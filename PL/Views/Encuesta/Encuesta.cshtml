@@ -1,0 +1,194 @@
+﻿@model ML.Encuesta
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Encuesta</title>
+</head>
+<body>
+    <div>
+        <h4>Encuesta</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.IdEncuesta)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.IdEncuesta)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FechaInicio)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FechaInicio)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FechaFin)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FechaFin)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Estatus)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Estatus)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Descripcion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Instruccion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Instruccion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ImagenInstruccion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ImagenInstruccion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TipoEncuesta)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TipoEncuesta)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Agradecimiento)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Agradecimiento)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ImagenAgradecimiento)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ImagenAgradecimiento)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FechaHoraCreacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FechaHoraCreacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UsuarioCreacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UsuarioCreacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProgramaCreacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProgramaCreacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FechaHoraModificacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FechaHoraModificacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UsuarioModificacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UsuarioModificacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProgramaModificacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProgramaModificacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FechaHoraEliminacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FechaHoraEliminacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.UsuarioEliminacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UsuarioEliminacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ProgramaEliminacion)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ProgramaEliminacion)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.IdEmpresa)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.IdEmpresa)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

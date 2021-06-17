@@ -1,0 +1,69 @@
+﻿<!--#region LoadingDiv-->
+<!--Loading swal-->
+<!--<div class="swal-overlay swal-overlay--show-modal" tabindex="-1" ng-class="{ loadVisible: vm.isBusy, loadInvisible: !vm.isBusy }">
+    <div class="swal-modal" role="dialog" aria-modal="true">
+        <div class="swal-icon swal-icon--custom load" style="width: 25%; height: 25%;"><img src="/images/load.gif"></div><div class="swal-title">Procesando...</div><div class="swal-text">Espere...</div><div class="swal-footer">
+            <div class="swal-button-container">
+                <button class="swal-button swal-button--confirm">OK</button>
+                <div class="swal-button__loader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!--#endregion LoadingDiv-->
+<!--Loading gif-->
+<div class="busy" ng-class="{ loadVisible: vm.isBusy, loadInvisible: !vm.isBusy }">
+    
+</div>
+<style>
+    .busy {
+        background: url(../../img/ReporteoClima/loading.gif) no-repeat center center;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        opacity: 0.9;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 2147483601;
+    }
+    .loader-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -100px 0 0 -100px;
+        width: 200px;
+        height: 200px;
+    }
+
+    .loader-ring-light {
+        width: 200px;
+        height: 200px;
+        -moz-border-radius: 240px;
+        -webkit-border-radius: 240px;
+        border-radius: 240px;
+        -moz-box-shadow: 0 4px 0 #10d0ff inset;
+        -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+        box-shadow: 0 4px 0 #10d0ff inset;
+        animation: rotate-360 2s linear infinite;
+        -moz-animation: rotate-360 2s linear infinite;
+    }
+    .loader-ring-track {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        -moz-border-radius: 240px;
+        -webkit-border-radius: 240px;
+        border-radius: 240px;
+        -moz-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+        -webkit-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+        box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+    }
+</style>
+<!--end Loading gif-->

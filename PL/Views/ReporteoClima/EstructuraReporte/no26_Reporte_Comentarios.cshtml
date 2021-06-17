@@ -1,0 +1,128 @@
+﻿<script src="~/scripts/ReporteoClima/text3d.js"></script>
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <p class="mb-n1">Reporte Gráfico de</p>
+        <h2 class="robotothin mb-2 mt-n1">COMENTARIOS ABIERTOS <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <button value="1" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(1)" class="btn preg robotobold yellow-clima area-empresa ml-3"><i class="far fa-question-circle"></i> ¿Existe algo especial o único en tu empresa que la caracterice como un excelente lugar para trabajar?</button><br /><br />
+        <button value="2" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(2)" class="btn preg robotobold yellow-clima area-empresa ml-3"><i class="far fa-question-circle"></i> Si pudieras cambiar algo acerca de tu empresa para hacerla un mejor lugar para trabajar, ¿qué cambiarías?</button><br /><br />
+        <button value="3" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(3)" class="btn preg robotobold yellow-clima area-empresa ml-3"><i class="far fa-question-circle"></i> ¿Cuáles son las fortalezas de tu jefe directo?</button><br /><br />
+        <button value="4" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(4)" class="btn preg robotobold yellow-clima area-empresa ml-3"><i class="far fa-question-circle"></i> ¿Cuáles son las áreas de oportunidad de tu jefe directo?</button><br /><br />
+        <button hidden value="4" ng-click="vm.getReporteDataPantalla_40(5)" class="btn preg robotobold yellow-clima area-empresa ml-3"><i class="far fa-question-circle"></i> Ver el resultado de todas</button><br /><br />
+        <div class="card">
+            <div class="card-block">
+                <div class="p-0">
+                    <div hidden class="row mt-3 mb-3 mr-3 ml-3">
+                        <div ng-show="vm.IdPregunta == 1 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                            <center><canvas id="preg1" class="word_cloud" width="400" height="400"></canvas></center>
+                        </div>
+                        <div ng-show="vm.IdPregunta == 2 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                            <center><canvas id="preg2" class="word_cloud" width="400" height="400"></canvas></center>
+                        </div>
+                        <div ng-show="vm.IdPregunta == 3 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                            <center><canvas id="preg3" class="word_cloud" width="400" height="400"></canvas></center>
+                        </div>
+                        <div ng-show="vm.IdPregunta == 4 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                            <center><canvas id="preg4" class="word_cloud" width="400" height="400"></canvas></center>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer1"><!---->
+                            <canvas width="300" height="300" id="myCanvas1">
+                                <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                <ul id="lista1"></ul>
+                            </canvas>
+                        </div>
+                        <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios"><!---->
+                            <ul class="respuestasMergeA" id="mergeRespuestasA1"></ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer2">
+                            <canvas width="300" height="300" id="myCanvas2">
+                                <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                <ul id="lista2"></ul>
+                            </canvas>
+                        </div>
+                        <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                            <ul class="respuestasMergeA" id="mergeRespuestasA2">
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer3">
+                            <canvas width="300" height="300" id="myCanvas3">
+                                <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                <ul id="lista3"></ul>
+                            </canvas>
+                        </div>
+                        <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                            <ul class="respuestasMergeA" id="mergeRespuestasA3">
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer4">
+                            <canvas width="300" height="300" id="myCanvas4">
+                                <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                <ul id="lista4"></ul>
+                            </canvas>
+                        </div>
+                        <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                            <ul class="respuestasMergeA" id="mergeRespuestasA4">
+
+                            </ul>
+                        </div>
+                    </div>
+ 
+                </div>
+
+            </div><!--.card-block-->
+        </div><!--.card-->
+
+        <hr class="clearfix my-5">
+
+    </div><!--.container-->
+
+</div><!--.content-wrap-->
+<script src="https://pulipulichen.github.io/blogger/posts/2016/11/r-text-mining/wordcloud2.js"></script>
+<script type="text/javascript">
+    //alto del canvas debe ser el de su div
+    $(window).resize(function () {
+        //console.log('window was resized');
+        document.getElementById("myCanvas1").offsetHeight;
+        document.getElementsByClassName("comentarios")[0].style.maxHeight = document.getElementById("myCanvas1").offsetHeight + "px";
+        document.getElementById("myCanvas2").offsetHeight;
+        document.getElementsByClassName("comentarios")[1].style.maxHeight = document.getElementById("myCanvas2").offsetHeight + "px";
+        document.getElementById("myCanvas3").offsetHeight;
+        document.getElementsByClassName("comentarios")[2].style.maxHeight = document.getElementById("myCanvas3").offsetHeight + "px";
+        document.getElementById("myCanvas4").offsetHeight;
+        document.getElementsByClassName("comentarios")[3].style.maxHeight = document.getElementById("myCanvas4").offsetHeight + "px";
+    });
+</script>
+<style>
+    .preg:hover {
+        color: #f0af42;
+    }
+    canvas{
+        border: 1px solid #000000;
+        /*width: 450px;*/
+        width: inherit !important;
+    }
+    .comentarios {
+        background-color: white;
+        border: 1px solid #000000;
+        overflow-x: scroll;
+        overflow-y: scroll;
+        margin-bottom: 15px;
+    }
+    .respuestasMergeA{
+        padding-left: 10px;
+    }
+</style>

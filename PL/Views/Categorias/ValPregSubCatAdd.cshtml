@@ -1,0 +1,16 @@
+﻿@using PL.Extensions
+@model ML.ValoracionPreguntaPorSubcategoria
+    @using (Html.BeginCollectionItem("NewVPPSC", ""))
+    {
+        @Html.HiddenFor(x => x.IdSubcategoria)
+        @Html.HiddenFor(x => x.IdPregunta)
+        <div class="@("row mt-2 mb-2 bloqueVPPSC"+Model.UniqueId)">
+            <div class="col-9" style="font-size: 0.8rem;text-transform: uppercase;">@(Model.NombrePregunta)</div>
+            <div class="col-2">
+                @Html.TextBoxFor(x => x.Valor, new { @class = "form-control p-0 valPregSubCat" })
+            </div>
+            <div class="col-1">
+                <div class="form-text ml-2 dvppsc" name="dvppsc" style="font-weight:bold;cursor:pointer;" id="@(Model.UniqueId)">X</div>
+            </div>
+        </div>
+    }

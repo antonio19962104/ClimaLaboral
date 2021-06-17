@@ -1,0 +1,262 @@
+﻿@using Newtonsoft.Json 
+@model ML.Result
+    @{
+        ViewBag.Title = "ConfigurarSecciones";
+        Layout = "~/Views/Admin/Contenido.cshtml";
+    }
+
+    @section H1
+    {
+        <section id="page-title">
+            <div class="container-fluid px-lg-5">
+                <div class="row">
+                    <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                        <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Ecuestas / <span>Configurar secciones</span></h1>
+                    </div>
+                </div>
+            </div><!--.container-fluid-->
+        </section>
+        }
+@section Styles
+{
+    <style type="text/css"> 
+     .busy {
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: .9;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 2147483601;
+            }
+             .loader-ring {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -100px 0 0 -100px;
+                width: 200px;
+                height: 200px;
+            }
+
+            .loader-ring-light {
+                width: 200px;
+                height: 200px;
+                -moz-border-radius: 240px;
+                -webkit-border-radius: 240px;
+                border-radius: 240px;
+                -moz-box-shadow: 0 4px 0 #10d0ff inset;
+                -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+                box-shadow: 0 4px 0 #10d0ff inset;
+                animation: rotate-360 2s linear infinite;
+                -moz-animation: rotate-360 2s linear infinite;
+            }
+
+            .rotacion {
+                width: 200px;
+                height: 200px;
+                -moz-border-radius: 240px;
+                -webkit-border-radius: 240px;
+                border-radius: 240px;
+                -moz-box-shadow: 0 4px 0 #10d0ff inset;
+                -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+                box-shadow: 0 4px 0 #10d0ff inset;
+                animation: rotate-360 2s linear infinite;
+                -moz-animation: rotate-360 2s linear infinite;
+            }
+
+            .loader-ring-track {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 200px;
+                height: 200px;
+                -moz-border-radius: 240px;
+                -webkit-border-radius: 240px;
+                border-radius: 240px;
+                -moz-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                -webkit-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+            }    
+    </style>
+    
+}
+<script>
+    var _nuevoResult = @Html.Raw(JsonConvert.SerializeObject(Model));
+
+</script>
+<div id="loading" class="busy loader" style="display:none;">
+    <img class="loader-ring" src="~/images/loadimage.gif" />   
+</div>
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="section-templates">
+                    <div class="icon-header-blue"><i class="far fa-newspaper"></i></div>
+                    <div class="title-header-blue">
+                        <span class="title-header-section">Configuración del orden de las preguntas en la encuesta</span>
+                    </div><!--.title-header-blue-->
+                    <hr>
+                    <div class="section-survey shadow-sm">
+                        <div class="body-survey">
+                            <div class="row">
+                                <div class="form-group col-12 p-0" id="mergeTextArea">
+                                    <label class="control-label col-12 p-0 text-center">Arrastar la pregunta hacia arriba o hacia abajo para reacomodar el orden de la encuesta</label>                                   
+                                </div>
+                                <!--merge textarea for title-->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 p-0" @*id="@Model.IdEncuesta"*@>
+                                            <link rel="stylesheet" href="//kendo.cdn.telerik.com/2015.2.902/styles/kendo.common-bootstrap.min.css" />
+                                            <link rel="stylesheet" href="//kendo.cdn.telerik.com/2015.2.902/styles/kendo.bootstrap.min.css" />
+                                            <script src="~/scripts/jquery-3.4.1.min.js"></script>                                           
+                                            <script src="~/scripts/kendo-all.js"></script>
+                                            
+                                            <div id="grid" class="col-12 p-0 m-0"></div>    
+                                            <script src="~/css/sweetalert.min.js"></script>                                        
+                                            <script>
+                                                var cadenaREA = @Html.Raw(JsonConvert.SerializeObject(Model.EditaEncuesta.NewCuestion));
+                                                var newArrayPreguntas = [];
+                                                  var grid = $("#grid").kendoGrid({
+                                                    dataSource: {
+                                                        data: cadenaREA,
+                                                      schema: {
+                                                        model: {
+                                                            fields: {                                                                       
+                                                                        Pregunta: {
+                                                                            editable: true
+                                                                        }
+                                                                    }
+                                                        }
+                                                      },
+                                                      //pageSize: 16
+                                                    },
+                                                    scrollable: false,
+                                                    columns: [
+                                                        {
+                                                            field: "Pregunta",
+                                                            title: "Pregunta",
+                                                            headerAttributes: {
+                                                                style: "text-align:center;font-weight:bold;vertical-align:middle;white-space:pre-wrap;"
+                                                            }
+                                                            
+                                                        }]
+                                                      }).data("kendoGrid");
+
+                                                      grid.table.kendoSortable({
+                                                        filter: ">tbody >tr",
+                                                        hint: function(element) { // Customize the hint.
+                                                          var table = $('<table style="width:100%;" class="k-grid k-widget"></table>'),
+                                                              hint;
+
+                                                          table.append(element.clone()); // Append the dragged element.
+                                                          table.css("opacity", 0.5);
+
+                                                          return table; // Return the hint element.
+                                                        },
+                                                        cursor: "move",
+                                                        placeholder: function(element) {
+                                                          return $('<tr class="placeholder"></tr>');
+                                                        },
+                                                        change: function(e) {
+                                                            var skip = grid.dataSource.skip() == undefined ? 0 : grid.dataSource.skip(),
+                                                              oldIndex = e.oldIndex + skip,
+                                                              newIndex = e.newIndex + skip,
+                                                              data = grid.dataSource.data(),
+                                                              dataItem = grid.dataSource.getByUid(e.item.data("uid"));
+
+                                                          grid.dataSource.remove(dataItem);
+                                                          grid.dataSource.insert(newIndex, dataItem);
+                                                            //camos
+                                                          newArrayPreguntas = [];
+                                                          _nuevoResult.ListadoPreguntas = [];
+                                                          for (var i = 0; i < grid.dataSource._data.length; i++) {
+                                                              //newArrayPreguntas.push({IdPregunta:grid.dataSource._data[i].IdPregunta,IdEncuesta:grid.dataSource._data[i].IdEncuesta,Pregunta:grid.dataSource._data[i].Pregunta,IdPreguntaPadre:grid.dataSource._data[i].IdPreguntaPadre,IdOrden:i + 1});
+                                                              _nuevoResult.ListadoPreguntas.push({IdPregunta:grid.dataSource._data[i].IdPregunta,IdEncuesta:grid.dataSource._data[i].IdEncuesta,Pregunta:grid.dataSource._data[i].Pregunta,IdCompetencia:grid.dataSource._data[i].IdCompetencia,IdPreguntaPadre:grid.dataSource._data[i].IdPreguntaPadre,IdOrden:i + 1});
+                                                          }
+                                                          //newArrayPreguntas = grid.dataSource.options.data;                                               
+                                                         
+                                                        }
+                                                      });
+                                            </script>
+                                            <style>
+                                                .k-grid tbody tr {
+                                                    cursor: move;
+                                                }
+
+                                                .placeholder {
+                                                    outline-style: dashed;
+                                                    outline-width: 1px;
+                                                    outline-color: red;
+                                                }
+                                            </style> 
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><!--.body-survey-->
+                    </div><!--.section-survey-->
+                </div>
+            </div><!--.col-lg-8-->
+        </div><!--.row-->
+        <div class="row">
+            <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                <div class="col-md-5 text-right">
+                    <input type="submit" value="Guardar" @*onclick="window.location.href='/Encuesta/GetAll'"*@ onclick="GuardarConfiguracion()" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/css/summernote.min.css" rel="stylesheet" />
+<script>   
+    function GuardarConfiguracion() {        
+        // se verifica el arreglo con los nuevos cambios de posicion
+        if (_nuevoResult.ListadoPreguntas != null) {
+            if (_nuevoResult.ListadoPreguntas.length == 0) {
+                swal('Configuración sin cambios', '', 'info');
+                window.location.href='/Encuesta/GetAll';
+            }
+            else {
+                $("#grid").remove();
+                document.getElementById("loading").style.display = "block";
+                //let _nuevoResult={
+                //    ListadoPreguntas: newArrayPreguntas
+                //}
+                $.ajax({
+                    url: '@Url.Action("ConfiguraOrden")',
+                    type: 'POST',
+                    data: _nuevoResult,
+                    complete: function (Response) {
+                        if (Response.responseJSON == 'success') {
+                            document.getElementById("loading").style.display = "none";
+                            swal({
+                                title: "La configuración se guardó correctamente",
+                                text: "",
+                                type: "success",
+                                icon: "success",
+                            }).then(function () {
+                                window.location.href = "/Encuesta/GetAll/"
+                                //Redirect();
+                            });
+                        }
+                        else {
+                            document.getElementById("loading").style.display = "none";
+                            swal("Ocurrió un error al intentar guardar la configuración", "", "error");
+                        }
+                    }
+                });
+            }
+        }
+        else
+        {
+            swal('Configuración sin cambios', '', 'info');
+            window.location.href='/Encuesta/GetAll';
+        }
+        
+    }   
+</script>

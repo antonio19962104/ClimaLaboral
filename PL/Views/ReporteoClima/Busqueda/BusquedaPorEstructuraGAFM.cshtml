@@ -1,0 +1,169 @@
+﻿<!--#region Reporteo por Estructura de la Empresa-->
+@*{ loadVisible: vm.isBusy, loadInvisible: !vm.isBusy }*@
+<div class="col-lg-12" style="" ng-class="{ CH : vm.CargaHistoricoView }">
+    <div class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label ng-show="vm.CargaHistoricoView == false" class="control-label">Criterio para el reporte por estructura del Grupo</label>
+            <label ng-show="vm.CargaHistoricoView == true" class="control-label">Elige a que entidad del grupo pertenece el histórico</label>
+            <select ng-model="vm.criterioBusquedaSeleccionado" class="form-control" ng-change="vm.changedValueCriterioBusqueda(vm.criterioBusquedaSeleccionado)"
+                    ng-options="criterioReporte.Nombre for criterioReporte in vm.criteriosReporte track by criterioReporte.Id"></select>
+        </div>
+    </div>
+    <!--Buscar(aIdUnidadNegocio)-->
+    <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 1">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Unidad de Negocio</label>
+            <select ng-model="vm.CompanyCategoria" class="form-control"
+                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+        </div>
+    </div>
+    <!--Buscar(aIdEmpresa)-->
+    <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 2">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Unidad de Negocio</label>
+            <select ng-model="vm.CompanyCategoriaForEmpresa" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForEmpresa)"
+                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Empresa</label>
+            <select ng-model="vm.Company" class="form-control"
+                    ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
+        </div>
+    </div>
+    <!--Buscar(aIdArea)-->
+    <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 3">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Unidad de Negocio</label>
+            <select ng-model="vm.CompanyCategoriaForArea" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForArea)"
+                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Empresa</label>
+            <select ng-model="vm.CompanyForArea" class="form-control" ng-change="vm.setAreas(vm.CompanyForArea)"
+                    ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Área</label>
+            <select ng-model="vm.Area" class="form-control"
+                    ng-options="area.Nombre for area in vm.listArea track by area.IdArea"></select>
+        </div>
+    </div>
+    <!--Buscar(aIdDepartamento)-->
+    <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 4">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Unidad de Negocio</label>
+            <select ng-model="vm.CompanyCategoriaForDepartamento" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForDepartamento)"
+                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Empresa</label>
+            <select ng-model="vm.CompanyForDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForDepartamento)"
+                    ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Área</label>
+            <select ng-model="vm.AreaForDepartamento" class="form-control" ng-change="vm.setDepartamentos(vm.AreaForDepartamento)"
+                    ng-options="area.Nombre for area in vm.listArea track by area.IdArea"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Departamento:</label>
+            <select ng-model="vm.Departamento" class="form-control"
+                    ng-options="departamento.Nombre for departamento in vm.listDepartamento track by departamento.IdDepartamento"></select>
+        </div>
+    </div>
+    <div ng-hide="vm.cargarHistoricoView == true" class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Año:</label>
+            <select ng-model="vm.Anio" class="form-control" ng-change="vm.changedValueAnio(vm.Anio)"
+                    ng-options="anios.value for anios in vm.listAnios track by anios.value"></select>
+        </div>
+    </div>
+    <!--Si es en global de lo que eligo tomo el primer boton, si hay que desplegar en no5_Indicadores_Generales toda la estructura tomo el segundo-->
+    <button ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.run()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar reporte</button>
+    <button hidden ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.generarJob()" class="btn btn-dark mt-3"><i class="fas fa-chart-bar"></i> Generar Job</button><br />
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @*<button hidden type="button" ng-click="vm.getReportes_1_2_3()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar Todas las vistas</button>*@
+    
+
+    @*<button type="button" ng-click="vm.getEstructura()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar</button>*@
+    
+
+    <!--Buscar(aIdSubDepartamento)-->
+    <!--<div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 5">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Unidad de Negocio</label>
+            <select ng-model="vm.CompanyCategoriaForSubDepartamento" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForSubDepartamento)"
+                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Empresa</label>
+            <select ng-model="vm.CompanyForSubDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForSubDepartamento)"
+                    ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Area</label>
+            <select ng-model="vm.AreaForSubDepartamento" class="form-control" ng-change="vm.setDepartamentos(vm.AreaForSubDepartamento)"
+                    ng-options="area.Nombre for area in vm.listArea track by area.IdArea"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Area</label>
+            <select ng-model="vm.DepartamentoForSubDepartamento" class="form-control" ng-change="vm.setSubDepartamentos(vm.DepartamentoForSubDepartamento)"
+                    ng-options="departamento.Nombre for departamento in vm.listDepartamento track by departamento.IdDepartamento"></select>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Area</label>
+            <select ng-model="vm.DepartamentoForSubDepartamento" class="form-control"
+                    ng-options="subDepartamento.Nombre for subDepartamento in vm.listSubDepartamento track by subDepartamento.IdSubdepartamento"></select>
+        </div>
+    </div>-->
+</div>
+<!--#endregion Reporteo por Estructura de la Empresa-->
+<hr ng-hide="vm.CargaHistoricoView == true" />
+<style>
+    .CH{
+        margin-bottom: -30px;
+    }
+</style>
+<script src="~/scripts/ReporteoClima/PDFreactor.js"></script>
+<script>
+    //window.onload = function() {
+    //    // Create new PDFreactor instance
+    //    var pdfReactor = new PDFreactor("https://cloud.pdfreactor.com/service/rest");
+    //    // Create a new PDFreactor configuration object
+    //    var config = {
+    //        // Specify the input document
+    //        document: "http://www.stackoverflow.com",
+    //    };
+    //    //var connectionSettings = {
+    //    //    headers: "header",
+    //    //    name: "name"
+    //    //};
+        
+    //    // Render document and save result
+    //    try {
+    //        //var result = pdfReactor.convert(config);
+    //        //document.getElementById("result").src = "data:application/pdf;base64," + result.document;
+    //        var result = pdfReactor.convert(config)
+    //            .then(function () {
+    //                var data = JSON.parse(b64Document);
+    //                document.getElementById("result").src = "data:application/pdf;base64," + data.document;
+    //            });
+    //    } catch (error) {
+    //        if (error instanceof PDFreactor.PDFreactorWebserviceError) {
+    //            document.body.innerHTML = "<h1>An Error Has Occurred</h1><h2>" + error.message + "</h2>";
+    //        }
+    //    }
+    //}
+</script>

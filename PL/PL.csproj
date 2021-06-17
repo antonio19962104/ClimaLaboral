@@ -1,0 +1,1207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.1.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.1.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0-rc1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0-rc1\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0-preview\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0-preview\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2D436E5E-1C83-4E7B-9449-5B3CB1CA8EC3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PL</RootNamespace>
+    <AssemblyName>PL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.PDF, Version=21.1.0.0, Culture=neutral, PublicKeyToken=f0262d67fe233d63, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.PDF.21.1.0\lib\net4.0\Aspose.PDF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.6.1\lib\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Common.Logging.Core, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <HintPath>..\packages\Common.Logging.Core.3.4.1\lib\net40\Common.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\Reutilizables\climaLaboral\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\..\Reutilizables\climaLaboral\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=5.0.4.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.0.4\lib\net45\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="GroupDocs.Conversion, Version=21.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\GroupDocs.Conversion.21.1.0\lib\net20\GroupDocs.Conversion.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hangfire.AspNet, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.AspNet.0.2.0\lib\net45\Hangfire.AspNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hangfire.Core, Version=1.7.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.7.12\lib\net45\Hangfire.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hangfire.MemoryStorage, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.MemoryStorage.1.7.0\lib\net40\Hangfire.MemoryStorage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Hangfire.SqlServer, Version=1.7.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.SqlServer.1.7.12\lib\net45\Hangfire.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.2, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.2\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp.xmlworker, Version=5.5.13.2, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\itextsharp.xmlworker.5.5.13.2\lib\itextsharp.xmlworker.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build.Framework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Framework.14.3.0\lib\net45\Microsoft.Build.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Tasks.Core.14.3.0\lib\net45\Microsoft.Build.Tasks.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Utilities.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Utilities.Core.14.3.0\lib\net45\Microsoft.Build.Utilities.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Graph.Core, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Graph.Core.1.3.1\lib\portable45-net45+win8+wpa81\Microsoft.Graph.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <HintPath>..\packages\ExcelPackage.1.0.0\lib\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.OneDrive.Sdk, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OneDriveSDK.2.0.7\lib\portable-net45+netcore45+wpa81+win8\Microsoft.OneDrive.Sdk.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PDFreactor">
+      <HintPath>..\..\Users\jamurillo\3D Objects\PDFreactor.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="Quartz, Version=2.4.1.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Quartz.2.4.1\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorEngine, Version=2.1.4113.149, Culture=neutral, PublicKeyToken=1f722ed313f51831, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorJS.0.4.3\lib\RazorEngine.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RazorJS, Version=0.4.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorJS.0.4.3\lib\RazorJS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="WebGrease">
+      <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApisController.cs" />
+    <Compile Include="Controllers\ApisHistoricoController.cs" />
+    <Compile Include="Controllers\AuxGetRespController.cs" />
+    <Compile Include="Controllers\BackGroundJobController.cs" />
+    <Compile Include="Controllers\BDController.cs" />
+    <Compile Include="Controllers\ClimaDinamicoController.cs" />
+    <Compile Include="Controllers\CompetenciaController.cs" />
+    <Compile Include="Controllers\DashboardController.cs" />
+    <Compile Include="Controllers\EmpresaController.cs" />
+    <Compile Include="Controllers\EncuestaController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HtmlToPDFController.cs" />
+    <Compile Include="Controllers\LoginAdminController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlantillasController.cs" />
+    <Compile Include="Controllers\ReporteClimaDinamicoController.cs" />
+    <Compile Include="Controllers\ReporteController.cs" />
+    <Compile Include="Controllers\ReporteD4UController.cs" />
+    <Compile Include="Controllers\ReporteoClimaController.cs" />
+    <Compile Include="Controllers\AdministradorController.cs" />
+    <Compile Include="Controllers\ReportesClimaController.cs" />
+    <Compile Include="Extensions\HtmlPrefixScopeExtensions.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\DemoContext.cs" />
+    <Compile Include="Models\EmailFormModel.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MensajesValidacion.cs" />
+    <Compile Include="Models\ReporteClimaDinamico.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Views\Admin\MPGeneral.Master.cs">
+      <DependentUpon>MPGeneral.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Views\Admin\MPGeneral.Master.designer.cs">
+      <DependentUpon>MPGeneral.Master</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\e2.css" />
+    <Content Include="Content\e7.css" />
+    <Content Include="Content\e8.css" />
+    <Content Include="Content\fn.css" />
+    <Content Include="Content\index.css" />
+    <Content Include="Content\ins.css" />
+    <Content Include="Content\site_global.css" />
+    <Content Include="Content\sweetalert\bootstrap-sweetalert.png" />
+    <Content Include="Content\sweetalert\docs.css" />
+    <Content Include="Content\sweetalert\sweet-alert.css" />
+    <Content Include="Content\sweetalert\thumbs-up.jpg" />
+    <Content Include="App_Data\output.json" />
+    <None Include="css js\bootstrap.min" />
+    <None Include="css js\sweetalert.min" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="css\Abiertas.css" />
+    <Content Include="css\all.min.css" />
+    <Content Include="css\animate.min.css" />
+    <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\Clima Dinamico\bootstrap.min.css" />
+    <Content Include="css\Clima Dinamico\styles-intro.css" />
+    <Content Include="css\Clima Dinamico\styles-likert.css" />
+    <Content Include="css\Clima Dinamico\styles-login.css" />
+    <Content Include="css\Clima Dinamico\StyleSheet1.css" />
+    <Content Include="css\Clima Dinamico\stylesTextRich.css" />
+    <Content Include="css\custom-administrator.css" />
+    <Content Include="css\custom-user.css" />
+    <Content Include="css\Demografico.css" />
+    <Content Include="css\e2.css" />
+    <Content Include="css\e7.css" />
+    <Content Include="css\e8.css" />
+    <Content Include="css\Encuesta - Landscape.css" />
+    <Content Include="css\Encuesta.css" />
+    <Content Include="css\fn.css" />
+    <Content Include="css\fontawesome5\css\fontawesome5.css" />
+    <Content Include="css\fontawesome5\dialogs\fontawesome5.js" />
+    <Content Include="css\fontawesome5\icons\fontawesome5.png" />
+    <Content Include="css\fontawesome5\plugin.js" />
+    <Content Include="css\formProgressBar.css" />
+    <Content Include="css\index.css" />
+    <Content Include="css\inicio.css" />
+    <Content Include="css\ins.css" />
+    <Content Include="css\JavaScript.js" />
+    <Content Include="css\kendo-default.css" />
+    <Content Include="css\login.css" />
+    <Content Include="css\main.css" />
+    <Content Include="css\plugin.js" />
+    <Content Include="css\preview\all.min.css" />
+    <Content Include="css\preview\animate.min.css" />
+    <Content Include="css\preview\bootstrap.min.css" />
+    <Content Include="css\preview\custom-administrator.css" />
+    <Content Include="css\preview\custom-user.css" />
+    <Content Include="css\RBP10.css" />
+    <Content Include="css\RBSelected.css" />
+    <Content Include="css\Reporte.css" />
+    <Content Include="css\reporteoClima.css" />
+    <Content Include="css\ReporteoClima\all.min.css" />
+    <Content Include="css\ReporteoClima\animate.min.css" />
+    <Content Include="css\ReporteoClima\bootstrap.min.css" />
+    <Content Include="css\ReporteoClima\custom-administrator - Copia.css" />
+    <Content Include="css\ReporteoClima\custom-administrator.css" />
+    <Content Include="css\ReporteoClima\custom-user.css" />
+    <Content Include="css\ReporteoClima\kendo.default-v2.min.css" />
+    <Content Include="css\ReporteoClima\lightslider.min.css" />
+    <Content Include="css\ReporteoClima\summernote.min.css" />
+    <Content Include="css\ReporteoClima\swiper.min.css" />
+    <Content Include="css\site_global.css" />
+    <Content Include="css\Style.css" />
+    <Content Include="css\StyleModal.css" />
+    <Content Include="css\summernote.min.css" />
+    <Content Include="css\sweetalert.min.css" />
+    <Content Include="css\sweetalert.min.js" />
+    <Content Include="css\sweetalert\custom-administrator.css" />
+    <Content Include="css\sweetalert\sweetalert.min.css" />
+    <Content Include="css\sweetalert\sweetalert.min.js" />
+    <Content Include="css\sweetalert\_sweetalert.min.js" />
+    <Content Include="css\swiper.min.css" />
+    <Content Include="css\TextRich\boostrapa.css" />
+    <Content Include="css\TextRich\bos.js" />
+    <Content Include="css\TextRich\font-awesome.min.css" />
+    <Content Include="css\TextRich\jquery.js" />
+    <Content Include="css\TextRich\modernizer.js" />
+    <Content Include="css\TextRich\rsponf.js" />
+    <Content Include="css\TextRich\summernote.css" />
+    <Content Include="css\yearpicker.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\fa-brands-400.svg" />
+    <Content Include="fonts\fa-regular-400.svg" />
+    <Content Include="fonts\fa-solid-900.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="images\1 Background image - copia.jpg" />
+    <Content Include="images\1 Background image.jpg" />
+    <Content Include="images\2 Login.png" />
+    <Content Include="images\3 Logo.png" />
+    <Content Include="images\4 Logo_2.png" />
+    <Content Include="images\Background Mobile.jpg" />
+    <Content Include="images\blank.gif" />
+    <Content Include="images\boto-02.png" />
+    <Content Include="images\boto-03.png" />
+    <Content Include="images\boto-04.png" />
+    <Content Include="images\boto_mesa de trabajo 1.png" />
+    <Content Include="images\CaritasRadio.JPG" />
+    <Content Include="images\cl2019.svg" />
+    <Content Include="images\cl2019_poster_.png" />
+    <Content Include="images\continuar.svg" />
+    <Content Include="images\continuar_poster_.png" />
+    <Content Include="images\enviar 2_poster_.png" />
+    <Content Include="images\enviar-2.svg" />
+    <Content Include="images\enviar.svg" />
+    <Content Include="images\enviar_poster_.png" />
+    <Content Include="images\fin.jpg" />
+    <Content Include="images\Indicadores.PNG" />
+    <Content Include="images\loading.gif" />
+    <Content Include="images\logo autofin_poster_.png" />
+    <Content Include="images\logo cl2019 2_poster_.png" />
+    <Content Include="images\logo-autofin.svg" />
+    <Content Include="images\logo-cl2019-2.svg" />
+    <Content Include="images\O6PHIU0 - copia.jpg" />
+    <Content Include="images\load.gif" />
+    <Content Include="images\salir.svg" />
+    <Content Include="images\salir_poster_.png" />
+    <Content Include="images\sin título-1.jpg" />
+    <Content Include="images\sin titulo-4-02.png" />
+    <Content Include="images\sin titulo-4-03.png" />
+    <Content Include="images\stock-photo-happy-business-colleagues-celebrating-successful-business-year-614620220-crop-u3354.jpg" />
+    <Content Include="images\stock-photo-picture-of-business-people-working-together-in-office-1101357503-crop-u727.jpg" />
+    <Content Include="images\stock-photo-succesful-enterprenours-and-business-people-1040775046-crop-u3385.jpg" />
+    <Content Include="images\u568-r.png" />
+    <Content Include="images\u568.png" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="img\683900_email_512x512.png" />
+    <Content Include="img\asdf.min.js" />
+    <Content Include="img\background\bg-login-1.jpg" />
+    <Content Include="img\background\bg-login-2.jpg" />
+    <Content Include="img\bg-header-survey-full.png" />
+    <Content Include="img\bg-header-survey.jpg" />
+    <Content Include="img\bg-hover.png" />
+    <Content Include="img\bg-inicio.jpg" />
+    <Content Include="img\bg-progress-number.png" />
+    <Content Include="img\bg-progress.png" />
+    <Content Include="img\bg-progress2.png" />
+    <Content Include="img\bg-progress3.png" />
+    <Content Include="img\bg-shape-menu.png" />
+    <Content Include="img\bg-tool-db.png" />
+    <Content Include="img\bg-tool-enterprises.png" />
+    <Content Include="img\bg-tool-report.png" />
+    <Content Include="img\bg-tool-survey.png" />
+    <Content Include="img\bg-tool-theme.png" />
+    <Content Include="img\bg-tool-user.png" />
+    <Content Include="img\bn-template-1.jpg" />
+    <Content Include="img\bn-template-2.jpg" />
+    <Content Include="img\bodyP1.png" />
+    <Content Include="img\bodyP2.png" />
+    <Content Include="img\bodyP3.png" />
+    <Content Include="img\business-flat-022-conversion-email-512.png" />
+    <Content Include="img\caret-active.png" />
+    <Content Include="img\ClimaDinamico\backImageDesktop.jpg" />
+    <Content Include="img\ClimaDinamico\backImageMobile.jpg" />
+    <Content Include="img\ClimaDinamico\enviar.png" />
+    <Content Include="img\ClimaDinamico\fin.jpg" />
+    <Content Include="img\ClimaDinamico\LogoFooter.png" />
+    <Content Include="img\ClimaDinamico\LogoHeader.png" />
+    <Content Include="img\ClimaDinamico\mail.png" />
+    <Content Include="img\ClimaDinamico\next.png" />
+    <Content Include="img\ClimaDinamico\portadaIntro.jpg" />
+    <Content Include="img\ClimaDinamico\prev.png" />
+    <Content Include="img\ClimaDinamico\saveAvance.png" />
+    <Content Include="img\CL\icon-always-right.png" />
+    <Content Include="img\CL\icon-false.png" />
+    <Content Include="img\CL\icon-often-false.png" />
+    <Content Include="img\CL\icon-often-right.png" />
+    <Content Include="img\CL\icon-sometimes.png" />
+    <Content Include="img\dsf.min.js" />
+    <Content Include="img\err.png" />
+    <Content Include="img\errorEmail.jpg" />
+    <Content Include="img\face-bad.png" />
+    <Content Include="img\face-happier.png" />
+    <Content Include="img\face-happy.png" />
+    <Content Include="img\face-regular.png" />
+    <Content Include="img\footerP1.png" />
+    <Content Include="img\footerP2.png" />
+    <Content Include="img\footerP3.png" />
+    <Content Include="img\headerP1.png" />
+    <Content Include="img\headerP2.png" />
+    <Content Include="img\headerP3.png" />
+    <Content Include="img\icon-always-right.png" />
+    <Content Include="img\icon-background-survey.png" />
+    <Content Include="img\icon-body-survey.png" />
+    <Content Include="img\icon-caret-bottom.png" />
+    <Content Include="img\icon-database.png" />
+    <Content Include="img\icon-enterprises.png" />
+    <Content Include="img\icon-false.png" />
+    <Content Include="img\icon-footer-survey.png" />
+    <Content Include="img\icon-header-survey.png" />
+    <Content Include="img\icon-often-false.png" />
+    <Content Include="img\icon-often-right.png" />
+    <Content Include="img\icon-reports.png" />
+    <Content Include="img\icon-sometimes.png" />
+    <Content Include="img\icon-survey-dark.png" />
+    <Content Include="img\icon-survey-red.png" />
+    <Content Include="img\icon-survey-white.png" />
+    <Content Include="img\icon-survey.png" />
+    <Content Include="img\icon-template.png" />
+    <Content Include="img\icon-user-male.jpg" />
+    <Content Include="img\icon-users.png" />
+    <Content Include="img\icono-preview.png" />
+    <Content Include="img\logo-clima-laboral-sm.png" />
+    <Content Include="img\logo-clima-laboral.png" />
+    <Content Include="img\logo-cresta.png" />
+    <Content Include="img\logo-h.png" />
+    <Content Include="img\logo-torino.png" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\LogoP1.png" />
+    <Content Include="img\LogoP2.png" />
+    <Content Include="img\LogoP3.png" />
+    <Content Include="img\Preguntas-1.jpg" />
+    <Content Include="img\Preguntas-2.jpg" />
+    <Content Include="img\Preguntas-3.jpg" />
+    <Content Include="img\preview_search_find_locate_1551.png" />
+    <Content Include="img\ReporteGraf.png" />
+    <Content Include="img\ReporteGraf2.jfif" />
+    <Content Include="img\ReporteoClima\autofin-logo.png" />
+    <Content Include="img\ReporteoClima\Bouncy-Preloader.gif" />
+    <Content Include="img\ReporteoClima\chevron-right.png" />
+    <Content Include="img\ReporteoClima\circle-bottom.png" />
+    <Content Include="img\ReporteoClima\circle-top.png" />
+    <Content Include="img\ReporteoClima\clima-logo.png" />
+    <Content Include="img\ReporteoClima\clima-portada.jpg" />
+    <Content Include="img\ReporteoClima\cup.png" />
+    <Content Include="img\ReporteoClima\ejecutivos2.png" />
+    <Content Include="img\ReporteoClima\icon-right.png" />
+    <Content Include="img\ReporteoClima\falta.png" />
+    <Content Include="img\ReporteoClima\indicador-lluvia.png" />
+    <Content Include="img\ReporteoClima\indicador-nube.png" />
+    <Content Include="img\ReporteoClima\indicador-sol.png" />
+    <Content Include="img\ReporteoClima\indicador-solnube.png" />
+    <Content Include="img\ReporteoClima\indicadores.png" />
+    <Content Include="img\ReporteoClima\indicadores2.png" />
+    <Content Include="img\ReporteoClima\indicadores3.png" />
+    <Content Include="img\ReporteoClima\indicadores4.png" />
+    <Content Include="img\ReporteoClima\lluvia-icono.svg" />
+    <Content Include="img\ReporteoClima\lluvia.svg" />
+    <Content Include="img\ReporteoClima\loading.gif" />
+    <Content Include="img\ReporteoClima\mejores.png" />
+    <Content Include="img\ReporteoClima\nube-icono.svg" />
+    <Content Include="img\ReporteoClima\nublado.svg" />
+    <Content Include="img\ReporteoClima\peores.png" />
+    <Content Include="img\ReporteoClima\peores1.png" />
+    <Content Include="img\ReporteoClima\peores2.png" />
+    <Content Include="img\ReporteoClima\sol-icono.svg" />
+    <Content Include="img\ReporteoClima\sol-nube-mejores5_1.png" />
+    <Content Include="img\ReporteoClima\sol-nube-mejores5_2.png" />
+    <Content Include="img\ReporteoClima\sol.svg" />
+    <Content Include="img\ReporteoClima\solnube-icono.svg" />
+    <Content Include="img\ReporteoClima\solnube.svg" />
+    <Content Include="img\Reportetabla.jpg" />
+    <Content Include="img\tyuytu.min.js" />
+    <Content Include="Jit\Examples\css\base.css" />
+    <Content Include="Jit\Examples\css\col1.png" />
+    <Content Include="Jit\Examples\css\col2.png" />
+    <Content Include="Jit\Examples\css\gradient.png" />
+    <Content Include="Jit\Examples\css\Icicle.css" />
+    <Content Include="Jit\Examples\Icicle\cicl2.html" />
+    <Content Include="Jit\Examples\Icicle\cicl2.js" />
+    <Content Include="Jit\Extras\excanvas.js" />
+    <Content Include="Jit\jit-yc.js" />
+    <Content Include="Jit\jit.js" />
+    <Content Include="log\log.txt" />
+    <Content Include="newCL\css\all.min.css" />
+    <Content Include="newCL\css\animate.min.css" />
+    <Content Include="newCL\css\bootstrap.css" />
+    <Content Include="newCL\css\bootstrap.min.css" />
+    <Content Include="newCL\css\custom-user.css" />
+    <Content Include="newCL\css\summernote.min.css" />
+    <Content Include="newCL\img\bg-progress-number.png" />
+    <Content Include="newCL\img\bg-progress.png" />
+    <Content Include="newCL\img\icon-always-right.png" />
+    <Content Include="newCL\img\icon-false.png" />
+    <Content Include="newCL\img\icon-often-false.png" />
+    <Content Include="newCL\img\icon-often-right.png" />
+    <Content Include="newCL\img\icon-sometimes.png" />
+    <Content Include="newCL\img\logo-clima-laboral-sm.png" />
+    <Content Include="newCL\img\logo-clima-laboral.png" />
+    <Content Include="newCL\img\logo-cresta.png" />
+    <Content Include="newCL\js\bootstrap.min.js" />
+    <Content Include="newCL\js\custom.js" />
+    <Content Include="newCL\js\jquery-3.4.1.min.js" />
+    <Content Include="newCL\js\popper.min.js" />
+    <Content Include="newCL\js\summernote.min.js" />
+    <Content Include="scripts\AngularJS.js" />
+    <Content Include="scripts\Clima Dinamico\adminClimaDinamico.js" />
+    <Content Include="scripts\Clima Dinamico\climaLaboral.js" />
+    <Content Include="scripts\Clima Dinamico\jquery.min.js" />
+    <Content Include="scripts\collapse.js" />
+    <Content Include="scripts\CreateGraphics.js" />
+    <Content Include="scripts\detect-element-resize.js" />
+    <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\custom.js" />
+    <Content Include="scripts\datatable.min..js" />
+    <Content Include="scripts\datatables.min.css" />
+    <Content Include="scripts\ElementQueries.js" />
+    <Content Include="scripts\excel.min.js" />
+    <Content Include="scripts\excellentexport.js" />
+    <Content Include="fonts\fa-brands-400.eot" />
+    <Content Include="fonts\fa-brands-400.ttf" />
+    <Content Include="fonts\fa-brands-400.woff" />
+    <Content Include="fonts\fa-brands-400.woff2" />
+    <Content Include="fonts\fa-regular-400.eot" />
+    <Content Include="fonts\fa-regular-400.ttf" />
+    <Content Include="fonts\fa-regular-400.woff" />
+    <Content Include="fonts\fa-regular-400.woff2" />
+    <Content Include="fonts\fa-solid-900.eot" />
+    <Content Include="fonts\fa-solid-900.ttf" />
+    <Content Include="fonts\fa-solid-900.woff" />
+    <Content Include="fonts\fa-solid-900.woff2" />
+    <Content Include="fonts\roboto-bold-webfont.woff" />
+    <Content Include="fonts\roboto-bold-webfont.woff2" />
+    <Content Include="fonts\roboto-light-webfont.woff" />
+    <Content Include="fonts\roboto-light-webfont.woff2" />
+    <Content Include="fonts\roboto-regular-webfont.woff" />
+    <Content Include="fonts\roboto-regular-webfont.woff2" />
+    <Content Include="fonts\summernote.woff" />
+    <Content Include="fonts\summernote.woff2" />
+    <Content Include="css\_type.scss" />
+    <Content Include="newCL\fonts\roboto-bold-webfont.woff2" />
+    <Content Include="newCL\fonts\roboto-regular-webfont.woff2" />
+    <Content Include="resources\LayoutUsuarios - Clima Laboral.xlsx" />
+    <Content Include="resources\Layout Departamento.xlsx" />
+    <Content Include="resources\LayaoutEncuesta.xlsx" />
+    <Content Include="css\jQCloud.css" />
+    <Content Include="css\ReporteoClima\bootstrap.min.css.map" />
+    <Content Include="fonts\roboto-thin-webfont.woff" />
+    <Content Include="fonts\roboto-thin-webfont.woff2" />
+    <Content Include="fonts\roboto-black-webfont.woff" />
+    <Content Include="fonts\roboto-black-webfont.woff2" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-Bold.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-BoldItalic.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-ExtraBold.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-ExtraBoldItalic.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-Italic.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-Light.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-LightItalic.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-Regular.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-SemiBold.ttf" />
+    <Content Include="css\Clima Dinamico\fonts\OpenSans-SemiBoldItalic.ttf" />
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="resources\LayoutIndicadoresPorcentaje - Clima Laboral.xlsx" />
+    <Content Include="resources\LayoutPreguntasPorcentaje - Clima Laboral.xlsx" />
+    <Content Include="resources\LayoutHistoricos.xlsx" />
+    <None Include="scripts\jquery-1.12.4.intellisense.js" />
+    <Content Include="scripts\formProgressBar.jquery.js" />
+    <Content Include="scripts\GetDataArray.js" />
+    <Content Include="scripts\JQCloud.js" />
+    <Content Include="scripts\jquery-1.12.4.js" />
+    <Content Include="scripts\jquery-1.12.4.min.js" />
+    <Content Include="scripts\jquery-ui-1.12.1.js" />
+    <Content Include="scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="scripts\jquery.autoSave.js" />
+    <Content Include="scripts\jquery.base64.js" />
+    <Content Include="scripts\jquery.table2excel.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="scripts\jquery2xlsx\Blob.js" />
+    <Content Include="scripts\jquery2xlsx\csv.svg" />
+    <Content Include="scripts\jquery2xlsx\exportXlsx.js" />
+    <Content Include="scripts\jquery2xlsx\FileSaver.js" />
+    <Content Include="scripts\jquery2xlsx\icsv.png" />
+    <Content Include="scripts\jquery2xlsx\itxt.png" />
+    <Content Include="scripts\jquery2xlsx\ixls.png" />
+    <Content Include="scripts\jquery2xlsx\ixlsx.png" />
+    <Content Include="scripts\jquery2xlsx\tableexport.css" />
+    <Content Include="scripts\jquery2xlsx\tableexport.js" />
+    <Content Include="scripts\jquery2xlsx\txt.svg" />
+    <Content Include="scripts\jquery2xlsx\xls.svg" />
+    <Content Include="scripts\jquery2xlsx\xlsx.core.min.js" />
+    <Content Include="scripts\jquery2xlsx\xlsx.svg" />
+    <Content Include="scripts\jqueryBase64.js" />
+    <Content Include="scripts\jqueryBase642.js" />
+    <None Include="scripts\linq-vsdoc.js" />
+    <Content Include="scripts\kendo-all.js" />
+    <Content Include="scripts\linq.js" />
+    <Content Include="scripts\linq.min.js" />
+    <Content Include="scripts\lz-string.min.js" />
+    <Content Include="scripts\Reporte.js" />
+    <Content Include="scripts\jquery-1.10.2.min.js" />
+    <Content Include="scripts\jquery-1.8.3.min.js" />
+    <Content Include="scripts\jquery-3.4.1.min.js" />
+    <Content Include="scripts\jquery.museoverlay.js" />
+    <Content Include="scripts\jquery.watch.js" />
+    <Content Include="scripts\museconfig.js" />
+    <Content Include="scripts\museutils.js" />
+    <Content Include="scripts\musewpslideshow.js" />
+    <Content Include="scripts\popper.min.js" />
+    <Content Include="scripts\reporteoClimaLaboral_FromJob - Copia_23_abril.js" />
+    <Content Include="scripts\reporteoClimaLaboral_FromJob - Copia_22_04_2021.js" />
+    <Content Include="scripts\reporteoClimaLaboral_FromJob.js" />
+    <Content Include="scripts\reporteoClimaLaboral.js" />
+    <Content Include="scripts\ReporteoClima\html.js" />
+    <Content Include="scripts\ReporteoClima\html2canvas.js" />
+    <Content Include="scripts\ReporteoClima\html2pdf.bundle.min.js" />
+    <Content Include="scripts\ReporteoClima\jspdf.js" />
+    <Content Include="scripts\ReporteoClima\kendo.all.min.js" />
+    <Content Include="scripts\ReporteoClima\LinQ.js" />
+    <Content Include="scripts\ReporteoClima\morris.js" />
+    <Content Include="scripts\ReporteoClima\morris2.js" />
+    <Content Include="scripts\ReporteoClima\PDFreactor.js" />
+    <Content Include="scripts\ReporteoClima\reporteoClima.min.js" />
+    <Content Include="scripts\ReporteoClima\split_text_to_size.js" />
+    <Content Include="scripts\ReporteoClima\standard_fonts_metrics.js" />
+    <Content Include="scripts\ReporteoClima\text3d.js" />
+    <Content Include="scripts\ReportsGenerator.js" />
+    <Content Include="scripts\require.js" />
+    <Content Include="scripts\ResizeSensor.js" />
+    <Content Include="scripts\resizeSensor.min.js" />
+    <Content Include="scripts\ScrollTable\jquery.table2excel.js" />
+    <Content Include="scripts\ScrollTable\jquery.table2excel.min.js" />
+    <Content Include="scripts\summernote.min.js" />
+    <Content Include="scripts\summernote\bootstrap.js" />
+    <Content Include="scripts\summernote\jquery-3.3.1.js" />
+    <Content Include="scripts\summernote\modernizr-2.8.3.js" />
+    <Content Include="scripts\summernote\respond.js" />
+    <Content Include="scripts\summernote\summernote-bs4.css" />
+    <Content Include="scripts\summernote\summernote-bs4.js" />
+    <Content Include="scripts\summernote\summernote-bs4.min.css" />
+    <Content Include="scripts\summernote\summernote-bs4.min.js" />
+    <Content Include="scripts\summernote\summernote-lite.css" />
+    <Content Include="scripts\summernote\summernote-lite.js" />
+    <Content Include="scripts\summernote\summernote-lite.min.css" />
+    <Content Include="scripts\summernote\summernote-lite.min.js" />
+    <Content Include="scripts\summernote\summernote.css" />
+    <Content Include="scripts\summernote\summernote.js" />
+    <Content Include="scripts\summernote\summernote.min.css" />
+    <Content Include="scripts\summernote\summernote.min.js" />
+    <Content Include="scripts\swal.min.js" />
+    <Content Include="scripts\sweetalert.min.js" />
+    <Content Include="scripts\sweetalert_2.min.js" />
+    <Content Include="scripts\swiper.min.js" />
+    <Content Include="scripts\tab.js" />
+    <Content Include="scripts\tableexport.js" />
+    <Content Include="scripts\templates-functions.js" />
+    <Content Include="scripts\touchswipe.js" />
+    <Content Include="scripts\UAParser.js" />
+    <Content Include="scripts\ValidarEntradas.js" />
+    <Content Include="scripts\ValidateLayoutEncuesta.js" />
+    <Content Include="scripts\webpro.js" />
+    <Content Include="scripts\whatinput.js" />
+    <Content Include="scripts\wordcloud2.js" />
+    <Content Include="scripts\yearpicker.js" />
+    <Content Include="scss\summernote-icons.css" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Administrador\Add.cshtml" />
+    <Content Include="Views\Administrador\EmailEnviado.cshtml" />
+    <Content Include="Views\Administrador\GetAll.cshtml" />
+    <Content Include="Views\Administrador\Permisos.cshtml" />
+    <Content Include="Views\Admin\Contenido.cshtml" />
+    <Content Include="Views\Admin\FooterAdmin.cshtml" />
+    <Content Include="Views\Admin\HeaderAdmin.cshtml" />
+    <Content Include="Views\Admin\MPGeneral.Master" />
+    <Content Include="Views\Admin\PatialIndex.cshtml" />
+    <Content Include="Views\Dashboard\Dashboard.cshtml" />
+    <Content Include="Views\Encuesta\Create.cshtml" />
+    <Content Include="Views\Encuesta\GetAll.cshtml" />
+    <Content Include="Views\Encuesta\EncuestaIngreso.cshtml" />
+    <Content Include="Views\Encuesta\ConfiguraSecciones.cshtml" />
+    <Content Include="Views\Encuesta\EditSecciones.cshtml" />
+    <Content Include="Views\Encuesta\EditCondiciones.cshtml" />
+    <Content Include="Views\Encuesta\EnviarEncuestaCL.cshtml" />
+    <Content Include="Views\Encuesta\EditClimaLab.cshtml" />
+    <Content Include="scripts\jQuery.auto-save-form.js" />
+    <Content Include="Views\Encuesta\successEmail.cshtml" />
+    <Content Include="Views\Clim\Login.cshtml" />
+    <Content Include="Views\Clim\LayoutPage.cshtml" />
+    <Content Include="Views\Clim\SeccionLikert.cshtml" />
+    <Content Include="Views\BD\ValidacionModal.cshtml" />
+    <Content Include="Views\Encuesta\errorView.cshtml" />
+    <Content Include="Views\Admin\DashBoard.cshtml" />
+    <Content Include="Views\Encuesta\GetEstatusEnvio.cshtml" />
+    <Content Include="Views\ClimaDinamico\Login.cshtml" />
+    <Content Include="Views\ClimaDinamico\Layout.cshtml" />
+    <Content Include="Views\ClimaDinamico\Encuesta.cshtml" />
+    <Content Include="Views\ClimaDinamico\Introduccion.cshtml" />
+    <Content Include="Views\ClimaDinamico\Thanks.cshtml" />
+    <Content Include="Views\Competencia\GetAll.cshtml" />
+    <Content Include="Views\Competencia\GetAll_Categoria.cshtml" />
+    <Content Include="Views\Encuesta\ConfiguraOrden.cshtml" />
+    <Content Include="Views\Encuesta\CreateCL.cshtml" />
+    <Content Include="Views\Categorias\CategoriasAdd.cshtml" />
+    <Content Include="Views\Categorias\ValPregSubCatAdd.cshtml" />
+    <Content Include="Views\Categorias\ValSubCatCatAdd.cshtml" />
+    <None Include="Views\Encuesta\mi vista.cshtml" />
+    <Content Include="Views\Encuesta\ValidacionModal.cshtml" />
+    <Content Include="Views\Home\Busy.cshtml" />
+    <Content Include="Views\Home\EncuestaP1.cshtml" />
+    <Content Include="Views\Home\EncuestaP10.cshtml" />
+    <Content Include="Views\Home\EncuestaP11.cshtml" />
+    <Content Include="Views\Home\EncuestaP2.cshtml" />
+    <Content Include="Views\Home\EncuestaP3.cshtml" />
+    <Content Include="Views\Home\EncuestaP4.cshtml" />
+    <Content Include="Views\Home\EncuestaP5.cshtml" />
+    <Content Include="Views\Home\EncuestaP6.cshtml" />
+    <Content Include="Views\Home\EncuestaP7.cshtml" />
+    <Content Include="Views\Home\EncuestaP8.cshtml" />
+    <Content Include="Views\Home\EncuestaP9.cshtml" />
+    <Content Include="Views\Home\EncuestaP9A.cshtml" />
+    <Content Include="Views\Home\EncuestaP9B.cshtml" />
+    <Content Include="Views\Home\Final.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Index_Aux.cshtml" />
+    <Content Include="Views\Home\Index_CL.cshtml" />
+    <Content Include="Views\Home\Inicio.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Modal.cshtml" />
+    <Content Include="Views\Home\ModalAvance.cshtml" />
+    <Content Include="Views\Home\ReportCL.cshtml" />
+    <Content Include="Views\Home\Reporte.cshtml" />
+    <Content Include="Views\Home\ReporteGetAll.cshtml" />
+    <Content Include="Views\Home\ValidacionModal.cshtml" />
+    <Content Include="Views\Home\ViewPrueba.cshtml" />
+    <Content Include="Views\LoginAdmin\Login.cshtml" />
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Plantillas\Create.cshtml" />
+    <Content Include="Views\Plantillas\Edit.cshtml" />
+    <Content Include="Views\Plantillas\Plantilla.cshtml" />
+    <Content Include="Views\Plantillas\Preview.cshtml" />
+    <Content Include="Views\Plantillas\_LayoutPreview.cshtml" />
+    <Content Include="scripts\ReporteoClima\cat.js" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Sweet\Alert.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="scripts\summernote\summernote-bs4.js.map" />
+    <Content Include="scripts\summernote\summernote-bs4.min.js.map" />
+    <Content Include="scripts\summernote\summernote-lite.js.map" />
+    <Content Include="scripts\summernote\summernote-lite.min.js.map" />
+    <Content Include="scripts\summernote\summernote.js.map" />
+    <Content Include="scripts\summernote\summernote.min.js.map" />
+    <Content Include="css\bootstrap.min.css.map" />
+    <Content Include="scss\btn-group.scss" />
+    <Content Include="scss\buttons.scss" />
+    <Content Include="scss\common.scss" />
+    <Content Include="scss\dropdown.scss" />
+    <Content Include="scss\form.scss" />
+    <Content Include="scss\mixins.scss" />
+    <Content Include="scss\modal.scss" />
+    <Content Include="scss\popover.scss" />
+    <Content Include="scss\toolbar.scss" />
+    <Content Include="scss\tooltip.scss" />
+    <Content Include="scss\variables.scss" />
+    <Content Include="Views\Administrador\SelectEmpleado.cshtml" />
+    <Content Include="Views\Empresa\GetAll.cshtml" />
+    <Content Include="Views\Empresa\Add.cshtml" />
+    <Content Include="Views\Empresa\AdministrarAreaDepto.cshtml" />
+    <Content Include="Views\Empresa\ModalEdit.cshtml" />
+    <Content Include="resources\LayoutArea.xlsx" />
+    <Content Include="UploadedFiles\AreaPrueba1.xlsx" />
+    <Content Include="Views\Empresa\GetDepartamentoByIdArea.cshtml" />
+    <Content Include="Views\Empresa\GetAllEliminadas.cshtml" />
+    <Content Include="Views\Preguntas\PreguntasAdd.cshtml" />
+    <Content Include="Views\Respuestas\RespuestasAdd.cshtml" />
+    <Content Include="Views\Empresa\GetAllSubDepartamento.cshtml" />
+    <Content Include="Views\Administrador\GetAllEliminados.cshtml" />
+    <Content Include="Views\Reporte\GetAll.cshtml" />
+    <Content Include="Views\Reporte\ReporteGlobalCL.cshtml" />
+    <Content Include="Views\Reporte\GetPorcentajeAfirmativas.cshtml" />
+    <Content Include="Views\Reporte\GetEstatusAvance.cshtml" />
+    <Content Include="Views\Reporte\GetPorcentajeAfrimativasByDemografico.cshtml" />
+    <Content Include="resources\LayoutUsuarios.xlsx" />
+    <Content Include="scripts\jquery-1.12.4.min.map" />
+    <Content Include="Views\Reporte\ReporteFinalByUNegocio.cshtml" />
+    <Content Include="Views\Reporte\ReporteAbiertas.cshtml" />
+    <Content Include="Views\Encuesta\creaEncuesta.cshtml" />
+    <Content Include="Views\Encuesta\e.cshtml" />
+    <Content Include="Views\Encuesta\Edit.cshtml" />
+    <Content Include="Views\Encuesta\Encuesta.cshtml" />
+    <Content Include="Views\Encuesta\Preview.cshtml" />
+    <Content Include="Views\BD\Add.cshtml" />
+    <Content Include="Views\BD\GetAll.cshtml" />
+    <Content Include="Views\BD\GetDataFromBD.cshtml" />
+    <Content Include="Views\BD\GetEliminadas.cshtml" />
+    <Content Include="Views\Preguntas\PreguntasEncuesta.cshtml" />
+    <Content Include="Views\Respuestas\RespuestasEncuesta.cshtml" />
+    <Content Include="Views\Encuesta\Load.cshtml" />
+    <Content Include="Views\Encuesta\Login.cshtml" />
+    <Content Include="Views\Encuesta\ViewReporte.cshtml" />
+    <Content Include="Views\Encuesta\ConfigurarCondiciones.cshtml" />
+    <Content Include="Views\Preguntas\GetPreguntas.cshtml" />
+    <Content Include="Views\Respuestas\GetRespuestas.cshtml" />
+    <Content Include="Views\Respuestas\RespuestaIndividual.cshtml" />
+    <Content Include="scss\mixins\buttons.scss" />
+    <Content Include="scss\elements.scss" />
+    <Content Include="scss\summernote-bs3.scss" />
+    <Content Include="scss\summernote-bs4.scss" />
+    <Content Include="scss\summernote-common.scss" />
+    <Content Include="scss\summernote-lite.scss" />
+    <Content Include="Views\Plantillas\creaPlantilla.cshtml" />
+    <Content Include="Views\Plantillas\DuplicaPlantilla.cshtml" />
+    <Content Include="Views\Plantillas\EditaPlantilla.cshtml" />
+    <Content Include="Views\Plantillas\Plantillas.cshtml" />
+    <Content Include="Views\Preguntas\PreguntasAddEdit.cshtml" />
+    <Content Include="Views\Respuestas\RespuestasAddEdit.cshtml" />
+    <Content Include="Views\Encuesta\ThankyouPage.cshtml" />
+    <Content Include="Views\Preguntas\GetOnlyPreguntas.cshtml" />
+    <Content Include="Views\Preguntas\GetOnlyPreguntasEdit.cshtml" />
+    <Content Include="Views\Encuesta\ErrorEmail.cshtml" />
+    <Content Include="Views\ReporteD4U\Reporte.cshtml" />
+    <Content Include="Views\ReporteD4U\ReporteD4U.cshtml" />
+    <Content Include="Views\ReporteD4U\Add.cshtml" />
+    <Content Include="Views\ReporteD4U\GetBase64Table.cshtml" />
+    <Content Include="Views\Reporte\CustomReport.cshtml" />
+    <Content Include="Views\ReporteoClima\ConfigirarReporte.cshtml" />
+    <Content Include="Views\ReporteoClima\Loading.cshtml" />
+    <Content Include="Views\ReporteoClima\_LayoutReportes.cshtml" />
+    <Content Include="Views\ReporteoClima\Busqueda\BusquedaPorEstructuraGAFM.cshtml" />
+    <Content Include="Views\ReporteoClima\ModalImagen.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no1_Portada.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\_GridFinalReporte.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no2_Contexto_Descripcion.cshtml" />
+    <Content Include="Views\ReporteoClima\IndexReporte.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no3_Contexto_Iconografia.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no4_Criterios_Busqueda.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no5_Indicadores_Generales.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no6_Indicadores_Por_Categoria.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no7_Impulsores_Clave.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no8_Reactivos_Mejor_ClasificadosEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no9_Reactivos_Mayor_CrecimientoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no10_Reactivos_Peor_ClasificadosEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no11_Reactivos_Menor_CrecimientoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no8_Reactivos_Mejor_ClasificadosEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no9_Reactivos_Mayor_CrecimientoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no10_Reactivos_Peor_ClasificadosEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no11_Reactivos_Menor_CrecimientoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no12_Reactivos_Factor_PsicoSocial.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no13_Indicadores_De_Permanencia.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no14_Comparativo_Indicadores_De_Permanencia.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no15_Comparativo_Indicadores_De_Abandono.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no16_Resultados_Generales_Por_DepartamentoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no16_Resultados_Generales_Por_DepartamentoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no17_Resultados_Generales_Por_Niveles_EE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no17_Resultados_Generales_Por_Niveles_EA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no18_Tabla_Clasificacion_CorporativoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no18_Tabla_Clasificacion_CorporativoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no19_Reporte_Rango_AntiguedadEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no19_Reporte_Rango_AntiguedadEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no20_Reporte_GeneroEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no20_Reporte_GeneroEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no21_Reporte_Grado_AcademicoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no21_Reporte_Grado_AcademicoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no22_Reporte_Condicion_TrabajoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no22_Reporte_Condicion_TrabajoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no23_Reporte_FuncionEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no23_Reporte_FuncionEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no24_Reporte_Rango_EdadEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no24_Reporte_Rango_EdadEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no25_Reporte_Dinamico.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no26_Reporte_Comentarios.cshtml" />
+    <Content Include="Views\ReporteoClima\CargarHistorico\CargarHistorico.cshtml" />
+    <Content Include="Views\ReporteoClima\Busqueda\BusquedaPorReactivoSeleccionado.cshtml" />
+    <Content Include="Views\ReporteoClima\Busqueda\BusquedaPorTipoDeIndicador.cshtml" />
+    <Content Include="Views\ReporteoClima\ModalEntidad.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\Introduccion.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no5_Indicadores_Generales_Custom.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no16_Resultados_Generales_Por_DepartamentoEA - Copia.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\reportedinamicoEE.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\reportedinamicoEA.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\no27_Reporte_Corpo.cshtml" />
+    <Content Include="Views\Preguntas\PreguntasAddCL.cshtml" />
+    <Content Include="Views\Encuesta\PreviewConfig.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scripts\TableExport\" />
+    <Folder Include="Views\ApisHistorico\" />
+    <Folder Include="Views\AuxGetResp\" />
+    <Folder Include="Views\BackGroundJob\" />
+    <Folder Include="Views\CalcClim\" />
+    <Folder Include="Views\HtmlToPDF\" />
+    <Folder Include="Views\ReporteClimaDinamico\" />
+    <Folder Include="Views\ReportesClima\" />
+    <Folder Include="Views\Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Content\sweetalert\sweet-alert.less" />
+    <Content Include="Content\sweetalert\sweet-alert-combine.less" />
+    <Content Include="Content\sweetalert\sweet-alert-animations.less" />
+    <Content Include="Content\bootstrap\variables.less" />
+    <Content Include="Content\bootstrap\mixins.less" />
+    <None Include="css js\jquery-1.12.4.min" />
+    <None Include="css js\popper.min" />
+    <Content Include="img\sweetalert2.min" />
+    <None Include="Project_Readme.html" />
+    <None Include="Properties\PublishProfiles\ClimaLaboral.pubxml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BL\BL.csproj">
+      <Project>{af230048-f13f-4051-b07a-c8029591fa6d}</Project>
+      <Name>BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DL\DL\DL.csproj">
+      <Project>{502c5693-4b46-4206-b11f-e433a628f9a9}</Project>
+      <Name>DL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ML\ML.csproj">
+      <Project>{840167a0-5b08-4f7c-ae1e-b8c7d8360e07}</Project>
+      <Name>ML</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="scripts\TS\BL\Usuario.ts" />
+    <TypeScriptCompile Include="scripts\TS\ML\IUsuario.ts" />
+    <TypeScriptCompile Include="scripts\typings\sweetalert\sweetalert.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Relase Prod|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>11124</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:11124/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://192.192.192.97</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0-preview\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0-preview\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0-rc1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0-rc1\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.1.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.1.0\build\Microsoft.Net.Compilers.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

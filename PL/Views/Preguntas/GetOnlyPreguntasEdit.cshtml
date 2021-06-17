@@ -1,0 +1,67 @@
+﻿@model ML.Preguntas
+
+@*@using (Html.BeginCollectionItem("NewCuestion",""))
+{*@
+    @Html.AntiForgeryToken()   
+    <div class="section-survey col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@Model.IdPregunta">
+        <div class="body-survey">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-12">
+                    <div class="form-group" style="background-color:#e9ecef; border-radius:2px; border: 1px solid #ced4da">                       
+                        @*@Html.TextBoxFor(m => m.Pregunta, new { @class = "form-control", @id = Model.IdPregunta, @autofocus = "true", })*@
+                        <label class="control-label" id = "@Model.IdPregunta" >@Model.Pregunta</label>
+                       
+                         
+                       
+                        
+                    </div><!--.form-group-->
+                    <div class="col-md-6">
+                        <label class="control-label">Elige en que sección irá la pregunta</label>
+                        @{ 
+                            var ClassItems = "clase"+Model.IdPregunta;
+                        }
+                        <select id="@Model.IdPregunta" style="" class="form-control DDLsecciones @ClassItems" ></select>
+                    </div>
+                    </div><!--.col-md-7-->               
+            </div>        
+            <hr class="clearfix" />
+            
+        </div><!--.body-survey-->
+    </div>
+
+
+@*}*@
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<script>
+    //$(document).ready(function () {
+    //    $('input').prop("readonly", true);
+    //});
+</script>
+<script>
+    $(document).ready(function () {
+       $(document).on('change', '@("#isCondicional" + Model.IdPregunta)', function () {
+
+
+
+       });
+        $('#numSecciones').change(function () {
+
+            var numSecciones = $('#numSecciones').val();
+            var cadenaInsert = '';
+            for (var i = 0; i < numSecciones; i++) {
+                var seccionReal = i + 1;
+                
+                cadenaInsert += '<option value="'+seccionReal+'">Seccion ' + seccionReal + '</option>'
+                
+            }
+            $('select option').remove();
+            $('select').append(cadenaInsert);
+        });
+        //Set value of max secciones to input
+        
+    });
+
+
+
+
+</script>

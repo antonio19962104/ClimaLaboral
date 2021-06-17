@@ -1,0 +1,205 @@
+﻿@using Newtonsoft.Json
+@{
+    ViewBag.Title = "IndexReporte";
+    Layout = "~/Views/ReporteoClima/_LayoutReportes.cshtml";
+}
+<style>
+    .screenshot {
+        opacity: 0.6;
+    }
+</style>
+
+<script>
+    var _nuevoHistorico = @Html.Raw(JsonConvert.SerializeObject(new ML.Historico()));
+    var _nuevoHistoricoMin = @Html.Raw(JsonConvert.SerializeObject(new ML.minHistorico()));
+    var _newHistorico = @Html.Raw(JsonConvert.SerializeObject(new ML.HistoricoClima()));
+</script>
+<!--original-->
+<div class=""><!--col-lg-10 offset-lg-1 o con un collg12-->
+    <div ng-show="vm.urlApis == 'http://localhost:11124/'" style="overflow:auto; margin-top:10px;">
+        <div style="float:right;"></div>
+    </div>
+    <div ng-show="vm.urlApis == 'http://localhost:11124/'" style="text-align:center;margin-top:0px;">
+        <i ng-hide="vm.SeccionesReporte.Id == 1" ng-click="vm.prev()" class="fas fa-arrow-left" style="cursor:pointer"></i>
+        <span class="step" ng-class="{ active: vm.SeccionesReporte.Id % 2 == 0 }"></span>
+        <span class="step" ng-class="{ active: vm.SeccionesReporte.Id % 2 != 0 }"></span>
+        <i ng-hide="vm.SeccionesReporte.Id == 41" ng-click="vm.next()" class="fas fa-arrow-right" style="cursor:pointer"></i>
+    </div>
+    
+    
+    <div id="grid">
+        <!--<input hidden type="button" ng-click="vm.savePDF()" value="exportar" />-->
+        <div ng-show="vm.SeccionesReporte.Id == 1" id="tab-1" title="Configurar reporte">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no4_Criterios_Busqueda.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 2" id="tab-2" title="Configurar portada">
+            @Html.Partial("~/Views/ReporteoClima/ConfigirarReporte.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 3" id="tab-3" title="Portada del reporte">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no1_Portada.cshtml")
+        </div>
+
+        <div ng-show="vm.SeccionesReporte.Id == 3.5" id="tab-3punto5" title="Portada del reporte">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/Introduccion.cshtml")
+        </div>
+
+        <div ng-show="vm.SeccionesReporte.Id == 4" id="tab-4" title="Descripción del reporte">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no2_Contexto_Descripcion.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 5" id="tab-5" title="Descripción de la iconografía">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no3_Contexto_Iconografia.cshtml")
+        </div>
+
+
+        <div ng-show="vm.SeccionesReporte.Id == 6 && vm.opc == 1 || vm.SeccionesReporte.Id == 6 && vm.opc == 4" id="tab-6" title="Reporte de indicadores generales">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no5_Indicadores_Generales.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 6 && vm.opc > 1" id="tab-6" title="Reporte de indicadores generales">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no5_Indicadores_Generales_Custom.cshtml")
+        </div>
+
+        <div ng-show="vm.SeccionesReporte.Id == 7" id="tab-7" title="Reporte de indicadores por categoria">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no6_Indicadores_Por_Categoria.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 8" id="tab-8" title="Reporte de impulsores clave">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no7_Impulsores_Clave.cshtml")
+        </div>
+        <!-------------------------------------Reactivos mejor clasificados----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 9" id="tab-9" title="Reactivos mejor clasificados en el enfoque empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no8_Reactivos_Mejor_ClasificadosEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 10" id="tab-10" title="Reactivos mejor clasificados en el enfoque area">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no8_Reactivos_Mejor_ClasificadosEA.cshtml")
+        </div>
+
+
+        <!--Pendientes-->
+        <div ng-show="vm.SeccionesReporte.Id == 11" id="tab-11" title="Reactivos con mayor crecimiento en el enfoque empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no9_Reactivos_Mayor_CrecimientoEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 12" id="tab-12" title="Reactivos con mayor crecimiento en el enfoque area">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no9_Reactivos_Mayor_CrecimientoEA.cshtml")
+        </div>
+        <!--end Pendientes-->
+        <!-------------------------------------Reactivos peor clasificados----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 13" id="tab-13" title="Reactivos peor clasificados en el enfoque empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no10_Reactivos_Peor_ClasificadosEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 14" id="tab-14" title="Reactivos peor clasificados en el enfoque area">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no10_Reactivos_Peor_ClasificadosEA.cshtml")
+        </div>
+
+
+        <!--Pendientes-->
+        <div ng-show="vm.SeccionesReporte.Id == 15" id="tab-15" title="Reactivos con menor crecimiento enfoque empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no11_Reactivos_Menor_CrecimientoEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 16" id="tab-16" title="Reactivos con menor crecimiento enfoque empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no11_Reactivos_Menor_CrecimientoEA.cshtml")
+        </div>
+        <!--end Pendientes-->
+        <!-------------------------------------Reporte Bienestar(Bio, Psico, Social)----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 17" id="tab-17" title="Indicadores del factor de bienestar psicosocial">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no12_Reactivos_Factor_PsicoSocial.cshtml")
+        </div>
+        <!-------------------------------------Reporte de Indicadores de Permanencia----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 18" id="tab-18" title="Indicadores de permanencia">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no13_Indicadores_De_Permanencia.cshtml")
+        </div>
+        <!-------------------------------------Reporte comparativo de Indicadores de Permanencia----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 19" id="tab-19" title="Comparativo de indicadores de Permanencia">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no14_Comparativo_Indicadores_De_Permanencia.cshtml")
+        </div>
+        <!-------------------------------------Reporte Comparativo de Indicadores de Abandono----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 20" id="tab-20" title="Comparativo de indicadores de Abandono">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no15_Comparativo_Indicadores_De_Abandono.cshtml")
+        </div>
+        <!-------------------------------------Reporte de Resultados Generales por Departamento----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 21" id="tab-21" title="Resultados Generales por Departamento Enfoque Empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 22" id="tab-22" title="Resultados Generales por Departamento Enfoque Área">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte de Resultados Generales por Niveles----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 23" id="tab-23" title="Resultados Generales por Niveles Enfoque Empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no17_Resultados_Generales_Por_Niveles_EE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 24" id="tab-24" title="Resultados generales por Niveles Enfoque Area">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no17_Resultados_Generales_Por_Niveles_EA.cshtml")
+        </div>
+        <!-------------------------------------Reporte de Clasificación Corporativo----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 25" id="tab-25" title="Pantalla del punto numero 16 Enfoque empresa">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no18_Tabla_Clasificacion_CorporativoEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 26" id="tab-26" title="Pantalla del punto numero 16 Enfoque Area">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no18_Tabla_Clasificacion_CorporativoEA.cshtml")
+        </div>
+
+
+        <!-------------------------------------Pantallas finales------------------------------------------------------->
+        <!-------------------------------------Reporte por Rango de Antiguedad----------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 27" id="tab-27" title="Reporte por Rango de Antigüedad">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no19_Reporte_Rango_AntiguedadEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 28" id="tab-28" title="Reporte por Rango de Antigüedad">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no19_Reporte_Rango_AntiguedadEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte por Genero----------------------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 29" id="tab-29" title="Reporte por Género">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no20_Reporte_GeneroEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 30" id="tab-30" title="Reporte por Género">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no20_Reporte_GeneroEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte por Grado Academico-------------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 31" id="tab-31" title="Reporte por Grado Académico">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no21_Reporte_Grado_AcademicoEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 32" id="tab-32" title="Reporte por Grado Académico">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no21_Reporte_Grado_AcademicoEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte por Condicion de Trabajo-------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 33" id="tab-33" title="Reporte por Condición de Trabajo">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no22_Reporte_Condicion_TrabajoEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 34" id="tab-34" title="Reporte por Condición de Trabajo">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no22_Reporte_Condicion_TrabajoEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte por Funcion-------------------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 35" id="tab-35" title="Reporte por Función">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no23_Reporte_FuncionEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 36" id="tab-36" title="Reporte por Función">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no23_Reporte_FuncionEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte por Rango de Edad------------------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 37" id="tab-37" title="Reporte por Rango de Edad">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no24_Reporte_Rango_EdadEE.cshtml")
+        </div>
+        <div ng-show="vm.SeccionesReporte.Id == 38" id="tab-38" title="Reporte por Rango de Edad">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no24_Reporte_Rango_EdadEA.cshtml")
+        </div>
+        <!-------------------------------------Reporte Dinámico de Clima Laboral---------------------------------->
+        <div ng-show="vm.SeccionesReporte.Id == 39" id="tab-39" title="Reporte Dinámico de Clima Laboral">
+            <script src="~/Jit/jit.js"></script>
+            <div id="IdEE"></div>
+            <div id="IdEA"></div>    
+        </div>
+        <!-------------------------------------Reporte de Comentarios Abiertos------------------------------------>
+        <div ng-show="vm.SeccionesReporte.Id == 40" id="tab-40" title="Reporte de Comentarios Abiertos">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no26_Reporte_Comentarios.cshtml")
+        </div>
+
+        <div ng-show="vm.SeccionesReporte.Id == 40.5 && vm.opc == '4'">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no27_Reporte_Corpo.cshtml")
+        </div>
+
+        <div ng-show="vm.SeccionesReporte.Id == 41" id="tab-41" title="Reactivos con menor crecimiento">
+            @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/_GridFinalReporte.cshtml")
+        </div>
+
+    </div>
+    <div ng-click="vm.prev()" ng-hide="vm.SeccionesReporte.Id == 1" class="swiper-button-prev swiper-prev"></div>
+    <div ng-click="vm.next()" ng-hide="(vm.SeccionesReporte.Id == 1) || (vm.SeccionesReporte.Id == 41) || (vm.opc > 1 && vm.SeccionesReporte.Id == 6)" class="swiper-button-next swiper-next"></div>
+</div>

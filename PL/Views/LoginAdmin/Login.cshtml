@@ -1,0 +1,189 @@
+﻿@using Newtonsoft.Json
+@model ML.Administrador
+@{  
+    ViewBag.Title = "Login CMS - Encuestas";
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @Styles.Render("~/bundles/cssAdmin")   
+    
+    <!-- Title -->
+    <title>Bienvenido | Diagnostic 4U</title>
+</head>
+<body>
+    <main id="wrapper">
+        <section id="slider">
+            <!-- Swiper -->
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-1.jpg');"></div><!--.swiper-slide-->
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-2.jpg');"></div><!--.swiper-slide-->
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-1.jpg');"></div><!--.swiper-slide-->
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-2.jpg');"></div><!--.swiper-slide-->
+                </div><!--.swiper-wrapper-->
+            </div><!--.swiper-container-->
+        </section>
+  
+    
+        <div class="form-wrapper">
+            <div class="form-box">
+                <img src="~/img/logo.png" class="img-fluid logo-form" alt="Logo">
+                <h1 class="title-form-box">Iniciar sesión</h1>
+                <div class="form-group mb-4" >
+                    @*<input type="text" class="form-control form-control-lg UserName" id="userLogin" placeholder="Usuario:">*@
+                    @Html.TextBoxFor(model => model.UserName, htmlAttributes: new { @type = "text", @class="form-control form-control-lg UserName", @id="userLogin",  @placeholder="Usuario:" })
+                </div>
+                <div class="form-group mb-4">
+                    @*<input type="password" class="form-control form-control-lg Pass" id="passwordLogin" placeholder="Contraseña:">*@
+                    @Html.TextBoxFor(model => model.Password, htmlAttributes: new { @type="password", @class="form-control form-control-lg Pass", @id="passwordLogin", @placeholder="Contraseña:" })
+                </div>
+                <a href="@Url.Action("ForgotPassword", "Account")" class="text-forgot">¿Olvidaste tu contraseña?</a>
+            </div>
+            @*<a href="#" class="btn btn-login btn-block" onclick="Autenticar()">Entrar</a>*@
+                <input type="submit" value="Entrar" class="btn btn-login btn-block" style="min-width:100%" onclick="Autenticar()" />
+           </div>
+    
+        <div class="text-slide">
+            <h2 class="title-message">Mejora la interacción</h2>
+            <p class="desc-message">con el cliente tomando decisiones<br>basadas en conocimientos generados</p>
+        </div>
+    </main>
+
+    
+    @Scripts.Render("~/bundles/jqueryAdmin")
+
+
+    <script src="~/scripts/swiper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+      var swiper = new Swiper('.swiper-container', {
+        spaceBetween: 0,
+        effect: 'fade',
+        loop: true,
+        centeredSlides: true,
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+        }
+      });
+    </script>
+    <script>
+
+        $(document).ready(function () {
+
+            var resultLogin = @Session["resultLogin"];
+            if (resultLogin != 0) {
+                
+                swal({
+                    title: "Claves de acceso no válidas",
+                    text: "",
+                    type: "error",
+                    icon: "error",
+                });
+
+            }
+
+
+            //$("#userLogin").on('paste', function (e) {
+            //    e.preventDefault();
+            //    //alert('Esta acción está prohibida');
+            //});
+
+            //$("#userLogin").on('copy', function (e) {
+            //    e.preventDefault();
+            //    //alert('Esta acción está prohibida');
+            //});
+
+            //$("#passwordLogin").on('paste', function (e) {
+            //    e.preventDefault();
+            //    //alert('Esta acción está prohibida');
+            //});
+
+            //$("#passwordLogin").on('copy', function (e) {
+            //    e.preventDefault();
+            //    //alert('Esta acción está prohibida');
+            //});
+        });
+
+        function validarClaves() {
+            var userName = $('.UserName').val();
+            var pass = $('.Pass').val();
+
+            if (userName == null || pass == null || userName == "" || pass == "") {
+                swal("Debe ingresar sus claves de acceso", "", "error");
+                return false;
+            }
+            else {
+                Autenticar();
+            }
+
+        }
+
+        function Autenticar() {
+            var userName = $('.UserName').val();
+            var pass = $('.Pass').val();
+
+            if (userName == "" || userName == null || pass == null || pass == "") {
+                swal("Debe ingresar sus claves de acceso", "", "error");
+            }
+            else{
+
+                let ModelAdministrador = {
+                    username: userName,
+                    password: pass
+                };
+
+                var MLAdministrador = JSON.stringify(ModelAdministrador);
+
+                $.ajax({
+
+                    type: 'POST',
+                    data: MLAdministrador, traditional: true,
+                    url: '@Url.Action("AutenticarAdmin", "LoginAdmin")',
+                    contentType: 'application/json; charset=utf-8',
+                    complete: function (Response) {
+                        if (Response.responseText == '"error"') {
+                            swal("Claves de acceso no válidas", "", "error");
+                        }
+                        if (Response.responseText == '"success"') {
+                            //console.log('suxccess');
+                            localStorage["usuario"] = userName;
+                            window.location.href = "/Dashboard/Dashboard/";
+                        }
+
+                    }
+                });
+            
+            }
+        }
+        function sendCode() {
+            var code = '<h3 class="box-header-title">Encuesta corta Satisfacción al cliente</h3><p class="box-header-paragraph">Breve descripción de la encuesta, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu</p>';
+            var instr = '<h3 class="box-header-title">Encuesta corta Satisfacción al cliente</h3><p class="box-header-paragraph">Breve descripción de la encuesta, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu</p>';
+            let model = { 
+                descripcion: code,
+                instruccion: instr
+            }
+
+            $.ajax({
+                url: '@Url.Action("getHtml", "LoginAdmin")',
+                data: model,
+                success: function (Response) {
+                    console.log(Response);
+                }
+            });
+
+        }
+    </script>
+
+    
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "successEmail";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Encuesta / <span>Resultados de los envíos de email</span></h1>
+            </div>
+        </div>
+    </div><!--.container-fluid-->
+</section>
+
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12" id="principal">
+                        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                            <p><img src="~/img/err.png" style="width:100px; height:100px;" /></p>
+                            <p>Ha ocurrido un error al enviar los email a los usuarios de la base de datos: @Session["NombreBDSendEmail"] @HttpRuntime.Cache.Get("NombreBDSendEmail")</p>
+                            <div class="form-group">
+                                <p>Elementos por enviar: @HttpRuntime.Cache.Get("TotalAEnviar") </p>
+                                <p>Elementos correctos: @HttpRuntime.Cache.Get("EnviadosCorrectos") </p>
+                                <p>Errores de envio: @HttpRuntime.Cache.Get("logError") </p>
+                            </div>
+                            <div class="form-group">
+                                <input onclick="log()" class="btn btn-danger" type="submit" name="name" value="Ver el log de error" />
+                            </div>
+                            <div class="form-group">
+                                <input class="sub btn btn-success" type="submit" name="name" value="Volver al DashBoard" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".logo-header").prop("onclick", null).off("click");
+    });
+    $('.sub').click(function () {
+        window.location.href = "/DashBoard/DashboardA";
+    });
+    $('.logo-header').click(function () {
+        window.location.href = "/DashBoard/DashboardA";
+    });
+    function log() {
+        $('#principal').append(
+            '<p style="color:red"> @Session["getErrorMessage"] </p>'
+            );
+    }
+</script>

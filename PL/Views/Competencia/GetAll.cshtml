@@ -1,0 +1,82 @@
+﻿@using Newtonsoft.Json
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/Clima Dinamico/adminClimaDinamico.js"></script>
+<script src="http://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    var _listCompetencias = @Html.Raw(JsonConvert.SerializeObject(new List<ML.Competencia>()));
+    var _objCompetencia = @Html.Raw(JsonConvert.SerializeObject(new ML.Competencia()));
+</script>
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Encuesta / <span>Competencias</span></h1>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<div class="content-wrap" id="" ng-app="app">
+    <div class="container-fluid px-lg-5" ng-controller="climaController as vm">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="true">Competencias</a>
+                    </li>
+                    <li hidden class="nav-item">
+                        <a class="nav-link" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Cargar Layout</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tabSurveyContent">
+                    <div class="tab-pane fade show active" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                        <div class="section-survey shadow-sm animated fadeInUp">
+                            <div class="body-survey">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <label>Listado de mis competencias</label>
+                                                <div class="col-md-6 col-sm-6" ng-repeat="item in vm.listCompetencias.data track by $index">
+                                                    <input ng-if="item.IdCompetencia < 15" disabled autocomplete="off" type="text" class="form-control col-8" idCompetencia="{{ item.IdCompetencia }}" value="{{ item.Nombre }}" />
+                                                    <p>
+                                                        <input style="float: inline-start;" ng-if="item.IdCompetencia >= 15" autocomplete="off" type="text" class="form-control col-8" idCompetencia="{{ item.IdCompetencia }}" value="{{ item.Nombre }}" />
+                                                        <i title="Guardar" style="cursor: pointer;" ng-if="item.IdCompetencia >= 15" class="fas fa-save col-1" ng-click="vm.UpdateCompetencia($event)"></i>
+                                                        <i title="Eliminar" style="cursor: pointer;" ng-if="item.IdCompetencia >= 15" class="fas fa-trash col-1" ng-click="vm.DeleteCompetencia($event)"></i>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn" onclick="$('.newCompe')[0].removeAttribute('hidden');$('.newCompe').show();">Agregar competencia <i style="cursor: pointer" class="fas fa-plus"></i> </button>
+                                        </div>
+                                        <div class="form-horizontal newCompe" hidden>
+                                            <div class="form-group">
+                                                <label>Agregar una nueva competencia</label>
+                                                <div class="col-md-4 col-sm-6">
+                                                    <input id="newCompetencia" autocomplete="off" type="text" class="form-control" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-4 col-sm-6">
+                                                    <input type="button" class="btn btn-success" value="Agregar" ng-click="vm.AgregarCompetencia()" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

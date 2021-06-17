@@ -1,0 +1,689 @@
+﻿@using Newtonsoft.Json
+@model ML.Encuesta
+@{
+    ViewBag.Title = "Load";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xls/0.7.4-a/xls.core.min.js"></script>
+<script src="~/scripts/ValidateLayoutEncuesta.js"></script>
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-sm-8 bottom-align-left center-vertically-xs">
+                <img class="img-fluid" src="../img/icon-survey.png">
+                <h1 class="title-page-survey">Ecuestas / <span>Crear</span></h1>
+            </div>
+            <div class="col-sm-4 bottom-align-right center-vertically-xs">
+                <a href="#" onclick="return validateData();" class="btn-parallelogram parallelogram">
+                    <span class="skew-fix"><i class="fas fa-eye"></i>Crear Encuesta</span>
+                </a>
+            </div>
+        </div>
+           
+        </div><!--.container-fluid-->
+    </section>
+}
+@section Styles
+{
+    <style type="text/css">
+        .contenedor-text-rich .btn-group{
+            position: unset !important;
+        }
+        .swal-title {
+            font-size: 25px !important;
+        }
+
+        .swal-button {
+            font-size: 20px !important;
+        }
+
+        .cc-selector input {
+            margin: 0;
+            padding: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .badface {
+            background-image: url('../img/face-bad.png');
+        }
+
+        .regularface {
+            background-image: url('../img/face-regular.png');
+        }
+
+        .happyface {
+            background-image: url('../img/face-happy.png');
+        }
+
+        .happierface {
+            background-image: url('../img/face-happier.png');
+        }
+
+        input:active + .face-value {
+            opacity: .9;
+        }
+
+        input:checked + .face-value {
+            -webkit-filter: none;
+            -moz-filter: none;
+            filter: none;
+        }
+
+        .face-value {
+            cursor: pointer;
+            background-size: contain;
+            background-repeat: no-repeat;
+            display: inline-block;
+            width: 100px;
+            height: 70px;
+            -webkit-transition: all 100ms ease-in;
+            -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+            -webkit-filter: brightness(1.1) grayscale(1) opacity(.7);
+            -moz-filter: brightness(1.1) grayscale(1) opacity(.7);
+            filter: brightness(1.1) grayscale(1) opacity(.7);
+        }
+
+            .face-value:hover {
+                -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                filter: brightness(1.2) grayscale(.5) opacity(.9);
+            }
+    </style>
+    <link href="~/css/swiper.min.css" rel="stylesheet" />
+    <link href="~/css/summernote.min.css" rel="stylesheet" />
+}
+@Html.AntiForgeryToken()
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="false">Configuración</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Administración de preguntas y respuestas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " id="conf-tab" data-toggle="tab" href="#conf" role="tab" aria-controls="confi" aria-selected="true">Plantillas</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tabSurveyContent">
+                    <div class="tab-pane fade active show" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                        <div class="section-survey shadow-sm animated fadeInUp">
+                            <div class="body-survey">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            @Html.TextBoxFor(m => m.Nombre, new { @Id = "Nombre", @class = "form-control", @placeholder = "Nombre de la Encuestas", @autofocus = "true", })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        <div class="form-group">
+                                            @Html.DropDownListFor(model => model.IdEmpresa,
+                                            new SelectList(Model.ListEmpresas, "CompanyId", "CompanyName"), "Selecciona Empresa",
+                                            new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                        @Html.DropDownListFor(model => model.MLTipoEncuesta.IdTipoEncuesta,
+                                            new SelectList(Model.ListTipoEncuesta, "IdTipoEncuesta", "NombreTipoDeEncuesta"), "Selecciona Tipo de Encuesta",
+                                            new { @class = "form-control" })
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6 " id="muestraBDA">
+                                        @Html.DropDownListFor(model => model.BasesDeDatos.IdBaseDeDatos,
+                                            new SelectList(Model.ListDataBase, "IdBaseDeDatos", "Nombre"), "Selecciona Base de Datos",
+                                            new { @class = "form-control", @id = "BaseDeDatosAnonima" })
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                        <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label>Pregunta condición</label> @Html.CheckBoxFor(m => m.PreguntasCondicion, new { @name = "PreguntasCondicion" }) <i class="fas fa-project-diagram"></i>
+                                        </div>
+                                        <hr />
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                        <label>Vigencia</label>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-xl-3">
+                                                    <label>Apartir de:</label>
+                                                </div>
+                                                <div class="col-xl-3">
+                                                    @Html.TextBoxFor(m => m.FechaInicio, new { type = "date", @class = "form-control" })
+                                                </div>
+                                            </div><!--.row-->
+                                        </div><!--.form-group-->
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-xl-3">
+                                                    <label>Hasta:</label>
+                                                </div>
+                                                <div class="col-xl-3">
+                                                    @Html.TextBoxFor(m => m.FechaFin, new { type = "date", @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div><!--.form-group-->
+                                    </div>
+                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label>Instrucciones</label>
+                                            <div class="input-group trichzone contenedor-text-rich">
+                                                @Html.TextAreaFor(m => m.Instruccion, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Instruccion", @class = "form-control input-lg textarea-editor", })
+                                            </div>
+                                        </div><!--.form-group-->
+                                    </div>
+
+                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label>Agradecimiento</label>
+                                            <div class="input-group trichzone contenedor-text-rich">
+                                                @Html.TextAreaFor(m => m.Agradecimiento, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Agradecimiento", @class = "form-control input-lg textarea-editor", })
+                                            </div>
+                                        </div><!--.form-group-->
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.body-survey-->
+                        </div>
+                    </div><!--.tab-pane-->
+
+                    <div class="tab-pane fade" id="manag" role="tabpanel" aria-labelledby="manag-tab">
+                        <div class="section-survey shadow-sm animated fadeInUp">
+                            <div class="body-survey">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                                                <a style="" href="@Url.Action("DownloadLayout")" class="btn btn-secondary btn-action btn-sm" data-toggle="" data-target="">
+                                                    Descargar Layout<i class="fas fa-file-excel ml-1"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <label data-error="wrong" data-success="right" for="inputName">Elige el excel con los datos cargados</label>
+                                        <input type="file" id="encuestaFile" name="encuestaFile" class="form-control validate" onchange="ExportToTable()">
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
+                                        <div class="form-group">
+                                            <table id="exceltable" class="table table-hover table-responsive-lg table-responsive-md table-responsive-sm table-responsive-xl" style="display:none;">
+                                                <thead id="filaHead"></thead>
+                                                <tbody id="cuerpoTabla"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--.tab-pane-->
+
+                    <div class="tab-pane fade" id="conf" role="tabpanel" aria-labelledby="conf-tab">
+                        <div class="section-survey shadow-sm animated fadeInUp">
+                            <div class="body-survey">
+                                <div class="row">
+                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                        <div class="form-group">
+                                            <label>Selecciona una Plantilla</label>
+                                        </div>
+
+                                        <hr class="clearfix" />
+                                        <div class="row">
+
+                                            @{
+                                                if (Model.ListPlantillas != null)
+                                                {
+
+                                                    for (int i = 0; i < Model.ListPlantillas.Count(); i++)
+                                                    {
+                                                        <div class="col-6 col-md-3 col-lg-2 px-lg-2">
+                                                            <div class="border mb-2 mb-lg-0 rounded" align="center">
+                                                                <div class="form-check px-2 py-2">
+                                                                    <div class="col-12 p-0">
+                                                                        <input class="form-check-input position-relative mx-auto mt-0 d-block" type="radio" name="Plantillas.IdPlantilla" id="Plantillas_IdPlantilla" value="@Model.ListPlantillas[i].IdPlantilla">
+                                                                    </div>
+                                                                    <div class="col-12 p-0">
+                                                                        <label class="form-check-label d-block" for="Plantillas_IdPlantilla">
+                                                                            <div class="col-12 p-0">
+                                                                                <p class="mb-0" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: inline-block;max-width: 100%;">@Html.Raw(@Model.ListPlantillas[i].Nombre)</p>
+                                                                            </div>
+                                                                            <div class="col-12 p-0">
+                                                                                <a class="btn btn-sm btn-preview mt-1" href="@Url.Action("Preview", "Plantillas", new { IdPlantilla = @Model.ListPlantillas[i].IdPlantilla })" target="_blank">
+                                                                                    <img src="~/img/icono-preview.png" class="mt-1" width="15" height="15" alt="Icono Previsualizar">
+                                                                                    <p class="mb-0 text-white p-preview"><small class="text-preview">Previsualizar</small></p>
+                                                                                </a>
+                                                                            </div>
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                }
+                                            }
+
+                                        </div>
+                                        <hr class="clearfix" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--.tab-pane-->
+
+                </div><!--.tab-content-->
+            </div><!--.col-lg-8-->
+        </div><!--.row-->
+        <div class="row">
+            <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                <div class="col-md-8 text-right">
+                    @*<input type="button" name="name" value="validaExcel" onclick="validaExcel()" />*@
+                    @*<input type="submit" value="Create" onclick="return validateData();" class="btn btn-success" />*@
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                
+                <div id="mergeExcelResult">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validaExcel() {
+        var excelValido = true;
+        var numberOfRows = $('#exceltable tr').length;
+        var numberOfCol = document.getElementById('exceltable').rows[0].cells.length;
+
+        var headers = prueba('exceltable', 0);
+        var tieneSecciones = false;
+        for (var i = 0; i < headers.length; i++) {
+            if (headers[i] == 'Secciones') {
+                tieneSecciones = true;
+            }
+        }
+        if (tieneSecciones == false) {
+            swal('Debes llenar la columna de secciones para la encuesta', '', 'info');
+            excelValido = false;
+        }
+
+        for (var columna = 1; columna < numberOfRows; columna++) {//Empiezo de la uno porque uno es encabezado
+            var numeroColumna = columna + 1;
+            var resultData = prueba('exceltable', columna);
+
+
+            for (var i = 0; i < resultData.length; i++) {
+                var filaUser = columna;
+                if (resultData.length < 3) {//Longitud minima
+                    swal('Verifica el layout que has importado en la fila número ' + filaUser, '', 'info');
+                    excelValido = false;
+                    break;
+                }
+                if (resultData[i] == 'Likert Doble') {//LikertDoble
+                    if (resultData.length < 7) {//Incluir columnas y al menos una pregunta
+                        swal('Verifica el llenado de la pregunta tipo Likert Doble de la fila número ' + filaUser, 'Recuerda que debes incluir el nombre de las dos columnas más al menos una pregunta', 'info');
+                        excelValido = false;
+                        break;
+                    }
+                    else {
+                        for (var k = 0; k < resultData.length; k++) {//Dentro de likert doble no deben haber datos vacios
+                            if (resultData[k] == '' || resultData[k] == null) {
+                                swal('No deben haber campos vacios en el layout, verifica la fila número ' + filaUser, '', 'info');
+                                excelValido = false;
+                                break;
+                            }
+                        }
+                    }
+                }//SubSeccion
+                if (resultData[i] == 'Respuesta Corta' || resultData[i] == 'Respuesta Larga' || resultData[i] == 'Rango' || resultData[i] == 'Sentimiento' || resultData[i] == 'SubSeccion' ||
+                    resultData[i] == 'Likert Acuerdo' || resultData[i] == 'Likert Frecuencia' || resultData[i] == 'Likert Importacia' || resultData[i] == 'Likert Probabilidad') {
+                    //Respuesta corta, Respuesta Larga, Rango, Sentimiento, Likert Acuerdo, Likert Frecuencia, Likert Importacia, Likert Probabilidad
+                    if (resultData.length < 3) {
+                        swal('Verifica el llenado de la fila número ' + filaUser, '', 'info');
+                        excelValido = false;
+                        break;
+                    }
+                    else {
+                        for (var l = 0; l < 3; l++) {
+                            if (resultData[l] == '' || resultData[l] == null) {
+                                swal('No deben haber campos vacios en el layout, verifica la fila número ' + filaUser, '', 'info');
+                                excelValido = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (resultData[i] == 'Opción Multiple' || resultData[i] == 'Casilla de Verificación' || resultData[i] == 'Lista Desplegable') {
+                    if (resultData.length < 5) {
+                        swal('Para los tipos de pregunta Opción Multiple, Casilla de verificación y Lista Desplegable debes colocar mínimo una respuesta, Verifica la fila número ' + filaUser, '', 'info');
+                        excelValido = false;
+                        break;
+                    }
+                    else {
+                        for (var r = 0; r < 5; r++) {
+                            if(resultData[r] == '' || resultData[r] == null){
+                                 swal('No deben haber campos vacios en el layout, verifica la fila número ' + filaUser, '', 'info');
+                                excelValido = false;
+                                break;
+                            }
+                        }
+                    }
+                    for (var t = 4; t < 5; t++) {
+                        if (resultData[t] == '' || resultData[t] == null) {
+                            swal('Para los tipos de pregunta Opción Multiple, Casilla de verificación y Lista Desplegable debes colocar mínimo una respuesta, Verifica la fila número ' + filaUser, '', 'info');
+                            excelValido = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            console.log('Valores de la columna ' + columna + ' => ' + resultData);
+        }
+        return excelValido;
+    }
+    //$('#mergeExcelResult').append(
+    //    '<div class="body-survey"> <div class="row" id=""> <input type="hidden" name="" autocomplete="off" value="b27a2239-df3c-4acf-8bed-a1b915f2fae3"> <input name="__RequestVerificationToken" type="hidden" value="mwsy2LdPAmEd12diP8Wvd9Q4El-0UbtjUa5zCGyFqEIPLtMwfRGXdhQuDj134uLApXBzwDEC8Yx3GrCgKNY6Hu9p3tmx5Yd7dkkyIOcVZcA1">    <div class="section-survey shadow-sm animated fadeInUp col-lg-12 col-md-12 col-sm-12 col-xs-12" id="6a6e6419-e135-4a67-b21b-f319e6e5090c"> <div class="body-survey"> <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12"> <div class="col-md-6"> <div class="form-group"> <input autofocus="true" class="form-control" id="NewCuestion_b27a2239-df3c-4acf-8bed-a1b915f2fae3__Pregunta" name="NewCuestion[b27a2239-df3c-4acf-8bed-a1b915f2fae3].Pregunta" placeholder="Pregunta" type="text" value=""> </div><!--.form-group--> </div><!--.col-md-6--> <div class="col-md-6"> <<input type="text" name="TipoControl" value=""> </div> </div><div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12"><!--merge Respuestas--><div class="col-md-6"> <div class="form-check"> <input data-val="true" data-val-required="El campo Obligatoria es obligatorio." id="NewCuestion_b27a2239-df3c-4acf-8bed-a1b915f2fae3__Obligatoria" name="NewCuestion[b27a2239-df3c-4acf-8bed-a1b915f2fae3].Obligatoria" type="checkbox" value="true"><input name="NewCuestion[b27a2239-df3c-4acf-8bed-a1b915f2fae3].Obligatoria" type="hidden" value="false"> <label for="NewCuestion_b27a2239-df3c-4acf-8bed-a1b915f2fae3__Obligatoria">Obligatoria</label> </div><!--.form-check--> </div><!--.col-md-6--> <hr class="clearfix"> </div><!--.row--> </div><!--.body-survey--> </div> </div> </div>'
+    //);
+    //for (var itemResultData = 0; itemResultData < resultData.length; itemResultData++) {
+    //    if (resultData[itemResultData] == null || resultData[itemResultData] == '') {//Si algo viene vacio
+    //        swal('Revisa el excel en la columna número ' + numeroColumna + ' ya que viene un dato vacío', '', 'info');
+    //    }
+    //}
+    //Get Value of columns
+    function getColumn(table_id, col) {
+        var array = [];
+        var tab = document.getElementById(table_id);
+        var n = tab.rows.length;
+        var i, s = null, tr, td;
+
+        if (col < 0) {
+            return null;
+        }
+
+        for (i = 0; i < n; i++) {
+            tr = tab.rows[i];
+            if (tr.cells.length > col) {
+                td = tr.cells[col];    
+                s += ' ' + td.innerText;
+                array.push(td.innerText);
+            }
+        }
+        return array;
+    }
+</script>
+
+<script>
+    function prueba(table_id, filan) {
+        var array = [];
+        var tab = document.getElementById(table_id);
+        //var n = tab.rows.length;
+        var nCol = document.getElementById('exceltable').rows[0].cells.length;
+        var i, s = null, fila, td;
+
+        if (fila < 0) {
+            return null;
+        }
+
+        for (var i = 0; i < nCol; i++) {
+            var dato = tab.rows[filan].cells[i].innerText;
+            array.push(dato);
+        }
+        return array;
+    }
+</script>
+
+@section Scripts
+{
+
+    @*<script src="~/scripts/Controller/encuestaApp.js"></script>*@
+    <script src="~/scripts/summernote/bootstrap.js" type="text/javascript"></script>
+    <script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+    <script src="~/css/sweetalert.min.js"></script>
+    <script src="~/scripts/swiper.min.js"></script>
+    <script src="~/scripts/jqueryBase642.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#muestraBD").hide();
+            $('html, body').animate({ scrollTop: $('#wrapper').offset().top - 100 }, 'fast');
+
+
+
+        });
+    </script>
+    <script type="text/javascript">
+
+        var swiper = new Swiper('.swiper-slides', {
+            slidesPerView: 3,
+            spaceBetween: 25,
+            slidesPerGroup: 1,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+        $("#MLTipoEncuesta_IdTipoEncuesta").on('change', function () {
+            var seleccion = $("#MLTipoEncuesta_IdTipoEncuesta").val();
+            switch (seleccion) {
+                case "1":
+                    $("#muestraBD").hide();
+                    break;
+                case "2":
+                    $("#muestraBD").show();
+                    break;
+                case "3":
+                    $("#muestraBD").show();
+                    break;
+                default:
+                    $("#muestraBD").hide();
+            }
+        });
+    </script>
+    <script type="text/javascript">
+
+        var reemplazarAcentos = function (cadena) {
+            if (cadena != "" && cadena != null) {
+                var chars = {
+                    "á": "&aacute;", "é": "&eacute;", "í": "&iacute;", "ó": "&oacute;", "ú": "&uacute;",
+                    "à": "&aacute;", "è": "&eacute;", "ì": "&iacute;", "ò": "&oacute;", "ù": "&uacute;", "ñ": "n",
+                    "Á": "&Aacute;", "É": "&Eacute;", "Í": "&Iacute;", "Ó": "&Oacute;", "Ú": "&Uacute;",
+                    "À": "&Aacute;", "È": "&Eacute;", "Ì": "&Iacute;", "Ò": "&Oacute;", "Ù": "&Uacute;", "Ñ": "N"
+                }
+                var expr = /[áàéèíìóòúùñ]/ig;
+                var res = cadena.replace(expr, function (e) { return chars[e] });
+            }
+            else {
+                res = "";
+            }
+            return res;
+        }
+
+        function updateTextInput(val) {
+            document.getElementById('textInput').value = val;
+        };
+        function deleteCuestion(CuestionDiv) {
+            CuestionDiv.remove();
+        };
+        function seleccTipoControl(idTipoControl) {
+            alert(idTipoControl);
+        };
+        function validateData() {
+            var excel = $('#encuestaFile').val();
+            if ($("#Nombre").val() == "") {
+                swal("Escriba un Nombre de Encuesta, Por Favor. !", "", "error");
+                return false;
+            }
+
+            if ($("#IdEmpresa").val() == 0) {
+                swal("Seleccione una empresa, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#FechaInicio").val() == "") {
+                swal("Selecciones una fecha de inicio, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#FechaFin").val() == "") {
+                swal("Seleccione una fecha de fin, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#MLTipoEncuesta_IdTipoEncuesta").val() == "") {
+                swal("Seleccione un Tipo de encuesta, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#BaseDeDatosAnonima").val() == "") {
+
+                swal("Seleccione una Base de Datos, Por Favor. !", "", "error");
+                return false;
+            }
+            if (excel == "" || excel == null) {
+                swal("Seleccione un archivo para subir", "", "error");
+                return false;
+            }
+            var idPlantilla = $("input[name='Plantillas.IdPlantilla']:checked").val();
+            if (idPlantilla == undefined) {
+                swal("Seleccione una plantilla, Por Favor. !", "", "error");
+                return false;
+            }
+
+            var validacionLayout = validaExcel();
+            if (validacionLayout == false) {
+                return false;
+            }
+
+
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            var DosColumnasL = $('input:checkbox[name=DosColumnas]:checked').val() == undefined ? 0 : 1;
+            var PreguntasCondicion = $('input:checkbox[name=PreguntasCondicion]:checked').val() == undefined ? 0 : 1;
+            var NombreL = $("#Nombre").val();
+            var FechaInicioL = $("#FechaInicio").val();
+            var FechaFinL = $("#FechaFin").val();
+            var IdEmpresa = $("#IdEmpresa").val();
+            var PlantillasL = $('input[name="Plantillas.IdPlantilla"]:checked').val();
+            var BasesDeDatos = $("#BaseDeDatosAnonima").val();
+            var Descripcion = $("#Descripcion").val();
+            var Descripcion64 = $.base64.encode(reemplazarAcentos(Descripcion));
+            var Instruccion = $("#Instruccion").val();
+            var Instruccion64 = $.base64.encode(reemplazarAcentos(Instruccion));//btoa(Instruccion);
+            var ImagenInstruccionL = $("#ImagenInstruccion").val();
+            var ImagenInstruccionL64 = $.base64.encode(reemplazarAcentos(ImagenInstruccionL));
+            var MLTipoEncuestaL = $("#MLTipoEncuesta_IdTipoEncuesta").val();
+            var AgradecimientoL = $("#Agradecimiento").val();
+            var AgradecimientoL64 = $.base64.encode(reemplazarAcentos(AgradecimientoL));
+            var ImagenAgradecimientoL = $("#ImagenAgradecimiento").val();
+            var ImagenAgradecimientoL64 = $.base64.encode(reemplazarAcentos(ImagenAgradecimientoL));
+
+            let model = {
+                dosColumnas: DosColumnasL,
+                preguntasCondicion: PreguntasCondicion,
+                Nombre: NombreL,
+                DosColumnasN: DosColumnasL,
+                PreguntasCondicionN: PreguntasCondicion,
+                FechaInicio: FechaInicioL,
+                FechaFin: FechaFinL,
+                IdEmpresa: IdEmpresa,
+                Plantillas: { IdPlantilla: PlantillasL },
+                BasesDeDatos: { IdBaseDeDatos: BasesDeDatos },
+                MLTipoEncuesta: { IdTipoEncuesta: MLTipoEncuestaL },
+                descripcion: Descripcion64,
+                instruccion: Instruccion64,
+                imagenInstruccion: ImagenInstruccionL64,
+                agradecimiento: AgradecimientoL64,
+                imagenAgradecimiento: ImagenAgradecimientoL64
+            };
+
+            //let modelHtml = {
+            //    descripcion: Descripcion ,
+            //    instruccion: Instruccion,
+            //    imagenInstruccion: ImagenInstruccionL,
+            //    agradecimiento: AgradecimientoL,
+            //    imagenAgradecimiento: ImagenAgradecimientoL
+            //}
+            $.ajax({
+                type: 'POST',
+                data: model, //JSON.stringify(model),//{ encuesta: modelSend, descripcionHtml: descripcionHtmlSend },
+                url: '@Url.Action("Load", "Encuesta")',
+                complete: function (Response) {
+                    if (Response.responseJSON == 'success') {
+                        /*Alta preguntas por excel*/
+
+                        var formData = new FormData();
+                        var totalFiles = document.getElementById("encuestaFile").files.length;
+
+                        var file = document.getElementById("encuestaFile").files[0];
+                        formData.append("encuestaFile", file);
+                        
+                        $.ajax({
+                            type: 'POST',
+                            data: formData,
+                            url: '@Url.Action("AddEncuestaLayout", "Encuesta")',
+                            contentType: false,
+                            processData: false,
+                            complete: function (Response) {
+                                if (Response.statusText == 'OK') {
+                                    swal({
+                                        title: "Los datos se registraron exitosamente",
+                                        text: "",
+                                        type: "success",
+                                        icon: "success",
+                                    }).then(function () {
+                                        if (PreguntasCondicion == 0) {
+                                            window.location.href = "/Encuesta/GetAll/";
+                                        }
+                                        else {
+
+                                            //var idEncuesta = @*@Session["IdEncuestaAlta"];*@
+
+                                            window.location.href = "/Encuesta/ConfigurarCondiciones/ConfigurarCondiciones/";
+                                        }
+
+
+
+                                    });
+                                }
+                                else {
+                                    location.reload(true);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        swal("Ocurrió un error al registrar la Encuesta");
+                        location.reload(true);
+                    }
+                }
+            });
+
+
+        };
+    </script>
+
+
+
+}
+
+
+
+

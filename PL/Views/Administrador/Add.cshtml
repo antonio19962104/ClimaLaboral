@@ -1,0 +1,1960 @@
+﻿@using Newtonsoft.Json
+@model ML.Administrador
+
+@{
+    ViewBag.Title = "Agregar administrador";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/cssAdmin")
+    @*@RenderSection("Styles", false)*@
+    
+    @{
+        //Session["PerfilAdminLog"]
+        ViewBag.Perfil = Session["PerfilAdminLog"];
+    }
+    @Scripts.Render("~/bundles/jqueryAdmin")
+    @*<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />*@
+    @*<script src="~/scripts/jquery-3.4.1.min.js"></script>*@
+    @*<script src="~/scripts/templates-functions.js"></script>*@
+    <script>
+            var usr = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
+    </script>
+</head>
+
+@{
+    var usr = Convert.ToString(Session["AdminLog"]);
+    if (!String.IsNullOrEmpty(usr))
+    {
+        /* Cargar sitio */
+        <body>
+            <ul id="mySidenav" class="sidenav">
+                <a href="javascript:void(0)" class="closebtn d-none" onclick="closeNav()"><i class="fas fa-arrow-left fa-lg color"></i></a>
+                <span class="openbtn animated pulse slow" onclick="openNav()"><i class="fas fa-arrow-right fa-lg color"></i></span>
+
+
+                <!--Seccion Permisos por usuario-->
+                @{
+                    //Validar permisos
+                    var ActionEncuestasListar = false;
+                    var ActionEncuestasCrear = false;
+                    var ActionEncuestasOpc = false;
+
+                    var ActionPlantillasListar = false;
+                    var ActionPlantillasCrear = false;
+                    var ActionPlantillasOpc = false;
+
+                    var ActionReportesListar = false;
+                    var ActionReportesCrear = false;
+                    var ActionReportesOpc = false;
+
+                    var ActionBDListar = false;
+                    var ActionBDCrear = false;
+                    var ActionBDOpc = false;
+
+                    var ActionUsuariosListar = false;
+                    var ActionUsuariosCrear = false;
+                    var ActionUsuariosOpc = false;
+
+                    var ActionEmpresasListar = false;
+
+                    var ActionEmpresasCrear = false;
+                    var chkEmpresasOpc = false;
+
+                    var session = Session["AdminLog"];
+                    var sessionPerfil = Session["PerfilAdminLog"];
+
+
+                    ViewBag.Permisos = Session["Permisos"];
+                    ViewBag.Modulos = Session["Modulos"];
+                    //Model.ObjectsPermisos = new List<object>();
+                    //Model.ObjectsPermisos = ViewBag.Permisos;
+
+                    foreach (ML.PerfilModulo item in ViewBag.Permisos)
+                    {
+                        if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "ListarEncuesta")
+                        {
+                            ActionEncuestasListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "CrearEncuesta")
+                        {
+                            ActionEncuestasCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "OpcEncuesta")
+                        {
+                            ActionEncuestasOpc = true;
+                        }
+                        /**********************/
+                        if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "ListarPlantilla")
+                        {
+                            ActionPlantillasListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "CrearPlantilla")
+                        {
+                            ActionPlantillasCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "OpcPlantilla")
+                        {
+                            ActionPlantillasOpc = true;
+                        }
+                        /***********************************/
+                        if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "ListarReporte")
+                        {
+                            ActionReportesListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "CrearReporte")
+                        {
+                            ActionReportesCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "OpcReporte")
+                        {
+                            ActionReportesOpc = true;
+                        }
+                        /***************************************/
+                        if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "ListarBD")
+                        {
+                            ActionBDListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "CrearBD")
+                        {
+                            ActionBDCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "OpcBD")
+                        {
+                            ActionBDOpc = true;
+                        }
+                        /*******************************/
+                        if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "ListarUsuario")
+                        {
+                            ActionUsuariosListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "CrearUsuario")
+                        {
+                            ActionUsuariosCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "OpcUsuario")
+                        {
+                            ActionUsuariosOpc = true;
+                        }
+                        /*********************************/
+                        if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "ListarEmpresa")
+                        {
+                            ActionEmpresasListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "CrearEmpresa")
+                        {
+                            ActionEmpresasCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "OpcEmpresa")
+                        {
+                            chkEmpresasOpc = true;
+                        }
+                    }
+
+                    foreach (ML.PerfilModulo perf in ViewBag.Modulos)
+                    {
+                        ML.PerfilModulo perfilModulo = new ML.PerfilModulo();
+                        perfilModulo.Modulo = new ML.Modulo();
+
+                        perfilModulo.Modulo.Nombre = perf.Modulo.Nombre;
+
+
+
+                        if (perfilModulo.Modulo.Nombre == "Encuestas")
+                        {
+                            <li id="Encuestas">
+                                <div class="item-menu-icon" onclick="openNav()">
+                                    <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                                    <span class="tooltiptext">Encuestas</span>
+                                </div>
+                                <span class="item-menu d-none">
+                                    <a data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                                        <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Encuestas
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseSurvey">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (ActionEncuestasCrear == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Encuesta")">Crear</a></li>
+                                                }
+                                                if (ActionEncuestasOpc == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Load", "Encuesta")">Importar encuesta</a></li>
+                                                }
+                                                if (ActionEncuestasListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Encuesta")">Listado</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                                                }
+                                                if (perfilModulo.Modulo.Nombre == "Plantillas")
+                                                {
+                                                    <li id="Plantillas">
+                                                        <div class="item-menu-icon" onclick="openNav()">
+                                                            <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
+                                                            <span class="tooltiptext">Plantillas</span>
+                                                        </div>
+                                                        <span class="item-menu d-none">
+                                                            <a onclick="openNav()" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
+                                                                <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
+                                                            </a>
+                                                        </span>
+                                                        <div class="collapse" id="collapseTemplates">
+                                                            <div class="card card-body py-2">
+                                                                <ul class="fa-ul pl-lg-4">
+                                                                    @{
+                                                                        if (ActionPlantillasCrear == true)
+                                                                        {
+                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Plantillas")">Crear</a></li>
+                                                                        }
+                                                                        if (ActionPlantillasListar == true)
+                                                                        {
+                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Plantillas", "Plantillas")">Listado</a></li>
+                                                                        }
+                                                                        if (ActionPlantillasOpc == true)
+                                                                        {
+                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                                                        }
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                                        }
+                                                                        if (perfilModulo.Modulo.Nombre == "Reportes")
+                                                                        {
+                                                                            <li id="Reportes">
+                                                                                <div class="item-menu-icon" onclick="openNav()">
+                                                                                    <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
+                                                                                    <span class="tooltiptext">Reportes</span>
+                                                                                </div>
+                                                                                <span class="item-menu d-none">
+                                                                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
+                                                                                        <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
+                                                                                    </a>
+                                                                                </span>
+                                                                                <div class="collapse" id="collapseReports">
+                                                                                    <div class="card card-body py-2">
+                                                                                        <ul class="fa-ul pl-lg-4">
+                                                                                            @{
+                                                                                                if (ActionReportesCrear == true)
+                                                                                                {
+                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "ReporteD4U")">Crear</a></li>
+                                                                                                }
+                                                                                                if (ActionReportesListar == true)
+                                                                                                {
+                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Reporte")">Listado</a></li>
+                                                                                                }
+                                                                                                if (ActionReportesOpc == true)
+                                                                                                {
+                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                                                                                }
+                                                                                            }
+                                                                                        </ul>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                                                }
+                                                                                                if (perfilModulo.Modulo.Nombre == "Base de datos")
+                                                                                                {
+                                                                                                    <li id="BD">
+                                                                                                        <div class="item-menu-icon" onclick="openNav()">
+                                                                                                            <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
+                                                                                                            <span class="tooltiptext">Bases de datos</span>
+                                                                                                        </div>
+                                                                                                        <span class="item-menu d-none">
+                                                                                                            <a onclick="openNav()" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
+                                                                                                                <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
+                                                                                                            </a>
+                                                                                                        </span>
+                                                                                                        <div class="collapse" id="collapseDatabase">
+                                                                                                            <div class="card card-body py-2">
+                                                                                                                <ul class="fa-ul pl-lg-4">
+                                                                                                                    @{
+                                                                                                                        if (ActionBDCrear == true)
+                                                                                                                        {
+                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "BD")">Crear</a></li>
+                                                                                                                        }
+                                                                                                                        if (ActionBDListar == true)
+                                                                                                                        {
+                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllForListado", "BD")">Listado</a></li>
+                                                                                                                        }
+                                                                                                                        if (ActionBDOpc == true)
+                                                                                                                        {
+                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEliminadas", "BD")">Administrar bases de datos eliminadas</a></li>
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                </ul>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </li>
+                                                                                                                        }
+                                                                                                                        if (perfilModulo.Modulo.Nombre == "Usuarios")
+                                                                                                                        {
+                                                                                                                            <li id="Usuarios">
+                                                                                                                                <div class="item-menu-icon" onclick="openNav()">
+                                                                                                                                    <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
+                                                                                                                                    <span class="tooltiptext">Usuarios</span>
+                                                                                                                                </div>
+                                                                                                                                <span class="item-menu d-none">
+                                                                                                                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
+                                                                                                                                        <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
+                                                                                                                                    </a>
+                                                                                                                                </span>
+                                                                                                                                <div class="collapse" id="collapseUsers">
+                                                                                                                                    <div class="card card-body py-2">
+                                                                                                                                        <ul class="fa-ul pl-lg-4">
+                                                                                                                                            @{
+                                                                                                                                                if (ActionUsuariosCrear == true)
+                                                                                                                                                {
+                                                                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Administrador")">Crear</a></li>
+                                                                                                                                                }
+                                                                                                                                                if (ActionUsuariosListar == true)
+                                                                                                                                                {
+                                                                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Administrador")">Listado</a></li>
+                                                                                                                                                }
+                                                                                                                                                if (ActionUsuariosOpc == true)
+                                                                                                                                                {
+                                                                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminados", "Administrador")">Administrar usuarios eliminadas</a></li>
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        </ul>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </li>
+                                                                                                                                                }
+                                                                                                                                                if (perfilModulo.Modulo.Nombre == "Empresas")
+                                                                                                                                                {
+                                                                                                                                                    <li id="Empresas">
+                                                                                                                                                        <div class="item-menu-icon" onclick="openNav()">
+                                                                                                                                                            <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
+                                                                                                                                                            <span class="tooltiptext">Empresas</span>
+                                                                                                                                                        </div>
+                                                                                                                                                        <span class="item-menu d-none">
+                                                                                                                                                            <a onclick="openNav()" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
+                                                                                                                                                                <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
+                                                                                                                                                            </a>
+                                                                                                                                                        </span>
+                                                                                                                                                        <div class="collapse" id="collapseEnterprises">
+                                                                                                                                                            <div class="card card-body py-2">
+                                                                                                                                                                <ul class="fa-ul pl-lg-4">
+                                                                                                                                                                    @{
+                                                                                                                                                                        if (ActionEmpresasCrear == true)
+                                                                                                                                                                        {
+                                                                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Empresa")">Crear</a></li>
+                                                                                                                                                                        }
+                                                                                                                                                                        if (ActionEmpresasListar == true)
+                                                                                                                                                                        {
+                                                                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Empresa")">Listado</a></li>
+                                                                                                                                                                        }
+                                                                                                                                                                        if (chkEmpresasOpc == true)
+                                                                                                                                                                        {
+                                                                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminadas", "Empresa")">Administrar empresas eliminadas</a></li>
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                </ul>
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </li>
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                }
+                <!--Fin seccion permisos por usuario-->
+
+
+
+            </ul>
+            <div id="main" style="margin-left: 50px;">
+                <main id="wrapper" class="animate fadeIn">
+
+                    <div id="top-bar">
+                        <div class="container-fluid px-lg-5">
+                            <div class="row center-vertically">
+
+                                <div class="col-6 col-sm-4 col-md-5">
+                                    <img src="@Session["logo"]" class="logo-header" alt="Logo" onclick="GetDashBoard()">
+                                </div>
+
+                                <div class="col-6 col-sm-8 col-md-7">
+                                    <div class="user-info">
+                                        <span class="color">Hola</span>, @Session["AdminLog"]  @{ foreach (var item in ViewBag.Perfil)
+                                            { <span class="position"> / @item  </span> } } <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
+                                    </div><!--.user-info-->
+                                </div>
+                            </div><!--.row-->
+                        </div><!--.container-fluid-->
+                    </div>
+
+                    <section id="page-title">
+                        <div class="container-fluid px-lg-5">
+                            <img src="~/img/icon-users.png" class="img-fluid">
+                            <h1 class="title-page-survey">
+                                Administrador / <span>Crear</span>
+                            </h1>
+                        </div><!--.container-fluid-->
+                    </section>
+
+                    <section class="" id="content">
+                        <p id="" style="color:red; padding-left:30px;"><strong> </strong></p>
+                        <div class="container-fluid px-lg-5">
+                            <div class="row">
+
+                                <div class="col-lg-8 offset-lg-2">
+
+                                    <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="true">Datos generales</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Datos de estructura</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="conf-tab" data-toggle="tab" href="#conf" role="tab" aria-controls="conf" aria-selected="false">Permisos</a>
+                                        </li>
+                                    </ul>
+
+                                    @*<form id="formulario">*@
+                                    <div class="tab-content" id="tabSurveyContent">
+                                        <div class="tab-pane fade show active" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                                            <div class="section-survey shadow-sm animated fadeInUp">
+                                                <div class="body-survey">
+                                                    <div class="row">
+                                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+
+                                                                    @Html.LabelFor(model => model.Empleado.Nombre, new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-6">
+                                                                        <input maxlength="35" type="text" id="Nombre" class="form-control" value="" placeholder="Nombre del administrador" onkeyup="validarRealTime(this)" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(model => model.Empleado.ApellidoPaterno, new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-6">
+                                                                        <input type="text" maxlength="35" id="ApellidoPaterno" class="form-control" value="" placeholder="Apellido Paterno" onkeyup="validarRealTime(this)" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(model => model.Empleado.ApellidoMaterno, new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-6">
+                                                                        <input maxlength="35" type="text" id="ApellidoMaterno" class="form-control" value="" placeholder="Apellido Materno" onkeyup="validarRealTime(this)" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(model => model.Empleado.Correo, new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-6">
+                                                                        <input maxlength="50" type="text" id="Correo" class="form-control" value="" placeholder="Correo del administrador" onkeyup="validarRealTime(this)" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="manag" role="tabpanel" aria-labelledby="manag-tab">
+                                            <div class="section-survey shadow-sm animated fadeInUp">
+                                                <div class="body-survey">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(model => model.Empleado.UnidadNegocio, new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-5">
+                                                                        @Html.DropDownListFor(model => model.Empleado.UnidadNegocio, new SelectList(Model.listUNegocio, "Descripcion", "Descripcion"), "Selecciona una unidad de negocio  ", new { @id = "CompanyCategoria", @class = "form-control" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.Label("Empresa a la que pertenece el usuario", htmlAttributes: new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-5">
+                                                                        @Html.DropDownList("Company", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @class = "form-control", @id = "DDLCompany" })@*Id deñ elemento Subcategoria*@
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="conf" role="tabpanel" aria-labelledby="conf-tab">
+                                            <div class="section-survey shadow-sm animated fadeInUp">
+                                                <div class="body-survey">
+                                                    <div class="row">
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.Label("Selecciona las empresas a las que tendra acceso el usuariio", htmlAttributes: new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-5">
+                                                                        <div class="form-group">
+                                                                            <input class="" onclick="$('#especificas').css('display', 'block'); lista = []; $('#mergeSelected').empty();" type="radio" name="name" value="" id="opc1" /> <label for="opc1">Elegir empresas especificas</label>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <input class="" onclick="$('#especificas').css('display', 'none'); GetAllCompanies();" type="radio" name="name" value="" id="opc2" /> <label for="opc2">Elegir todas las empresas de su unidad de negocio</label>
+                                                                        </div>
+                                                                        @{
+                                                                            if (Model.AdminSA == 1)
+                                                                            {
+                                                                                <div class="form-group">
+                                                                                    <input class="" onclick="$('#especificas').css('display', 'none'); swal('Al crear un usuario Super Administrador tendrá acceso a todas las empresas existentes dentro del sistema', '', 'info');" type="radio" name="name" value="" id="SA" /> <label for="SA">Acceso como Super Administrador</label>
+                                                                                </div>
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                    <div id="especificas" style="display:none;" class="col-md-5 col-sm-5">
+                                                                        <input type="text" id="Company" class="form-control" value="" placeholder="Busca y selecciona una division" />
+                                                                    </div>
+                                                                    <div id="mergeSelected" class="col-md-10 col-sm-8" style="margin-top:5px;">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--End New Add-->
+
+
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.Label("Estatus", new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-5">
+                                                                        <select name="Estatus" id="Estatus" class=" form-control">
+                                                                            <option value="0">Selecciona una respuesta</option>
+                                                                            <option value="1">Activo</option>
+                                                                            <option value="2">Inactivo</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(model => model.PerfilD4U, new { @class = "control-label" })
+                                                                    <div class="col-md-5 col-sm-5">
+                                                                        @Html.DropDownListFor(model => model.PerfilD4U.IdPerfil, new SelectList(Model.ListPerfilD4U, "IdPerfil", "Descripcion"), "Selecciona perfil  ", new { @id = "DDLPerfilD4U", @class = "form-control" })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!--Merge opciones-->
+                                                            <div id="misPermisos" class="row" style="display:block;">
+                                                                <div class="col-lg-12">
+                                                                    <div class="row">
+
+                                                                        <div id="ModuloEncuestas" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #00d068; background-image: url('../img/bg-tool-survey.png');">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Encuestas</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="../img/icon-survey.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarEncuesta" id="chkEncuestasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="OpcEncuesta" id="chkEncuestasOpc" class="chk" type="checkbox"></span>Importar Encuesta</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearEncuesta" id="chkEncuestasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+                                                                        <div id="ModuloPlantillas" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #ff2d2d; background-image: url('../img/bg-tool-theme.png');">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Plantillas</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="../img/icon-template.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarPlantilla" id="chkPlantillasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearPlantilla" id="chkPlantillasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="OpcPlantilla" id="chkPlantillasOpc" class="chk" type="checkbox"></span>Más opciones</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+                                                                        <div id="ModuloReportes" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #47aadf; background-image: url('../img/bg-tool-report.png');">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Reportes</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="../img/icon-reports.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarReporte" id="chkReportesListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearReporte" id="chkReportesCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="OpcReporte" id="chkReportesOpc" class="chk" type="checkbox"></span>Administrar reportes eliminados</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+                                                                        <div id="ModuloBD" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #ffbe16; background-image: url('../img/bg-tool-db.png');">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Bases de datos</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="../img/icon-database.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarBD" id="chkBDListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearBD" id="chkBDCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="OpcBD" id="chkBDOpc" class="chk" type="checkbox"></span>Administrar Bases de Datos eliminadas</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+
+                                                                        <div id="Modulousuarios" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #e1e700; background-image: url('../img/bg-tool-user.png')">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Usuarios</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="../img/icon-users.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarUsuario" id="chkUsuariosListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearUsuario" id="chkUsuariosCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="OpcUsuario" id="chkUsuariosOpc" class="chk" type="checkbox"></span>Administrar usuarios eliminados</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+
+
+                                                                        <div id="ModuloEmpresas" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #422bff; background-image: url('../../img/bg-tool-enterprises.png')">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Empresas</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="~/img/icon-enterprises.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarEmpresa" id="chkEmpresasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearEmpresa" id="chkEmpresasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="OpcEmpresa" id="chkEmpresasOpc" class="chk" type="checkbox"></span>Administrar empresas eliminadas</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+                                                                    </div><!--.row-->
+                                                                </div><!--.col-lg-7-->
+                                                            </div><!--.row-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="">
+                                        <div class="col-md-5" style="margin-bottom: 3%;">
+                                            <input type="submit" style="margin-top:20px;" id="SaveData" class="btn btn-success" value="Crear" onclick="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main><!--#wrapper-->
+            </div>
+            <footer id="footer">
+                <div class="container-fluid px-lg-5">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            @*// @RenderSection("scripts", required: false)*@
+            <script>
+            function GetDashBoard() {
+                window.location.href = "/DashBoard/DashBoard"
+            }
+            function GetAllCompanies(){
+                var Uneg = $('#CompanyCategoria').val();
+                let model = { companyName : Uneg };
+                lista = [];
+                $('#mergeSelected').empty();
+                $.ajax({
+                    url: 'GetCompaniesByUNeg',
+                    data: model,
+                    type: 'GET',
+                    complete: function (Response){
+                        if (Response.responseJSON.Objects.length > 0) {
+                            for(var i = 0; i < Response.responseJSON.Objects.length; i++){
+                                lista.push(Response.responseJSON.Objects[i].CompanyName);
+                                $("#mergeSelected").append(
+                                "<button value ='" + Response.responseJSON.Objects[i].CompanyName + "' type='button' class='items btn btn-primary' style='margin-top:5px;'>" +
+                                    Response.responseJSON.Objects[i].CompanyName +
+                                    //" <span class='badge badge-light closeItem' >X</span>" +
+                                "</button>"
+                                );
+                            }
+                        }
+                        else{
+                            swal('No se pudieron obtener las empresas, asegurese de haber elegido una unidad de negocio para el nuevo usuario', '', 'info');
+                        }
+                    }
+                });
+
+            }
+            </script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <!--End ModalSearch-->
+            <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+            <script src="~/scripts/jquery-ui-1.12.1.min.js"></script>
+            <script>
+
+            var lista = [];
+
+            $(document).ready(function () {
+
+                $('#Company').autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '/Administrador/GetCompanies/',
+                            dataType: 'json',
+                            data: { Unegocio: $('#Company').val() },
+                            success: function (data) {
+                                response($.map(data, function (item){
+
+
+                                    return {label: item.CompanyName, value: item.CompanyName}
+
+
+                                }));
+                            },
+                            error: function (xhr, status, error) {
+                                alert('Error\n' + error);
+                            }
+                        });
+                    },
+                    select: function (event, ui) {
+
+                        if (lista.includes(ui.item.value) == false) {
+                            lista.push(ui.item.value);
+                            $("#mergeSelected").append(
+                            "<button value ='" + ui.item.value + "' type='button' class='items btn btn-primary' style='margin-top:5px;'>" +
+                                ui.item.value +
+                                " <span class='badge badge-light closeItem' >X</span>" +
+                            "</button>"
+                            );
+                        }
+                        else{
+                            swal('La empresa ya se encuestra en la lista', '', 'info');
+                        }
+
+
+
+                        var valor = lista[0];
+
+
+
+                        //remove list
+
+
+                        $('.closeItem').click(function () {
+
+                            $(this).parent().remove();
+
+                            var valorToDeleteList = $(this).parent().val();
+                            lista.remove(valorToDeleteList);
+
+                        });
+
+                        //$('#SaveData').click(function () {
+                        //    if (lista.lenght == 0) {
+                        //        swal("Debe llenar todos los campos", "", "error");
+                        //    }
+                        //    Enviar(lista);
+                        //});
+
+                    },
+                    close: function(){
+
+                    }
+                });
+            });
+
+            $('.closeItem').click(function () {
+
+                $(this).parent().remove();
+
+                var valorToDeleteList = $(this).parent().val();
+                lista.remove(valorToDeleteList);
+
+            });
+
+            function find_duplicate_in_array(arra1) {
+                var object = {};
+                var result = [];
+
+                arra1.forEach(function (item) {
+                    if(!object[item])
+                        object[item] = 0;
+                    object[item] += 1;
+                })
+
+                for (var prop in object) {
+                    if(object[prop] >= 2) {
+                        result.push(prop);
+                    }
+                }
+
+                return result;
+
+            }
+
+            $('#SaveData').click(function () {
+                if (lista.length == 0) {
+                    swal("Debe llenar todos los campos", "", "error");
+                }
+                //swall con then function
+                Enviar(lista);
+            });
+
+            Array.prototype.remove = function() {
+                var what, a = arguments, L = a.length, ax;
+                while (L && this.length) {
+                    what = a[--L];
+                    while ((ax = this.indexOf(what)) !== -1) {
+                        this.splice(ax, 1);
+                    }
+                }
+                return this;
+            };
+
+
+
+            function validarCampos() {
+                var TxtNombreAdmin = $('#TxtNombreAdmin').val();
+                var Perfil = $('#DDLPerfilD4U').val();
+                var Estatus = $('#Estatus').val();
+
+                if (TxtNombreAdmin == null || Perfil == 0 || Estatus == 0) {
+                    $("#ErrorMessage").text('Debes llenar todos los campos');
+                    return false;
+                }
+            }
+            </script>
+            <script>
+            $("#DDLPerfilD4U").change(function () {
+                var PerfilD4U = $('#DDLPerfilD4U').val();
+
+                if (PerfilD4U == 0) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    NotcheckAll();
+                }
+                if (PerfilD4U == 1) {//Master
+                    $('#ModuloEncuestas').css('display', 'block');
+                    $('#ModuloPlantillas').css('display', 'block');
+                    $('#ModuloReportes').css('display', 'block');
+                    $('#ModuloBD').css('display', 'block');
+                    $('#Modulousuarios').css('display', 'block');
+                    $('#ModuloEmpresas').css('display', 'block');
+                    //poner checkox selecionados
+                    checkAll();
+                    $('input[type="checkbox"]').hide();
+                    //$('input[type="checkbox"]').parent().parent().prepend('<i class="fas fa-minus"></i>');
+                    $('input[type="checkbox"]').parent().append('<i class="fas fa-minus"></i>');;
+                }
+                if (PerfilD4U == 2) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'block');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    NotcheckAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 3) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'block');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    NotcheckAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 4) {
+                    $('#ModuloEncuestas').css('display', 'block');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    NotcheckAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 5) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'block');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    NotcheckAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 6) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'block');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    NotcheckAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 7) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'block');
+                    NotcheckAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 8) {
+                    $('#ModuloEncuestas').css('display', 'block');
+                    $('#ModuloPlantillas').css('display', 'block');
+                    $('#ModuloReportes').css('display', 'block');
+                    $('#ModuloBD').css('display', 'block');
+                    $('#Modulousuarios').css('display', 'block');
+                    $('#ModuloEmpresas').css('display', 'block');
+                    //poner checkox selecionados
+                    checkAll();
+                    $('input[type="checkbox"]').show();
+                    $('.fa-minus').remove();
+                }
+            });
+
+            function checkAll(){
+                $('#chkEncuestasListar').prop('checked', true)
+                $('#chkEncuestasCrear').prop('checked', true);
+                $('#chkEncuestasOpc').prop('checked', true);
+
+                $('#chkPlantillasListar').prop('checked', true)
+                $('#chkPlantillasCrear').prop('checked', true);
+                $('#chkPlantillasOpc').prop('checked', true);
+
+                $('#chkReportesListar').prop('checked', true)
+                $('#chkReportesCrear').prop('checked', true);
+                $('#chkReportesOpc').prop('checked', true);
+
+                $('#chkBDListar').prop('checked', true)
+                $('#chkBDCrear').prop('checked', true);
+                $('#chkBDOpc').prop('checked', true);
+
+                $('#chkUsuariosListar').prop('checked', true)
+                $('#chkUsuariosCrear').prop('checked', true);
+                $('#chkUsuariosOpc').prop('checked', true);
+
+                $('#chkEmpresasListar').prop('checked', true)
+                $('#chkEmpresasCrear').prop('checked', true);
+                $('#chkEmpresasOpc').prop('checked', true);
+            }
+            function NotcheckAll(){
+                $('#chkEncuestasListar').prop('checked', false)
+                $('#chkEncuestasCrear').prop('checked', false);
+                $('#chkEncuestasOpc').prop('checked', false);
+
+                $('#chkPlantillasListar').prop('checked', false)
+                $('#chkPlantillasCrear').prop('checked', false);
+                $('#chkPlantillasOpc').prop('checked', false);
+
+                $('#chkReportesListar').prop('checked', false)
+                $('#chkReportesCrear').prop('checked', false);
+                $('#chkReportesOpc').prop('checked', false);
+
+                $('#chkBDListar').prop('checked', false)
+                $('#chkBDCrear').prop('checked', false);
+                $('#chkBDOpc').prop('checked', false);
+
+                $('#chkUsuariosListar').prop('checked', false)
+                $('#chkUsuariosCrear').prop('checked', false);
+                $('#chkUsuariosOpc').prop('checked', false);
+
+                $('#chkEmpresasListar').prop('checked', false)
+                $('#chkEmpresasCrear').prop('checked', false);
+                $('#chkEmpresasOpc').prop('checked', false);
+            }
+
+            </script>
+            <script>
+            var input = document.getElementById("Nombre");
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("Buscar").click();
+                }
+            });
+
+
+            var input = document.getElementById("ApellidoPaterno");
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("Buscar").click();
+                }
+            });
+
+            var input = document.getElementById("ApellidoMaterno");
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("Buscar").click();
+                }
+            });
+            </script>
+            <script>
+            function validarRealTime(e){
+                var regExpSoloLetras = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]*$/;
+                var regExpEmail = /^(([^<>()[\]\.,;:\s@@\"]+(\.[^<>()[\]\.,;:\s@@\"]+)*)|(\".+\"))@@(([^<>()[\]\.,;:\s@@\"]+\.)+[^<>()[\]\.,;:\s@@\"]{2,})$/i;
+
+                var idItem = '#' + e.id;
+                var classSpan = e.id;
+                var texto = $(idItem).val();
+                var PadreDiv = e.parentNode;
+
+                if (e.id == "Nombre" || e.id == "ApellidoPaterno" || e.id == "ApellidoMaterno") {
+                    if (!regExpSoloLetras.test(texto)) {
+                        $('.' + classSpan).remove();
+                        $(PadreDiv).append('<span class="'+classSpan+' error" style="color:red">No se permiten números o caracteres especiales</span>');
+                        $(':input[type="submit"]').prop('disabled', true);
+                    }else{
+                        $('.' + classSpan).remove();
+                        $(':input[type="submit"]').prop('disabled', false);
+                    }
+                }
+
+                if (e.id == "Correo") {
+                    if (!regExpEmail.test(texto)) {
+                        $('.' + classSpan).remove();
+                        $(PadreDiv).append('<span class="'+classSpan+' error" style="color:red">Por favor ingrese un correo válido</span>');
+                        $(':input[type="submit"]').prop('disabled', true);
+                    }else{
+                        $('.' + classSpan).remove();
+                        $(':input[type="submit"]').prop('disabled', false);
+                    }
+                }
+
+            }
+            //JAMG
+            function Enviar(lista) {
+                var resultado = "";
+                var EmpresaOrigen = $( "#DDLCompany option:selected" ).text();
+
+                lista.push(EmpresaOrigen);
+
+                //Ultima lipieza a lista
+                var uniqs = lista.filter(function(item, index, array) {
+                    return array.indexOf(item) === index;
+                })
+
+                lista = uniqs;
+
+                var Nombre = $('#Nombre').val();
+                var ApellidoPaterno = $('#ApellidoPaterno').val();
+                var ApellidoMaterno = $('#ApellidoMaterno').val();
+                var Correo = $('#Correo').val();
+                var UNegocio = $('#CompanyCategoria').val();
+                var CompanyEmpleado = $('#DDLCompany').val();
+                var listaCompaniesToPermission = lista;
+                var Perfil = $('#DDLPerfilD4U').val();
+                var Estatus = $('#Estatus').val();
+
+                if (Nombre == null || Nombre == "" || Perfil == 0 || Estatus == 0 ||
+                    ApellidoPaterno == "" || ApellidoPaterno == null ||
+                    ApellidoMaterno == null || ApellidoMaterno == "" ||
+                    Correo == null || Correo == "" || UNegocio == null || UNegocio == "" || CompanyEmpleado == 0 || CompanyEmpleado == null
+                    || CompanyEmpleado == "") {
+                    //$("#ErrorMessage").text('Debes llenar todos los campos');
+                    swal({
+                        title: "Debes llenar todos los campos para poder registrar un administrador",
+                        text: "",
+                        type: "info",
+                        icon: "info",
+                    });
+                    // event.preventDefault();
+                }
+                else if (lista.length < 1) {
+                    //manag-tab
+                    $('.nav-link ').removeClass('active');
+                    $('#manag-tab').addClass('active');
+                    //aria-selected
+                    $('.nav-link ').prop('aria-selected', false);
+                    $('#manag-tab ').prop('aria-selected', false);
+                    $('#Company').css('background-color', 'bisque');
+                    swal({
+                        title: "Debes elegir a que empresas tendrá acceso el nuevo usuario",
+                        text: "",
+                        type: "info",
+                        icon: "info",
+                    });
+                    //event.preventDefault();
+                }
+                else{
+                    swal ({
+                        title: "Procesando...",
+                        text: "Espere...",
+                        imageUrl: "",
+                        icon: "/images/load.gif",
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+                    $('.swal-icon').addClass('load');
+                    $('.load').css('width', '25%');
+                    $('.load').css('height', '25%');
+                    $('swal-button-container').css('display', 'none');
+
+
+                    @*var IdEmpleado = @Session["IdEmpleadoForNewAdmin"];*@
+                    var IdPerfil = $('#DDLPerfilD4U').val();
+                    var Estatus = $('#Estatus').val();
+
+
+                    //
+                    if ($('#chkEncuestasListar').prop('checked')) {
+                        var ListarEncuesta = $('#chkEncuestasListar').val();
+                    }
+                    if ($('#chkEncuestasCrear').prop('checked')) {
+                        var CrearEncuesta = $('#chkEncuestasCrear').val();
+                    }
+                    if ($('#chkEncuestasOpc').prop('checked')) {
+                        var OpcEncuesta = $('#chkEncuestasOpc').val();
+                    }
+
+                    if ($('#chkPlantillasListar').prop('checked')) {
+                        var ListarPlantilla = $('#chkPlantillasListar').val();
+                    }
+                    if ($('#chkPlantillasCrear').prop('checked')) {
+                        var CrearPlantilla = $('#chkPlantillasCrear').val();
+                    }
+                    if ($('#chkPlantillasOpc').prop('checked')) {
+                        var OpcPlantilla = $('#chkPlantillasOpc').val();
+                    }
+                    //++++++++++
+                    if ($('#chkReportesListar').prop('checked')) {
+                        var ListarReporte = $('#chkReportesListar').val();
+                    }
+                    if ($('#chkReportesCrear').prop('checked')) {
+                        var CrearReporte = $('#chkReportesCrear').val();
+                    }
+                    if ($('#chkReportesOpc').prop('checked')) {
+                        var OpcReporte = $('#chkReportesOpc').val();
+                    }
+                    //******************
+                    if ($('#chkBDListar').prop('checked')) {
+                        var ListarBD = $('#chkBDListar').val();
+                    }
+                    if ($('#chkBDCrear').prop('checked')) {
+                        var CrearBD = $('#chkBDCrear').val();
+                    }
+                    if ($('#chkBDOpc').prop('checked')) {
+                        var OpcBD = $('#chkBDOpc').val();
+                    }
+                    //
+                    if ($('#chkUsuariosListar').prop('checked')) {
+                        var ListarUsuario = $('#chkUsuariosListar').val();
+                    }
+                    if ($('#chkUsuariosCrear').prop('checked')) {
+                        var CrearUsuario = $('#chkUsuariosCrear').val();
+                    }
+                    if ($('#chkUsuariosOpc').prop('checked')) {
+                        var OpcUsuario = $('#chkUsuariosOpc').val();
+                    }
+                    //
+                    if ($('#chkEmpresasListar').prop('checked')) {
+                        var ListarEmpresa = $('#chkEmpresasListar').val();
+                    }
+                    if ($('#chkEmpresasCrear').prop('checked')) {
+                        var CrearEmpresa = $('#chkEmpresasCrear').val();
+                    }
+                    if ($('#chkEmpresasOpc').prop('checked')) {
+                        var OpcEmpresa = $('#chkEmpresasOpc').val();
+                    }
+
+
+                    var passwordJS = generar_contrasenya();
+
+
+                    var accionesMaster = [ "ListarEncuesta", "CrearEncuesta", "OpcEncuesta",
+                                           "ListarPlantilla", "CrearPlantilla", "OpcPlantilla",
+                                           "ListarReporte", "CrearReporte", "OpcReporte",
+                                           "ListarBD", "CrearBD", "OpcBD",
+                                           "ListarUsuario", "CrearUsuario", "OpcUsuario",
+                                           "ListarEmpresa", "CrearEmpresa", "OpcEmpresa"];
+
+                    //var accionesEncuesta   = [ "ListarEncuesta", "CrearEncuesta", "OpcEncuesta" ];
+                    //var accionesPlantillas = [ "ListarPlantilla", "CrearPlantilla", "OpcPlantilla" ];
+                    //var accionesReportes   = [ "ListarReporte", "CrearReporte", "OpcReporte" ];
+                    //var accionesUsuarios   = [ "ListarUsuario", "CrearUsuario", "OpcUsuario" ];
+                    //var accionesBasesDD    = [ "ListarBD", "CrearBD", "OpcBD" ];
+                    //var accionesEmpresas   = [ "ListarEmpresa", "CrearEmpresa", "OpcEmpresa" ];
+
+                    var listaEnviar = [];
+                    if (IdPerfil == 1) {
+                        listaEnviar = accionesMaster;
+                    }
+                    //if (IdPerfil == 2) {
+                    //    listaEnviar = accionesReportes;
+                    //}
+                    //if (IdPerfil == 3) {
+                    //    listaEnviar = accionesPlantillas;
+                    //}
+                    //if (IdPerfil == 4) {
+                    //    listaEnviar = accionesEncuesta;
+                    //}
+                    //if (IdPerfil == 5) {
+                    //    listaEnviar = accionesBasesDD;
+                    //}
+                    //if (IdPerfil == 6) {
+                    //    listaEnviar = accionesUsuarios;
+                    //}
+                    //if (IdPerfil == 7) {
+                    //    listaEnviar = accionesEmpresas;
+                    //}
+
+                    //valida si es SA
+                    var isSuperAdmin = 0;
+                    try {
+
+                        var data = $('input[id=SA]');
+                        console.log(data[0].checked)
+
+
+                        isSuperAdmin = 0;
+                        if (data[0].checked == true) {
+                            isSuperAdmin = 1;
+                        }
+
+                    } catch (e) {
+                        isSuperAdmin = 0;
+                    }
+
+
+
+
+                    //Cargar Modelo
+                    let ModelAdministrador = {
+                        //empleado: { IdEmpleado: IdEmpleado },
+                        nombre: Nombre,
+                        apellidoPaterno: ApellidoPaterno,
+                        apellidoMaterno: ApellidoMaterno,
+                        correo: Correo,
+                        AdminSA: isSuperAdmin,
+                        uNegocio: UNegocio,
+                        listaCompaniesForPermission: lista,
+                        perfilD4U: { IdPerfil: IdPerfil },
+                        company: { companyId:  $('#DDLCompany').val() },
+                        password: passwordJS ,
+                        tipoEstatus: { idEstatus: Estatus },
+                        acciones: [ListarEncuesta, CrearEncuesta, OpcEncuesta,
+                                   ListarPlantilla, CrearPlantilla, OpcPlantilla,
+                                    ListarReporte, CrearReporte, OpcReporte,
+                                     ListarBD, CrearBD, OpcBD,
+                                      ListarUsuario, CrearUsuario, OpcUsuario,
+                                       ListarEmpresa, CrearEmpresa, OpcEmpresa]
+                    };
+
+                    //acciones: [ListarEncuesta, CrearEncuesta, OpcEncuesta,
+                    //               ListarPlantilla, CrearPlantilla, OpcPlantilla,
+                    //                ListarReporte, CrearReporte, OpcReporte,
+                    //                 ListarBD, CrearBD, OpcBD,
+                    //                  ListarUsuario, CrearUsuario, OpcUsuario,
+                    //                   ListarEmpresa, CrearEmpresa, OpcEmpresa]
+
+
+                    var MLAdministrador = JSON.stringify(ModelAdministrador);
+
+
+                    $.ajax({
+
+                        type: 'POST',
+                        data: MLAdministrador, traditional: true,
+                        url: '@Url.Action("Add", "Administrador")',
+                        contentType: 'application/json; charset=utf-8',
+                        complete: function (Response) {
+                            if (Response.responseJSON == "error") {
+                                swal("Ocurrio un error al guardar", "", "error");
+                            }
+                            if (Response.responseJSON == "success") {
+                                swal({
+                                    title: "El administrador se registró correctamente, las claves de acceso serán enviadas al correo electrónico del nuevo administrador",
+                                    text: "",
+                                    type: "success",
+                                    icon: "success",
+                                }).then(function () {
+                                    window.location.href = "/Administrador/GetAll/";
+                                });
+                            }
+                            if (Response.status != 200) {
+                                swal({
+                                    title: "El administrador se registró correctamente, sin embargo ocurrió un error al enviarle el email con sus claves de acceso!",
+                                    text: "",
+                                    type: "warning",
+                                    icon: "warning",
+                                }).then(function () {
+                                    window.location = "GetAll";
+                                });
+                            }
+                        }
+                    });
+                    function finished(err) {
+
+                        alert('Hubo un error');
+
+                    }
+
+                }
+            }
+
+            function getPerfiles() {
+                var id = 1;
+                @*@Session["IdEmpleadoForNewAdmin"];*@
+
+                let ModelAdministrador = {
+                    IdEmpleado: id
+                };
+
+                var MLAdministrador = JSON.stringify(ModelAdministrador);
+
+                $.ajax({
+                    //type: 'POST',
+                    data: MLAdministrador, traditional: true,
+                    url: '@Url.Action("GetPerfilesByIdEmpleado", "Administrador")',
+                    contentType: 'application/json; charset=utf-8',
+                    succes: function (Response){
+                        //Response trae Json con los perfiles que ya tiene asignado
+                        alert(Response);
+
+                    },
+                    complete: function (Response) {
+                        alert(Response.statusText);
+                        alert(Response.status);
+                        alert(Response.responseJSON);
+                    },
+                    err: function (err) {
+                        alert(err)
+                    }
+
+                });
+
+            }
+            </script>
+            <script>
+            $('.badge-light').click(function () {
+
+                $(this).parent().remove();
+
+                var valorToDeleteList = $(this).parent().val();
+                lista.remove(valorToDeleteList);
+
+            });
+            $(document).ready(function () {
+
+                $('#myTable').css('display', 'none');
+
+                var ismaster = @Session["IsMaster"];
+
+                if (ismaster == 1) {
+                    swal({
+                        title: "Esta persona ya es un administrador master",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+            });
+
+            var tamanyo_password				=	8;			// definimos el tamaño que tendrá nuestro password
+
+            var caracteres_conseguidos			=	0;			// contador de los caracteres que hemos conseguido
+            var caracter_temporal				=	'';
+
+            var array_caracteres				=	new Array();// array para guardar los caracteres de forma temporal
+
+            for(var i = 0; i < tamanyo_password; i++){		// inicializamos el array con el valor null
+                array_caracteres[i]	=	null;
+            }
+
+            var password_definitivo				=	'';
+
+            var numero_minimo_letras_minusculas	=	1;			// en ésta y las siguientes variables definimos cuántos
+            var numero_minimo_letras_mayusculas	=	1;			// caracteres de cada tipo queremos en cada
+            var numero_minimo_numeros			=	1;
+            var numero_minimo_simbolos			=	0;
+
+            var letras_minusculas_conseguidas 	=	0;
+            var	letras_mayusculas_conseguidas	=	0;
+            var	numeros_conseguidos				=	0;
+            var	simbolos_conseguidos			=	0;
+
+
+            // función que genera un número aleatorio entre los límites superior e inferior pasados por parámetro
+            function genera_aleatorio(i_numero_inferior, i_numero_superior) {
+                var     i_aleatorio  =   Math.floor((Math.random() * (i_numero_superior - i_numero_inferior + 1)) + i_numero_inferior);
+                return  i_aleatorio;
+            }
+
+
+            // función que genera un tipo de caracter en base al tipo que se le pasa por parámetro (mayúscula, minúscula, número, símbolo o aleatorio)
+            function genera_caracter(tipo_de_caracter){
+                // hemos creado una lista de caracteres específica, que además no tiene algunos caracteres como la "i" mayúscula ni la "l" minúscula para evitar errores de transcripción
+                var lista_de_caracteres	=	'$+=?@@_23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz';
+                var caracter_generado	=	'';
+                var valor_inferior		=	0;
+                var valor_superior		=	0;
+
+                switch (tipo_de_caracter){
+                    case 'minúscula':
+                        valor_inferior	=	38;
+                        valor_superior	=	61;
+                        break;
+                    case 'mayúscula':
+                        valor_inferior	=	14;
+                        valor_superior	=	37;
+                        break;
+                    case 'número':
+                        valor_inferior	=	6;
+                        valor_superior	=	13;
+                        break;
+                    case 'símbolo':
+                        valor_inferior	=	0;
+                        valor_superior	=	5;
+                        break;
+                    case 'aleatorio':
+                        valor_inferior	=	0;
+                        valor_superior	=	61;
+
+                } // fin del switch
+
+                caracter_generado	=	lista_de_caracteres.charAt(genera_aleatorio(valor_inferior, valor_superior));
+                return caracter_generado;
+            } // fin de la función genera_caracter()
+
+
+            // función que guarda en una posición vacía aleatoria el caracter pasado por parámetro
+            function guarda_caracter_en_posicion_aleatoria(caracter_pasado_por_parametro){
+                var guardado_en_posicion_vacia	=	false;
+                var posicion_en_array			=	0;
+
+                while(guardado_en_posicion_vacia	!=	true){
+                    posicion_en_array	=	genera_aleatorio(0, tamanyo_password-1);	// generamos un aleatorio en el rango del tamaño del password
+
+                    // el array ha sido inicializado con null en sus posiciones. Si es una posición vacía, guardamos el caracter
+                    if(array_caracteres[posicion_en_array] == null){
+                        array_caracteres[posicion_en_array]	=	caracter_pasado_por_parametro;
+                        guardado_en_posicion_vacia			=	true;
+                    }
+                }
+            }
+
+
+            // función que se inicia una vez que la página se ha cargado
+            function generar_contrasenya(){
+
+                // generamos los distintos tipos de caracteres y los metemos en un password_temporal
+                while (letras_minusculas_conseguidas < numero_minimo_letras_minusculas){
+                    caracter_temporal	=	genera_caracter('minúscula');
+                    guarda_caracter_en_posicion_aleatoria(caracter_temporal);
+                    letras_minusculas_conseguidas++;
+                    caracteres_conseguidos++;
+                }
+
+                while (letras_mayusculas_conseguidas < numero_minimo_letras_mayusculas){
+                    caracter_temporal	=	genera_caracter('mayúscula');
+                    guarda_caracter_en_posicion_aleatoria(caracter_temporal);
+                    letras_mayusculas_conseguidas++;
+                    caracteres_conseguidos++;
+                }
+
+                while (numeros_conseguidos < numero_minimo_numeros){
+                    caracter_temporal	=	genera_caracter('número');
+                    guarda_caracter_en_posicion_aleatoria(caracter_temporal);
+                    numeros_conseguidos++;
+                    caracteres_conseguidos++;
+                }
+
+                while (simbolos_conseguidos < numero_minimo_simbolos){
+                    caracter_temporal	=	genera_caracter('símbolo');
+                    guarda_caracter_en_posicion_aleatoria(caracter_temporal);
+                    simbolos_conseguidos++;
+                    caracteres_conseguidos++;
+                }
+
+                // si no hemos generado todos los caracteres que necesitamos, de forma aleatoria añadimos los que nos falten
+                // hasta llegar al tamaño de password que nos interesa
+                while (caracteres_conseguidos < tamanyo_password){
+                    caracter_temporal	=	genera_caracter('aleatorio');
+                    guarda_caracter_en_posicion_aleatoria(caracter_temporal);
+                    caracteres_conseguidos++;
+                }
+
+                // ahora pasamos el contenido del array a la variable password_definitivo
+                for(var i=0; i < array_caracteres.length; i++){
+                    password_definitivo	=	password_definitivo + array_caracteres[i];
+                }
+
+                // indicamos los parámetros con los que hemos generado la contraseña
+                //document.write('Tamaño total de la contraseña: ' 	+ tamanyo_password + '<br>');
+                //document.write('Cantidad de minúsculas: '			+ numero_minimo_letras_minusculas + '<br>');
+                //document.write('Cantidad de mayúsculas: ' 			+ numero_minimo_letras_mayusculas + '<br>');
+                //document.write('Cantidad de números: ' 				+ numero_minimo_numeros + '<br>');
+                //document.write('Cantidad de símbolos: ' 			+ numero_minimo_simbolos + '<br>');
+                //document.write('El resto de caracteres hasta llegar al tamaño de la contraseña se completa con caracteres aleatorios.<br>');
+
+                // y ahora simplemente lo mostramos por pantalla
+                //document.write('Password generado: <strong>' + password_definitivo + '</strong><br>');
+                //alert(password_definitivo);
+                return password_definitivo;
+                // e indicamos que al recargar la página se generará uno nuevo
+                //document.write('Pulse F5 para generar una nueva contraseña')
+            }
+
+            function showSwal(){
+                swal ({
+                    title: "Procesando...",
+                    text: "Espere...",
+                    imageUrl: "",
+                    icon: "/images/load.gif",
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+                $('img').addClass('load');
+                $('.load').css('width', '50%');
+                $('.load').css('height', '50%');
+
+                for (var i = 0; i < 20000; i++) {
+                    if (i < 10000) {
+
+                    }
+                    else if(i > 10000){
+                        swal({
+                            title: "El administrador se registró correctamente, las claves de acceso serán enviadas al correo electrónico del nuevo administrador",
+                            text: "",
+                            type: "success",
+                            icon: "success",
+                        }).then(function () {
+                            //window.location = "GetAll";
+                        });
+                    }
+                }
+            }
+
+            function Buscar() {
+                //Limpiar tabla
+                $("#myTable tbody").remove();
+                var NombreEmpleado = $('#Nombre').val();
+                var ApellidoPaterno = $('#ApellidoPaterno').val();
+                var ApellidoMaterno = $('#ApellidoMaterno').val();
+
+                if (NombreEmpleado == "" && ApellidoPaterno == "" && ApellidoMaterno == "") {
+                    swal({
+                        title: "No es posible efectuar una búsqueda si no ha llenado al menos uno de los campos",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                    return false;
+                }
+
+                else{
+
+
+                    let modelEmpleado = {
+                        nombre: NombreEmpleado,
+                        apellidoPaterno: ApellidoPaterno,
+                        apellidoMaterno: ApellidoMaterno
+                    }
+
+                    var ml = JSON.stringify(modelEmpleado);
+
+                    $.ajax({
+
+                        type: 'POST',
+                        data: ml, traditional: true,
+                        url: '@Url.Action("SearchOpen", "Administrador")',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data != null) {
+                                $('#myTable').css('display', 'block');
+
+                            }
+                            if (data.length == 0) {
+                                $('#myTable').css('display', 'none');
+                                $('#ErrorMessage').text('No se obtuvieron coincidencias');
+                                swal("No se obtuvieron coincidencias", "", "error");
+                            }
+
+                            $.each(data, function (i, data) {
+
+                                //$("#Company").append('<option value=" ' + result.Value + '">' + result.Text + '</option>');
+
+                                $("#myTable").
+                                    append(
+                                    "<tr><td class='text-center'>" + data.Nombre + " " + data.ApellidoPaterno + " " + data.ApellidoMaterno +
+                                    "</td><td>" + data.UnidadNegocio +
+                                    "</td><td>" + data.DivisonMarca +
+                                    "</td><td>" + data.AreaAgencia +
+                                    "</td><td value='" +
+                                    data.IdEmpleado + "'>" +
+                                    "<a value='" + data.IdEmpleado + "' href='/Administrador/AddWithNameAdmin?IdEmpleado=" + data.IdEmpleado + "'><button value='" + data.IdEmpleado + "' class='btn btn-danger' >Elegir</button></a>" + "</td></tr>");
+
+                            });
+                        }
+                    });
+                }
+            }
+
+            function ElegirAdmin(IdEmpleadoForNewAdmin) {
+
+                let model = {
+                    idEmpleado: IdEmpleadoForNewAdmin
+                }
+
+                var administra = JSON.stringify(model);
+
+                $.ajax({
+
+                    type: 'GET',
+                    data: model, traditional: true,
+                    url: '@Url.Action("AddWithNameAdmin", "Administrador")',
+                    contentType: 'application/json; charset=utf-8',
+                    complete:function (data) {
+                        console.log(data);
+
+                    }
+                });
+            }
+
+            </script>
+            <script>
+            $(document).ready(function () {
+
+                $("#CompanyCategoria").change(function () {
+
+
+
+                    $.ajax({
+
+                        type: 'POST',
+
+                        url: '@Url.Action("GetCompanyAjax", "Administrador")',
+
+                        dataType: 'json',
+
+                        data: { nombre: $("#CompanyCategoria").val() },
+
+                        success: function (city) {
+                            //LIMPIAR
+                            $("#DDLCompany").empty();
+                            $("#DDLCompany").append('<option value="0">Selecciona una opcion</option>');
+                            $.each(city, function (i, city) {
+
+                                $("#DDLCompany").append('<option value="'
+
+                                                           + city.Value + '">'
+
+                                                           + city.Text + '</option>');
+                            });
+                        }
+                    });
+                });
+            });
+
+
+
+
+
+            </script>
+            <script>
+            $("body").mousemove(function (e) {
+                /*$.ajax({
+                    type: 'POST',
+                    data: 2, traditional: true,
+                    url: '/LoginAdmin/IsLogged',
+                    contentType: 'application/json; charset=utf-8',
+                    succes: function (Response) {
+                        if (Response == "success") {
+                            console.log('Sesion activa');
+                        }
+                        if (Response == "error") {
+                            alert('Session expirada');
+                        }
+
+                    },
+                    complete: function (Response) {
+                        if (Response.responseJSON == "success") {
+                            console.log('Sesion activa');
+                        }
+                        if (Response.responseJSON == "error") {
+                            swal({
+                                title: "La session ha expirado, serás redireccionado al Login",
+                                text: "",
+                                type: "error",
+                                icon: "error",
+                                closeOnClickOutside: false,
+                            }).then(function () {
+                                window.location.href = "/LoginAdmin/Login";
+                            });
+                        }
+                        if (Response.responseJSON == "successAndEmails") {
+                            swal({
+                                title: "El proceso de envío de email ha terminado. Presiona Ok para ver el estatus",
+                                text: "",
+                                type: "info",
+                                icon: "info",
+                                closeOnClickOutside: false,
+                            }).then(function () {
+                                window.location.href = "/Encuesta/successEmail/";
+                            });
+                        }
+                        if (Response.responseJSON == "errorEmail") {
+                            swal({
+                                title: "El proceso de envío de email ha terminado. Presiona Ok para ver el estatus",
+                                text: "",
+                                type: "info",
+                                icon: "info",
+                                closeOnClickOutside: false,
+                            }).then(function () {
+                                window.location.href = "/Encuesta/errorEmail/";
+                            });
+                        }
+                    }
+                });*/
+                var spansList = document.getElementsByClassName('error');
+                if (spansList.length > 0) {
+                    $(':input[type="submit"]').prop('disabled', true);
+                    $('#SaveData').css( 'cursor', 'not-allowed' );
+                }
+                else{
+                    $(':input[type="submit"]').css('disabled', false);
+                    $('#SaveData').css( 'cursor', 'pointer' );
+                }
+            });
+            </script>
+            <style>
+                [data-title]:hover:after {
+                    opacity: 1;
+                    transition: all 0.1s ease 0.5s;
+                    visibility: visible;
+                }
+
+                [data-title]:after {
+                    content: attr(data-title);
+                    background-color: #00FF00;
+                    color: #111;
+                    font-size: 150%;
+                    position: absolute;
+                    padding: 1px 5px 2px 5px;
+                    bottom: -1.6em;
+                    left: 100%;
+                    white-space: nowrap;
+                    box-shadow: 1px 1px 3px #222222;
+                    opacity: 0;
+                    border: 1px solid #111111;
+                    z-index: 99999;
+                    visibility: hidden;
+                }
+
+                [data-title] {
+                    position: relative;
+                }
+            </style>
+            <script>
+            function validarLongitud(caja){
+                if (caja.length > 35) {
+                    swal('');
+                }
+            }
+            </script>
+        </body>
+    }
+    else
+    {
+        /* Pagina de error */
+        <body>
+            <main id="wrapper">
+                <div id="top-bar">
+                    <div class="container-fluid px-lg-5">
+                        <div class="row">
+                            <div class="col-4 col-sm-5 col-md-5">
+                                <img src="~/img/logo.png" class="logo-header" alt="Logo" onclick="">
+                            </div>
+                            <div style="display: none">
+                                @*@RenderSection("H1", false)
+                                @RenderSection("Header", false)*@
+                            </div>
+
+                            <div class="col-8 col-sm-7 col-md-7">
+                                <div class="user-info">
+                                    <span class="color">Hola</span>
+                                    <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
+                                </div><!--.user-info-->
+                            </div>
+                        </div><!--.row-->
+                    </div><!--.container-fluid-->
+                </div>
+                <section id="content">
+                    <div class="content-wrap">
+                        <div class="container-fluid px-lg-5">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div hidden class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                        <h2>Ooops ha ocurrido un error</h2>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                        <h2>Ooops ha ocurrido un error :(</h2>
+                                        <p>Accede nuevamente</p>
+                                        <p><a id="urlLogn" href="">Login de usuario</a></p>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            <footer id="footer" style="bottom: 0; position: fixed;">
+                <div class="container-fluid px-lg-5">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+            <script>
+var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
+try {
+var elem = document.getElementById("urlLogn").href = redirect;
+} catch (e) {
+
+}
+swal("Tu sesión ha expirado, serás redireccionado al Login", "", "info").then(function () {
+var elem = document.getElementById("urlLogn").click();
+});
+            </script>
+        </body>
+    }
+}
+
+
+</html>

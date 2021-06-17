@@ -1,0 +1,570 @@
+﻿@model ML.Result
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.IdEmpleado = Session["IdEmpleadoLog"];
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+@section Styles
+{
+    <style type="text/css">
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-slides {
+        width: 100%;
+        height: 100%;
+        color: #FFFFFF;
+    }
+
+        .swiper-slides .swiper-slide {
+            background-color: #111657;
+            padding: 0.65rem;
+            min-height: 395px;
+        }
+
+    .slider-templates-wrap {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .swiper-prev {
+        left: -30px;
+    }
+
+    .swiper-next {
+        right: -30px;
+    }
+
+    .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 2rem;
+    }
+</style>
+}
+
+@section H1
+{
+    <section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-1"><img src="../img/icon-template.png" class="img-fluid"></div>
+            <div class="col-8">
+                <h1 class="title-page-survey">
+                    Plantillas / <span>Administración</span>
+                </h1>
+            </div>
+            <div class="col-3">
+                <a href="@Url.Action("creaPlantilla","Plantillas")" class="btn-parallelogram parallelogram">
+                    <span class="skew-fix"><i class="fas fa-plus-circle mr-1"></i> Crear Plantilla</span>
+                </a>
+            </div>
+        </div>    
+    </div><!--.container-fluid-->
+</section>
+}
+
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">               
+                <div class="section-templates">
+                    <div class="title-header-blue">
+                        <span class="title-header-section">Plantillas predefinidas</span>
+                    </div>
+                    <!-- Swiper -->
+                    <div class="slider-templates-wrap" >
+                        <div class="slider-produtos-destaque swiper-container">
+                            <div class="swiper-wrapper swiper-slides">
+                                @foreach (ML.Plantillas item in Model.ListadoDePlantillas)
+                                {
+                                    <div class="swiper-slide pb-0" style="overflow:hidden;">
+                                        <div class="box-template" style="overflow:hidden;">
+                                            <!--<img src="" class="img-fluid">-->
+                                            @Html.Raw(item.DetallePlantilla.ThumbImage)
+                                            <div class="box-template-title border-bottom">
+                                                <p class="title-template" style="white-space: nowrap;">@Html.Raw(item.Nombre)</p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 border-right">
+                                                    <a href="@Url.Action("Preview","Plantillas", new {IdPlantilla=item.IdPlantilla} )" target="_blank">
+                                                        <i class="fas fa-eye color"></i>
+                                                        <p class="btn-action-template">Ver</p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a style="cursor:pointer" onclick="confirmarUsar(@item.IdPlantilla)" @*href="@Url.Action("Load","Encuesta", new {IdPlantilla=item.IdPlantilla} )"*@>
+                                                        <i class="fas fa-check-circle color"></i>
+                                                        <p class="btn-action-template">Usar</p>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div><!--.swiper-wrapper-->
+                        </div>
+                      
+                        <!-- Add Pagination -->
+                        <div class="swiper-button-prev swiper-prev"></div>
+                        <div class="swiper-button-next swiper-next"></div>
+                    </div><!--.swiper-container-->
+                </div><!--.section-templates-->
+
+                <div class="section-templates">
+                    <div class="title-header-blue">
+                        <span class="title-header-section">Mis plantillas</span>
+                    </div>
+                    <!-- Swiper -->
+                    <div class="slider-templates-wrap">
+                        <div class="slider-produtos-destaque swiper-container">
+                            <div class="swiper-wrapper swiper-slides">
+                                @foreach (ML.Plantillas item in Model.ListadoDePlantillasPorUsuario)
+                                {
+                                    <div class="swiper-slide pb-0" style="overflow:hidden;">
+                                        <div class="box-template" style="overflow:hidden;">
+                                            @Html.Raw(item.DetallePlantilla.ThumbImage)
+                                            <div class="box-template-title border-bottom">
+                                                <p class="title-template" style="white-space: nowrap;">@Html.Raw(item.Nombre)</p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 border-right">
+                                                    <a href="@Url.Action("Preview","Plantillas", new {IdPlantilla=item.IdPlantilla} )" target="_blank">
+                                                        <i class="fas fa-eye color"></i>
+                                                        <p class="btn-action-template">Ver</p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a style="cursor:pointer" href="#" onclick="DuplicaPersonal(@item.IdPlantilla);">
+                                                        <i class="fas fa-copy color"></i>
+                                                        <p class="btn-action-template">Duplicar</p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-6 pr-0 pl-1">
+                                                    <a class="btn btn-sm btn-block btn-actions btn-success" onclick="confirmEditarPlantilla(@item.IdPlantilla)" @*href="@Url.Action("EditaPlantilla","Plantillas", new {IdPlantilla=item.IdPlantilla} )"*@ title="Editar">Editar</a>
+                                                    @*<button class="btn btn-sm btn-block btn-actions btn-success" type="button">Editar</button>*@
+                                                </div>
+                                                <div class="col-6 pl-0 pr-1">
+                                                    <a class="btn btn-sm btn-block btn-actions btn-danger" onclick="DeletePlantilla(@item.IdPlantilla);">Eliminar</a>
+                                                    @*<button class="btn btn-sm btn-block btn-actions btn-danger" type="button">Eliminar</button>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div><!--.swiper-wrapper-->
+
+                        </div>
+                        <div class="swiper-button-prev swiper-prev"></div>
+                        <div class="swiper-button-next swiper-next"></div>
+                    </div><!--.swiper-container-->
+                </div><!--.section-templates-->
+
+                <div class="section-templates">
+                    <div class="title-header-blue">
+                        <span class="title-header-section">Últimas plantillas creadas</span>
+                    </div>
+                    <!-- Swiper -->
+                    <div class="slider-templates-wrap">
+                        <div class="slider-produtos-destaque swiper-container">
+                            <div class="swiper-wrapper swiper-slides">
+                                @foreach (ML.Plantillas itemMini in Model.ListadoDePlantillasUltimas)
+                                {
+                                    <div class="swiper-slide pb-0" style="overflow:hidden;">
+                                        <div class="box-template" style="overflow:hidden;">
+                                            @Html.Raw(itemMini.DetallePlantilla.ThumbImage)
+                                            <div class="box-template-title border-bottom">
+                                                <p class="title-template" style="white-space: nowrap;">@Html.Raw(itemMini.Nombre)</p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6 border-right">
+                                                    <a href="@Url.Action("Preview","Plantillas", new {IdPlantilla=itemMini.IdPlantilla} )" target="_blank">
+                                                        <i class="fas fa-eye color"></i>
+                                                        <p class="btn-action-template">Ver</p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-6">
+                                                    <a @*href="@Url.Action("Load","Encuesta", new {IdPlantilla=itemMini.IdPlantilla} )"*@ onclick="confirmUsarUltimasCreadas(@itemMini.IdPlantilla)">
+                                                        <i class="fas fa-check-circle color"></i>
+                                                        <p class="btn-action-template">Usar</p>
+                                                    </a>
+                                                </div>
+                                                <div class="col-12 px-1">
+                                                    <a style="cursor:pointer" class="btn btn-sm btn-block rounded-0 btn-info" onclick="confirmDuplicarEditar(@itemMini.IdPlantilla)" @*href="@Url.Action("DuplicaPlantilla","Plantillas", new {IdPlantilla=itemMini.IdPlantilla} )"*@>Duplicar y Editar</a>
+                                                    @*<button class="btn btn-sm btn-block rounded-0 btn-info" type="button"><i class="fas fa-copy"></i> </button>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div><!--.swiper-wrapper-->
+                        </div>
+                        
+                        <!-- Add Pagination -->
+                        <div class="swiper-button-prev swiper-prev"></div>
+                        <div class="swiper-button-next swiper-next"></div>
+                    </div><!--.swiper-container-->
+                </div><!--.section-templates-->
+
+            </div><!--.col-lg-8-->
+        </div><!--.row-->
+
+    </div><!--.container-->
+
+</div>
+              
+
+@section Scripts
+{   
+    <script src="~/scripts/summernote/bootstrap.js" type="text/javascript"></script>
+    <script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+    <script src="~/css/sweetalert.min.js"></script>   
+    <script src="~/scripts/swiper.min.js"></script>
+<script>
+    function confirmEditarPlantilla(IdPlantilla) {
+        ///Plantillas/EditaPlantilla?IdPlantilla=51
+        var url = "/Plantillas/EditaPlantilla?IdPlantilla=" + IdPlantilla;
+
+        swal({
+            title: "Estas seguro de que quieres editar esta plantilla",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                window.location.href = url;
+            } else {
+                return false;
+            }
+        })
+    }
+
+
+    function confirmarUsar(IdPlantillUsar) {
+        ///Encuesta/Load?IdPlantilla=10
+        var url = "/Encuesta/Create/?IdPlantilla=" + IdPlantillUsar;
+
+        swal({
+            title: "Estas seguro de que quieres usar esta plantilla",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                window.location.href = url;
+            } else {
+                return false;
+            }
+        })
+    }
+
+    function confirmUsarUltimasCreadas(IdPlantillaAUtilizar) {
+        ///Encuesta/Load?IdPlantilla=10
+        var url = "/Encuesta/Load/?IdPlantilla=" + IdPlantillaAUtilizar;
+
+        swal({
+            title: "Estas seguro de que quieres usar esta plantilla",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                window.location.href = url;
+            } else {
+                return false;
+            }
+        });
+    }
+
+    function confirmDuplicarEditar(IdPlantillaADuplicarEditar) {
+        ///Plantillas/DuplicaPlantilla?IdPlantilla=48
+        var url = "/Plantillas/DuplicaPlantilla?IdPlantilla=" + IdPlantillaADuplicarEditar;
+
+        swal({
+            title: "Estas seguro de que quieres duplicar y editar esta plantilla",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                window.location.href = url;
+            } else {
+                return false;
+            }
+        });
+    }
+
+</script>
+<script>
+    var x = document.getElementsByClassName("slider-templates-wrap");
+
+    for (var i = 0; i < x.length; i++) {
+
+        var el = x[i];
+
+        var swiper = el.getElementsByClassName("swiper-container")[0];
+        var nx = el.getElementsByClassName("swiper-next")[0];
+        var pr = el.getElementsByClassName("swiper-prev")[0];
+
+        new Swiper(swiper, {
+            slidesPerView: 3,
+            spaceBetween: 0,
+            loop: true,
+            navigation: {
+                nextEl: nx,
+                prevEl: pr
+            },
+            breakpoints: {
+                200: {
+                    slidesPerView: 1,
+                    spaceBetween: 5,
+                },
+                567: {
+                    slidesPerView: 3,
+                    spaceBetween: 5,
+                },
+                992: {
+                    slidesPerView: 4,
+                    spaceBetween: 10,
+                },
+            }
+        });
+    }
+    @*var cuantasPlantillas =@Model.ListadoDePlantillasPorUsuario.Count();
+    var plantillasMuestra=0;
+    if(cuantasPlantillas <= 3)
+    {
+        plantillasMuestra = cuantasPlantillas;
+    }
+    else
+    {
+        plantillasMuestra=3;
+    }
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 3,
+        spaceBetween: 25,
+        centeredSlides: false,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 40,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 50,
+            },
+        }
+    });
+    //var swiper = new Swiper('.swiper-slides', {
+    //slidesPerView: 3,
+    //spaceBetween: 25,
+    //slidesPerGroup: 1,
+    // loop: true,
+    //loopFillGroupWithBlank: true,
+    // navigation: {
+    //  nextEl: '.swiper-button-next',
+    // prevEl: '.swiper-button-prev',
+    //},
+    // navigation: {
+    // nextEl: '.swiper-pagination',
+    // clickable: true,
+    // },
+    // });
+    var cuantasPlantillas2 =@Model.ListadoDePlantillasPorUsuario.Count();
+    var plantillasMuestra2=0;
+    if(cuantasPlantillas2 <= 4)
+    {
+        plantillasMuestra2 = cuantasPlantillas;
+    }
+    else
+    {
+        plantillasMuestra2=4;
+    }
+    var swiper_templates = new Swiper('.own-templates', {
+        slidesPerView: plantillasMuestra2,
+        spaceBetween: 25,
+        //slidesPerGroup: 1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 40,
+            },
+            1024: {
+                slidesPerView: plantillasMuestra2,
+                spaceBetween: 50,
+            },
+        }
+    });
+    var swiper_templates = new Swiper('.own-templatesU', {
+        slidesPerView: 4,
+        spaceBetween: 25,
+        slidesPerGroup: 1,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 40,
+            },
+            1024: {
+                slidesPerView: 4,
+                spaceBetween: 50,
+            },
+        }
+    });*@
+    function DeletePlantilla(idPlantilla) {
+
+        let ModelPlantilla = {
+            IdPlantilla: idPlantilla
+        };
+
+        var data = JSON.stringify(ModelPlantilla);
+
+
+        //Confirm
+        swal({
+            title: "Estas seguro de que quieres eliminar esta plantilla",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+
+                    type: 'POST',
+                    data: data, traditional: true,
+                    url: '@Url.Action("DeletePlantilla", "Plantillas")',
+                    contentType: 'application/json; charset=utf-8',
+                    complete: function (Response) {
+
+                        if (Response.responseJSON == "success") {
+                            swal({
+                                title: "La Plantilla se ha eliminado con éxito",
+                                text: "",
+                                type: "success",
+                                icon: "success",
+                            }).then(function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            swal({
+                                title: "Ocurrio un error al intentar eliminar la Plantilla",
+                                text: "",
+                                type: "error",
+                                icon: "error",
+                            });
+                        }
+
+                    }
+                });
+            } else {
+                return false;
+            }
+        });
+
+
+    };
+    function DuplicaPersonal(idPlantilla)
+    {
+        let ModelPlantilla = {
+            IdPlantilla: idPlantilla
+        };
+        var data = JSON.stringify(ModelPlantilla);
+
+
+        swal({
+            title: "Estas seguro de que quieres duplicar esta plantilla",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    type: 'POST',
+                    data: data, traditional: true,
+                    url: '@Url.Action("DuplicaPlantillaPersonal", "Plantillas")',
+                    contentType: 'application/json; charset=utf-8',
+                    complete: function (Response) {
+                        if (Response.responseJSON == "success") {
+                            swal({
+                                title: "La Plantilla se ha duplicado con éxito",
+                                text: "",
+                                type: "success",
+                                icon: "success",
+                            }).then(function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            swal({
+                                title: "Ocurrio un error al intentar duplicar la Plantilla",
+                                text: "",
+                                type: "error",
+                                icon: "error",
+                            });
+                        }
+
+                    }
+                });
+            } else {
+                return false;
+            }
+        })
+    };
+</script>
+}
+
+

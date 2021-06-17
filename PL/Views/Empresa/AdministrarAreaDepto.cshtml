@@ -1,0 +1,1063 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "AdministrarAreaDepto";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img class="img-fluid" src="~/img/icon-enterprises.png" /><h1 class="title-page-survey">Empresas / Área / <span>Listado</span></h1>
+    </div>
+</section>
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+
+                        @{
+                            ViewBag.Permisos = Session["Permisos"];
+
+                            foreach (ML.PerfilModulo item in ViewBag.Permisos)
+                            {
+                                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "CrearEmpresa")
+                                {
+                                    <div class="text-center">
+                                        <a href="" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="#modalAdd">
+                                            Agregar Area<i class="fas fa-plus-square ml-1"></i>
+                                        </a>
+                                    </div>
+                                    <br />
+                                    <div class="text-center">
+                                        <a href="" onclick="Download()" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="">
+                                            Descargar layout de Áreas<i class="fas fa-file-excel ml-1"></i>
+                                        </a>
+                                    </div>
+                                    <br />
+                                    <div class="text-center">
+                                        <a href="" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="#modalAddArea">
+                                            Agregar Áreas de forma masiva<i class="fas fa-file-excel ml-1"></i>
+                                        </a>
+                                    </div>
+
+                                    <br />
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        }
+                           
+                        
+                        @*Mostar tabla con los datos guardados*@
+                        <table id="tableArea" class="table table-hover table-responsive">
+                            <caption>Lista de Areas que pertenecen a la Empresa</caption>
+                             <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        IdArea
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Nombre del Área
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Empresa a la que pertenece
+                                    </th>
+                                    <th class="text-center" scope="col" style="display:block;">
+                                        Unidad de Negocio
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Estatus
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Editar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Eliminar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Administrar Departamentos
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Area area in Model.Objects)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @area.IdArea
+                                        </td>
+                                        <td class="text-center IsEditable">
+                                            @area.Nombre
+                                        </td>
+                                        <td class="text-center">
+                                            @area.Company.CompanyName
+                                        </td>
+                                        <td class="text-center">
+                                            @area.Company.CompanyCategoria.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            @if (area.TipoEstatus.IdEstatus == 1)
+                                            {
+                                                <a href="@Url.Action("UpdateEstatus", "Empresa", new { IdArea = area.IdArea, IdentitificadorEstatus = area.TipoEstatus.IdEstatus })">
+                                                    <button title="Cambia el estatus del administrador a Desactivado" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-check"></i> Activo</button>
+                                                </a>
+                                            }
+                                            else if (area.TipoEstatus.IdEstatus == 2)
+                                            {
+                                                <a href="@Url.Action("UpdateEstatus", "Empresa", new { IdArea = area.IdArea, IdentitificadorEstatus = area.TipoEstatus.IdEstatus })" title="">
+                                                    <button title="Cambia el estatus del administrador a Activo" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-ban"></i> Desactivado</button>
+                                                </a>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="text-center buttonEditWrapper">
+                                                <button value="@area.IdArea" onclick="GetUpdateArea($(this).val())" class="btn btn-secondary btn-action buttonEdit" data-toggle="modal" data-target="#modalEdit">
+                                                    Edit<i class="fas fa-pencil-square-o ml-1"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <button value="@area.IdArea" onclick="DeleteArea($(this).val());" type="button" class="btn btn-secondary btn-action"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("GetDepartamentoByIdArea", "Empresa", new { IdArea = area.IdArea })" title="">
+                                                <button title="Agrega, elimina o actualiza los departamentos del área seleccionada" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-list"></i> Administrar departamentos</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+        
+        <!--MODAL AGREGAR AREA-->
+        <div class="modal fade addNewInputs" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAdd"
+             aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Agrega una nueva Area a la Empresa</h4>
+                        <button type="button" class="close text-primary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5" id="mergeValidacion">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre de la nueva Área:</label>
+                            <input onkeyup="validaDuplicadoArea();" placeholder="Ingresa el nombre del Área" type="text" id="inputName" class="form-control validate NombreArea NombreNewArea">
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus del Área</label>
+                            <select class="form-control" id="DDLEstatus">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                        <button onclick="AddArea()" class="btn btn-outline-primary btn-block buttonAdd botonAgregaArea">
+                            Agregar Área
+                            <i class="fas fa-plus ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+
+        @*modal agregar AREA MASIVA*@
+        <div class="modal fade addNewInputs" id="modalAddArea" tabindex="-1" role="dialog" aria-labelledby="modalAddArea"
+             aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                @using (Html.BeginForm("BulkArea", "Empresa", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Agrega áreas de forma masiva</h4>
+                        <button type="button" class="close text-primary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Elige el excel con los departamentos cargados</label>
+                            <input type="file" id="postedFile" name="postedFile" class="form-control validate" onchange="ExportToTable()">
+                        </div>
+
+                    </div>
+                    <span>
+                        @ViewBag.Message
+                    </span>
+                    <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                        <button onclick="" class="btn btn-outline-primary btn-block buttonAdd" id="botonAgregaExcel">
+                            Importar datos
+                            <i class="fas fa-plus-square ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+
+
+        @*modal edicion*@
+        <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar Área</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Id del Área:</label>
+                            <input type="text" id="TxtIdArea" class="form-control validate" disabled>
+                        </div>
+
+                        <div class="md-form mb-5" id="mergeValidacionupdate">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre del Área:</label>
+                            <input type="text" id="inputName" class="form-control validate NombreAreaUpdate" onkeyup="validaDuplicadoAreaUpdate()">
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Unidad de Negocio a la que pertenece</label>
+                            <select class="form-control" id="DDLUNegocioUpdate">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">AUTOFINANCIAMIENTO</option>
+                                <option value="2">AUTOMOTRIZ</option>
+                                <option value="3">CORPORATIVO</option>
+                                <option value="4">FINANCIERA</option>
+                                <option value="5">INTERNACIONAL</option>
+                                <option value="6">MANUFACTURA</option>
+                                <option value="7">OTROS NEGOCIOS</option>
+                                <option value="8">PRESIDENCIA</option>
+                                <option value="9">TURISMO</option>
+                            </select>
+                        </div>
+
+                        @*DDL de comoany*@
+                        
+                        
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Empresa a la que pertenece</label>
+                            @Html.DropDownList("Company", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @onclick = "", @id = "Company", @class = "form-control" })
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus deL Área</label>
+                            <select class="form-control" id="DDLEstatusUpdate">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+
+                        
+
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="PostUpdateArea()" class="btn btn-outline-primary btn-block buttonAdd botonEdit">
+                                Guardar cambios
+                                <i class="fas fa-pencil-square-o ml-1"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+</style>
+<script>
+    var listEmpresas = [];
+    var listAreas = [];
+    function validaDuplicadoArea() {
+        var nombreNewArea = $('.NombreNewArea').val();
+        nombreNewArea = nombreNewArea.toUpperCase();
+        //Revisar en la lista que no exista
+        var existe = false;
+
+        for (var i = 0; i < listAreas.length; i++) {
+            if (listAreas[i] == nombreNewArea) {
+                existe = true;
+                $('#msg').remove();
+                $('#mergeValidacion').append('<span id="msg" style="color:red">Ya existe una empresa con este nombre</span>');
+                $('.botonAgregaArea').prop('disabled', true);
+            }
+        }
+
+        if (existe == false) {
+            $('#msg').remove();
+            $('.botonAgregaArea').prop('disabled', false);
+        }
+
+    }
+
+
+    //NombreAreaUpdate
+    function validaDuplicadoAreaUpdate() {
+        var nombreNewArea = $('.NombreAreaUpdate').val();
+        nombreNewArea = nombreNewArea.toUpperCase();
+        //Revisar en la lista que no exista
+        var existe = false;
+
+        for (var i = 0; i < listAreas.length; i++) {
+            if (listAreas[i] == nombreNewArea) {
+                existe = true;
+                $('#msg').remove();
+                $('#mergeValidacionupdate').append('<span id="msg" style="color:red">Ya existe una empresa con este nombre</span>');
+                $('.botonEdit').prop('disabled', true);
+            }
+        }
+
+        if (existe == false) {
+            $('#msg').remove();
+            $('.botonEdit').prop('disabled', false);
+        }
+
+    }
+
+</script>
+
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script src="~/scripts/jquery-1.8.3.min.js"></script>
+        <script>
+    $(document).ready(function () {
+        $('#tableArea').DataTable();
+        $('.IsEditable').prop('contenteditable', false);
+
+        //Listar todas las Empresas y areas para validar duplicado
+        $.ajax({
+            url: '@Url.Action("GetAllEmpresas")',
+            type: 'GET',
+            data: 'company',
+            complete: function (dataeMPRESA) {
+                for (var i = 0; i < dataeMPRESA.responseJSON.length; i++) {
+                    var nameEmpresa = dataeMPRESA.responseJSON[i].CompanyName.toUpperCase();
+                    listEmpresas.push(nameEmpresa);
+                }
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("GetAllAreas")',
+            type: 'GET',
+            data: 'company',
+            complete: function (dataArea) {
+                for (var i = 0; i < dataArea.responseJSON.length; i++) {
+                    var nameArea = dataArea.responseJSON[i].Nombre.toUpperCase();
+                    listAreas.push(nameArea);
+                }
+            }
+        });
+
+    });
+
+    function setEditable() {
+        $('.IsEditable').prop('contenteditable', true);
+        $('.IsEditable').css('border', '2px solid green');
+    }
+    function setNotEditable() {
+        $('.IsEditable').prop('contenteditable', false);
+        $('.IsEditable').css('border-top', '1px solid #dee2e6');
+        $('.IsEditable').css('border-bottom', 'none');
+        $('.IsEditable').css('border-left', 'none');
+        $('.IsEditable').css('border-right', 'none');
+
+        exportTableToJSON();
+
+    }
+    function exportTableToJSON() {
+        var table = $('#tableArea');
+        var data = [];
+
+        // Get Encabezados
+        var headers = [];
+
+        headers[0] = "idArea";
+        headers[1] = "nombre";
+        headers[2] = "companyId";
+
+        // Get data
+        for (var i = 1; i < table[0].rows.length; i++) {
+
+            var tableRow = table[0].rows[i];
+            var rowData = {};
+
+            for (var j = 0; j < tableRow.cells.length; j++) {
+
+                rowData[headers[j]] = tableRow.cells[j].innerText;
+
+            }
+
+            data.push(rowData);
+        }
+        console.log(data);
+
+        var MLArea = JSON.stringify(data);
+
+        $.ajax({
+
+            type: 'POST',
+            data: MLArea, traditional: true,
+            url: '@Url.Action("UpdateArea", "Empresa")',
+            contentType: 'application/json; charset=utf-8',
+            succes: function (Response) {
+
+            },
+            complete: function (Response) {
+                if (Response.responseJSON == "success") {
+                    swal({
+                        title: "Los cambios se realizaron correctamente",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        window.location = "AdministrarAreaDepto?CompanyId=" + @Session["CompanyIdForAddArea"];
+                    });
+                }
+                else {
+                    swal({
+                        title: "Ocurrió un error al intentar guardar los cambios",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+            }
+
+        });
+    }
+
+    function Download() {
+        window.location = "@Url.Action("DownloadLayoutArea", "Empresa")";
+    }
+
+            function AddArea() {
+
+                var companyId = @Session["CompanyIdForAddArea"];
+                var nombreArea = $('.NombreArea').val();
+                var estatusArea = $('#DDLEstatus').val();
+
+
+                if (nombreArea == null || nombreArea == "" || estatusArea == 0) {
+                    swal({
+                        title: "Debes llenar todos los campos para poder registrar el Área",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+                else{
+
+
+                    let modelArea = {
+                        nombre: nombreArea,
+                        company: { companyId: companyId },
+                        tipoEstatus: { idEstatus: estatusArea }
+                    }
+
+                    var data  = JSON.stringify(modelArea);
+
+                    //Post: AddArea
+                    $.ajax({
+
+                        type: 'POST',
+                        data: data, traditional: true,
+                        url: '@Url.Action("AddArea", "Empresa")',
+                        contentType: 'application/json; charset=utf-8',
+                        complete: function (Response) {
+
+                            if (Response.responseJSON == "success") {
+                                swal({
+                                    title: "El Área se agregó correctamente",
+                                    text: "",
+                                    type: "success",
+                                    icon: "success",
+                                }).then(function () {
+                                    window.location = "AdministrarAreaDepto?CompanyId=" + @Session["CompanyIdForAddArea"];
+                                });
+                            }
+                            else{
+                                swal({
+                                    title: "Ocurrió un error al intentar registrar el área",
+                                    text: "",
+                                    type: "error",
+                                    icon: "error",
+                                });
+                            }
+
+                        }
+                    });
+
+                }
+            }
+            function GetUpdateArea(IdArea) {
+
+                //ajax request for fill DDL Company
+
+
+
+                $('#modalEdit').css('display', 'block');
+
+                var ID_AREA = IdArea;
+
+                let ModelArea = {
+                    idArea: ID_AREA
+                }
+                $.ajax({
+
+                    type: 'GET',
+                    data: ModelArea, traditional: true,
+                    url: '@Url.Action("GetAreaById", "Empresa")',
+                    contentType: 'application/json; charset=utf-8',
+                    complete: function (Response) {
+
+                        if (Response.responseJSON != "error") {
+
+                            $('#modalEdit').css('display', 'block');
+                            $('#TxtIdArea').val(Response.responseJSON.IdArea);
+                            $('#Company').val(Response.responseJSON.Company.CompanyId)
+                            $('input.NombreAreaUpdate').val(Response.responseJSON.Nombre);
+                            $('#DDLUNegocioUpdate').val(Response.responseJSON.Company.CompanyCategoria.IdCompanyCategoria);
+                            $('#DDLEstatusUpdate').val(Response.responseJSON.TipoEstatus.IdEstatus);
+
+                            //alert($("#DDLUNegocioUpdate").val());
+                            //$('#Company').empty();
+                            $('#Company').empty();
+
+                            $("#Company").append('<option value="'
+
+                                                                       + 0 + '">'
+
+                                                                       + 'Selecciona una respuesta' + '</option>');
+
+                            $.ajax({
+
+                                type: 'POST',
+
+                                url: '@Url.Action("GetCompanyAjax", "Empresa")',
+
+                                dataType: 'json',
+
+                                data: { id: $("#DDLUNegocioUpdate").val() },
+
+                                success: function (city) {
+
+                                    if (city != null) {
+
+
+                                        $.each(city, function (i, city) {
+
+                                            $("#Company").append('<option value="'
+
+                                                                       + city.Value + '">'
+
+                                                                       + city.Text + '</option>');
+
+
+                                        });
+                                    }
+                                    $('#Company').val(Response.responseJSON.Company.CompanyId)
+                                }
+
+                            });
+
+                        }
+                        else {
+                            swal({
+                                title: "Ocurrio un error en la peticion Ajax",
+                                text: "",
+                                type: "error",
+                                icon: "error",
+                            });
+                        }
+
+
+                    }
+                });
+
+            }
+
+            //function FillDDLCompany() {
+                $(document).ready (function () {
+
+
+                //Get value of Categoria
+                $("#DDLUNegocioUpdate").change(function () {
+                    //alert($("#DDLUNegocioUpdate").val());
+                    $('#Company').empty();
+
+                    $("#Company").append('<option value="'
+
+                                                               + 0 + '">'
+
+                                                               + 'Selecciona una respuesta' + '</option>');
+
+
+                    $.ajax({
+
+                        type: 'POST',
+
+                        url: '@Url.Action("GetCompanyAjax", "Empresa")',
+
+                        dataType: 'json',
+
+                        data: { id: $("#DDLUNegocioUpdate").val() },
+
+                        success: function (city) {
+
+                            if (city != null) {
+                                //alert('city no es nulo');
+
+                                $("#u20208").show();
+                                $("#u20200-4").show();
+                                $("#buttonu20361").show();
+
+                                $.each(city, function (i, city) {
+
+                                    $("#Company").append('<option value="'
+
+                                                               + city.Value + '">'
+
+                                                               + city.Text + '</option>');
+
+
+                                });
+                            }
+                        }
+                    });
+                });
+                });
+            // }
+
+            function PostUpdateArea() {
+
+
+                var ID_AREA = $('#TxtIdArea').val();
+                var NOMBRE_AREA = $('.NombreAreaUpdate').val();
+                var COMPANY_ID = $('#Company').val();
+                var ID_ESTATUS = $('#DDLEstatusUpdate').val();
+
+
+
+                if (NOMBRE_AREA == null || NOMBRE_AREA == "" || COMPANY_ID == 0 || ID_ESTATUS == 0) {
+
+                    swal({
+                        title: "Debes llenar todos los campos para poder registrar",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+
+                }
+
+                else{
+
+                    //Create Model AREA
+                    let MOdelArea = {
+                        idArea: ID_AREA,
+                        nombre: NOMBRE_AREA,
+                        company: { companyId: COMPANY_ID },
+                        tipoEstatus: { idEstatus: ID_ESTATUS }
+                    }
+
+                    var data  = JSON.stringify(MOdelArea);
+
+                    $.ajax({
+
+                        type: 'POST',
+                        data: data, traditional: true,
+                        url: '@Url.Action("UpdateAreaD4U", "Empresa")',
+                        contentType: 'application/json; charset=utf-8',
+                        complete: function (Response) {
+
+                            if (Response.responseJSON = "success") {
+
+                                swal({
+                                    title: "El Área ha sido actualizada con éxito",
+                                    text: "",
+                                    type: "success",
+                                    icon: "success",
+                                }).then(function () {
+                                    window.location = "AdministrarAreaDepto?CompanyId=" + @Session["CompanyIdForAddArea"];
+                                });
+
+                            }
+                            else{
+                                swal({
+                                    title: "Ocurrió un error al intentar actualizar el Área",
+                                    text: "",
+                                    type: "error",
+                                    icon: "error",
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+
+            $(document).ready(function () {
+
+                @*console.log(@Session["MsgError"]);*@
+
+                var errorCode = @Session["LogError"];
+                if (errorCode == 1) {
+                    swal({
+                        title: "Formato de archivo no compatible",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+                if (errorCode == 2) {
+                    swal({
+                        title: "Verifique que en el layout haya escrito correctamente los nombres a importar",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+                if (errorCode == 3) {
+                    swal({
+                        title: "Ocurrió un error al intentar guardar, verifique la información en el archivo",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+                if (errorCode == 4) {
+                    swal({
+                        title: "Error al importar los datos",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+                if (errorCode == 5) {
+                    swal({
+                        title: "No se ha elegido un archivo",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+                if (errorCode == 6) {
+                    swal({
+                        title: "No se encontraron filas para registrar",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+
+                if (errorCode == 9) {
+                    //alert('Nada XD');
+                }
+
+                if (errorCode == 10) {
+                    swal({
+                        title: "Datos registrados exitosamente",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: 'ResetLogError',
+                            contentType: 'application/json; charset-utf-8',
+                            complete: function (Response) {
+                                location.reload;
+                            }
+                        });
+                    });
+                }
+
+
+            });
+
+            function DeleteArea(IdArea) {
+
+                let ModelArea = {
+                    idArea: IdArea
+                }
+
+                var data = JSON.stringify(ModelArea);
+
+                $.ajax({
+
+                    type: 'POST',
+                    data: data, traditional: true,
+                    url: '@Url.Action("DeleteArea", "Empresa")',
+                    contentType: 'application/json; charset=utf-8',
+                    complete: function (Response) {
+
+                        if (Response.responseJSON == "success") {
+                            swal({
+                                title: "El Área se ha eliminado con éxito",
+                                text: "",
+                                type: "success",
+                                icon: "success",
+                            }).then(function () {
+                                location.reload();
+                            });
+                        }
+                        else {
+                            swal({
+                                title: "Ocurrio un error al intentar eliminar el Área",
+                                text: "",
+                                type: "error",
+                                icon: "error",
+                            });
+                        }
+
+                    }
+                });
+
+            }
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xls/0.7.4-a/xls.core.min.js"></script>
+<script>
+    var excelValido = false;
+    var propiertiesExcel = null;
+    var excelData = null;
+    function ExportToTable() {
+        $('#exceltable tr').remove();
+        var archivo = $('#postedFile').val();
+        var extension = archivo.split('.')[1];
+        if (extension == 'xlsx') {
+            var xlsxflag = false; /*Flag for checking whether excel is .xls format or .xlsx format*/
+            if ($("#postedFile").val().toLowerCase().indexOf(".xlsx") > 0) {
+                xlsxflag = true;
+            }
+            /*Checks whether the browser supports HTML5*/
+            if (typeof (FileReader) != "undefined") {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var data = e.target.result;
+                    /*Converts the excel data in to object*/
+                    if (xlsxflag) {
+                        var workbook = XLSX.read(data, { type: 'binary' });
+                        propiertiesExcel = workbook;
+                    }
+                    else {
+                        var workbook = XLS.read(data, { type: 'binary' });
+                        propiertiesExcel = workbook;
+                    }
+                    /*Gets all the sheetnames of excel in to a variable*/
+                    var sheet_name_list = workbook.SheetNames;
+
+                    var cnt = 0; /*This is used for restricting the script to consider only first sheet of excel*/
+                    sheet_name_list.forEach(function (y) { /*Iterate through all sheets*/
+                        /*Convert the cell value to Json*/
+                        if (xlsxflag) {
+                            var exceljson = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                            excelData = exceljson;
+                        }
+                        else {
+                            var exceljson = XLS.utils.sheet_to_row_object_array(workbook.Sheets[y]);
+                            excelData = excelData;
+                            if (exceljson == null) {
+                                excelValido = false;
+                                swal('El archivo no contiene informacion para guardar', '', 'info');
+                            }
+                        }
+                        if (exceljson.length > 0 && cnt == 0) {
+                            BindTable(exceljson, '#exceltable');
+                            cnt++;
+                        }
+                    });
+                    //Validar contenido duplicado
+                    var rows = $('#exceltable tr').length;
+                    var cols = [];
+
+                    try {
+                        for (var i = 0; i < 5; i++) {
+                            var datosexcel = propiertiesExcel.Strings[i].h.toUpperCase();
+                            cols.push(datosexcel);
+                        }
+                    } catch (e) {
+                        $('#botonAgregaExcel').prop('disabled', true);
+                        swal('El archivo que ha elegido no contiene informacion para importar', '', 'info');
+                    }
+                    
+
+                    //Si en el array cols hay algo igual que el listAreas hay duplicidad
+                    var encuentra = false;
+                    var datoRepetido = "";
+                    for(var i =0; i < cols.length;i++){
+                        for(var j =0; j < listAreas.length;j++){
+                            if(cols[i] == listAreas[j]){
+                                encuentra = true;
+                                datoRepetido = listAreas[j];
+                                break;
+                            }
+                        }
+                    }
+
+                    if(encuentra == true){
+                        //botonAgregaExcel
+                        $('#botonAgregaExcel').prop('disabled', true);
+                        swal('Ya existe un Área con el nombre: ' + datoRepetido, '', 'info');
+                    }
+                    else if(encuentra == false && cols.length > 1){
+                        $('#botonAgregaExcel').prop('disabled', false);
+                    }
+
+
+                    //Validacion
+                    if (rows == 0) {
+                        excelValido = false;
+                        swal('El archivo que ha elegido no contiene informacion para importar', '', 'info');
+                        $('#botonAgregaExcel').prop('disabled', true);
+                    }
+                    else{
+                        excelValido = true;
+                        $('#botonAgregaExcel').prop('disabled', false);
+                        //$('#exceltable').DataTable();
+                        //$('#exceltable').show();
+                    }
+                }
+                if (xlsxflag) {/*If excel file is .xlsx extension than creates a Array Buffer from excel*/
+                    reader.readAsArrayBuffer($("#postedFile")[0].files[0]);
+                }
+                else {
+                    reader.readAsBinaryString($("#postedFile")[0].files[0]);
+                }
+            }
+            else {
+                swal("Your browser does not support HTML5!", "", "info");
+            }
+        }
+        else {
+            swal("Formato de archivo no admitido", "", "info");
+        }
+    }
+    function BindTable(jsondata, tableid) {/*Function used to convert the JSON array to Html Table*/
+        tableid = '#cuerpoTabla';
+        var columns = BindTableHeader(jsondata, tableid); /*Gets all the column headings of Excel*/
+        for (var i = 0; i < jsondata.length; i++) {
+            var row$ = $('<tr/>');
+            for (var colIndex = 0; colIndex < columns.length; colIndex++) {
+                var cellValue = jsondata[i][columns[colIndex]];
+                if (cellValue == null)
+                    cellValue = "";
+                row$.append($('<td/>').html(cellValue));
+            }
+            $(tableid).append(row$);
+        }
+    }
+    function BindTableHeader(jsondata, tableid) {/*Function used to get all column names from JSON and bind the html table header*/
+        tableid = "#filaHead";
+        var columnSet = [];
+        var headerTr$ = $('<tr/>');
+        for (var i = 0; i < jsondata.length; i++) {
+            var rowHash = jsondata[i];
+            for (var key in rowHash) {
+                if (rowHash.hasOwnProperty(key)) {
+                    if ($.inArray(key, columnSet) == -1) {/*Adding each unique column names to a variable array*/
+                        columnSet.push(key);
+                        headerTr$.append($('<th/>').html(key));
+                    }
+                }
+            }
+        }
+        $(tableid).append(headerTr$);
+        return columnSet;
+    }
+</script>
+<table id="exceltable">
+    <thead id="filaHead">
+
+    </thead>
+    <tbody id="cuerpoTabla">
+
+    </tbody>
+</table>

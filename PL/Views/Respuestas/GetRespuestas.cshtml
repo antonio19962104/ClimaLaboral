@@ -1,0 +1,83 @@
+﻿
+@model ML.Respuestas
+
+@*@using (Html.BeginCollectionItem("NewAnswer", Model.IdPadreObjeto))
+{*@
+    @Html.AntiForgeryToken()
+  
+    @switch (Model.Pregunta.TipoControl.IdTipoControl)
+    {
+        case 1:
+
+            break;
+        case 2:
+
+            break;
+        case 3:
+            <div class="row" style="margin-bottom:12px;">
+                <div class="form-check float-left col-8 " id="@Model.IdRespuesta">
+                    <div class="">
+                        @Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Opción", @autofocus = "true", @id = Model.IdRespuesta })
+                    </div>
+                </div>
+                <div class="form-check float-left col-2" id="@Model.IdRespuesta">
+                    <div class="">
+                        <input type="radio" name="@Model.Pregunta.IdPregunta" id="@("Respuesta_"+Model.Pregunta.IdPregunta)" value="@(Model.Pregunta.IdEncuesta+"_"+Model.Pregunta.IdPregunta+"_"+Model.IdRespuesta)" data-toggle="modal" data-target="#modalAddConfiguracion" />
+                        @*@Html.CheckBoxFor(m => m.Selected)*@
+                    </div>
+                </div>
+                <div class="col-12" id="REspuesta_@Model.IdRespuesta">
+
+                </div>
+            </div>
+            break;
+        case 4:
+            <div class="row" style="margin-bottom:12px;">
+                <div class="form-check float-left col-8" id="@Model.IdRespuesta">
+                    <div class="">
+                        @Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Respuesta", @autofocus = "true", @id = Model.IdRespuesta })
+                    </div>
+                </div>
+                <div class="form-check float-left col-2" id="@Model.IdRespuesta">
+                    <div class="">
+                        <input type="radio" name="@Model.Pregunta.IdPregunta" id="@("Respuesta_"+Model.Pregunta.IdPregunta)" value="@(Model.Pregunta.IdEncuesta+"_"+Model.Pregunta.IdPregunta+"_"+Model.IdRespuesta)" data-toggle="modal" data-target="#modalAddConfiguracion" />
+                        @*@Html.RadioButtonFor(m => m.Selected,false,new {@name=Model.Pregunta.IdPregunta,@id=Model.Pregunta.IdPregunta})*@
+                    </div>
+                </div>
+                <div class="col-12" id="REspuesta_@Model.IdRespuesta">
+
+                </div>
+            </div>
+            break;
+        case 5:
+
+            break;
+        case 6:
+
+            break;
+        case 7:
+
+            break;
+        case 8:
+
+            break;
+        case 9:
+
+            break;
+        case 10:
+
+            break;
+        case 11:
+
+            break;
+        case 12:
+
+            break;
+        default:
+                <text>
+                    <h1>No tenemos registrado el Tipo de Control</h1>
+                </text>
+                break;
+                }
+
+                @*}*@

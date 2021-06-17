@@ -1,0 +1,147 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+@*<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img class="img-fluid" src="~/img/icon-database.png" /><h1 class="title-page-survey">Base de datos / <span>Listado</span></h1>
+    </div>
+</section>*@
+@*<style>
+    #page-title{
+        position: relative !important;
+    }
+</style>*@
+@section H1
+    {
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-database.png"> <h1 class="title-page-survey">Base de datos / <span>Listado</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+@*<section id="content">*@
+<p></p>
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        
+                        @*<div class="text-center" style="margin-bottom:10px;">
+                            <a href="#" onclick="Download()" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="">
+                                Descargar layout<i class="fas fa-file-excel ml-1"></i>
+                            </a>
+                        </div>*@
+
+                        <table id="tableAdmin" class="table table-hover table-responsive">
+                            <caption>Lista de bases de datos</caption>
+                            @*//*@
+                            @{ 
+                                ViewBag.Permisos = Session["Permisos"];
+
+                                foreach (ML.PerfilModulo item in ViewBag.Permisos)
+                                {
+                                    if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "CrearBD")
+                                    {
+                                        <caption><a href="@Url.Action("Add", "BD")" class="btn btn-add-template"><i class="fas fa-plus"></i> Agregar base de datos</a></caption>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+
+                            
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        <strong>Nombre</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Tipo de BD</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Estatus</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Eliminar</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Ver datos</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.BasesDeDatos bd in Model.ListadoDeBaseDeDatos)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @bd.Nombre
+                                        </td>
+                                        <td class="text-center">
+                                            @bd.TipoBD.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            @{ 
+                                                if (bd.TipoEstatus.IdEstatus == 1)
+                                                {
+                                                <a href="@Url.Action("UpdateEstatus", "BD", new { IdBaseDeDatos = bd.IdBaseDeDatos, IdentificadorEstatus = bd.TipoEstatus.IdEstatus })">
+                                                    @*<input type="submit" name="name" value="Activo" class="btn btn-success" />*@
+                                                    <button title="Cambia el estatus de la base de datos a Desactivado" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-check"></i> Activo</button>
+                                                </a>
+                                                }
+                                                else if (bd.TipoEstatus.IdEstatus == 2)
+                                                {
+                                                <a href="@Url.Action("UpdateEstatus", "BD", new { IdBaseDeDatos = bd.IdBaseDeDatos, IdentificadorEstatus = bd.TipoEstatus.IdEstatus })" title="">
+                                                    @*<input type="submit" name="name" value="Desactivado" class="btn btn-danger" />*@
+                                                    <button title="Cambia el estatus de la base de datos a Activo" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-ban"></i> Desactivado</button>
+                                                </a>
+                                                    }
+                                                }
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("DeleteBD", "BD", new { IdBaseDeDatos = bd.IdBaseDeDatos } )" title="">
+                                                <button title="Eliminar" type="button" class="btn btn-secondary btn-action"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("GetDataFromBD", "BD", new { IdBaseDeDatos = bd.IdBaseDeDatos, IdTipoBD = bd.TipoBD.IdTipoBD } )" title="">
+                                                <button title="Ver los datos contemidos en la Base" type="button" class="btn btn-secondary btn-action"><i class="fas fa-list"></i> Ver datos</button>
+                                           </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@*</section>*@
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+
+
+<script>
+    function Download() {
+        window.location = "@Url.Action("DownloadLayout", "BD")";
+    }
+    $(document).ready(function () {
+        $('#tableAdmin').DataTable();
+    });
+</script>

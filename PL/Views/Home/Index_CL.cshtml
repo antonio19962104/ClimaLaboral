@@ -1,0 +1,214 @@
+﻿@model ML.Empleado
+@{
+    ViewBag.Title = "Login";
+}
+@*@Html.HiddenFor(model => model.MensajeEmpleado)*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@*//NoStart
+  //AppEnd*@
+@*@if (Model.MensajeEmpleado == "NoStart")
+{
+    <script>
+        swal('@ViewBag.MensajeLogin', '', 'info');
+    </script>
+}
+else if (Model.MensajeEmpleado == "AppEnd")
+{
+    <script>
+        swal('@ViewBag.MensajeLogin', '', 'warning');
+    </script>
+}*@
+<div class="portada">
+        <div class="headerSuperior">
+            <img src="~/images/3 Logo.png" class="logoCL" />
+        </div>
+    <div class="text">
+        <div class="divtxtClave">
+            @Html.TextBoxFor(model => model.ClavesAcceso.ClaveAcceso, htmlAttributes: new { @type = "text", @class = "centrarTexto txtClave", @id = "Pass", @placeholder = "Ingresa tu clave", @style = "" })
+        </div>
+        <div class="divBtnIngresar" onclick="Autenticar()" id="Enter">
+            <p style="margin-top:14px">Ingresar</p>
+        </div>
+        <div class="divBtnEmail contentCenter" onclick="window.location.href = 'mailto:soporte@diagnostic4u.com'">
+            <input class="btnEmail" type="submit" value="¿Problemas con tu clave de acceso?" />
+        </div>
+    </div>
+    <div style="width:100%; height:auto;" id="portadaIMG">
+        <img src="~/images/1 Background image - copia.jpg" style="width:100%;" />
+    </div>
+
+    <div class="footer">
+        <img src="~/images/4 Logo_2.png" class="imgFotter" style="opacity:1;" />
+    </div>
+</div>
+<link href="~/css/Style.css" rel="stylesheet" />
+
+
+<script>
+    $(document).ready(function () {
+
+        //Do solo si la posicion es vertical
+        
+            console.log("the orientation of the device is now " + screen.orientation.angle);
+
+            if (screen.orientation.angle == 0) {
+             var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            $("html, body").css({ "width": w, "height": h });
+
+            }
+
+        
+
+        //$('html').css('overflow', 'hidden');
+        //var es_ie = navigator.userAgent.indexOf("Trident") > -1;
+        //var es_edge = navigator.userAgent.toLowerCase().indexOf('edge') > -1;
+        //if (es_ie && $(window).width() < 1450) {
+        //    alert("El navegador que se está utilizando es Internet Explorer");
+        //    $('html').css('overflow', 'hidden');
+
+        //    $('.headerSuperior').css('position', 'relative');
+        //    $('.headerSuperior').css('margin-top', '-67%');
+
+        //    $('#padre').css('margin-left', '5%');
+        //    $('#padre').css('position', 'relative');
+        //    $('.divBtnIngresar').css('margin-left', '-75%');
+        //    $('.divBtnEmail').css('margin-left', '-75%');
+
+        //    $('.logoCL').css('position', 'static');
+        //    $('.logoCL').css('margin-left', '5%');
+        //    $('.imgFotter').css('margin-left', '5%');
+        //    $('.imgFotter').css('position', 'static');
+        //}
+        //else if (es_edge) {
+            
+        //    $('#divBackground').css('margin-top', '-80px');
+        //    $('html').css('overflow', 'hidden');
+        //}
+
+
+            var txt = document.getElementById('Pass');
+        
+            txt.style.fontSize = '30px';
+        
+        
+    });
+</script>
+
+<script src="~/Scripts/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+
+<script>
+    var input = document.getElementById("Pass");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("Enter").click();
+        }
+    });
+</script>
+<script>
+
+    function Autenticar() {
+
+        var Password = $('#Pass').val();
+
+        if (Password.length < 1) {
+
+            swal({
+                title: "Captura la clave que te ha sido asignada. Si no cuentas con clave acércate con tu responsable de Recursos Humanos",
+                text: "",
+                icon: "warning",
+                showCancelButton: false,
+                showConfirmButton: true,
+                dangerMode: true,
+            });
+
+        }
+        else {
+
+            //Enviar OBJ ML.Empleado
+
+            var listaJSOn = '{"ClavesAcceso":{"ClaveAcceso":"' + Password + '"}}'
+
+            $.ajax({
+                type: 'POST',
+                data: listaJSOn, traditional: true,
+                url: '@Url.Action("Autenticar", "Home")',
+                contentType: 'application/json; charset=utf-8',
+                success: function (Response) {
+
+                    if (Response == "Clave de acceso no válida") {
+
+                        swal({
+                            title: "La clave es invalida",
+                            text: "",
+                            icon: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: true,
+                            dangerMode: true,
+                        });
+
+                    }
+                    else
+                        if (Response == "Ya has realizado la encuesta!") {
+
+                            swal({
+                                title: "Esta clave ya ha sido utilizada",
+                                text: "",
+                                icon: "warning",
+                                showCancelButton: false,
+                                showConfirmButton: true,
+                                //buttons: true,
+                                dangerMode: true,
+                            });
+
+                        }
+                        else
+                            if (Response == "Error del proveedor subyacente en Open.") {
+
+                                swal({
+                                    title: "Error del proveedor subyacente en Open",
+                                    text: "",
+                                    icon: "warning",
+                                    showCancelButton: false,
+                                    showConfirmButton: true,
+                                    //buttons: true,
+                                    dangerMode: true,
+                                });
+
+                            }
+                            else
+                                if (Response == "Success") {
+
+                                    //LLevarme a Inicio
+                                    window.location.href = "Home/Inicio";
+
+                                }
+                                else if (Response == "NoStart") {
+                                    swal('La encuesta aún no está disponible para responderse', '', 'info');
+                                }
+                                else if (Response == "AppEnd") {
+                                    swal('El periodo de aplicación de la encuesta ha terminado', '', 'info');
+                            }
+                }
+            });
+            function finished(err) {
+
+                swal({
+                    title: "Ha ocurrido un error al realizar la autenticación",
+                    text: "",
+                    icon: "warning",
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    //buttons: true,
+                    dangerMode: true,
+                });
+            }
+        }
+    }
+</script>

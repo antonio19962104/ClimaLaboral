@@ -1,0 +1,654 @@
+﻿@media only screen and (min-width: 768px) and (max-width: 2500px) {
+    #u19501 {
+        width: 10%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #paginacion {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #u19973-4 {
+        /*Titulo*/
+        margin-top: 130px;
+        margin-left: 5%;
+        margin-bottom: 10px;
+    }
+
+    #u19974-4, #u19984-4, #u19990-4, #u19996-4, #u19999-4, #u20059-4 {
+        width: 100%;
+        margin-left: 100px;
+    }
+
+    #u19975, #u20002, #u20012, #u20022, #u20042, #u20062 {
+        margin-top: 35px;
+        left: 100px;
+    }
+
+    #u19974-4, #u19984-4, #u19990-4, #u19996-4, #u19999-4, #u20059-4 {
+        margin-top: -25px;
+    }
+
+    #u19975, #u20002, #u20012, #u20022, #u20042, #u20062 {
+        margin-top: 10px;
+    }
+
+    #u20042 {
+        margin-bottom: 20px;
+    }
+
+    /*Other */
+    #u20187-4, #u20200-4, #u20179-4, #u20176-4 {
+        width: 100%;
+        margin-top: -25px;
+        margin-left: 140px;
+    }
+
+    #u20195, #u20208, #u20228, #u20248 {
+        position: static;
+        margin-top: 10px;
+        margin-left: 145px;
+    }
+
+
+    /*Buttons*/
+    #u14532, #u14532:hover {
+        margin-top: -60px;
+    }
+
+    #u14554 {
+        margin-top: -60px;
+        margin-left: -10px;
+    }
+
+    #u9273 {
+        margin-left: 5px;
+    }
+    .imgFotter{
+        margin-left:37%;
+        margin-right:auto;
+        position:relative;
+    }
+}
+
+
+@media only screen and (min-width: 350px) and (max-width: 767px) and (orientation: portrait) {
+    /*Ajustes para jquery*/
+    .ajuste{
+        margin-left:0.5%;
+    }
+    .a1{
+        position:static;
+        margin-left:-15px;
+    }
+
+    #u19984-4 {
+        margin-top: -25px;
+    }
+
+    #u20002 {
+        margin-top: -10px;
+    }
+
+
+
+
+    #u19973-4 {
+        /*Titulo*/
+        margin-top: 130px;
+        margin-left: 10%;
+        margin-bottom: 10px;
+    }
+    /*Antig*/
+    #u19974-4 {
+        margin-top: -20px;
+        width: 100%;
+        position: static;
+    }
+
+    #u19974-4, #u20187-4, #u19984-4, #u19990-4, #u19996-4, #u19999-4, #u20059-4, #u20200-4, #u20179-4, #u20176-4 {
+        margin-left: 20px;
+        position: static;
+    }
+
+    #u19975 {
+        position: static;
+        margin-top: 10px;
+        margin-left: 20px;
+    }
+
+    /*Uneg*/
+    #colUNegocio{
+        position:relative;
+        margin-left:0px;
+    }
+    #u20187-4 {
+        width: 250%;
+        /*margin-top: 30px;*/
+        /*margin-left: 60px;*/
+    }
+
+    #u20195 {
+        position: static;
+        margin-left: 20px;
+        margin-top: 35px;
+    }
+    /*edad*/
+    #u19984-4 {
+        width: 100%;
+    }
+
+    #u20002 {
+        position: static;
+        margin-left: 20px;
+        margin-top: 5px;
+    }
+    /*Compa*/
+    #colCompany{
+        position:static;
+        /*margin-left:40px;*/
+    }
+    #u20200-4 {
+        position:static;
+        width: 200%;
+        /*margin-top: 30px;*/
+    }
+
+    #u20208 {
+        position:static;
+        margin-top: 50px;
+        margin-left:20px;
+    }
+    /*Ctrabajo*/
+    #u19990-4 {
+        width: 100%;
+        margin-top: -15px;
+    }
+
+    #u20012 {
+        position: static;
+        margin-top: 15px;
+        margin-left: 20px;
+    }
+    /*Area*/
+    #colArea{
+        /*margin-top:15px;*/
+    }
+    #u20179-4 {
+        position:static;
+        width: 200%;
+        /*margin-left:60px;*/
+        /*margin-top:20px;*/
+    }
+
+    #u20228 {
+        position:static;
+        margin-left: 20px;
+        margin-top: 35px;
+    }
+    /*Sexo*/
+    #u19996-4 {
+        width: 100%;
+        margin-top: -20px;
+    }
+
+    #u20022 {
+        position: static;
+        margin-left: 20px;
+        margin-top: 15px;
+    }
+
+    #u19999-4 {
+        width: 100%;
+        margin-top: -20px;
+    }
+
+    #u20042 {
+        position: static;
+        margin-left: 20px;
+        margin-top: 15px;
+    }
+
+    #colDepartamento{
+        /*margin-left:-240px;*/
+        margin-top:15px;
+    }
+    #u20176-4{
+        position:static;
+    }
+    #u20248 {
+        position: static;
+        margin-left: 20px;
+    }
+
+    #u20059-4 {
+        width: 100%;
+    }
+
+    #u20062 {
+        position: static;
+        margin-left: 20px;
+        margin-top: 35px;
+    }
+    /*dpto*/
+    #u20176-4 {
+        width: 100%;
+    }
+
+    #u20248 {
+        margin-left: 20px;
+        margin-top: 30px;
+    }
+    #u19501{
+        max-width:30%;
+    }
+    #u14554 {
+        margin-top: -60px;
+        max-width:10%;
+        min-width:10%;
+    }
+    #u14532, #u14532:hover{
+        margin-top: -60px;
+        max-width:10%;
+        min-width:10%;
+    }
+
+    #u14554 {
+        left: 70%;
+    }
+
+    #u19501 {
+    }
+
+    #u9273, .prog {
+        width: 100%;
+        margin-top: 85px;
+    }
+
+    #progreso {
+        margin-left: 35%;
+        margin-top: 5px;
+    }
+
+    .headerSuperior {
+        width: 110%;
+        min-width: 110%;
+    }
+
+    .logoCL {
+        margin-top: 10px;
+        margin-left:-5%;
+    }
+    .imgFotter{
+        margin-left:-5%;
+    }
+    .footer {
+        width: 110%;
+        min-width: 110%;
+        max-width: 110%;
+    }
+
+    #u20200-4 {
+    }
+}
+
+
+
+
+
+
+@media only screen and (min-width: 600px) and (max-width: 767px) and (orientation: landscape) {
+    #u19973-4 {
+        /*Titulo*/
+        margin-top: 130px;
+        margin-left: 5%;
+        margin-bottom: 10px;
+    }
+    /*Antig*/
+    #u19974-4 {
+        margin-top: -20px;
+        margin-left: -30px;
+        width: 100%;
+        position: static;
+    }
+
+    #u19975 {
+        margin-top: -25px;
+        margin-left: 100px;
+    }
+    /*Uneg*/
+    #u20187-4 {
+        width: 100%;
+        margin-left: -30px;
+        position: static;
+        margin-top:-55px;
+    }
+
+    #u20195 {
+        margin-left: 100px;
+        margin-top: -55px;
+    }
+    /*edad*/
+    #u19984-4 {
+        margin-top:-45px;
+        width: 100%;
+        margin-left: -30px;
+    }
+
+    #u20002 {
+        margin-left: 100px;
+        margin-top: -45px;
+    }
+    /*Compa*/
+    #u20200-4 {
+        width: 100%;
+        margin-left: -30px;
+        margin-top:-30px;
+    }
+
+    #u20208 {
+        margin-left: 100px;
+        margin-top: -30px;
+    }
+    /*Ctrabajo*/
+    #u19990-4 {
+        width: 100%;
+        margin-top: -50px;
+        margin-left: -30px;
+    }
+
+    #u20012 {
+        margin-top: -50px;
+        margin-left: -85px;
+        margin-left: 100px;
+    }
+    /*Area*/
+    #u20179-4 {
+        width: 100%;
+        margin-left: -30px;
+    }
+
+    #u20228 {
+        margin-left: 100px;
+        margin-top: 0px;
+    }
+    /*Sexo*/
+    #u19996-4 {
+        width: 100%;
+        margin-left: -30px;
+        margin-top:-55px;
+    }
+
+    #u20022 {
+        margin-left: 100px;
+        margin-top: -55px;
+    }
+    /*Gradoacadem*/
+    #u19999-4 {
+        width: 100%;
+        margin-left: -30px;
+        margin-top:-55px;
+    }
+    #colUNegocio, #colCompany, #colArea, #colDepartamento{
+        margin-left:15px;
+        position:static;
+    }
+    #u20195, #u20208, #u20228, #u20248{
+        margin-left:185px;
+        
+    }
+    
+    #u20042 {
+        margin-left: 100px;
+        margin-top: -55px;
+    }
+
+    #u20059-4 {
+        width: 100%;
+        margin-top:-55px;
+        margin-left: -30px;
+    }
+
+    #u20062 {
+        margin-left: 100px;
+        margin-top: -55px;
+    }
+    /*dpto*/
+    #u20176-4 {
+        width: 100%;
+        margin-left: -30px;
+    }
+
+    #u20248 {
+        /*margin-left: 100px;*/
+        margin-top: 00px;
+    }
+
+    #u14532, #u14554 {
+        margin-top: -60px;
+    }
+
+    #u19501 {
+        height: auto;
+    }
+    
+    .progres_ {
+        width: 10%;
+    }
+
+    #u14532 {
+        width: 5%;
+    }
+
+    #u9273 {
+        margin-top: 100px;
+        width: 100%;
+    }
+
+    #u14554 {
+        left: 75%;
+    }
+
+    #u14532 {
+        left: 90%;
+    }
+
+    .headerSuperior {
+        width: 110%;
+        min-width: 110%;
+    }
+
+    .logoCL {
+        margin-top: 10px;
+    }
+
+    .footer {
+        width: 110%;
+        min-width: 110%;
+        max-width: 110%;
+    }
+
+    #progreso {
+        margin-left: 40%;
+    }
+
+    .logoCL {
+        width: 55%;
+    }
+
+    .imgFotter {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+
+
+
+/*@media only screen and (min-width: 768px) and (max-height: 1200px) and (orientation: landscape) {
+    #u19973-4 {
+        /*Titulo
+        margin-top: 130px;
+        margin-left: 5%;
+        margin-bottom: 10px;
+    }
+    Antig
+    #u19974-4 {
+        margin-top: -20px;
+        margin-left:-30px;
+        width: 100%;
+        position:static;
+    }
+
+    #u19975 {
+        margin-top: -25px;
+        margin-left: 135px;
+    }
+    Uneg
+    #u20187-4 {
+        width: 100%;
+        margin-left:-350px;
+        margin-top:30px;
+        margin-bottom:30px;
+        position:absolute;
+    }
+
+    #u20195 {
+        margin-left: -80px;
+        margin-top: 30px;
+    }
+    edad
+    #u19984-4 {
+        width: 100%;
+        margin-left:-35px;
+    }
+
+    #u20002 {
+        margin-left: 100px;
+        margin-top: 0px;
+    }
+    Compa
+    #u20200-4 {
+        width: 100%;
+        margin-left:-30px;
+    }
+
+    #u20208 {
+        margin-left: 100px;
+        margin-top: 0px;
+    }
+    Ctrabajo
+    #u19990-4 {
+        width: 100%;
+        margin-top: 10px;
+        margin-left:-30px;
+    }
+
+    #u20012 {
+        margin-top: 5px;
+        margin-left: -85px;
+        margin-left:100px;
+    }
+    Area
+    #u20179-4{
+        width:100%;
+        margin-left:-30px;
+    }
+    #u20228{
+        margin-left:100px;
+        margin-top:0px;
+    }
+    Sexo
+    #u19996-4{
+        width:100%;
+        margin-left:-30px;
+    }
+    #u20022{
+        margin-left:100px;
+        margin-top:0px;
+    }
+
+    #u19999-4{
+        width:100%;
+        margin-left:-30px;
+    }
+    #u20042{
+        margin-left:100px;
+        margin-top:0px;
+    }
+
+    #u20059-4{
+        width:100%;
+        margin-left:-30px;
+    }
+    #u20062{
+        margin-left:100px;
+        margin-top:0px;
+    }
+    dpto
+    #u20176-4{
+        width:100%;
+        margin-left:-30px;
+    }
+    #u20248{
+        margin-left:100px;
+        margin-top:00px;
+    }
+
+    #u14532, #u14554{
+        margin-top:-60px;
+    }
+
+
+
+
+    .headerSuperior {
+        width: 110%;
+        min-width: 110%;
+    }
+
+    .logoCL {
+        margin-top: 10px;
+    }
+
+    .footer {
+        width: 110%;
+        min-width: 110%;
+        max-width: 110%;
+    }
+
+    #progreso {
+        margin-left: -10px;
+    }
+}*/
+
+
+
+
+
+
+select {
+    /* styling */
+    min-width: 300px;
+    max-width: 300px;
+    background-color: #f2f2f2;
+    display: inline-block;
+    line-height: 1.5em;
+    padding: 2px 2px 2px 2px;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+    select.classic {
+        background-image: linear-gradient(45deg, transparent 50%, #F2F2F2 0%), linear-gradient(135deg, #F2F2F2 50%, transparent 0%), linear-gradient(to right, #000080, #000080);
+        background-position: calc(100% - 15px) calc(1em + -5px), calc(100% - 10px) calc(1em + -5px), 100% 0;
+        background-size: 5px 5px, 5px 5px, 2em 2em;
+        background-repeat: no-repeat;
+    }

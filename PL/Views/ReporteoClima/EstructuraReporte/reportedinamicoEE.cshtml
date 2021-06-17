@@ -1,0 +1,191 @@
+﻿@using Newtonsoft.Json
+@model ML.Result
+<link href="~/Jit/Examples/css/base.css" rel="stylesheet" />
+<link href="~/Jit/Examples/css/Icicle.css" rel="stylesheet" />
+<script type="text/javascript" >
+   
+    var cadenaR = @Html.Raw(JsonConvert.SerializeObject(Model.CURRENT_USER));
+    cadenaR = cadenaR.replace(/\/+/g,'/');
+    cadenaR = cadenaR.replace(/\/+/g,'/');
+    var labelType, useGradients, nativeTextSupport, animate;
+
+    (function () {   
+        var ua = navigator.userAgent,
+            iStuff = ua.match(/iPhone/i) || ua.match(/iPad/i),
+            typeOfCanvas = typeof HTMLCanvasElement,
+            nativeCanvasSupport = (typeOfCanvas == 'object' || typeOfCanvas == 'function'),
+            textSupport = nativeCanvasSupport
+              && (typeof document.createElement('canvas').getContext('2d').fillText == 'function');
+        //I'm setting this based on the fact that ExCanvas provides text support for IE
+        //and that as of today iPhone/iPad current text support is lame
+        labelType = 'HTML';//(!nativeCanvasSupport || (textSupport && !iStuff)) ? 'Native' : 'HTML';
+        nativeTextSupport = labelType == 'Native';
+        useGradients = nativeCanvasSupport;
+        animate = !(iStuff || !nativeCanvasSupport);
+    })();
+
+    var Log = {
+        elem: false,
+        write: function (text) {
+            if (!this.elem)
+                this.elem = document.getElementById('log');
+            this.elem.innerHTML = text;
+            this.elem.style.left = (500 - this.elem.offsetWidth / 2) + 'px';
+        }
+    };
+    var icicle;    
+    //NO$("#infovis").hide(true);
+
+    function initLoad() {
+        // left panel controls
+        //controls();
+        //$jit.id('max-levels').style.display = 'none';
+        // init data       
+        var json = JSON.parse(cadenaR);
+        //alert("vacio");
+        //console.log(json);
+       
+        //// init Icicle
+        icicle = new $jit.Icicle({
+            // id of the visualization container
+            injectInto: 'infovis',
+            // whether to add transition animations
+            animate: animate,
+            // nodes offset
+            offset: 1,
+            // whether to add cushion type nodes
+            cushion: false,
+            // do not show all levels at once
+            constrained: true,
+            levelsToShow: 2,
+            // enable tips
+            Tips: {
+                enable: false,
+                type: 'Native',
+                // add positioning offsets
+                offsetX: 20,
+                offsetY: 20,
+                // implement the onShow method to
+                // add content to the tooltip when a node
+                // is hovered
+                onShow: function (tip, node) {
+                    // count children
+                    var count = 0;
+                    node.eachSubnode(function () {
+                        count++;
+                    });
+                    // add tooltip info
+                    tip.innerHTML = "<div class=\"tip-title\"><b>Name:</b> "
+                        + node.name + "</div><div class=\"tip-text\">" + count
+                        + " children</div>";
+                }
+            },
+            // Add events to nodes
+            Events: {
+                enable: true,
+                onClick: function (node) {
+                    if (node) {
+                        //hide tips
+                        icicle.tips.hide();
+                        // perform the enter animation
+                        icicle.enter(node);
+                    }
+                },
+                onRightClick: function () {
+                    //hide tips
+                    icicle.tips.hide();
+                    // perform the out animation
+                    icicle.out();
+                }
+            },
+            // Add canvas label styling
+            Label: {
+                type: "HTML", //labelType, // "Native" or "HTML"
+                color: '#FFF',
+                style: 'bold',
+                size: 12
+            },
+            // Add the name of the node in the corresponding label
+            // This method is called once, on label creation and only for DOM and
+            // not
+            // Native labels.
+            onCreateLabel: function (domElement, node) {
+                domElement.innerHTML = node.name;
+                var style = domElement.style;
+                style.fontSize = '0.9em';
+                style.display = '';
+                style.cursor = 'pointer';
+                style.color = '#fff';
+                style.overflow = 'hidden';
+            },
+            // Change some label dom properties.
+            // This method is called each time a label is plotted.
+            onPlaceLabel: function (domElement, node) {
+                var style = domElement.style, width = node.getData('width'), height = node
+                    .getData('height');
+                if (width < 7 || height < 7) {
+                    style.display = 'none';
+                } else {
+                    style.display = '';
+                    style.width = width + 'px';
+                    style.height = height + 'px';
+                }
+            }
+        });
+        // load data
+        icicle.loadJSON(json);
+        // compute positions and plot
+        icicle.refresh();
+        //end
+    }
+
+    //init controls
+    function controls() {
+        var jit = $jit;
+    }
+    //end
+
+
+
+</script>
+@*<script src="~/Jit/jit.js"></script>*@
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <p class="mb-n1">Reporte</p>
+        <h2 class="robotothin mb-2 mt-n1">DINÁMICO <span class="robotobold yellow-clima area-empresa ml-3">@Model.CompanyDelAdmin</span></h2>
+        <div class="form-group">
+            <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                <label class="control-label">Enfoque Empresarial</label>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-block">
+                <div class="px-4">
+                    <div class="row mt-4 mb-4">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-dejar">
+                                <center>
+                                    <p class="robotobold titulo-grafica2">@Model.CompanyDelAdmin</p><br>
+                                    <i class="fa fa-caret-down text-black f-40 icono-down-center"></i>
+                                </center>
+                                <button onclick="icicle.out();" type="button" class="btn btn-outline-primary">Regresa un nivel</button>
+                                <div class="row mb-5 mr-3 ml-3">
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <div id="infovis"></div>
+                                    </div>
+                                    <div id="_tooltip" class="tip" style="display:none; position: absolute; z-index: 13000; top: -252px; left: 964px;"><div class="tip-title"></div><div class="tip-text"></div></div>
+
+                                    @*<div class="embed-responsive embed-responsive-4by3" style="height: 615px;">
+                                        <div id="ifdinamico"></div>
+                                    </div>*@
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+                        </div>
+                    </div><!--.row-->
+                </div>
+            </div>
+        </div>       
+    </div><!--.container-->
+</div><!--.content-wrap-->
+
+

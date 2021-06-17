@@ -1,0 +1,304 @@
+﻿@using PL.Extensions
+@model ML.Respuestas
+
+@using (Html.BeginCollectionItem("NewAnswer", Model.IdPadreObjeto))
+{
+    @Html.AntiForgeryToken()
+  
+    switch (Model.Pregunta.TipoControl.IdTipoControl)
+    {
+        case 1:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 "  id="@Model.UniqueId">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12  float-left">
+                    @Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Respuesta Corta", @autofocus = "true", @disabled = "disabled" })
+                </div>
+            </div>
+                break;
+            case 2:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12"  id="@Model.UniqueId">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 float-left">
+                    @Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Respuesta Larga", @autofocus = "true", @disabled = "disabled" })
+                </div>
+            </div>
+                break;
+            case 3:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;"  id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <input class="form-check-input" type="radio" value="" disabled />@Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Opción", @autofocus = "true", })
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 float-right">
+                    <ul class="list-inline crud-questions">
+                        <li class="list-inline-item" style="cursor:pointer;" onclick="javascript: deleteCuestion(document.getElementById('@Model.UniqueId'))">@*<i class="fas fa-trash-alt"></i>*@[X]</li>
+                    </ul>
+                </div>
+            </div>
+                break;
+            case 4:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;"  id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <input class="form-check-input" type="checkbox" value="" disabled />@Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Respuesta", @autofocus = "true", })
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 float-right">
+                    <ul class="list-inline crud-questions">
+                        <li class="list-inline-item" style="cursor:pointer;" onclick="javascript: deleteCuestion(document.getElementById('@Model.UniqueId'))">@*<i class="fas fa-trash-alt"></i>*@[X]</li>
+                    </ul>
+                </div>
+            </div>
+            break;
+        case 5:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <input class="form-check-input" type="radio" value="" disabled />@Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Opción", @autofocus = "true", })
+                </div>
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 float-right">
+                    <ul class="list-inline crud-questions">
+                        <li class="list-inline-item" style="cursor:pointer;" onclick="javascript: deleteCuestion(document.getElementById('@Model.UniqueId'))">@*<i class="fas fa-trash-alt"></i>*@[X]</li>
+                    </ul>
+                </div>
+            </div>           
+            break;
+        case 6:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="cc-selector">
+                                <input name="credit-card" id="badface" type="radio" value="badface">
+                                <label class="face-value badface" for="badface"></label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="cc-selector">
+                                <input name="credit-card" id="regularface" type="radio" value="regularface">
+                                <label class="face-value regularface" for="regularface"></label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="cc-selector">
+                                <input name="credit-card" id="happyface" type="radio" value="happyface">
+                                <label class="face-value happyface" for="happyface"></label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="cc-selector">
+                                <input name="credit-card" id="happierface" type="radio" value="happierface">
+                                <label class="face-value happierface" for="happierface"></label>
+                            </div>
+                        </div>
+                    </div>
+                     @*@Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Respuesta", @autofocus = "true", })*@
+                </div>
+            </div>
+            break;
+        case 7:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 float-left">
+                    <div class="row align-bottom-vertically mb-2">
+                        <div align="left" class="col-4">
+                            <label class="text-danger label-range" for="customRange1"><strong>Definitivamente no</strong></label>
+                        </div>
+                        <div align="center" class="col-4">
+                            <input disabled="" class="form-control textInput col-sm-6" id="textInput" type="text" value="">
+                        </div>
+                        <div align="right" class="col-4">
+                            <label class="text-success label-range" for="customRange1"><strong>Totalmente</strong></label>
+                        </div>
+                    </div>
+                    <input class="custom-range" id="customRange1" onchange="updateTextInput(this.value);" type="range">
+
+                    @*<input class="form-check-input" type="checkbox" value="" disabled />@Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Respuesta", @autofocus = "true", })*@
+                </div>               
+            </div>
+            break;
+        case 8:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <div class="row">
+                        <div class="card-question" style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Acuerdo" class="custom-control-input" id="Totalmente_de_Acuerdo" type="radio" value="Totalmente de Acuerdo">
+                                <label class="custom-control-label" for="Totalmente_de_Acuerdo">Totalmente de Acuerdo</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Acuerdo" class="custom-control-input" id="De_Acuerdo" type="radio" value="Totalmente de Acuerdo">
+                                <label class="custom-control-label" for="De_Acuerdo">De Acuerdo</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Acuerdo" class="custom-control-input" id="Indeciso" type="radio" value="Indeciso">
+                                <label class="custom-control-label" for="Indeciso">Indeciso</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Acuerdo" class="custom-control-input" id="En_Desacuerdo" type="radio" value="En Desacuerdo">
+                                <label class="custom-control-label" for="En_Desacuerdo">En Desacuerdo</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Acuerdo" class="custom-control-input" id="Totalmente_en_Desacuerdo" type="radio" value="Totalmente en Desacuerdo">
+                                <label class="custom-control-label" for="Totalmente_en_Desacuerdo">Totalmente en Desacuerdo</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            break;
+        case 9:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <div class="row">
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Frecuencia" class="custom-control-input" id="Muy_Frecuente" type="radio" value="Muy Frecuentemente">
+                                <label class="custom-control-label" for="Muy_Frecuente">Muy Frecuentemente</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Frecuencia" class="custom-control-input" id="Frecuentemente" type="radio" value="Frecuentemente">
+                                <label class="custom-control-label" for="Frecuentemente">Frecuentemente</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Frecuencia" class="custom-control-input" id="Ocasionalmente" type="radio" value="Ocasionalmente">
+                                <label class="custom-control-label" for="Ocasionalmente">Ocasionalmente</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Frecuencia" class="custom-control-input" id="Raramente" type="radio" value="Raramente">
+                                <label class="custom-control-label" for="Raramente">Raramente</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Frecuencia" class="custom-control-input" id="Nunca" type="radio" value="Nunca">
+                                <label class="custom-control-label" for="Nunca">Nunca</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            break;
+        case 10:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <div class="row">
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Importancia" class="custom-control-input" id="Muy_Importante" type="radio" value="Muy Importante">
+                                <label class="custom-control-label" for="Muy_Importante">Muy Importante</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Importancia" class="custom-control-input" id="Importante" type="radio" value="Importante">
+                                <label class="custom-control-label" for="Importante">Importante</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Importancia" class="custom-control-input" id="Moderadamente_Importante" type="radio" value="Moderadamente Importante">
+                                <label class="custom-control-label" for="Moderadamente_Importante">Moderadamente Importante</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Importancia" class="custom-control-input" id="De_Poca_Importancia" type="radio" value="De Poca Importancia">
+                                <label class="custom-control-label" for="De_Poca_Importancia">De Poca Importancia</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Importancia" class="custom-control-input" id="Sin_Importancia" type="radio" value="Sin Importancia">
+                                <label class="custom-control-label" for="Sin_Importancia">Sin Importancia</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            break;
+        case 11:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 float-left">
+                    <div class="row">
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Probabilidad" class="custom-control-input" id="Casi_Siempre_Verdad" type="radio" value="Casi Siempre Verdad">
+                                <label class="custom-control-label" for="Casi_Siempre_Verdad">Verdad</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Probabilidad" class="custom-control-input" id="Usualmente_Verdad" type="radio" value="Usualmente_Verdad">
+                                <label class="custom-control-label" for="Usualmente_Verdad">Usualmente Verdad</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Probabilidad" class="custom-control-input" id="Ocasionalmente_Verdad" type="radio" value="Ocasionalmente Verdad">
+                                <label class="custom-control-label" for="Ocasionalmente_Verdad">Ocasionalmente Verdad</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Probabilidad" class="custom-control-input" id="Usualmente_No_Verdad" type="radio" value="Usualmente_No_Verdad">
+                                <label class="custom-control-label" for="Usualmente_No_Verdad">Usualmente Falso</label>
+                            </div>
+                        </div>
+                        <div class="card-question"  style="width:100%;">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input disabled name="Likert-Probabilidad" class="custom-control-input" id="Casi_Nunca_Verdad" type="radio" value="Casi Nunca Verdad">
+                                <label class="custom-control-label" for="Casi_Nunca_Verdad">Falso</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            break;
+        case 12:
+            <div class="form-check col-lg-12 col-md-12 col-sm-12 col-xs-12 " style="overflow: auto;margin-bottom: 10px;" id="@Model.UniqueId">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @{
+
+                        if (Model.Verdadero == 1)
+                        {
+                            @Html.Raw("Titulo de Columna");                            
+                        }
+                        else
+                        {
+                            @Html.Raw("Pregunta"); 
+                        }
+                    }
+                    
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-2 float-left">
+                    @{
+                        if (Model.Verdadero == 1)
+                        {
+                            @Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Titulo de Columna", @autofocus = "true", })
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(m => m.Respuesta, new { @class = "form-control p-0", @placeholder = "Pregunta", @autofocus = "true", })
+                        }
+
+                    }                    
+                </div>               
+            </div>
+            break;
+        default:
+            <text>
+                <h1>No tenemos registrado el Tipo de Control</h1>
+            </text>
+                break;
+        }
+
+}

@@ -1,0 +1,194 @@
+﻿@model ML.Empleado
+@{
+    ViewBag.Title = "Index_Aux";
+}
+
+
+<div class="portada">
+    <div class="headerSuperior">
+        <img src="~/images/3 Logo.png" class="logoCL" />
+    </div>
+    <div class="text">
+        <div class="divtxtClave">
+            @*<input type="text" class="centrarTexto txtClave" placeholder="Ingresa tu clave" style="border:none; font-size:30px; font-weight:bold; width:100%; " />*@
+            @Html.TextBoxFor(model => model.ClavesAcceso.ClaveAcceso, htmlAttributes: new { @type = "text", @class = "centrarTexto txtClave", @id = "Pass", @placeholder = "Ingresa tu clave", @style = "" })
+        </div>
+        <div class="divBtnIngresar" onclick="Autenticar()" id="Enter">
+            <p style="margin-top:14px">Ingresar</p>
+        </div>
+        <div class="divBtnEmail contentCenter" onclick="window.location.href = 'mailto:soporte@diagnostic4u.com'">
+            <input class="btnEmail" type="submit" value="¿Problemas con tu clave de acceso?" />
+        </div>
+    </div>
+    <div style="width:100%; height:auto;" id="portadaIMG">
+        <img src="~/images/1 Background image - copia.jpg" style="width:100%;" />
+    </div>
+
+    <div class="footer">
+        <img src="~/images/4 Logo_2.png" class="imgFotter" style="opacity:1;" />
+    </div>
+</div>
+<link href="~/css/Style.css" rel="stylesheet" />
+<!--
+<div onclick="" class="row Login" style="overflow:hidden; display:flex; justify-content:center;">
+    <div style="width:100%; overflow:hidden; display:block;" id="divBackground" >
+        @*<img src="~/images/1 Background image.jpg" id="imgFondo" class="img-responsive" style="opacity:1;" />*@
+    </div>
+    <div class="headerSuperior" style="position:absolute;display:flex; justify-content:center; margin-left:-15px; margin-right:auto;">
+        <img src="~/images/3 Logo.png" class="logoCL" id="" />
+    </div>
+    <!--Contenido botones-->
+<!--
+    <div id="padre" class="contentCenter" style="position:relative; z-index:1; width:400px; height:130px;">
+        <div class="divtxtClave">
+
+        </div>
+        <div class="divBtnIngresar" onclick="Autenticar()">
+            <input type="submit" value="Ingresar" id="Enter" style="font-family:Open Sans" class="Button" data-heightwidthratio="1.6515151515151516" />
+        </div>
+        <div class="divBtnEmail contentCenter" onclick="window.location.href = 'mailto:soporte@diagnostic4u.com'">
+            <input class="btnEmail" type="submit" value="¿Problemas con tu clave de acceso?" />
+        </div>
+    </div>
+    <!--Contenido botones-->
+<!--
+    <div class="footer card-footer" style="display:flex; justify-content:center;">
+        <img src="~/images/4 Logo_2.png" class="imgFotter" style="opacity:1" />
+    </div>
+</div>
+-->
+
+<script>
+    $(document).ready(function () {
+
+        console.log("the orientation of the device is now " + screen.orientation.angle);
+
+        if (screen.orientation.angle == 0) {
+            var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            $("html, body").css({ "width": w, "height": h });
+
+        }
+
+
+
+            var txt = document.getElementById('Pass');
+
+            txt.style.fontSize = '30px';
+
+
+    });
+</script>
+
+<script src="~/Scripts/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,300" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans" />
+
+<script>
+    var input = document.getElementById("Pass");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("Enter").click();
+        }
+    });
+</script>
+<script>
+
+    function Autenticar() {
+
+        var Password = $('#Pass').val();
+
+        if (Password.length < 1) {
+
+            swal({
+                title: "Captura la clave que te ha sido asignada. Si no cuentas con clave acércate con tu responsable de Recursos Humanos",
+                text: "",
+                icon: "warning",
+                showCancelButton: false,
+                showConfirmButton: true,
+                dangerMode: true,
+            });
+
+        }
+        else {
+
+            //Enviar OBJ ML.Empleado
+
+            var listaJSOn = '{"ClavesAcceso":{"ClaveAcceso":"' + Password + '"}}'
+
+            $.ajax({
+                type: 'POST',
+                data: listaJSOn, traditional: true,
+                url: '@Url.Action("Autenticar", "Home")',
+                contentType: 'application/json; charset=utf-8',
+                success: function (Response) {
+
+                    if (Response == "Clave de acceso no válida") {
+
+                        swal({
+                            title: "La clave es invalida",
+                            text: "",
+                            icon: "warning",
+                            showCancelButton: false,
+                            showConfirmButton: true,
+                            dangerMode: true,
+                        });
+
+                    }
+                    else
+                        if (Response == "Ya has realizado la encuesta!") {
+
+                            swal({
+                                title: "Esta clave ya ha sido utilizada",
+                                text: "",
+                                icon: "warning",
+                                showCancelButton: false,
+                                showConfirmButton: true,
+                                //buttons: true,
+                                dangerMode: true,
+                            });
+
+                        }
+                        else
+                            if (Response == "Error del proveedor subyacente en Open.") {
+
+                                swal({
+                                    title: "Error del proveedor subyacente en Open",
+                                    text: "",
+                                    icon: "warning",
+                                    showCancelButton: false,
+                                    showConfirmButton: true,
+                                    //buttons: true,
+                                    dangerMode: true,
+                                });
+
+                            }
+                            else
+                                if (Response == "Success") {
+
+                                    //LLevarme a Inicio
+                                    window.location.href = "Inicio";
+
+                                }
+                                else {
+                                    alert(Response);
+                                }
+                }
+            });
+            function finished(err) {
+
+                swal({
+                    title: "Ha ocurrido un error al realizar la autenticación",
+                    text: "",
+                    icon: "warning",
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    //buttons: true,
+                    dangerMode: true,
+                });
+            }
+        }
+    }
+</script>

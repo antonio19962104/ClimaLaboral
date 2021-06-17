@@ -1,0 +1,210 @@
+﻿@model ML.Usuario
+@{
+    ViewBag.Title = "Login CMS - Encuestas";
+    
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    @Styles.Render("~/bundles/cssAdmin")
+
+    <!-- Title -->
+    <title>Bienvenido | Diagnostic 4U</title>
+    <script>
+        navigator.sayswho = (function () {
+            var ua = navigator.userAgent, tem,
+            M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+            if (/trident/i.test(M[1])) {
+                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                return 'IE ' + (tem[1] || '');
+            }
+            if (M[1] === 'Chrome') {
+                tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+                if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+            }
+            M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+            if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+            return M.join(' ');
+        })();
+    </script>
+</head>
+<body>
+   
+    <main id="wrapper">
+        <section id="slider">
+            <!-- Swiper -->
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-1.jpg');"></div><!--.swiper-slide-->
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-2.jpg');"></div><!--.swiper-slide-->
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-1.jpg');"></div><!--.swiper-slide-->
+                    <div class="swiper-slide" style="background-image: url('../../img/background/bg-login-2.jpg');"></div><!--.swiper-slide-->
+                </div><!--.swiper-wrapper-->
+            </div><!--.swiper-container-->
+        </section>
+        @using (Html.BeginForm("Login", "Encuesta", FormMethod.Post))
+        {
+            @Html.HiddenFor(m => m.IdEncuesta)
+
+            @*if (Model.IdEncuesta == 999888888)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("Aviso", "La encuesta no es compatible con su versión de navegador, favor de actualizalo", "info");
+                </script>
+            }*@
+
+            if (Model.IdEncuesta == 999999991)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("Aviso", "La encuesta ya está cerrada", "info");
+                </script>
+            }
+
+
+            if (Model.IdEncuesta == 999988888)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("Aviso", "Esta página no es compatible con Internet Explorer, intentelo con Edge, Chrome, Firefox o Safari, por favor.", "info");
+                </script>
+            }
+            if (Model.IdEncuesta == 0)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                    <script>
+                        swal("Atención", "Verifica la liga de la encuesta, por favor.", "info");
+                    </script>
+            }
+            if (Model.IdEncuesta == 999999999)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("Aviso", "Usted ya contesto la Encuesta.", "info");
+                </script>
+            }
+            if (Model.IdEncuesta == 999999888)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("Atención", "Encuesta no encontrada. Ingresa de nuevo a la liga que llegó a tu correo y verifica tu contraseña, por favor", "info");
+                </script>
+            }
+            if (Model.IdEncuesta == 999998888)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("Atención", "Tu sesión ha expirado. Ingresa de nuevo a la liga que llegó a tu correo, por favor", "info");
+                </script>
+            }
+
+
+            if (@ViewBag.RespuestLogin != null)
+            {
+                <script src="~/css/sweetalert.min.js"></script>
+                <script>
+                    swal("@ViewBag.RespuestLogin", "", "info");
+                </script>
+            }
+
+            <div class="form-wrapper">
+                <div class="form-box">
+                    <img src="~/img/logo.png" class="img-fluid logo-form" alt="Logo">
+                    <h1 class="title-form-box">Iniciar sesión @ViewBag.RespuestLogin</h1>
+                    <div class="form-group mb-4">
+                        @*<input type="text" class="form-control form-control-lg UserName" id="userLogin" placeholder="Usuario:">*@
+                        @if(Model.IdEncuesta != 0 || Model.IdEncuesta == 999999999)
+                        {
+                            @Html.TextBoxFor(model => model.ClaveAcceso, htmlAttributes: new { @type = "text", @class = "form-control form-control-lg UserName", @id = "userLogin", @placeholder = "Clave de acceso:" })
+                        }                        
+                    </div>
+                    @*<a href="#" class="text-forgot">¿Olvidaste tu contraseña?</a>*@
+                </div>
+                @*<a href="#" class="btn btn-login btn-block" onclick="Autenticar()">Entrar</a>*@
+                <input  type="submit" @(Model.IdEncuesta == 999988888 ? "disabled" : "" )  @(Model.IdEncuesta == 999999991 ? "disabled" : "" )  @(Model.IdEncuesta == 999998888 ? "disabled" : "" )    @(Model.IdEncuesta == 0 ? "disabled" : "" ) @(Model.IdEncuesta == 999999888 ? "disabled" : "" ) @(Model.IdEncuesta == 999999999 ? "disabled" : "" ) value="Entrar" class="btn btn-login btn-block" style="min-width:100%" onclick="" />
+            </div>
+        }
+        
+
+        <div class="text-slide">
+            <h2 class="title-message">Mejora la interacción</h2>
+            <p class="desc-message">con el cliente tomando decisiones<br>basadas en conocimientos generados</p>
+            @*<span>Para un correcto funcionamiento del portal<br> se recomienda usar los navegadores: <br> Firefox en la versión X en adelante<br> Chrome en la versión x en adelante <br>Safari en la versión x en adelante<br> Edge en la versión x en adelante.</span>*@
+        </div>
+    </main>
+
+
+    @Scripts.Render("~/bundles/jqueryAdmin")
+
+    
+    <script src="~/scripts/swiper.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log(navigator.sayswho);
+            var navigatorAndVersion = navigator.sayswho;
+            var nav = navigatorAndVersion.split(' ')[0];
+            var version = navigatorAndVersion.split(' ')[1];
+            version = parseInt(version);
+            if (nav == 'Edge' && version < 18) {
+                //$('input[type="submit"]').prop('disabled', true)
+                var btn = document.getElementsByClassName('btn-login');
+                btn[0].disabled = true;
+                swal("Aviso", "La encuesta no es compatible con su versión de Edge, por favor actualizalo", "info");
+            }
+            if (nav == 'Firefox' && version < 60) {
+                //$('input[type="submit"]').prop('disabled', true)
+                var btn = document.getElementsByClassName('btn-login');
+                btn[0].disabled = true;
+                swal("Aviso", "La encuesta no es compatible con su versión de Firefox, por favor actualizalo", "info");
+            }
+            if (nav == 'Chrome' && version < 66) {
+                //$('input[type="submit"]').prop('disabled', true)
+                var btn = document.getElementsByClassName('btn-login');
+                btn[0].disabled = true;
+                swal("Aviso", "La encuesta no es compatible con su versión de Chrome, por favor actualizalo", "info");
+            }
+            if (nav == 'Safari' && version < 10) {
+                //$('input[type="submit"]').prop('disabled', true)
+                var btn = document.getElementsByClassName('btn-login');
+                btn[0].disabled = true;
+                swal("Aviso", "La encuesta no es compatible con su versión de Safari, por favor actualizalo", "info");
+            }
+            if (nav == 'MSIE') {
+                var btn = document.getElementsByClassName('btn-login');
+                btn[0].disabled = true;
+                alert("La encuesta no es compatible con su versión de navegador, por favor actualizalo");
+                //$('input[type="submit"]').prop('disabled', true)
+            }
+        })
+
+        
+
+        try {
+            var swiper = new Swiper('.swiper-container', {
+                spaceBetween: 0,
+                effect: 'fade',
+                loop: true,
+                centeredSlides: true,
+                autoplay: {
+                    delay: 3500,
+                    disableOnInteraction: false,
+                }
+            });
+        } catch (e) {
+            
+        }
+      
+    </script>
+   
+
+</body>
+</html>

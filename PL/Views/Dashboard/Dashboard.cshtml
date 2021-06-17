@@ -1,0 +1,98 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+@section Header{
+    <header id="header">
+    <nav class="navbar py-0 px-lg-5">
+        <a class="navbar-brand title-section-top" href="#">Escritorio</a>
+    </nav>
+</header>    
+    }
+
+@section H1{ 
+
+<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <h1 class="title-page-title">Bienvenido <span>Selecciona cualquiera de las herramientas para que comiences:</span></h1>
+    </div><!--.container-fluid-->
+</section>
+}
+<!--<section id="content">-->
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row d-none">
+                <div class="col-lg-8 offset-lg-2 col-xl-6 offset-xl-3">
+                    <div class="row">
+
+                    </div><!--.row-->
+                </div><!--.col-lg-7-->
+            </div><!--.row-->
+
+        </div><!--.container-->
+
+    </div><!--.content-wrap-->
+@*</section>*@
+  
+    @*@Scripts.Render("~/bundles/jqueryAdmin")*@  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        /*$("body").mousemove(function (e) {
+            $.ajax({
+                type: 'POST',
+                data: 2, traditional: true,
+                url: '/LoginAdmin/IsLogged',
+                contentType: 'application/json; charset=utf-8',
+                succes: function (Response) {
+                    if (Response == "success") {
+                       // console.log('Sesion activa');
+                    }
+                    if (Response == "error") {
+                        alert('Session expirada');
+                    }
+
+                },
+                complete: function (Response) {
+                    if (Response.responseJSON == "success") {
+                       // console.log('Sesion activa');
+                    }
+                    if (Response.responseJSON == "error") {
+                        swal({
+                            title: "La session ha expirado, serás redireccionado al Login",
+                            text: "",
+                            type: "error",
+                            icon: "error",
+                            closeOnClickOutside: false,
+                        }).then(function () {
+                            window.location.href = "/LoginAdmin/Login";
+                        });
+                    }
+                    if (Response.responseJSON == "successAndEmails") {
+                        swal({
+                            title: "El proceso de envío de email ha terminado. Presiona Ok para ver el estatus",
+                            text: "",
+                            type: "info",
+                            icon: "info",
+                            closeOnClickOutside: false,
+                        }).then(function () {
+                            window.location.href = "/Encuesta/successEmail/";
+                        });
+                    }
+                    if (Response.responseJSON == "errorEmail") {
+                        swal({
+                            title: "El proceso de envío de email ha terminado. Presiona Ok para ver el estatus",
+                            text: "",
+                            type: "info",
+                            icon: "info",
+                            closeOnClickOutside: false,
+                        }).then(function () {
+                            window.location.href = "/Encuesta/errorEmail/";
+                        });
+                    }
+                }
+            });
+        });*/
+    </script>

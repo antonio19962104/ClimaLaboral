@@ -1,0 +1,77 @@
+﻿<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <h2 class="robotothin mb-2 mt-n1">INDICADORES DE PERMANENCIA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="px-4">
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-trabajar">
+                                <center>
+                                    <p class="titulo-grafica1 robotobold">Lo que me motiva a trabajar en la empresa<!--Positivo--></p><br><!--vm.indicadoresPermanenciaAFM-->
+                                    <i class="fa fa-caret-down yellow-clima f-40 icono-down-center"></i>
+                                </center>
+                                <div class="row mb-5 mr-1 ml-1 bg-gris">
+                                    <div ng-repeat="item in vm.indicadoresPermanenciaAFM" class="col px-0 px-sm-1">
+                                        <center>
+                                            <p class="label-top-graphic">{{ item.Porcentaje }}%</p>
+                                            <div class="bar">
+                                                <div class="bar-progress" style="height: {{ item.Porcentaje }}px;">
+                                                </div>
+                                                <p class="label-top-graphic2">{{ item.Frecuencia }}</p>
+                                                <div class="bar-progress2" style="height: {{ item.Frecuencia }}px;">
+                                                </div>
+                                            </div>
+                                            <p class="text-graph">{{ item.Pregunta }}</p>
+                                        </center>
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+                        </div>
+                    </div><!--.row-->
+                    <div class="row mt-5">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-dejar">
+                                <center>
+                                    <p class="robotobold titulo-grafica2">Lo que me haría dejar la empresa<!--Negativo--></p><br><!--vm.indicadoresAbandonoAFM-->
+                                    <i class="fa fa-caret-down text-black f-40 icono-down-center"></i>
+                                </center>
+                                <div class="row mb-5 mr-1 ml-1 bg-gris">
+                                    <div ng-repeat="item in vm.indicadoresAbandonoAFM" class="col px-0 px-sm-1">
+                                        <center>
+                                            <p class="label-top-graphic-blue">{{ item.Porcentaje }}%</p>
+                                            <div class="bar2">
+                                                <div class="bar-progress3" style="height: {{ item.Porcentaje }}px;">
+                                                </div>
+                                                <p class="label-top-graphic-blue2">{{ item.Frecuencia }}</p>
+                                                <div class="bar-progress4" style="height: {{ item.Frecuencia }}px;">
+                                                </div>
+                                            </div>
+                                            <p class="text-graph">{{ item.Pregunta }}</p>
+                                        </center>
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+                        </div>
+                    </div><!--.row-->
+                    <div class="d-flex justify-content-center mt-3">
+                        <img src="~/img/ReporteoClima/indicadores.png" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="clearfix my-5">
+    </div><!--.container-->
+
+</div><!--.content-wrap-->
+<style>
+    .bar-progress2{
+        margin-right: auto;
+        margin-left:auto;
+    }
+    .pl-sm-1, .px-sm-1{
+    /*max-width: 300px !important;*/
+    min-width: 150px !important;
+}
+</style>

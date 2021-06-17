@@ -1,0 +1,43 @@
+﻿@model ML.Preguntas
+
+@*@using (Html.BeginCollectionItem("NewCuestion",""))
+{*@
+    @Html.AntiForgeryToken()   
+    <div class="section-survey col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@Model.IdPregunta">
+        <div class="body-survey">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-12">
+                    <div class="form-group" style="background-color:#e9ecef; border-radius:2px; border: 1px solid #ced4da">                       
+                        @*@Html.TextBoxFor(m => m.Pregunta, new { @class = "form-control", @id = Model.IdPregunta, @autofocus = "true", })*@
+                        <label class="control-label" id = "@Model.IdPregunta" >@Model.Pregunta</label>
+                       
+                         
+                       
+                        
+                    </div><!--.form-group-->
+                    <div class="col-md-6">
+                        <label class="control-label">Elige en que sección irá la pregunta</label>
+                        <select id="@Model.IdPregunta" style="" class="form-control DDLsecciones" ></select>
+                    </div>
+                    </div><!--.col-md-7-->               
+            </div>        
+            <hr class="clearfix" />
+            
+        </div><!--.body-survey-->
+    </div>
+
+
+@*}*@
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<script>
+    //$(document).ready(function () {
+    //    $('input').prop("readonly", true);
+    //});
+</script>
+<script>
+    
+
+
+
+
+</script>

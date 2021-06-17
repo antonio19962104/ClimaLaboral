@@ -1,0 +1,3905 @@
+﻿@model ML.Result
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/Reporte.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewPrueba</title>
+</head>
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<body>
+    
+    <div class="headerSuperiorR" style="">
+        <img src="~/images/3 Logo.png" class="logoCLR" />
+    </div>
+    <div class="container" style="padding-top:135px; margin-left:15px;">
+
+
+        <p>Reporte Clima Laboral</p>
+        <br />
+        <p style="font-weight:100">Use los filtros para obtener informacion detallada</p>
+        <br />
+        @*<a href="@Url.Action("ReporteGetAll", "Home")">*@
+        <input type="submit" name="GetAll" value="Ver reporte global" class="btn btn-danger" style="font-weight:bold;" onclick="$('#progressbar').css('display', 'none'); $('#myTable tbody').remove();  GetAllResult(); " />
+        @*</a>*@
+        <br /><br />
+        <select name="OpcioneFiltro" id="optionFilter">
+            <option value="0">Seleccionar</option>
+            <option value="1">Por Id de Empleado</option>
+            <option value="2">Por Unidad de negocio</option>
+            <option value="3">Por Direccion</option>
+            <option value="4">Por Area</option>
+            <option value="5">Por Departamento</option>
+        </select>
+        <br /><br />
+
+
+        <div id="GetByIdEmpleado" style="display:none;">
+            <p style="">Filtrar por el Id de Empleado</p>
+            @Html.TextBoxFor(model => model.Empleado.IdEmpleado, htmlAttributes: new { @placeholder = "Ingresa el id del empleado", @class = "form-control", @style = "display:inline;", @id = "IdEmpleado" })
+            <br /><br />
+            <input type="submit" value="Buscar" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none'); $('#myTable tbody').remove(); getByIdEmpleado()" />
+        </div>
+
+        <div action="" id="GetByUnidadNegocio" style="display:none;">
+            <p style="">Filtrar por Unidad de negocio</p>
+            <select id="DDLUnidad" name="DDLCompanyCategoria">
+                <option value="0">Selecciona Unidad de negocio</option>
+                <option value="AUTOFINANCIAMIENTO">AUTOFINANCIAMIENTO</option>
+                <option value="AUTOMOTRIZ">AUTOMOTRIZ</option>
+                <option value="CORPORATIVO">CORPORATIVO</option>
+                <option value="FINANCIERA">FINANCIERA</option>
+                <option value="INTERNACIONAL">INTERNACIONAL</option>
+                <option value="MANUFACTURA">MANUFACTURA</option>
+                <option value="OTROS NEGOCIOS">OTROS NEGOCIOS</option>
+                <option value="PRESIDENCIA">PRESIDENCIA</option>
+                <option value="TURISMO">TURISMO</option>
+            </select>
+            <input type="submit" value="Buscar" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none'); $('#myTable tbody').remove(); GetByUnidad()" />
+        </div>
+
+        <div id="GetByCompany" style="display:none;">
+            <p>Filtrar por Direccion</p>
+            <select id="CompanyCategoria" name="CompanyCategoria">
+                <option value="0">Selecciona unidad de negocio</option>
+                <option value="AUTOFINANCIAMIENTO">AUTOFINANCIAMIENTO</option>
+                <option value="AUTOMOTRIZ">AUTOMOTRIZ</option>
+                <option value="CORPORATIVO">CORPORATIVO</option>
+                <option value="FINANCIERA">FINANCIERA</option>
+                <option value="INTERNACIONAL">INTERNACIONAL</option>
+                <option value="MANUFACTURA">MANUFACTURA</option>
+                <option value="OTROS NEGOCIOS">OTROS NEGOCIOS</option>
+                <option value="PRESIDENCIA">PRESIDENCIA</option>
+                <option value="TURISMO">TURISMO</option>
+            </select>
+            <br /><br />
+            @Html.DropDownList("Company", new SelectList(string.Empty, "Text", "Text"), "Selecciona Direccion", new { @onclick = "", @id = "Company", @class = "DDL classic", @width = 212 })@*Id deñ elemento Subcategoria*@
+            <br /><br />
+            @Html.DropDownList("Area", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @onclick = "", @id = "Area", @class = "DDL classic", @width = 212 })@*Id deñ elemento Subcategoria*@
+            <br /><br />
+            @Html.DropDownList("Departamento", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @id = "Departamento", @class = "DDL classic", @width = 212 })@*Id deñ elemento Subcategoria*@
+            <br />
+            <input id="BuscarByCompany" type="submit" value="Buscar" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none'); $('#myTable tbody').remove(); GetByCompany()" />
+            <input id="BuscarByArea" type="submit" value="Buscar" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none');  $('#myTable tbody').remove(); GetByArea()" />
+            <input id="BuscarByDepartamento" type="submit" value="Buscar" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none');  $('#myTable tbody').remove(); GetByDepartamento()" />
+
+        </div>
+
+
+        <br />
+        <p id="descripcion">Ultimo evento: @ViewBag.Event</p>
+        <p id="datetime">Fecha/hora: @DateTime.Now</p>
+
+        <div id="progressbar" class="progress" style="margin: 10px; width: 700px; display:none">
+            <div id="dynamic" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                <span id="current-progress"></span>
+            </div>
+        </div>
+
+        <hr style="" />
+        <div class="row" style="padding-top:30px; display:none;">
+            <div class="col-md-12 col-sm-3">
+                <input type="submit" value="Exportar a excel" class="btn btn-success" onclick="tableToExcel('myTable', 'Reporte ClimaLaboral')" style="font-weight:bold;" onload="alert('ready');" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="padding-top:30px; margin-left:15px;">
+        <div class="col-md-12">
+            <table id="myTable" class="table table-hover table-striped" style="font-size:12px; overflow-x:scroll; display:block; white-space:nowrap" onchange="console.log('cambiando');">
+                <thead>
+                    <tr>
+                        <th class="text-center" scope="col" style="">
+                            ID_EMPLEADO
+                        </th>
+                        <th class="text-center" scope="col">
+                            A_PATERNO
+                        </th>
+                        <th class="text-center" scope="col">
+                            A_MATERNO
+                        </th>
+                        <th class="text-center" scope="col">
+                            NOMBRE_EMPLEADO
+                        </th>
+                        <th class="text-center" scope="col">
+                            PUESTO
+                        </th>
+                        <th class="text-center" scope="col">
+                            F_NACIM
+                        </th>
+                        <th class="text-center" scope="col">
+                            F_ANTIG
+                        </th>
+                        <th class="text-center" scope="col">
+                            SEXO
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMAIL
+                        </th>
+                        <th class="text-center" scope="col">
+                            TIPO_FUNCION
+                        </th>
+                        <th class="text-center" scope="col">
+                            CONDIC_TRAB
+                        </th>
+                        <th class="text-center" scope="col">
+                            GRADO_ACADEM
+                        </th>
+                        <th class="text-center" scope="col">
+                            UNIDAD_NEGOCIO
+                        </th>
+                        <th class="text-center" scope="col">
+                            DIVIS_MARCA
+                        </th>
+                        <th class="text-center" scope="col">
+                            AREA_AGENCIA
+                        </th>
+                        <th class="text-center" scope="col">
+                            DEPARTAMENTO
+                        </th>
+                        <th class="text-center" scope="col">
+                            SUBDEPARTAMENTO
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_CONTRATANTE
+                        </th>
+                        <th class="text-center" scope="col">
+                            ID_RESPONS_RH
+                        </th>
+                        <th class="text-center" scope="col">
+                            NOM_RESPONS_RH
+                        </th>
+                        <th class="text-center" scope="col">
+                            ID_JEFE
+                        </th>
+                        <th class="text-center" scope="col">
+                            NOMBRE_JEFE
+                        </th>
+                        <th class="text-center" scope="col">
+                            PUESTO_JEFE
+                        </th>
+                        <th class="text-center" scope="col">
+                            ID_RESPONS_EST
+                        </th>
+                        <th class="text-center" scope="col">
+                            NOM_RESP_ESTRUC
+                        </th>
+                        <th class="text-center" scope="col">
+                            CVE_ACCESO
+                        </th>
+                        <th class="text-center" scope="col">
+                            RANGO_ANTIG
+                        </th>
+                        <th class="text-center" scope="col">
+                            RANGO_EDAD
+                        </th>
+                        <th class="text-center" scope="col">
+                            STS_ENCUESTA
+                        </th>
+                        <th class="text-center" scope="col">
+                            ESTATUS_COLABORADOR
+                        </th>
+                        <!--Enfoque Empresa-->
+                        <th class="text-center" scope="col">
+                            EMP_R1
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R2
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R3
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R4
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R5
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R6
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R7
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R8
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R9
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R10
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R11
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R12
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R13
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R14
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R15
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R16
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R17
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R18
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R19
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R20
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R21
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R22
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R23
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R24
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R25
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R26
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R27
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R28
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R29
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R30
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R31
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R32
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R33
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R34
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R35
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R36
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R37
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R38
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R39
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R40
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R41
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R42
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R43
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R44
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R45
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R46
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R47
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R48
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R49
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R50
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R51
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R52
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R53
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R54
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R55
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R56
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R57
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R58
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R59
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R60
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R61
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R62
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R63
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R64
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R65
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R66
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R67
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R68
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R69
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R70
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R71
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R72
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R73
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R74
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R75
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R76
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R77
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R78
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R79
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R80
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R81
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R82
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R83
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R84
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R85
+                        </th>
+                        <th class="text-center" scope="col">
+                            EMP_R86
+                        </th>
+                        <!--Enfoque Area-->
+                        <th class="text-center" scope="col">
+                            ARE_1
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_2
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_3
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_4
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_5
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_6
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_7
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_8
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_9
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_10
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_11
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_12
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_13
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_14
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_15
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_16
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_17
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_18
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_19
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_20
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_21
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_22
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_23
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_24
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_25
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_26
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_27
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_28
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_29
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_30
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_31
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_32
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_33
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_34
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_35
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_36
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_37
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_38
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_39
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_40
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_41
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_42
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_43
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_44
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_45
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_46
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_47
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_48
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_49
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_50
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_51
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_52
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_53
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_54
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_55
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_56
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_57
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_58
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_59
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_60
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_61
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_62
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_63
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_64
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_65
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_66
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_67
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_68
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_69
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_70
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_71
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_72
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_73
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_74
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_75
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_76
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_77
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_78
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_79
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_80
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_81
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_82
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_83
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_84
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_85
+                        </th>
+                        <th class="text-center" scope="col">
+                            ARE_86
+                        </th>
+
+                        <!--Abiertas y demo-->
+                        <th class="text-center" scope="col">
+                            ESPECIAL_OPEN
+                        </th>
+                        <th class="text-center" scope="col">
+                            CAMBIAR_OPEN
+                        </th>
+                        <th class="text-center" scope="col">
+                            FORT_JEFE
+                        </th>
+                        <th class="text-center" scope="col">
+                            OPORT_JEFE
+                        </th>
+                        <th class="text-center" scope="col">
+                            MOTIVA_TRAB
+                        </th>
+                        <th class="text-center" scope="col">
+                            DEJAR_EMP
+                        </th>
+                        <th class="text-center" scope="col">
+                            PRESION
+                        </th>
+                        <th class="text-center" scope="col">
+                            ANTIGUEDAD
+                        </th>
+                        <th class="text-center" scope="col">
+                            RANGO_EDAD
+                        </th>
+                        <th class="text-center" scope="col">
+                            CONDICION
+                        </th>
+                        <th class="text-center" scope="col">
+                            SEXO
+                        </th>
+                        <th class="text-center" scope="col">
+                            ACADEMICO
+                        </th>
+                        <th class="text-center" scope="col">
+                            FUNCION
+                        </th>
+                        <th class="text-center" scope="col">
+                            UNIDAD
+                        </th>
+                        <th class="text-center" scope="col">
+                            DIRECCION
+                        </th>
+                        <th class="text-center" scope="col">
+                            AREA
+                        </th>
+                        <th class="text-center" scope="col">
+                            DEPARTAMENTO
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.EmpleadoRespuesta emp in Model.Objects)
+            {
+                        <tr>
+                            <td class="text-center">
+                                @emp.Empleado.IdEmpleado
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.ApellidoPaterno
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.ApellidoMaterno
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Nombre
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Puesto
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.FechaNaciemiento
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.FechaAntiguedad
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Sexo
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Correo
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Perfil.Descripcion
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.CondicionTrabajo
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.GradoAcademico
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Departamento.Area.Company.CompanyCategoria.Descripcion
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Departamento.Area.Company.CompanyName
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Departamento.Area.Nombre
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Departamento.Nombre
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.Subdepartamento.Nombre
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.EmpresaContratante
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.IdResponsableRH
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.NombreResponsableRH
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.IdJefe
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.NombreJefe
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.PuestoJefe
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.IdRespinsableEstructura
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.NombreResponsableEstrucutra
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.ClavesAcceso.ClaveAcceso
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.RangoAntiguedad
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.RangoEdad
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.EstatusEncuesta.Estatus
+                            </td>
+                            <td class="text-center">
+                                @emp.Empleado.EstatusEmpleado
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R1
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R2
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R3
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R4
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R5
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R6
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R7
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R8
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R9
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R10
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R11
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R12
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R13
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R14
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R15
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R16
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R17
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R18
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R19
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R20
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R21
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R22
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R23
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R24
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R25
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R26
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R27
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R28
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R29
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R30
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R31
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R32
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R33
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R34
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R35
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R36
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R37
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R38
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R39
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R40
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R41
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R42
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R43
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R44
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R45
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R46
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R47
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R48
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R49
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R50
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R51
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R52
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R53
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R54
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R55
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R56
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R57
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R58
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R59
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R60
+                            </td>
+
+                            <td class="text-center">
+                                @emp.EMP_R61
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R62
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R63
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R64
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R65
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R66
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R67
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R68
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R69
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R70
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R71
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R72
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R73
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R74
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R75
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R76
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R77
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R78
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R79
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R80
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R81
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R82
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R83
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R84
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R85
+                            </td>
+                            <td class="text-center">
+                                @emp.EMP_R86
+                            </td>
+
+                            <!--Enfoque Area-->
+                            <td class="text-center">
+                                @emp.ARE_1
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_2
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_3
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_4
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_5
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_6
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_7
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_8
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_9
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_10
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_11
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_12
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_13
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_14
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_15
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_16
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_17
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_18
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_19
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_20
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_21
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_22
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_23
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_24
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_25
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_26
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_27
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_28
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_29
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_30
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_31
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_32
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_33
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_34
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_35
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_36
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_37
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_38
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_39
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_40
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_41
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_42
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_43
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_44
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_45
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_46
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_47
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_48
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_49
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_50
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_51
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_52
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_53
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_54
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_55
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_56
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_57
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_58
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_59
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_60
+                            </td>
+
+                            <td class="text-center">
+                                @emp.ARE_61
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_62
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_63
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_64
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_65
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_66
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_67
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_68
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_69
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_70
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_71
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_72
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_73
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_74
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_75
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_76
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_77
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_78
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_79
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_80
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_81
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_82
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_83
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_84
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_85
+                            </td>
+                            <td class="text-center">
+                                @emp.ARE_86
+                            </td>
+
+                            <!--Abiertas y demo-->
+                            <td class="text-center">
+                                @emp.ESPECIAL_OPEN
+                            </td>
+                            <td class="text-center">
+                                @emp.CAMBIAR_OPEN
+                            </td>
+                            <td class="text-center">
+                                @emp.FORT_JEFE
+                            </td>
+                            <td class="text-center">
+                                @emp.OPORT_JEFE
+                            </td>
+                            <td class="text-center">
+                                @emp.MOTIVA_TRAB
+                            </td>
+                            <td class="text-center">
+                                @emp.DEJAR_EMP
+                            </td>
+                            <td class="text-center">
+                                @emp.PRESION
+                            </td>
+                            <td class="text-center">
+                                @emp.ANTIGUEDAD
+                            </td>
+                            <td class="text-center">
+                                @emp.RANGO_EDAD
+                            </td>
+                            <td class="text-center">
+                                @emp.CONDICION
+                            </td>
+                            <td class="text-center">
+                                @emp.SEXO
+                            </td>
+                            <td class="text-center">
+                                @emp.ACADEMICO
+                            </td>
+                            <td class="text-center">
+                                @emp.FUNCION
+                            </td>
+                            <td class="text-center">
+                                @emp.UNIDAD
+                            </td>
+                            <td class="text-center">
+                                @emp.DIRECION
+                            </td>
+                            <td class="text-center">
+                                @emp.AREA
+                            </td>
+                            <td class="text-center">
+                                @emp.DEPARTAMENTO
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p style="margin-bottom:75px;">Fecha y hora de consula: @DateTime.Now</p>
+        </div>
+    </div>
+    <div class="footerR">
+        <img src="~/images/4 Logo_2.png" class="imgFotterR" style="opacity:1;" />
+    </div>
+
+    <div id="loading" ng-show="vm.isBusy" class="busy ng-hide" style="display:none;">
+        <div class="loader-ring">
+            <i class="icon-smart"></i>
+            <div class="loader-ring-light"></div>
+            <div class="loader-ring-track"></div>
+        </div>
+    </div>
+    <style>
+        .busy {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: .5;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 2147483601;
+        }
+
+        .loader-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -100px 0 0 -100px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .loader-ring-light {
+            width: 200px;
+            height: 200px;
+            -moz-border-radius: 240px;
+            -webkit-border-radius: 240px;
+            border-radius: 240px;
+            -moz-box-shadow: 0 4px 0 #10d0ff inset;
+            -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+            box-shadow: 0 4px 0 #10d0ff inset;
+            animation: rotate-360 2s linear infinite;
+            -moz-animation: rotate-360 2s linear infinite;
+        }
+
+        .rotacion {
+            width: 200px;
+            height: 200px;
+            -moz-border-radius: 240px;
+            -webkit-border-radius: 240px;
+            border-radius: 240px;
+            -moz-box-shadow: 0 4px 0 #10d0ff inset;
+            -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+            box-shadow: 0 4px 0 #10d0ff inset;
+            animation: rotate-360 2s linear infinite;
+            -moz-animation: rotate-360 2s linear infinite;
+        }
+
+        .loader-ring-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 200px;
+            -moz-border-radius: 240px;
+            -webkit-border-radius: 240px;
+            border-radius: 240px;
+            -moz-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+            -webkit-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+            box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+        }
+
+
+        [class*=" icon-"], [class^="icon-"] {
+            font-family: Smart-IT-Icon-Set-v17 !important;
+            speak: none;
+            font-style: normal;
+            font-weight: 400;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-smart::before {
+            content: "Cargando...";
+            /*background-image: url('../../images/logo cl2019 2_poster_.png');*/
+        }
+    </style>
+
+
+
+
+
+
+
+
+    <script>
+    $(document).ready(function () {
+
+
+        var filtro = $('#optionFilter').val();
+        $('#GetByIdEmpleado').css('display', 'none');
+        $('#GetByUnidadNegocio').css('display', 'none');
+        $('#GetByCompany').css('display', 'none');
+        $('#GetByArea').css('display', 'none');
+
+    });
+    /*---------------*/
+    $('#optionFilter').change(function () {
+
+        var filtro = $('#optionFilter').val();
+
+
+        if (filtro == 0) {
+            $('#GetByIdEmpleado').css('display', 'none');
+            $('#GetByUnidadNegocio').css('display', 'none');
+            $('#GetByCompany').css('display', 'none');
+            $('#GetByArea').css('display', 'none');
+        }
+
+        if (filtro == 1) {
+            $('#GetByIdEmpleado').css('display', 'block');
+            $('#GetByUnidadNegocio').css('display', 'none');
+            $('#GetByCompany').css('display', 'none');
+            $('#GetByArea').css('display', 'none');
+            $('#descripcion').text('Reporte de respuestas según el Id del empleado seleccionado');
+        }
+
+        if (filtro == 2) {
+            $('#GetByIdEmpleado').css('display', 'none');
+            $('#GetByUnidadNegocio').css('display', 'block');
+            $('#GetByCompany').css('display', 'none');
+            $('#GetByArea').css('display', 'none');
+            $('#descripcion').text('Reporte de respuestas según la unidad de negocio seleccionada');
+        }
+
+        if (filtro == 3) {
+            $('#GetByIdEmpleado').css('display', 'none');
+            $('#GetByUnidadNegocio').css('display', 'none');
+            $('#GetByCompany').css('display', 'block');
+            $('#GetByArea').css('display', 'none');
+            $('#Area').css('display', 'none');
+            $('#Departamento').css('display', 'none');
+            $('#BuscarByArea').css('display', 'none');
+            $('#BuscarByCompany').css('display', 'block');
+            $('#BuscarByDepartamento').css('display', 'none');
+            $('#descripcion').text('Reporte de respuestas según la Direccion seleccionada');
+        }
+
+        if (filtro == 4) {
+            $('#GetByIdEmpleado').css('display', 'none');
+            $('#GetByUnidadNegocio').css('display', 'none');
+            $('#GetByCompany').css('display', 'block');
+            //$('#GetByArea').css('display', 'block');
+            $('#Area').css('display', 'block');
+            $('#BuscarByCompany').css('display', 'none');
+            $('#BuscarByArea').css('display', 'block');
+            $('#Departamento').css('display', 'none');
+            $('#BuscarByDepartamento').css('display', 'none');
+            $('#descripcion').text('Reporte de respuestas según el Area seleccionada');
+        }
+        if (filtro == 5) {
+            $('#GetByIdEmpleado').css('display', 'none');
+            $('#GetByUnidadNegocio').css('display', 'none');
+            $('#GetByCompany').css('display', 'block');
+
+            $('#BuscarByCompany').css('display', 'none');
+            $('#BuscarByArea').css('display', 'none');
+            $('#BuscarByDepartamento').css('display', 'block');
+            $('#Departamento').css('display', 'block');
+            $('#descripcion').text('Reporte de respuestas según el Departamento seleccionado');
+        }
+
+    });
+
+    $("#myTable").click(function () {
+        $('#myTable').addClass('text-center');
+    });
+
+    </script>
+
+
+    <script type="text/javascript">
+    var tableToExcel = (function () {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+          , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
+          , base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) }
+          , format = function (s, c) { return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; }) }
+        return function (table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+    </script>
+
+
+
+    <script>
+    $(document).ready(function () {
+        $('.form-control-sm').attr('id', 'selectPagina');
+        $('#selectPagina').append("<option value='10000000' >All</option>");
+
+    });
+
+    </script>
+    @*DDL: Company*@
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        //Compañia
+        $("#u20208").hide();
+        $("#u20200-4").hide();
+        $("#buttonu20361").hide();
+        //Area
+        $("#buttonu20364").hide();
+        $("#u20179-4").hide();
+        $("#u20228").hide();
+        //Departamento
+        $("#buttonu20367").hide();
+        $("#u20176-4").hide();
+        $("#u20248").hide();
+
+        $("#CompanyCategoria").change(function () {
+
+            $("#Company").empty();
+            //ocultar div´s
+
+
+            $.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("GetCompanyAjaxReporte")',
+
+                dataType: 'json',
+
+                data: { id: $("#CompanyCategoria").val() },
+
+                success: function (city) {
+
+                    //IdCategoria = State , IdCategoria=City
+                    if (city != null) {
+                        //alert('city no es nulo');
+
+                        $("#u20208").show();
+                        $("#u20200-4").show();
+                        $("#buttonu20361").show();
+
+                        $.each(city, function (i, city) {
+
+                            $("#Company").append('<option value="'
+
+                                                       + city.Text + '">'
+
+                                                       + city.Text + '</option>');
+
+
+
+                        });
+
+                    }
+                    else {
+                        $("#u20208").hide();
+                        $("#u20200-4").hide();
+                        $("#buttonu20361").hide();
+                    }
+
+
+                },
+
+                error: function (ex) {
+
+                    //alert('Debe seleccionar una Unidad de negocio\n' + ex);
+                    //Compañia
+                    $("#u20208").hide();
+                    $("#u20200-4").hide();
+                    $("#buttonu20361").hide();
+                    //Area
+                    $("#buttonu20364").hide();
+                    $("#u20179-4").hide();
+                    $("#u20228").hide();
+                    //Departamento
+                    $("#buttonu20367").hide();
+                    $("#u20176-4").hide();
+                    $("#u20248").hide();
+
+                }
+
+            });
+
+            return false;
+
+        })
+
+    });
+    </script>
+
+    @*******************************DDL: Area*********************************@
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+
+
+        /* ((ML.SubCategoria)model).Asignatura.IdAsignatura*/
+
+        $("#Company").change(function () {
+
+            $("#Area").empty();
+
+            $.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("GetAreaAjaxReporte")',
+
+                dataType: 'json',
+
+                data: { id: $("#Company").val() },
+
+                success: function (city) {
+
+                    if (city != null) {
+
+                        $("#buttonu20364").show();
+                        $("#u20179-4").show();
+                        $("#u20228").show();
+
+                        $.each(city, function (i, city) {
+
+                            $("#Area").append('<option value="'
+
+                                                       + city.Text + '">'
+
+                                                       + city.Text + '</option>');
+
+                        });
+
+                    }
+                    else {
+                        $("#buttonu20364").hide();
+                        $("#u20179-4").hide();
+                        $("#u20228").hide();
+                    }
+
+                    if (city.length < 2) {
+                        //Area
+                        $("#buttonu20364").hide();
+                        $("#u20179-4").hide();
+                        $("#u20228").hide();
+                        //Departamento
+                        $("#buttonu20367").hide();
+                        $("#u20176-4").hide();
+                        $("#u20248").hide();
+                    }
+
+                },
+
+                error: function (ex) {
+
+
+
+
+                }
+
+            });
+
+            return false;
+
+        })
+
+    });
+    </script>
+
+
+
+    @*******************************DDL: Departamento*********************************@
+    <script type="text/javascript">
+    $(document).ready(function () {
+
+        /* ((ML.SubCategoria)model).Asignatura.IdAsignatura*/
+
+        $("#Area").change(function () {
+
+            $("#Departamento").empty();
+
+            $.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("GetDepartamentoAjaxReporte")',
+
+                dataType: 'json',
+
+                data: { id: $("#Area").val() },
+
+                success: function (city) {
+
+                    if (city != null) {
+
+                        $("#buttonu20367").show();
+                        $("#u20176-4").show();
+                        $("#u20248").show();
+
+                        $.each(city, function (i, city) {
+
+                            $("#Departamento").append('<option value="'
+
+                                                       + city.Text + '">'
+
+                                                       + city.Text + '</option>');
+
+                        });
+                    }
+                    else {
+                        $("#buttonu20367").hide();
+                        $("#u20176-4").hide();
+                        $("#u20248").hide();
+                    }
+
+                    if (city.length < 2) {
+
+                        //Departamento
+                        $("#buttonu20367").hide();
+                        $("#u20176-4").hide();
+                        $("#u20248").hide();
+                    }
+
+                },
+
+                error: function (ex) {
+
+
+                    //Departamento
+                    $("#buttonu20367").hide();
+                    $("#u20176-4").hide();
+                    $("#u20248").hide();
+
+                }
+
+            });
+
+            return false;
+
+        })
+
+    });
+    </script>
+
+    
+    
+
+
+    
+    <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.print.min.js"></script>
+    <link href="https://cdn.datatables.net/buttons/1.4.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+        });
+    </script>
+
+
+    <script>
+    function GetAllResult() {
+
+        $("#descripcion").text('Ultimo evento: Se ha iniciado la consulta de resultados globales de Clima Laboral');
+        var hoy = new Date();
+        var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+        var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+        var fechaHora = fecha + ' ' + hora;
+        $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+        $('#loading').css('display', 'block');
+
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("ReporteGetAll")',
+
+            dataType: 'json',
+
+            //data: { id: 1 },
+
+            success: function (data) {
+
+                $.extend($.fn.dataTable.defaults, {
+                    buttons: ['copy', 'csv', 'excel', 'pdf']
+                });
+
+                var table = $('#myTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+                    destroy: true,
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
+                    columns: [
+                        { 'data': 'IdEmpleado' },
+                        { 'data': 'ApellidoPaterno' },
+                        { 'data': 'ApellidoMaterno' },
+                        { 'data': 'Nombre' },
+                        { 'data': 'Puesto' },
+                        { 'data': 'FechaNaciemiento' },
+                        { 'data': 'FechaAntiguedad' },
+                        { 'data': 'Sexo' },
+                        { 'data': 'Correo' },
+                        { 'data': 'TipoFuncion' },
+                        { 'data': 'CondicionTrabajo' },
+                        { 'data': 'GradoAcademico' },
+                        { 'data': 'UNIDAD' },
+                        { 'data': 'DIRECION' },
+                        { 'data': 'AREA' },
+                        { 'data': 'DEPARTAMENTO' },
+                        { 'data': 'SUBDEPARTAMENTO' },
+                        { 'data': 'EmpresaContratante' },
+                        { 'data': 'IdResponsableRH' },
+                        { 'data': 'NombreResponsableRH' },
+                        { 'data': 'IdJefe' },
+                        { 'data': 'NombreJefe' },
+                        { 'data': 'PuestoJefe' },
+                        { 'data': 'IdRespinsableEstructura' },
+                        { 'data': 'NombreResponsableEstrucutra' },
+                        { 'data': 'ClaveAcceso' },
+                        { 'data': 'RangoAntiguedad' },
+                        { 'data': 'RangoEdad' },
+                        { 'data': 'EstatusENcuesta' },
+                        { 'data': 'EstatusEmpleado' },
+                        { 'data': 'EMP_R1' },
+                        { 'data': 'EMP_R2' },
+                        { 'data': 'EMP_R3' },
+                        { 'data': 'EMP_R4' },
+                        { 'data': 'EMP_R5' },
+                        { 'data': 'EMP_R6' },
+                        { 'data': 'EMP_R7' },
+                        { 'data': 'EMP_R8' },
+                        { 'data': 'EMP_R9' },
+                        { 'data': 'EMP_R10' },
+                        { 'data': 'EMP_R11' },
+                        { 'data': 'EMP_R12' },
+                        { 'data': 'EMP_R13' },
+                        { 'data': 'EMP_R14' },
+                        { 'data': 'EMP_R15' },
+                        { 'data': 'EMP_R16' },
+                        { 'data': 'EMP_R17' },
+                        { 'data': 'EMP_R18' },
+                        { 'data': 'EMP_R19' },
+                        { 'data': 'EMP_R20' },
+                        { 'data': 'EMP_R21' },
+                        { 'data': 'EMP_R22' },
+                        { 'data': 'EMP_R23' },
+                        { 'data': 'EMP_R24' },
+                        { 'data': 'EMP_R25' },
+                        { 'data': 'EMP_R26' },
+                        { 'data': 'EMP_R27' },
+                        { 'data': 'EMP_R28' },
+                        { 'data': 'EMP_R29' },
+                        { 'data': 'EMP_R30' },
+
+                        { 'data': 'EMP_R31' },
+                        { 'data': 'EMP_R32' },
+                        { 'data': 'EMP_R33' },
+                        { 'data': 'EMP_R34' },
+                        { 'data': 'EMP_R35' },
+                        { 'data': 'EMP_R36' },
+                        { 'data': 'EMP_R37' },
+                        { 'data': 'EMP_R38' },
+                        { 'data': 'EMP_R39' },
+                        { 'data': 'EMP_R40' },
+
+                        { 'data': 'EMP_R41' },
+                        { 'data': 'EMP_R42' },
+                        { 'data': 'EMP_R43' },
+                        { 'data': 'EMP_R44' },
+                        { 'data': 'EMP_R45' },
+                        { 'data': 'EMP_R46' },
+                        { 'data': 'EMP_R47' },
+                        { 'data': 'EMP_R48' },
+                        { 'data': 'EMP_R49' },
+                        { 'data': 'EMP_R50' },
+
+                        { 'data': 'EMP_R51' },
+                        { 'data': 'EMP_R52' },
+                        { 'data': 'EMP_R53' },
+                        { 'data': 'EMP_R54' },
+                        { 'data': 'EMP_R55' },
+                        { 'data': 'EMP_R56' },
+                        { 'data': 'EMP_R57' },
+                        { 'data': 'EMP_R58' },
+                        { 'data': 'EMP_R59' },
+                        { 'data': 'EMP_R60' },
+
+                        { 'data': 'EMP_R61' },
+                        { 'data': 'EMP_R62' },
+                        { 'data': 'EMP_R63' },
+                        { 'data': 'EMP_R64' },
+                        { 'data': 'EMP_R65' },
+                        { 'data': 'EMP_R66' },
+                        { 'data': 'EMP_R67' },
+                        { 'data': 'EMP_R68' },
+                        { 'data': 'EMP_R69' },
+                        { 'data': 'EMP_R70' },
+
+                        { 'data': 'EMP_R71' },
+                        { 'data': 'EMP_R72' },
+                        { 'data': 'EMP_R73' },
+                        { 'data': 'EMP_R74' },
+                        { 'data': 'EMP_R75' },
+                        { 'data': 'EMP_R76' },
+                        { 'data': 'EMP_R77' },
+                        { 'data': 'EMP_R78' },
+                        { 'data': 'EMP_R79' },
+                        { 'data': 'EMP_R80' },
+
+                        { 'data': 'EMP_R81' },
+                        { 'data': 'EMP_R82' },
+                        { 'data': 'EMP_R83' },
+                        { 'data': 'EMP_R84' },
+                        { 'data': 'EMP_R85' },
+                        { 'data': 'EMP_R86' },
+
+                        /*EA*/
+                        { 'data': 'ARE_1' },
+                        { 'data': 'ARE_2' },
+                        { 'data': 'ARE_3' },
+                        { 'data': 'ARE_4' },
+                        { 'data': 'ARE_5' },
+                        { 'data': 'ARE_6' },
+                        { 'data': 'ARE_7' },
+                        { 'data': 'ARE_8' },
+                        { 'data': 'ARE_9' },
+                        { 'data': 'ARE_10' },
+                        { 'data': 'ARE_11' },
+                        { 'data': 'ARE_12' },
+                        { 'data': 'ARE_13' },
+                        { 'data': 'ARE_14' },
+                        { 'data': 'ARE_15' },
+                        { 'data': 'ARE_16' },
+                        { 'data': 'ARE_17' },
+                        { 'data': 'ARE_18' },
+                        { 'data': 'ARE_19' },
+                        { 'data': 'ARE_20' },
+                        { 'data': 'ARE_21' },
+                        { 'data': 'ARE_22' },
+                        { 'data': 'ARE_23' },
+                        { 'data': 'ARE_24' },
+                        { 'data': 'ARE_25' },
+                        { 'data': 'ARE_26' },
+                        { 'data': 'ARE_27' },
+                        { 'data': 'ARE_28' },
+                        { 'data': 'ARE_29' },
+                        { 'data': 'ARE_30' },
+
+                        { 'data': 'ARE_31' },
+                        { 'data': 'ARE_32' },
+                        { 'data': 'ARE_33' },
+                        { 'data': 'ARE_34' },
+                        { 'data': 'ARE_35' },
+                        { 'data': 'ARE_36' },
+                        { 'data': 'ARE_37' },
+                        { 'data': 'ARE_38' },
+                        { 'data': 'ARE_39' },
+                        { 'data': 'ARE_40' },
+
+                        { 'data': 'ARE_41' },
+                        { 'data': 'ARE_42' },
+                        { 'data': 'ARE_43' },
+                        { 'data': 'ARE_44' },
+                        { 'data': 'ARE_45' },
+                        { 'data': 'ARE_46' },
+                        { 'data': 'ARE_47' },
+                        { 'data': 'ARE_48' },
+                        { 'data': 'ARE_49' },
+                        { 'data': 'ARE_50' },
+
+                        { 'data': 'ARE_51' },
+                        { 'data': 'ARE_52' },
+                        { 'data': 'ARE_53' },
+                        { 'data': 'ARE_54' },
+                        { 'data': 'ARE_55' },
+                        { 'data': 'ARE_56' },
+                        { 'data': 'ARE_57' },
+                        { 'data': 'ARE_58' },
+                        { 'data': 'ARE_59' },
+                        { 'data': 'ARE_60' },
+
+                        { 'data': 'ARE_61' },
+                        { 'data': 'ARE_62' },
+                        { 'data': 'ARE_63' },
+                        { 'data': 'ARE_64' },
+                        { 'data': 'ARE_65' },
+                        { 'data': 'ARE_66' },
+                        { 'data': 'ARE_67' },
+                        { 'data': 'ARE_68' },
+                        { 'data': 'ARE_69' },
+                        { 'data': 'ARE_70' },
+
+                        { 'data': 'ARE_71' },
+                        { 'data': 'ARE_72' },
+                        { 'data': 'ARE_73' },
+                        { 'data': 'ARE_74' },
+                        { 'data': 'ARE_75' },
+                        { 'data': 'ARE_76' },
+                        { 'data': 'ARE_77' },
+                        { 'data': 'ARE_78' },
+                        { 'data': 'ARE_79' },
+                        { 'data': 'ARE_80' },
+
+                        { 'data': 'ARE_81' },
+                        { 'data': 'ARE_82' },
+                        { 'data': 'ARE_83' },
+                        { 'data': 'ARE_84' },
+                        { 'data': 'ARE_85' },
+                        { 'data': 'ARE_86' },
+
+                        ////oPEN
+                        { 'data': 'ESPECIAL_OPEN' },
+                        { 'data': 'CAMBIAR_OPEN' },
+                        { 'data': 'FORT_JEFE' },
+                        { 'data': 'OPORT_JEFE' },
+                        { 'data': 'MOTIVA_TRAB' },
+                        { 'data': 'DEJAR_EMP' },
+
+                        { 'data': 'PRESION' },
+                        { 'data': 'ANTIGUEDADR' },
+                        { 'data': 'RANGO_EDADR' },
+                        { 'data': 'CONDICIONR' },
+                        { 'data': 'SEXOR' },
+                        { 'data': 'ACADEMICOR' },
+
+                        { 'data': 'FUNCIONR' },
+                        { 'data': 'UNIDADRES' },
+                        { 'data': 'DIRECIONRES' },
+                        { 'data': 'AREARES' },
+                        { 'data': 'DEPARTAMENTORES' }
+                        //{ 'data': 'SUBDEPARTAMENTORES' }
+
+                    ],
+                    initComplete: function () {
+                        
+                        //this.buttons().container().appendTo($('#myTable_wrapper .col-sm-6:eq(0)'));
+                    }
+
+                });
+
+
+                console.log(data);
+                
+
+                //});
+                $("tr").addClass("text-center");
+                //Cambiar id:descripcion y datetime
+                $("#descripcion").text('Ultimo evento: Carga de resultados globales');
+                var hoy = new Date();
+                var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+                var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+                var fechaHora = fecha + ' ' + hora;
+                $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+                $('#loading').css('display', 'none');
+
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+    </script>
+
+
+
+    <script>
+    window.setInterval(function () {
+        /// call your function here
+        var count = $('#myTable tr').length;
+        var filas = count - 1;
+
+        if (filas == 0) {
+            console.log('La tabla se empezo a cargar');
+        }
+        else if (filas == 1) {
+            console.log('La tabla tiene un dato');
+        }
+        else if (filas == 1000) {
+            console.log('La tabla tiene mil datos');
+        }
+        else if (filas == 2000) {
+            console.log('La tabla tiene dos mil datos');
+        }
+        else if (filas == 2300) {
+            console.log('La tabla ha terminado de cargarse');
+        }
+        else if (filas == 10 || filas == 2300) {
+
+        }
+
+    }, 1000);
+
+
+    //if (document.readyState == "loading" || document.readyState == "interactive" || document.readyState == "complete") {
+
+    //}
+
+    </script>
+
+    <script>
+    function getByIdEmpleado() {
+
+        $("#descripcion").text('Ultimo evento: Se ha iniciado la consulta de resultados según el Id de empleado seleccionado');
+        var hoy = new Date();
+        var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+        var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+        var fechaHora = fecha + ' ' + hora;
+        $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+        $('#loading').css('display', 'block');
+
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("ReporteByIdEmpleado")',
+
+            dataType: 'json',
+
+            data: { IdEmpleado: $('#IdEmpleado').val() },
+
+            success: function (data) {
+
+
+
+
+                console.log(data);
+                
+
+                $.extend($.fn.dataTable.defaults, {
+                    buttons: ['copy', 'csv', 'excel', 'pdf']
+                });
+
+                var table = $('#myTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+                    destroy: true,
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
+                    columns: [
+                        { 'data': 'IdEmpleado' },
+                        { 'data': 'ApellidoPaterno' },
+                        { 'data': 'ApellidoMaterno' },
+                        { 'data': 'Nombre' },
+                        { 'data': 'Puesto' },
+                        { 'data': 'FechaNaciemiento' },
+                        { 'data': 'FechaAntiguedad' },
+                        { 'data': 'Sexo' },
+                        { 'data': 'Correo' },
+                        { 'data': 'TipoFuncion' },
+                        { 'data': 'CondicionTrabajo' },
+                        { 'data': 'GradoAcademico' },
+                        { 'data': 'UNIDAD' },
+                        { 'data': 'DIRECION' },
+                        { 'data': 'AREA' },
+                        { 'data': 'DEPARTAMENTO' },
+                        { 'data': 'SUBDEPARTAMENTO' },
+                        { 'data': 'EmpresaContratante' },
+                        { 'data': 'IdResponsableRH' },
+                        { 'data': 'NombreResponsableRH' },
+                        { 'data': 'IdJefe' },
+                        { 'data': 'NombreJefe' },
+                        { 'data': 'PuestoJefe' },
+                        { 'data': 'IdRespinsableEstructura' },
+                        { 'data': 'NombreResponsableEstrucutra' },
+                        { 'data': 'ClaveAcceso' },
+                        { 'data': 'RangoAntiguedad' },
+                        { 'data': 'RangoEdad' },
+                        { 'data': 'EstatusENcuesta' },
+                        { 'data': 'EstatusEmpleado' },
+                        { 'data': 'EMP_R1' },
+                        { 'data': 'EMP_R2' },
+                        { 'data': 'EMP_R3' },
+                        { 'data': 'EMP_R4' },
+                        { 'data': 'EMP_R5' },
+                        { 'data': 'EMP_R6' },
+                        { 'data': 'EMP_R7' },
+                        { 'data': 'EMP_R8' },
+                        { 'data': 'EMP_R9' },
+                        { 'data': 'EMP_R10' },
+                        { 'data': 'EMP_R11' },
+                        { 'data': 'EMP_R12' },
+                        { 'data': 'EMP_R13' },
+                        { 'data': 'EMP_R14' },
+                        { 'data': 'EMP_R15' },
+                        { 'data': 'EMP_R16' },
+                        { 'data': 'EMP_R17' },
+                        { 'data': 'EMP_R18' },
+                        { 'data': 'EMP_R19' },
+                        { 'data': 'EMP_R20' },
+                        { 'data': 'EMP_R21' },
+                        { 'data': 'EMP_R22' },
+                        { 'data': 'EMP_R23' },
+                        { 'data': 'EMP_R24' },
+                        { 'data': 'EMP_R25' },
+                        { 'data': 'EMP_R26' },
+                        { 'data': 'EMP_R27' },
+                        { 'data': 'EMP_R28' },
+                        { 'data': 'EMP_R29' },
+                        { 'data': 'EMP_R30' },
+
+                        { 'data': 'EMP_R31' },
+                        { 'data': 'EMP_R32' },
+                        { 'data': 'EMP_R33' },
+                        { 'data': 'EMP_R34' },
+                        { 'data': 'EMP_R35' },
+                        { 'data': 'EMP_R36' },
+                        { 'data': 'EMP_R37' },
+                        { 'data': 'EMP_R38' },
+                        { 'data': 'EMP_R39' },
+                        { 'data': 'EMP_R40' },
+
+                        { 'data': 'EMP_R41' },
+                        { 'data': 'EMP_R42' },
+                        { 'data': 'EMP_R43' },
+                        { 'data': 'EMP_R44' },
+                        { 'data': 'EMP_R45' },
+                        { 'data': 'EMP_R46' },
+                        { 'data': 'EMP_R47' },
+                        { 'data': 'EMP_R48' },
+                        { 'data': 'EMP_R49' },
+                        { 'data': 'EMP_R50' },
+
+                        { 'data': 'EMP_R51' },
+                        { 'data': 'EMP_R52' },
+                        { 'data': 'EMP_R53' },
+                        { 'data': 'EMP_R54' },
+                        { 'data': 'EMP_R55' },
+                        { 'data': 'EMP_R56' },
+                        { 'data': 'EMP_R57' },
+                        { 'data': 'EMP_R58' },
+                        { 'data': 'EMP_R59' },
+                        { 'data': 'EMP_R60' },
+
+                        { 'data': 'EMP_R61' },
+                        { 'data': 'EMP_R62' },
+                        { 'data': 'EMP_R63' },
+                        { 'data': 'EMP_R64' },
+                        { 'data': 'EMP_R65' },
+                        { 'data': 'EMP_R66' },
+                        { 'data': 'EMP_R67' },
+                        { 'data': 'EMP_R68' },
+                        { 'data': 'EMP_R69' },
+                        { 'data': 'EMP_R70' },
+
+                        { 'data': 'EMP_R71' },
+                        { 'data': 'EMP_R72' },
+                        { 'data': 'EMP_R73' },
+                        { 'data': 'EMP_R74' },
+                        { 'data': 'EMP_R75' },
+                        { 'data': 'EMP_R76' },
+                        { 'data': 'EMP_R77' },
+                        { 'data': 'EMP_R78' },
+                        { 'data': 'EMP_R79' },
+                        { 'data': 'EMP_R80' },
+
+                        { 'data': 'EMP_R81' },
+                        { 'data': 'EMP_R82' },
+                        { 'data': 'EMP_R83' },
+                        { 'data': 'EMP_R84' },
+                        { 'data': 'EMP_R85' },
+                        { 'data': 'EMP_R86' },
+
+                        /*EA*/
+                        { 'data': 'ARE_1' },
+                        { 'data': 'ARE_2' },
+                        { 'data': 'ARE_3' },
+                        { 'data': 'ARE_4' },
+                        { 'data': 'ARE_5' },
+                        { 'data': 'ARE_6' },
+                        { 'data': 'ARE_7' },
+                        { 'data': 'ARE_8' },
+                        { 'data': 'ARE_9' },
+                        { 'data': 'ARE_10' },
+                        { 'data': 'ARE_11' },
+                        { 'data': 'ARE_12' },
+                        { 'data': 'ARE_13' },
+                        { 'data': 'ARE_14' },
+                        { 'data': 'ARE_15' },
+                        { 'data': 'ARE_16' },
+                        { 'data': 'ARE_17' },
+                        { 'data': 'ARE_18' },
+                        { 'data': 'ARE_19' },
+                        { 'data': 'ARE_20' },
+                        { 'data': 'ARE_21' },
+                        { 'data': 'ARE_22' },
+                        { 'data': 'ARE_23' },
+                        { 'data': 'ARE_24' },
+                        { 'data': 'ARE_25' },
+                        { 'data': 'ARE_26' },
+                        { 'data': 'ARE_27' },
+                        { 'data': 'ARE_28' },
+                        { 'data': 'ARE_29' },
+                        { 'data': 'ARE_30' },
+
+                        { 'data': 'ARE_31' },
+                        { 'data': 'ARE_32' },
+                        { 'data': 'ARE_33' },
+                        { 'data': 'ARE_34' },
+                        { 'data': 'ARE_35' },
+                        { 'data': 'ARE_36' },
+                        { 'data': 'ARE_37' },
+                        { 'data': 'ARE_38' },
+                        { 'data': 'ARE_39' },
+                        { 'data': 'ARE_40' },
+
+                        { 'data': 'ARE_41' },
+                        { 'data': 'ARE_42' },
+                        { 'data': 'ARE_43' },
+                        { 'data': 'ARE_44' },
+                        { 'data': 'ARE_45' },
+                        { 'data': 'ARE_46' },
+                        { 'data': 'ARE_47' },
+                        { 'data': 'ARE_48' },
+                        { 'data': 'ARE_49' },
+                        { 'data': 'ARE_50' },
+
+                        { 'data': 'ARE_51' },
+                        { 'data': 'ARE_52' },
+                        { 'data': 'ARE_53' },
+                        { 'data': 'ARE_54' },
+                        { 'data': 'ARE_55' },
+                        { 'data': 'ARE_56' },
+                        { 'data': 'ARE_57' },
+                        { 'data': 'ARE_58' },
+                        { 'data': 'ARE_59' },
+                        { 'data': 'ARE_60' },
+
+                        { 'data': 'ARE_61' },
+                        { 'data': 'ARE_62' },
+                        { 'data': 'ARE_63' },
+                        { 'data': 'ARE_64' },
+                        { 'data': 'ARE_65' },
+                        { 'data': 'ARE_66' },
+                        { 'data': 'ARE_67' },
+                        { 'data': 'ARE_68' },
+                        { 'data': 'ARE_69' },
+                        { 'data': 'ARE_70' },
+
+                        { 'data': 'ARE_71' },
+                        { 'data': 'ARE_72' },
+                        { 'data': 'ARE_73' },
+                        { 'data': 'ARE_74' },
+                        { 'data': 'ARE_75' },
+                        { 'data': 'ARE_76' },
+                        { 'data': 'ARE_77' },
+                        { 'data': 'ARE_78' },
+                        { 'data': 'ARE_79' },
+                        { 'data': 'ARE_80' },
+
+                        { 'data': 'ARE_81' },
+                        { 'data': 'ARE_82' },
+                        { 'data': 'ARE_83' },
+                        { 'data': 'ARE_84' },
+                        { 'data': 'ARE_85' },
+                        { 'data': 'ARE_86' },
+
+                        ////oPEN
+                        { 'data': 'ESPECIAL_OPEN' },
+                        { 'data': 'CAMBIAR_OPEN' },
+                        { 'data': 'FORT_JEFE' },
+                        { 'data': 'OPORT_JEFE' },
+                        { 'data': 'MOTIVA_TRAB' },
+                        { 'data': 'DEJAR_EMP' },
+
+                        { 'data': 'PRESION' },
+                        { 'data': 'ANTIGUEDADR' },
+                        { 'data': 'RANGO_EDADR' },
+                        { 'data': 'CONDICIONR' },
+                        { 'data': 'SEXOR' },
+                        { 'data': 'ACADEMICOR' },
+
+                        { 'data': 'FUNCIONR' },
+                        { 'data': 'UNIDADRES' },
+                        { 'data': 'DIRECIONRES' },
+                        { 'data': 'AREARES' },
+                        { 'data': 'DEPARTAMENTORES' }
+                        //{ 'data': 'SUBDEPARTAMENTORES' }
+
+                    ],
+                    initComplete: function () {
+
+                        //this.buttons().container().appendTo($('#myTable_wrapper .col-sm-6:eq(0)'));
+                    }
+
+                });
+
+
+
+
+                $("tr").addClass("text-center");
+                //Cambiar id:descripcion y datetime
+                $("#descripcion").text('Ultimo evento: Carga de resultados según el Id del Empleado');
+                var hoy = new Date();
+                var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+                var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+                var fechaHora = fecha + ' ' + hora;
+                $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+                $('#loading').css('display', 'none');
+
+
+                if (data.length == 0) {
+                    swal({
+                        title: "No se encontaron coincidencias con el filtro aplicado",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        //buttons: true,
+                        dangerMode: true,
+                    });
+                }
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+    </script>
+
+    <script>
+    function GetByUnidad() {
+
+        $("#descripcion").text('Ultimo evento: Se ha iniciado la consulta de resultados según la Unidad de Negocio seleccionada');
+        var hoy = new Date();
+        var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+        var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+        var fechaHora = fecha + ' ' + hora;
+        $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+        $('#loading').css('display', 'block');
+
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("ReporteGetByUnidadNegocio")',
+
+            dataType: 'json',
+
+            data: { UNegocio: $('#DDLUnidad').val() },
+
+            success: function (data) {
+
+                console.log(data);
+                
+
+
+                $.extend($.fn.dataTable.defaults, {
+                    buttons: ['copy', 'csv', 'excel', 'pdf']
+                });
+
+                var table = $('#myTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+                    destroy: true,
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
+                    columns: [
+                        { 'data': 'IdEmpleado' },
+                        { 'data': 'ApellidoPaterno' },
+                        { 'data': 'ApellidoMaterno' },
+                        { 'data': 'Nombre' },
+                        { 'data': 'Puesto' },
+                        { 'data': 'FechaNaciemiento' },
+                        { 'data': 'FechaAntiguedad' },
+                        { 'data': 'Sexo' },
+                        { 'data': 'Correo' },
+                        { 'data': 'TipoFuncion' },
+                        { 'data': 'CondicionTrabajo' },
+                        { 'data': 'GradoAcademico' },
+                        { 'data': 'UNIDAD' },
+                        { 'data': 'DIRECION' },
+                        { 'data': 'AREA' },
+                        { 'data': 'DEPARTAMENTO' },
+                        { 'data': 'SUBDEPARTAMENTO' },
+                        { 'data': 'EmpresaContratante' },
+                        { 'data': 'IdResponsableRH' },
+                        { 'data': 'NombreResponsableRH' },
+                        { 'data': 'IdJefe' },
+                        { 'data': 'NombreJefe' },
+                        { 'data': 'PuestoJefe' },
+                        { 'data': 'IdRespinsableEstructura' },
+                        { 'data': 'NombreResponsableEstrucutra' },
+                        { 'data': 'ClaveAcceso' },
+                        { 'data': 'RangoAntiguedad' },
+                        { 'data': 'RangoEdad' },
+                        { 'data': 'EstatusENcuesta' },
+                        { 'data': 'EstatusEmpleado' },
+                        { 'data': 'EMP_R1' },
+                        { 'data': 'EMP_R2' },
+                        { 'data': 'EMP_R3' },
+                        { 'data': 'EMP_R4' },
+                        { 'data': 'EMP_R5' },
+                        { 'data': 'EMP_R6' },
+                        { 'data': 'EMP_R7' },
+                        { 'data': 'EMP_R8' },
+                        { 'data': 'EMP_R9' },
+                        { 'data': 'EMP_R10' },
+                        { 'data': 'EMP_R11' },
+                        { 'data': 'EMP_R12' },
+                        { 'data': 'EMP_R13' },
+                        { 'data': 'EMP_R14' },
+                        { 'data': 'EMP_R15' },
+                        { 'data': 'EMP_R16' },
+                        { 'data': 'EMP_R17' },
+                        { 'data': 'EMP_R18' },
+                        { 'data': 'EMP_R19' },
+                        { 'data': 'EMP_R20' },
+                        { 'data': 'EMP_R21' },
+                        { 'data': 'EMP_R22' },
+                        { 'data': 'EMP_R23' },
+                        { 'data': 'EMP_R24' },
+                        { 'data': 'EMP_R25' },
+                        { 'data': 'EMP_R26' },
+                        { 'data': 'EMP_R27' },
+                        { 'data': 'EMP_R28' },
+                        { 'data': 'EMP_R29' },
+                        { 'data': 'EMP_R30' },
+
+                        { 'data': 'EMP_R31' },
+                        { 'data': 'EMP_R32' },
+                        { 'data': 'EMP_R33' },
+                        { 'data': 'EMP_R34' },
+                        { 'data': 'EMP_R35' },
+                        { 'data': 'EMP_R36' },
+                        { 'data': 'EMP_R37' },
+                        { 'data': 'EMP_R38' },
+                        { 'data': 'EMP_R39' },
+                        { 'data': 'EMP_R40' },
+
+                        { 'data': 'EMP_R41' },
+                        { 'data': 'EMP_R42' },
+                        { 'data': 'EMP_R43' },
+                        { 'data': 'EMP_R44' },
+                        { 'data': 'EMP_R45' },
+                        { 'data': 'EMP_R46' },
+                        { 'data': 'EMP_R47' },
+                        { 'data': 'EMP_R48' },
+                        { 'data': 'EMP_R49' },
+                        { 'data': 'EMP_R50' },
+
+                        { 'data': 'EMP_R51' },
+                        { 'data': 'EMP_R52' },
+                        { 'data': 'EMP_R53' },
+                        { 'data': 'EMP_R54' },
+                        { 'data': 'EMP_R55' },
+                        { 'data': 'EMP_R56' },
+                        { 'data': 'EMP_R57' },
+                        { 'data': 'EMP_R58' },
+                        { 'data': 'EMP_R59' },
+                        { 'data': 'EMP_R60' },
+
+                        { 'data': 'EMP_R61' },
+                        { 'data': 'EMP_R62' },
+                        { 'data': 'EMP_R63' },
+                        { 'data': 'EMP_R64' },
+                        { 'data': 'EMP_R65' },
+                        { 'data': 'EMP_R66' },
+                        { 'data': 'EMP_R67' },
+                        { 'data': 'EMP_R68' },
+                        { 'data': 'EMP_R69' },
+                        { 'data': 'EMP_R70' },
+
+                        { 'data': 'EMP_R71' },
+                        { 'data': 'EMP_R72' },
+                        { 'data': 'EMP_R73' },
+                        { 'data': 'EMP_R74' },
+                        { 'data': 'EMP_R75' },
+                        { 'data': 'EMP_R76' },
+                        { 'data': 'EMP_R77' },
+                        { 'data': 'EMP_R78' },
+                        { 'data': 'EMP_R79' },
+                        { 'data': 'EMP_R80' },
+
+                        { 'data': 'EMP_R81' },
+                        { 'data': 'EMP_R82' },
+                        { 'data': 'EMP_R83' },
+                        { 'data': 'EMP_R84' },
+                        { 'data': 'EMP_R85' },
+                        { 'data': 'EMP_R86' },
+
+                        /*EA*/
+                        { 'data': 'ARE_1' },
+                        { 'data': 'ARE_2' },
+                        { 'data': 'ARE_3' },
+                        { 'data': 'ARE_4' },
+                        { 'data': 'ARE_5' },
+                        { 'data': 'ARE_6' },
+                        { 'data': 'ARE_7' },
+                        { 'data': 'ARE_8' },
+                        { 'data': 'ARE_9' },
+                        { 'data': 'ARE_10' },
+                        { 'data': 'ARE_11' },
+                        { 'data': 'ARE_12' },
+                        { 'data': 'ARE_13' },
+                        { 'data': 'ARE_14' },
+                        { 'data': 'ARE_15' },
+                        { 'data': 'ARE_16' },
+                        { 'data': 'ARE_17' },
+                        { 'data': 'ARE_18' },
+                        { 'data': 'ARE_19' },
+                        { 'data': 'ARE_20' },
+                        { 'data': 'ARE_21' },
+                        { 'data': 'ARE_22' },
+                        { 'data': 'ARE_23' },
+                        { 'data': 'ARE_24' },
+                        { 'data': 'ARE_25' },
+                        { 'data': 'ARE_26' },
+                        { 'data': 'ARE_27' },
+                        { 'data': 'ARE_28' },
+                        { 'data': 'ARE_29' },
+                        { 'data': 'ARE_30' },
+
+                        { 'data': 'ARE_31' },
+                        { 'data': 'ARE_32' },
+                        { 'data': 'ARE_33' },
+                        { 'data': 'ARE_34' },
+                        { 'data': 'ARE_35' },
+                        { 'data': 'ARE_36' },
+                        { 'data': 'ARE_37' },
+                        { 'data': 'ARE_38' },
+                        { 'data': 'ARE_39' },
+                        { 'data': 'ARE_40' },
+
+                        { 'data': 'ARE_41' },
+                        { 'data': 'ARE_42' },
+                        { 'data': 'ARE_43' },
+                        { 'data': 'ARE_44' },
+                        { 'data': 'ARE_45' },
+                        { 'data': 'ARE_46' },
+                        { 'data': 'ARE_47' },
+                        { 'data': 'ARE_48' },
+                        { 'data': 'ARE_49' },
+                        { 'data': 'ARE_50' },
+
+                        { 'data': 'ARE_51' },
+                        { 'data': 'ARE_52' },
+                        { 'data': 'ARE_53' },
+                        { 'data': 'ARE_54' },
+                        { 'data': 'ARE_55' },
+                        { 'data': 'ARE_56' },
+                        { 'data': 'ARE_57' },
+                        { 'data': 'ARE_58' },
+                        { 'data': 'ARE_59' },
+                        { 'data': 'ARE_60' },
+
+                        { 'data': 'ARE_61' },
+                        { 'data': 'ARE_62' },
+                        { 'data': 'ARE_63' },
+                        { 'data': 'ARE_64' },
+                        { 'data': 'ARE_65' },
+                        { 'data': 'ARE_66' },
+                        { 'data': 'ARE_67' },
+                        { 'data': 'ARE_68' },
+                        { 'data': 'ARE_69' },
+                        { 'data': 'ARE_70' },
+
+                        { 'data': 'ARE_71' },
+                        { 'data': 'ARE_72' },
+                        { 'data': 'ARE_73' },
+                        { 'data': 'ARE_74' },
+                        { 'data': 'ARE_75' },
+                        { 'data': 'ARE_76' },
+                        { 'data': 'ARE_77' },
+                        { 'data': 'ARE_78' },
+                        { 'data': 'ARE_79' },
+                        { 'data': 'ARE_80' },
+
+                        { 'data': 'ARE_81' },
+                        { 'data': 'ARE_82' },
+                        { 'data': 'ARE_83' },
+                        { 'data': 'ARE_84' },
+                        { 'data': 'ARE_85' },
+                        { 'data': 'ARE_86' },
+
+                        ////oPEN
+                        { 'data': 'ESPECIAL_OPEN' },
+                        { 'data': 'CAMBIAR_OPEN' },
+                        { 'data': 'FORT_JEFE' },
+                        { 'data': 'OPORT_JEFE' },
+                        { 'data': 'MOTIVA_TRAB' },
+                        { 'data': 'DEJAR_EMP' },
+
+                        { 'data': 'PRESION' },
+                        { 'data': 'ANTIGUEDADR' },
+                        { 'data': 'RANGO_EDADR' },
+                        { 'data': 'CONDICIONR' },
+                        { 'data': 'SEXOR' },
+                        { 'data': 'ACADEMICOR' },
+
+                        { 'data': 'FUNCIONR' },
+                        { 'data': 'UNIDADRES' },
+                        { 'data': 'DIRECIONRES' },
+                        { 'data': 'AREARES' },
+                        { 'data': 'DEPARTAMENTORES' }
+                        //{ 'data': 'SUBDEPARTAMENTORES' }
+
+                    ],
+                    initComplete: function () {
+
+                        //this.buttons().container().appendTo($('#myTable_wrapper .col-sm-6:eq(0)'));
+                    }
+
+                });
+
+
+
+
+                $("tr").addClass("text-center");
+                //Cambiar id:descripcion y datetime
+                $("#descripcion").text('Ultimo evento: Carga de resultados según la Unidad de negocio seleccionada');
+                var hoy = new Date();
+                var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+                var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+                var fechaHora = fecha + ' ' + hora;
+                $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+                $('#loading').css('display', 'none');
+
+                if (data.length == 0) {
+                    swal({
+                        title: "No se encontaron coincidencias con el filtro aplicado",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        //buttons: true,
+                        dangerMode: true,
+                    });
+                }
+
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+    </script>
+
+    <script>
+    function GetByCompany() {
+
+        $("#descripcion").text('Ultimo evento: Se ha iniciado la consulta de resultados según la Direccion seleccionada');
+        var hoy = new Date();
+        var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+        var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+        var fechaHora = fecha + ' ' + hora;
+        $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+        $('#loading').css('display', 'block');
+
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("ReporteGetByCompany")',
+
+            dataType: 'json',
+
+            data: { Company: $('#Company').val() },
+
+            success: function (data) {
+
+
+
+
+                console.log(data);
+                
+                $.extend($.fn.dataTable.defaults, {
+                    buttons: ['copy', 'csv', 'excel', 'pdf']
+                });
+
+                var table = $('#myTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+                    destroy: true,
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
+                    columns: [
+                        { 'data': 'IdEmpleado' },
+                        { 'data': 'ApellidoPaterno' },
+                        { 'data': 'ApellidoMaterno' },
+                        { 'data': 'Nombre' },
+                        { 'data': 'Puesto' },
+                        { 'data': 'FechaNaciemiento' },
+                        { 'data': 'FechaAntiguedad' },
+                        { 'data': 'Sexo' },
+                        { 'data': 'Correo' },
+                        { 'data': 'TipoFuncion' },
+                        { 'data': 'CondicionTrabajo' },
+                        { 'data': 'GradoAcademico' },
+                        { 'data': 'UNIDAD' },
+                        { 'data': 'DIRECION' },
+                        { 'data': 'AREA' },
+                        { 'data': 'DEPARTAMENTO' },
+                        { 'data': 'SUBDEPARTAMENTO' },
+                        { 'data': 'EmpresaContratante' },
+                        { 'data': 'IdResponsableRH' },
+                        { 'data': 'NombreResponsableRH' },
+                        { 'data': 'IdJefe' },
+                        { 'data': 'NombreJefe' },
+                        { 'data': 'PuestoJefe' },
+                        { 'data': 'IdRespinsableEstructura' },
+                        { 'data': 'NombreResponsableEstrucutra' },
+                        { 'data': 'ClaveAcceso' },
+                        { 'data': 'RangoAntiguedad' },
+                        { 'data': 'RangoEdad' },
+                        { 'data': 'EstatusENcuesta' },
+                        { 'data': 'EstatusEmpleado' },
+                        { 'data': 'EMP_R1' },
+                        { 'data': 'EMP_R2' },
+                        { 'data': 'EMP_R3' },
+                        { 'data': 'EMP_R4' },
+                        { 'data': 'EMP_R5' },
+                        { 'data': 'EMP_R6' },
+                        { 'data': 'EMP_R7' },
+                        { 'data': 'EMP_R8' },
+                        { 'data': 'EMP_R9' },
+                        { 'data': 'EMP_R10' },
+                        { 'data': 'EMP_R11' },
+                        { 'data': 'EMP_R12' },
+                        { 'data': 'EMP_R13' },
+                        { 'data': 'EMP_R14' },
+                        { 'data': 'EMP_R15' },
+                        { 'data': 'EMP_R16' },
+                        { 'data': 'EMP_R17' },
+                        { 'data': 'EMP_R18' },
+                        { 'data': 'EMP_R19' },
+                        { 'data': 'EMP_R20' },
+                        { 'data': 'EMP_R21' },
+                        { 'data': 'EMP_R22' },
+                        { 'data': 'EMP_R23' },
+                        { 'data': 'EMP_R24' },
+                        { 'data': 'EMP_R25' },
+                        { 'data': 'EMP_R26' },
+                        { 'data': 'EMP_R27' },
+                        { 'data': 'EMP_R28' },
+                        { 'data': 'EMP_R29' },
+                        { 'data': 'EMP_R30' },
+
+                        { 'data': 'EMP_R31' },
+                        { 'data': 'EMP_R32' },
+                        { 'data': 'EMP_R33' },
+                        { 'data': 'EMP_R34' },
+                        { 'data': 'EMP_R35' },
+                        { 'data': 'EMP_R36' },
+                        { 'data': 'EMP_R37' },
+                        { 'data': 'EMP_R38' },
+                        { 'data': 'EMP_R39' },
+                        { 'data': 'EMP_R40' },
+
+                        { 'data': 'EMP_R41' },
+                        { 'data': 'EMP_R42' },
+                        { 'data': 'EMP_R43' },
+                        { 'data': 'EMP_R44' },
+                        { 'data': 'EMP_R45' },
+                        { 'data': 'EMP_R46' },
+                        { 'data': 'EMP_R47' },
+                        { 'data': 'EMP_R48' },
+                        { 'data': 'EMP_R49' },
+                        { 'data': 'EMP_R50' },
+
+                        { 'data': 'EMP_R51' },
+                        { 'data': 'EMP_R52' },
+                        { 'data': 'EMP_R53' },
+                        { 'data': 'EMP_R54' },
+                        { 'data': 'EMP_R55' },
+                        { 'data': 'EMP_R56' },
+                        { 'data': 'EMP_R57' },
+                        { 'data': 'EMP_R58' },
+                        { 'data': 'EMP_R59' },
+                        { 'data': 'EMP_R60' },
+
+                        { 'data': 'EMP_R61' },
+                        { 'data': 'EMP_R62' },
+                        { 'data': 'EMP_R63' },
+                        { 'data': 'EMP_R64' },
+                        { 'data': 'EMP_R65' },
+                        { 'data': 'EMP_R66' },
+                        { 'data': 'EMP_R67' },
+                        { 'data': 'EMP_R68' },
+                        { 'data': 'EMP_R69' },
+                        { 'data': 'EMP_R70' },
+
+                        { 'data': 'EMP_R71' },
+                        { 'data': 'EMP_R72' },
+                        { 'data': 'EMP_R73' },
+                        { 'data': 'EMP_R74' },
+                        { 'data': 'EMP_R75' },
+                        { 'data': 'EMP_R76' },
+                        { 'data': 'EMP_R77' },
+                        { 'data': 'EMP_R78' },
+                        { 'data': 'EMP_R79' },
+                        { 'data': 'EMP_R80' },
+
+                        { 'data': 'EMP_R81' },
+                        { 'data': 'EMP_R82' },
+                        { 'data': 'EMP_R83' },
+                        { 'data': 'EMP_R84' },
+                        { 'data': 'EMP_R85' },
+                        { 'data': 'EMP_R86' },
+
+                        /*EA*/
+                        { 'data': 'ARE_1' },
+                        { 'data': 'ARE_2' },
+                        { 'data': 'ARE_3' },
+                        { 'data': 'ARE_4' },
+                        { 'data': 'ARE_5' },
+                        { 'data': 'ARE_6' },
+                        { 'data': 'ARE_7' },
+                        { 'data': 'ARE_8' },
+                        { 'data': 'ARE_9' },
+                        { 'data': 'ARE_10' },
+                        { 'data': 'ARE_11' },
+                        { 'data': 'ARE_12' },
+                        { 'data': 'ARE_13' },
+                        { 'data': 'ARE_14' },
+                        { 'data': 'ARE_15' },
+                        { 'data': 'ARE_16' },
+                        { 'data': 'ARE_17' },
+                        { 'data': 'ARE_18' },
+                        { 'data': 'ARE_19' },
+                        { 'data': 'ARE_20' },
+                        { 'data': 'ARE_21' },
+                        { 'data': 'ARE_22' },
+                        { 'data': 'ARE_23' },
+                        { 'data': 'ARE_24' },
+                        { 'data': 'ARE_25' },
+                        { 'data': 'ARE_26' },
+                        { 'data': 'ARE_27' },
+                        { 'data': 'ARE_28' },
+                        { 'data': 'ARE_29' },
+                        { 'data': 'ARE_30' },
+
+                        { 'data': 'ARE_31' },
+                        { 'data': 'ARE_32' },
+                        { 'data': 'ARE_33' },
+                        { 'data': 'ARE_34' },
+                        { 'data': 'ARE_35' },
+                        { 'data': 'ARE_36' },
+                        { 'data': 'ARE_37' },
+                        { 'data': 'ARE_38' },
+                        { 'data': 'ARE_39' },
+                        { 'data': 'ARE_40' },
+
+                        { 'data': 'ARE_41' },
+                        { 'data': 'ARE_42' },
+                        { 'data': 'ARE_43' },
+                        { 'data': 'ARE_44' },
+                        { 'data': 'ARE_45' },
+                        { 'data': 'ARE_46' },
+                        { 'data': 'ARE_47' },
+                        { 'data': 'ARE_48' },
+                        { 'data': 'ARE_49' },
+                        { 'data': 'ARE_50' },
+
+                        { 'data': 'ARE_51' },
+                        { 'data': 'ARE_52' },
+                        { 'data': 'ARE_53' },
+                        { 'data': 'ARE_54' },
+                        { 'data': 'ARE_55' },
+                        { 'data': 'ARE_56' },
+                        { 'data': 'ARE_57' },
+                        { 'data': 'ARE_58' },
+                        { 'data': 'ARE_59' },
+                        { 'data': 'ARE_60' },
+
+                        { 'data': 'ARE_61' },
+                        { 'data': 'ARE_62' },
+                        { 'data': 'ARE_63' },
+                        { 'data': 'ARE_64' },
+                        { 'data': 'ARE_65' },
+                        { 'data': 'ARE_66' },
+                        { 'data': 'ARE_67' },
+                        { 'data': 'ARE_68' },
+                        { 'data': 'ARE_69' },
+                        { 'data': 'ARE_70' },
+
+                        { 'data': 'ARE_71' },
+                        { 'data': 'ARE_72' },
+                        { 'data': 'ARE_73' },
+                        { 'data': 'ARE_74' },
+                        { 'data': 'ARE_75' },
+                        { 'data': 'ARE_76' },
+                        { 'data': 'ARE_77' },
+                        { 'data': 'ARE_78' },
+                        { 'data': 'ARE_79' },
+                        { 'data': 'ARE_80' },
+
+                        { 'data': 'ARE_81' },
+                        { 'data': 'ARE_82' },
+                        { 'data': 'ARE_83' },
+                        { 'data': 'ARE_84' },
+                        { 'data': 'ARE_85' },
+                        { 'data': 'ARE_86' },
+
+                        ////oPEN
+                        { 'data': 'ESPECIAL_OPEN' },
+                        { 'data': 'CAMBIAR_OPEN' },
+                        { 'data': 'FORT_JEFE' },
+                        { 'data': 'OPORT_JEFE' },
+                        { 'data': 'MOTIVA_TRAB' },
+                        { 'data': 'DEJAR_EMP' },
+
+                        { 'data': 'PRESION' },
+                        { 'data': 'ANTIGUEDADR' },
+                        { 'data': 'RANGO_EDADR' },
+                        { 'data': 'CONDICIONR' },
+                        { 'data': 'SEXOR' },
+                        { 'data': 'ACADEMICOR' },
+
+                        { 'data': 'FUNCIONR' },
+                        { 'data': 'UNIDADRES' },
+                        { 'data': 'DIRECIONRES' },
+                        { 'data': 'AREARES' },
+                        { 'data': 'DEPARTAMENTORES' }
+                        //{ 'data': 'SUBDEPARTAMENTORES' }
+
+                    ],
+                    initComplete: function () {
+
+                        //this.buttons().container().appendTo($('#myTable_wrapper .col-sm-6:eq(0)'));
+                    }
+
+                });
+
+
+
+                $("tr").addClass("text-center");
+                //Cambiar id:descripcion y datetime
+                $("#descripcion").text('Ultimo evento: Carga de resultados según la Unidad de negocio seleccionada');
+                var hoy = new Date();
+                var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+                var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+                var fechaHora = fecha + ' ' + hora;
+                $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+                $('#loading').css('display', 'none');
+
+                if (data.length == 0) {
+                    swal({
+                        title: "No se encontaron coincidencias con el filtro aplicado",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        //buttons: true,
+                        dangerMode: true,
+                    });
+                }
+
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+    </script>
+
+
+    <script>
+    function GetByArea() {
+
+        $("#descripcion").text('Ultimo evento: Se ha iniciado la consulta de resultados según el Area seleccionada');
+        var hoy = new Date();
+        var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+        var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+        var fechaHora = fecha + ' ' + hora;
+        $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+        $('#loading').css('display', 'block');
+
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("ReporteGetByArea")',
+
+            dataType: 'json',
+
+            data: { Area: $('#Area').val() },
+
+            success: function (data) {
+
+                console.log(data);
+                
+                $.extend($.fn.dataTable.defaults, {
+                    buttons: ['copy', 'csv', 'excel', 'pdf']
+                });
+
+                var table = $('#myTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+                    destroy: true,
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
+                    columns: [
+                        { 'data': 'IdEmpleado' },
+                        { 'data': 'ApellidoPaterno' },
+                        { 'data': 'ApellidoMaterno' },
+                        { 'data': 'Nombre' },
+                        { 'data': 'Puesto' },
+                        { 'data': 'FechaNaciemiento' },
+                        { 'data': 'FechaAntiguedad' },
+                        { 'data': 'Sexo' },
+                        { 'data': 'Correo' },
+                        { 'data': 'TipoFuncion' },
+                        { 'data': 'CondicionTrabajo' },
+                        { 'data': 'GradoAcademico' },
+                        { 'data': 'UNIDAD' },
+                        { 'data': 'DIRECION' },
+                        { 'data': 'AREA' },
+                        { 'data': 'DEPARTAMENTO' },
+                        { 'data': 'SUBDEPARTAMENTO' },
+                        { 'data': 'EmpresaContratante' },
+                        { 'data': 'IdResponsableRH' },
+                        { 'data': 'NombreResponsableRH' },
+                        { 'data': 'IdJefe' },
+                        { 'data': 'NombreJefe' },
+                        { 'data': 'PuestoJefe' },
+                        { 'data': 'IdRespinsableEstructura' },
+                        { 'data': 'NombreResponsableEstrucutra' },
+                        { 'data': 'ClaveAcceso' },
+                        { 'data': 'RangoAntiguedad' },
+                        { 'data': 'RangoEdad' },
+                        { 'data': 'EstatusENcuesta' },
+                        { 'data': 'EstatusEmpleado' },
+                        { 'data': 'EMP_R1' },
+                        { 'data': 'EMP_R2' },
+                        { 'data': 'EMP_R3' },
+                        { 'data': 'EMP_R4' },
+                        { 'data': 'EMP_R5' },
+                        { 'data': 'EMP_R6' },
+                        { 'data': 'EMP_R7' },
+                        { 'data': 'EMP_R8' },
+                        { 'data': 'EMP_R9' },
+                        { 'data': 'EMP_R10' },
+                        { 'data': 'EMP_R11' },
+                        { 'data': 'EMP_R12' },
+                        { 'data': 'EMP_R13' },
+                        { 'data': 'EMP_R14' },
+                        { 'data': 'EMP_R15' },
+                        { 'data': 'EMP_R16' },
+                        { 'data': 'EMP_R17' },
+                        { 'data': 'EMP_R18' },
+                        { 'data': 'EMP_R19' },
+                        { 'data': 'EMP_R20' },
+                        { 'data': 'EMP_R21' },
+                        { 'data': 'EMP_R22' },
+                        { 'data': 'EMP_R23' },
+                        { 'data': 'EMP_R24' },
+                        { 'data': 'EMP_R25' },
+                        { 'data': 'EMP_R26' },
+                        { 'data': 'EMP_R27' },
+                        { 'data': 'EMP_R28' },
+                        { 'data': 'EMP_R29' },
+                        { 'data': 'EMP_R30' },
+
+                        { 'data': 'EMP_R31' },
+                        { 'data': 'EMP_R32' },
+                        { 'data': 'EMP_R33' },
+                        { 'data': 'EMP_R34' },
+                        { 'data': 'EMP_R35' },
+                        { 'data': 'EMP_R36' },
+                        { 'data': 'EMP_R37' },
+                        { 'data': 'EMP_R38' },
+                        { 'data': 'EMP_R39' },
+                        { 'data': 'EMP_R40' },
+
+                        { 'data': 'EMP_R41' },
+                        { 'data': 'EMP_R42' },
+                        { 'data': 'EMP_R43' },
+                        { 'data': 'EMP_R44' },
+                        { 'data': 'EMP_R45' },
+                        { 'data': 'EMP_R46' },
+                        { 'data': 'EMP_R47' },
+                        { 'data': 'EMP_R48' },
+                        { 'data': 'EMP_R49' },
+                        { 'data': 'EMP_R50' },
+
+                        { 'data': 'EMP_R51' },
+                        { 'data': 'EMP_R52' },
+                        { 'data': 'EMP_R53' },
+                        { 'data': 'EMP_R54' },
+                        { 'data': 'EMP_R55' },
+                        { 'data': 'EMP_R56' },
+                        { 'data': 'EMP_R57' },
+                        { 'data': 'EMP_R58' },
+                        { 'data': 'EMP_R59' },
+                        { 'data': 'EMP_R60' },
+
+                        { 'data': 'EMP_R61' },
+                        { 'data': 'EMP_R62' },
+                        { 'data': 'EMP_R63' },
+                        { 'data': 'EMP_R64' },
+                        { 'data': 'EMP_R65' },
+                        { 'data': 'EMP_R66' },
+                        { 'data': 'EMP_R67' },
+                        { 'data': 'EMP_R68' },
+                        { 'data': 'EMP_R69' },
+                        { 'data': 'EMP_R70' },
+
+                        { 'data': 'EMP_R71' },
+                        { 'data': 'EMP_R72' },
+                        { 'data': 'EMP_R73' },
+                        { 'data': 'EMP_R74' },
+                        { 'data': 'EMP_R75' },
+                        { 'data': 'EMP_R76' },
+                        { 'data': 'EMP_R77' },
+                        { 'data': 'EMP_R78' },
+                        { 'data': 'EMP_R79' },
+                        { 'data': 'EMP_R80' },
+
+                        { 'data': 'EMP_R81' },
+                        { 'data': 'EMP_R82' },
+                        { 'data': 'EMP_R83' },
+                        { 'data': 'EMP_R84' },
+                        { 'data': 'EMP_R85' },
+                        { 'data': 'EMP_R86' },
+
+                        /*EA*/
+                        { 'data': 'ARE_1' },
+                        { 'data': 'ARE_2' },
+                        { 'data': 'ARE_3' },
+                        { 'data': 'ARE_4' },
+                        { 'data': 'ARE_5' },
+                        { 'data': 'ARE_6' },
+                        { 'data': 'ARE_7' },
+                        { 'data': 'ARE_8' },
+                        { 'data': 'ARE_9' },
+                        { 'data': 'ARE_10' },
+                        { 'data': 'ARE_11' },
+                        { 'data': 'ARE_12' },
+                        { 'data': 'ARE_13' },
+                        { 'data': 'ARE_14' },
+                        { 'data': 'ARE_15' },
+                        { 'data': 'ARE_16' },
+                        { 'data': 'ARE_17' },
+                        { 'data': 'ARE_18' },
+                        { 'data': 'ARE_19' },
+                        { 'data': 'ARE_20' },
+                        { 'data': 'ARE_21' },
+                        { 'data': 'ARE_22' },
+                        { 'data': 'ARE_23' },
+                        { 'data': 'ARE_24' },
+                        { 'data': 'ARE_25' },
+                        { 'data': 'ARE_26' },
+                        { 'data': 'ARE_27' },
+                        { 'data': 'ARE_28' },
+                        { 'data': 'ARE_29' },
+                        { 'data': 'ARE_30' },
+
+                        { 'data': 'ARE_31' },
+                        { 'data': 'ARE_32' },
+                        { 'data': 'ARE_33' },
+                        { 'data': 'ARE_34' },
+                        { 'data': 'ARE_35' },
+                        { 'data': 'ARE_36' },
+                        { 'data': 'ARE_37' },
+                        { 'data': 'ARE_38' },
+                        { 'data': 'ARE_39' },
+                        { 'data': 'ARE_40' },
+
+                        { 'data': 'ARE_41' },
+                        { 'data': 'ARE_42' },
+                        { 'data': 'ARE_43' },
+                        { 'data': 'ARE_44' },
+                        { 'data': 'ARE_45' },
+                        { 'data': 'ARE_46' },
+                        { 'data': 'ARE_47' },
+                        { 'data': 'ARE_48' },
+                        { 'data': 'ARE_49' },
+                        { 'data': 'ARE_50' },
+
+                        { 'data': 'ARE_51' },
+                        { 'data': 'ARE_52' },
+                        { 'data': 'ARE_53' },
+                        { 'data': 'ARE_54' },
+                        { 'data': 'ARE_55' },
+                        { 'data': 'ARE_56' },
+                        { 'data': 'ARE_57' },
+                        { 'data': 'ARE_58' },
+                        { 'data': 'ARE_59' },
+                        { 'data': 'ARE_60' },
+
+                        { 'data': 'ARE_61' },
+                        { 'data': 'ARE_62' },
+                        { 'data': 'ARE_63' },
+                        { 'data': 'ARE_64' },
+                        { 'data': 'ARE_65' },
+                        { 'data': 'ARE_66' },
+                        { 'data': 'ARE_67' },
+                        { 'data': 'ARE_68' },
+                        { 'data': 'ARE_69' },
+                        { 'data': 'ARE_70' },
+
+                        { 'data': 'ARE_71' },
+                        { 'data': 'ARE_72' },
+                        { 'data': 'ARE_73' },
+                        { 'data': 'ARE_74' },
+                        { 'data': 'ARE_75' },
+                        { 'data': 'ARE_76' },
+                        { 'data': 'ARE_77' },
+                        { 'data': 'ARE_78' },
+                        { 'data': 'ARE_79' },
+                        { 'data': 'ARE_80' },
+
+                        { 'data': 'ARE_81' },
+                        { 'data': 'ARE_82' },
+                        { 'data': 'ARE_83' },
+                        { 'data': 'ARE_84' },
+                        { 'data': 'ARE_85' },
+                        { 'data': 'ARE_86' },
+
+                        ////oPEN
+                        { 'data': 'ESPECIAL_OPEN' },
+                        { 'data': 'CAMBIAR_OPEN' },
+                        { 'data': 'FORT_JEFE' },
+                        { 'data': 'OPORT_JEFE' },
+                        { 'data': 'MOTIVA_TRAB' },
+                        { 'data': 'DEJAR_EMP' },
+
+                        { 'data': 'PRESION' },
+                        { 'data': 'ANTIGUEDADR' },
+                        { 'data': 'RANGO_EDADR' },
+                        { 'data': 'CONDICIONR' },
+                        { 'data': 'SEXOR' },
+                        { 'data': 'ACADEMICOR' },
+
+                        { 'data': 'FUNCIONR' },
+                        { 'data': 'UNIDADRES' },
+                        { 'data': 'DIRECIONRES' },
+                        { 'data': 'AREARES' },
+                        { 'data': 'DEPARTAMENTORES' }
+                        //{ 'data': 'SUBDEPARTAMENTORES' }
+
+                    ],
+                    initComplete: function () {
+
+                        //this.buttons().container().appendTo($('#myTable_wrapper .col-sm-6:eq(0)'));
+                    }
+
+                });
+
+
+                $("tr").addClass("text-center");
+                //Cambiar id:descripcion y datetime
+                $("#descripcion").text('Ultimo evento: Carga de resultados según el Área seleccionada');
+                var hoy = new Date();
+                var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+                var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+                var fechaHora = fecha + ' ' + hora;
+                $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+                $('#loading').css('display', 'none');
+
+                if (data.length == 0) {
+                    swal({
+                        title: "No se encontaron coincidencias con el filtro aplicado",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        //buttons: true,
+                        dangerMode: true,
+                    });
+                }
+
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+    </script>
+
+
+    <script>
+    function GetByDepartamento() {
+        $("#descripcion").text('Ultimo evento: Se ha iniciado la consulta de resultados según el Departamento seleccionado');
+        var hoy = new Date();
+        var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+        var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+        var fechaHora = fecha + ' ' + hora;
+        $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+
+        $('#loading').css('display', 'block');
+
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("ReporteGetByDepartamento")',
+
+            dataType: 'json',
+
+            data: { Dpto: $('#Departamento').val() },
+
+            success: function (data) {
+
+
+                console.log(data);
+               
+
+                $.extend($.fn.dataTable.defaults, {
+                    buttons: ['copy', 'csv', 'excel', 'pdf']
+                });
+
+                var table = $('#myTable').DataTable({
+
+
+                    data: data,
+                    dom: 'Bfrtip',
+                    destroy: true,
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf'
+                    ],
+                    columns: [
+                        { 'data': 'IdEmpleado' },
+                        { 'data': 'ApellidoPaterno' },
+                        { 'data': 'ApellidoMaterno' },
+                        { 'data': 'Nombre' },
+                        { 'data': 'Puesto' },
+                        { 'data': 'FechaNaciemiento' },
+                        { 'data': 'FechaAntiguedad' },
+                        { 'data': 'Sexo' },
+                        { 'data': 'Correo' },
+                        { 'data': 'TipoFuncion' },
+                        { 'data': 'CondicionTrabajo' },
+                        { 'data': 'GradoAcademico' },
+                        { 'data': 'UNIDAD' },
+                        { 'data': 'DIRECION' },
+                        { 'data': 'AREA' },
+                        { 'data': 'DEPARTAMENTO' },
+                        { 'data': 'SUBDEPARTAMENTO' },
+                        { 'data': 'EmpresaContratante' },
+                        { 'data': 'IdResponsableRH' },
+                        { 'data': 'NombreResponsableRH' },
+                        { 'data': 'IdJefe' },
+                        { 'data': 'NombreJefe' },
+                        { 'data': 'PuestoJefe' },
+                        { 'data': 'IdRespinsableEstructura' },
+                        { 'data': 'NombreResponsableEstrucutra' },
+                        { 'data': 'ClaveAcceso' },
+                        { 'data': 'RangoAntiguedad' },
+                        { 'data': 'RangoEdad' },
+                        { 'data': 'EstatusENcuesta' },
+                        { 'data': 'EstatusEmpleado' },
+                        { 'data': 'EMP_R1' },
+                        { 'data': 'EMP_R2' },
+                        { 'data': 'EMP_R3' },
+                        { 'data': 'EMP_R4' },
+                        { 'data': 'EMP_R5' },
+                        { 'data': 'EMP_R6' },
+                        { 'data': 'EMP_R7' },
+                        { 'data': 'EMP_R8' },
+                        { 'data': 'EMP_R9' },
+                        { 'data': 'EMP_R10' },
+                        { 'data': 'EMP_R11' },
+                        { 'data': 'EMP_R12' },
+                        { 'data': 'EMP_R13' },
+                        { 'data': 'EMP_R14' },
+                        { 'data': 'EMP_R15' },
+                        { 'data': 'EMP_R16' },
+                        { 'data': 'EMP_R17' },
+                        { 'data': 'EMP_R18' },
+                        { 'data': 'EMP_R19' },
+                        { 'data': 'EMP_R20' },
+                        { 'data': 'EMP_R21' },
+                        { 'data': 'EMP_R22' },
+                        { 'data': 'EMP_R23' },
+                        { 'data': 'EMP_R24' },
+                        { 'data': 'EMP_R25' },
+                        { 'data': 'EMP_R26' },
+                        { 'data': 'EMP_R27' },
+                        { 'data': 'EMP_R28' },
+                        { 'data': 'EMP_R29' },
+                        { 'data': 'EMP_R30' },
+
+                        { 'data': 'EMP_R31' },
+                        { 'data': 'EMP_R32' },
+                        { 'data': 'EMP_R33' },
+                        { 'data': 'EMP_R34' },
+                        { 'data': 'EMP_R35' },
+                        { 'data': 'EMP_R36' },
+                        { 'data': 'EMP_R37' },
+                        { 'data': 'EMP_R38' },
+                        { 'data': 'EMP_R39' },
+                        { 'data': 'EMP_R40' },
+
+                        { 'data': 'EMP_R41' },
+                        { 'data': 'EMP_R42' },
+                        { 'data': 'EMP_R43' },
+                        { 'data': 'EMP_R44' },
+                        { 'data': 'EMP_R45' },
+                        { 'data': 'EMP_R46' },
+                        { 'data': 'EMP_R47' },
+                        { 'data': 'EMP_R48' },
+                        { 'data': 'EMP_R49' },
+                        { 'data': 'EMP_R50' },
+
+                        { 'data': 'EMP_R51' },
+                        { 'data': 'EMP_R52' },
+                        { 'data': 'EMP_R53' },
+                        { 'data': 'EMP_R54' },
+                        { 'data': 'EMP_R55' },
+                        { 'data': 'EMP_R56' },
+                        { 'data': 'EMP_R57' },
+                        { 'data': 'EMP_R58' },
+                        { 'data': 'EMP_R59' },
+                        { 'data': 'EMP_R60' },
+
+                        { 'data': 'EMP_R61' },
+                        { 'data': 'EMP_R62' },
+                        { 'data': 'EMP_R63' },
+                        { 'data': 'EMP_R64' },
+                        { 'data': 'EMP_R65' },
+                        { 'data': 'EMP_R66' },
+                        { 'data': 'EMP_R67' },
+                        { 'data': 'EMP_R68' },
+                        { 'data': 'EMP_R69' },
+                        { 'data': 'EMP_R70' },
+
+                        { 'data': 'EMP_R71' },
+                        { 'data': 'EMP_R72' },
+                        { 'data': 'EMP_R73' },
+                        { 'data': 'EMP_R74' },
+                        { 'data': 'EMP_R75' },
+                        { 'data': 'EMP_R76' },
+                        { 'data': 'EMP_R77' },
+                        { 'data': 'EMP_R78' },
+                        { 'data': 'EMP_R79' },
+                        { 'data': 'EMP_R80' },
+
+                        { 'data': 'EMP_R81' },
+                        { 'data': 'EMP_R82' },
+                        { 'data': 'EMP_R83' },
+                        { 'data': 'EMP_R84' },
+                        { 'data': 'EMP_R85' },
+                        { 'data': 'EMP_R86' },
+
+                        /*EA*/
+                        { 'data': 'ARE_1' },
+                        { 'data': 'ARE_2' },
+                        { 'data': 'ARE_3' },
+                        { 'data': 'ARE_4' },
+                        { 'data': 'ARE_5' },
+                        { 'data': 'ARE_6' },
+                        { 'data': 'ARE_7' },
+                        { 'data': 'ARE_8' },
+                        { 'data': 'ARE_9' },
+                        { 'data': 'ARE_10' },
+                        { 'data': 'ARE_11' },
+                        { 'data': 'ARE_12' },
+                        { 'data': 'ARE_13' },
+                        { 'data': 'ARE_14' },
+                        { 'data': 'ARE_15' },
+                        { 'data': 'ARE_16' },
+                        { 'data': 'ARE_17' },
+                        { 'data': 'ARE_18' },
+                        { 'data': 'ARE_19' },
+                        { 'data': 'ARE_20' },
+                        { 'data': 'ARE_21' },
+                        { 'data': 'ARE_22' },
+                        { 'data': 'ARE_23' },
+                        { 'data': 'ARE_24' },
+                        { 'data': 'ARE_25' },
+                        { 'data': 'ARE_26' },
+                        { 'data': 'ARE_27' },
+                        { 'data': 'ARE_28' },
+                        { 'data': 'ARE_29' },
+                        { 'data': 'ARE_30' },
+
+                        { 'data': 'ARE_31' },
+                        { 'data': 'ARE_32' },
+                        { 'data': 'ARE_33' },
+                        { 'data': 'ARE_34' },
+                        { 'data': 'ARE_35' },
+                        { 'data': 'ARE_36' },
+                        { 'data': 'ARE_37' },
+                        { 'data': 'ARE_38' },
+                        { 'data': 'ARE_39' },
+                        { 'data': 'ARE_40' },
+
+                        { 'data': 'ARE_41' },
+                        { 'data': 'ARE_42' },
+                        { 'data': 'ARE_43' },
+                        { 'data': 'ARE_44' },
+                        { 'data': 'ARE_45' },
+                        { 'data': 'ARE_46' },
+                        { 'data': 'ARE_47' },
+                        { 'data': 'ARE_48' },
+                        { 'data': 'ARE_49' },
+                        { 'data': 'ARE_50' },
+
+                        { 'data': 'ARE_51' },
+                        { 'data': 'ARE_52' },
+                        { 'data': 'ARE_53' },
+                        { 'data': 'ARE_54' },
+                        { 'data': 'ARE_55' },
+                        { 'data': 'ARE_56' },
+                        { 'data': 'ARE_57' },
+                        { 'data': 'ARE_58' },
+                        { 'data': 'ARE_59' },
+                        { 'data': 'ARE_60' },
+
+                        { 'data': 'ARE_61' },
+                        { 'data': 'ARE_62' },
+                        { 'data': 'ARE_63' },
+                        { 'data': 'ARE_64' },
+                        { 'data': 'ARE_65' },
+                        { 'data': 'ARE_66' },
+                        { 'data': 'ARE_67' },
+                        { 'data': 'ARE_68' },
+                        { 'data': 'ARE_69' },
+                        { 'data': 'ARE_70' },
+
+                        { 'data': 'ARE_71' },
+                        { 'data': 'ARE_72' },
+                        { 'data': 'ARE_73' },
+                        { 'data': 'ARE_74' },
+                        { 'data': 'ARE_75' },
+                        { 'data': 'ARE_76' },
+                        { 'data': 'ARE_77' },
+                        { 'data': 'ARE_78' },
+                        { 'data': 'ARE_79' },
+                        { 'data': 'ARE_80' },
+
+                        { 'data': 'ARE_81' },
+                        { 'data': 'ARE_82' },
+                        { 'data': 'ARE_83' },
+                        { 'data': 'ARE_84' },
+                        { 'data': 'ARE_85' },
+                        { 'data': 'ARE_86' },
+
+                        ////oPEN
+                        { 'data': 'ESPECIAL_OPEN' },
+                        { 'data': 'CAMBIAR_OPEN' },
+                        { 'data': 'FORT_JEFE' },
+                        { 'data': 'OPORT_JEFE' },
+                        { 'data': 'MOTIVA_TRAB' },
+                        { 'data': 'DEJAR_EMP' },
+
+                        { 'data': 'PRESION' },
+                        { 'data': 'ANTIGUEDADR' },
+                        { 'data': 'RANGO_EDADR' },
+                        { 'data': 'CONDICIONR' },
+                        { 'data': 'SEXOR' },
+                        { 'data': 'ACADEMICOR' },
+
+                        { 'data': 'FUNCIONR' },
+                        { 'data': 'UNIDADRES' },
+                        { 'data': 'DIRECIONRES' },
+                        { 'data': 'AREARES' },
+                        { 'data': 'DEPARTAMENTORES' }
+                        //{ 'data': 'SUBDEPARTAMENTORES' }
+
+                    ],
+                    initComplete: function () {
+
+                        //this.buttons().container().appendTo($('#myTable_wrapper .col-sm-6:eq(0)'));
+                    }
+
+                });
+
+
+
+                $("tr").addClass("text-center");
+                //Cambiar id:descripcion y datetime
+                $("#descripcion").text('Ultimo evento: Carga de resultados según el Departamento seleccionada');
+                var hoy = new Date();
+                var fecha = hoy.getDate() + '-' + (hoy.getMonth() + 1) + '-' + hoy.getFullYear();
+                var hora = hoy.getHours() + ':' + hoy.getMinutes() + ':' + hoy.getSeconds();
+                var fechaHora = fecha + ' ' + hora;
+                $("#datetime").text('Fecha/hora: ' + fechaHora);
+
+                $('#loading').css('display', 'none');
+
+                $("#btnExportar").click(function () {
+                    ConvertToCSV(data);
+                    alert(ConvertToCSV(data));
+                });
+
+
+                if (data.length == 0) {
+                    swal({
+                        title: "No se encontaron coincidencias con el filtro aplicado",
+                        text: "",
+                        icon: "warning",
+                        showCancelButton: false,
+                        showConfirmButton: true,
+                        //buttons: true,
+                        dangerMode: true,
+                    });
+                }
+
+            },
+            error: function (ex) {
+
+            }
+        });
+    }
+    </script>
+    <!--Swall-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+</html>

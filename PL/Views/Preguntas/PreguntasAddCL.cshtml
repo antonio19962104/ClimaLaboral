@@ -1,0 +1,62 @@
+﻿@using PL.Extensions
+@*@using HtmlHelpers.BeginCollectionItem*@
+@model ML.Preguntas
+
+
+@using (Html.BeginCollectionItem("NewCuestion", ""))
+{
+    @Html.AntiForgeryToken() 
+    @Html.HiddenFor(m => m.IdPregunta)
+    @Html.HiddenFor(m => m.IdEncuesta)  
+    @Html.HiddenFor(m => m.IdCompetencia)   
+    @Html.HiddenFor(m => m.IdEnfoque)
+    //@Html.HiddenFor(m => m.Valoracion)
+    @Html.HiddenFor(m => m.Competencia.IdCompetencia,new { @name="idCompetenciaP"})
+    @Html.HiddenFor(m => m.Competencia.Nombre)   
+    
+    <div class="mb-2" style="border-bottom: 1px solid #dedede;">
+        <div class="p-0 col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@Model.UniqueId">             
+            <div class="m-0 p-0 col-lg-1 col-md-1 col-sm-1 col-xs-1" style="float:left;">
+                <div class="col-md-11 m-0 p-0">
+                    <div class="form-group" style="text-align:center;">
+                        <div class="fas fa-plus mt-4" id="@("addAnswer" + Model.UniqueId)" name="addCategoria" @*name="@("addAnswere" + Model.UniqueId)"*@
+                             title="Agrega la pregunta a Categorias" style="cursor:pointer;"
+                             @*data-toggle="modal" data-target="#modalEdit"*@>
+                            @Html.HiddenFor(m => m.IdPreguntaPadre)
+                        </div>
+                    </div><!--.form-group-->
+                </div><!--.col-md-6-->
+            </div>   
+            <div class="m-0 p-0 col-11" style="float:left;">
+                <div class="m-0 p-0 col-md-11">
+                    <div class="form-group" >
+                        @Html.TextAreaFor(m => m.Pregunta, new { @class = "form-control pcol1", @autofocus = "true", })
+                    </div><!--.form-group-->
+                </div><!--.col-md-6-->
+            </div>
+
+            <div class="m-0 p-0 col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:left;">
+                <div class="col-5  p-0 offset-lg-2">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Valoracion, new { @class = "form-control valComp", @autofocus = "true", })
+                    </div><!--.form-group-->
+
+                </div><!--.col-md-6-->
+            </div>
+
+            <div class="m-0 p-0 col-lg-6 col-md-6 col-sm-6 col-xs-6" style="float:right;">
+                <div class="col-md-11 m-0 p-0">
+                    <div class="form-check">
+                        @Html.CheckBoxFor(Model => Model.Obligatoria, new { @checked = "checked" })
+                        <label for="@("NewCuestion_"+Model.UniqueId+"__Obligatoria")">Desactivada</label>
+                        @*@Html.LabelFor(Model => Model.Obligatoria)*@
+                    </div><!--.form-check-->
+                </div><!--.col-md-6-->
+            </div><!--.row-->
+
+        </div>      
+        <div class="col-md-12 p-0 m-2" style="display: inline-block;width: 96%;" id="@("cat_" + Model.UniqueId)"></div>
+    </div>
+
+        }
+

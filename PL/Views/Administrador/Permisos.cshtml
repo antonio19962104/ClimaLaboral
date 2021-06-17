@@ -1,0 +1,595 @@
+﻿@model ML.Result
+@*Model.Object => DatosAdminEmpleado*@
+@*Model.Objects => Lista de Modulos a los que tiene acceso*@
+@{
+    ViewBag.Title = "Permisos";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <h2>Permisos</h2>
+            <h3>Administrador: @ViewBag.NombreAdmin</h3>
+            <h3>Perfil: @ViewBag.PerfilD4U</h3>
+            <input type="submit" value="Editar permisos" class="btn btn-primary" onclick="GetPanelEdit()" />
+            <input type="submit" value="Guardar cambios" class="btn btn-success" onclick="Editar()" />
+            <div id="misPermisos" class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+
+                        @{
+                            var ModuloEncuestas = false;
+                            var ModuloPlantillas = false;
+                            var ModuloReportes = false;
+                            var ModuloBD = false;
+                            var ModuloUsuarios = false;
+
+
+                            var chkEncuestasListar = false;
+                            var chkEncuestasCrear = false;
+                            var chkEncuestasOpc = false;
+                            //Falta chequear chkEncuestaOpc desde BL
+                            var chkPlantillasListar = false;
+                            var chkPlantillasCrear = false;
+                            var chkPlantillasOpc = false;
+
+                            var chkReportesListar = false;
+                            var chkReportesCrear = false;
+                            var chkReportesOpc = false;
+
+                            var chkBDListar = false;
+                            var chkBDCrear = false;
+                            var chkBDOpc = false;
+
+                            var chkUsuariosListar = false;
+                            var chkusuariosCrear = false;
+                            var chkUsuariosOpc = false;
+
+                            var chkEmpresasListar = false;
+                            var chkEmpresasCrear = false;
+                            var chkEmpresasOpc = false;
+
+
+                            foreach (ML.PerfilModulo item in Model.ObjectsPermisos)
+                            {
+                                if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "ListarEncuesta")
+                                {
+                                    chkEncuestasListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "CrearEncuesta")
+                                {
+                                    chkEncuestasCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "OpcEncuesta")
+                                {
+                                    chkEncuestasOpc = true;
+                                }
+                                /**********************/
+                                if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "ListarPlantilla")
+                                {
+                                    chkPlantillasListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "CrearPlantilla")
+                                {
+                                    chkPlantillasCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "OpcPlantilla")
+                                {
+                                    chkPlantillasOpc = true;
+                                }
+                                /***********************************/
+                                if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "ListarReporte")
+                                {
+                                    chkReportesListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "CrearReporte")
+                                {
+                                    chkReportesCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "OpcReporte")
+                                {
+                                    chkReportesOpc = true;
+                                }
+                                /***************************************/
+                                if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "ListarBD")
+                                {
+                                    chkBDListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "CrearBD")
+                                {
+                                    chkBDCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "OpcBD")
+                                {
+                                    chkBDOpc = true;
+                                }
+                                /*******************************/
+                                if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "ListarUsuario")
+                                {
+                                    chkUsuariosListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "CrearUsuario")
+                                {
+                                    chkusuariosCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "OpcUsuario")
+                                {
+                                    chkUsuariosOpc = true;
+                                }
+                                /*********************************/
+                                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "ListarEmpresa")
+                                {
+                                    chkEmpresasListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "CrearEmpresa")
+                                {
+                                    chkEmpresasCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "OpcEmpresa")
+                                {
+                                    chkEmpresasOpc = true;
+                                }
+                            }
+
+                            foreach (ML.PerfilModulo perf in Model.ObjectsAux)
+                            {
+                                ML.PerfilModulo perfilModulo = new ML.PerfilModulo();
+                                perfilModulo.Modulo = new ML.Modulo();
+
+                                perfilModulo.Modulo.Nombre = perf.Modulo.Nombre;
+
+
+
+                                if (perfilModulo.Modulo.Nombre == "Encuestas")
+                                {
+                                    ModuloEncuestas = true;
+                                    <div id="ModuloEncuestas" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #00d068; background-image: url('../img/bg-tool-survey.png');">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Encuestas</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="../img/icon-survey.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkEncuestasListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkEncuestasCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkEncuestasOpc == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasOpc" class="chk" type="checkbox" checked="checked"></span>Importar encuesta</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasOpc" class="chk" type="checkbox"></span>Importar Encuesta</li>
+                                                        }
+
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                                if (perfilModulo.Modulo.Nombre == "Plantillas")
+                                {
+                                    ModuloPlantillas = true;
+                                    <div id="ModuloPlantillas" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #ff2d2d; background-image: url('../img/bg-tool-theme.png');">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Plantillas</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="../img/icon-template.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkPlantillasListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkPlantillasListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkPlantillasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkPlantillasCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkPlantillasCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkPlantillasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkPlantillasOpc == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkPlantillasOpc" class="chk" type="checkbox" checked="checked"></span>Más opciones</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkPlantillasOpc" class="chk" type="checkbox"></span>Más opciones</li>
+                                                        }
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                                if (perfilModulo.Modulo.Nombre == "Reportes")
+                                {
+                                    ModuloReportes = true;
+                                    <div id="ModuloReportes" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #47aadf; background-image: url('../img/bg-tool-report.png');">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Reportes</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="../img/icon-reports.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkReportesListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkReportesListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkReportesListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkReportesCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkReportesCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkReportesCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkReportesOpc == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkReportesOpc" class="chk" type="checkbox" checked="checked"></span>Más opciones</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkReportesOpc" class="chk" type="checkbox"></span>Más opciones</li>
+                                                        }
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                                if (perfilModulo.Modulo.Nombre == "Base de datos")
+                                {
+                                    ModuloBD = true;
+                                    <div id="ModuloBD" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #ffbe16; background-image: url('../img/bg-tool-db.png');">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Bases de datos</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="../img/icon-database.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkBDListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkBDListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkBDListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkBDCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkBDCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkBDCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkBDOpc == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkBDOpc" class="chk" type="checkbox" checked="checked"></span>Más opciones</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkBDOpc" class="chk" type="checkbox"></span>Más opciones</li>
+                                                        }
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                                if (perfilModulo.Modulo.Nombre == "Usuarios")
+                                {
+                                    ModuloUsuarios = true;
+                                    <div id="Modulousuarios" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #e1e700; background-image: url('../img/bg-tool-user.png')" ;="">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Usuarios</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="../img/icon-users.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkUsuariosListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkUsuariosListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkUsuariosListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkusuariosCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkusuariosCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkusuariosCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkUsuariosOpc == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkUsuariosOpc" class="chk" type="checkbox" checked="checked"></span>Más opciones</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkUsuariosOpc" class="chk" type="checkbox"></span>Más opciones</li>
+                                                        }
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                                if (perfilModulo.Modulo.Nombre == "Empresas")
+                                {
+                                    ModuloUsuarios = true;
+                                    <div id="Modulousuarios" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #422bff; background-image: url('../../img/bg-tool-enterprises.png')" ;="">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Empresas</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="~/img/icon-enterprises.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkEmpresasListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEmpresasListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEmpresasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkEmpresasCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEmpresasCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEmpresasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkEmpresasOpc == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEmpresasOpc" class="chk" type="checkbox" checked="checked"></span>Más opciones</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEmpresasOpc" class="chk" type="checkbox"></span>Más opciones</li>
+                                                        }
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                            }
+
+                        }
+
+                    </div><!--.row-->
+                </div><!--.col-lg-7-->
+            </div><!--.row-->
+            <a href="@Url.Action("GetAll", "Administrador")">
+                <p>Volver al listado</p>
+            </a>
+        </div><!--.container-->
+    </div><!--.content-wrap-->
+
+
+</section>
+<script src="~/scripts/jquery-1.8.3.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".chk").prop('disabled', true);
+        $('#todospermisos').css('display', 'none');
+    });
+
+    function GetPanelEdit() {
+        $('.chk').prop('disabled', false);
+        //$('#misPermisos').css('display', 'none');
+        //$('#todospermisos').css('display', 'block');
+    }
+
+    function DisabledItems() {
+        $('.chk').prop('disabled', true);
+    }
+
+    function Editar() {
+        //get permission value from checkbox
+        var chkEncuestasListar = false;
+        var chkEncuestasCrear = false;
+        var chkEncuestasOpc = false;
+
+        var chkPlantillasListar = false;
+        var chkPlantillasCrear = false;
+        var chkPlantillasOpc = false;
+
+        var chkReportesListar = false;
+        var chkReportesCrear = false;
+        var chkReportesOpc = false;
+
+        var chkBDListar = false;
+        var chkBDCrear = false;
+        var chkBDOpc = false;
+
+        var chkUsuariosListar = false;
+        var chkusuariosCrear = false;
+        var chkUsuariosOpc = false;
+
+        var chkEmpresasListar = false;
+        var chkEmpresasCrear = false;
+        var chkEmpresasOpc = false;
+
+        if ($('#chkEncuestasListar').is(':checked') == true) {
+            chkEncuestasListar = "ListarEncuesta";
+        }
+        if ($('#chkEncuestasCrear').is(':checked') == true) {
+            chkEncuestasCrear = "CrearEncuesta";
+        }
+        if ($('#chkEncuestasOpc').is(':checked') == true) {
+            chkEncuestasOpc = "OpcEncuesta";
+        }
+
+        if ($('#chkPlantillasListar').is(':checked') == true) {
+            chkPlantillasListar = "ListarPlantilla";
+        }
+        if ($('#chkPlantillasCrear').is(':checked') == true) {
+            chkPlantillasCrear = "CrearPlantilla";
+        }
+        if ($('#chkPlantillasOpc').is(':checked') == true) {
+            chkPlantillasOpc = "OpcPlantilla";
+        }
+
+        if ($('#chkReportesListar').is(':checked') == true) {
+            chkReportesListar = "ListarReporte";
+        }
+        if ($('#chkReportesCrear').is(':checked') == true) {
+            chkReportesCrear = "CrearReporte";
+        }
+        if ($('#chkReportesOpc').is(':checked') == true) {
+            chkReportesOpc = "OpcReporte";
+        }
+
+        if ($('#chkBDListar').is(':checked') == true) {
+            chkBDListar = "ListarBD";
+        }
+        if ($('#chkBDCrear').is(':checked') == true) {
+            chkBDCrear = "CrearBD";
+        }
+        if ($('#chkBDOpc').is(':checked') == true) {
+            chkBDOpc = "OpcBD";
+        }
+
+        if ($('#chkUsuariosListar').is(':checked') == true) {
+            chkUsuariosListar = "ListarUsuario";
+        }
+        if ($('#chkusuariosCrear').is(':checked') == true) {
+            chkusuariosCrear = "CrearUsuario";
+        }
+        if ($('#chkUsuariosOpc').is(':checked') == true) {
+            chkUsuariosOpc = "OpcUsuario";
+        }
+
+        if ($('#chkEmpresasListar').is(':checked') == true) {
+            chkEmpresasListar = "ListarEmpresa";
+        }
+        if ($('#chkEmpresasCrear').is(':checked') == true) {
+            chkEmpresasCrear = "CrearEmpresa";
+        }
+        if ($('#chkEmpresasOpc').is(':checked') == true) {
+            chkEmpresasOpc = "OpcEmpresa";
+        }
+
+        let ModelPerfilModulo = {
+            acciones: [chkEmpresasListar, chkEmpresasCrear, chkEmpresasOpc,
+                        chkEncuestasListar, chkEncuestasCrear, chkEncuestasOpc,
+                        chkPlantillasListar, chkPlantillasCrear, chkPlantillasOpc,
+                        chkBDListar, chkBDCrear, chkBDOpc,
+                        chkReportesListar, chkReportesCrear, chkReportesOpc,
+                        chkUsuariosListar, chkusuariosCrear, chkUsuariosOpc]
+        };
+
+        var MLPerfilModulo = JSON.stringify(ModelPerfilModulo);
+
+        $.ajax({
+            type: 'POST',
+            data: MLPerfilModulo, traditional: true,//Aqui era usuarioRespuestas
+            url: '@Url.Action("EditPermisos", "Administrador")',
+            contentType: 'application/json; charset=utf-8',
+            success: function (Response) {
+                DisabledItems()
+                swal("Los cambios han sido guardados", "", "success");
+                if (Response == "success") {
+                    DisabledItems()
+                }
+                else if (Response == "error") {
+                    swal("No se han podido guardar los cambios", "", "error");
+                }
+
+            }
+        });
+    }
+</script>

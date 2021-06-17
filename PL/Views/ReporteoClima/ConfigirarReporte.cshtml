@@ -1,0 +1,85 @@
+﻿<!--Section RenderBody-->
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+
+            <!--#region Imagen Portada-->
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Elige una imagen de portada para el reporte, si no eliges una se colocara la imagen por default</label>
+                        <input @*ng-model="vm.ImagenPortada" ng-change="vm.getImage()"*@ onchange="document.getElementById('getImage').click();" type="file" name="file" hidden id="fileChosse" accept="jpg,png,jpeg" class="form-control" />
+                        <label class="form-control" for="fileChosse" id="nombreArchivo" ng-class="{ validFile: vm.portadaValida == true, invalidFile: vm.portadaValida == false, Error: !vm.ImagenPortada }"><i class="fas fa-file fa-lg text-default" aria-hidden="true"></i> Selecciona un archivo</label>
+                        <div class="col-xs-2">
+                            <a id="getImage" hidden ng-click="vm.getImage()" class="imagenShowInventario" title="Cargar imagen">
+                                <i class="fas fa-upload fa-2x text-default" aria-hidden="true"></i>
+                            </a>
+                            <img id="imagenPortada" width="50" height="50" class="imagenInventario" ng-src="vm.ImagenPortada" ng-model="vm.ImagenPortada" ng-show="vm.portadaValida == true" />
+                            <a ng-click="vm.prevImage()" class="imagenShowInventario" title="Previsualizar">
+                                <i class="fas fa-eye fa-2x text-default" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--#endregion Imagen Portada-->
+            <hr />            
+
+            <!--#region Visualizar Histórico-->
+            <div hidden class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Ver comparativo histórico</label>
+                        <!-- Rounded switch -->
+                        <label class="switch">
+                            <input type="checkbox" id="demo" ng-model="vm.verComparativoHistorico">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <!--#endregion Visualizar Histórico-->
+            <hr hidden />
+
+            <!--#region Opciones Enfoque-->
+            <div hidden class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Enfoques a mostrar</label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Enfoques Empresa</label>
+                        <input type="checkbox" class="" ng-model="vm.verEnfoqueEmpresa"/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Enfoques Área</label>
+                        <input type="checkbox" class="" ng-model="vm.verEnfoqueArea" />
+                    </div>
+                </div>
+            </div>
+            <!--#endregion Opciones Enfoque-->
+            @Html.Partial("~/Views/ReporteoClima/Loading.cshtml")
+            @Html.Partial("~/Views/ReporteoClima/ModalImagen.cshtml")
+        </div>
+    </div>
+</div>
+<!--end Section Render Body-->
+<style>
+    .validFile {
+        border: solid 0.5px green !important;
+    }
+
+    .invalidFile {
+        background-color: #ffdddd !important;
+    }
+
+    #nombreArchivo {
+        border: solid 0.5px black;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+
+    .imagenShowInventario {
+        cursor: pointer;
+    }
+</style>

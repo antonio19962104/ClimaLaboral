@@ -1,0 +1,150 @@
+﻿@using PL.Extensions
+@model ML.Respuestas
+    
+
+@using (Html.BeginCollectionItem("NewAnswer", Model.IdPadreObjeto))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+ 
+
+
+        switch (Model.Pregunta.TipoControl.IdTipoControl)
+        {
+        case 1:
+        <div class="col-sm-12">
+            <div class="card-question">
+                @Html.EditorFor(model => model.Respuesta, new { htmlAttributes = new { @class = "form-control", @Value = "" } })
+                @Html.ValidationMessageFor(model => model.Respuesta, "", new { @class = "text-danger", @Value = "" })
+            </div>
+        </div>
+        break;
+        case 2:
+        <div class="col-sm-12">
+            <div class="card-question">
+                @Html.EditorFor(model => model.Respuesta, new { htmlAttributes = new { @class = "form-control", @Value = "" } })
+                @Html.ValidationMessageFor(model => model.Respuesta, "", new { @class = "text-danger", @Value = "" })
+            </div>
+        </div>
+        break;
+        case 3:
+           
+        <div class="col-6">
+            <div class="card-question">
+                <div id="@Model.IdPadreObjeto" class="custom-control custom-radio custom-control-inline">
+                    @if (!Model.Selected)
+                    {
+                        <input type="radio" name="@Model.IdPadreObjeto.Replace("[", "").Replace("]", "")" id="@Model.IdPadreObjeto" value="@Model.IdRespuesta">
+                    }
+                    else
+                    {
+                        <input type="radio" name="@Model.IdPadreObjeto.Replace("[", "").Replace("]", "")" id="@Model.IdPadreObjeto" value="@Model.IdRespuesta" checked>
+                    }
+
+                    @Model.Respuesta <br />
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.Selected, new { htmlAttributes = new { @id = Model.IdRespuesta, @value = false } })
+                    </div>
+                        @*<input type="checkbox" id=@(Model.IdRespuesta)/>*@
+                    
+                </div>
+            </div>
+        </div>
+        @*<script type="text/javascript">
+            $(document).ready(function () {
+                $('input[name=@Model.IdPadreObjeto.Replace("[", "").Replace("]", "")]').click(function () {
+                    var idrespuesta = $('input:radio[name=@Model.IdPadreObjeto.Replace("[", "").Replace("]", "")]:checked').val();
+                    $('#' + idrespuesta).attr("checked", true);
+                    $('#' + idrespuesta).val(true);
+                });
+            });
+        </script>*@
+        break;
+        case 4:
+        <div class="col-6">
+            <div class="card-question">
+                <div class="custom-control custom-checkbox">
+                    @Html.EditorFor(model => model.Selected, new { @class = "custom-control-input" })
+                    <label class="custom-control-label" for="customCheck1">@Model.Respuesta</label>
+                </div>
+            </div>
+        </div>
+        break;
+        case 5:
+
+        break;
+        case 6:
+        <div class="row">
+            <div class="col-3">
+                <div class="cc-selector">
+                    <input name="credit-card" id="badface" type="radio" value="badface">
+                    <label class="face-value badface" for="badface"></label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="cc-selector">
+                    <input name="credit-card" id="regularface" type="radio" value="regularface">
+                    <label class="face-value regularface" for="regularface"></label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="cc-selector">
+                    <input name="credit-card" id="happyface" type="radio" value="happyface">
+                    <label class="face-value happyface" for="happyface"></label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="cc-selector">
+                    <input name="credit-card" id="happierface" type="radio" value="happierface">
+                    <label class="face-value happierface" for="happierface"></label>
+                </div>
+            </div>
+        </div>
+        break;
+        case 7:
+        <div class="row align-bottom-vertically mb-2">
+            <div align="left" class="col-4">
+                <label class="text-danger label-range" for="customRange1"><strong>Definitivamente no</strong></label>
+            </div>
+            <div align="center" class="col-4">
+                <input disabled="" class="form-control textInput col-sm-6" id="textInput" type="text" value="">
+            </div>
+            <div align="right" class="col-4">
+                <label class="text-success label-range" for="customRange1"><strong>Totalmente</strong></label>
+            </div>
+        </div>
+        <input class="custom-range" id="customRange1" onchange="updateTextInput(this.value);" type="range">
+        <script type="text/javascript">
+            function updateTextInput(val) {
+                document.getElementById('textInput').value = val;
+            }
+        </script>
+        break;
+
+        }
+
+
+
+    @*<div class="form-horizontal">       
+       
+      
+        <div class="form-group">
+           
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Respuesta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Respuesta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">          
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Selected)
+                    @Html.ValidationMessageFor(model => model.Selected, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>            
+    </div>*@
+}
+

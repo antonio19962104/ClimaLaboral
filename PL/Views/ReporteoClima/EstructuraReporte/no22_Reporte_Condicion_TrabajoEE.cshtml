@@ -1,0 +1,55 @@
+﻿<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <p class="mb-n1">Resultado General</p>
+        <h2 class="robotothin mb-2 mt-n1">Reporte por Condición de Trabajo Enfoque Empresa <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="px-4">
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-trabajar">
+                                <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
+                                    <div class="col px-0 px-sm-1" ng-repeat="item in vm.ComparativoCondicionTrabajoEE">
+                                        <center>
+                                            <p hidden>{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
+                                            <img @*src="~/img/ReporteoClima/sol-icono.svg"*@ ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>
+                                            <div class="bar-clasificacion">
+                                                <div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;">
+                                                </div>
+                                                <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">{{  vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
+                                                <p class="label-top-graphic-blue2">{{ item.HC }}</p>
+                                                <div class="bar-progress4" style="height: {{ item.HC }}px;">
+                                                </div>
+                                            </div>
+                                            <p class="text-graph">{{ item.Entidad }}</p>
+                                        </center>
+                                    </div>
+
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+
+                        </div><!--.row-->
+                        
+                    </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <div class="row" style="width: 100%;">
+                            <div class="col-7 col-sm-7 col-md-7"><img src="/img/ReporteoClima/indicadores.png" class="img-fluid"> </div>
+                            <div class="col-5 col-sm-5 col-md-5">
+                                <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">HC</div>
+                                <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ACTUAL</div>
+                                <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="clearfix my-5">
+    </div><!--.container-->
+
+</div><!--.content-wrap-->

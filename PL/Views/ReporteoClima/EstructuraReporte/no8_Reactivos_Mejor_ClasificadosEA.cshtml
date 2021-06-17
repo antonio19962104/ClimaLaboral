@@ -1,0 +1,102 @@
+﻿<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <h2 class="robotothin mb-2 mt-n1">LOS 5 MEJORES ENFOQUE ÁREA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card mb-4 mb-md-0 pr-3 pl-3">
+            <div class="card-block mt-3 mb-3">
+                <div class="row mb-5">
+                    <div class="col-xl" ng-repeat="item in vm.MejoresReactivosEA track by $index">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(item.Porcentaje) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2">{{ item.Pregunta }}</p>
+                                </div>
+                                <div class="contenido-mejores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ item.Porcentaje }}%</h3>
+                                    <center ng-hide="!vm.hasHistorico"><p class="{{ vm.getDiffHistoricoEA(item.IdPregunta, item.Porcentaje) >= 0 ? 'porcentaje-mejores' : 'porcentaje-peores' }}">{{ vm.getDiffHistoricoEA(item.IdPregunta, item.Porcentaje) }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <!--<div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MejoresReactivosEA[1].Porcentaje) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2">{{ vm.MejoresReactivosEA[1].Pregunta }}</p>
+                                </div>
+                                <div class="contenido-mejores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MejoresReactivosEA[1].Porcentaje }}%</h3>
+                                    <center><p class="porcentaje-mejores">{{ vm.getDiffHistoricoEA(vm.MejoresReactivosEA[1].IdPregunta, vm.MejoresReactivosEA[1].Porcentaje) }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MejoresReactivosEA[2].Porcentaje) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2">{{ vm.MejoresReactivosEA[2].Pregunta }}</p>
+                                </div>
+                                <div class="contenido-mejores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MejoresReactivosEA[2].Porcentaje }}%</h3>
+                                    <center><p class="porcentaje-mejores">{{ vm.getDiffHistoricoEA(vm.MejoresReactivosEA[2].IdPregunta, vm.MejoresReactivosEA[2].Porcentaje) }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MejoresReactivosEA[3].Porcentaje) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2">{{ vm.MejoresReactivosEA[3].Pregunta }}</p>
+                                </div>
+                                <div class="contenido-mejores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MejoresReactivosEA[3].Porcentaje }}%</h3>
+                                    <center><p class="porcentaje-mejores">{{ vm.getDiffHistoricoEA(vm.MejoresReactivosEA[3].IdPregunta, vm.MejoresReactivosEA[3].Porcentaje) }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MejoresReactivosEA[4].Porcentaje) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2">{{ vm.MejoresReactivosEA[4].Pregunta }}</p>
+                                </div>
+                                <div class="contenido-mejores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MejoresReactivosEA[4].Porcentaje }}%</h3>
+                                    <center><p class="porcentaje-mejores">{{ vm.getDiffHistoricoEA(vm.MejoresReactivosEA[4].IdPregunta, vm.MejoresReactivosEA[4].Porcentaje) }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="d-flex justify-content-center">
+                    <img src="~/img/ReporteoClima/indicadores.png" class="img-fluid">
+                </div>
+            </div><!--.card-block-->
+        </div><!--.card-->
+        <hr class="clearfix my-5">
+
+    </div><!--.container-->
+
+</div><!--.content-wrap-->

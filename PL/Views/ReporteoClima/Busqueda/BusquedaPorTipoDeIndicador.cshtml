@@ -1,0 +1,34 @@
+﻿<!--#region Reporteo por Tipo de Indicador-->
+<div class="col-lg-12">
+    <div class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Criterio para el reporte por indicador</label>
+            <select ng-model="vm.tipoIndicadorSeleccionado" class="form-control" ng-change="vm.changedValueTipoIndicador(vm.tipoIndicadorSeleccionado)"
+                    ng-options="indicador.Nombre for indicador in vm.listTipoIndicador track by indicador.Id"></select>
+        </div>
+    </div>
+    <!--
+    <div class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12" ng-show="vm.tipoIndicadorSeleccionado.Id == 1">
+            <label class="control-label">Indicadores generales</label>
+            <select ng-model="vm.indicadorGeneral" class="form-control" ng-change="vm.changedValueIndicadorGeneral(vm.indicadorGeneral)"
+                    ng-options="indicador.Nombre for indicador in vm.indicadoresGenerales track by indicador.Id"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12" ng-show="vm.tipoIndicadorSeleccionado.Id == 2">
+            <label class="control-label">Indicadores estandar</label>
+            <select ng-model="vm.indicadorEstandar" class="form-control" ng-change="vm.changedValueIndicadorEstandar(vm.indicadorEstandar)"
+                    ng-options="indicador.Nombre for indicador in vm.indicadoresEstandar track by indicador.Id"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12" ng-show="vm.tipoIndicadorSeleccionado.Id == 3">
+            <label class="control-label">Indicadores personalizados</label>
+            <select ng-model="vm.indicadorPersonalizado" class="form-control" ng-change="vm.changedValueIndicadorPersonalizado(vm.indicadorPersonalizado)"
+                    ng-options="indicador.Nombre for indicador in vm.indicadoresPersonalizados track by indicador.Id"></select>
+        </div>
+    </div>-->
+</div>
+<!--#endregion Reporteo por Tipo de Indicador-->
+<hr />

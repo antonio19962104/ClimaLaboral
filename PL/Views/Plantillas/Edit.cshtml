@@ -1,0 +1,265 @@
+﻿@model ML.Plantillas
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+@section Styles
+{
+<style type="text/css">
+    .swal-title {
+        font-size: 25px !important;
+    }
+    .swal-button {
+        font-size: 20px !important;
+    }
+</style>
+    <link href="~/css/swiper.min.css" rel="stylesheet" />
+    <link href="~/css/summernote.min.css" rel="stylesheet"/>
+}
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <img class="img-fluid" src="../img/icon-template.png"> <h1 class="title-page-survey">Plantillas / <span>Editar</span></h1>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+@using (Html.BeginForm("Edit","Plantillas",FormMethod.Post))
+{  
+    @Html.AntiForgeryToken()
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="true">Plantilla</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Header</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="conf-tab" data-toggle="tab" href="#conf" role="tab" aria-controls="conf" aria-selected="false">Footer</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tabSurveyContent">
+                        <div class="tab-pane fade show active" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                            <div class="section-survey shadow-sm animated fadeInUp">
+                                <div class="body-survey">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.Nombre, new { @required = "required", @class = "form-control", placeholder = "Nombre de la Plantilla", @autofocus = "true", })
+                                            </div>
+                                        </div>
+                                        @*<div class="row">*@
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label>Selecciona una Opción ya creada</label>
+                                                <div class="input-group trichzone">
+
+                                                    @for (int i = 0; i < Model.DetalleList.Count(); i++)
+                                                    {
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            @Html.RadioButtonFor(model => Model.DetallePlantilla.IdDetallePlantilla, Model.DetalleList[i].IdDetallePlantilla, new { @checked = false, @style = "width:auto;background:none;border:none;margin-right:20px;" })
+                                                            @Html.Raw(Model.DetalleList[i].ImagenIco)
+                                                        </div>
+                                                    }
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!--</div>-->
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="summernote">Contenido HTML *Al insertar código HTML, debes especificar donde es el contenido, ejemplo: &lt;div&gt; Contenido &lt;/div&gt;</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.DetallePlantilla.CodeHTML, new {rows = "20", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor" }).
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="summernote">Contenido Icono</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.DetallePlantilla.ImagenIco, new {rows = "20", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor", })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div>
+                                    </div><!--.row-->
+                                </div><!--.body-survey-->
+                            </div><!--.section-survey-->
+                        </div><!--.tab-pane--> 
+                    @Html.Hidden("IdPlantilla", Model.IdPlantilla)                   
+                        <div class="tab-pane fade" id="manag" role="tabpanel" aria-labelledby="manag-tab">
+                            <div class="section-survey shadow-sm animated fadeInUp">
+                                <div class="body-survey">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label>Selecciona una Opción ya creada</label>
+                                                <div class="input-group trichzone">
+
+                                                    @for (int r = 0; r < Model.HeaderList.Count(); r++)
+                                                    {
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            @Html.RadioButtonFor(model => Model.HeaderPlantilla.IdHeaderPlantilla, Model.HeaderList[r].IdHeaderPlantilla, new { @checked = false, @style = "width:auto;background:none;border:none;margin-right:20px;" })
+                                                            @Html.Raw(@Model.HeaderList[r].LogoIco)
+
+                                                        </div>
+                                                    }
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="summernote">Contenido HTML</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.HeaderPlantilla.CodeHTML, new { rows = "20", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
+                                            <div class="form-group">
+                                                <label for="summernote">Logo HTML</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.HeaderPlantilla.LogoIco, new { rows = "20", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                            <div class="form-group">
+                                                <label for="summernote">Alineación:</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.DropDownListFor(model => model.HeaderPlantilla.LogoAlinea.IdAling, new SelectList(Model.aling, "IdAling", "Nombre"), "Selecciona", new { @class = "form-control", @id = "AlingLogo" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
+                                            <div class="form-group">
+                                                <label for="summernote">Imagen de Fondo HTML</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.HeaderPlantilla.ImagenFondo, new { rows = "20", style = "resize:none;width:100%;",  @class = "form-control input-lg textarea-editor" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                            <div class="form-group">
+                                                <label for="summernote">Alineación:</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.DropDownListFor(model => model.HeaderPlantilla.ImagenFondoAlinea.IdAling, new SelectList(Model.aling, "IdAling", "Nombre"), "Selecciona", new { @class = "form-control", @id = "AlingImgBack" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                    </div><!--.row-->
+                                </div><!--.body-survey-->
+                            </div><!--.section-survey-->
+                        </div><!--.tab-pane-->
+                        <div class="tab-pane fade" id="conf" role="tabpanel" aria-labelledby="conf-tab">
+                            <div class="section-survey shadow-sm animated fadeInUp">
+                                <div class="body-survey">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label>Selecciona una Opción ya creada</label>
+                                                <div class="input-group trichzone">
+
+                                                    @for (int i = 0; i < Model.FooterList.Count(); i++)
+                                                    {
+                                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                            @Html.RadioButtonFor(model => Model.FooterPlantilla.IdFooterPlantilla, Model.FooterList[i].IdFooterPlantilla, new { @checked = false, @style = "width:auto;background:none;border:none;margin-right:20px;" })
+                                                            @Html.Raw(Model.FooterList[i].ImagenFondo)
+                                                        </div>
+                                                    }
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="summernote">Contenido HTML</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.FooterPlantilla.CodeHTML, new { rows = "20", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
+                                            <div class="form-group">
+                                                <label for="summernote">Logo HTML</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.FooterPlantilla.LogoIco, new { rows = "20", style = "resize:none;width:100%;",  @class = "form-control input-lg textarea-editor" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                            <div class="form-group">
+                                                <label for="summernote">Alineación:</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.DropDownListFor(model => model.FooterPlantilla.LogoAlinea.IdAling, new SelectList(Model.aling, "IdAling", "Nombre"), "Selecciona", new { @class = "form-control", @id = "AlingLogoFooter" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
+                                            <div class="form-group">
+                                                <label for="summernote">Imagen de Fondo HTML</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.TextAreaFor(model => model.FooterPlantilla.ImagenFondo, new { rows = "20", style = "resize:none;width:100%;",  @class = "form-control input-lg textarea-editor" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                        <div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
+                                            <div class="form-group">
+                                                <label for="summernote">Alineación:</label>
+                                                <div class="input-group trichzone">
+                                                    @Html.DropDownListFor(model => model.FooterPlantilla.ImagenFondoAlinea.IdAling, new SelectList(Model.aling, "IdAling", "Nombre"), "Selecciona", new { @class = "form-control", @id = "AlingImgBackFooter" })
+                                                </div>
+                                            </div><!--.form-group-->
+                                        </div><!--.col-md-12-->
+                                    </div><!--.row-->
+                                </div><!--.body-survey-->
+                            </div><!--.section-survey-->
+                        </div><!--.tab-pane-->
+                    </div><!--.tab-content-->
+                </div><!--.col-lg-8-->
+            </div><!--.row-->
+            <div class="row">
+                <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                    <div class="col-md-5 text-right">
+                        <input type="submit" value="Editar" onclick="return validateData();" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Regresar al listado", "Plantilla")
+</div>
+@section Scripts
+{
+<script type="text/javascript">
+
+    function validateData() {
+
+        if ($("#Nombre").val() == "") {
+            swal("Escriba un Nombre de Plantilla, Por Favor. !", "", "error");
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script> 
+    <script src="~/scripts/summernote/bootstrap.js" type="text/javascript"></script>
+    <script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+    <script src="~/css/sweetalert.min.js"></script> 
+}

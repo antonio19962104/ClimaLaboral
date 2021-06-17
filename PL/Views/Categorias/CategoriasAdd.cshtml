@@ -1,0 +1,18 @@
+﻿@using PL.Extensions
+@model ML.Categoria
+    @using (Html.BeginCollectionItem("NewCat", Model.IdPadreObjeto.ToString()))
+    {
+        @Html.HiddenFor(x => x.IdCategoria, new { @class="catAdd"})
+        @*<table id="@(Model.IdPadreObjeto +"_"+Model.IdCategoria+"_Bloque")">*@
+            <div class="@("row mt-2 mb-2 bloquePregunta"+Model.IdPadreObjeto)">
+                <div class="col-9">@(Model.Nombre)</div>
+                <div  class="col-2">
+                    @Html.TextBoxFor(x => x.Valoracion, new {@class= "form-control p-0" })
+                 </div>                
+                <div class="col-1">
+                    <div class="form-text ml-2 dcat" name="dcat"  style ="font-weight:bold;cursor:pointer;" id="@(Model.IdPadreObjeto)">X</div>
+                </div>
+            </div>
+        @*</table>*@
+       
+    }

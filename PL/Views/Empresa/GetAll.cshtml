@@ -1,0 +1,706 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+}
+
+
+@*<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img class="img-fluid" src="~/img/icon-enterprises.png" /><h1 class="title-page-survey">Empresas / <span>Listado</span></h1>
+    </div>
+</section>*@
+
+@section H1
+    {
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-enterprises.png"> <h1 class="title-page-survey">Empresas / <span>Listado</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+    }
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-11">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        
+
+                        @{
+                            ViewBag.Permisos = Session["Permisos"];
+
+                            foreach (ML.PerfilModulo item in ViewBag.Permisos)
+                            {
+                                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "CrearEmpresa")
+                                {
+                                    @*<div class="text-center">
+                                        <a href="" class="btn btn-secondary btn-action btn-sm" onclick="GetCategorias()" data-toggle="modal" data-target="#modalAdd">
+                                            Agregar Empresa<i class="fas fa-plus-square ml-1"></i>
+                                        </a>
+                                    </div>
+                                    <br />*@
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        }
+                       
+
+
+                        <table id="tableEmpresa" class="table table-hover table-responsive">
+                            <caption>Lista de empresas</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        <strong>LogoEmpresa</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Color</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Nombre_Empresa</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Tipo_Empresa</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Unidad de Neocio a la que pertenece</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Estatus</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Editar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Eliminar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Acciones</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Company company in Model.Objects)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="image" name="name" src="@company.LogoEmpresa" style="width:75px; height:75px;" />
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="text" disabled name="name" style="width:75px; height:75px; background-color:@company.Color" />
+                                        </td>
+                                        <td class="text-center">
+                                            @company.CompanyName
+                                        </td>
+                                        <td class="text-center">
+                                            @company.TipoEmpresa
+                                        </td>
+                                        <td class="text-center">
+                                            @company.CompanyCategoria.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            @if (company.TipoEstatus.IdEstatus == 1)
+                                            {
+                                                <a href="@Url.Action("UpdateEstatusCompany", "Empresa", new { CompanyId = company.CompanyId, IdentificadorEstatus = company.TipoEstatus.IdEstatus } )">
+                                                    <button value="@company.TipoEstatus.Descripcion" title="Cambia el estatus de la empresa a Desactivado" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-check"></i> Activo</button>
+                                                </a>
+                                            }
+                                            else if (company.TipoEstatus.IdEstatus == 2)
+                                            {
+                                                <a href="@Url.Action("UpdateEstatusCompany", "Empresa", new { CompanyId = company.CompanyId, IdentificadorEstatus = company.TipoEstatus.IdEstatus } )" title="">
+                                                    <button value="@company.TipoEstatus.Descripcion" title="Cambia el estatus de la empresa a Activo" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-ban"></i> Desactivado</button>
+                                                </a>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="text-center buttonEditWrapper">
+                                                    <button value="@company.CompanyId" onclick="GetUpdateEmpresa($(this).val())" class="btn btn-secondary btn-action buttonEdit" data-toggle="modal" data-target="#modalEdit">
+                                                        Edit<i class="fas fa-pencil-square-o ml-1"></i>
+                                                    </button>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <button value="@company.CompanyId" onclick="DeleteCompany($(this).val())" type="button" class="btn btn-secondary btn-action"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("AdministrarAreaDepto", "Empresa", new { CompanyId = company.CompanyId } )" title="Consulta, edita y agrega nuevas Áreas para esta empresa">
+                                                <button type="button" class="btn btn-secondary btn-action"><i class="fas fa-list"></i> Administrar áreas</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@*Seccion Modal*@
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+
+
+        <div class="modal fade addNewInputs" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAdd"
+             aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Agrega una nueva empresa</h4>
+                        <button type="button" class="close text-primary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre de la nueva empresa:</label>
+                            <input placeholder="Ingresa el nombre de la empresa" type="text" id="inputName" class="form-control validate NombreEmpresa">
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Unidad de Negocio a la que pertenece</label>
+                            @*<select class="form-control" id="DDLUNegocio">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">AUTOFINANCIAMIENTO</option>
+                                <option value="2">AUTOMOTRIZ</option>
+                                <option value="3">CORPORATIVO</option>
+                                <option value="4">FINANCIERA</option>
+                                <option value="5">INTERNACIONAL</option>
+                                <option value="6">MANUFACTURA</option>
+                                <option value="7">OTROS NEGOCIOS</option>
+                                <option value="8">PRESIDENCIA</option>
+                                <option value="9">TURISMO</option>
+                            </select>*@
+@Html.DropDownList("CompanyCategoria", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @class = "CompanyCategoria form-control", @id = "DDLUNegocioForAgregar" })
+@*@Html.DropDownListFor(model => model.IdCompanyCategoria, new SelectList(Model.ListCompanyCategoria, "IdCompanyCategoria", "Descripcion"), "Selecciona una respuesta  ", new {  })*@
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus de la Empresa</label>
+                            <select class="form-control" id="DDLEstatus">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Logo de la Empresa</label><br />
+                            <input onchange="encodeImageFileAsURL2(this)" id="AddLogos" type="file" name="logo" value="" accept="image/*" /><br />
+                            <input type="image" name="name" id="AddLogo" src="" style="width:75px; height:75px;" />
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Color de la Empresa</label><br />
+                            <input id="AddColor" class="color-picker" value="" data-huebee />
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                        <button onclick="AddEmpresa()" class="btn btn-outline-primary btn-block buttonAdd" >
+                            Agregar Empresa
+                            <i class="fas fa-plus ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar Empresa</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        
+                        <div class="md-form mb-5" id="mergeValidacion">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre de la nueva empresa:</label>
+                            <input onkeyup="validaDuplicadoEmpresa();" placeholder="Ingresa el nombre de la empresa" type="text" id="inputName" class="form-control validate NombreEmpresaUpdate">
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Unidad de Negocio a la que pertenece</label>
+                            @*<select class="form-control" id="DDLUNegocioUpdate">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">AUTOFINANCIAMIENTO</option>
+                                <option value="2">AUTOMOTRIZ</option>
+                                <option value="3">CORPORATIVO</option>
+                                <option value="4">FINANCIERA</option>
+                                <option value="5">INTERNACIONAL</option>
+                                <option value="6">MANUFACTURA</option>
+                                <option value="7">OTROS NEGOCIOS</option>
+                                <option value="8">PRESIDENCIA</option>
+                                <option value="9">TURISMO</option>
+                            </select>*@
+                            @Html.DropDownList("CompanyCategoria", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @class = "CompanyCategoria form-control", @id= "DDLUNegocioUpdate" })
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus de la Empresa</label>
+                            <select class="form-control" id="DDLEstatusUpdate">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                            </select>
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Logo de la Empresa</label><br />
+                            <input onchange="encodeImageFileAsURL(this)" id="logoEmpresa" type="file" name="logo" value="" accept="image/*" /><br />
+                            <input type="image" name="name" id="updateLogo" src="" style="width:75px; height:75px;" />
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Color de la Empresa</label><br />
+                            @*<input id="UpdateColor" class="color-picker" value="" data-huebee />*@
+                            <input type="color" id="UpdateColor" name="favcolor" value="#ff0000" style="width:50%;">
+                        </div>
+
+                            <label data-error="wrong" data-success="right" for="inputName">CompanyId: </label>
+                            <input placeholder="" type="text" id="CompanyId" class="form-control validate NombreEmpresaUpdate" disabled>
+
+
+                            <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                                <button onclick="PostUpdateEmpresa()" class="btn btn-outline-primary btn-block buttonAdd">
+                                    Guardar cambios
+                                    <i class="fas fa-pencil-square-o ml-1"></i>
+                                </button>
+                            </div>
+
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+</style>
+@*Fin seccion modal*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+
+<script src="~/scripts/jquery-1.8.3.min.js"></script>
+<script>
+    var listEmpresas = [];
+    var listAreas = [];
+    function validaDuplicadoEmpresa() {
+        var nombreNewEmpresa = $('.NombreEmpresaUpdate').val();
+        nombreNewEmpresa = nombreNewEmpresa.toUpperCase();
+        //Revisar en la lista que no exista
+        var existe = false;
+
+        for (var i = 0; i < listEmpresas.length; i++) {
+            if (listEmpresas[i] == nombreNewEmpresa) {
+                existe = true;
+                $('#msg').remove();
+                $('#mergeValidacion').append('<span id="msg" style="color:red">Ya existe una empresa con este nombre</span>');
+                $('.buttonAdd').prop('disabled', true);
+            }
+        }
+
+        if (existe == false) {
+            $('#msg').remove();
+            $('.buttonAdd').prop('disabled', false);
+        }
+
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        $('#tableEmpresa').DataTable();
+
+        //Listar todas las Empresas y areas para validar duplicado
+        $.ajax({
+            url: '@Url.Action("GetAllEmpresas")',
+            type: 'GET',
+            data: 'company',
+            complete: function (dataeMPRESA) {
+                for (var i = 0; i < dataeMPRESA.responseJSON.length; i++) {
+                    var nameEmpresa = dataeMPRESA.responseJSON[i].CompanyName.toUpperCase();
+                    listEmpresas.push(nameEmpresa);
+                }
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("GetAllAreas")',
+            type: 'GET',
+            data: 'company',
+            complete: function (dataArea) {
+                for (var i = 0; i < dataArea.responseJSON.length; i++) {
+                    var nameArea = dataArea.responseJSON[i].Nombre.toUpperCase();
+                    listAreas.push(nameArea);
+                }
+            }
+        });
+
+    });
+
+    function encodeImageFileAsURL(element) {
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            console.log(reader.result)
+            $('#updateLogo').prop('src', reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function encodeImageFileAsURL2(element) {
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            console.log(reader.result)
+            $('#AddLogo').prop('src', reader.result);
+        }
+        reader.readAsDataURL(file);
+    }
+
+    function AddEmpresa() {
+
+        var nombre = $('.NombreEmpresa').val();
+        var Categoria = $('#DDLUNegocioForAgregar').val();
+        var Estatus = $('#DDLEstatus').val();
+
+        var color = $('#AddColor').val();
+        var imagenB64 = $('#AddLogo').prop('src');
+
+        if (nombre == "" || Categoria == 0 || Estatus == 0 || color == null || color == "" || imagenB64 == null || imagenB64 == "" ) {
+            swal({
+                title: "Debes llenar todos los campos para poder registrar la empresa",
+                text: "",
+                type: "error",
+                icon: "error",
+            });
+        }
+        else {
+
+            let ModelCompany = {
+                companyName: nombre,
+                companyCategoria: { idCompanyCategoria: Categoria },
+                tipoEstatus: { idEstatus: Estatus },
+                color: color,
+                LogoEmpresa: imagenB64
+            }
+
+            var data = JSON.stringify(ModelCompany);
+
+
+            $.ajax({
+
+                type: 'POST',
+                data: data, traditional: true,
+                url: '@Url.Action("Add", "Empresa")',
+                contentType: 'application/json; charset=utf-8',
+                complete: function (Response) {
+                    $('#modalAdd').css('display', 'none');
+                    if (Response.responseJSON == "success") {
+                        swal({
+                            title: "La empresa se registró correctamente",
+                            text: "",
+                            type: "success",
+                            icon: "success",
+                        }).then(function () {
+                            window.location = "GetAll";
+                        });
+                    }
+                    else {
+                        swal({
+                            title: "Ocurrió un error al intentar registrar la empresa",
+                            text: "",
+                            type: "error",
+                            icon: "error",
+                        }).then(function () {
+                            window.location = "GetAll";
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    function GetUpdateEmpresa(CompanyIdentificador) {
+        $('#modalEdit').css('display', 'block');
+        GetCategorias();
+        var companyIde = CompanyIdentificador;
+
+        let ModelCompany = {
+            companyId: companyIde
+        }
+        //Ajax request for get Data where CompanyId = parameter CompanyId
+        $.ajax({
+
+            type: 'GET',
+            data: ModelCompany, traditional: true,
+            url: '@Url.Action("GetCompanyById", "Empresa")',
+            contentType: 'application/json; charset=utf-8',
+            complete: function (Response) {
+
+                if (Response.responseJSON != "error") {
+
+                    $('#modalEdit').css('display', 'block');
+                    $('input.NombreEmpresaUpdate').val(Response.responseJSON.CompanyName);
+                    $('#DDLUNegocioUpdate').val(Response.responseJSON.CompanyCategoria.IdCompanyCategoria);
+                    $('#DDLEstatusUpdate').val(Response.responseJSON.TipoEstatus.IdEstatus);
+                    $('#CompanyId').val(Response.responseJSON.CompanyId);
+
+                    $('#updateLogo').prop('src', Response.responseJSON.LogoEmpresa);
+                    $('#UpdateColor').val(Response.responseJSON.Color);
+                   var rgb = hexToRgb(Response.responseJSON.Color);
+                    $('#UpdateColor').prop('background-color',  rgb);
+
+
+
+                }
+                else {
+                    swal({
+                        title: "Ocurrió un error en la peticion Ajax",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+
+            }
+        });
+
+        //Fill controlls with data received
+    }
+
+    function PostUpdateEmpresa() {
+        var companyIdForUpadate = $('#CompanyId').val();
+
+        var newNombre = $('.NombreEmpresaUpdate').val();
+        var newCategoria = $('#DDLUNegocioUpdate').val();
+        var newEstatus = $('#DDLEstatusUpdate').val();
+
+        var color = $('#UpdateColor').val();
+
+        var imagenB64 = $('#updateLogo').prop('src');
+
+        if (newNombre == "" || newCategoria == 0 || newCategoria == null || newEstatus == 0) {
+            swal({
+                title: "Debes llenar todos los campos para poder registrar",
+                text: "",
+                type: "error",
+                icon: "error",
+            });
+        }
+        else {
+            //Ajax function pasando un modelo
+
+            let ModelCompany = {
+                companyId: companyIdForUpadate,
+                companyName: newNombre,
+                companyCategoria: { idCompanyCategoria: newCategoria },
+                tipoEstatus: { idEstatus: newEstatus },
+                color: color,
+                LogoEmpresa: imagenB64
+            }
+
+            var data = JSON.stringify(ModelCompany);
+
+            $.ajax({
+
+                type: 'POST',
+                data: data, traditional: true,
+                url: '@Url.Action("Update", "Empresa")',
+                contentType: 'application/json; charset=utf-8',
+                complete: function (Response) {
+
+                    if (Response.responseJSON == "success") {
+                        swal({
+                            title: "La empresa se actualizó correctamente",
+                            text: "",
+                            type: "success",
+                            icon: "success",
+                        }).then(function () {
+                            window.location = "GetAll";
+                        });
+                    }
+                    else {
+                        swal({
+                            title: "Ocurrio un error al intentar actualizar",
+                            text: "",
+                            type: "error",
+                            icon: "error",
+                        });
+                    }
+                }
+            });
+
+
+        }
+    }
+
+    function DeleteCompany(IdCompany) {
+
+        let ModelCompany = {
+            companyId: IdCompany
+        };
+
+        var data = JSON.stringify(ModelCompany);
+
+        $.ajax({
+
+            type: 'POST',
+            data: data, traditional: true,
+            url: '@Url.Action("DeleteEmpresa", "Empresa")',
+            contentType: 'application/json; charset=utf-8',
+            complete: function (Response) {
+
+                if (Response.responseJSON == "success") {
+                    swal({
+                        title: "La Empresa se ha eliminado con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal({
+                        title: "Ocurrio un error al intentar eliminar la Empresa",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+            }
+        });
+    }
+
+</script>
+<script type="text/javascript">
+    function GetCategorias() {
+        //CompanyCategoria
+        $('.CompanyCategoria').empty();
+        $.ajax({
+
+            type: 'POST',
+
+            url: '@Url.Action("GetUNegocio", "Empresa")',
+
+            dataType: 'json',
+
+            success: function (city) {
+
+                if (city != null) {
+
+                    $.each(city, function (i, city) {
+
+                        $(".CompanyCategoria").append('<option value="'
+
+                                                   + city.Value + '">'
+
+                                                   + city.Text + '</option>');
+                    });
+
+                }
+            }
+        });
+    }
+</script>
+<link rel="stylesheet" href="https://unpkg.com/huebee@latest/dist/huebee.min.css" />
+<script src="/path/to/cdn/jquery.slim.min.js"></script>
+<script src="https://unpkg.com/huebee@latest/dist/huebee.pkgd.min.js"></script>
+<script>
+    var colorPicker = new Huebee( '.color-picker', {
+        customColors: [ '#efefef' ]
+    });
+    var colorPicker = new Huebee('.color-picker', {
+
+        // the number of hues
+        hues: 12,
+
+        // the first hue
+        hue0: 0,
+
+        // the number of shades
+        shades: 5,
+
+        // the number of sets of saturation
+        saturations: 3,
+
+        // or "hex", "hsl"
+        notation: 'shortHex',
+
+        // applies color to text
+        setText: true,
+
+        // applies color to background
+        setBGColor: true,
+
+        // shows the color picker on init
+        staticOpen: false,
+
+        // additional CSS class(es)
+        className: ''
+
+    });
+    colorPicker.on('change', function (color) {
+        // do something
+    });
+
+    // returns the color
+    hueb.color
+
+    // returns the hue
+    hueb.hue
+
+    // returns the saturation
+    hueb.sat
+
+    // returns the luminance
+    hueb.lum
+
+    // determines if the color is light
+    hueb.isLight
+</script>
+
+<script>
+    function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+</script>

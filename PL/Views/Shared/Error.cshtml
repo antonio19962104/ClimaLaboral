@@ -1,0 +1,80 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+@*<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>*@
+<!DOCTYPE html>
+<html lang="es-es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/cssAdmin")
+    <script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
+        var elem = document.getElementById("urlLogn").href = redirect;
+        $(document).ready(function () {
+            swal.fire("Debes iniciar sesion para acceder al portal", "", "info").then(function () {
+                window.location.href = redirect;
+            });
+        })
+    </script>
+</head>
+<body>
+    <main id="wrapper">
+        <div id="top-bar">
+            <div class="container-fluid px-lg-5">
+                <div class="row">
+                    <div class="col-4 col-sm-5 col-md-5">
+                        <img src="~/img/logo.png" class="logo-header" alt="Logo" onclick="">
+                    </div>
+
+                    <div class="col-8 col-sm-7 col-md-7">
+                        <div class="user-info">
+                            <span class="color">Hola</span>
+                            <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
+                        </div><!--.user-info-->
+                    </div>
+                </div><!--.row-->
+            </div><!--.container-fluid-->
+        </div>
+        <section id="content">
+            <div class="content-wrap">
+                <div class="container-fluid px-lg-5">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div hidden class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                <h2>Ooops ha ocurrido un error</h2>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                <h2>Ooops ha ocurrido un error :(</h2>
+                                <p>Accede nuevamente</p>
+                                <p><a id="urlLogn" href="">Login de usuario</a></p>
+                            </div>
+                            <div class="col-md-6 col-sm-12 col-xs-6 col-6">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="footer">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6">
+                    <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                </div>
+                <div class="col-6">
+                    <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

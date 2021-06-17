@@ -1,0 +1,287 @@
+﻿@model ML.Encuesta
+@{
+    ViewBag.Title = "ConfigurarSecciones";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+    List<int> secciones = new List<int>();
+    List<int> Preguntas = new List<int>();
+    List<string> Encabezados = new List<string>();
+    foreach (ML.Preguntas item in Model.NewCuestion)
+    {
+        secciones.Add(item.Seccion);
+        Preguntas.Add(item.IdPregunta);
+        Encabezados.Add(item.Encabezado);
+    }
+    var numSeccionesLoad = secciones.Max();
+}
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Ecuestas / <span>Configurar secciones</span></h1>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="section-templates">
+                    <div class="icon-header-blue"><i class="far fa-newspaper"></i></div>
+                    <div class="title-header-blue">
+                        <span class="title-header-section">Configuración de las secciones en la encuesta</span>
+                    </div><!--.title-header-blue-->
+                    <hr>
+                    <div class="section-survey shadow-sm">
+                        <div class="body-survey">
+                            <div class="row">
+                                <div class="form-group" id="mergeTextArea">
+                                    <label class="control-label">¿Cuantas secciones deseas tener en tu encuesta?</label>
+                                    <input class="" autocomplete="off" type="number" name="name" value="" id="numSecciones" />
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@Model.IdEncuesta">
+                                            @{
+
+                                                if (Model.NewCuestion != null)
+                                                {
+                                                    if (Model.TipoEstatus.IdEstatus > 0)
+                                                    {
+                                                        foreach (var pregunta in Model.NewCuestion)
+                                                        {
+                                                            @Html.Partial("~/Views/Preguntas/GetOnlyPreguntasEdit.cshtml", pregunta);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><!--.body-survey-->
+                    </div><!--.section-survey-->
+                </div>
+            </div><!--.col-lg-8-->
+        </div><!--.row-->
+        <div class="row">
+            <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                <div class="col-md-5 text-right">
+                    <input type="submit" value="Guardar" @*onclick="window.location.href='/Encuesta/GetAll'"*@ onclick="GuardarConfiguracion()" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link href="~/css/summernote.min.css" rel="stylesheet" />
+<script>
+    $(document).ready(function () {
+        $('#numSecciones').change(function () {
+
+            var numSecciones = $('#numSecciones').val();
+            var cadenaInsert = '';
+            for (var i = 0; i < numSecciones; i++) {
+                var seccionReal = i + 1;
+                
+                cadenaInsert += '<option value="'+seccionReal+'">Seccion ' + seccionReal + '</option>'
+                
+            }
+            //Setear configuracion de nuevo
+
+            $('select option').remove();
+            $('select').append(cadenaInsert);
+
+            setValuesConf();
+            resetSummernote();
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#numSecciones').val(@numSeccionesLoad);
+        var numSecciones = $('#numSecciones').val();
+        var cadenaInsert = '';
+        for (var i = 0; i < numSecciones; i++) {
+            var seccionReal = i + 1;
+
+            cadenaInsert += '<option value="' + seccionReal + '">Seccion ' + seccionReal + '</option>'
+
+        }
+        $('select option').remove();
+        $('select').append(cadenaInsert);
+        //Set values
+        @{ 
+            for (int i = 0; i < Preguntas.Count; i++)
+            {
+                //string IdItem = "#"+Preguntas[i];
+                <text>
+                var idPregunta = '.clase'+@Preguntas[i];
+                var valor = '' + @secciones[i] +''
+                $(idPregunta).val(valor);
+                </text>
+            }
+        }
+    });
+    function setValuesConf() {
+    @{ 
+        for (int i = 0; i < Preguntas.Count; i++)
+        {
+            //string IdItem = "#"+Preguntas[i];
+            <text>
+            var idPregunta = '.clase'+@Preguntas[i];
+            var valor = '' + @secciones[i] +''
+            $(idPregunta).val(valor);
+            </text>
+        }
+    }
+    }
+    function GuardarConfiguracion() {
+        //Obtener valor de todos los select
+        var listIdPreguntas = [];
+        var listSecciones = [];
+        $("select").each(function () {
+            listIdPreguntas.push(this.id);
+            listSecciones.push(this.value);
+        });
+        console.log(listIdPreguntas);
+        console.log(listSecciones);
+
+        var listEncabezados = [];
+
+
+        var listEncab = $('#mergeTextArea').find('textarea');
+        for (var i = 0; i < listEncab.length; i++) {
+            console.log(listEncab[i].value);
+            console.log(listEncab[i].id);
+            listEncabezados.push(listEncab[i].id + '_' + listEncab[i].value);
+        }
+
+
+        $.ajax({
+            url: '@Url.Action("ConfiguraSecciones")',
+            type: 'POST',
+            data: { listaIdPregunta: listIdPreguntas, listaSecciones: listSecciones, listaEncabezados: listEncabezados },
+            complete: function (Response) {
+                if(Response.responseJSON == 'success'){
+                    swal({
+                        title: "La configuración se guardó correctamente",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        Redirect();
+                    });
+                }
+                else {
+                    swal("Ocurrió un error al intentar guardar la configuración", "", "error");
+                }
+            },
+            error: function (jqXHR, exception) {
+                console.log(jqXHR);
+                console.log(exception);
+            }
+        });
+
+    }
+
+    function Redirect() {
+        var configuraSecciones = 0;
+        configuraSecciones = @Session["EditConfigCond"];
+        
+        
+        if (configuraSecciones == 0) {
+            window.location.href = '/Encuesta/GetAll/';
+        }
+        else if(configuraSecciones == 1) {
+            window.location.href = "/Encuesta/EditCondiciones/";
+        }
+     }
+
+    $('#numSecciones').change(function () {
+        //$('.containerEncabezado').remove();
+        var numSecciones = $('#numSecciones').val();
+        var num = 0;
+        var seccionesactuales = $('#mergeTextArea').find('.txtEnc');
+    //$('#mergeTextArea').find('textarea');
+        seccionesactuales = seccionesactuales.length;
+        if (numSecciones > seccionesactuales) {
+            $('#mergeTextArea').append(
+                '<div class="form-group containerEncabezado">' +
+                '<label class="control-label">Encabezado para la sección número ' + numSecciones + '</label>' +
+                '<textarea id="TS' + numSecciones + '" class="form-control txtEnc" rows="10"></textarea>' +
+                '</div>'
+            );
+        }
+        else{
+            //Elimina la ultima
+            var item = $('#mergeTextArea').find('textarea');
+            var ultimo = item.length - 1;
+            item[ultimo].parentNode.remove();
+            item[ultimo - 1].parentNode.remove();
+        }
+
+        resetSummernote();
+
+        //for (var i = 0; i < numSecciones; i++) {
+        //    num = i + 1;
+        //    var idForTextArea = 'TS' + num;
+        //    //$('#mergeTextArea').clearQueue
+        //    //Aumenta
+        //    $('#mergeTextArea').append(
+        //        '<div class="form-group containerEncabezado">' +
+        //        '<label class="control-label">Escribe el encabezado para la sección número ' + num + '</label>' +
+        //        '<textarea id="' + idForTextArea + '" class="form-control"></textarea>' +
+        //        '</div>'
+        //    );
+        //}
+    });
+
+    function resetSummernote() {
+        $('textarea').each(function( index ) {
+            $(this).summernote('destroy');
+        });
+        $('textarea').summernote();
+    }
+
+    $(document).ready (function () {
+        //MergeTextArea
+        $.ajax({
+            url: '@Url.Action("GetSeccionTitle")',
+            type: 'GET',
+            complete: function (val) {
+                
+                console.log(val);
+                $('.containerEncabezado').remove();
+                var numSecciones = $('#numSecciones').val();
+                var num = 0;
+                for (var i = 0; i < val.responseJSON.length; i++) {
+                    num = i + 1;
+                    var idForTextArea = 'TS' + num;
+                    //$('#mergeTextArea').clearQueue
+                    
+                    
+                        
+                        $('#mergeTextArea').append(
+                            '<div class="form-group containerEncabezado">' +
+                            '<label class="control-label">Encabezado para la sección número ' + num + '</label>' +
+                            '<textarea rows="10" id="' + idForTextArea + '" class="form-control txtEnc">' + val.responseJSON[i].Encabezado + '</textarea>' +
+                            '</div>'
+                        );
+
+                    
+                }
+                resetSummernote();
+            }
+        });
+    })
+</script>

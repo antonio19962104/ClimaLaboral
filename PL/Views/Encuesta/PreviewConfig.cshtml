@@ -1,0 +1,10 @@
+﻿@using Newtonsoft.Json
+@model ML.Encuesta
+<script>
+    var previewData = @Html.Raw(JsonConvert.SerializeObject(Model));
+    var strData = JSON.stringify(previewData);
+    localStorage.setItem("prevData", strData);
+</script>
+<div ng-app="app" ng-controller="climaController as vm">
+    <h4>antonio</h4>
+</div>

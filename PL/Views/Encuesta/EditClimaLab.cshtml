@@ -1,0 +1,292 @@
+﻿@model ML.Encuesta
+
+@{
+    ViewBag.Title = "EditClimaLab";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+    Model.Instrucciones1 = Model.Instruccion.Split('*')[0];
+    Model.Instrucciones2 = Model.Instruccion.Split('*')[1];
+}
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+@section H1
+{
+<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img src="~/img/icon-survey.png" class="img-fluid">
+        <h1 class="title-page-survey">
+            Encuestas / <span>Editar Clima Laboral</span>
+        </h1>
+    </div><!--.container-fluid-->
+</section>
+}
+@section Styles
+{
+    <style type="text/css">
+        .swal-title {
+            font-size: 25px !important;
+        }
+
+        .swal-button {
+            font-size: 20px !important;
+        }
+    </style>
+    <link href="~/css/swiper.min.css" rel="stylesheet" />
+    <link href="~/css/summernote.min.css" rel="stylesheet" />
+}
+
+@*here*@
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8  offset-lg-2">
+                    @*<div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">*@
+                    @*data*@
+                    <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                        <li class="nav-item" style="display:none">
+                            <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="false">Configuración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Administración de periodos de aplicación</a>
+                        </li>
+                    </ul>
+
+
+
+                    <div class="tab-content" id="tabSurveyContent">
+                        <div style="display:none" class="tab-pane fade show active" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                            <div class="section-survey shadow-sm animated fadeInUp">
+                                <div class="body-survey">
+                                    <div class="row">
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            @using (Html.BeginForm("UpdateCL", "Encuesta", FormMethod.Post))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <div class="section-templates">
+                                                    <div class="icon-header-blue"><i class="fas fa-cog"></i></div>
+                                                    <div class="title-header-blue">
+                                                        <span class="title-header-section">Configuración de Encuesta</span>
+                                                    </div><!--.title-header-blue-->
+                                                    <hr>
+                                                    @Html.HiddenFor(m => m.IdEncuesta)
+                                                    <div class="section-survey shadow-sm">
+                                                        <div class="body-survey">
+                                                            <div class="row">
+                                                                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                                                    <div class="form-group">
+                                                                        @Html.TextBoxFor(m => m.Nombre, new { @Id = "Nombre", @class = "form-control", @placeholder = "Nombre de la Encuestas", @autofocus = "true", })
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                                    <div class="form-group">
+                                                                        <label>Primer bloque de Instrucciones</label>
+                                                                        <div class="input-group trichzone">
+                                                                            @Html.TextAreaFor(m => m.Instrucciones1, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Instruccion", @class = "form-control input-lg textarea-editor", })
+                                                                        </div>
+                                                                    </div><!--.form-group-->
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                                    <div class="form-group">
+                                                                        <label>Segundo bloque de Instrucciones</label>
+                                                                        <div class="input-group trichzone">
+                                                                            @Html.TextAreaFor(m => m.Instrucciones2, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Instruccion", @class = "form-control input-lg textarea-editor", })
+                                                                        </div>
+                                                                    </div><!--.form-group-->
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                                    <div class="form-group">
+                                                                        <label>Imagen de Instrucciones</label>
+                                                                        <div class="input-group trichzone">
+                                                                            @Html.TextAreaFor(m => m.ImagenInstruccion, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "ImagenInstruccion", @class = "form-control input-lg textarea-editor", })
+                                                                        </div>
+                                                                    </div><!--.form-group-->
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                                    <div class="form-group">
+                                                                        <label>Agradecimiento</label>
+                                                                        <div class="input-group trichzone">
+                                                                            @Html.TextAreaFor(m => m.Agradecimiento, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Agradecimiento", @class = "form-control input-lg textarea-editor", })
+                                                                        </div>
+                                                                    </div><!--.form-group-->
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                                    <div class="form-group">
+                                                                        <label>Imagen de Agradecimiento</label>
+                                                                        <div class="input-group trichzone">
+                                                                            @Html.TextAreaFor(m => m.ImagenAgradecimiento, new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Agradecimiento", @class = "form-control input-lg textarea-editor", })
+                                                                        </div>
+                                                                    </div><!--.form-group-->
+                                                                </div>
+
+                                                            </div><!--.row-->
+                                                        </div><!--.body-survey-->
+                                                    </div><!--.section-survey-->
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                                                        <div class="col-md-5 text-right">
+                                                            <input type="submit" value="Create" onclick="" class="btn btn-success" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show active" id="manag" role="tabpanel" aria-labelledby="manag-tab">
+                            <div class="section-survey shadow-sm animated fadeInUp">
+                                <div class="body-survey">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="accordion" id="accordionExample">
+                                                        <div class="card">
+                                                            <div class="card-header" id="headingTwo">
+                                                                <h2 class="mb-0">
+                                                                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                                        Periodos de la encuesta Clima Laboral por cada base de datos <i class="fas fa-angle-double-down"></i>
+                                                                    </button>
+                                                                </h2>
+                                                            </div>
+                                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                                                <div class="card-body" id="mergePeriodos">
+                                                                    @*merge*@
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--.row-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@*here*@
+
+@section Scripts
+{
+
+    @*<script src="~/scripts/Controller/encuestaApp.js"></script>*@
+    <script src="~/scripts/summernote/bootstrap.js" type="text/javascript"></script>
+    <script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+    <script src="~/css/sweetalert.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //document.getElementById("prev-tab").focus();
+            $("#conf-tab").hide();
+            $('html, body').animate({ scrollTop: $('#wrapper').offset().top - 100 }, 'slow');
+        });
+    </script>
+<script>
+    $(document).ready(function () {
+        //
+        var IdEncuesta = 1;
+        $.ajax({
+            url: '@Url.Action("GetAllPeriodosConfig")',
+            type: 'GET',
+            data: IdEncuesta,
+            complete: function (Response) {
+                if(Response.responseJSON.length > 0)
+                {
+                    for (var i = 0; i < Response.responseJSON.length; i++) {
+                        var fechaInicio = Response.responseJSON[i].InicioEncuesta;
+                        var fechaFin = Response.responseJSON[i].FinEncuesta;
+                        //** 20/04/2020
+                        var diaI = fechaInicio.substring(0, 2);
+                        var mesI = fechaInicio.substring(3, 5);
+                        var anioI = fechaInicio.substring(6, 10);
+                        var valueInicio = anioI + '-' + mesI + '-' + diaI;
+
+                        var diaF = fechaFin.substring(0, 2);
+                        var mesF = fechaFin.substring(3, 5);
+                        var anioF = fechaFin.substring(6, 10);
+                        var valueFin = anioF + '-' + mesF + '-' + diaF;
+
+
+                        $('#mergePeriodos').append(
+                        '<div class="form-group">' +
+                        '<label class="control-label"><strong>Base de datos: </strong>' + Response.responseJSON[i].BaseDeDatos.Nombre + '</label>' +
+                        '<div class="col-md-6">' +
+                        '<label class="control-label">Fecha de Inicio</label> <input type="date" value="' + valueInicio + '" class="form-control" id="DateInicio_IdConfig_' + Response.responseJSON[i].IdConfigurtacion + '" />' +
+                        '<label class="control-label">Fecha de Termino</label><input type="date" value="' + valueFin + '" class="form-control" id="DateFin_IdConfig_' + Response.responseJSON[i].IdConfigurtacion + '" />' +
+                        '</div></div><input class="classConfiguracion_' + Response.responseJSON[i].IdConfigurtacion + '" onclick="setEditable(this)" type="submit" value="Editar periodos" ><input onclick="updateFechas(this)" type="submit" value="Guardar cambios" class="updateFechas" id="IdConfiguracion_' + Response.responseJSON[i].IdConfigurtacion + '" ><hr />'
+                        );
+                    }
+                }
+                else {
+                    swal('No existen periodos de fechas configurados o bases de datos para Clima Laboral', '', 'info');
+                }
+                $('input[type="date"]').attr('readonly', true);
+            }
+        });
+    });
+    //updateFechas
+    function setEditable(e) {
+        console.log(e);
+        console.log(e.classList[0]);
+        var clase = e.classList[0];
+        var IdConfiguracion = clase.split('_')[1];
+
+        $('#DateInicio_IdConfig_'+IdConfiguracion).attr('readonly', false);
+        $('#DateFin_IdConfig_' + IdConfiguracion).attr('readonly', false);
+
+    }
+    function updateFechas(e) {
+        console.log(e.id);
+
+        var IdConfiguracion = e.id.split('_')[1];
+        var newFechaInicio = $('#DateInicio_IdConfig_' + IdConfiguracion).val();
+        var newFechaFin = $('#DateFin_IdConfig_' + IdConfiguracion).val();
+
+        if (newFechaInicio > newFechaFin || newFechaInicio == newFechaFin) {
+            swal('Verifica las fechas de aplicación', '', 'warning');
+            return false;
+        }
+
+        let model =
+            {
+                idConfigurtacion: IdConfiguracion,
+                fechaInicio: newFechaInicio,
+                fechaFin: newFechaFin
+            }
+
+        console.log(model);
+
+        $.ajax({
+            url: '@Url.Action("UpdatePeriodosClimaLab")',
+            type: 'POST',
+            data: model,
+            complete: function (Response) {
+                if(Response.responseJSON == 'success')
+                {
+                    swal({
+                        title: "Los periodos se actualizaron exitosamente",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        window.location.reload(true);
+                    });
+                }
+                else {
+                    swal('Los periodos no se pudieron actualizar', '', 'error');
+                }
+            }
+        });
+
+    }
+</script>
+}
+
+

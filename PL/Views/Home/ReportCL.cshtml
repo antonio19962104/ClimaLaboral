@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "ReportCL";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+<div class="content-wrap">
+    <div class="container">
+        <h2>Administradores D4U</h2>
+        <h3>@ViewBag.Title</h3>
+        <div class="row">
+            <div class="col-md-12 col-sm-3">
+                @Html.ActionLink("Agregar administrador", "Add", "Administrador", htmlAttributes: new { @class = "btn btn-success" })
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row" style="padding-top:30px; align-content:center">
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <tr>
+                        <th class="text-center" scope="col">
+                            Edit
+                        </th>
+                        <th class="text-center" scope="col">
+                            IdAdministrador
+                        </th>
+                        <th class="text-center" scope="col">
+                            Nombre
+                        </th>
+                        <th class="text-center" scope="col">
+                            Perfil
+                        </th>
+                        <th class="text-center" scope="col">
+                            Estatus
+                        </th>
+                    </tr>
+                    @foreach (ML.Administrador admin in Model.Objects)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                <a href="@Url.Action("Update", "Administrador", new { IdAdministrador = admin.IdAdministrador } )" title="Edit">
+                                    <img style="height:20px; width:20px;" src="https://cdn.pixabay.com/photo/2013/07/13/12/07/edit-159218_960_720.png" />
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                @admin.IdAdministrador
+                            </td>
+                            <td class="text-center">
+                                @admin.Empleado.Nombre @admin.Empleado.ApellidoPaterno @admin.Empleado.ApellidoMaterno
+                            </td>
+                            <td class="text-center">
+                                @admin.PerfilD4U.Descripcion
+                            </td>
+                            <td class="text-center">
+                                @if (admin.Estatus == "Activo")
+                                {
+                                    <a href="@Url.Action("OFF", "Administrador", new { IdAdministrador = admin.IdAdministrador } )" title="">
+                                        <input type="submit" name="name" value="@admin.Estatus" class="btn btn-success" />
+                                    </a>
+                                }
+                                else if (admin.Estatus == "Inactivo")
+                                {
+                                    <a href="@Url.Action("ON", "Administrador", new { IdAdministrador = admin.IdAdministrador } )" title="">
+                                        <input type="submit" name="name" value="@admin.Estatus" class="btn btn-danger" />
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

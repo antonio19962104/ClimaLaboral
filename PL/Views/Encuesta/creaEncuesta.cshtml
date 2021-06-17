@@ -1,0 +1,588 @@
+﻿@using ML
+@model Encuesta
+
+@{
+    ViewBag.Title = "creaEncuesta";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+@section H1
+{
+    <section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                <img class="img-fluid img-page-title" src="../img/icon-survey.png"> <h1 class="title-page-survey">Encuestas / <span>Administración</span></h1>
+            </div>
+            <div class="col-sm-6 bottom-align-right center-vertically-xs">
+                <a href="#" class="btn-parallelogram parallelogram">
+                    <span class="skew-fix"><i class="fas fa-eye"></i> Previsualizar</span>
+                </a>
+                <a href="#" class="btn-parallelogram parallelogram">
+                    <span class="skew-fix"><i class="fas fa-save"></i> Salvar</span>
+                </a>
+            </div>
+        </div><!--.row-->
+    </div><!--.container-fluid-->
+</section>
+}
+
+<section id="content">
+
+    <div class="content-wrap">
+
+        <div class="container-fluid px-lg-5">
+
+            <div class="row">
+                <div class="col-lg-8 col-xl-7">
+
+                    <div class="section-templates">
+                        <div class="icon-header-blue"><i class="fas fa-cog"></i></div>
+                        <div class="title-header-blue">
+                            <span class="title-header-section">Plantillas predefinidas</span>
+                        </div><!--.title-header-blue-->
+                        <div class="form-row">
+                            <div class="col-lg-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="namTemplate" placeholder="Nombre de plantilla">
+                                </div><!--.form-group-->
+                            </div>
+                            <div class="col-lg-4">
+                                <select class="custom-select">
+                                    <option selected>Visibilidad</option>
+                                    <option value="1">Privada</option>
+                                    <option value="2">Pública</option>
+                                </select>
+                            </div>
+                        </div><!--.form-row-->
+                    </div><!--.section-templates-->
+
+                    <ul class="nav nav-tabs" id="tabTemplate" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="visual-header-tab" data-toggle="tab" href="#visual-header" role="tab" aria-controls="visual-header" aria-selected="true">Visual</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="html-header-tab" data-toggle="tab" href="#html-header" role="tab" aria-controls="html-header" aria-selected="false">HTML</a>
+                        </li>
+                    </ul>
+                    <div class="section-templates">
+                        <div class="tab-content" id="tabTemplateContent">
+                            <div class="tab-pane fade show active" id="visual-header" role="tabpanel" aria-labelledby="visual-header-tab">
+                                <div class="icon-header-blue"><i class="far fa-newspaper"></i></div>
+                                <div class="title-header-blue">
+                                    <span class="title-header-section">Header</span>
+                                </div><!--.title-header-blue-->
+                                <hr>
+                                <p>Previsualizar:</p>
+                                <img src="https://via.placeholder.com/720x100" class="img-fluid" id="prev-header-1">
+                                <img src="https://via.placeholder.com/720x101" class="img-fluid" id="prev-header-2">
+                                <img src="https://via.placeholder.com/720x102" class="img-fluid" id="prev-header-3">
+                                <hr>
+                                <p>Selecciona un diseño:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios1">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="prevHeaderRadio" id="exampleRadios1" value="option1" checked>
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios2">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="prevHeaderRadio" id="exampleRadios2" value="option2">
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios3">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="prevHeaderRadio" id="exampleRadios3" value="option3">
+                                                </div><!--.form-check-->
+                                            </div>
+                                        </div><!--.row-->
+                                    </div>
+                                </div><!--.row-->
+                                <div class="clearfix my-4"></div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p>Cambiar logotipo:</p>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="customFile">
+                                            <label class="custom-file-label btn-upload" for="customFile" data-browse="Subir">Selecciona una imagen</label>
+                                        </div>
+                                    </div><!--.col-md-6-->
+                                    <div class="col-md-6">
+                                        <p>Selecciona el estilo:</p>
+                                        <select class="custom-select mb-3">
+                                            <option selected>Colores planos o dinámicos:</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+
+                                        <label>Selecciona un color prestablecido:</label>
+                                        <div class="row">
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-blue" type="radio" name="bodyHeaderRadios" id="bodyHeaderRadios1" value="option1" checked>
+                                                <label class="form-check-label" for="bodyHeaderRadios1"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-bluelight" type="radio" name="bodyHeaderRadios" id="bodyHeaderRadios2" value="option1">
+                                                <label class="form-check-label" for="bodyHeaderRadios2"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-grey" type="radio" name="bodyHeaderRadios" id="bodyHeaderRadios3" value="option1">
+                                                <label class="form-check-label" for="bodyHeaderRadios3"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-green" type="radio" name="bodyHeaderRadios" id="bodyHeaderRadios4" value="option1">
+                                                <label class="form-check-label" for="bodyHeaderRadios4"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-red" type="radio" name="bodyHeaderRadios" id="bodyHeaderRadios5" value="option1">
+                                                <label class="form-check-label" for="bodyHeaderRadios5"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-black" type="radio" name="bodyHeaderRadios" id="bodyHeaderRadios6" value="option1">
+                                                <label class="form-check-label" for="bodyHeaderRadios6"></label>
+                                            </div>
+                                        </div><!--.row-->
+
+                                        <div class="clearfix my-3"></div>
+
+                                        <label for="favcolor">Color específico:</label>
+                                        <input type="color" id="favcolor" name="favcolor" value="#ff0000">
+                                    </div><!--.col-md-6-->
+                                </div><!--.row-->
+                            </div><!--.tab-pane-->
+                            <div class="tab-pane fade" id="html-header" role="tabpanel" aria-labelledby="html-header-tab">
+                                <div id="summernote"></div>
+                            </div><!--.tab-pane-->
+                        </div><!--.tab-content-->
+                    </div><!--.section-templates-->
+
+                    <ul class="nav nav-tabs" id="tabTemplate2" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="visual-body-tab" data-toggle="tab" href="#visual-body" role="tab" aria-controls="visual-body" aria-selected="true">Visual</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="html-body-tab" data-toggle="tab" href="#html-body" role="tab" aria-controls="html-body" aria-selected="false">HTML</a>
+                        </li>
+                    </ul>
+                    <div class="section-templates">
+                        <div class="tab-content" id="tabTemplateContent">
+                            <div class="tab-pane fade show active" id="visual-body" role="tabpanel" aria-labelledby="visual-body-tab">
+                                <div class="icon-header-blue"><i class="far fa-newspaper"></i></div>
+                                <div class="title-header-blue">
+                                    <span class="title-header-section">Body</span>
+                                </div><!--.title-header-blue-->
+
+                                <hr>
+
+                                <p>Previsualizar:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img src="https://via.placeholder.com/720x300" class="img-fluid" id="prev-body-1">
+                                        <img src="https://via.placeholder.com/720x301" class="img-fluid" id="prev-body-2">
+                                        <img src="https://via.placeholder.com/720x302" class="img-fluid" id="prev-body-3">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <img src="https://via.placeholder.com/720x300" class="img-fluid" id="prev-body-4">
+                                        <img src="https://via.placeholder.com/720x301" class="img-fluid" id="prev-body-5">
+                                        <img src="https://via.placeholder.com/720x302" class="img-fluid" id="prev-body-6">
+                                    </div>
+                                </div>
+
+                                <p>Selecciona un estilo:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios4">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="styleBodyRadios" id="exampleRadios4" value="option1" checked>
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios5">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="styleBodyRadios" id="exampleRadios5" value="option2">
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios6">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="styleBodyRadios" id="exampleRadios6" value="option3">
+                                                </div><!--.form-check-->
+                                            </div>
+                                        </div><!--.row-->
+                                    </div>
+                                </div><!--.row-->
+                                <div class="clearfix my-4"></div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6 pr-4">
+                                        <p>Cambiar icono:</p>
+                                        <div class="row">
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style" align="center">
+                                                    <label class="form-check-label" for="exampleRadioIcon1">
+                                                        <img src="https://via.placeholder.com/100x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="RadioIcon1" id="exampleRadioIcon1" value="option1" checked>
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style" align="center">
+                                                    <label class="form-check-label" for="exampleRadioIcon2">
+                                                        <img src="https://via.placeholder.com/100x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="RadioIcon1" id="exampleRadioIcon2" value="option2">
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style" align="center">
+                                                    <label class="form-check-label" for="exampleRadioIcon3">
+                                                        <img src="https://via.placeholder.com/100x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="RadioIcon1" id="exampleRadioIcon3" value="option3">
+                                                </div><!--.form-check-->
+                                            </div>
+                                        </div><!--.row-->
+                                        <div class="clearfix my-4"></div>
+                                        <hr>
+                                        <p>Quitar fondo del cuerpo:</p>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="iconRadioInline1" name="iconRadioInline" class="custom-control-input">
+                                            <label class="custom-control-label" for="iconRadioInline1">SÍ</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="iconRadioInline2" name="iconRadioInline" class="custom-control-input">
+                                            <label class="custom-control-label" for="iconRadioInline2">NO</label>
+                                        </div>
+                                    </div><!--.col-md-6-->
+                                    <div class="col-md-6 border-left">
+                                        <p>Selecciona color primario:</p>
+                                        <div class="row">
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-blue" type="radio" name="bodyColorRadios" id="bodyColorRadios1" value="option1" checked>
+                                                <label class="form-check-label" for="bodyColorRadios1"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-bluelight" type="radio" name="bodyColorRadios" id="bodyColorRadios2" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadios2"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-grey" type="radio" name="bodyColorRadios" id="bodyColorRadios3" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadios3"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-green" type="radio" name="bodyColorRadios" id="bodyColorRadios4" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadios4"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-red" type="radio" name="bodyColorRadios" id="bodyColorRadios5" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadios5"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-black" type="radio" name="bodyColorRadios" id="bodyColorRadios6" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadios6"></label>
+                                            </div>
+                                        </div><!--.row-->
+
+                                        <div class="clearfix my-2"></div>
+
+                                        <div class="row">
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-2">
+
+                                            </div>
+                                            <div class="col-2">
+
+                                            </div>
+                                        </div><!--.row-->
+
+                                        <div class="clearfix my-2"></div>
+
+                                        <label for="favcolor">Color específico:</label>
+                                        <input type="color" id="favcolor" name="favcolor" value="#ff0000">
+
+                                        <hr>
+
+                                        <p>Selecciona color secundario:</p>
+
+                                        <div class="row">
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-blue" type="radio" name="bodyColorRadios2" id="bodyColorRadiosSec1" value="option1" checked>
+                                                <label class="form-check-label" for="bodyColorRadiosSec1"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-bluelight" type="radio" name="bodyColorRadios2" id="bodyColorRadiosSec2" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadiosSec2"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-grey" type="radio" name="bodyColorRadios2" id="bodyColorRadiosSec3" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadiosSec3"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-green" type="radio" name="bodyColorRadios2" id="bodyColorRadiosSec4" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadiosSec4"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-red" type="radio" name="bodyColorRadios2" id="bodyColorRadiosSec5" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadiosSec5"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-black" type="radio" name="bodyColorRadios2" id="bodyColorRadiosSec6" value="option1">
+                                                <label class="form-check-label" for="bodyColorRadiosSec6"></label>
+                                            </div>
+                                        </div><!--.row-->
+
+                                        <div class="clearfix my-2"></div>
+
+                                        <label>Aplicar fondo cabecera barra derecha::</label>
+                                        <div class="clearfix"></div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="iconRadioInlineBgHeader1" name="iconRadioInlineBgHeader" class="custom-control-input">
+                                            <label class="custom-control-label" for="iconRadioInlineBgHeader1">SÍ</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input type="radio" id="iconRadioInlineBgHeader2" name="iconRadioInlineBgHeader" class="custom-control-input">
+                                            <label class="custom-control-label" for="iconRadioInlineBgHeader2">NO</label>
+                                        </div>
+                                    </div><!--.col-md-6-->
+                                </div><!--.row-->
+                            </div><!--.tab-pane-->
+                            <div class="tab-pane fade" id="html-body" role="tabpanel" aria-labelledby="html-body-tab">
+                                <div id="summernote-2"></div>
+                            </div><!--.tab-pane-->
+                        </div><!--.tab-content-->
+                    </div><!--.section-templates-->
+
+                    <ul class="nav nav-tabs" id="tabTemplate3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="visual-footer-tab" data-toggle="tab" href="#visual-footer" role="tab" aria-controls="visual-footer" aria-selected="true">Visual</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="html-footer-tab" data-toggle="tab" href="#html-footer" role="tab" aria-controls="html-footer" aria-selected="false">HTML</a>
+                        </li>
+                    </ul>
+                    <div class="section-templates">
+                        <div class="tab-content" id="tabTemplateContent">
+                            <div class="tab-pane fade show active" id="visual-footer" role="tabpanel" aria-labelledby="visual-footer-tab">
+                                <div class="icon-header-blue"><i class="far fa-newspaper"></i></div>
+                                <div class="title-header-blue">
+                                    <span class="title-header-section">Footer</span>
+                                </div><!--.title-header-blue-->
+                                <hr>
+                                <p>Previsualizar:</p>
+                                <img src="https://via.placeholder.com/720x100" class="img-fluid" id="prev-footer-1">
+                                <img src="https://via.placeholder.com/720x101" class="img-fluid" id="prev-footer-2">
+                                <img src="https://via.placeholder.com/720x102" class="img-fluid" id="prev-footer-3">
+                                <p>Selecciona un diseño:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios7">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="exampleRadios3" id="exampleRadios7" value="option1" checked>
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios8">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="exampleRadios3" id="exampleRadios8" value="option2">
+                                                </div><!--.form-check-->
+                                            </div>
+                                            <div class="col-4 px-0">
+                                                <div class="form-check radio-wrap-style">
+                                                    <label class="form-check-label" for="exampleRadios9">
+                                                        <img src="https://via.placeholder.com/150x150" class="img-fluid rounded-lg">
+                                                    </label>
+                                                    <input class="form-check-input" type="radio" name="exampleRadios3" id="exampleRadios9" value="option3">
+                                                </div><!--.form-check-->
+                                            </div>
+                                        </div><!--.row-->
+                                    </div>
+                                </div><!--.row-->
+                                <div class="clearfix my-4"></div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label>Selecciona un color prestablecido:</label>
+                                        <div class="row">
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-blue" type="radio" name="colorsRadios" id="exampleRadios1" value="option1" checked>
+                                                <label class="form-check-label" for="exampleRadios1"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-bluelight" type="radio" name="colorsRadios" id="exampleRadios2" value="option1">
+                                                <label class="form-check-label" for="exampleRadios2"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-grey" type="radio" name="colorsRadios" id="exampleRadios3" value="option1">
+                                                <label class="form-check-label" for="exampleRadios3"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-green" type="radio" name="colorsRadios" id="exampleRadios4" value="option1">
+                                                <label class="form-check-label" for="exampleRadios4"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-red" type="radio" name="colorsRadios" id="exampleRadios5" value="option1">
+                                                <label class="form-check-label" for="exampleRadios5"></label>
+                                            </div>
+                                            <div class="col-2" align="center">
+                                                <input class="form-check-input bg-radio-black" type="radio" name="colorsRadios" id="exampleRadios6" value="option1">
+                                                <label class="form-check-label" for="exampleRadios6"></label>
+                                            </div>
+                                        </div><!--.row-->
+                                    </div><!--.col-md-6-->
+                                    <div class="col-md-6">
+                                        <div class="clearfix my-lg-3"></div>
+                                        <label for="favcolor">Color específico:</label>
+                                        <input type="color" id="favcolor" name="favcolor" value="#ff0000">
+                                    </div><!--.col-md-6-->
+                                </div><!--.row-->
+                            </div><!--.tab-pane-->
+                            <div class="tab-pane fade" id="html-footer" role="tabpanel" aria-labelledby="html-footer-tab">
+                                <div id="summernote-3"></div>
+                            </div><!--.tab-pane-->
+                        </div><!--.tab-content-->
+                    </div><!--.section-templates-->
+
+                </div><!--.col-lg-8-->
+            </div><!--.row-->
+
+        </div><!--.container-->
+
+    </div><!--.content-wrap-->
+
+</section>
+@section Scripts
+{
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#summernote').summernote();
+      });
+</script>
+<script type="text/javascript">
+      $(document).ready(function() {
+        $('#summernote-2').summernote();
+      });
+</script>
+<script type="text/javascript">
+      $(document).ready(function() {
+        $('#summernote-3').summernote();
+      });
+</script>
+<script type="text/javascript">
+      $("input[name='prevHeaderRadio']").click(function(){
+        switch($(this).val()) {
+
+          case 'option1':
+          $("#prev-header-1").show();
+          $("#prev-header-2").hide();
+          $("#prev-header-3").hide();
+          break;
+
+          case 'option2':
+          $("#prev-header-1").hide();
+          $("#prev-header-2").show();
+          $("#prev-header-3").hide();
+          break;
+
+          case 'option3':
+          $("#prev-header-1").hide();
+          $("#prev-header-2").hide();
+          $("#prev-header-3").show();
+          break;
+        }
+      });
+</script>
+<script type="text/javascript">
+      $("input[name='styleBodyRadios']").click(function(){
+        switch($(this).val()) {
+
+          case 'option1':
+          $("#prev-body-1").show();
+          $("#prev-body-2").hide();
+          $("#prev-body-3").hide();
+          $("#prev-body-4").show();
+          $("#prev-body-5").hide();
+          $("#prev-body-6").hide();
+          break;
+
+          case 'option2':
+          $("#prev-body-1").hide();
+          $("#prev-body-2").show();
+          $("#prev-body-3").hide();
+          $("#prev-body-4").hide();
+          $("#prev-body-5").show();
+          $("#prev-body-6").hide();
+          break;
+
+          case 'option3':
+          $("#prev-body-1").hide();
+          $("#prev-body-2").hide();
+          $("#prev-body-3").show();
+          $("#prev-body-4").hide();
+          $("#prev-body-5").hide();
+          $("#prev-body-6").show();
+          break;
+        }
+      });
+</script>
+<script type="text/javascript">
+      $("input[name='exampleRadios3']").click(function(){
+        switch($(this).val()) {
+
+          case 'option1':
+          $("#prev-footer-1").show();
+          $("#prev-footer-2").hide();
+          $("#prev-footer-3").hide();
+          break;
+
+          case 'option2':
+          $("#prev-footer-1").hide();
+          $("#prev-footer-2").show();
+          $("#prev-footer-3").hide();
+          break;
+
+          case 'option3':
+          $("#prev-footer-1").hide();
+          $("#prev-footer-2").hide();
+          $("#prev-footer-3").show();
+          break;
+        }
+      });
+</script>
+    }
