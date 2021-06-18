@@ -3538,12 +3538,14 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Area" Type="nvarchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByCompanyEnfEmpresaOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Company" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByCondicionTrabajo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
@@ -3554,12 +3556,14 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="CondicionTrabajo" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Departamento" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByDeptoEnfEmpresaOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
@@ -3575,6 +3579,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Funcion" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByGeneroEnfEmpresaOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
@@ -3586,6 +3591,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
           <Parameter Name="Genero" Type="varchar" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByGradoAcademico" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
@@ -3596,12 +3602,14 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="GradoAcad" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="RangoAnt" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByRangoEdad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
@@ -3612,6 +3620,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="RangoEdad" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdbD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasBySexo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
@@ -3622,6 +3631,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Subdepartamento" Type="varchar" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
@@ -3631,6 +3641,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Parameter Name="UNegocio" Type="varchar" Mode="In" />
           <Parameter Name="IdPregunta" Type="int" Mode="In" />
           <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetResP1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdEmpleado" Type="int" Mode="In" />
@@ -7260,12 +7271,14 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Area" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByCompanyEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Company" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByCondicionTrabajo" ReturnType="Collection(RH_DesModel.GetPorcentajeAfirmativasByCondicionTrabajo_Result)">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
@@ -7276,6 +7289,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="CondicionTrabajo" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByDeptoEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
@@ -7291,6 +7305,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Funcion" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByGeneroEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
@@ -7306,18 +7321,21 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="GradoAcad" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="RangoAnt" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="RangoEdad" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdbD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasBySexo" ReturnType="Collection(RH_DesModel.GetPorcentajeAfirmativasBySexo_Result)">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
@@ -7328,6 +7346,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Subdepartamento" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
@@ -7338,6 +7357,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Departamento" Mode="In" Type="String" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetEstatusAvanceByUnegocio" ReturnType="Collection(RH_DesModel.GetEstatusAvanceByUnegocio_Result)">
           <Parameter Name="CompanyCategoria" Mode="In" Type="String" />
@@ -7528,12 +7548,14 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
             <Parameter Name="UNegocio" Mode="In" Type="String" />
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Anio" Mode="In" Type="Int32" />
             <Parameter Name="Genero" Mode="In" Type="String" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="ValoracionPreguntaPorSubcategoria" EntityType="RH_DesModel.ValoracionPreguntaPorSubcategoria" />
           <EntitySet Name="ValoracionSubcategoriaPorCategoria" EntityType="RH_DesModel.ValoracionSubcategoriaPorCategoria" />

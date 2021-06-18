@@ -2829,7 +2829,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDivisionMarca_3_Result>("GetPorcentAfirmativasByDivisionMarca_3", companyParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByAreaEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string area, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByAreaEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string area, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -2847,10 +2847,14 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByAreaEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, areaParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByAreaEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, areaParameter, anioParameter, idBDParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCompanyEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string company, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCompanyEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string company, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -2868,7 +2872,11 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCompanyEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, companyParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCompanyEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, companyParameter, anioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<GetPorcentajeAfirmativasByCondicionTrabajo_Result> GetPorcentajeAfirmativasByCondicionTrabajo(Nullable<int> idPregunta, string condicionTrabajo)
@@ -2884,7 +2892,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByCondicionTrabajo_Result>("GetPorcentajeAfirmativasByCondicionTrabajo", idPreguntaParameter, condicionTrabajoParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string condicionTrabajo, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string condicionTrabajo, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -2902,7 +2910,11 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, condicionTrabajoParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, condicionTrabajoParameter, anioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDeptoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string depto)
@@ -2935,7 +2947,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByFuncion_Result>("GetPorcentajeAfirmativasByFuncion", idPreguntaParameter, funcionParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByFuncionEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string funcion, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByFuncionEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string funcion, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -2953,7 +2965,11 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByFuncionEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, funcionParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByFuncionEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, funcionParameter, anioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string genero)
@@ -2986,7 +3002,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByGradoAcademico_Result>("GetPorcentajeAfirmativasByGradoAcademico", idPreguntaParameter, gradoAcademicoParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string gradoAcad, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string gradoAcad, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3004,10 +3020,14 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, gradoAcadParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, gradoAcadParameter, anioParameter, idBDParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoAnt, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoAnt, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3025,10 +3045,14 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoAntParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoAntParameter, anioParameter, idBDParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoEdad, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoEdad, Nullable<int> anio, Nullable<int> idbD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3046,7 +3070,11 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoEdadParameter, anioParameter);
+            var idbDParameter = idbD.HasValue ?
+                new ObjectParameter("IdbD", idbD) :
+                new ObjectParameter("IdbD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoEdadParameter, anioParameter, idbDParameter);
         }
     
         public virtual ObjectResult<GetPorcentajeAfirmativasBySexo_Result> GetPorcentajeAfirmativasBySexo(Nullable<int> idPregunta, string sexo)
@@ -3062,7 +3090,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasBySexo_Result>("GetPorcentajeAfirmativasBySexo", idPreguntaParameter, sexoParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string subdepartamento, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string subdepartamento, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3080,7 +3108,11 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, subdepartamentoParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, subdepartamentoParameter, anioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta)
@@ -3096,7 +3128,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK", uNegocioParameter, idPreguntaParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string departamento, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string departamento, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3114,7 +3146,11 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, departamentoParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, departamentoParameter, anioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<GetEstatusAvanceByUnegocio_Result> GetEstatusAvanceByUnegocio(string companyCategoria)
@@ -3350,7 +3386,7 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByIdDepartamento_Result>("f_getEstructuraDescByIdDepartamento", aIdDepartamentoParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3364,10 +3400,14 @@ namespace DL
                 new ObjectParameter("Anio", anio) :
                 new ObjectParameter("Anio", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, idBDParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, string genero)
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, string genero, Nullable<int> idBD)
         {
             var uNegocioParameter = uNegocio != null ?
                 new ObjectParameter("UNegocio", uNegocio) :
@@ -3385,7 +3425,11 @@ namespace DL
                 new ObjectParameter("Genero", genero) :
                 new ObjectParameter("Genero", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, generoParameter);
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, generoParameter, idBDParameter);
         }
     
         [DbFunction("RH_DesEntities", "splitstring_COMA")]

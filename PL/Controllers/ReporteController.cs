@@ -97,13 +97,10 @@ namespace PL.Controllers
             json.MaxJsonLength = int.MaxValue;
             return new JsonResult { Data = json, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult ReporteAbiertas()
         {
             return View();
         }
-
-        // GET: Reporte
         public ActionResult GetAll()
         {
             List<object> permisosEstructura = new List<object>();
@@ -118,11 +115,6 @@ namespace PL.Controllers
 
             return Json(result.Objects, JsonRequestBehavior.AllowGet);
         }
-
-
-
-
-
         /*ActionMethod For Clima Laboral*/
         public ActionResult ReporteGlobalCL()
         {
@@ -765,9 +757,6 @@ namespace PL.Controllers
 
             return Content(data);
         }
-
-        
-
         public ActionResult ReporteGetByCompany(string Company)
         {
             //Enviar Catalogo de unidades de negocio usando viewbag
@@ -1541,7 +1530,7 @@ namespace PL.Controllers
         }
         public ActionResult GetAvanceByUNeg(string CompanyCategoria)
         {
-            var result = BL.ReporteD4U.GetEstatusAvanceByUnegocio(CompanyCategoria);
+            var result = BL.ReporteD4U.GetEstatusAvanceByUNEGocio(CompanyCategoria);
             return View("GetEstatusAvance", result);
         }
 
@@ -1704,7 +1693,7 @@ namespace PL.Controllers
         }
         public ActionResult GetPorcentajeAfirmativasByDemoUNegocio(ML.Empleado empleado)
         {
-            var result = BL.ReporteD4U.GetPorcentajeAfirmativasByDemoUNegocio(empleado.UnidadNegocio);
+            var result = BL.ReporteD4U.GetPorcentajeAfirmativasByDemoUNEGocio(empleado.UnidadNegocio);
 
             Session["criterio"] = "para los empleados que pertenecen a la unidad de negocio: " + empleado.UnidadNegocio;
             string JSON = "";
@@ -1832,7 +1821,7 @@ namespace PL.Controllers
             items.ListadoPreguntas = new List<ML.Preguntas>();
             for (int IdPregunta = 1; IdPregunta < 173; IdPregunta++)
             {
-                var dta = (BL.ReporteD4U.GetPorcentajeAfirmativasByUNegocio(IdPregunta, company.CompanyName).Pregunta);
+                var dta = (BL.ReporteD4U.GetPorcentajeAfirmativasByUNEGocio(IdPregunta, company.CompanyName).Pregunta);
                 items.ListadoPreguntas.Add(dta);
             }
             return Json(items.ListadoPreguntas, JsonRequestBehavior.AllowGet);
@@ -3053,7 +3042,7 @@ namespace PL.Controllers
                     string DataForFilter = item.Remove(0, 6);
                     if (prefijo == "UNeg=>")
                     {
-                        var result = BL.ReporteD4U.GetEsperadasByUnegocio(DataForFilter, anioActual, model.IdBD);
+                        var result = BL.ReporteD4U.GetEsperadasByUNEGocio(DataForFilter, anioActual, model.IdBD);
                         resultados.Add(result);
                     }
                     if (prefijo == "Gene=>")
@@ -3119,8 +3108,10 @@ namespace PL.Controllers
                 return Json(false);
             }
         }
-        public ActionResult GetContestadas(ML.ReporteD4U model)
+        public ActionResult GetContestadas(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             // falta hacer este filtrado
             Console.Write(model.IdBD + model.Anio);
             List<int> resultados = new List<int>();
@@ -3136,68 +3127,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetContestadasByUNegocio(DataForFilter);
+                    var result = BL.ReporteD4U.GetContestadasByUNEGocio(DataForFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByGenero(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByGenero(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByFuncion(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByFuncion(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByCondicionTrabajo(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByCondicionTrabajo(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByGradoAcademico(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByGradoAcademico(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByRangoAntiguedad(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByRangoAntiguedad(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByRangoEdad(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByRangoEdad(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByCompany(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByCompany(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByArea(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByArea(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaByDepartamento(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaByDepartamento(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetContestadaBySubdepartamento(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetContestadaBySubdepartamento(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
 
@@ -3224,67 +3215,67 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByUNegocioEnfoqueEmpresa(model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByUNEGocioEnfoqueEmpresa(model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGeneroEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGeneroEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Func=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByFuncionEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByFuncionEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCondicionTrabajoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCondicionTrabajoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGradoAcademicoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGradoAcademicoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoAntiguedadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoAntiguedadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoEdadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoEdadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCompanyEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCompanyEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByAreaEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByAreaEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByDepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByDepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasBySubdepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasBySubdepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
             }
@@ -3312,324 +3303,75 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByUNegocioEnfoqueEmpresa(model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByUNEGocioEnfoqueEmpresa(model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGeneroEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGeneroEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Func=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByFuncionEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByFuncionEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCondicionTrabajoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCondicionTrabajoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGradoAcademicoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByGradoAcademicoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoAntiguedadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoAntiguedadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoEdadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByRangoEdadEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCompanyEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByCompanyEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByAreaEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByAreaEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByDepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasByDepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasBySubdepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPorcentajeAfirmativasBySubdepartamentoEnfoqueEmpresa(DataForFilter, model.IdPregunta, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
             }
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetValueComodinEnfoqueEmpresa(ML.ReporteD4U model)
-        {
-            List<double> resultados = new List<double>();
-            foreach (string item in model.ListFiltros)
-            {
-                char[] arreglo = new char[50];
-                arreglo = item.ToCharArray();
-                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
-
-                //Set Data for filter
-
-                if (prefijo == "UNeg=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByUNegocioEnfoqueEmpresa(DataForFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Gene=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByGeneroEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Func=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByFuncionEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "CTra=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByCondicionTrabajoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "GAca=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByGradoAcademicoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "RAnt=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByRangoAntiguedadEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "REda=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByRangoEdadEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Comp=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByCompanyEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Area=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByAreaEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Dpto=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByDepartamentoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "SubD=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinBySubdepartamentoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-            }
-
-            return Json(resultados, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult GetValueComodinEnfoqueArea(ML.ReporteD4U model)
-        {
-            List<double> resultados = new List<double>();
-            foreach (string item in model.ListFiltros)
-            {
-                char[] arreglo = new char[50];
-                arreglo = item.ToCharArray();
-                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
-
-                //Set Data for filter
-
-                if (prefijo == "UNeg=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByUNegocioEnfoqueArea(DataForFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Gene=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByGeneroEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Func=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByFuncionEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "CTra=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByCondicionTrabajoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "GAca=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByGradoAcademicoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "RAnt=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByRangoAntiguedadEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "REda=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByRangoEdadEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Comp=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByCompanyEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Area=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByAreaEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Dpto=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinByDepartamentoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "SubD=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComodinBySubdepartamentoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-            }
-            return Json(resultados, JsonRequestBehavior.AllowGet);
-        }
+        
+        
 
         public ActionResult GetPorcentajeParticipacionEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
@@ -3653,7 +3395,7 @@ namespace PL.Controllers
                     if (prefijo == "UNeg=>")
                     {
                         //Metodo por unidad de negocio
-                        var result = BL.ReporteD4U.GetParticipacionByUNegocio(DataForFilter, anioActual, model.IdBD);
+                        var result = BL.ReporteD4U.GetParticipacionByUNEGocio(DataForFilter, anioActual, model.IdBD);
                         if (Double.IsNaN(result) == true)
                         {
                             result = 0;
@@ -3803,7 +3545,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByUNegocioEE(DataForFilter, anioActual, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3936,7 +3678,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3946,7 +3688,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3957,7 +3699,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3967,7 +3709,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3977,7 +3719,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3987,7 +3729,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -3997,7 +3739,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4007,7 +3749,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4017,7 +3759,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4027,7 +3769,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4037,7 +3779,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4069,7 +3811,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4079,7 +3821,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4090,7 +3832,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4100,7 +3842,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4110,7 +3852,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4120,7 +3862,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4130,7 +3872,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4140,7 +3882,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4150,7 +3892,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4160,7 +3902,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4170,7 +3912,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4202,7 +3944,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioRespetoByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4212,7 +3954,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4223,7 +3965,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4233,7 +3975,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4243,7 +3985,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4253,7 +3995,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4263,7 +4005,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4273,7 +4015,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4283,7 +4025,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4293,7 +4035,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4303,7 +4045,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4335,7 +4077,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4345,7 +4087,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4356,7 +4098,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4366,7 +4108,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4376,7 +4118,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4386,7 +4128,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4396,7 +4138,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4406,7 +4148,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4416,7 +4158,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4426,7 +4168,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4436,7 +4178,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4468,7 +4210,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCoachingByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4478,7 +4220,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4489,7 +4231,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4499,7 +4241,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4509,7 +4251,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4519,7 +4261,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4529,7 +4271,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4539,7 +4281,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4549,7 +4291,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4559,7 +4301,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4569,7 +4311,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4601,7 +4343,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCambioByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4611,7 +4353,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4622,7 +4364,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4632,7 +4374,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4642,7 +4384,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4652,7 +4394,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4662,7 +4404,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4672,7 +4414,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4682,7 +4424,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4692,7 +4434,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4702,7 +4444,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4734,7 +4476,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioBienestarByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4744,7 +4486,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4755,7 +4497,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4765,7 +4507,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4775,7 +4517,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4785,7 +4527,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4795,7 +4537,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4805,7 +4547,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4815,7 +4557,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4825,7 +4567,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4835,7 +4577,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4867,7 +4609,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4877,7 +4619,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4888,7 +4630,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4898,7 +4640,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4908,7 +4650,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4918,7 +4660,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4928,7 +4670,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4938,7 +4680,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4948,7 +4690,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4958,7 +4700,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -4968,7 +4710,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5000,7 +4742,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioGestaltByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5010,7 +4752,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5021,7 +4763,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5031,7 +4773,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5041,7 +4783,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5051,7 +4793,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5061,7 +4803,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5071,7 +4813,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5081,7 +4823,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5091,7 +4833,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5101,7 +4843,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5133,7 +4875,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5143,7 +4885,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5154,7 +4896,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5164,7 +4906,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5174,7 +4916,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5184,7 +4926,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5194,7 +4936,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5204,7 +4946,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5214,7 +4956,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5224,7 +4966,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5234,7 +4976,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5248,258 +4990,7 @@ namespace PL.Controllers
 
         //Get Total de impulsoresclave para el logro de resultados
 
-        public ActionResult GetImpulsoresClavesEnfoqueEmpresa(ML.ReporteD4U model)
-        {
-            List<double> resultados = new List<double>();
-            foreach (string item in model.ListFiltros)
-            {
-                char[] arreglo = new char[50];
-                arreglo = item.ToCharArray();
-                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
-
-                //Set Data for filter
-
-                if (prefijo == "UNeg=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByUNegocioEE(DataForFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Gene=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-
-                if (prefijo == "Func=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "CTra=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "GAca=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "RAnt=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "REda=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Comp=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Area=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByAreaEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Dpto=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "SubD=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-            }
-            return Json(resultados, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult GetImpulsoresClavesEA(ML.ReporteD4U model)
-        {
-            List<double> resultados = new List<double>();
-            foreach (string item in model.ListFiltros)
-            {
-                char[] arreglo = new char[50];
-                arreglo = item.ToCharArray();
-                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
-
-                //Set Data for filter
-
-                if (prefijo == "UNeg=>")
-                {
-                    //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByUNegocioEA(DataForFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Gene=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-
-                if (prefijo == "Func=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "CTra=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "GAca=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "RAnt=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "REda=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Comp=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Area=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByAreaEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "Dpto=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-                if (prefijo == "SubD=>")
-                {
-                    //Metodo por genero
-                    var result = BL.ReporteD4U.GetImpulsoresClaveBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
-                    if (Double.IsNaN(result) == true)
-                    {
-                        result = 0;
-                    }
-                    resultados.Add(result);
-                }
-            }
-            return Json(resultados, JsonRequestBehavior.AllowGet);
-        }
+        
 
         //GetPromedios 66 Reactivos
         public JsonResult GetPromedios66ReactivosEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
@@ -5521,7 +5012,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5531,7 +5022,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5542,7 +5033,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5552,7 +5043,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5562,7 +5053,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5572,7 +5063,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5582,7 +5073,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5592,7 +5083,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5602,7 +5093,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5612,7 +5103,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5622,7 +5113,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66BySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66BySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5653,7 +5144,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5663,7 +5154,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5674,7 +5165,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5684,7 +5175,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5694,7 +5185,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5704,7 +5195,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5714,7 +5205,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5724,7 +5215,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5734,7 +5225,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5744,7 +5235,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5754,7 +5245,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5785,7 +5276,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5795,7 +5286,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5806,7 +5297,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5816,7 +5307,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5826,7 +5317,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5836,7 +5327,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5846,7 +5337,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5856,7 +5347,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5866,7 +5357,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5876,7 +5367,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5886,7 +5377,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5917,7 +5408,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5927,7 +5418,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5938,7 +5429,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5948,7 +5439,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5958,7 +5449,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5968,7 +5459,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5978,7 +5469,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5988,7 +5479,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -5998,7 +5489,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6008,7 +5499,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6018,7 +5509,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6030,8 +5521,11 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromediosInspirando
-        public ActionResult GetPromediosInspirandoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosInspirandoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6045,7 +5539,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6055,7 +5549,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6066,7 +5560,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6076,7 +5570,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6086,7 +5580,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6096,7 +5590,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6106,7 +5600,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6116,7 +5610,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6126,7 +5620,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6136,7 +5630,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6146,7 +5640,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6158,8 +5652,11 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioHablando
-        public ActionResult GetPromediosHablandoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosHablandoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6173,7 +5670,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioHablandoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6183,7 +5680,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6194,7 +5691,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6204,7 +5701,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6214,7 +5711,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6224,7 +5721,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6234,7 +5731,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6244,7 +5741,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6254,7 +5751,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6264,7 +5761,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6274,7 +5771,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6286,8 +5783,11 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioEscuchando
-        public ActionResult GetPromediosEscuchandoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosEscuchandoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6301,7 +5801,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6311,7 +5811,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6322,7 +5822,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6332,7 +5832,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6342,7 +5842,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6352,7 +5852,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6362,7 +5862,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6372,7 +5872,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6382,7 +5882,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6392,7 +5892,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6402,7 +5902,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6414,8 +5914,11 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromediosAgradeciendo
-        public ActionResult GetPromediosAgradeciendoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosAgradeciendoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6429,7 +5932,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6439,7 +5942,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6450,7 +5953,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6460,7 +5963,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6470,7 +5973,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6480,7 +5983,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6490,7 +5993,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6500,7 +6003,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6510,7 +6013,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6520,7 +6023,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6530,7 +6033,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6542,8 +6045,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioDesarrollando
-        public ActionResult GetPromediosDesarrollandoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosDesarrollandoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6557,7 +6062,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6567,7 +6072,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6578,7 +6083,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6588,7 +6093,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6598,7 +6103,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6608,7 +6113,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6618,7 +6123,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6628,7 +6133,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6638,7 +6143,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6648,7 +6153,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6658,7 +6163,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6670,8 +6175,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioCuidando
-        public ActionResult GetPromediosCuidandoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosCuidandoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6685,7 +6192,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6695,7 +6202,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6706,7 +6213,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6716,7 +6223,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6726,7 +6233,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6736,7 +6243,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6746,7 +6253,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6756,7 +6263,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6766,7 +6273,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6776,7 +6283,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6786,7 +6293,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6798,8 +6305,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioPercepcionLugar
-        public ActionResult GetPromediosPercepcionLugarEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosPercepcionLugarEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6813,7 +6322,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -6824,7 +6333,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6835,7 +6344,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6845,7 +6354,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6855,7 +6364,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6865,7 +6374,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6875,7 +6384,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6885,7 +6394,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6895,7 +6404,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6905,7 +6414,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6915,7 +6424,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6927,8 +6436,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioCooperando
-        public ActionResult GetPromediosCooperandoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosCooperandoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -6942,7 +6453,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -6953,7 +6464,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6964,7 +6475,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6974,7 +6485,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6984,7 +6495,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -6994,7 +6505,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7004,7 +6515,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7014,7 +6525,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7024,7 +6535,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7034,7 +6545,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7044,7 +6555,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7073,7 +6584,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7084,7 +6595,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7095,7 +6606,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7105,7 +6616,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7115,7 +6626,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7125,7 +6636,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7135,7 +6646,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7145,7 +6656,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7155,7 +6666,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7165,7 +6676,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7175,7 +6686,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7204,7 +6715,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7215,7 +6726,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7226,7 +6737,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7236,7 +6747,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7246,7 +6757,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7256,7 +6767,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7266,7 +6777,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7276,7 +6787,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7286,7 +6797,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7296,7 +6807,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7306,7 +6817,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7318,8 +6829,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioPlanes de Carrera
-        public ActionResult GetPromediosCarreraYPromocionPersEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosCarreraYPromocionPersEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -7333,7 +6846,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7344,7 +6857,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7355,7 +6868,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7365,7 +6878,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7375,7 +6888,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7385,7 +6898,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7395,7 +6908,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7405,7 +6918,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7415,7 +6928,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7425,7 +6938,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7435,7 +6948,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7447,8 +6960,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioCapacitacionYDesarrollo
-        public ActionResult GetPromediosCapacitacionYDesarrolloEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosCapacitacionYDesarrolloEnfoqueEmpresa(ML.ReporteD4U model, int anioActual)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -7462,7 +6977,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7473,7 +6988,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7484,7 +6999,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7494,7 +7009,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7504,7 +7019,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7514,7 +7029,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7524,7 +7039,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7534,7 +7049,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7544,7 +7059,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7554,7 +7069,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7564,7 +7079,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7591,7 +7106,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7602,7 +7117,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7613,7 +7128,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7623,7 +7138,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7633,7 +7148,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7643,7 +7158,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7653,7 +7168,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7663,7 +7178,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7673,7 +7188,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7683,7 +7198,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7693,7 +7208,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7705,8 +7220,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioEvalDesempeño
-        public ActionResult GetPromediosEvalDesempeñoEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosEvalDesempeñoEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -7720,7 +7237,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7731,7 +7248,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7742,7 +7259,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7752,7 +7269,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7762,7 +7279,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7772,7 +7289,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7782,7 +7299,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7792,7 +7309,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7802,7 +7319,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7812,7 +7329,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7822,7 +7339,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7834,8 +7351,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioIntegracion
-        public ActionResult GetPromediosIntegracionEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosIntegracionEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -7849,7 +7368,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7860,7 +7379,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7871,7 +7390,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7881,7 +7400,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7891,7 +7410,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7901,7 +7420,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7911,7 +7430,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7921,7 +7440,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7931,7 +7450,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7941,7 +7460,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7951,7 +7470,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -7980,7 +7499,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -7991,7 +7510,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8002,7 +7521,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8012,7 +7531,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8022,7 +7541,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8032,7 +7551,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8042,7 +7561,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8052,7 +7571,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8062,7 +7581,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8072,7 +7591,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8082,7 +7601,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8111,7 +7630,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8122,7 +7641,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8133,7 +7652,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8143,7 +7662,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8153,7 +7672,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8163,7 +7682,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8173,7 +7692,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8183,7 +7702,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8193,7 +7712,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8203,7 +7722,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8213,7 +7732,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8240,7 +7759,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8251,7 +7770,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8262,7 +7781,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8272,7 +7791,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8282,7 +7801,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8292,7 +7811,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8302,7 +7821,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8312,7 +7831,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8322,7 +7841,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8332,7 +7851,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8342,7 +7861,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8368,7 +7887,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8379,7 +7898,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8390,7 +7909,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8400,7 +7919,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8410,7 +7929,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8420,7 +7939,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8430,7 +7949,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8440,7 +7959,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8450,7 +7969,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8460,7 +7979,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8470,7 +7989,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8497,7 +8016,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8508,7 +8027,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8519,7 +8038,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8529,7 +8048,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8539,7 +8058,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8549,7 +8068,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8559,7 +8078,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8569,7 +8088,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8579,7 +8098,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8589,7 +8108,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8599,7 +8118,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8626,7 +8145,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioBioByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8637,7 +8156,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8648,7 +8167,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8658,7 +8177,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8668,7 +8187,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8678,7 +8197,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8688,7 +8207,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8698,7 +8217,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8708,7 +8227,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8718,7 +8237,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8728,7 +8247,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8755,7 +8274,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioPsicoByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8766,7 +8285,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8777,7 +8296,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8787,7 +8306,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8797,7 +8316,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8807,7 +8326,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8817,7 +8336,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8827,7 +8346,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8837,7 +8356,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8847,7 +8366,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8857,7 +8376,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8884,7 +8403,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioSocialByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -8895,7 +8414,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8906,7 +8425,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8916,7 +8435,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8926,7 +8445,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8936,7 +8455,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8946,7 +8465,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8956,7 +8475,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8966,7 +8485,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8976,7 +8495,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8986,7 +8505,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -8998,8 +8517,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosComunicacionEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosComunicacionEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -9013,7 +8534,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -9024,7 +8545,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9035,7 +8556,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9045,7 +8566,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9055,7 +8576,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9065,7 +8586,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9075,7 +8596,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9085,7 +8606,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9095,7 +8616,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9105,7 +8626,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9115,7 +8636,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9127,8 +8648,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosEnpowerEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosEnpowerEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -9142,7 +8665,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -9153,7 +8676,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9164,7 +8687,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9174,7 +8697,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9184,7 +8707,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9194,7 +8717,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9204,7 +8727,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9214,7 +8737,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9224,7 +8747,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9234,7 +8757,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9244,7 +8767,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9256,8 +8779,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosCoordinacionEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosCoordinacionEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -9271,7 +8796,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -9282,7 +8807,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9293,7 +8818,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9303,7 +8828,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9313,7 +8838,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9323,7 +8848,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9333,7 +8858,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9343,7 +8868,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9353,7 +8878,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9363,7 +8888,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9373,7 +8898,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9385,8 +8910,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosVisionEstrateEnfoqueEmpresa(ML.ReporteD4U model)
+        public ActionResult GetPromediosVisionEstrateEnfoqueEmpresa(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -9400,7 +8927,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByUNegocioEE(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -9411,7 +8938,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9422,7 +8949,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9432,7 +8959,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9442,7 +8969,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9452,7 +8979,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9462,7 +8989,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9472,7 +8999,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9482,7 +9009,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9492,7 +9019,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9502,7 +9029,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9529,7 +9056,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -9540,7 +9067,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9551,7 +9078,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9561,7 +9088,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9571,7 +9098,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9581,7 +9108,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9591,7 +9118,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9601,7 +9128,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9611,7 +9138,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9621,7 +9148,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9631,7 +9158,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9668,7 +9195,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9678,7 +9205,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9689,7 +9216,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9699,7 +9226,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9709,7 +9236,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9719,7 +9246,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9729,7 +9256,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9739,7 +9266,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9749,7 +9276,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9759,7 +9286,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9769,7 +9296,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCredibilidadBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCredibilidadBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9798,7 +9325,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9808,7 +9335,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9819,7 +9346,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9829,7 +9356,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9839,7 +9366,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9849,7 +9376,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9859,7 +9386,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9869,7 +9396,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9879,7 +9406,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9889,7 +9416,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9899,7 +9426,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioImparcialidadBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioImparcialidadBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9928,7 +9455,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9938,7 +9465,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9949,7 +9476,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9959,7 +9486,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9969,7 +9496,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9979,7 +9506,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9989,7 +9516,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9999,7 +9526,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10009,7 +9536,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10019,7 +9546,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10029,7 +9556,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOrgulloBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOrgulloBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10058,7 +9585,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioRespetoByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10068,7 +9595,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10079,7 +9606,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10089,7 +9616,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10099,7 +9626,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10109,7 +9636,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter,anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10119,7 +9646,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10129,7 +9656,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10139,7 +9666,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10149,7 +9676,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10159,7 +9686,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioRespetoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioRespetoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10188,7 +9715,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10198,7 +9725,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10209,7 +9736,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10219,7 +9746,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10229,7 +9756,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10239,7 +9766,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10249,7 +9776,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10259,7 +9786,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10269,7 +9796,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10279,7 +9806,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10289,7 +9816,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCompañerismoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCompañerismoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10318,7 +9845,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCoachingByUNegocioEA(DataForFilter,anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByUNEGocioEA(DataForFilter,anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10328,7 +9855,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10339,7 +9866,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10349,7 +9876,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10359,7 +9886,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10369,7 +9896,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10379,7 +9906,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10389,7 +9916,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10399,7 +9926,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10409,7 +9936,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10419,7 +9946,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoachingBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCoachingBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10448,7 +9975,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCambioByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10458,7 +9985,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10469,7 +9996,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10479,7 +10006,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10489,7 +10016,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10499,7 +10026,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10509,7 +10036,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10519,7 +10046,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10529,7 +10056,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10539,7 +10066,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10549,7 +10076,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCambioBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioCambioBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10576,7 +10103,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioBienestarByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByUNEGocioEA(DataForFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10586,7 +10113,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10597,7 +10124,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10607,7 +10134,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10617,7 +10144,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10627,7 +10154,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10637,7 +10164,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10647,7 +10174,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10657,7 +10184,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10667,7 +10194,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10677,7 +10204,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBienestarBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBienestarBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10704,7 +10231,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByUNEGocioEA(DataForFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10714,7 +10241,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10725,7 +10252,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10735,7 +10262,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10745,7 +10272,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10755,7 +10282,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10765,7 +10292,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10775,7 +10302,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10785,7 +10312,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10795,7 +10322,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10805,7 +10332,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlinCulturalBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioAlinCulturalBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10832,7 +10359,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioGestaltByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByUNEGocioEA(DataForFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10842,7 +10369,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10853,7 +10380,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10863,7 +10390,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10873,7 +10400,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10883,7 +10410,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10893,7 +10420,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10903,7 +10430,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10913,7 +10440,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10923,7 +10450,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10933,7 +10460,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioGestaltBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioGestaltBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10962,7 +10489,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10972,7 +10499,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10983,7 +10510,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -10993,7 +10520,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11003,7 +10530,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11013,7 +10540,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11023,7 +10550,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11033,7 +10560,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11043,7 +10570,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11053,7 +10580,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11063,7 +10590,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioConfianzaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioConfianzaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11097,7 +10624,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11107,7 +10634,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11118,7 +10645,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11128,7 +10655,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11138,7 +10665,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11148,7 +10675,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11158,7 +10685,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11168,7 +10695,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11178,7 +10705,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11188,7 +10715,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66ByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66ByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11198,7 +10725,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioOneTo66BySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioOneTo66BySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11227,7 +10754,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByUNEGocioEA(DataForFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11237,7 +10764,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11248,7 +10775,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11258,7 +10785,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11268,7 +10795,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11278,7 +10805,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11288,7 +10815,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11298,7 +10825,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11308,7 +10835,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11318,7 +10845,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11328,7 +10855,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio86ReactivosBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedio86ReactivosBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11357,7 +10884,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11367,7 +10894,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11378,7 +10905,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11388,7 +10915,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11398,7 +10925,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11408,7 +10935,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11418,7 +10945,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11428,7 +10955,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11438,7 +10965,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11448,7 +10975,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11458,7 +10985,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioPracticasCulturalesBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11470,8 +10997,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioReclutandoYDandoLaBienvenida
-        public ActionResult GetPromediosReclutandoBienvenidaEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosReclutandoBienvenidaEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -11485,7 +11014,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11495,7 +11024,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11506,7 +11035,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11516,7 +11045,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11526,7 +11055,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11536,7 +11065,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11546,7 +11075,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11556,7 +11085,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11566,7 +11095,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11576,7 +11105,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11586,7 +11115,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioReclutandoBienvenidaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11598,8 +11127,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromediosInspirando
-        public ActionResult GetPromediosInspirandoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosInspirandoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -11613,7 +11144,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11623,7 +11154,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11634,7 +11165,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11644,7 +11175,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11654,7 +11185,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11664,7 +11195,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11674,7 +11205,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11684,7 +11215,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11694,7 +11225,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11704,7 +11235,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11714,7 +11245,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioInspirandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioInspirandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11726,8 +11257,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioHablando
-        public ActionResult GetPromediosHablandoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosHablandoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -11741,7 +11274,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioHablandoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11751,7 +11284,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11762,7 +11295,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11772,7 +11305,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11782,7 +11315,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11792,7 +11325,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11802,7 +11335,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11812,7 +11345,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11822,7 +11355,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11832,7 +11365,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11842,7 +11375,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHablandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioHablandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11854,8 +11387,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioEscuchando
-        public ActionResult GetPromediosEscuchandoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosEscuchandoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -11869,7 +11404,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11879,7 +11414,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11890,7 +11425,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11900,7 +11435,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11910,7 +11445,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11920,7 +11455,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11930,7 +11465,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11940,7 +11475,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11950,7 +11485,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11960,7 +11495,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11970,7 +11505,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEscuchandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEscuchandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -11982,8 +11517,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromediosAgradeciendo
-        public ActionResult GetPromediosAgradeciendoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosAgradeciendoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -11997,7 +11534,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12007,7 +11544,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12018,7 +11555,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12028,7 +11565,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12038,7 +11575,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12048,7 +11585,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12058,7 +11595,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12068,7 +11605,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12078,7 +11615,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12088,7 +11625,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12098,7 +11635,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAgradeciendoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioAgradeciendoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12110,8 +11647,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioDesarrollando
-        public ActionResult GetPromediosDesarrollandoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosDesarrollandoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -12125,7 +11664,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByUNEGocioEA(DataForFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12135,7 +11674,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12146,7 +11685,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12156,7 +11695,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12166,7 +11705,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12176,7 +11715,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12186,7 +11725,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12196,7 +11735,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12206,7 +11745,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12216,7 +11755,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12226,7 +11765,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioDesarrollandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioDesarrollandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12238,8 +11777,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioCuidando
-        public ActionResult GetPromediosCuidandoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosCuidandoEnfoqueArea(ML.ReporteD4U model, int anioActual)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -12253,7 +11794,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12263,7 +11804,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12274,7 +11815,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12284,7 +11825,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12294,7 +11835,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12304,7 +11845,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12314,7 +11855,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12324,7 +11865,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12334,7 +11875,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12344,7 +11885,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12354,7 +11895,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCuidandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCuidandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12366,8 +11907,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioPercepcionLugar
-        public ActionResult GetPromediosPercepcionLugarEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosPercepcionLugarEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -12381,7 +11924,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -12392,7 +11935,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12403,7 +11946,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12413,7 +11956,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12423,7 +11966,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12433,7 +11976,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12443,7 +11986,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12453,7 +11996,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12463,7 +12006,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12473,7 +12016,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12483,7 +12026,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioPercepcionLugarBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12495,8 +12038,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioCooperando
-        public ActionResult GetPromediosCooperandoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosCooperandoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -12510,7 +12055,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -12521,7 +12066,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12532,7 +12077,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12542,7 +12087,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12552,7 +12097,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12562,7 +12107,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12572,7 +12117,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12582,7 +12127,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12592,7 +12137,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12602,7 +12147,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12612,7 +12157,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCooperandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCooperandoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12641,7 +12186,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -12652,7 +12197,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12663,7 +12208,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12673,7 +12218,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12683,7 +12228,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12693,7 +12238,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12703,7 +12248,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12713,7 +12258,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12723,7 +12268,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12733,7 +12278,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12743,7 +12288,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12772,7 +12317,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -12783,7 +12328,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12794,7 +12339,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12804,7 +12349,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12814,7 +12359,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12824,7 +12369,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12834,7 +12379,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12844,7 +12389,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12854,7 +12399,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12864,7 +12409,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12874,7 +12419,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioProcesosOrganBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioProcesosOrganBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12886,8 +12431,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioPlanes de Carrera
-        public ActionResult GetPromediosCarreraYPromocionPersEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosCarreraYPromocionPersEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -12901,7 +12448,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -12912,7 +12459,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12923,7 +12470,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12933,7 +12480,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12943,7 +12490,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12953,7 +12500,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12963,7 +12510,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12973,7 +12520,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12983,7 +12530,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -12993,7 +12540,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13003,7 +12550,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCarreraYPromocionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13015,8 +12562,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioCapacitacionYDesarrollo
-        public ActionResult GetPromediosCapacitacionYDesarrolloEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosCapacitacionYDesarrolloEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -13030,7 +12579,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13041,7 +12590,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13052,7 +12601,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13062,7 +12611,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13072,7 +12621,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13082,7 +12631,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13092,7 +12641,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13102,7 +12651,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13112,7 +12661,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13122,7 +12671,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13132,7 +12681,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCapacitacionDesarrolloBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13159,7 +12708,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13170,7 +12719,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13181,7 +12730,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13191,7 +12740,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13201,7 +12750,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13211,7 +12760,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13221,7 +12770,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13231,7 +12780,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13241,7 +12790,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13251,7 +12800,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13261,7 +12810,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioEMPOWERMENTBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13273,8 +12822,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioEvalDesempeño
-        public ActionResult GetPromediosEvalDesempeñoEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosEvalDesempeñoEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -13288,7 +12839,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13299,7 +12850,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13310,7 +12861,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13320,7 +12871,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13330,7 +12881,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13340,7 +12891,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13350,7 +12901,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13360,7 +12911,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13370,7 +12921,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13380,7 +12931,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13390,7 +12941,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEvalDesempeñoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13402,8 +12953,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
         //GetPromedioIntegracion
-        public ActionResult GetPromediosIntegracionEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosIntegracionEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -13417,7 +12970,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByUNEGocioEA(DataForFilter, model.Anio, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13428,7 +12981,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13439,7 +12992,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13449,7 +13002,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13459,7 +13012,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13469,7 +13022,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13479,7 +13032,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13489,7 +13042,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13499,7 +13052,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13509,7 +13062,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13519,7 +13072,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioIntegracionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioIntegracionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13548,7 +13101,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13559,7 +13112,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13570,7 +13123,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13580,7 +13133,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13590,7 +13143,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13600,7 +13153,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13610,7 +13163,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13620,7 +13173,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13630,7 +13183,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13640,7 +13193,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13650,7 +13203,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13679,7 +13232,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13690,7 +13243,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13701,7 +13254,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13711,7 +13264,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13721,7 +13274,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13731,7 +13284,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13741,7 +13294,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13751,7 +13304,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13761,7 +13314,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13771,7 +13324,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13781,7 +13334,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioNivelCompromisoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13808,7 +13361,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13819,7 +13372,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13830,7 +13383,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13840,7 +13393,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13850,7 +13403,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13860,7 +13413,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13870,7 +13423,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13880,7 +13433,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13890,7 +13443,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13900,7 +13453,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13910,7 +13463,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorSocialBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorSocialBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13936,7 +13489,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -13947,7 +13500,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13958,7 +13511,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13968,7 +13521,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13978,7 +13531,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13988,7 +13541,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -13998,7 +13551,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14008,7 +13561,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14018,7 +13571,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14028,7 +13581,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14038,7 +13591,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorPsicoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorPsicoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14065,7 +13618,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14076,7 +13629,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14087,7 +13640,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14097,7 +13650,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14107,7 +13660,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14117,7 +13670,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14127,7 +13680,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14137,7 +13690,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14147,7 +13700,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14157,7 +13710,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14167,7 +13720,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioFactorFisicoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioFactorFisicoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14194,7 +13747,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioBioByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14205,7 +13758,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14216,7 +13769,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14226,7 +13779,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14236,7 +13789,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14246,7 +13799,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14256,7 +13809,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14266,7 +13819,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14276,7 +13829,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14286,7 +13839,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14296,7 +13849,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioBioBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioBioBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14323,7 +13876,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioPsicoByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14334,7 +13887,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14345,7 +13898,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14355,7 +13908,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14365,7 +13918,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14375,7 +13928,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14385,7 +13938,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14395,7 +13948,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14405,7 +13958,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14415,7 +13968,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14425,7 +13978,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioPsicoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioPsicoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14452,7 +14005,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioSocialByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14463,7 +14016,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14474,7 +14027,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14484,7 +14037,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14494,7 +14047,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14504,7 +14057,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14514,7 +14067,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14524,7 +14077,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14534,7 +14087,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14544,7 +14097,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14554,7 +14107,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioSocialBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioSocialBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14566,8 +14119,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosComunicacionEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosComunicacionEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -14581,7 +14136,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14592,7 +14147,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14603,7 +14158,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14613,7 +14168,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14623,7 +14178,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14633,7 +14188,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14643,7 +14198,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14653,7 +14208,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14663,7 +14218,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14673,7 +14228,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14683,7 +14238,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioComunicacionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioComunicacionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14695,8 +14250,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosEnpowerEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosEnpowerEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -14710,7 +14267,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14721,7 +14278,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14732,7 +14289,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14742,7 +14299,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14752,7 +14309,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14762,7 +14319,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14772,7 +14329,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14782,7 +14339,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14792,7 +14349,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14802,7 +14359,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14812,7 +14369,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioEnpowerBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioEnpowerBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14824,8 +14381,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosCoordinacionEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosCoordinacionEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -14839,7 +14398,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14850,7 +14409,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14861,7 +14420,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14871,7 +14430,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14881,7 +14440,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14891,7 +14450,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14901,7 +14460,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14911,7 +14470,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14921,7 +14480,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14931,7 +14490,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14941,7 +14500,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioCoordinacionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioCoordinacionBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14953,8 +14512,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetPromediosVisionEstrateEnfoqueArea(ML.ReporteD4U model)
+        public ActionResult GetPromediosVisionEstrateEnfoqueArea(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
@@ -14968,7 +14529,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByUNegocioEA(DataForFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -14979,7 +14540,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -14990,7 +14551,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15000,7 +14561,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15010,7 +14571,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15020,7 +14581,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15030,7 +14591,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15040,7 +14601,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15050,7 +14611,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15060,7 +14621,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15070,7 +14631,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioVisionEstrateBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.Anio);
+                    var result = BL.ReporteD4U.GetPromedioVisionEstrateBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15097,7 +14658,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -15108,7 +14669,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15119,7 +14680,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15129,7 +14690,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15139,7 +14700,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15149,7 +14710,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15159,7 +14720,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15169,7 +14730,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15179,7 +14740,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15189,7 +14750,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15199,7 +14760,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15231,7 +14792,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioISOByUNegocioEA(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByUNEGocioEA(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -15242,7 +14803,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByGeneroEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15253,7 +14814,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByFuncionEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15263,7 +14824,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15273,7 +14834,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15283,7 +14844,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15293,7 +14854,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15303,7 +14864,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByCompanyEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15313,7 +14874,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByAreaEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15323,7 +14884,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15333,7 +14894,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15358,7 +14919,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioISOByUNegocioEE(DataForFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByUNEGocioEE(DataForFilter, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -15369,7 +14930,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByGeneroEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15380,7 +14941,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByFuncionEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15390,7 +14951,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15400,7 +14961,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15410,7 +14971,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15420,7 +14981,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15430,7 +14991,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByCompanyEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15440,7 +15001,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByAreaEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15450,7 +15011,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15460,7 +15021,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioISOBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter);
+                    var result = BL.ReporteD4U.GetPromedioISOBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15491,7 +15052,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -15502,7 +15063,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15513,7 +15074,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15523,7 +15084,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15533,7 +15094,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15543,7 +15104,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15553,7 +15114,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15563,7 +15124,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15573,7 +15134,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15583,7 +15144,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15593,7 +15154,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15622,7 +15183,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -15633,7 +15194,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15644,7 +15205,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15654,7 +15215,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15664,7 +15225,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15674,7 +15235,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15684,7 +15245,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15694,7 +15255,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15704,7 +15265,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15714,7 +15275,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15724,7 +15285,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -15754,68 +15315,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMejoresByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetMejoresBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
@@ -15839,7 +15400,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNegocioEE(DataForFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEE(DataForFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
@@ -15908,7 +15469,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNegocioEA(DataForFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEA(DataForFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 /*
@@ -16000,7 +15561,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNegocioEE(DataForFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEE(DataForFilter, AnioActual, aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
@@ -16072,7 +15633,7 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNegocioEA(DataForFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEA(DataForFilter, AnioActual, aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 /*
@@ -16148,7 +15709,7 @@ namespace PL.Controllers
         }
         //End crecimiento
 
-        public JsonResult GetMejoresEA(ML.ReporteD4U model, int AnioActual)
+        public JsonResult GetMejoresEA(ML.ReporteD4U model, int anioActual)
         {
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
@@ -16163,68 +15724,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMejoresByUNegocioEA(DataForFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByGeneroEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByFuncionEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByCompanyEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByAreaEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMejoresBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetMejoresBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
@@ -16232,8 +15793,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetPeoresEE(ML.ReporteD4U model, int AnioActual)
+        public JsonResult GetPeoresEE(ML.ReporteD4U model, int anioActual = 0)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
@@ -16247,68 +15810,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPeoresByUNegocioEE(DataForFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByGeneroEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByFuncionEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByCompanyEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByAreaEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
@@ -16316,8 +15879,10 @@ namespace PL.Controllers
             return Json(resultados, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetPeoresEA(ML.ReporteD4U model, int AnioActual)
+        public JsonResult GetPeoresEA(ML.ReporteD4U model, int anioActual)
         {
+            if (anioActual == 0)
+                anioActual = model.Anio;
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
@@ -16331,68 +15896,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPeoresByUNegocioEA(DataForFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByGeneroEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByFuncionEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByCompanyEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByAreaEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPeoresBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, AnioActual);
+                    var result = BL.ReporteD4U.GetPeoresBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
@@ -16415,68 +15980,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
@@ -16499,68 +16064,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetIndicadoresAbandonoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
 
@@ -16589,68 +16154,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoPermanenciaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoPermanenciaBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
 
@@ -16672,68 +16237,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetComparativoAbandonoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetComparativoAbandonoBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.AddRange(result);
                 }
 
@@ -16755,68 +16320,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedio66ByUNegocioEE(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByUNEGocioEE(DataForFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByGeneroEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByFuncionEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByCompanyEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByAreaEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66BySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66BySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
 
@@ -16838,68 +16403,68 @@ namespace PL.Controllers
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedio66ByUNegocioEA(DataForFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByUNEGocioEA(DataForFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByGeneroEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
 
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByFuncionEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByCompanyEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByAreaEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66ByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66ByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedio66BySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual);
+                    var result = BL.ReporteD4U.GetPromedio66BySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, anioActual, model.IdBD);
                     resultados.Add(result);
                 }
 
@@ -16957,6 +16522,518 @@ namespace PL.Controllers
             var data = BL.CompanyCategoria.GetAll();
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-    }
 
+
+
+        #region Metodos que no se usan
+
+        /*public ActionResult GetImpulsoresClavesEnfoqueEmpresa(ML.ReporteD4U model)
+        {
+            List<double> resultados = new List<double>();
+            foreach (string item in model.ListFiltros)
+            {
+                char[] arreglo = new char[50];
+                arreglo = item.ToCharArray();
+                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
+                string DataForFilter = item.Remove(0, 6);
+
+                //Set Data for filter
+
+                if (prefijo == "UNeg=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByUNEGocioEE(DataForFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Gene=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+
+                if (prefijo == "Func=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "CTra=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "GAca=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "RAnt=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "REda=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Comp=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Area=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Dpto=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "SubD=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+            }
+            return Json(resultados, JsonRequestBehavior.AllowGet);
+        }*/
+
+        /*public ActionResult GetImpulsoresClavesEA(ML.ReporteD4U model)
+        {
+            List<double> resultados = new List<double>();
+            foreach (string item in model.ListFiltros)
+            {
+                char[] arreglo = new char[50];
+                arreglo = item.ToCharArray();
+                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
+                string DataForFilter = item.Remove(0, 6);
+
+                //Set Data for filter
+
+                if (prefijo == "UNeg=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByUNEGocioEA(DataForFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Gene=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByGeneroEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+
+                if (prefijo == "Func=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByFuncionEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "CTra=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByCondicionTrabajoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "GAca=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByGradoAcademicoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "RAnt=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoAntiguedadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "REda=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByRangoEdadEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Comp=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByCompanyEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Area=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByAreaEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Dpto=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveByDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "SubD=>")
+                {
+                    //Metodo por genero
+                    var result = BL.ReporteD4U.GetImpulsoresClaveBySubDepartamentoEA(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+            }
+            return Json(resultados, JsonRequestBehavior.AllowGet);
+        }*/
+
+        /*public ActionResult GetValueComodinEnfoqueEmpresa(ML.ReporteD4U model)
+        {
+            List<double> resultados = new List<double>();
+            foreach (string item in model.ListFiltros)
+            {
+                char[] arreglo = new char[50];
+                arreglo = item.ToCharArray();
+                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
+                string DataForFilter = item.Remove(0, 6);
+
+                //Set Data for filter
+
+                if (prefijo == "UNeg=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByUNEGocioEnfoqueEmpresa(DataForFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Gene=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByGeneroEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Func=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByFuncionEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "CTra=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByCondicionTrabajoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "GAca=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByGradoAcademicoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "RAnt=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByRangoAntiguedadEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "REda=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByRangoEdadEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Comp=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByCompanyEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Area=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByAreaEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Dpto=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByDepartamentoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "SubD=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinBySubdepartamentoEnfoqueEmpresa(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+            }
+
+            return Json(resultados, JsonRequestBehavior.AllowGet);
+        }*/
+
+        /*public ActionResult GetValueComodinEnfoqueArea(ML.ReporteD4U model)
+        {
+            List<double> resultados = new List<double>();
+            foreach (string item in model.ListFiltros)
+            {
+                char[] arreglo = new char[50];
+                arreglo = item.ToCharArray();
+                string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
+                string DataForFilter = item.Remove(0, 6);
+
+                //Set Data for filter
+
+                if (prefijo == "UNeg=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByUNEGocioEnfoqueArea(DataForFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Gene=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByGeneroEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Func=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByFuncionEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "CTra=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByCondicionTrabajoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "GAca=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByGradoAcademicoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "RAnt=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByRangoAntiguedadEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "REda=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByRangoEdadEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Comp=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByCompanyEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Area=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByAreaEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "Dpto=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinByDepartamentoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+                if (prefijo == "SubD=>")
+                {
+                    //Metodo por unidad de negocio
+                    var result = BL.ReporteD4U.GetComodinBySubdepartamentoEnfoqueArea(DataForFilter, model.UnidadNegocioFilter);
+                    if (Double.IsNaN(result) == true)
+                    {
+                        result = 0;
+                    }
+                    resultados.Add(result);
+                }
+            }
+            return Json(resultados, JsonRequestBehavior.AllowGet);
+        }*/
+
+        #endregion
+    }
 }

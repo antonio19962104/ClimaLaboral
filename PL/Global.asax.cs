@@ -24,6 +24,9 @@ namespace PL
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
+
+            BL.ReporteD4U.GetPromedioAlinCulturalByUNEGocioEE("TURISMO", 2020, 1);
+
             // metodos demo
             var aModel = new ML.modelReporte()
             {
