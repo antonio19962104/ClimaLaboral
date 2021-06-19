@@ -258,7 +258,10 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     string SqlQuery = "UPDATE Empleado SET NOMBRE = {0}, APELLIDOPATERNO = {1}, APELLIDOMATERNO = {2}, Puesto = {4}, FechaNacimiento = {5}, FechaAntiguedad = {6}, Sexo = {7}, Correo = {8}, TipoFuncion = {9}, CondicionTrabajo = {10}, GradoAcademico = {11}, UnidadNegocio = {12}, DivisionMarca = {13}, AreaAgencia = {14}, Depto = {15}, Subdepartamento = {16}, EmpresaContratante = {17}, IdResponsableRH = {18}, NombreResponsableRH = {19}, IdJefe = {20}, NombreJefe = {21}, PuestoJefe = {22}, IdResponsableEstructura = {23}, NombreResponsableEstructura = {24}, RangoAntiguedad = {26}, RangoEdad = {27}, EstatusEmpleado = {28}, IdEmpleadoRH = {36} WHERE IdEmpleado = {35}";
-
+                    if (emp.EstatusEmpleado == "" || emp.EstatusEmpleado == null)
+                    {
+                        emp.EstatusEmpleado = "Activo";
+                    }
                     var query = context.Database.ExecuteSqlCommand(SqlQuery,
                         emp.Nombre, emp.ApellidoPaterno, emp.ApellidoMaterno,
                         "", emp.Puesto, emp.FechaNaciemiento, emp.FechaAntiguedad,

@@ -1,4 +1,5 @@
-﻿<!--#region Reporteo por Estructura de la Empresa-->
+﻿<script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
+<!--#region Reporteo por Estructura de la Empresa-->
 @*{ loadVisible: vm.isBusy, loadInvisible: !vm.isBusy }*@
 <div class="col-lg-12" style="" ng-class="{ CH : vm.CargaHistoricoView }">
     <div class="form-group">
@@ -78,6 +79,14 @@
                     ng-options="anios.value for anios in vm.listAnios track by anios.value"></select>
         </div>
     </div>
+    <div class="form-group">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label class="control-label">Base de Datos</label>
+            <select class="form-control" id="DDLBD">
+
+            </select>
+        </div>
+    </div>
     <!--Si es en global de lo que eligo tomo el primer boton, si hay que desplegar en no5_Indicadores_Generales toda la estructura tomo el segundo-->
     <button ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.run()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar reporte</button>
     <button hidden ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.generarJob()" class="btn btn-dark mt-3"><i class="fas fa-chart-bar"></i> Generar Job</button><br />
@@ -138,32 +147,18 @@
 </style>
 <script src="~/scripts/ReporteoClima/PDFreactor.js"></script>
 <script>
-    //window.onload = function() {
-    //    // Create new PDFreactor instance
-    //    var pdfReactor = new PDFreactor("https://cloud.pdfreactor.com/service/rest");
-    //    // Create a new PDFreactor configuration object
-    //    var config = {
-    //        // Specify the input document
-    //        document: "http://www.stackoverflow.com",
-    //    };
-    //    //var connectionSettings = {
-    //    //    headers: "header",
-    //    //    name: "name"
-    //    //};
-        
-    //    // Render document and save result
-    //    try {
-    //        //var result = pdfReactor.convert(config);
-    //        //document.getElementById("result").src = "data:application/pdf;base64," + result.document;
-    //        var result = pdfReactor.convert(config)
-    //            .then(function () {
-    //                var data = JSON.parse(b64Document);
-    //                document.getElementById("result").src = "data:application/pdf;base64," + data.document;
-    //            });
-    //    } catch (error) {
-    //        if (error instanceof PDFreactor.PDFreactorWebserviceError) {
-    //            document.body.innerHTML = "<h1>An Error Has Occurred</h1><h2>" + error.message + "</h2>";
-    //        }
-    //    }
-    //}
+    $(document).ready(function () {
+        $.ajax({
+            url: "/BD/GetAllForListadoJSON",
+            type: "GET",
+            success: function (response) {
+                $("#DDLBD").empty();
+                $("#DDLBD").append("<option value='" + 0 + "'>-Selecciona-</option>");
+                [].forEach.call(response.ListadoDeBaseDeDatos, function (elem) {
+                    if (elem.TipoBD.IdTipoBD == 1)
+                        $("#DDLBD").append("<option value='" + elem.IdBaseDeDatos + "'>" + elem.Nombre + "</option>");
+                });
+            }
+        })
+    });
 </script>

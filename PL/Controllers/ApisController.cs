@@ -718,6 +718,7 @@ namespace PL.Controllers
             ML.ReporteD4U model = new ML.ReporteD4U();
             try
             {
+                //model.IdBD = parametroDeBD
                 model.UnidadNegocioFilter = aUnidadDeNegocio;
                 model.ListFiltros = new List<string>();
                 aFiltro = setPrefijo(aCriterioBusquedaSeleccionado, aFiltro);

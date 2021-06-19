@@ -18,7 +18,7 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var query = context.EstatusEncuestaAgregar(estatusEncuesta.Encuesta.IdEncuesta, estatusEncuesta.Empleado.IdEmpleado);
-                    var lastIdEstatusEncuesta = context.EstatusEncuesta.Max(o => o.IdEstatusEncuesta);
+                    var lastIdEstatusEncuesta = context.EstatusEncuesta.Where(o => o.IdEmpleado ==  estatusEncuesta.Empleado.IdEmpleado);
                     /*
                      * El Año en Estatus encuesta debe ser acorde a lo que se haya configurado en ConfigClimaLab
                      * JAMG
@@ -32,7 +32,7 @@ namespace BL
                     var q2 = context.ConfigClimaLab.Select(o => o).Where(o => o.IdBaseDeDatos == idBD && o.IdEncuesta == 1).FirstOrDefault();
                     
                     //context.Database.ExecuteSqlCommand("UPDATE ESTATUSENCUESTA SET ANIO = {0} WHERE IDESTATUSENCUESTA = {1}", DateTime.Now.Year, lastIdEstatusEncuesta);
-                    context.Database.ExecuteSqlCommand("UPDATE ESTATUSENCUESTA SET ANIO = {0} WHERE IDESTATUSENCUESTA = {1}", q2.PeriodoAplicacion, lastIdEstatusEncuesta);
+                    context.Database.ExecuteSqlCommand("UPDATE ESTATUSENCUESTA SET ANIO = {0} WHERE IDESTATUSENCUESTA = {1}", q2.PeriodoAplicacion, lastIdEstatusEncuesta.FirstOrDefault().IdEstatusEncuesta);
                     context.SaveChanges();
 
                     result.Correct = true;
