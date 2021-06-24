@@ -571,6 +571,15 @@ namespace PL.Controllers
                 var result = BL.Respuestas.Add(usuarioRespuesta);
             }
             resultado.Correct = true;
+            //
+            ML.EstatusEncuesta model = new ML.EstatusEncuesta();
+            int IdUsuarios = Convert.ToInt32(Session["EmpleadoEncuestado"]);
+            model.Empleado = new ML.Empleado();
+            model.Empleado.IdEmpleado = IdUsuarios;
+            model.Encuesta = new ML.Encuesta();
+            model.Encuesta.IdEncuesta = 1;
+            var resultStatus = BL.Empleado.EstatusEncuestaFinal(model);
+            Session.Abandon();
             return Json("success");
         }
         [HttpPost]

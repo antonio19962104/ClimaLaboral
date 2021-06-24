@@ -83,6 +83,7 @@ namespace PL.Controllers
         {
             try
             {
+                Console.Write(aHistorico.IdBaseDeDatos);
                 #region validar
                 BL.LogReporteoClima.writteLogJobReporte("Entré a generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 //Session["AnioActual_AnioHistorico"] = (aHistorico.Anio + 1) + "_" + aHistorico.Anio;
@@ -106,72 +107,76 @@ namespace PL.Controllers
                     /* Se debe generar el reporte a nivel GAFM * El de la Uniad de negocio actual se saca de todos estos calculos * El de las otras unidades de negocio se sacaria de la tabla de historicos tomando el mismo año que se esta consultando en AnioActual*/
                 }
 
-                objMejoresEE = apis.getReactivosMejorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objMejoresEA = apis.getReactivosMejorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objMayorCrecimientoEE = apis.getReactivosMayorCrecimietoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual);
-                objMayorCrecimientoEA = apis.getReactivosMayorCrecimietoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual);
-                objpeoresEE = apis.getReactivosPeorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objpeoresEA = apis.getReactivosPeorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objProcesosOrg = apis.getProcesosOrga(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objPracticasCulturales = apis.getPracticasCulturales(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objEsperadas = apis.getEncuestasEsperadas(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objParticipacion = apis.getParticipacion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objCalificacionGlobal = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objConfianza = apis.getConfianza(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objNivelCompromiso = apis.getNivelCompromiso(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objNivelColaboracion = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objCredibilidad = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objImparcialidad = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                objMejoresEE = apis.getReactivosMejorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objMejoresEA = apis.getReactivosMejorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objMayorCrecimientoEE = apis.getReactivosMayorCrecimietoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objMayorCrecimientoEA = apis.getReactivosMayorCrecimietoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objpeoresEE = apis.getReactivosPeorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objpeoresEA = apis.getReactivosPeorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+
+                //segunda validacion
+                objProcesosOrg = apis.getProcesosOrga(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta ajustar EA
+                objPracticasCulturales = apis.getPracticasCulturales(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objEsperadas = apis.getEncuestasEsperadas(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objParticipacion = apis.getParticipacion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objCalificacionGlobal = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objConfianza = apis.getConfianza(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objNivelCompromiso = apis.getNivelCompromiso(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objNivelColaboracion = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objCredibilidad = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objImparcialidad = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 // 
-                objOrgullo = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objRespeto = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objCompanierismo = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objCoaching = apis.getCoaching(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objHabgerenciales = apis.getHabGerenciales(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objAlineacionEstrategica = apis.getAlineacionEstrategica(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objCambio = apis.getCambio(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                objOrgullo = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objRespeto = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objCompanierismo = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objCoaching = apis.getCoaching(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objHabgerenciales = apis.getHabGerenciales(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objAlineacionEstrategica = apis.getAlineacionEstrategica(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
+                objCambio = apis.getCambio(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 /*
                  * Faltantes de añadir el campo año 
                 */
                 //Bienestar (17)
                 var aFiltrosEntUnNivelAbajo = getFiltros(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId, aHistorico.EntidadNombre);
-                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual);
-                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual);
+                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
                 //
-                objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
-                objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 //
 
 
 
-                objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual);
-                objComparativoAbandono = apis.getComparativoAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual);
+                objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoAbandono = apis.getComparativoAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 //
-                objComparativoEntidadesResultadoGeneralEE = apis.getComparativoEntidadesResultadoGeneralEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual);
-                objComparativoEntidadesResultadoGeneralEA = apis.getComparativoEntidadesResultadoGeneralEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual);
+                objComparativoEntidadesResultadoGeneralEE = apis.getComparativoEntidadesResultadoGeneralEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objComparativoEntidadesResultadoGeneralEA = apis.getComparativoEntidadesResultadoGeneralEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 //
                 var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
-                objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual);
-                objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual);
-                objComparativoPorAntiguedadEE = apis.getComparativoPorAntiguedadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorAntiguedadEA = apis.getComparativoPorAntiguedadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorGeneroEE = apis.getComparativoPorGeneroEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorGeneroEA = apis.getComparativoPorGeneroEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorGradoAcademicoEE = apis.getComparativoPorGradoAcademicoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorGradoAcademicoEA = apis.getComparativoPorGradoAcademicoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
+                objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objComparativoPorAntiguedadEE = apis.getComparativoPorAntiguedadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoPorAntiguedadEA = apis.getComparativoPorAntiguedadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoPorGeneroEE = apis.getComparativoPorGeneroEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoPorGeneroEA = apis.getComparativoPorGeneroEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoPorGradoAcademicoEE = apis.getComparativoPorGradoAcademicoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoPorGradoAcademicoEA = apis.getComparativoPorGradoAcademicoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 #endregion #region calcular data
 
                 /* Anio asignado */
-                objComparativoPorCondicionTrabajoEE = apis.getComparativoPorCondicionTrabajoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorCondicionTrabajoEA = apis.getComparativoPorCondicionTrabajoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorFuncionEE = apis.getComparativoPorFuncionEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorFuncionEA = apis.getComparativoPorFuncionEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorRangoEdadEE = apis.getComparativoPorRangoEdadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
-                objComparativoPorRangoEdadEA = apis.getComparativoPorRangoEdadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual);
+                //ajustar queries de estos metodos
+                objComparativoPorCondicionTrabajoEE = apis.getComparativoPorCondicionTrabajoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorCondicionTrabajoEA = apis.getComparativoPorCondicionTrabajoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorFuncionEE = apis.getComparativoPorFuncionEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorFuncionEA = apis.getComparativoPorFuncionEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorRangoEdadEE = apis.getComparativoPorRangoEdadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorRangoEdadEA = apis.getComparativoPorRangoEdadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objNube1 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "1", AnioActual);
                 objNube2 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "2", AnioActual);
                 objNube3 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "3", AnioActual);
                 objNube4 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "4", AnioActual);
+                //ajustar queries de hasta aqui
 
                 #region Asignar alias al objeto
                 objCalificacionGlobal.ContentType = "dataCalificacionGlobal";
@@ -1711,34 +1716,34 @@ namespace PL.Controllers
             switch (id)
             {
                 case 1:
-                    data = apis.getParticipacion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getParticipacion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 2:
-                    data = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 3:
-                    data = apis.getConfianza(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getConfianza(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 4:
-                    data = apis.getNivelCompromiso(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getNivelCompromiso(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 5:
-                    data = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 6:
-                    data = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 7:
-                    data = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 8:
-                    data = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 9:
-                    data = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 10:
-                    data = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 default:
                     break;
@@ -1761,34 +1766,34 @@ namespace PL.Controllers
             switch (id)
             {
                 case 1:
-                    data = apis.getParticipacion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getParticipacion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 2:
-                    data = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 3:
-                    data = apis.getConfianza(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getConfianza(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 4:
-                    data = apis.getNivelCompromiso(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getNivelCompromiso(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 5:
-                    data = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 6:
-                    data = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 7:
-                    data = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 8:
-                    data = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 9:
-                    data = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 case 10:
-                    data = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual);
+                    data = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                     break;
                 default:
                     break;
@@ -1816,43 +1821,43 @@ namespace PL.Controllers
                 switch (id)
                 {
                     case 1:
-                        data = apis.getParticipacion(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getParticipacion(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 2:
-                        data = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getCalificacionGlobal(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 3:
-                        data = apis.getConfianza(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getConfianza(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 4:
-                        data = apis.getNivelCompromiso(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getNivelCompromiso(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 5:
-                        data = apis.getNivelColaboracion(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getNivelColaboracion(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 6:
-                        data = apis.getCredibilidad(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getCredibilidad(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 7:
-                        data = apis.getImparcialidad(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getImparcialidad(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 8:
-                        data = apis.getOrgullo(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getOrgullo(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 9:
-                        data = apis.getRespeto(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getRespeto(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     case 10:
-                        data = apis.getCompanierismo(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual);
+                        data = apis.getCompanierismo(criterioBusquedaSeleccionado, item.EntidadNombre, unidadNeg, AnioActual, item.IdBaseDeDatos);
                         result.Add(data.Data);
                         break;
                     default:

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json
+<!DOCTYPE html>
 <html class="nojs html" lang="es-es" style="" >
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
@@ -90,7 +91,7 @@
                     url: '@Url.Action("validarSession", "Home")',
                     contentType: 'application/json; charset=utf-8',
                     success: function (Response) {
-                        var Seccion = @Session["AvanceSeccion"];
+                        var Seccion = @Html.Raw(JsonConvert.SerializeObject(Session["AvanceSeccion"]));
 
                         if (Seccion == 1) {
                             if(location.href == 'http://www.diagnostic4u.com/Home/EncuestaP2Get'){

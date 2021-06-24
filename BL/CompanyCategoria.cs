@@ -25,11 +25,10 @@ namespace BL
                         foreach (var obj in query)
                         {
                             ML.CompanyCategoria companyCategoria = new ML.CompanyCategoria();
-
                             companyCategoria.IdCompanyCategoria = obj.IdCompanyCategoria;
                             companyCategoria.Descripcion = obj.Descripcion;
-
-                            result.Objects.Add(companyCategoria);
+                            if (obj.IdCompanyCategoria != 10)
+                                result.Objects.Add(companyCategoria);
                         }
                         result.Correct = true;
                     }

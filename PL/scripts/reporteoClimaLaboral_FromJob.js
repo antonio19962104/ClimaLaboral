@@ -1632,6 +1632,7 @@ function GetDashBoard() {
                                     vm.aux.EntidadNombre = vm.arrayStringFiltros[i];
                                     vm.aux.EntidadId = 0;
                                     vm.aux.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id + 1;
+                                    vm.aux.IdBaseDeDatos = document.getElementById("DDLBD").val;
                                     vm.listHistoricoData.push(vm.aux);
                                 }
                                 // console.log(vm.listHistoricoData);
@@ -7998,6 +7999,7 @@ function GetDashBoard() {
                 vm.model.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
                 vm.model.CurrentUsr = localStorage["usuario"];
                 vm.model.currentURL = vm.urlApis;
+                vm.model.IdBaseDeDatos = document.getElementById("DDLBD").value;
 
                 fillArrayCustomHisto("BackGroundJob/execute", vm.model, vm.ExisteH, function () {
                     if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {

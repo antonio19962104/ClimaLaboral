@@ -1,4 +1,5 @@
-﻿@model ML.CompanyCategoria
+﻿@using Newtonsoft.Json
+@model ML.CompanyCategoria
 @{
     ViewBag.Title = "EncuestaP11";
 }
@@ -218,7 +219,7 @@
                     </div>
                 </div>
                 <p id="puntito" style="position:relative; left:10.11%">.</p>
-                <div class="clearfix colelem referencia" onclick="al" id="pbuttonu20333">
+                <div class="clearfix colelem referencia" onclick="" id="pbuttonu20333">
                     <div class="row">
                         <div class="safari col-12 col-sm-12 col-md-6 col-xs-6 ajuste">
                             <!-- group -->
@@ -556,7 +557,18 @@
 <script>
     function enviar()
     {
-
+        swal ({
+            title: "Procesando...",
+            text: "Espere...",
+            imageUrl: "",
+            icon: "/images/load.gif",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+        $('.swal-icon').addClass('load');
+        $('.load').css('width', '25%');
+        $('.load').css('height', '25%');
+        $('swal-button-container').css('display', 'none');
         var respuesta1 = $('#Antiguedad').val();
         var respuesta2 = $('#RangoEdad').val();
         var respuesta3 = $('#CondicionTrabajo').val();
@@ -784,7 +796,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
+        
         //Compañia
         $("#u20208").hide();
         $("#u20200-4").hide();
@@ -1160,14 +1172,27 @@
 
 
     $(document).ready(function (){
+        var idEmple = @Html.Raw(JsonConvert.SerializeObject(Session["EmpleadoEncuestado"]));
+        if (idEmple == null || idEmple == undefined) {
+            swal({
+                title: "Su sesion ha expirado, Serás redireccionado al Login",
+                text: "",
+                type: "info",
+                icon: "info",
+            }).then(function () {
+                window.location.href = "/";
+                return false;
+            });
+        }
+
 
         var anchoReal = $(document).width();
 
         if (anchoReal == 1485) {
-            $('select').css('font-size', '12px;');  
+            $('select').css('font-size', '12px;');
         }
 
-    });  
+    });
 </script>
 <script>
  

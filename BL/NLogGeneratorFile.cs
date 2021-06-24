@@ -22,12 +22,21 @@ namespace BL
         }
         public static void logError(Exception aE, StackTrace st)
         {
-            nlogClimaDinamico.Error("/---------------------------------------------------------------------------------/");
-            nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
-            nlogClimaDinamico.Error("Message: " + aE.Message);
-            nlogClimaDinamico.Error("Exception: " + aE);
-            nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
-            nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
+            if (aE.InnerException.ToString().Contains("Error de división entre cero."))
+            {
+                nlogClimaDinamico.Error("/----------------------------------------------------------------------------------------------------------------------------/");
+                nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Error de división entre cero");
+            }
+            else
+            {
+                nlogClimaDinamico.Error("/----------------------------------------------------------------------------------------------------------------------------/");
+                nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Message: " + aE.Message);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
+            }
         }
         public static void logError(string message, StackTrace st)
         {

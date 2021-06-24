@@ -3039,7 +3039,11 @@ namespace PL.Controllers
                     char[] arreglo = new char[50];
                     arreglo = item.ToCharArray();
                     string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                    string DataForFilter = item.Remove(0, 6);
+                    string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
+
+                    if (prefijo == "UNeg=>")
+                        model.UnidadNegocioFilter = DataForFilter;
+
                     if (prefijo == "UNeg=>")
                     {
                         var result = BL.ReporteD4U.GetEsperadasByUNEGocio(DataForFilter, anioActual, model.IdBD);
@@ -3120,9 +3124,11 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (prefijo == "UNeg=>")
+                    model.UnidadNegocioFilter = DataForFilter;
 
                 if (prefijo == "UNeg=>")
                 {
@@ -3208,9 +3214,11 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
-                //Set Data for filter
+                // set unidad negocio
+                if (prefijo == "UNeg=>")
+                    model.UnidadNegocioFilter = DataForFilter;
 
                 if (prefijo == "UNeg=>")
                 {
@@ -3296,9 +3304,10 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 if (prefijo == "UNeg=>")
                 {
@@ -3388,7 +3397,7 @@ namespace PL.Controllers
                     char[] arreglo = new char[50];
                     arreglo = item.ToCharArray();
                     string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                    string DataForFilter = item.Remove(0, 6);
+                    string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                     //Set Data for filter
 
@@ -3538,7 +3547,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -3671,7 +3680,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -3804,7 +3813,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -3937,7 +3946,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4070,7 +4079,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4203,7 +4212,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4336,7 +4345,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4469,7 +4478,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4602,7 +4611,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4735,7 +4744,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -4868,7 +4877,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5005,7 +5014,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5137,7 +5146,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5269,7 +5278,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5401,7 +5410,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5532,7 +5541,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5663,7 +5672,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5794,7 +5803,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -5925,7 +5934,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6055,7 +6064,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6185,7 +6194,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6315,7 +6324,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6446,7 +6455,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6577,7 +6586,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6708,7 +6717,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6839,7 +6848,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -6970,7 +6979,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7099,7 +7108,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7230,7 +7239,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7361,7 +7370,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7492,7 +7501,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7623,7 +7632,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7752,7 +7761,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -7880,7 +7889,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8009,7 +8018,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8138,7 +8147,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8267,7 +8276,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8396,7 +8405,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8527,7 +8536,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8658,7 +8667,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8789,7 +8798,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -8920,7 +8929,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9049,14 +9058,14 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByUNEGocioEE(DataForFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByUNEGocioEE(DataForFilter, model.Anio, model.IdBD);
 
                     if (Double.IsNaN(result) == true)
                     {
@@ -9067,7 +9076,7 @@ namespace PL.Controllers
                 if (prefijo == "Gene=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGeneroEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9078,7 +9087,7 @@ namespace PL.Controllers
                 if (prefijo == "Func=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByFuncionEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9088,7 +9097,7 @@ namespace PL.Controllers
                 if (prefijo == "CTra=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCondicionTrabajoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9098,7 +9107,7 @@ namespace PL.Controllers
                 if (prefijo == "GAca=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByGradoAcademicoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9108,7 +9117,7 @@ namespace PL.Controllers
                 if (prefijo == "RAnt=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoAntiguedadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9118,7 +9127,7 @@ namespace PL.Controllers
                 if (prefijo == "REda=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByRangoEdadEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9128,7 +9137,7 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9138,7 +9147,7 @@ namespace PL.Controllers
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByAreaEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9148,7 +9157,7 @@ namespace PL.Controllers
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9158,7 +9167,7 @@ namespace PL.Controllers
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.IdBD);
+                    var result = BL.ReporteD4U.GetPromedioNivelDesempeñoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, model.Anio, model.IdBD);
                     if (Double.IsNaN(result) == true)
                     {
                         result = 0;
@@ -9188,7 +9197,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9318,7 +9327,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9448,7 +9457,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9578,7 +9587,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9708,7 +9717,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9838,7 +9847,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -9968,7 +9977,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10096,7 +10105,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10224,7 +10233,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10352,7 +10361,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10482,7 +10491,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10617,7 +10626,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10747,7 +10756,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -10877,7 +10886,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11007,7 +11016,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11137,7 +11146,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11267,7 +11276,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11397,7 +11406,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11527,7 +11536,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11657,7 +11666,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11787,7 +11796,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -11917,7 +11926,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12048,7 +12057,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12179,7 +12188,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12310,7 +12319,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12441,7 +12450,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12572,7 +12581,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12701,7 +12710,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12832,7 +12841,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -12963,7 +12972,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13094,7 +13103,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13225,7 +13234,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13354,7 +13363,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13482,7 +13491,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13611,7 +13620,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13740,7 +13749,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13869,7 +13878,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -13998,7 +14007,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14129,7 +14138,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14260,7 +14269,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14391,7 +14400,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14522,7 +14531,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14651,7 +14660,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14785,7 +14794,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -14912,7 +14921,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15045,7 +15054,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15176,7 +15185,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15308,7 +15317,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15385,7 +15394,7 @@ namespace PL.Controllers
         }
 
         //Crecimient
-        public JsonResult GetMayorCrecimientoEE(ML.ReporteD4U model, string aEntidadId, HttpSessionStateBase Session)
+        public JsonResult GetMayorCrecimientoEE(ML.ReporteD4U model, string aEntidadId, HttpSessionStateBase Session, int idBaseDeDatos)
         {
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
@@ -15393,14 +15402,14 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEE(DataForFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEE(DataForFilter, Session["AnioActual_AnioHistorico"], aEntidadId, idBaseDeDatos);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
@@ -15425,28 +15434,28 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId, idBaseDeDatos);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByAreaEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByAreaEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId, idBaseDeDatos);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoByAreaEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId, idBaseDeDatos);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId, idBaseDeDatos);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -15462,7 +15471,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15545,6 +15554,7 @@ namespace PL.Controllers
         }
         public JsonResult GetMayorCrecimientoEE(ML.ReporteD4U model, string aEntidadId, object AnioActual)
         {
+            //Revisar que pasa con el año
             int Actual = Convert.ToInt32(AnioActual);
             int Anterior = Actual - 1;
             AnioActual = Actual + "_" + Anterior;
@@ -15554,14 +15564,14 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEE(DataForFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByUNEGocioEE(DataForFilter, AnioActual, aEntidadId, model.IdBD);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Gene=>")
@@ -15586,28 +15596,28 @@ namespace PL.Controllers
                 if (prefijo == "Comp=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId, model.IdBD);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoByCompanyEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Area=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByAreaEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByAreaEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId, model.IdBD);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoByAreaEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "Dpto=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId, model.IdBD);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoByDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
                 if (prefijo == "SubD=>")
                 {
                     //Metodo por genero
-                    var result = BL.ReporteD4U.GetMayorCrecimientoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId);
+                    var result = BL.ReporteD4U.GetMayorCrecimientoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, AnioActual, aEntidadId, model.IdBD);
                     //var result = BL.ReporteD4U.GetMayorCrecimientoBySubDepartamentoEE(DataForFilter, model.UnidadNegocioFilter, Session["AnioActual_AnioHistorico"], aEntidadId);
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
@@ -15626,7 +15636,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15717,7 +15727,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15803,7 +15813,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15889,7 +15899,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -15973,7 +15983,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -16057,7 +16067,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -16143,7 +16153,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 if (DataForFilter == "TUR COM - GERENCIA GENERAL")
                 {
@@ -16231,7 +16241,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
                 if (prefijo == "UNeg=>")
@@ -16314,7 +16324,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
                 if (prefijo == "UNeg=>")
@@ -16397,7 +16407,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
                 if (prefijo == "UNeg=>")
@@ -16535,7 +16545,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -16662,7 +16672,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -16789,7 +16799,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 
@@ -16916,7 +16926,7 @@ namespace PL.Controllers
                 char[] arreglo = new char[50];
                 arreglo = item.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = item.Remove(0, 6);
+                string DataForFilter = item.Remove(0, 6);  if (prefijo == "UNeg=>") { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
 

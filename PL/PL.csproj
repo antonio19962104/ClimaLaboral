@@ -315,6 +315,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\EncuestaController.cs" />
+    <Compile Include="Controllers\EstructuraAFMReporteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HtmlToPDFController.cs" />
     <Compile Include="Controllers\LoginAdminController.cs" />
@@ -449,6 +450,7 @@
     <Content Include="css\reporteoClima.css" />
     <Content Include="css\ReporteoClima\all.min.css" />
     <Content Include="css\ReporteoClima\animate.min.css" />
+    <Content Include="css\ReporteoClima\bootstrap-multiselect.css" />
     <Content Include="css\ReporteoClima\bootstrap.min.css" />
     <Content Include="css\ReporteoClima\custom-administrator - Copia.css" />
     <Content Include="css\ReporteoClima\custom-administrator.css" />
@@ -795,14 +797,18 @@
     <Content Include="scripts\reporteoClimaLaboral_FromJob - Copia_22_04_2021.js" />
     <Content Include="scripts\reporteoClimaLaboral_FromJob.js" />
     <Content Include="scripts\reporteoClimaLaboral.js" />
+    <Content Include="scripts\ReporteoClima\filtradoReportes.js" />
     <Content Include="scripts\ReporteoClima\html.js" />
     <Content Include="scripts\ReporteoClima\html2canvas.js" />
     <Content Include="scripts\ReporteoClima\html2pdf.bundle.min.js" />
+    <Content Include="scripts\ReporteoClima\jquery.multi-select.js" />
     <Content Include="scripts\ReporteoClima\jspdf.js" />
     <Content Include="scripts\ReporteoClima\kendo.all.min.js" />
+    <Content Include="scripts\ReporteoClima\kendo.multiselect.min.js" />
     <Content Include="scripts\ReporteoClima\LinQ.js" />
     <Content Include="scripts\ReporteoClima\morris.js" />
     <Content Include="scripts\ReporteoClima\morris2.js" />
+    <Content Include="css\ReporteoClima\multi-select.css" />
     <Content Include="scripts\ReporteoClima\PDFreactor.js" />
     <Content Include="scripts\ReporteoClima\reporteoClima.min.js" />
     <Content Include="scripts\ReporteoClima\split_text_to_size.js" />
@@ -1101,6 +1107,7 @@
     <Folder Include="Views\AuxGetResp\" />
     <Folder Include="Views\BackGroundJob\" />
     <Folder Include="Views\CalcClim\" />
+    <Folder Include="Views\EstructuraAFMReporte\" />
     <Folder Include="Views\HtmlToPDF\" />
     <Folder Include="Views\ReporteClimaDinamico\" />
     <Folder Include="Views\ReportesClima\" />

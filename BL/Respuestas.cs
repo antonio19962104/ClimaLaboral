@@ -20,25 +20,33 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    //IdPregunta, RespuestaUsuario, IdRespuesta, IdEmpleado
-                    var query = context.RespuestasAdd(EmpleadoRespuestas.Pregunta.IdPregunta, EmpleadoRespuestas.RespuestaEmpleado, EmpleadoRespuestas.Respuesta.IdRespuesta, EmpleadoRespuestas.Empleado.IdEmpleado);
-                    var lastInsert = context.EmpleadoRespuestas.Max(o => o.IdEmpleadoRespuestas);
-                    /*
-                     * El Año en Estatus encuesta debe ser acorde a lo que se haya configurado en ConfigClimaLab
-                     * JAMG
-                     * 12/04/2021
-                     * Buscar a BD en la que esta el empleado
-                     * Buscar la configuracion segun la encuesta 1 y el id de BD
-                    */
-                    var q1 = context.Empleado.Select(o => new { o.IdEmpleado, o.Nombre, o.ApellidoPaterno, o.ApellidoMaterno, o.IdBaseDeDatos }).Where(o => o.IdEmpleado == EmpleadoRespuestas.Empleado.IdEmpleado).FirstOrDefault();
-                    var idBD = q1.IdBaseDeDatos;
+                    var status = context.EstatusEncuesta.Where(o => o.IdEmpleado == EmpleadoRespuestas.Empleado.IdEmpleado).FirstOrDefault();
+                    if (status.Estatus == "Terminada")
+                    {
+                        Console.Write("invalida guardado");
+                    }
+                    else
+                    {
+                        //IdPregunta, RespuestaUsuario, IdRespuesta, IdEmpleado
+                        var query = context.RespuestasAdd(EmpleadoRespuestas.Pregunta.IdPregunta, EmpleadoRespuestas.RespuestaEmpleado, EmpleadoRespuestas.Respuesta.IdRespuesta, EmpleadoRespuestas.Empleado.IdEmpleado);
+                        var lastInsert = context.EmpleadoRespuestas.Max(o => o.IdEmpleadoRespuestas);
+                        /*
+                         * El Año en Estatus encuesta debe ser acorde a lo que se haya configurado en ConfigClimaLab
+                         * JAMG
+                         * 12/04/2021
+                         * Buscar a BD en la que esta el empleado
+                         * Buscar la configuracion segun la encuesta 1 y el id de BD
+                        */
+                        var q1 = context.Empleado.Select(o => new { o.IdEmpleado, o.Nombre, o.ApellidoPaterno, o.ApellidoMaterno, o.IdBaseDeDatos }).Where(o => o.IdEmpleado == EmpleadoRespuestas.Empleado.IdEmpleado).FirstOrDefault();
+                        var idBD = q1.IdBaseDeDatos;
 
-                    var q2 = context.ConfigClimaLab.Select(o => o).Where(o => o.IdBaseDeDatos == idBD && o.IdEncuesta == 1).FirstOrDefault();
+                        var q2 = context.ConfigClimaLab.Select(o => o).Where(o => o.IdBaseDeDatos == idBD && o.IdEncuesta == 1).FirstOrDefault();
 
-                    context.Database.ExecuteSqlCommand("UPDATE EMPLEADORESPUESTAS SET ANIO = {0} WHERE IDEMPLEADORESPUESTAS = {1}", q2.PeriodoAplicacion, lastInsert);
-                    context.SaveChanges();
+                        context.Database.ExecuteSqlCommand("UPDATE EMPLEADORESPUESTAS SET ANIO = {0} WHERE IDEMPLEADORESPUESTAS = {1}", q2.PeriodoAplicacion, lastInsert);
+                        context.SaveChanges();
 
-                    result.Correct = true;
+                        result.Correct = true;
+                    }
                 }
             }
             catch(Exception ex)

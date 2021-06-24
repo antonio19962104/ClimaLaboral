@@ -25,29 +25,31 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
-            BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNEGocioEE("turismo", 2020, 1);
+
+            //BL.EstructuraAFMReporte.GetEstructuraGAFM("1");
+            //BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNEGocioEE("turismo", 2020, 1);
 
             // metodos demo
-            var aModel = new ML.modelReporte()
-            {
-                idTipoEntidad = 1,
-                anioActual = 2019, // lo asigno asi porque asi cae de la vista del reporte
-                entidadNombre = "turismo",
-                idEntidad = 9,
-                idPregunta = 1,
-                idCompetencia = 1,
-                idEncuesta = 1,
-                idEnfoque = 1,
-                idSubCategoria = 1
-            };
-            var model = new ML.Historico()
-            {
-                Anio = aModel.anioActual,
-                IdTipoEntidad = aModel.idTipoEntidad,
-                EntidadNombre = aModel.entidadNombre,
-                EntidadId = aModel.idEntidad,
-                idEncuesta = aModel.idEncuesta, CurrentUsr = "jamurillo"
-            };
+            //var aModel = new ML.modelReporte()
+            //{
+            //    idTipoEntidad = 1,
+            //    anioActual = 2019, // lo asigno asi porque asi cae de la vista del reporte
+            //    entidadNombre = "turismo",
+            //    idEntidad = 9,
+            //    idPregunta = 1,
+            //    idCompetencia = 1,
+            //    idEncuesta = 1,
+            //    idEnfoque = 1,
+            //    idSubCategoria = 1
+            //};
+            //var model = new ML.Historico()
+            //{
+            //    Anio = aModel.anioActual,
+            //    IdTipoEntidad = aModel.idTipoEntidad,
+            //    EntidadNombre = aModel.entidadNombre,
+            //    EntidadId = aModel.idEntidad,
+            //    idEncuesta = aModel.idEncuesta, CurrentUsr = "jamurillo"
+            //};
 
             //PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
             //backGroundJobController.BackgroundJobCreateReport(model);

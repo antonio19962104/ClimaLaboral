@@ -9,6 +9,7 @@ namespace ML
 {
     public class minHistorico
     {
+        public int IdBaseDeDatos { get; set; } = 0;
         public int EntidadId { get; set; } = 0;
         public string EntidadNombre { get; set; } = String.Empty;
         public int Anio { get; set; } = 0;
@@ -16,6 +17,7 @@ namespace ML
     }
     public class Historico
     {
+        public int IdBaseDeDatos { get; set; } = 0;
         public int idEncuesta { get; set; }
         public string currentURL { get; set; } = "";
         public string CurrentUsr { get; set; } = String.Empty;

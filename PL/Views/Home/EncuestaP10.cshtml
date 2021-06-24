@@ -1,4 +1,5 @@
-﻿@*Seccion de preguntas abiertas*@
+﻿@using Newtonsoft.Json
+@*Seccion de preguntas abiertas*@
 @{
     ViewBag.Title = "EncuestaP10";
 }
@@ -765,7 +766,7 @@
                 contentType: 'application/json; charset=utf-8',
                 success: function (Response) {
 
-                    var Seccion = @Session["AvanceSeccion"];
+                    var Seccion = @Html.Raw(JsonConvert.SerializeObject(Session["AvanceSeccion"]));
 
                     if (Seccion == 1) {
                         if(location.href == 'http://www.diagnostic4u.com/Home/EncuestaP2Get'){
@@ -1206,7 +1207,18 @@
 <script>
 
     function enviar() {
-
+        swal ({
+            title: "Procesando...",
+            text: "Espere...",
+            imageUrl: "",
+            icon: "/images/load.gif",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+        $('.swal-icon').addClass('load');
+        $('.load').css('width', '25%');
+        $('.load').css('height', '25%');
+        $('swal-button-container').css('display', 'none');
         var comentario1 = $('#Coment1').val();
         var comentario2 = $('#Coment2').val();
         var comentario3 = $('#Coment3').val();

@@ -57,51 +57,51 @@ namespace PL.Controllers
         #endregion Llenado de catalogos
 
         #region Pantalla 1
-        public JsonResult getEncuestasEsperadas(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getEncuestasEsperadas(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             /*string Actual_Historico = Convert.ToString(Session["AnioActual_AnioHistorico"]);
             int Actual = Convert.ToInt32(Actual_Historico.Split('_')[0]);
             int Histor = Convert.ToInt32(Actual_Historico.Split('_')[1]);*/
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             return Json(dataLayer.GetEsperadas(model, anioActual), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getParticipacion(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getParticipacion(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             /*string Actual_Historico = Convert.ToString(Session["AnioActual_AnioHistorico"]);
             int Actual = Convert.ToInt32(Actual_Historico.Split('_')[0]);
             int Histor = Convert.ToInt32(Actual_Historico.Split('_')[1]);*/
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             return Json(dataLayer.GetPorcentajeParticipacionEnfoqueEmpresa(model, anioActual), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getConfianza(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getConfianza(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosConfianzaEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosConfianzaEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getCalificacionGlobal(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getCalificacionGlobal(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromedios66ReactivosEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromedios66ReactivosEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getNivelCompromiso(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getNivelCompromiso(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosNivelCompromisoEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosNivelCompromisoEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getNivelColaboracion(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getNivelColaboracion(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosNivelCoolaboracionEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosNivelCoolaboracionEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
@@ -110,41 +110,41 @@ namespace PL.Controllers
         #endregion Pantalla 1
 
         #region Pantalla 2
-        public JsonResult getCredibilidad(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getCredibilidad(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosCreedibilidadEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCreedibilidadEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getImparcialidad(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getImparcialidad(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosImparcialidadEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosImparcialidadEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getOrgullo(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getOrgullo(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosOrgulloEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosOrgulloEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getRespeto(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getRespeto(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosRespetoEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosRespetoEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getCompanierismo(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getCompanierismo(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosCompañerismoEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCompañerismoEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
@@ -153,49 +153,49 @@ namespace PL.Controllers
         #endregion Pantalla 2
 
         #region Pantalla 3
-        public JsonResult getCoaching(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getCoaching(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosCoachingEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCoachingEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getHabGerenciales(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getHabGerenciales(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosHabilidadesGerencialesEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosHabilidadesGerencialesEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getAlineacionEstrategica(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getAlineacionEstrategica(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosAlineacionEstrategicaEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosAlineacionEstrategicaEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getPracticasCulturales(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getPracticasCulturales(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosPracticasCulturealesEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosPracticasCulturealesEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getCambio(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getCambio(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosCambioEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCambioEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getProcesosOrga(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getProcesosOrga(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPromediosProcesosOrganizacionalesEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosProcesosOrganizacionalesEnfoqueArea(model, anioActual);
             return Json(dataReport(EE, EA), JsonRequestBehavior.AllowGet);
@@ -203,71 +203,71 @@ namespace PL.Controllers
         #endregion Pantalla 3
 
         #region Pantalla 4 Reactivos mejor clasificados
-        public JsonResult getReactivosMejorClasificadosEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getReactivosMejorClasificadosEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetMejoresEE(model, anioActual);
             return Json(EE, JsonRequestBehavior.AllowGet);
         }
 
         //Crecimiento
-        public JsonResult getReactivosMayorCrecimietoEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId)
+        public JsonResult getReactivosMayorCrecimietoEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId, int IdBaseDeDatos)
         {
             //Aqui ya trae la data para pintar mayor crecimiento y menor crecimiento EE
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
-            var EE = dataLayer.GetMayorCrecimientoEE(model, aEntidadId, this.Session);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
+            var EE = dataLayer.GetMayorCrecimientoEE(model, aEntidadId, this.Session, IdBaseDeDatos);
             return Json(EE, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult getReactivosMayorCrecimietoEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId, int AnioActual)
+        public JsonResult getReactivosMayorCrecimietoEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId, int AnioActual, int IdBaseDeDatos)
         {
             //Aqui ya trae la data para pintar mayor crecimiento y menor crecimiento EE
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetMayorCrecimientoEE(model, aEntidadId, AnioActual);
             return Json(EE, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult getReactivosMayorCrecimietoEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId)
+        public JsonResult getReactivosMayorCrecimietoEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId, int IdBaseDeDatos)
         {
             //Aqui ya trae la data para pintar mayor crecimiento y menor crecimiento EE
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetMayorCrecimientoEA(model, aEntidadId, this.Session);
             return Json(EE, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult getReactivosMayorCrecimietoEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId, int AnioActual)
+        public JsonResult getReactivosMayorCrecimietoEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, string aEntidadId, int AnioActual, int IdBaseDeDatos)
         {
             //Aqui ya trae la data para pintar mayor crecimiento y menor crecimiento EE
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetMayorCrecimientoEA(model, aEntidadId, AnioActual);
             return Json(EE, JsonRequestBehavior.AllowGet);
         }
 
         //end Crecimiento
 
-        public JsonResult getReactivosMejorClasificadosEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int AnioActual)
+        public JsonResult getReactivosMejorClasificadosEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int AnioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EA = dataLayer.GetMejoresEA(model, AnioActual);
             return Json(EA, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getReactivosPeorClasificadosEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int AnioActual)
+        public JsonResult getReactivosPeorClasificadosEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int AnioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EE = dataLayer.GetPeoresEE(model, AnioActual);
             return Json(EE, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getReactivosPeorClasificadosEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int AnioActual)
+        public JsonResult getReactivosPeorClasificadosEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int AnioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var EA = dataLayer.GetPeoresEA(model, AnioActual);
             return Json(EA, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getPorcentajePsicoSocialEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody] List<string> aFiltros, int anioActual)
+        public JsonResult getPorcentajePsicoSocialEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody] List<string> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<string>() : aFiltros;
             var data = new List<double>();
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             foreach (var item in aFiltros)
             {
                 /*
@@ -323,11 +323,11 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getPorcentajePsicoSocialEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual)
+        public JsonResult getPorcentajePsicoSocialEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<string>() : aFiltros;
             var data = new List<double>();
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             foreach (var item in aFiltros)
             {
                 /*Validar prefijo segun criterio de busqueda*/
@@ -376,24 +376,24 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getIndicadoresPermanencia(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getIndicadoresPermanencia(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var data = dataLayer.getIndicadoresPermanencia(model, anioActual);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getIndicadoresAbandono(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual)
+        public JsonResult getIndicadoresAbandono(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             var data = dataLayer.getIndicadoresAbandono(model, anioActual);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPermanencia(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual)
+        public JsonResult getComparativoPermanencia(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<string>() : aFiltros;
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             model.ListFiltros.RemoveAt(0);
             foreach (var item in aFiltros)
             {
@@ -404,10 +404,10 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoAbandono(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual)
+        public JsonResult getComparativoAbandono(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<string>() : aFiltros;
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             model.ListFiltros.RemoveAt(0);
             foreach (var item in aFiltros)
             {
@@ -418,10 +418,10 @@ namespace PL.Controllers
         }
 
         //Punto Numero 14
-        public JsonResult getComparativoEntidadesResultadoGeneralEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual)
+        public JsonResult getComparativoEntidadesResultadoGeneralEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<string>() : aFiltros;
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             model.ListFiltros.RemoveAt(0);
             foreach (var item in aFiltros)
             {
@@ -431,10 +431,10 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoEntidadesResultadoGeneralEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual)
+        public JsonResult getComparativoEntidadesResultadoGeneralEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<string> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<string>() : aFiltros;
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             model.ListFiltros.RemoveAt(0);
             foreach (var item in aFiltros)
             {
@@ -446,10 +446,10 @@ namespace PL.Controllers
 
 
         //Punto Numero 15
-        public JsonResult getComparativoResultadoGeneralPorNivelesEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<ApisController.myCustomArray> aFiltros, int anioActual)
+        public JsonResult getComparativoResultadoGeneralPorNivelesEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<ApisController.myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<myCustomArray>() : aFiltros;
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             foreach (var item in aFiltros)
             {
                 model.ListFiltros.Add(String.Concat(item.type, item.value));
@@ -459,10 +459,10 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoResultadoGeneralPorNivelesEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<myCustomArray> aFiltros, int anioActual)
+        public JsonResult getComparativoResultadoGeneralPorNivelesEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
         {
             aFiltros = aFiltros == null ? new List<myCustomArray>() : aFiltros;
-            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio);
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
             foreach (var item in aFiltros)
             {
                 model.ListFiltros.Add(String.Concat(item.type, item.value));
@@ -472,87 +472,87 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorAntiguedadEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorAntiguedadEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorAntiguedadEE(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorAntiguedadEE(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorAntiguedadEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorAntiguedadEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorAntiguedadEA(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorAntiguedadEA(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorGeneroEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorGeneroEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorGeneroEE(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorGeneroEE(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorGeneroEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorGeneroEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int idBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorGeneroEA(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorGeneroEA(filtro, valorEntidadAFM, anioActual, idBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorGradoAcademicoEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorGradoAcademicoEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int idBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorGradoAcademicoEE(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorGradoAcademicoEE(filtro, valorEntidadAFM, anioActual, idBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorGradoAcademicoEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorGradoAcademicoEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int idBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorGradoAcademicoEA(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorGradoAcademicoEA(filtro, valorEntidadAFM, anioActual, idBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorCondicionTrabajoEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorCondicionTrabajoEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorCondicionTrabajoEE(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorCondicionTrabajoEE(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorCondicionTrabajoEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorCondicionTrabajoEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorCondicionTrabajoEA(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorCondicionTrabajoEA(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorFuncionEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorFuncionEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int idBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorFuncionEE(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorFuncionEE(filtro, valorEntidadAFM, anioActual, idBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorFuncionEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorFuncionEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int idBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorFuncionEA(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorFuncionEA(filtro, valorEntidadAFM, anioActual, idBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorRangoEdadEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorRangoEdadEE(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int idBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorRangoEdadEE(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorRangoEdadEE(filtro, valorEntidadAFM, anioActual, idBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult getComparativoPorRangoEdadEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public JsonResult getComparativoPorRangoEdadEA(string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             var filtro = getNameColumn(filtroEntidadAFM);
-            var data = BL.ReporteD4U.getComparativoPorRangoEdadEA(filtro, valorEntidadAFM, anioActual);
+            var data = BL.ReporteD4U.getComparativoPorRangoEdadEA(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
         public JsonResult getDatosNube(string aFiltro, string aValor, string aIdPregunta, int anioActual)
@@ -713,12 +713,14 @@ namespace PL.Controllers
             }
         }
 
-        public ML.ReporteD4U getObjReporte(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio)
+        public ML.ReporteD4U getObjReporte(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int IdBaseDeDatos)
         {
+            if (IdBaseDeDatos == 0)
+                BL.NLogGeneratorFile.logError("El parametro de Base de Datos llegó el cero", new StackTrace());
             ML.ReporteD4U model = new ML.ReporteD4U();
             try
             {
-                //model.IdBD = parametroDeBD
+                model.IdBD = IdBaseDeDatos;
                 model.UnidadNegocioFilter = aUnidadDeNegocio;
                 model.ListFiltros = new List<string>();
                 aFiltro = setPrefijo(aCriterioBusquedaSeleccionado, aFiltro);

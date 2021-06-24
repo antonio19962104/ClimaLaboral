@@ -25,7 +25,7 @@ namespace BL
                         foreach (var obj in query)
                         {
                             ML.Company company = new ML.Company();
-
+                            
                             company.CompanyId = obj.CompanyId;
                             company.CompanyName = obj.CompanyName;
 

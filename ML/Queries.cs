@@ -32,14 +32,16 @@ namespace ML
                             FROM EMPLEADO 
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.UnidadNegocio = {2} AND EstatusEncuesta.Anio = {3}";
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.UnidadNegocio = {2} AND EstatusEncuesta.Anio = {3}
+                            AND Empleado.IdBaseDeDatos = {4}";
 
         public static string QUERY_ENCUESTAS_TERMINADAS_LVL2 =
                             @"SELECT * 
                             FROM EMPLEADO 
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} AND Empleado.{2} = {3} and EstatusEncuesta.Anio = {4}";
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} AND Empleado.{2} = {3} and EstatusEncuesta.Anio = {4}
+                            and Empleado.IdBaseDeDatos = {5}";
 
         public static string QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA = //AND EmpleadoRespuestas.IdPregunta NOT IN (36, 37, 38) 
                             @"SELECT TOP 10 Preguntas.IdPregunta, Preguntas.Pregunta, COUNT(200) AS mas_popular
@@ -48,9 +50,11 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 DESC";
 
@@ -61,35 +65,41 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 DESC";
 
-        public static string QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA = 
+        public static string QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA =
                             @"SELECT TOP 5 Preguntas.IdPregunta, Preguntas.Pregunta, COUNT(200) AS mas_popular
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 ASC";
 
-        public static string QUERY_PEORES_REACTIVOS_ENFOQUE_AREA = 
+        public static string QUERY_PEORES_REACTIVOS_ENFOQUE_AREA =
                             @"SELECT TOP 5 Preguntas.IdPregunta, Preguntas.Pregunta, COUNT(200) AS mas_popular
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 ASC";
 
@@ -332,17 +342,21 @@ namespace ML
                             (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 176 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
+
         public static string QUERY_MAYOR_CRECIMIENTO_EE =
                             @"SELECT Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque, COUNT(200) AS CONTEO FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             WHERE 
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad')
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad'
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad')
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad'
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque
                             order by Preguntas.IdPregunta";
+
         public static string QUERY_MAYOR_CRECIMIENTO_EA =
                             @"SELECT Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque, COUNT(200) AS CONTEO FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
@@ -411,13 +425,14 @@ namespace ML
         /// <param name="valor">Valor del dato general</param>
         /// <param name="UnidadNegocio"></param>
         /// <returns></returns>
-        public static string getQueryTerminadas(string filtro, string valor, string UnidadNegocio, int anioActual)
+        public static string getQueryTerminadas(string filtro, string valor, string UnidadNegocio, int anioActual, int idBD)
         {
             inicializarQueries();
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{0}", filtro);
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{1}", "'" + valor + "'");
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{2}", "'" + UnidadNegocio + "'");
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{3}", Convert.ToString(anioActual));
+            QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{4}", Convert.ToString(idBD));
             validaQuery(QUERY_ENCUESTAS_TERMINADAS_LVL1, filtro, valor, new StackTrace());
             return QUERY_ENCUESTAS_TERMINADAS_LVL1;
         }
@@ -438,7 +453,7 @@ namespace ML
         /// <param name="filtroEntidadAFM">Jerarquia de la entidad moral</param>
         /// <param name="valorEntidadAFM">Valor de la entidad moral</param>
         /// <returns></returns>
-        public static string getQueryTerminadas(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int anioActual)
+        public static string getQueryTerminadas(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_ENCUESTAS_TERMINADAS_LVL2 = QUERY_ENCUESTAS_TERMINADAS_LVL2.Replace("{0}", filtro);
@@ -446,38 +461,47 @@ namespace ML
             QUERY_ENCUESTAS_TERMINADAS_LVL2 = QUERY_ENCUESTAS_TERMINADAS_LVL2.Replace("{2}", filtroEntidadAFM);
             QUERY_ENCUESTAS_TERMINADAS_LVL2 = QUERY_ENCUESTAS_TERMINADAS_LVL2.Replace("{3}", "'" + valorEntidadAFM + "'");
             QUERY_ENCUESTAS_TERMINADAS_LVL2 = QUERY_ENCUESTAS_TERMINADAS_LVL2.Replace("{4}", Convert.ToString(anioActual));
+            QUERY_ENCUESTAS_TERMINADAS_LVL2 = QUERY_ENCUESTAS_TERMINADAS_LVL2.Replace("{5}", Convert.ToString(IdBD));
             validaQuery(QUERY_ENCUESTAS_TERMINADAS_LVL2, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_ENCUESTAS_TERMINADAS_LVL2;
         }
-        public static string getQueryMejoresEE(string filtro, string valor)
+        public static string getQueryMejoresEE(string filtro, string valor, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{0}", filtro);
             QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{1}", "'" + valor.ToUpper() + "'");
+            QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA, filtro, valor, new StackTrace());
             return QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA;
         }
-        public static string getQueryMejoresEA(string filtro, string valor)
+        public static string getQueryMejoresEA(string filtro, string valor, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA = QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA.Replace("{0}", filtro);
             QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA = QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA.Replace("{1}", "'" + valor.ToUpper() + "'" );
+            QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA = QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA = QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA, filtro, valor, new StackTrace());
             return QUERY_MEJORES_REACTIVOS_ENFOQUE_AREA;
         }
-        public static string getQueryPeoresEE(string filtro, string valor)
+        public static string getQueryPeoresEE(string filtro, string valor, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{0}", filtro);
             QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{1}", "'" + valor.ToUpper() + "'");
+            QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA = QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA, filtro, valor, new StackTrace());
             return QUERY_PEORES_REACTIVOS_ENFOQUE_EMPRESA;
         }
-        public static string getQueryPeoresEA(string filtro, string valor)
+        public static string getQueryPeoresEA(string filtro, string valor, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_PEORES_REACTIVOS_ENFOQUE_AREA = QUERY_PEORES_REACTIVOS_ENFOQUE_AREA.Replace("{0}", filtro);
             QUERY_PEORES_REACTIVOS_ENFOQUE_AREA = QUERY_PEORES_REACTIVOS_ENFOQUE_AREA.Replace("{1}", "'" + valor.ToUpper() + "'");
+            QUERY_PEORES_REACTIVOS_ENFOQUE_AREA = QUERY_PEORES_REACTIVOS_ENFOQUE_AREA.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_PEORES_REACTIVOS_ENFOQUE_AREA = QUERY_PEORES_REACTIVOS_ENFOQUE_AREA.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_PEORES_REACTIVOS_ENFOQUE_AREA, filtro, valor, new StackTrace());
             return QUERY_PEORES_REACTIVOS_ENFOQUE_AREA;
         }
@@ -718,12 +742,17 @@ namespace ML
             return QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4;
         }
 
-        public static string getQueryReactivosMayorCrecimientoEE(string filtro, string valor)
+        public static string getQueryReactivosMayorCrecimientoEE(string filtro, string valor, int anioActual, int IdBD)
         {
             //QUERY_MAYOR_CRECIMIENTO_EE
             inicializarQueries();
             QUERY_MAYOR_CRECIMIENTO_EE = QUERY_MAYOR_CRECIMIENTO_EE.Replace("{0}", filtro);
             QUERY_MAYOR_CRECIMIENTO_EE = QUERY_MAYOR_CRECIMIENTO_EE.Replace("{1}", valor);
+            QUERY_MAYOR_CRECIMIENTO_EE = QUERY_MAYOR_CRECIMIENTO_EE.Replace("{2}", Convert.ToString(anioActual));
+            if (IdBD == 0)
+                QUERY_MAYOR_CRECIMIENTO_EE = QUERY_MAYOR_CRECIMIENTO_EE.Replace("{3}", "is not null");
+            else
+                QUERY_MAYOR_CRECIMIENTO_EE = QUERY_MAYOR_CRECIMIENTO_EE.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_MAYOR_CRECIMIENTO_EE, filtro, valor, new StackTrace());
             return QUERY_MAYOR_CRECIMIENTO_EE;
         }
@@ -893,14 +922,16 @@ namespace ML
                             FROM EMPLEADO 
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.UnidadNegocio = {2} AND EstatusEncuesta.Anio = {3}";
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.UnidadNegocio = {2} AND EstatusEncuesta.Anio = {3}
+                            AND Empleado.IdBaseDeDatos = {4}";
 
             QUERY_ENCUESTAS_TERMINADAS_LVL2 =
                                 @"SELECT * 
                             FROM EMPLEADO 
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} AND Empleado.{2} = {3} and EstatusEncuesta.Anio = {4}";
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} AND Empleado.{2} = {3} and EstatusEncuesta.Anio = {4}
+                            and Empleado.IdBaseDeDatos = {5}";
 
             QUERY_MEJORES_REACTIVOS_ENFOQUE_EMPRESA = //AND EmpleadoRespuestas.IdPregunta NOT IN (36, 37, 38) 
                                 @"SELECT TOP 10 Preguntas.IdPregunta, Preguntas.Pregunta, COUNT(200) AS mas_popular
@@ -909,9 +940,11 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 DESC";
 
@@ -922,9 +955,11 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 DESC";
 
@@ -935,9 +970,11 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 1 AND 86 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 ASC";
 
@@ -948,9 +985,11 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Casi siempre es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta  BETWEEN 87 AND 172 AND RespuestaEmpleado = 'Frecuentemente es verdad' and Empleado.{0} = {1}
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 ASC";
 
@@ -1193,17 +1232,21 @@ namespace ML
                             (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 176 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
+
             QUERY_MAYOR_CRECIMIENTO_EE =
                                 @"SELECT Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque, COUNT(200) AS CONTEO FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             WHERE 
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad')
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad'
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad')
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad'
+                            and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque
                             order by Preguntas.IdPregunta";
+
             QUERY_MAYOR_CRECIMIENTO_EA =
                                 @"SELECT Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque, COUNT(200) AS CONTEO FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado

@@ -121,6 +121,7 @@
     <Compile Include="Empresa.cs" />
     <Compile Include="Encuesta.cs" />
     <Compile Include="Estatus.cs" />
+    <Compile Include="EstructuraAFMReporte.cs" />
     <Compile Include="Generales.cs" />
     <Compile Include="GeneratorPass.cs" />
     <Compile Include="GetRespBD.cs" />
