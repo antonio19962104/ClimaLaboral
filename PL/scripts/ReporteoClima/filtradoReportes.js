@@ -69,8 +69,8 @@
             */
             if (true) { // junto
                 for (var i = 0; i < list.length; i++) {
-                    $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Gene=>_Masculino</strong></th>');
-                    $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Gene=>_Femenino</strong></th>');
+                    $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Gene=>Masculino</strong></th>');
+                    $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Gene=>Femenino</strong></th>');
                 }
                 //for (var i = 0; i < list.length; i++) {
                     document.getElementById("sexo").colSpan = (2 * (list.length));
