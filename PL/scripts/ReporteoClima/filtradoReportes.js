@@ -63,6 +63,47 @@
     function mergeDemograficos(listEstructura, IdBaseDeDatos, list) {
         try {
             document.getElementsByClassName("k-multiselect-wrap")[0].style.height = "inherit";
+            /*
+             * Si van duplicados los demograficos
+             * hacer el merge segun el numero de items que vengan en el parametro list
+            */
+            if (true) { // junto
+                for (var i = 0; i < list.length; i++) {
+                    $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Gene=>_Masculino</strong></th>');
+                    $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Gene=>_Femenino</strong></th>');
+                }
+                //for (var i = 0; i < list.length; i++) {
+                    document.getElementById("sexo").colSpan = (2 * (list.length));
+                    document.getElementById("funcion").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_TF")).toList().where(o => o.length > 3).count() * list.length;
+                    document.getElementById("condicionTrabajo").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_CT")).toList().where(o => o.length > 3).count() * list.length;
+                    document.getElementById("gradoAcademico").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_GA")).toList().where(o => o.length > 3).count() * list.length;
+                    document.getElementById("Antiguedad").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_RA")).toList().where(o => o.length > 3).count() * list.length;
+                    document.getElementById("rangoEdad").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_RE")).toList().where(o => o.length > 3).count() * list.length;
+                    [].forEach.call(listEstructura, function (item) {
+                        if (item.split("_")[1] == "TF" && item.length > 3) {
+                            for (var i = 0; i < list.length; i++)
+                                $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_Func=>' + item.split("_")[0] + '</strong></th>');
+                        }
+                        if (item.split("_")[1] == "CT" && item.length > 3) {
+                            for (var i = 0; i < list.length; i++)
+                                $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_CTra=>' + item.split("_")[0] + '</strong></th>');
+                        }
+                        if (item.split("_")[1] == "GA" && item.length > 3) {
+                            for (var i = 0; i < list.length; i++)
+                                $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_GAca=>' + item.split("_")[0] + '</strong></th>');
+                        }
+                        if (item.split("_")[1] == "RA" && item.length > 3) {
+                            for (var i = 0; i < list.length; i++)
+                             $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_RAnt=>' + item.split("_")[0] + '</strong></th>');
+                        }
+                        if (item.split("_")[1] == "RE" && item.length > 3) {
+                            for (var i = 0; i < list.length; i++)
+                                $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>' + list[i] + '_REda=>' + item.split("_")[0] + '</strong></th>');
+                        }
+                    });
+                //}
+            }
+            /* original
             document.getElementById("sexo").colSpan = 2;
             document.getElementById("funcion").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_TF")).toList().length;
             document.getElementById("condicionTrabajo").colSpan = Enumerable.from(listEstructura).where(o => o.includes("_CT")).toList().length;
@@ -72,17 +113,17 @@
             $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>Gene=>Masculino</strong></th>');
             $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>Gene=>Femenino</strong></th>');
             [].forEach.call(listEstructura, function (item) {
-                if (item.split("_")[1] == "TF")
+                if (item.split("_")[1] == "TF" && item.length > 3)
                     $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>Func=>' + item.split("_")[0] + '</strong></th>');
-                if (item.split("_")[1] == "CT")
+                if (item.split("_")[1] == "CT" && item.length > 3)
                     $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>CTra=>' + item.split("_")[0] + '</strong></th>');
-                if (item.split("_")[1] == "GA")
+                if (item.split("_")[1] == "GA" && item.length > 3)
                     $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>GAca=>' + item.split("_")[0] + '</strong></th>');
-                if (item.split("_")[1] == "RA")
+                if (item.split("_")[1] == "RA" && item.length > 3)
                     $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>RAnt=>' + item.split("_")[0] + '</strong></th>');
-                if (item.split("_")[1] == "RE")
+                if (item.split("_")[1] == "RE" && item.length > 3)
                     $('#mergeFuncion').append('<th class="text-center" scope="col"><strong>REda=>' + item.split("_")[0] + '</strong></th>');
-            });
+            });*/
             mergeEstructuraGAFM(IdBaseDeDatos, list);
         } catch (aE) {
             document.getElementById("loading").style.display = "none";
