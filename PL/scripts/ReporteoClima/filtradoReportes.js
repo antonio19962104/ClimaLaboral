@@ -3,6 +3,7 @@
         // cargar la estrucura que existe en el layout de BD
         try {
             var IdBaseDeDatos = e.target.value;
+            document.getElementById("loading").style.display = "block";
             $.ajax({
                 url: '/EstructuraAFMReporte/GetEstructuraDemografica/?IdBaseDeDatos=' + IdBaseDeDatos,
                 type: 'GET',
@@ -10,7 +11,10 @@
                     $.ajax({
                         url: '/EstructuraAFMReporte/GetCompanyCategoria/?IdBaseDeDatos=' + IdBaseDeDatos,
                         type: 'GET',
+                        async: false,
+                        cache: false,
                         success: function (listCompanyCategoria) {
+                            document.getElementById("loading").style.display = "none";
                             $(".sectionConf").show();
                             destroyMultiSelect('UnidadNegocio');
                             document.getElementById("UnidadNegocio").innerHTML = "";
@@ -22,6 +26,10 @@
                             required.bind("change", function (e) {
                                 document.getElementById("loading").style.display = "block";
                                 var list = this.value();
+                                /* 
+                                 * list contiene las unidades de negocio del kendo-select
+                                 * 
+                                */ 
                                 document.getElementById("resultadosGenerales").colSpan = list.length;
                                 $('#mergeFuncion').empty();
                                 var txt = "";
@@ -45,15 +53,6 @@
                 }, error: function (err_Funcion) {
                     document.getElementById("loading").style.display = "none";
                     console.log(err_Funcion);
-                }
-            });
-            $('#treeview-container').treeview({
-                debug: false,
-                data: ['3.2', '2.2.3']
-            });
-            $('#treeview-container').on("treeview.change", function (e, ele) {
-                if ($(ele).parents('ul').length > 1) {  // not on root elements
-                    $(ele).closest('li').siblings().find(':checkbox').prop('checked', false);
                 }
             });
         } catch (aE) {
@@ -107,17 +106,45 @@
                 data: { data: list, level: listLevel },
                 success: function (listData) {
                     // con list se filtra cuales de las entidades van o no van
-                    console.log(listFilter);
-                    [].forEach.call(listData, function (item) {
+                    $(".newColsParent").remove();
+                    var counter = 0;
+                    var indiceUneg = 0;
+                    [].forEach.call(listData, function (item, index) {
                         if (!IsNullOrEmpty(item)) {
-                            if (item.includes("Comp=>"))
+                            if (item.includes("UNeg=>") && listLevel.length > 1) {
+                                $("#Encabezado").append("<th id='col-uneg-" + index + "' class='text-center newColsParent'>" + item + "</th>");
+                                indiceUneg = index;
+                                if (listFilter.length == 1)
+                                    document.getElementById("col-uneg-" + index).colSpan = listData.length;
+                            }
+                            if (item.includes("Comp=>")) {
                                 $('#mergeFuncion').append('<th class="text-center egafm" style="background-color:#2F75B5;" scope="col"><strong>' + item + '</strong></th>');
-                            if (item.includes("Area=>"))
+                                counter++;
+                            }
+                            if (item.includes("Area=>")) {
                                 $('#mergeFuncion').append('<th class="text-center egafm" style="background-color:#9BC2E6;" scope="col"><strong>' + item + '</strong></th>');
-                            if (item.includes("Dpto=>"))
+                                counter++;
+                            }
+                            if (item.includes("Dpto=>")) {
                                 $('#mergeFuncion').append('<th class="text-center egafm" style="background-color:#DDEBF7;" scope="col"><strong>' + item + '</strong></th>');
-                            if (item.includes("SubD=>"))
+                                counter++;
+                            }
+                            if (item.includes("SubD=>")) {
                                 $('#mergeFuncion').append('<th class="text-center egafm" style="background-color:#ffffff;" scope="col"><strong>' + item + '</strong></th>');
+                                counter++;
+                            }
+
+                            if (item.includes("UNeg=>") && listLevel.length > 1 && index > 0 && listFilter.length > 1) {
+                                var aux = index - (counter + 1)
+                                if (document.getElementById("col-uneg-" + aux) != null)
+                                    document.getElementById("col-uneg-" + aux).colSpan = counter;
+                                counter = 0;
+                            }
+                            if ((index) == listData.length - 1) {
+                                // ultima vuelta
+                                if (document.getElementById("col-uneg-" + indiceUneg) != null)
+                                    document.getElementById("col-uneg-" + indiceUneg).colSpan = counter;
+                            }
                         }
                     });
                     document.getElementById("myTable").style.display = "block";

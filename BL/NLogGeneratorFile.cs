@@ -24,7 +24,6 @@ namespace BL
         {
             if (aE.InnerException.ToString().Contains("Error de división entre cero."))
             {
-                nlogClimaDinamico.Error("/----------------------------------------------------------------------------------------------------------------------------/");
                 nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
                 nlogClimaDinamico.Error("Error de división entre cero");
             }
