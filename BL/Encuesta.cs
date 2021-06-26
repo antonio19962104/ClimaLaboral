@@ -3692,6 +3692,7 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
+                BL.NLogGeneratorFile.logError(ex, new StackTrace());
             }
             return result;
         }
@@ -3709,35 +3710,44 @@ namespace BL
         }
         public static void sendEmail()
         {
-            var result = GetMailsFaltantes();
-            foreach (ML.EstatusEmail item in result.Objects)
+            try
             {
-                var body = item.Mensaje;
-                var message = new MailMessage();
-                message.To.Add(new MailAddress(item.Destinatario));
-                message.Subject = "Notificación Diagnostic4U";
-                message.Body = string.Format(body, "DIAGNOSTIC4U", "", "");
-                message.IsBodyHtml = true;
-                
-                using (var smtp = new SmtpClient())
+                var result = GetMailsFaltantes();
+                if (result.Objects.Count == 0)
+                    BL.NLogGeneratorFile.logInfoEmailSender("No se encontraron emails por enviar con la tarea programada", 0, 0);
+                foreach (ML.EstatusEmail item in result.Objects)
                 {
-                    try
+                    var body = item.Mensaje;
+                    var message = new MailMessage();
+                    message.To.Add(new MailAddress(item.Destinatario));
+                    message.Subject = "Notificación Diagnostic4U";
+                    message.Body = string.Format(body, "DIAGNOSTIC4U", "", "");
+                    message.IsBodyHtml = true;
+
+                    using (var smtp = new SmtpClient())
                     {
-                        smtp.Send(message);
-                        Encuesta.UpdateFlagEmailToSuccess(item, item.IdEstatusEmail);
-                        BL.NLogGeneratorFile.logInfoEmailSender("Email enviado correctamente", item.Encuesta.IdEncuesta, item.BaseDeDatos.IdBaseDeDatos);
-                    }
-                    catch (SmtpException ex)
-                    {
-                        Console.Write(ex.Message);
-                        Encuesta.UpdateFlagEmailToError(item, ex, item.IdEstatusEmail);
-                        BL.NLogGeneratorFile.logInfoEmailSender(ex, item, 0);
-                    }
-                    finally
-                    {
-                        smtp.Dispose();
+                        try
+                        {
+                            smtp.Send(message);
+                            Encuesta.UpdateFlagEmailToSuccess(item, item.IdEstatusEmail);
+                            BL.NLogGeneratorFile.logInfoEmailSender("Email enviado correctamente", item.Encuesta.IdEncuesta, item.BaseDeDatos.IdBaseDeDatos);
+                        }
+                        catch (SmtpException ex)
+                        {
+                            Console.Write(ex.Message);
+                            Encuesta.UpdateFlagEmailToError(item, ex, item.IdEstatusEmail);
+                            BL.NLogGeneratorFile.logInfoEmailSender(ex, item, 0);
+                        }
+                        finally
+                        {
+                            smtp.Dispose();
+                        }
                     }
                 }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
             }
         }
         public static int AddToEstatusEmail(ML.EstatusEmail estatusEmail)
@@ -3909,6 +3919,7 @@ namespace BL
         }
         public static void CronReenvioEmail()
         {
+            BL.NLogGeneratorFile.logInfoEmailSender("Tarea programada de reenvio de email", 0, 0);
             sendEmail();
         }
         public static ML.Result GetEstatusEnvioByIdBaseDeDatos(ML.Encuesta encuesta) 

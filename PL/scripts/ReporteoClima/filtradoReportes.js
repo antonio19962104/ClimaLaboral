@@ -11,8 +11,6 @@
                     $.ajax({
                         url: '/EstructuraAFMReporte/GetCompanyCategoria/?IdBaseDeDatos=' + IdBaseDeDatos,
                         type: 'GET',
-                        async: false,
-                        cache: false,
                         success: function (listCompanyCategoria) {
                             document.getElementById("loading").style.display = "none";
                             $(".sectionConf").show();
