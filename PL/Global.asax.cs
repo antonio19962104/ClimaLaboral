@@ -12,6 +12,7 @@ using Hangfire.SqlServer;
 using System.Diagnostics;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data;
 
 namespace PL
 {
@@ -25,7 +26,7 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
-
+            
             //BL.EstructuraAFMReporte.GetEstructuraGAFM("1");
             //BL.ReporteD4U.GetPromedioCapacitacionDesarrolloByUNEGocioEE("turismo", 2020, 1);
 

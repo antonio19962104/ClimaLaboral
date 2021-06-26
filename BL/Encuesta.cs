@@ -3672,6 +3672,8 @@ namespace BL
                             estatusEmail.Destinatario = item.Destinatario.Trim();
                             estatusEmail.BaseDeDatos = new ML.BasesDeDatos();
                             estatusEmail.BaseDeDatos.IdBaseDeDatos = item.IdBaseDeDatos;
+                            estatusEmail.Encuesta = new ML.Encuesta();
+                            estatusEmail.Encuesta.IdEncuesta = (int)item.IdEncuesta;
                             estatusEmail.EstatusMail = new ML.EstatusMail();
                             estatusEmail.EstatusMail.IdEstatusMail = Convert.ToInt32(item.IdEstatusMail);
                             estatusEmail.noIntentos = (int)item.noIntentos;
@@ -3723,11 +3725,13 @@ namespace BL
                     {
                         smtp.Send(message);
                         Encuesta.UpdateFlagEmailToSuccess(item, item.IdEstatusEmail);
+                        BL.NLogGeneratorFile.logInfoEmailSender("Email enviado correctamente", item.Encuesta.IdEncuesta, item.BaseDeDatos.IdBaseDeDatos);
                     }
                     catch (SmtpException ex)
                     {
                         Console.Write(ex.Message);
                         Encuesta.UpdateFlagEmailToError(item, ex, item.IdEstatusEmail);
+                        BL.NLogGeneratorFile.logInfoEmailSender(ex, item, 0);
                     }
                     finally
                     {
