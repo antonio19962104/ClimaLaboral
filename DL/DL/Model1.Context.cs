@@ -93,6 +93,7 @@ namespace DL
         public virtual DbSet<ValoracionPreguntaPorSubcategoria> ValoracionPreguntaPorSubcategoria { get; set; }
         public virtual DbSet<ValoracionSubcategoriaPorCategoria> ValoracionSubcategoriaPorCategoria { get; set; }
         public virtual DbSet<DemoReporteClimaDinamico> DemoReporteClimaDinamico { get; set; }
+        public virtual DbSet<Generaciones> Generaciones { get; set; }
     
         public virtual int AddDepartamentoDemo(string nOMBRE_NEW_DEPARTAMENTO, string nombreAreaLayout, string nombreCompanyLayout, Nullable<int> iD_ESTATUS)
         {
@@ -3459,6 +3460,132 @@ namespace DL
                 new ObjectParameter("IdBD", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByUnidadNula_Result>("GetByUnidadNula", idBDParameter);
+        }
+    
+        public virtual ObjectResult<GetByMultiUnidad_Result> GetByMultiUnidad(string unidad1, string unidad2, string unidad3, string unidad4, string unidad5, string unidad6, string unidad7, string unidad8, string unidad9, string unidad10, string unidad11, string unidad12, string unidad13, string unidad14, string unidad15, Nullable<int> idBD)
+        {
+            var unidad1Parameter = unidad1 != null ?
+                new ObjectParameter("unidad1", unidad1) :
+                new ObjectParameter("unidad1", typeof(string));
+    
+            var unidad2Parameter = unidad2 != null ?
+                new ObjectParameter("unidad2", unidad2) :
+                new ObjectParameter("unidad2", typeof(string));
+    
+            var unidad3Parameter = unidad3 != null ?
+                new ObjectParameter("unidad3", unidad3) :
+                new ObjectParameter("unidad3", typeof(string));
+    
+            var unidad4Parameter = unidad4 != null ?
+                new ObjectParameter("unidad4", unidad4) :
+                new ObjectParameter("unidad4", typeof(string));
+    
+            var unidad5Parameter = unidad5 != null ?
+                new ObjectParameter("unidad5", unidad5) :
+                new ObjectParameter("unidad5", typeof(string));
+    
+            var unidad6Parameter = unidad6 != null ?
+                new ObjectParameter("unidad6", unidad6) :
+                new ObjectParameter("unidad6", typeof(string));
+    
+            var unidad7Parameter = unidad7 != null ?
+                new ObjectParameter("unidad7", unidad7) :
+                new ObjectParameter("unidad7", typeof(string));
+    
+            var unidad8Parameter = unidad8 != null ?
+                new ObjectParameter("unidad8", unidad8) :
+                new ObjectParameter("unidad8", typeof(string));
+    
+            var unidad9Parameter = unidad9 != null ?
+                new ObjectParameter("unidad9", unidad9) :
+                new ObjectParameter("unidad9", typeof(string));
+    
+            var unidad10Parameter = unidad10 != null ?
+                new ObjectParameter("unidad10", unidad10) :
+                new ObjectParameter("unidad10", typeof(string));
+    
+            var unidad11Parameter = unidad11 != null ?
+                new ObjectParameter("unidad11", unidad11) :
+                new ObjectParameter("unidad11", typeof(string));
+    
+            var unidad12Parameter = unidad12 != null ?
+                new ObjectParameter("unidad12", unidad12) :
+                new ObjectParameter("unidad12", typeof(string));
+    
+            var unidad13Parameter = unidad13 != null ?
+                new ObjectParameter("unidad13", unidad13) :
+                new ObjectParameter("unidad13", typeof(string));
+    
+            var unidad14Parameter = unidad14 != null ?
+                new ObjectParameter("unidad14", unidad14) :
+                new ObjectParameter("unidad14", typeof(string));
+    
+            var unidad15Parameter = unidad15 != null ?
+                new ObjectParameter("unidad15", unidad15) :
+                new ObjectParameter("unidad15", typeof(string));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByMultiUnidad_Result>("GetByMultiUnidad", unidad1Parameter, unidad2Parameter, unidad3Parameter, unidad4Parameter, unidad5Parameter, unidad6Parameter, unidad7Parameter, unidad8Parameter, unidad9Parameter, unidad10Parameter, unidad11Parameter, unidad12Parameter, unidad13Parameter, unidad14Parameter, unidad15Parameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<getComentariosMultiUnidad_Result> getComentariosMultiUnidad(string unegocio1, string unegocio2, string unegocio3, string unegocio4, string unegocio5, string unegocio6, string unegocio7, string unegocio8, string unegocio9, string unegocio10, string unegocio11, string unegocio12, Nullable<int> idBD)
+        {
+            var unegocio1Parameter = unegocio1 != null ?
+                new ObjectParameter("Unegocio1", unegocio1) :
+                new ObjectParameter("Unegocio1", typeof(string));
+    
+            var unegocio2Parameter = unegocio2 != null ?
+                new ObjectParameter("Unegocio2", unegocio2) :
+                new ObjectParameter("Unegocio2", typeof(string));
+    
+            var unegocio3Parameter = unegocio3 != null ?
+                new ObjectParameter("Unegocio3", unegocio3) :
+                new ObjectParameter("Unegocio3", typeof(string));
+    
+            var unegocio4Parameter = unegocio4 != null ?
+                new ObjectParameter("Unegocio4", unegocio4) :
+                new ObjectParameter("Unegocio4", typeof(string));
+    
+            var unegocio5Parameter = unegocio5 != null ?
+                new ObjectParameter("Unegocio5", unegocio5) :
+                new ObjectParameter("Unegocio5", typeof(string));
+    
+            var unegocio6Parameter = unegocio6 != null ?
+                new ObjectParameter("Unegocio6", unegocio6) :
+                new ObjectParameter("Unegocio6", typeof(string));
+    
+            var unegocio7Parameter = unegocio7 != null ?
+                new ObjectParameter("Unegocio7", unegocio7) :
+                new ObjectParameter("Unegocio7", typeof(string));
+    
+            var unegocio8Parameter = unegocio8 != null ?
+                new ObjectParameter("Unegocio8", unegocio8) :
+                new ObjectParameter("Unegocio8", typeof(string));
+    
+            var unegocio9Parameter = unegocio9 != null ?
+                new ObjectParameter("Unegocio9", unegocio9) :
+                new ObjectParameter("Unegocio9", typeof(string));
+    
+            var unegocio10Parameter = unegocio10 != null ?
+                new ObjectParameter("Unegocio10", unegocio10) :
+                new ObjectParameter("Unegocio10", typeof(string));
+    
+            var unegocio11Parameter = unegocio11 != null ?
+                new ObjectParameter("Unegocio11", unegocio11) :
+                new ObjectParameter("Unegocio11", typeof(string));
+    
+            var unegocio12Parameter = unegocio12 != null ?
+                new ObjectParameter("Unegocio12", unegocio12) :
+                new ObjectParameter("Unegocio12", typeof(string));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("idBD", idBD) :
+                new ObjectParameter("idBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getComentariosMultiUnidad_Result>("getComentariosMultiUnidad", unegocio1Parameter, unegocio2Parameter, unegocio3Parameter, unegocio4Parameter, unegocio5Parameter, unegocio6Parameter, unegocio7Parameter, unegocio8Parameter, unegocio9Parameter, unegocio10Parameter, unegocio11Parameter, unegocio12Parameter, idBDParameter);
         }
     }
 }

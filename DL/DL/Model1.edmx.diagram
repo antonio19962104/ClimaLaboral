@@ -175,6 +175,7 @@
         <AssociationConnector Association="RH_DesModel.fk_tblpSub_Encuesta" />
         <AssociationConnector Association="RH_DesModel.fk_tblpSub_Pregunta" />
         <EntityTypeShape EntityType="RH_DesModel.DemoReporteClimaDinamico" Width="1.5" PointX="3.375" PointY="12.75" />
+        <EntityTypeShape EntityType="RH_DesModel.Generaciones" Width="1.5" PointX="5.375" PointY="13.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

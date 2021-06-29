@@ -2788,6 +2788,7 @@ namespace PL.Controllers
         public ActionResult AddUsuariosClimaLaboral(FormCollection formCollection)
         {
             //Obtener ultima BD insertada
+            //inerrtar anio en estatus encuesta
             int lastInsertBD = 0;
             var maxIdEmpleado = 0;
             using (DL.RH_DesEntities contextOne = new DL.RH_DesEntities())
@@ -3029,6 +3030,7 @@ namespace PL.Controllers
                             stats.FechaHoraCreacion = DateTime.Now;
                             stats.UsuarioCreacion = Convert.ToString(Session["AdminLog"]);
                             stats.ProgramaCreacion = "Diagnostic4U";
+                            //stats.Anio = ;
                             context.EstatusEncuesta.Add(stats);
                             //Add primer respuesta
                             DL.EmpleadoRespuestas empres = new DL.EmpleadoRespuestas();

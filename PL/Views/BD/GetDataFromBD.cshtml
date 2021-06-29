@@ -667,7 +667,7 @@
                                                     {
                                                         <tr>
                                                             <td class="text-center">
-                                                                <button value="@BDUsuario.IdUsuario" onclick="GetUpdate($(this).val())" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="#modalEdit">
+                                                                <button value="@BDUsuario.IdUsuario" onclick="GetUpdate($(this).val()); " class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="#modalEdit">
                                                                     Editar datos<i class="fas fa-pencil-alt ml-1"></i>
                                                                 </button>
                                                             </td>
@@ -1414,8 +1414,8 @@
                                             <label data-error="wrong" data-success="right" for="inputPosition">Estatus</label>
                                             <select class="form-control EstatusUsuario" id="">
                                                 <option value="0">Selecciona una opcion</option>
-                                                <option value="1">Activo</option>
-                                                <option value="2">Inactivo</option>
+                                                <option value="Activo">Activo</option>
+                                                <option value="Inactivo">Inactivo</option>
                                             </select>
                                         </div>
 
@@ -1886,7 +1886,7 @@
                                 $('.ClaveAcceso').val(Response.ClavesAcceso.ClaveAcceso);
                                 $('.RangoAntiguedad').val(Response.RangoAntiguedad);
                                 $('.RangoEdad').val(Response.RangoEdad);
-                                $('.EstatusUsuario').val(Response.EstatusEmplado);
+                                $('.EstatusUsuario').val(Response.EstatusEmpleado);
 
                             }
                         });
@@ -1958,7 +1958,7 @@
                             ClavesAcceso: { ClaveAcceso: ClaveAcceso} ,
                             RangoAntiguedad: RangoAntiguedad,
                             RangoEdad: RangoEdad,
-                            EstatusEmplado: IdEstatus
+                            EstatusEmpleado: IdEstatus
 
                         };
                         //perfilD4U: { IdPerfil: IdPerfil },
@@ -2075,7 +2075,12 @@
                     }
                 </script>
                 @*<script src="~/scripts/jquery-1.8.3.min.js"></script>*@
-                
-                
+                <style>
+                    #modalEdit, #modalAdd ,#modalAddSubCat,#modalAddCat{
+                        background-color: #000000b8;
+                            overflow: auto;
+                    }
+                </style>        
+                 
     </body>
 </html>

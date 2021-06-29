@@ -677,6 +677,16 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="150" />
           <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="150" />
         </EntityType>
+        <EntityType Name="Generaciones">
+          <Key>
+            <PropertyRef Name="IdGeneracion" />
+          </Key>
+          <Property Name="IdGeneracion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="500" />
+          <Property Name="FechaInicio" Type="date" />
+          <Property Name="FechaFin" Type="date" />
+        </EntityType>
         <EntityType Name="GradoAcademico">
           <Key>
             <PropertyRef Name="IdGradoAcademico" />
@@ -3389,6 +3399,24 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
         <Function Name="GetByIdEmpleadoResultOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdEmpleado" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetByMultiUnidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="unidad1" Type="varchar" Mode="In" />
+          <Parameter Name="unidad2" Type="varchar" Mode="In" />
+          <Parameter Name="unidad3" Type="varchar" Mode="In" />
+          <Parameter Name="unidad4" Type="varchar" Mode="In" />
+          <Parameter Name="unidad5" Type="varchar" Mode="In" />
+          <Parameter Name="unidad6" Type="varchar" Mode="In" />
+          <Parameter Name="unidad7" Type="varchar" Mode="In" />
+          <Parameter Name="unidad8" Type="varchar" Mode="In" />
+          <Parameter Name="unidad9" Type="varchar" Mode="In" />
+          <Parameter Name="unidad10" Type="varchar" Mode="In" />
+          <Parameter Name="unidad11" Type="varchar" Mode="In" />
+          <Parameter Name="unidad12" Type="varchar" Mode="In" />
+          <Parameter Name="unidad13" Type="varchar" Mode="In" />
+          <Parameter Name="unidad14" Type="varchar" Mode="In" />
+          <Parameter Name="unidad15" Type="varchar" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetByUNegocio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UnidadNegocio" Type="varchar" Mode="In" />
           <Parameter Name="IdBD" Type="int" Mode="In" />
@@ -3402,6 +3430,21 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
         </Function>
         <Function Name="getComentarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Unegocio" Type="varchar" Mode="In" />
+          <Parameter Name="idBD" Type="int" Mode="In" />
+        </Function>
+        <Function Name="getComentariosMultiUnidad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Unegocio1" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio2" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio3" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio4" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio5" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio6" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio7" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio8" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio9" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio10" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio11" Type="varchar" Mode="In" />
+          <Parameter Name="Unegocio12" Type="varchar" Mode="In" />
           <Parameter Name="idBD" Type="int" Mode="In" />
         </Function>
         <Function Name="GetEsperadasByCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -3999,6 +4042,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <EntitySet Name="EstatusEncuestaD4U" EntityType="Self.EstatusEncuestaD4U" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstatusMail" EntityType="Self.EstatusMail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FooterPlantilla" EntityType="Self.FooterPlantilla" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Generaciones" EntityType="Self.Generaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GradoAcademico" EntityType="Self.GradoAcademico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HeaderPlantilla" EntityType="Self.HeaderPlantilla" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Historico" EntityType="Self.Historico" Schema="dbo" store:Type="Tables" />
@@ -7592,6 +7636,40 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           </FunctionImport>
           <FunctionImport Name="GetByUnidadNula" ReturnType="Collection(RH_DesModel.GetByUnidadNula_Result)">
           <Parameter Name="IdBD" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Generaciones" EntityType="RH_DesModel.Generaciones" />
+          <FunctionImport Name="GetByMultiUnidad" ReturnType="Collection(RH_DesModel.GetByMultiUnidad_Result)">
+            <Parameter Name="unidad1" Mode="In" Type="String" />
+            <Parameter Name="unidad2" Mode="In" Type="String" />
+            <Parameter Name="unidad3" Mode="In" Type="String" />
+            <Parameter Name="unidad4" Mode="In" Type="String" />
+            <Parameter Name="unidad5" Mode="In" Type="String" />
+            <Parameter Name="unidad6" Mode="In" Type="String" />
+            <Parameter Name="unidad7" Mode="In" Type="String" />
+            <Parameter Name="unidad8" Mode="In" Type="String" />
+            <Parameter Name="unidad9" Mode="In" Type="String" />
+            <Parameter Name="unidad10" Mode="In" Type="String" />
+            <Parameter Name="unidad11" Mode="In" Type="String" />
+            <Parameter Name="unidad12" Mode="In" Type="String" />
+            <Parameter Name="unidad13" Mode="In" Type="String" />
+            <Parameter Name="unidad14" Mode="In" Type="String" />
+            <Parameter Name="unidad15" Mode="In" Type="String" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="getComentariosMultiUnidad" ReturnType="Collection(RH_DesModel.getComentariosMultiUnidad_Result)">
+            <Parameter Name="Unegocio1" Mode="In" Type="String" />
+            <Parameter Name="Unegocio2" Mode="In" Type="String" />
+            <Parameter Name="Unegocio3" Mode="In" Type="String" />
+            <Parameter Name="Unegocio4" Mode="In" Type="String" />
+            <Parameter Name="Unegocio5" Mode="In" Type="String" />
+            <Parameter Name="Unegocio6" Mode="In" Type="String" />
+            <Parameter Name="Unegocio7" Mode="In" Type="String" />
+            <Parameter Name="Unegocio8" Mode="In" Type="String" />
+            <Parameter Name="Unegocio9" Mode="In" Type="String" />
+            <Parameter Name="Unegocio10" Mode="In" Type="String" />
+            <Parameter Name="Unegocio11" Mode="In" Type="String" />
+            <Parameter Name="Unegocio12" Mode="In" Type="String" />
+            <Parameter Name="idBD" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="AreaGetByCompanyId_Result">
@@ -13514,6 +13592,250 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Property Type="String" Name="DIRECCIONR" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="AREAR" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="DEPARTAMENTOR" Nullable="true" MaxLength="150" />
+        </ComplexType>
+        <EntityType Name="Generaciones">
+          <Key>
+            <PropertyRef Name="IdGeneracion" />
+          </Key>
+          <Property Name="IdGeneracion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FechaInicio" Type="DateTime" Precision="0" />
+          <Property Name="FechaFin" Type="DateTime" Precision="0" />
+        </EntityType>
+        <ComplexType Name="GetByMultiUnidad_Result">
+          <Property Type="Int32" Name="ID_EMPLEADO" Nullable="true" />
+          <Property Type="String" Name="A_PATERNO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="A_MATERNO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="NOMBRE_EMPLEADO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PUESTO" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="F_NACIM" Nullable="true" />
+          <Property Type="DateTime" Name="F_ANTIG" Nullable="true" />
+          <Property Type="String" Name="SEXO" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="EMAIL" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="TIPO_FUNCION" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="CONDIC_TRAB" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="GRADO_ACADEM" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UNIDAD_NEGOCIO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DIVIS_MARCA" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AREA_AGENCIA" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DEPARTAMENTO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="SUBDEPARTAMENTO" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="EMP_CONTRATANTE" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ID_RESPONS_RH" Nullable="true" />
+          <Property Type="String" Name="NOM_RESPONS_RH" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ID_JEFE" Nullable="true" />
+          <Property Type="String" Name="NOMBRE_JEFE" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PUESTO_JEFE" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="ID_RESPONS_EST" Nullable="true" />
+          <Property Type="String" Name="NOM_RESP_ESTRUC" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="CVE_ACCESO" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RANGO_ANTIG" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RANGO_EDAD" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="STS_ENCUESTA" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ESTATUS_COLABORADOR" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="EMP_R1" Nullable="true" />
+          <Property Type="String" Name="EMP_R2" Nullable="true" />
+          <Property Type="String" Name="EMP_R3" Nullable="true" />
+          <Property Type="String" Name="EMP_R4" Nullable="true" />
+          <Property Type="String" Name="EMP_R5" Nullable="true" />
+          <Property Type="String" Name="EMP_R6" Nullable="true" />
+          <Property Type="String" Name="EMP_R7" Nullable="true" />
+          <Property Type="String" Name="EMP_R8" Nullable="true" />
+          <Property Type="String" Name="EMP_R9" Nullable="true" />
+          <Property Type="String" Name="EMP_R10" Nullable="true" />
+          <Property Type="String" Name="EMP_R11" Nullable="true" />
+          <Property Type="String" Name="EMP_R12" Nullable="true" />
+          <Property Type="String" Name="EMP_R13" Nullable="true" />
+          <Property Type="String" Name="EMP_R14" Nullable="true" />
+          <Property Type="String" Name="EMP_R15" Nullable="true" />
+          <Property Type="String" Name="EMP_R16" Nullable="true" />
+          <Property Type="String" Name="EMP_R17" Nullable="true" />
+          <Property Type="String" Name="EMP_R18" Nullable="true" />
+          <Property Type="String" Name="EMP_R19" Nullable="true" />
+          <Property Type="String" Name="EMP_R20" Nullable="true" />
+          <Property Type="String" Name="EMP_R21" Nullable="true" />
+          <Property Type="String" Name="EMP_R22" Nullable="true" />
+          <Property Type="String" Name="EMP_R23" Nullable="true" />
+          <Property Type="String" Name="EMP_R24" Nullable="true" />
+          <Property Type="String" Name="EMP_R25" Nullable="true" />
+          <Property Type="String" Name="EMP_R26" Nullable="true" />
+          <Property Type="String" Name="EMP_R27" Nullable="true" />
+          <Property Type="String" Name="EMP_R28" Nullable="true" />
+          <Property Type="String" Name="EMP_R29" Nullable="true" />
+          <Property Type="String" Name="EMP_R30" Nullable="true" />
+          <Property Type="String" Name="EMP_R31" Nullable="true" />
+          <Property Type="String" Name="EMP_R32" Nullable="true" />
+          <Property Type="String" Name="EMP_R33" Nullable="true" />
+          <Property Type="String" Name="EMP_R34" Nullable="true" />
+          <Property Type="String" Name="EMP_R35" Nullable="true" />
+          <Property Type="String" Name="EMP_R36" Nullable="true" />
+          <Property Type="String" Name="EMP_R37" Nullable="true" />
+          <Property Type="String" Name="EMP_R38" Nullable="true" />
+          <Property Type="String" Name="EMP_R39" Nullable="true" />
+          <Property Type="String" Name="EMP_R40" Nullable="true" />
+          <Property Type="String" Name="EMP_R41" Nullable="true" />
+          <Property Type="String" Name="EMP_R42" Nullable="true" />
+          <Property Type="String" Name="EMP_R43" Nullable="true" />
+          <Property Type="String" Name="EMP_R44" Nullable="true" />
+          <Property Type="String" Name="EMP_R45" Nullable="true" />
+          <Property Type="String" Name="EMP_R46" Nullable="true" />
+          <Property Type="String" Name="EMP_R47" Nullable="true" />
+          <Property Type="String" Name="EMP_R48" Nullable="true" />
+          <Property Type="String" Name="EMP_R49" Nullable="true" />
+          <Property Type="String" Name="EMP_R50" Nullable="true" />
+          <Property Type="String" Name="EMP_R51" Nullable="true" />
+          <Property Type="String" Name="EMP_R52" Nullable="true" />
+          <Property Type="String" Name="EMP_R53" Nullable="true" />
+          <Property Type="String" Name="EMP_R54" Nullable="true" />
+          <Property Type="String" Name="EMP_R55" Nullable="true" />
+          <Property Type="String" Name="EMP_R56" Nullable="true" />
+          <Property Type="String" Name="EMP_R57" Nullable="true" />
+          <Property Type="String" Name="EMP_R58" Nullable="true" />
+          <Property Type="String" Name="EMP_R59" Nullable="true" />
+          <Property Type="String" Name="EMP_R60" Nullable="true" />
+          <Property Type="String" Name="EMP_R61" Nullable="true" />
+          <Property Type="String" Name="EMP_R62" Nullable="true" />
+          <Property Type="String" Name="EMP_R63" Nullable="true" />
+          <Property Type="String" Name="EMP_R64" Nullable="true" />
+          <Property Type="String" Name="EMP_R65" Nullable="true" />
+          <Property Type="String" Name="EMP_R66" Nullable="true" />
+          <Property Type="String" Name="EMP_R67" Nullable="true" />
+          <Property Type="String" Name="EMP_R68" Nullable="true" />
+          <Property Type="String" Name="EMP_R69" Nullable="true" />
+          <Property Type="String" Name="EMP_R70" Nullable="true" />
+          <Property Type="String" Name="EMP_R71" Nullable="true" />
+          <Property Type="String" Name="EMP_R72" Nullable="true" />
+          <Property Type="String" Name="EMP_R73" Nullable="true" />
+          <Property Type="String" Name="EMP_R74" Nullable="true" />
+          <Property Type="String" Name="EMP_R75" Nullable="true" />
+          <Property Type="String" Name="EMP_R76" Nullable="true" />
+          <Property Type="String" Name="EMP_R77" Nullable="true" />
+          <Property Type="String" Name="EMP_R78" Nullable="true" />
+          <Property Type="String" Name="EMP_R79" Nullable="true" />
+          <Property Type="String" Name="EMP_R80" Nullable="true" />
+          <Property Type="String" Name="EMP_R81" Nullable="true" />
+          <Property Type="String" Name="EMP_R82" Nullable="true" />
+          <Property Type="String" Name="EMP_R83" Nullable="true" />
+          <Property Type="String" Name="EMP_R84" Nullable="true" />
+          <Property Type="String" Name="EMP_R85" Nullable="true" />
+          <Property Type="String" Name="EMP_R86" Nullable="true" />
+          <Property Type="String" Name="ARE_1" Nullable="true" />
+          <Property Type="String" Name="ARE_2" Nullable="true" />
+          <Property Type="String" Name="ARE_3" Nullable="true" />
+          <Property Type="String" Name="ARE_4" Nullable="true" />
+          <Property Type="String" Name="ARE_5" Nullable="true" />
+          <Property Type="String" Name="ARE_6" Nullable="true" />
+          <Property Type="String" Name="ARE_7" Nullable="true" />
+          <Property Type="String" Name="ARE_8" Nullable="true" />
+          <Property Type="String" Name="ARE_9" Nullable="true" />
+          <Property Type="String" Name="ARE_10" Nullable="true" />
+          <Property Type="String" Name="ARE_11" Nullable="true" />
+          <Property Type="String" Name="ARE_12" Nullable="true" />
+          <Property Type="String" Name="ARE_13" Nullable="true" />
+          <Property Type="String" Name="ARE_14" Nullable="true" />
+          <Property Type="String" Name="ARE_15" Nullable="true" />
+          <Property Type="String" Name="ARE_16" Nullable="true" />
+          <Property Type="String" Name="ARE_17" Nullable="true" />
+          <Property Type="String" Name="ARE_18" Nullable="true" />
+          <Property Type="String" Name="ARE_19" Nullable="true" />
+          <Property Type="String" Name="ARE_20" Nullable="true" />
+          <Property Type="String" Name="ARE_21" Nullable="true" />
+          <Property Type="String" Name="ARE_22" Nullable="true" />
+          <Property Type="String" Name="ARE_23" Nullable="true" />
+          <Property Type="String" Name="ARE_24" Nullable="true" />
+          <Property Type="String" Name="ARE_25" Nullable="true" />
+          <Property Type="String" Name="ARE_26" Nullable="true" />
+          <Property Type="String" Name="ARE_27" Nullable="true" />
+          <Property Type="String" Name="ARE_28" Nullable="true" />
+          <Property Type="String" Name="ARE_29" Nullable="true" />
+          <Property Type="String" Name="ARE_30" Nullable="true" />
+          <Property Type="String" Name="ARE_31" Nullable="true" />
+          <Property Type="String" Name="ARE_32" Nullable="true" />
+          <Property Type="String" Name="ARE_33" Nullable="true" />
+          <Property Type="String" Name="ARE_34" Nullable="true" />
+          <Property Type="String" Name="ARE_35" Nullable="true" />
+          <Property Type="String" Name="ARE_36" Nullable="true" />
+          <Property Type="String" Name="ARE_37" Nullable="true" />
+          <Property Type="String" Name="ARE_38" Nullable="true" />
+          <Property Type="String" Name="ARE_39" Nullable="true" />
+          <Property Type="String" Name="ARE_40" Nullable="true" />
+          <Property Type="String" Name="ARE_41" Nullable="true" />
+          <Property Type="String" Name="ARE_42" Nullable="true" />
+          <Property Type="String" Name="ARE_43" Nullable="true" />
+          <Property Type="String" Name="ARE_44" Nullable="true" />
+          <Property Type="String" Name="ARE_45" Nullable="true" />
+          <Property Type="String" Name="ARE_46" Nullable="true" />
+          <Property Type="String" Name="ARE_47" Nullable="true" />
+          <Property Type="String" Name="ARE_48" Nullable="true" />
+          <Property Type="String" Name="ARE_49" Nullable="true" />
+          <Property Type="String" Name="ARE_50" Nullable="true" />
+          <Property Type="String" Name="ARE_51" Nullable="true" />
+          <Property Type="String" Name="ARE_52" Nullable="true" />
+          <Property Type="String" Name="ARE_53" Nullable="true" />
+          <Property Type="String" Name="ARE_54" Nullable="true" />
+          <Property Type="String" Name="ARE_55" Nullable="true" />
+          <Property Type="String" Name="ARE_56" Nullable="true" />
+          <Property Type="String" Name="ARE_57" Nullable="true" />
+          <Property Type="String" Name="ARE_58" Nullable="true" />
+          <Property Type="String" Name="ARE_59" Nullable="true" />
+          <Property Type="String" Name="ARE_60" Nullable="true" />
+          <Property Type="String" Name="ARE_61" Nullable="true" />
+          <Property Type="String" Name="ARE_62" Nullable="true" />
+          <Property Type="String" Name="ARE_63" Nullable="true" />
+          <Property Type="String" Name="ARE_64" Nullable="true" />
+          <Property Type="String" Name="ARE_65" Nullable="true" />
+          <Property Type="String" Name="ARE_66" Nullable="true" />
+          <Property Type="String" Name="ARE_67" Nullable="true" />
+          <Property Type="String" Name="ARE_68" Nullable="true" />
+          <Property Type="String" Name="ARE_69" Nullable="true" />
+          <Property Type="String" Name="ARE_70" Nullable="true" />
+          <Property Type="String" Name="ARE_71" Nullable="true" />
+          <Property Type="String" Name="ARE_72" Nullable="true" />
+          <Property Type="String" Name="ARE_73" Nullable="true" />
+          <Property Type="String" Name="ARE_74" Nullable="true" />
+          <Property Type="String" Name="ARE_75" Nullable="true" />
+          <Property Type="String" Name="ARE_76" Nullable="true" />
+          <Property Type="String" Name="ARE_77" Nullable="true" />
+          <Property Type="String" Name="ARE_78" Nullable="true" />
+          <Property Type="String" Name="ARE_79" Nullable="true" />
+          <Property Type="String" Name="ARE_80" Nullable="true" />
+          <Property Type="String" Name="ARE_81" Nullable="true" />
+          <Property Type="String" Name="ARE_82" Nullable="true" />
+          <Property Type="String" Name="ARE_83" Nullable="true" />
+          <Property Type="String" Name="ARE_84" Nullable="true" />
+          <Property Type="String" Name="ARE_85" Nullable="true" />
+          <Property Type="String" Name="ARE_86" Nullable="true" />
+          <Property Type="String" Name="ESPECIAL_OPEN" Nullable="true" />
+          <Property Type="String" Name="CAMBIAR_OPEN" Nullable="true" />
+          <Property Type="String" Name="FORT_JEFE" Nullable="true" />
+          <Property Type="String" Name="OPORT_JEFE" Nullable="true" />
+          <Property Type="String" Name="MOTIVA_TRAB" Nullable="true" />
+          <Property Type="String" Name="DEJAR_EMP" Nullable="true" />
+          <Property Type="String" Name="PRESION" Nullable="true" />
+          <Property Type="String" Name="ANTIGÜEDADR" Nullable="true" />
+          <Property Type="String" Name="RANGO_EDADR" Nullable="true" />
+          <Property Type="String" Name="CONDICIONR" Nullable="true" />
+          <Property Type="String" Name="SEXOR" Nullable="true" />
+          <Property Type="String" Name="ACADEMICOR" Nullable="true" />
+          <Property Type="String" Name="FUNCIONR" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="UNIDADR" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DIRECCIONR" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AREAR" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="DEPARTAMENTOR" Nullable="true" MaxLength="150" />
+        </ComplexType>
+        <ComplexType Name="getComentariosMultiUnidad_Result">
+          <Property Type="Int32" Name="ID_EMPLEADO" Nullable="false" />
+          <Property Type="String" Name="DivisionMarca" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="AreaAgencia" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Depto" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="EMP_R1" Nullable="true" />
+          <Property Type="String" Name="EMP_R2" Nullable="true" />
+          <Property Type="String" Name="EMP_R3" Nullable="true" />
+          <Property Type="String" Name="EMP_R4" Nullable="true" />
+          <Property Type="String" Name="EMP_R5" Nullable="true" />
+          <Property Type="String" Name="EMP_R6" Nullable="true" />
+          <Property Type="String" Name="EMP_R7" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20331,6 +20653,259 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
                 <ScalarProperty Name="DIRECCIONR" ColumnName="DIRECCIONR" />
                 <ScalarProperty Name="AREAR" ColumnName="AREAR" />
                 <ScalarProperty Name="DEPARTAMENTOR" ColumnName="DEPARTAMENTOR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Generaciones">
+            <EntityTypeMapping TypeName="RH_DesModel.Generaciones">
+              <MappingFragment StoreEntitySet="Generaciones">
+                <ScalarProperty Name="FechaFin" ColumnName="FechaFin" />
+                <ScalarProperty Name="FechaInicio" ColumnName="FechaInicio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdGeneracion" ColumnName="IdGeneracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetByMultiUnidad" FunctionName="RH_DesModel.Store.GetByMultiUnidad">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RH_DesModel.GetByMultiUnidad_Result">
+                <ScalarProperty Name="ID_EMPLEADO" ColumnName="ID_EMPLEADO" />
+                <ScalarProperty Name="A_PATERNO" ColumnName="A_PATERNO" />
+                <ScalarProperty Name="A_MATERNO" ColumnName="A_MATERNO" />
+                <ScalarProperty Name="NOMBRE_EMPLEADO" ColumnName="NOMBRE_EMPLEADO" />
+                <ScalarProperty Name="PUESTO" ColumnName="PUESTO" />
+                <ScalarProperty Name="F_NACIM" ColumnName="F_NACIM" />
+                <ScalarProperty Name="F_ANTIG" ColumnName="F_ANTIG" />
+                <ScalarProperty Name="SEXO" ColumnName="SEXO" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="TIPO_FUNCION" ColumnName="TIPO_FUNCION" />
+                <ScalarProperty Name="CONDIC_TRAB" ColumnName="CONDIC_TRAB" />
+                <ScalarProperty Name="GRADO_ACADEM" ColumnName="GRADO_ACADEM" />
+                <ScalarProperty Name="UNIDAD_NEGOCIO" ColumnName="UNIDAD_NEGOCIO" />
+                <ScalarProperty Name="DIVIS_MARCA" ColumnName="DIVIS_MARCA" />
+                <ScalarProperty Name="AREA_AGENCIA" ColumnName="AREA_AGENCIA" />
+                <ScalarProperty Name="DEPARTAMENTO" ColumnName="DEPARTAMENTO" />
+                <ScalarProperty Name="SUBDEPARTAMENTO" ColumnName="SUBDEPARTAMENTO" />
+                <ScalarProperty Name="EMP_CONTRATANTE" ColumnName="EMP_CONTRATANTE" />
+                <ScalarProperty Name="ID_RESPONS_RH" ColumnName="ID_RESPONS_RH" />
+                <ScalarProperty Name="NOM_RESPONS_RH" ColumnName="NOM_RESPONS_RH" />
+                <ScalarProperty Name="ID_JEFE" ColumnName="ID_JEFE" />
+                <ScalarProperty Name="NOMBRE_JEFE" ColumnName="NOMBRE_JEFE" />
+                <ScalarProperty Name="PUESTO_JEFE" ColumnName="PUESTO_JEFE" />
+                <ScalarProperty Name="ID_RESPONS_EST" ColumnName="ID_RESPONS_EST" />
+                <ScalarProperty Name="NOM_RESP_ESTRUC" ColumnName="NOM_RESP_ESTRUC" />
+                <ScalarProperty Name="CVE_ACCESO" ColumnName="CVE_ACCESO" />
+                <ScalarProperty Name="RANGO_ANTIG" ColumnName="RANGO_ANTIG" />
+                <ScalarProperty Name="RANGO_EDAD" ColumnName="RANGO_EDAD" />
+                <ScalarProperty Name="STS_ENCUESTA" ColumnName="STS_ENCUESTA" />
+                <ScalarProperty Name="ESTATUS_COLABORADOR" ColumnName="ESTATUS_COLABORADOR" />
+                <ScalarProperty Name="EMP_R1" ColumnName="EMP_R1" />
+                <ScalarProperty Name="EMP_R2" ColumnName="EMP_R2" />
+                <ScalarProperty Name="EMP_R3" ColumnName="EMP_R3" />
+                <ScalarProperty Name="EMP_R4" ColumnName="EMP_R4" />
+                <ScalarProperty Name="EMP_R5" ColumnName="EMP_R5" />
+                <ScalarProperty Name="EMP_R6" ColumnName="EMP_R6" />
+                <ScalarProperty Name="EMP_R7" ColumnName="EMP_R7" />
+                <ScalarProperty Name="EMP_R8" ColumnName="EMP_R8" />
+                <ScalarProperty Name="EMP_R9" ColumnName="EMP_R9" />
+                <ScalarProperty Name="EMP_R10" ColumnName="EMP_R10" />
+                <ScalarProperty Name="EMP_R11" ColumnName="EMP_R11" />
+                <ScalarProperty Name="EMP_R12" ColumnName="EMP_R12" />
+                <ScalarProperty Name="EMP_R13" ColumnName="EMP_R13" />
+                <ScalarProperty Name="EMP_R14" ColumnName="EMP_R14" />
+                <ScalarProperty Name="EMP_R15" ColumnName="EMP_R15" />
+                <ScalarProperty Name="EMP_R16" ColumnName="EMP_R16" />
+                <ScalarProperty Name="EMP_R17" ColumnName="EMP_R17" />
+                <ScalarProperty Name="EMP_R18" ColumnName="EMP_R18" />
+                <ScalarProperty Name="EMP_R19" ColumnName="EMP_R19" />
+                <ScalarProperty Name="EMP_R20" ColumnName="EMP_R20" />
+                <ScalarProperty Name="EMP_R21" ColumnName="EMP_R21" />
+                <ScalarProperty Name="EMP_R22" ColumnName="EMP_R22" />
+                <ScalarProperty Name="EMP_R23" ColumnName="EMP_R23" />
+                <ScalarProperty Name="EMP_R24" ColumnName="EMP_R24" />
+                <ScalarProperty Name="EMP_R25" ColumnName="EMP_R25" />
+                <ScalarProperty Name="EMP_R26" ColumnName="EMP_R26" />
+                <ScalarProperty Name="EMP_R27" ColumnName="EMP_R27" />
+                <ScalarProperty Name="EMP_R28" ColumnName="EMP_R28" />
+                <ScalarProperty Name="EMP_R29" ColumnName="EMP_R29" />
+                <ScalarProperty Name="EMP_R30" ColumnName="EMP_R30" />
+                <ScalarProperty Name="EMP_R31" ColumnName="EMP_R31" />
+                <ScalarProperty Name="EMP_R32" ColumnName="EMP_R32" />
+                <ScalarProperty Name="EMP_R33" ColumnName="EMP_R33" />
+                <ScalarProperty Name="EMP_R34" ColumnName="EMP_R34" />
+                <ScalarProperty Name="EMP_R35" ColumnName="EMP_R35" />
+                <ScalarProperty Name="EMP_R36" ColumnName="EMP_R36" />
+                <ScalarProperty Name="EMP_R37" ColumnName="EMP_R37" />
+                <ScalarProperty Name="EMP_R38" ColumnName="EMP_R38" />
+                <ScalarProperty Name="EMP_R39" ColumnName="EMP_R39" />
+                <ScalarProperty Name="EMP_R40" ColumnName="EMP_R40" />
+                <ScalarProperty Name="EMP_R41" ColumnName="EMP_R41" />
+                <ScalarProperty Name="EMP_R42" ColumnName="EMP_R42" />
+                <ScalarProperty Name="EMP_R43" ColumnName="EMP_R43" />
+                <ScalarProperty Name="EMP_R44" ColumnName="EMP_R44" />
+                <ScalarProperty Name="EMP_R45" ColumnName="EMP_R45" />
+                <ScalarProperty Name="EMP_R46" ColumnName="EMP_R46" />
+                <ScalarProperty Name="EMP_R47" ColumnName="EMP_R47" />
+                <ScalarProperty Name="EMP_R48" ColumnName="EMP_R48" />
+                <ScalarProperty Name="EMP_R49" ColumnName="EMP_R49" />
+                <ScalarProperty Name="EMP_R50" ColumnName="EMP_R50" />
+                <ScalarProperty Name="EMP_R51" ColumnName="EMP_R51" />
+                <ScalarProperty Name="EMP_R52" ColumnName="EMP_R52" />
+                <ScalarProperty Name="EMP_R53" ColumnName="EMP_R53" />
+                <ScalarProperty Name="EMP_R54" ColumnName="EMP_R54" />
+                <ScalarProperty Name="EMP_R55" ColumnName="EMP_R55" />
+                <ScalarProperty Name="EMP_R56" ColumnName="EMP_R56" />
+                <ScalarProperty Name="EMP_R57" ColumnName="EMP_R57" />
+                <ScalarProperty Name="EMP_R58" ColumnName="EMP_R58" />
+                <ScalarProperty Name="EMP_R59" ColumnName="EMP_R59" />
+                <ScalarProperty Name="EMP_R60" ColumnName="EMP_R60" />
+                <ScalarProperty Name="EMP_R61" ColumnName="EMP_R61" />
+                <ScalarProperty Name="EMP_R62" ColumnName="EMP_R62" />
+                <ScalarProperty Name="EMP_R63" ColumnName="EMP_R63" />
+                <ScalarProperty Name="EMP_R64" ColumnName="EMP_R64" />
+                <ScalarProperty Name="EMP_R65" ColumnName="EMP_R65" />
+                <ScalarProperty Name="EMP_R66" ColumnName="EMP_R66" />
+                <ScalarProperty Name="EMP_R67" ColumnName="EMP_R67" />
+                <ScalarProperty Name="EMP_R68" ColumnName="EMP_R68" />
+                <ScalarProperty Name="EMP_R69" ColumnName="EMP_R69" />
+                <ScalarProperty Name="EMP_R70" ColumnName="EMP_R70" />
+                <ScalarProperty Name="EMP_R71" ColumnName="EMP_R71" />
+                <ScalarProperty Name="EMP_R72" ColumnName="EMP_R72" />
+                <ScalarProperty Name="EMP_R73" ColumnName="EMP_R73" />
+                <ScalarProperty Name="EMP_R74" ColumnName="EMP_R74" />
+                <ScalarProperty Name="EMP_R75" ColumnName="EMP_R75" />
+                <ScalarProperty Name="EMP_R76" ColumnName="EMP_R76" />
+                <ScalarProperty Name="EMP_R77" ColumnName="EMP_R77" />
+                <ScalarProperty Name="EMP_R78" ColumnName="EMP_R78" />
+                <ScalarProperty Name="EMP_R79" ColumnName="EMP_R79" />
+                <ScalarProperty Name="EMP_R80" ColumnName="EMP_R80" />
+                <ScalarProperty Name="EMP_R81" ColumnName="EMP_R81" />
+                <ScalarProperty Name="EMP_R82" ColumnName="EMP_R82" />
+                <ScalarProperty Name="EMP_R83" ColumnName="EMP_R83" />
+                <ScalarProperty Name="EMP_R84" ColumnName="EMP_R84" />
+                <ScalarProperty Name="EMP_R85" ColumnName="EMP_R85" />
+                <ScalarProperty Name="EMP_R86" ColumnName="EMP_R86" />
+                <ScalarProperty Name="ARE_1" ColumnName="ARE_1" />
+                <ScalarProperty Name="ARE_2" ColumnName="ARE_2" />
+                <ScalarProperty Name="ARE_3" ColumnName="ARE_3" />
+                <ScalarProperty Name="ARE_4" ColumnName="ARE_4" />
+                <ScalarProperty Name="ARE_5" ColumnName="ARE_5" />
+                <ScalarProperty Name="ARE_6" ColumnName="ARE_6" />
+                <ScalarProperty Name="ARE_7" ColumnName="ARE_7" />
+                <ScalarProperty Name="ARE_8" ColumnName="ARE_8" />
+                <ScalarProperty Name="ARE_9" ColumnName="ARE_9" />
+                <ScalarProperty Name="ARE_10" ColumnName="ARE_10" />
+                <ScalarProperty Name="ARE_11" ColumnName="ARE_11" />
+                <ScalarProperty Name="ARE_12" ColumnName="ARE_12" />
+                <ScalarProperty Name="ARE_13" ColumnName="ARE_13" />
+                <ScalarProperty Name="ARE_14" ColumnName="ARE_14" />
+                <ScalarProperty Name="ARE_15" ColumnName="ARE_15" />
+                <ScalarProperty Name="ARE_16" ColumnName="ARE_16" />
+                <ScalarProperty Name="ARE_17" ColumnName="ARE_17" />
+                <ScalarProperty Name="ARE_18" ColumnName="ARE_18" />
+                <ScalarProperty Name="ARE_19" ColumnName="ARE_19" />
+                <ScalarProperty Name="ARE_20" ColumnName="ARE_20" />
+                <ScalarProperty Name="ARE_21" ColumnName="ARE_21" />
+                <ScalarProperty Name="ARE_22" ColumnName="ARE_22" />
+                <ScalarProperty Name="ARE_23" ColumnName="ARE_23" />
+                <ScalarProperty Name="ARE_24" ColumnName="ARE_24" />
+                <ScalarProperty Name="ARE_25" ColumnName="ARE_25" />
+                <ScalarProperty Name="ARE_26" ColumnName="ARE_26" />
+                <ScalarProperty Name="ARE_27" ColumnName="ARE_27" />
+                <ScalarProperty Name="ARE_28" ColumnName="ARE_28" />
+                <ScalarProperty Name="ARE_29" ColumnName="ARE_29" />
+                <ScalarProperty Name="ARE_30" ColumnName="ARE_30" />
+                <ScalarProperty Name="ARE_31" ColumnName="ARE_31" />
+                <ScalarProperty Name="ARE_32" ColumnName="ARE_32" />
+                <ScalarProperty Name="ARE_33" ColumnName="ARE_33" />
+                <ScalarProperty Name="ARE_34" ColumnName="ARE_34" />
+                <ScalarProperty Name="ARE_35" ColumnName="ARE_35" />
+                <ScalarProperty Name="ARE_36" ColumnName="ARE_36" />
+                <ScalarProperty Name="ARE_37" ColumnName="ARE_37" />
+                <ScalarProperty Name="ARE_38" ColumnName="ARE_38" />
+                <ScalarProperty Name="ARE_39" ColumnName="ARE_39" />
+                <ScalarProperty Name="ARE_40" ColumnName="ARE_40" />
+                <ScalarProperty Name="ARE_41" ColumnName="ARE_41" />
+                <ScalarProperty Name="ARE_42" ColumnName="ARE_42" />
+                <ScalarProperty Name="ARE_43" ColumnName="ARE_43" />
+                <ScalarProperty Name="ARE_44" ColumnName="ARE_44" />
+                <ScalarProperty Name="ARE_45" ColumnName="ARE_45" />
+                <ScalarProperty Name="ARE_46" ColumnName="ARE_46" />
+                <ScalarProperty Name="ARE_47" ColumnName="ARE_47" />
+                <ScalarProperty Name="ARE_48" ColumnName="ARE_48" />
+                <ScalarProperty Name="ARE_49" ColumnName="ARE_49" />
+                <ScalarProperty Name="ARE_50" ColumnName="ARE_50" />
+                <ScalarProperty Name="ARE_51" ColumnName="ARE_51" />
+                <ScalarProperty Name="ARE_52" ColumnName="ARE_52" />
+                <ScalarProperty Name="ARE_53" ColumnName="ARE_53" />
+                <ScalarProperty Name="ARE_54" ColumnName="ARE_54" />
+                <ScalarProperty Name="ARE_55" ColumnName="ARE_55" />
+                <ScalarProperty Name="ARE_56" ColumnName="ARE_56" />
+                <ScalarProperty Name="ARE_57" ColumnName="ARE_57" />
+                <ScalarProperty Name="ARE_58" ColumnName="ARE_58" />
+                <ScalarProperty Name="ARE_59" ColumnName="ARE_59" />
+                <ScalarProperty Name="ARE_60" ColumnName="ARE_60" />
+                <ScalarProperty Name="ARE_61" ColumnName="ARE_61" />
+                <ScalarProperty Name="ARE_62" ColumnName="ARE_62" />
+                <ScalarProperty Name="ARE_63" ColumnName="ARE_63" />
+                <ScalarProperty Name="ARE_64" ColumnName="ARE_64" />
+                <ScalarProperty Name="ARE_65" ColumnName="ARE_65" />
+                <ScalarProperty Name="ARE_66" ColumnName="ARE_66" />
+                <ScalarProperty Name="ARE_67" ColumnName="ARE_67" />
+                <ScalarProperty Name="ARE_68" ColumnName="ARE_68" />
+                <ScalarProperty Name="ARE_69" ColumnName="ARE_69" />
+                <ScalarProperty Name="ARE_70" ColumnName="ARE_70" />
+                <ScalarProperty Name="ARE_71" ColumnName="ARE_71" />
+                <ScalarProperty Name="ARE_72" ColumnName="ARE_72" />
+                <ScalarProperty Name="ARE_73" ColumnName="ARE_73" />
+                <ScalarProperty Name="ARE_74" ColumnName="ARE_74" />
+                <ScalarProperty Name="ARE_75" ColumnName="ARE_75" />
+                <ScalarProperty Name="ARE_76" ColumnName="ARE_76" />
+                <ScalarProperty Name="ARE_77" ColumnName="ARE_77" />
+                <ScalarProperty Name="ARE_78" ColumnName="ARE_78" />
+                <ScalarProperty Name="ARE_79" ColumnName="ARE_79" />
+                <ScalarProperty Name="ARE_80" ColumnName="ARE_80" />
+                <ScalarProperty Name="ARE_81" ColumnName="ARE_81" />
+                <ScalarProperty Name="ARE_82" ColumnName="ARE_82" />
+                <ScalarProperty Name="ARE_83" ColumnName="ARE_83" />
+                <ScalarProperty Name="ARE_84" ColumnName="ARE_84" />
+                <ScalarProperty Name="ARE_85" ColumnName="ARE_85" />
+                <ScalarProperty Name="ARE_86" ColumnName="ARE_86" />
+                <ScalarProperty Name="ESPECIAL_OPEN" ColumnName="ESPECIAL_OPEN" />
+                <ScalarProperty Name="CAMBIAR_OPEN" ColumnName="CAMBIAR_OPEN" />
+                <ScalarProperty Name="FORT_JEFE" ColumnName="FORT_JEFE" />
+                <ScalarProperty Name="OPORT_JEFE" ColumnName="OPORT_JEFE" />
+                <ScalarProperty Name="MOTIVA_TRAB" ColumnName="MOTIVA_TRAB" />
+                <ScalarProperty Name="DEJAR_EMP" ColumnName="DEJAR_EMP" />
+                <ScalarProperty Name="PRESION" ColumnName="PRESION" />
+                <ScalarProperty Name="ANTIGÜEDADR" ColumnName="ANTIGÜEDADR" />
+                <ScalarProperty Name="RANGO_EDADR" ColumnName="RANGO_EDADR" />
+                <ScalarProperty Name="CONDICIONR" ColumnName="CONDICIONR" />
+                <ScalarProperty Name="SEXOR" ColumnName="SEXOR" />
+                <ScalarProperty Name="ACADEMICOR" ColumnName="ACADEMICOR" />
+                <ScalarProperty Name="FUNCIONR" ColumnName="FUNCIONR" />
+                <ScalarProperty Name="UNIDADR" ColumnName="UNIDADR" />
+                <ScalarProperty Name="DIRECCIONR" ColumnName="DIRECCIONR" />
+                <ScalarProperty Name="AREAR" ColumnName="AREAR" />
+                <ScalarProperty Name="DEPARTAMENTOR" ColumnName="DEPARTAMENTOR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="getComentariosMultiUnidad" FunctionName="RH_DesModel.Store.getComentariosMultiUnidad">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="RH_DesModel.getComentariosMultiUnidad_Result">
+                <ScalarProperty Name="ID_EMPLEADO" ColumnName="ID_EMPLEADO" />
+                <ScalarProperty Name="DivisionMarca" ColumnName="DivisionMarca" />
+                <ScalarProperty Name="AreaAgencia" ColumnName="AreaAgencia" />
+                <ScalarProperty Name="Depto" ColumnName="Depto" />
+                <ScalarProperty Name="EMP_R1" ColumnName="EMP_R1" />
+                <ScalarProperty Name="EMP_R2" ColumnName="EMP_R2" />
+                <ScalarProperty Name="EMP_R3" ColumnName="EMP_R3" />
+                <ScalarProperty Name="EMP_R4" ColumnName="EMP_R4" />
+                <ScalarProperty Name="EMP_R5" ColumnName="EMP_R5" />
+                <ScalarProperty Name="EMP_R6" ColumnName="EMP_R6" />
+                <ScalarProperty Name="EMP_R7" ColumnName="EMP_R7" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

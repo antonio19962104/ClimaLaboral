@@ -3070,7 +3070,7 @@ namespace BL
 
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                using (var transaction = context.Database.BeginTransaction())
+                using (var transaction = context.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
                     try
                     {
@@ -3090,6 +3090,16 @@ namespace BL
                             var query = context.Database.ExecuteSqlCommand
                                 ("INSERT INTO ConfigClimaLab(IDENCUESTA, IDBASEDEDATOS, FECHAINICIO, FECHAFIN, FECHAHORACREACION, USUARIOCREACION, PROGRAMACREACION, periodoAplicacion) VALUES({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7})",
                                 conf.Encuesta.IdEncuesta, conf.BaseDeDatos.IdBaseDeDatos, conf.FechaInicio, conf.FechaFin, DateTime.Now, CURRENT_USER, "Diagnostic4U", conf.PeriodoAplicacion);
+                            context.SaveChanges();
+                        }
+
+                        // actualizar el anio en EstatusEncuesta
+                        var usuarios = context.Empleado.Where(o => o.IdBaseDeDatos == conf.BaseDeDatos.IdBaseDeDatos).ToList();
+                        foreach (var item in usuarios)
+                        {
+                            var estatusEncuesta = context.EstatusEncuesta.Where(o => o.IdEmpleado == item.IdEmpleado && o.IdEncuesta == 1).FirstOrDefault();
+                            if (estatusEncuesta != null)
+                                estatusEncuesta.Anio = conf.PeriodoAplicacion;
                             context.SaveChanges();
                         }
                         

@@ -784,5 +784,32 @@ namespace BL
             string result = mensajeOriginal.Remove(Place, Find.Length).Insert(Place, NewValue);
             return result;
         }
+
+        public static void UpdateGeneracionEmpleado()
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var generacion = context.Generaciones.Select(o => o).ToList();
+                    // 1976-05-07
+                    var actual = DateTime.Now.ToString("MM-dd");
+                    string query = String.Format("select * from Empleado where FechaNacimiento like '%{0}%'", actual);
+                    var birthDatNow = context.Empleado.SqlQuery(query).ToList();
+                    foreach (var item in birthDatNow)
+                    {
+                        // 134497
+                        // 134870
+                        var anio = item.FechaNacimiento.ToString().Substring(0, 4);
+                        // segun el año comparar con catalogo de generaciones
+                        
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+            }
+        }
     }
 }

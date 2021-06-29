@@ -16,6 +16,12 @@
         ViewBag.Perfil = Session["PerfilAdminLog"];
     }
     @Scripts.Render("~/bundles/jqueryAdmin")
+    <script src="~/scripts/ReporteoClima/LinQ.js"></script>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.rtl.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.mobile.all.min.css">
+    <script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
     <script>
             var usr = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
     </script>
@@ -407,14 +413,17 @@
                                     <div class="col-lg-12">
                                         <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                                             <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6" action="" id="GetByUnidadNegocio" style="display:block;">
-                                                <p style="">Unidad de negocio</p>
-                                                <select id="DDLUnidad" name="DDLCompanyCategoria" class="form-control mb-2">
-                                                </select>
-                                                <br />
-                                                <p style="">Base de datos</p>
-                                                <select id="DDLBD" name="DDLCompanyCategoria" class="form-control mb-2">
-                                                </select>
-                                                <input style="margin-top:10px;" type="submit" value="Ver reporte" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none'); $('#myTable tbody').remove(); GetByUnidad()" />
+                                                <div class="form-group">
+                                                    <p style="">Base de datos</p>
+                                                    <select id="DDLBD" name="DDLCompanyCategoria" class="form-control mb-2"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <p style="">Unidad de negocio</p>
+                                                    <select id="DDLUnidad" name="DDLCompanyCategoria" multiple class="form-control mb-2"></select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input style="margin-top:10px;" type="submit" value="Ver reporte" class="btn btn-danger" onclick="$('#progressbar').css('display', 'none'); $('#myTable tbody').remove(); GetByUnidad()" />
+                                                </div>
                                             </div>
                                             <div class="row" style="padding-top:30px; margin-left:15px;">
                                                 <div class="col-md-12" style="overflow-x: auto">
@@ -2503,7 +2512,8 @@
                                 if (elem.TipoBD.IdTipoBD == 1)
                                     $("#DDLBD").append("<option value='"+ elem.IdBaseDeDatos +"'>" + elem.Nombre + "</option>");
                             });
-                            $.ajax({
+                            document.getElementsByClassName("busy")[0].style.display = "none";
+                            /*$.ajax({
                                 url: "/Reporte/GetUnidadNeg",
                                 type: "GET",
                                 success: function (response) {
@@ -2514,7 +2524,7 @@
                                     });
                                     document.getElementsByClassName("busy")[0].style.display = "none";
                                 }
-                            });
+                            });*/
                         }
                     });
                 });
@@ -3191,7 +3201,7 @@
             </script>
             <script>
                 function GetByUnidad() {
-                    if (document.getElementById("DDLUnidad").value == 0 || document.getElementById("DDLBD").value == 0){
+                    if (listUnidadesNegocio[0].length == 0 || document.getElementById("DDLBD").value == 0){
                         swal("Debe elegir una unidad de negocio y una base de datos para continuar", "", "info").then(function () {
                             return false;
                         });
@@ -3204,7 +3214,7 @@
                             type: 'POST',
                             url: '@Url.Action("ReporteGetByUnidadNegocio")',
                             dataType: 'json',
-                            data: { UNegocio: $('#DDLUnidad').val(), idBD: $("#DDLBD").val() },
+                            data: { listUNegocio: listUnidadesNegocio[0], idBD: $("#DDLBD").val() },
                             success: function (data) {
                                 console.log(data);
                                 if (data.length == 0) {
@@ -4537,6 +4547,36 @@
         });
     }
             </script>
+            <script>
+                var listUnidadesNegocio = [];
+                document.getElementById("DDLBD").addEventListener("change", function (e) {
+                    var IdBaseDeDatos = e.target.value;
+                    document.getElementById("loading").style.display = "block";
+                    destroyMultiSelect('DDLUnidad');
+                    document.getElementById("DDLUnidad").innerHTML = "";
+                    $.ajax({
+                        url: '/EstructuraAFMReporte/GetCompanyCategoria/?IdBaseDeDatos=' + IdBaseDeDatos,
+                        type: 'GET',
+                        success: function (listCompanyCategoria) {
+                            [].forEach.call(listCompanyCategoria, function (companyCategoria) {
+                                $('#DDLUnidad').append('<option value="' + companyCategoria + '">' + companyCategoria + '</option>');
+                            });
+                            var required = $("#DDLUnidad").kendoMultiSelect().data("kendoMultiSelect");
+                            required.bind("change", function (e) {
+                                listUnidadesNegocio = [];
+                                listUnidadesNegocio.push(this.value());
+                            });
+                            document.getElementById("loading").style.display = "none";
+                        }, error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                });
+                function destroyMultiSelect(id) {
+                    $('#' + id).unwrap('.k-multiselect').show().empty();
+                    $(".k-multiselect-wrap").remove();
+                }
+            </script>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -4604,16 +4644,17 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <script>
-var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
-try {
-var elem = document.getElementById("urlLogn").href = redirect;
-} catch (e) {
+                var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
+                try {
+                var elem = document.getElementById("urlLogn").href = redirect;
+                } catch (e) {
 
-}
-swal("Tu sesión ha expirado, serás redireccionado al Login", "", "info").then(function () {
-var elem = document.getElementById("urlLogn").click();
-});
+                }
+                swal("Tu sesión ha expirado, serás redireccionado al Login", "", "info").then(function () {
+                var elem = document.getElementById("urlLogn").click();
+                });
             </script>
+            
         </body>
     }
 }

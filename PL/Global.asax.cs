@@ -27,11 +27,13 @@ namespace PL
             HangfireAspNet.Use(GetHangfireServers);
 
             //https://github.com/antonio19962104/ClimaLaboral.git
-            
+
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere
             */
+            // BL.ClimaDinamico.UpdateGeneracionEmpleado();
+            //RecurringJob.AddOrUpdate("MyJobGeneraciones", () => BL.ClimaDinamico.UpdateGeneracionEmpleado(), Cron.Daily);
             // RecurringJob.AddOrUpdate("MyJob", () => BL.Encuesta.CronReenvioEmail(), Cron.Daily);
         }
         public void ResetRecurringJobs()

@@ -22,19 +22,26 @@ namespace BL
         }
         public static void logError(Exception aE, StackTrace st)
         {
-            if (aE.InnerException.ToString().Contains("Error de división entre cero."))
+            try
             {
-                //nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
-                //nlogClimaDinamico.Error("Error de división entre cero");
+                if (aE.InnerException.ToString().Contains("Error de división entre cero."))
+                {
+                    //nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
+                    //nlogClimaDinamico.Error("Error de división entre cero");
+                }
+                else
+                {
+                    nlogClimaDinamico.Error("/----------------------------------------------------------------------------------------------------------------------------/");
+                    nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
+                    nlogClimaDinamico.Error("Message: " + aE.Message);
+                    nlogClimaDinamico.Error("Exception: " + aE);
+                    nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                    nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
+                }
             }
-            else
+            catch (Exception e)
             {
-                nlogClimaDinamico.Error("/----------------------------------------------------------------------------------------------------------------------------/");
-                nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
-                nlogClimaDinamico.Error("Message: " + aE.Message);
-                nlogClimaDinamico.Error("Exception: " + aE);
-                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
-                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
+                Console.Write(e);
             }
         }
         public static void logError(string message, StackTrace st)
