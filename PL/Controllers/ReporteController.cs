@@ -100,7 +100,7 @@ namespace PL.Controllers
         [HttpPost]
         public ActionResult GetEstructuraForAbiertas(List<string> listUnidadNeg, int idBD)
         {
-            /*Validar repetidos*/
+            /*Validar repetidos*///
             ML.Result result = new ML.Result();
             try
             {
