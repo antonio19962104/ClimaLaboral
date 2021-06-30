@@ -26,19 +26,19 @@
                                 {
                                     <div class="text-center">
                                         <a href="" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="#modalAdd">
-                                            Agregar Area<i class="fas fa-plus-square ml-1"></i>
+                                            Agregar área<i class="fas fa-plus-square ml-1"></i>
                                         </a>
                                     </div>
                                     <br />
                                     <div class="text-center">
                                         <a href="" onclick="Download()" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="">
-                                            Descargar layout de Áreas<i class="fas fa-file-excel ml-1"></i>
+                                            Descargar layout de áreas<i class="fas fa-file-excel ml-1"></i>
                                         </a>
                                     </div>
                                     <br />
                                     <div class="text-center">
                                         <a href="" class="btn btn-secondary btn-action btn-sm" data-toggle="modal" data-target="#modalAddArea">
-                                            Agregar Áreas de forma masiva<i class="fas fa-file-excel ml-1"></i>
+                                            Agregar áreas de forma masiva<i class="fas fa-file-excel ml-1"></i>
                                         </a>
                                     </div>
 
@@ -61,7 +61,7 @@
                                         IdArea
                                     </th>
                                     <th class="text-center" scope="col">
-                                        Nombre del Área
+                                        Nombre del área
                                     </th>
                                     <th class="text-center" scope="col">
                                         Empresa a la que pertenece
@@ -156,12 +156,12 @@
                     </div>
                     <div class="modal-body mx-3">
                         <div class="md-form mb-5" id="mergeValidacion">
-                            <label data-error="wrong" data-success="right" for="inputName">Nombre de la nueva Área:</label>
-                            <input onkeyup="validaDuplicadoArea();" placeholder="Ingresa el nombre del Área" type="text" id="inputName" class="form-control validate NombreArea NombreNewArea">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre de la nueva área:</label>
+                            <input onkeyup="validaDuplicadoArea();" placeholder="Ingresa el nombre del área" type="text" id="inputName" class="form-control validate NombreArea NombreNewArea">
                         </div>
 
                         <div class="md-form mb-5">
-                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus del Área</label>
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus del área</label>
                             <select class="form-control" id="DDLEstatus">
                                 <option value="0">Selecciona una opcion</option>
                                 <option value="1">Activo</option>
@@ -171,7 +171,7 @@
                     </div>
                     <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
                         <button onclick="AddArea()" class="btn btn-outline-primary btn-block buttonAdd botonAgregaArea">
-                            Agregar Área
+                            Agregar área
                             <i class="fas fa-plus ml-1"></i>
                         </button>
                     </div>
@@ -220,7 +220,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">
-                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar Área</h4>
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar área</h4>
                         <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -228,12 +228,12 @@
                     <div class="modal-body mx-3">
 
                         <div class="md-form mb-5">
-                            <label data-error="wrong" data-success="right" for="inputName">Id del Área:</label>
+                            <label data-error="wrong" data-success="right" for="inputName">Id del área:</label>
                             <input type="text" id="TxtIdArea" class="form-control validate" disabled>
                         </div>
 
                         <div class="md-form mb-5" id="mergeValidacionupdate">
-                            <label data-error="wrong" data-success="right" for="inputName">Nombre del Área:</label>
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre del área:</label>
                             <input type="text" id="inputName" class="form-control validate NombreAreaUpdate" onkeyup="validaDuplicadoAreaUpdate()">
                         </div>
 
@@ -262,7 +262,7 @@
                         </div>
 
                         <div class="md-form mb-5">
-                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus deL Área</label>
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus deL área</label>
                             <select class="form-control" id="DDLEstatusUpdate">
                                 <option value="0">Selecciona una opcion</option>
                                 <option value="1">Activo</option>
@@ -501,7 +501,7 @@
 
                             if (Response.responseJSON == "success") {
                                 swal({
-                                    title: "El Área se agregó correctamente",
+                                    title: "El área se agregó correctamente",
                                     text: "",
                                     type: "success",
                                     icon: "success",

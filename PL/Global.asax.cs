@@ -26,7 +26,8 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
-            //https://github.com/antonio19962104/ClimaLaboral.git
+            // https://github.com/antonio19962104/ClimaLaboral.git
+            // https://www.doodleish.com/2020/06/hosting-for-angular-app-react-app.html
 
 
             /*
