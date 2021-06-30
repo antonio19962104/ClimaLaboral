@@ -28,7 +28,15 @@ namespace PL
 
             // https://github.com/antonio19962104/ClimaLaboral.git
             // https://www.doodleish.com/2020/06/hosting-for-angular-app-react-app.html
-
+            // https://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-sharp
+            // caemos en el cntrolador y antes de todo lama a esta funcon
+            // MenuToken token = MenuToken.ValidarToken(aToken, User.GetUserId());
+            // atoken es loque va en url y User.GetIserId es una cokkie
+            // public static MenuToken ValidarToken(string aCadenaEncriptada, int aIdUsuarioEnCookie)
+            // {
+            //    return ValidarToken(aCadenaEncriptada, aIdUsuarioEnCookie, 0, 0);
+            // }
+            // sobrecarga para recibir tambien idAgencia y id marca
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere
