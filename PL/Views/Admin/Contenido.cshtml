@@ -12,7 +12,7 @@
         <meta name="keywords" content="Encuestas, Clima Laboral, CMS, Grupo Autofin México" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
         <title>@ViewBag.Title</title>
-        @Styles.Render("~/bundles/cssAdmin")   
+        @Styles.Render("~/bundles/cssAdmin")
         @RenderSection("Styles", false)   
         @{
             ViewBag.Perfil = Session["PerfilAdminLog"];
@@ -405,7 +405,7 @@
                     <div class="container-fluid px-lg-5">
                         <div class="row">
                             <div class="col-6">
-                                <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                                <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
                             </div>
                             <div class="col-6">
                                 <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
@@ -574,7 +574,7 @@
                     <div class="container-fluid px-lg-5">
                         <div class="row">
                             <div class="col-6">
-                                <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                                <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
                             </div>
                             <div class="col-6">
                                 <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>

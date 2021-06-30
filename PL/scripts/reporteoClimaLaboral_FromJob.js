@@ -516,13 +516,25 @@ function GetDashBoard() {
                 }
             }
 
-            fillArray("apis/getCompanyCategoria", vm.listCompanyCategoria, function () {
-                vm.listCompanyCategoria.unshift({ Descripcion: "-Selecciona-", IdCompanyCategoria: 0 });
-                vm.CompanyCategoria = vm.listCompanyCategoria[0];
-                vm.CompanyCategoriaForEmpresa = vm.listCompanyCategoria[0];
-                vm.CompanyCategoriaForArea = vm.listCompanyCategoria[0];
-                vm.CompanyCategoriaForDepartamento = vm.listCompanyCategoria[0];
+            document.getElementById("DDLBD").addEventListener("change", function (e) {
+                
+                var IdBaseDeDatos = e.target.value;
+                vm.listCompanyCategoriaS = [];
+                vm.listCompanyCategoria = [];
+                fillArray("/EstructuraAFMReporte/GetCompanyCategoria/?IdBaseDeDatos=" + IdBaseDeDatos, vm.listCompanyCategoriaS, function () {
+                    // custom unidades de negocio
+                    [].forEach.call(vm.listCompanyCategoriaS, function (item) {
+                        vm.listCompanyCategoria.push({ Descripcion: item, IdCompanyCategoria: item });
+                    });
+                    vm.listCompanyCategoria.unshift({ Descripcion: "-Selecciona-", IdCompanyCategoria: 0 });
+                    vm.CompanyCategoria = vm.listCompanyCategoria[0];
+                    vm.CompanyCategoriaForEmpresa = vm.listCompanyCategoria[0];
+                    vm.CompanyCategoriaForArea = vm.listCompanyCategoria[0];
+                    vm.CompanyCategoriaForDepartamento = vm.listCompanyCategoria[0];
+                });
             });
+
+            
 
             fillArray("apis/getReactivos", vm.listReactivos, function () {
                 vm.listReactivos.unshift({ Pregunta: "-Selecciona-", IdPregunta: 0 });
@@ -1251,14 +1263,14 @@ function GetDashBoard() {
                     var validFind = false;
                     switch (vm.criterioBusquedaSeleccionado.Id) {
                         case 1:
-                            if (vm.CompanyCategoria.IdCompanyCategoria != null && vm.CompanyCategoria.IdCompanyCategoria > 0) {
+                            if (vm.CompanyCategoria.IdCompanyCategoria != null/* && vm.CompanyCategoria.IdCompanyCategoria > 0*/) {
                                 vm.model.EntidadNombre = vm.CompanyCategoria.Descripcion;
                                 vm.model.EntidadId = vm.CompanyCategoria.IdCompanyCategoria;
                                 validFind = true;
                             } else { swal("Antes de elegir el año debes seleccionar los criterios de búsqueda", "", "info"); validFind = false; }
                             break;
                         case 2:
-                            if (vm.Company.CompanyId != null && vm.Company.CompanyId > 0) {
+                            if (vm.Company.CompanyId != null/* && vm.Company.CompanyId > 0*/) {
                                 vm.model.EntidadNombre = vm.Company.CompanyName;
                                 vm.model.EntidadId = vm.Company.CompanyId;
                                 validFind = true;

@@ -267,7 +267,7 @@ namespace BL
                         "", emp.Puesto, emp.FechaNaciemiento, emp.FechaAntiguedad,
                         emp.Sexo, emp.Correo, emp.TipoFuncion, emp.CondicionTrabajo,
                         emp.GradoAcademico, emp.UnidadNegocio, emp.DivisonMarca,
-                        emp.AreaAgencia, emp.Departamento, emp.Subdepartamento,
+                        emp.AreaAgencia, emp.Depto, emp.Subdepto,
                         emp.EmpresaContratante, emp.IdResponsableRH, emp.NombreResponsableRH,
                         emp.IdJefe, emp.NombreJefe, emp.PuestoJefe, emp.IdRespinsableEstructura,
                         emp.NombreResponsableEstrucutra, emp.ClavesAcceso.ClaveAcceso, emp.RangoAntiguedad,
@@ -276,9 +276,32 @@ namespace BL
                         "", "", "",
                         emp.IdEmpleado, emp.IdEmpleadoRH
                         );
+                    //UPDATE Empleado SET
+                    //NOMBRE = {0}, APELLIDOPATERNO = {1}, APELLIDOMATERNO = {2}, Puesto = {4}, FechaNacimiento = {5}, FechaAntiguedad = {6},
+                    //Sexo = {7}, Correo = {8}, TipoFuncion = {9}, CondicionTrabajo = {10}, GradoAcademico = {11}, UnidadNegocio = {12},
+                    //DivisionMarca = {13}, AreaAgencia = {14}, Depto = {15}, Subdepartamento = {16}, EmpresaContratante = {17},
+                    //IdResponsableRH = {18}, NombreResponsableRH = {19}, IdJefe = {20}, NombreJefe = {21}, PuestoJefe = {22}, IdResponsableEstructura = {23},
+                    //NombreResponsableEstructura = {24}, RangoAntiguedad = {26}, RangoEdad = {27}, EstatusEmpleado = {28}, IdEmpleadoRH = {36}
+                    //WHERE IdEmpleado = {35}
+                    /*var empleado = context.Empleado.Where(o => o.IdEmpleado == emp.IdEmpleado).FirstOrDefault();
+                    if (empleado != null)
+                    {
+                        empleado.Nombre = String.IsNullOrEmpty(emp.Nombre) ? empleado.Nombre : emp.Nombre;
+                        empleado.ApellidoPaterno = String.IsNullOrEmpty(emp.ApellidoPaterno) ? empleado.ApellidoPaterno : emp.ApellidoPaterno;
+                        empleado.ApellidoMaterno = String.IsNullOrEmpty(emp.ApellidoMaterno) ? empleado.ApellidoMaterno : emp.ApellidoMaterno;
+                        empleado.Puesto = String.IsNullOrEmpty(emp.Puesto) ? empleado.Puesto : emp.Puesto;
+                        empleado.FechaNacimiento = emp.FechaNaciemiento == null ? empleado.FechaNacimiento : emp.FechaNaciemiento;
+                        empleado.FechaAntiguedad = emp.FechaAntiguedad == null ? empleado.FechaAntiguedad : emp.FechaAntiguedad;
+                        empleado.Sexo = String.IsNullOrEmpty(emp.Sexo) ? empleado.Sexo : emp.Sexo;
+                        empleado.Correo = String.IsNullOrEmpty(emp.Correo) ? empleado.Correo : emp.Correo;
+                        empleado.TipoFuncion = String.IsNullOrEmpty(emp.TipoFuncion) ? empleado.TipoFuncion : emp.TipoFuncion;
+                        empleado.CondicionTrabajo = String.IsNullOrEmpty(emp.CondicionTrabajo) ? empleado.CondicionTrabajo : emp.CondicionTrabajo;
+                        empleado.GradoAcademico = String.IsNullOrEmpty(emp.GradoAcademico) ? empleado.GradoAcademico : emp.GradoAcademico;
+                        empleado.UnidadNegocio = String.IsNullOrEmpty(emp.UnidadNegocio) ? empleado.UnidadNegocio : emp.UnidadNegocio;
+
+                    }*/
+
                     context.SaveChanges();
-
-
                     result.Correct = true;
                 }
             }

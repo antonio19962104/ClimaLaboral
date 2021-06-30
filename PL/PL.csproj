@@ -749,6 +749,7 @@
     <Content Include="resources\LayoutHistoricos.xlsx" />
     <None Include="scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="scripts\formProgressBar.jquery.js" />
+    <Content Include="scripts\General.js" />
     <Content Include="scripts\GetDataArray.js" />
     <Content Include="scripts\JQCloud.js" />
     <Content Include="scripts\jquery-1.12.4.js" />

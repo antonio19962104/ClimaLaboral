@@ -161,7 +161,7 @@
     function Download() {
         var tipo = ($('input:radio[name=tipo]:checked').val());
         if (tipo == "" || tipo == null) {
-            swal('Debes elegir primero el tipo de Encuesta para el que se usará el Layout', '', 'info');
+            swal('Debes elegir primero el tipo de encuesta para el que se usará el Layout', '', 'info');
         }
         if (tipo == 1) {
             window.location = "@Url.Action("DownloadLayoutClimaLaboral", "BD")";
@@ -239,10 +239,10 @@
 
             if (excelValido == false) {
                 if (faltaidEmple == true) {
-                    swal('No se han especificado los Id de empleado en el layout', '', 'info');
+                    swal('No se han especificado los id de empleado en el layout', '', 'info');
                 }
                 else if (duplicaIdEmpleado == true) {
-                    swal('Su layout contiene un Id de Empleado no valido, verificalo.', '', 'info');
+                    swal('Su layout contiene un id de empleado no valido, verificalo.', '', 'info');
                 }
                 else if (faltaidEmple == false && duplicaIdEmpleado == false) {
                     swal('El archivo cargado no es valido', '', 'info');

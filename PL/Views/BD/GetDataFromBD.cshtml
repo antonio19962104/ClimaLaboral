@@ -393,14 +393,14 @@
                         </div>
                     </div>
 
-            <section id="page-title">
-                <div class="col-6 bottom-align-left center-vertically-xs">
-                    <img src="~/img/icon-database.png" class="img-fluid">
-                    <h1 class="title-page-survey">
-                        Base de datos / <span>@Session["BDNombre"]</span>
-                    </h1>
-                </div>
-            </section>
+                    <section id="page-title">
+                        <div class="col-6 bottom-align-left center-vertically-xs">
+                            <img src="~/img/icon-database.png" class="img-fluid">
+                            <h1 class="title-page-survey">
+                                Base de datos / <span>@Session["BDNombre"]</span>
+                            </h1>
+                        </div>
+                    </section>
                 
 
 
@@ -1278,7 +1278,7 @@
                                             <input placeholder="" type="text" id="inputName" class="form-control validate ApellidoMaterno">
                                         </div>
 
-                                        <div class="md-form mb-5">
+                                        <div hidden class="md-form mb-5">
                                             <label data-error="wrong" data-success="right" for="inputName">Password</label>
                                             <input placeholder="" type="text" id="inputName" class="form-control validate Password">
                                         </div>
@@ -1393,7 +1393,7 @@
                                             <input placeholder="" type="text" id="inputName" class="form-control validate NombreResponsableEstructura">
                                         </div>
 
-                                        <div class="md-form mb-5">
+                                        <div hidden class="md-form mb-5">
                                             <label data-error="wrong" data-success="right" for="inputName">Clave de acceso</label>
                                             <input placeholder="" type="text" id="inputName" class="form-control validate ClaveAcceso">
                                         </div>
@@ -1410,48 +1410,69 @@
 
 
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus</label>
-                                            <select class="form-control EstatusUsuario" id="">
-                                                <option value="0">Selecciona una opcion</option>
-                                                <option value="Activo">Activo</option>
-                                                <option value="Inactivo">Inactivo</option>
-                                            </select>
-                                        </div>
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputName">Campo numerico 1</label>
-                                            <input placeholder="" type="text" id="inputName" class="form-control validate Numerico1">
-                                        </div>
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputName">Campo de texto 1</label>
-                                            <input placeholder="" type="text" id="inputName" class="form-control validate Texto1">
-                                        </div>
+                                        @{
+                                            var TIPOdEbd = Convert.ToInt32(Session["TipoBD"]);
+                                            if (TIPOdEbd == 2)
+                                            {
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputPosition">Estatus</label>
+                                                    <select class="form-control EstatusUsuario" id="">
+                                                        <option value="0">Selecciona una opcion</option>
+                                                        <option value="1">Activo</option>
+                                                        <option value="2">Inactivo</option>
+                                                    </select>
+                                                </div>
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputName">Campo numerico 2</label>
-                                            <input placeholder="" type="text" id="inputName" class="form-control validate Numerico2">
-                                        </div>
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputName">Campo numerico 1</label>
+                                                    <input placeholder="" type="text" id="inputName" class="form-control validate Numerico1">
+                                                </div>
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputName">Campo de texto 2</label>
-                                            <input placeholder="" type="text" id="inputName" class="form-control validate Texto2">
-                                        </div>
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputName">Campo de texto 1</label>
+                                                    <input placeholder="" type="text" id="inputName" class="form-control validate Texto1">
+                                                </div>
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputName">Campo numerico 3</label>
-                                            <input placeholder="" type="text" id="inputName" class="form-control validate Numerico3">
-                                        </div>
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputName">Campo numerico 2</label>
+                                                    <input placeholder="" type="text" id="inputName" class="form-control validate Numerico2">
+                                                </div>
 
-                                        <div class="md-form mb-5">
-                                            <label data-error="wrong" data-success="right" for="inputName">Campo de texto 3</label>
-                                            <input placeholder="" type="text" id="inputName" class="form-control validate Texto3">
-                                        </div>
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputName">Campo de texto 2</label>
+                                                    <input placeholder="" type="text" id="inputName" class="form-control validate Texto2">
+                                                </div>
+
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputName">Campo numerico 3</label>
+                                                    <input placeholder="" type="text" id="inputName" class="form-control validate Numerico3">
+                                                </div>
+
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputName">Campo de texto 3</label>
+                                                    <input placeholder="" type="text" id="inputName" class="form-control validate Texto3">
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="md-form mb-5">
+                                                    <label data-error="wrong" data-success="right" for="inputPosition">Estatus</label>
+                                                    <select class="form-control EstatusUsuario" id="">
+                                                        <option value="0">Selecciona una opcion</option>
+                                                        <option value="Activo">Activo</option>
+                                                        <option value="Inactivo">Inactivo</option>
+                                                    </select>
+                                                </div>
+                                            }
+                                        }
+
+
+
 
                                     </div>
                                     @{
-                                        var TIPOdEbd = Convert.ToInt32(Session["TipoBD"]);
                                         if (TIPOdEbd == 2)
                                         {
                                             <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
@@ -1482,8 +1503,7 @@
                         z-index: -5 !important;
                     }
                 </style>
-                @*<script src="~/scripts/jquery-1.8.3.min.js"></script>*@
-    @*<script src="~/scripts/jquery-3.4.1.min.js"></script>*@
+
 
     <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
     <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
@@ -1760,6 +1780,9 @@
                         var RangoAntiguedad = $('.RangoAntiguedad').val();
                         var RangoEdad = $('.RangoEdad').val();
                         var IdEstatus = $('.EstatusUsuario').val();
+                        //$('.EstatusUsuario').text();
+                        if (IdEstatus == 0)
+                            IdEstatus = "1";
 
                         var numerico1 = $('.Numerico1').val();
                         var numerico2 = $('.Numerico2').val();
@@ -1922,10 +1945,10 @@
                         var ClaveAcceso = $('.ClaveAcceso').val();
                         var RangoAntiguedad = $('.RangoAntiguedad').val();
                         var RangoEdad = $('.RangoEdad').val();
-                        var IdEstatus = $( ".EstatusUsuario option:selected" ).text();
+                        var IdEstatus = $( ".EstatusUsuario option:selected" ).val();
                         //$('.EstatusUsuario').text();
-
-
+                        if (IdEstatus == 0)
+                            IdEstatus = "Activo";
 
 
                         let model = {
@@ -1946,7 +1969,7 @@
                             DivisonMarca: DivisonMarca,
                             AreaAgencia: AreaAgencia,
                             Depto: Departamento,
-                            Subdpto: Subdepartamento,
+                            Subdepto: Subdepartamento,
                             EmpresaContratante: EmpresaContratante,
                             IdResponsableRH: IdResponsableRH,
                             NombreResponsableRH: NombreResponsableRH,

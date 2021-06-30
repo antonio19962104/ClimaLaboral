@@ -448,7 +448,7 @@
                                                                 <div class="form-group">
                                                                     @Html.LabelFor(model => model.Empleado.ApellidoPaterno, new { @class = "control-label" })
                                                                     <div class="col-md-5 col-sm-6">
-                                                                        <input type="text" maxlength="35" id="ApellidoPaterno" class="form-control" value="" placeholder="Apellido Paterno" onkeyup="validarRealTime(this)" />
+                                                                        <input type="text" maxlength="35" id="ApellidoPaterno" class="form-control" value="" placeholder="Apellido paterno" onkeyup="validarRealTime(this)" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -457,7 +457,7 @@
                                                                 <div class="form-group">
                                                                     @Html.LabelFor(model => model.Empleado.ApellidoMaterno, new { @class = "control-label" })
                                                                     <div class="col-md-5 col-sm-6">
-                                                                        <input maxlength="35" type="text" id="ApellidoMaterno" class="form-control" value="" placeholder="Apellido Materno" onkeyup="validarRealTime(this)" />
+                                                                        <input maxlength="35" type="text" id="ApellidoMaterno" class="form-control" value="" placeholder="Apellido materno" onkeyup="validarRealTime(this)" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -513,7 +513,7 @@
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                             <div class="form-horizontal">
                                                                 <div class="form-group">
-                                                                    @Html.Label("Selecciona las empresas a las que tendra acceso el usuariio", htmlAttributes: new { @class = "control-label" })
+                                                                    @Html.Label("Selecciona las empresas a las que tendra acceso el usuario", htmlAttributes: new { @class = "control-label" })
                                                                     <div class="col-md-5 col-sm-5">
                                                                         <div class="form-group">
                                                                             <input class="" onclick="$('#especificas').css('display', 'block'); lista = []; $('#mergeSelected').empty();" type="radio" name="name" value="" id="opc1" /> <label for="opc1">Elegir empresas especificas</label>
@@ -746,7 +746,7 @@
                 <div class="container-fluid px-lg-5">
                     <div class="row">
                         <div class="col-6">
-                            <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                            <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
                         </div>
                         <div class="col-6">
                             <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
@@ -781,7 +781,7 @@
                             }
                         }
                         else{
-                            swal('No se pudieron obtener las empresas, asegurese de haber elegido una unidad de negocio para el nuevo usuario', '', 'info');
+                            swal('No se pudieron obtener las empresas, asegurate de haber elegido una unidad de negocio para el nuevo usuario', '', 'info');
                         }
                     }
                 });
@@ -1382,7 +1382,7 @@
                         contentType: 'application/json; charset=utf-8',
                         complete: function (Response) {
                             if (Response.responseJSON == "error") {
-                                swal("Ocurrio un error al guardar", "", "error");
+                                swal("Ocurrió un error al guardar", "", "error");
                             }
                             if (Response.responseJSON == "success") {
                                 swal({
@@ -1758,7 +1758,7 @@
                         success: function (city) {
                             //LIMPIAR
                             $("#DDLCompany").empty();
-                            $("#DDLCompany").append('<option value="0">Selecciona una opcion</option>');
+                            $("#DDLCompany").append('<option value="0">Selecciona una opción</option>');
                             $.each(city, function (i, city) {
 
                                 $("#DDLCompany").append('<option value="'
@@ -1930,7 +1930,7 @@
                 <div class="container-fluid px-lg-5">
                     <div class="row">
                         <div class="col-6">
-                            <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> 2020</p>
+                            <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
                         </div>
                         <div class="col-6">
                             <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
@@ -1942,15 +1942,15 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
             <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
             <script>
-var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
-try {
-var elem = document.getElementById("urlLogn").href = redirect;
-} catch (e) {
+                var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
+                try {
+                var elem = document.getElementById("urlLogn").href = redirect;
+                } catch (e) {
 
-}
-swal("Tu sesión ha expirado, serás redireccionado al Login", "", "info").then(function () {
-var elem = document.getElementById("urlLogn").click();
-});
+                }
+                swal("Tu sesión ha expirado, serás redireccionado al Login", "", "info").then(function () {
+                var elem = document.getElementById("urlLogn").click();
+                });
             </script>
         </body>
     }

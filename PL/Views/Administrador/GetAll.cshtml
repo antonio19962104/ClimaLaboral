@@ -215,7 +215,7 @@
             complete: function (Response) {
                 if(Response.responseJSON == "success"){
                     swal({
-                        title: "El email del usuario se h actualizado con éxito, este será su nuevo Username para accesar a la plataforma",
+                        title: "El email del usuario se ha actualizado con éxito, este será su nuevo username para accesar a la plataforma",
                         text: "",
                         type: "success",
                         icon: "success",
@@ -277,7 +277,7 @@
         <script>
             function reenviarEmailFromList() {
                 $('.email').css('display', 'block');
-                swal("Elige a los usuarios que les deseas reenviar el email y al terminar da click en el boton reenviar", "", "info");
+                swal("Elige a los usuarios que les deseas reenviar el email y al terminar da click en el botón reenviar", "", "info");
             }
 
             function POSTreenviarEmailFromList() {
@@ -317,7 +317,7 @@
                     data: json,
                     contentType: 'application/json; charset=utf-8',
                     complete: function (Response) {
-                        swal("El envío de email se ha realizado con exito", "", "success");
+                        swal("El envío de email se ha realizado con éxito", "", "success");
                     }
                 });
 
