@@ -1277,14 +1277,14 @@ function GetDashBoard() {
                             } else { swal("Antes de elegir el año debes seleccionar los criterios de búsqueda", "", "info"); validFind = false; }
                             break;
                         case 3:
-                            if (vm.Area.IdArea != null && vm.Area.IdArea > 0) {
+                            if (vm.Area.IdArea != null/* && vm.Area.IdArea > 0*/) {
                                 vm.model.EntidadNombre = vm.Area.Nombre;
                                 vm.model.EntidadId = vm.Area.IdArea;
                                 validFind = true;
                             } else { swal("Antes de elegir el año debes seleccionar los criterios de búsqueda", "", "info"); validFind = false; }
                             break;
                         case 4:
-                            if (vm.Departamento.IdDepartamento != null && vm.Departamento.IdDepartamento > 0) {
+                            if (vm.Departamento.IdDepartamento != null/* && vm.Departamento.IdDepartamento > 0*/) {
                                 vm.model.EntidadNombre = vm.Departamento.Nombre;
                                 vm.model.EntidadId = vm.Departamento.IdDepartamento;
                                 validFind = true;
