@@ -86,7 +86,6 @@ namespace PL.Controllers
                 Console.Write(aHistorico.IdBaseDeDatos);
                 #region validar
                 BL.LogReporteoClima.writteLogJobReporte("Entré a generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
-                //Session["AnioActual_AnioHistorico"] = (aHistorico.Anio + 1) + "_" + aHistorico.Anio;
                 AnioActual = (int)aHistorico.Anio + 1;
                 AnioHistorico = (int)aHistorico.Anio;
                 string criterioBusquedaSeleccionado = Convert.ToString(aHistorico.IdTipoEntidad);
@@ -150,6 +149,9 @@ namespace PL.Controllers
                 var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
                 objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+
+
+                //Recalcular segun los demograficos encontrados en el excel de la Base de datos
                 objComparativoPorAntiguedadEE = apis.getComparativoPorAntiguedadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objComparativoPorAntiguedadEA = apis.getComparativoPorAntiguedadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objComparativoPorGeneroEE = apis.getComparativoPorGeneroEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
@@ -157,9 +159,6 @@ namespace PL.Controllers
                 objComparativoPorGradoAcademicoEE = apis.getComparativoPorGradoAcademicoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objComparativoPorGradoAcademicoEA = apis.getComparativoPorGradoAcademicoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 #endregion #region calcular data
-
-                /* Anio asignado */
-                //ajustar queries de estos metodos
                 objComparativoPorCondicionTrabajoEE = apis.getComparativoPorCondicionTrabajoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorCondicionTrabajoEA = apis.getComparativoPorCondicionTrabajoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorFuncionEE = apis.getComparativoPorFuncionEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
@@ -1688,7 +1687,7 @@ namespace PL.Controllers
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
-                {   
+                {
                     var query = context.Demo.Select(o => o).Where(o => o.Anio == anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                     if (query.Count > 0)
                     {
@@ -1700,7 +1699,7 @@ namespace PL.Controllers
             catch (Exception aE)
             {
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
-                BL.LogReporteoClima.writteLogJobReporte(aE, new System.Diagnostics.StackTrace());
+                BL.LogReporteoClima.writteLogJobReporte(aE, new StackTrace());
             }
         }
         public ActionResult getByIndicador([FromUri]int id, [FromBody]ML.Historico aHistorico)

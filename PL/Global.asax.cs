@@ -43,12 +43,12 @@ namespace PL
 
 
             //obtencion de hijos
-            var hijosCompanyCategoria = BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(1, "turismo");
+            /*var hijosCompanyCategoria = BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(1, "turismo");
             var hijosCompany = BL.EstructuraAFMReporte.GetAreasByCompany(1, hijosCompanyCategoria[1]);
             var hijosArea = BL.EstructuraAFMReporte.GetDepartamentosByArea(1, hijosCompany[1]);
             var hijosDepartamento = BL.EstructuraAFMReporte.GetSubDepartamentosByDepartamento(1, hijosArea[1]);
             //obtencion de toda la estructura hacia abajo
-            var hijosFromCompanyCategoria = Controllers.BackGroundJobController.getEstructuraFromExcel(1, 1, "turismo");
+            var hijosFromCompanyCategoria = Controllers.BackGroundJobController.getEstructuraFromExcel(1, 1, "turismo");*/
             
 
 
