@@ -846,8 +846,8 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var existsEE = context.HistoricoClima.Select(o => new { o.Anio, o.EntidadId, o.EntidadNombre, o.Enfoque }).Where(o => o.Anio == aHistorico.Anio && o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque empresa").ToList();
-                    var existsEA = context.HistoricoClima.Select(o => new { o.Anio, o.EntidadId, o.EntidadNombre, o.Enfoque }).Where(o => o.Anio == aHistorico.Anio && o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque Area").ToList();
+                    var existsEE = context.HistoricoClima.Select(o => new { o.Anio, o.EntidadId, o.EntidadNombre, o.Enfoque }).Where(o => o.Anio == aHistorico.Anio && /*o.EntidadId == aHistorico.EntidadId &&*/ o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque empresa").ToList();
+                    var existsEA = context.HistoricoClima.Select(o => new { o.Anio, o.EntidadId, o.EntidadNombre, o.Enfoque }).Where(o => o.Anio == aHistorico.Anio && /*o.EntidadId == aHistorico.EntidadId &&*/ o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque Area").ToList();
                     if (existsEE.Count > 0 && existsEA.Count > 0)
                     {
                         return true;
@@ -1342,8 +1342,8 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var query = context.HistoricoClima.Select(o => o)
-                        .Where(o => o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.Anio == aHistorico.Anio && o.Enfoque == "Enfoque empresa").ToList();
-                    var queryEE = context.HistoricoClima.Select(o => new { o.Promedio66R, o.Enfoque, o.EntidadId, o.EntidadNombre }).Where(o => (o.EntidadId == aHistorico.EntidadId && o.Enfoque == "Enfoque Empresa") || (o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque Empresa")).FirstOrDefault();
+                        .Where(o => /*o.EntidadId == aHistorico.EntidadId &&*/ o.EntidadNombre == aHistorico.EntidadNombre && o.Anio == aHistorico.Anio && o.Enfoque == "Enfoque empresa").ToList();
+                    var queryEE = context.HistoricoClima.Select(o => new { o.Promedio66R, o.Enfoque, o.EntidadId, o.EntidadNombre }).Where(o => (/*o.EntidadId == aHistorico.EntidadId && */o.Enfoque == "Enfoque Empresa") || (o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque Empresa")).FirstOrDefault();
                     if (query != null)
                     {
                         if (query.Count > 0)
@@ -3581,8 +3581,8 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var query = context.HistoricoClima.Select(o => o)
-                        .Where(o => o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.Anio == aHistorico.Anio && o.Enfoque == "Enfoque Area").ToList();
-                    var queryEA = context.HistoricoClima.Select(o => new { o.Promedio66R, o.Enfoque, o.EntidadId, o.EntidadNombre }).Where(o => (o.EntidadId == aHistorico.EntidadId && o.Enfoque == "Enfoque Area") || (o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque Area")).FirstOrDefault();
+                        .Where(o => /*o.EntidadId == aHistorico.EntidadId && */ o.EntidadNombre == aHistorico.EntidadNombre && o.Anio == aHistorico.Anio && o.Enfoque == "Enfoque Area").ToList();
+                    var queryEA = context.HistoricoClima.Select(o => new { o.Promedio66R, o.Enfoque, o.EntidadId, o.EntidadNombre }).Where(o => (/*o.EntidadId == aHistorico.EntidadId && */o.Enfoque == "Enfoque Area") || (o.EntidadNombre == aHistorico.EntidadNombre && o.Enfoque == "Enfoque Area")).FirstOrDefault();
                     if (query != null)
                     {
                         if (query.Count > 0)

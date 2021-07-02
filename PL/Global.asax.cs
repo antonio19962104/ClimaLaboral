@@ -13,6 +13,8 @@ using System.Diagnostics;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
+using System.Security.Claims;
+using BL;
 
 namespace PL
 {
@@ -29,14 +31,29 @@ namespace PL
             // https://github.com/antonio19962104/ClimaLaboral.git
             // https://www.doodleish.com/2020/06/hosting-for-angular-app-react-app.html
             // https://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-sharp
-            // caemos en el cntrolador y antes de todo lama a esta funcon
-            // MenuToken token = MenuToken.ValidarToken(aToken, User.GetUserId());
-            // atoken es loque va en url y User.GetIserId es una cokkie
-            // public static MenuToken ValidarToken(string aCadenaEncriptada, int aIdUsuarioEnCookie)
-            // {
-            //    return ValidarToken(aCadenaEncriptada, aIdUsuarioEnCookie, 0, 0);
-            // }
-            // sobrecarga para recibir tambien idAgencia y id marca
+            // mandar a encryptar el idusuario, nombre usuario, perfil, empresa de procedencia
+            string usuario = "jamurillo@grupoautofin.com|1|1,2,3,4,5";
+            string pass = "Pass@word01";
+            var encryptData = BL.EstructuraAFMReporte.Encrypt(usuario, pass);// esto va a la url
+            var descryptData = BL.EstructuraAFMReporte.Decrypt(encryptData, pass);
+            var usr = descryptData.Split('|')[0];
+            var perfil = descryptData.Split('|')[1];
+            var comp = descryptData.Split('|')[2];
+            var lst = comp.Split(',').Select(n => Convert.ToInt32(n)).ToList();
+
+
+            //obtencion de hijos
+            var hijosCompanyCategoria = BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(1, "turismo");
+            var hijosCompany = BL.EstructuraAFMReporte.GetAreasByCompany(1, hijosCompanyCategoria[1]);
+            var hijosArea = BL.EstructuraAFMReporte.GetDepartamentosByArea(1, hijosCompany[1]);
+            var hijosDepartamento = BL.EstructuraAFMReporte.GetSubDepartamentosByDepartamento(1, hijosArea[1]);
+            //obtencion de toda la estructura hacia abajo
+            var hijosFromCompanyCategoria = Controllers.BackGroundJobController.getEstructuraFromExcel(1, 1, "turismo");
+            
+
+
+
+
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere

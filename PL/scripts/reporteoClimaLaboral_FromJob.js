@@ -1300,7 +1300,7 @@ function GetDashBoard() {
                     vm.model.CurrentUsr = localStorage["usuario"];
 
                     vm.model.Anio = anioSeleccionado.value - 1;
-                    if (vm.model.EntidadNombre != "" && vm.model.EntidadId != null && vm.model.EntidadId > 0) {
+                    if (vm.model.EntidadNombre != "" && vm.model.EntidadId != null && vm.model.EntidadId != "") {
                         if (validFind) {
                             fillArrayCustomHisto("apisHistorico/existeHistorico_2", vm.model, vm.ExisteH, function () {
                                 vm.existeH = localStorage["tieneHistorico"];
@@ -7976,28 +7976,28 @@ function GetDashBoard() {
                 var validFind = false;
                 switch (vm.criterioBusquedaSeleccionado.Id) {
                     case 1:
-                        if (vm.CompanyCategoria.IdCompanyCategoria != null && vm.CompanyCategoria.IdCompanyCategoria > 0) {
+                        if (vm.CompanyCategoria.IdCompanyCategoria != null && vm.CompanyCategoria.IdCompanyCategoria != "") {
                             vm.model.EntidadNombre = vm.CompanyCategoria.Descripcion;
                             vm.model.EntidadId = vm.CompanyCategoria.IdCompanyCategoria;
                             validFind = true;
                         } else { swal("Antes de elegir el año debes seleccionar los criterios de búsqueda", "", "info"); validFind = false; }
                         break;
                     case 2:
-                        if (vm.Company.CompanyId != null && vm.Company.CompanyId > 0) {
+                        if (vm.Company.CompanyId != null && vm.Company.CompanyId != "") {
                             vm.model.EntidadNombre = vm.Company.CompanyName;
                             vm.model.EntidadId = vm.Company.CompanyId;
                             validFind = true;
                         } else { swal("Antes de elegir el año debes seleccionar los criterios de búsqueda", "", "info"); validFind = false; }
                         break;
                     case 3:
-                        if (vm.Area.IdArea != null && vm.Area.IdArea > 0) {
+                        if (vm.Area.IdArea != null && vm.Area.IdArea != "") {
                             vm.model.EntidadNombre = vm.Area.Nombre;
                             vm.model.EntidadId = vm.Area.IdArea;
                             validFind = true;
                         } else { swal("Antes de elegir el año debes seleccionar los criterios de búsqueda", "", "info"); validFind = false; }
                         break;
                     case 4:
-                        if (vm.Departamento.IdDepartamento != null && vm.Departamento.IdDepartamento > 0) {
+                        if (vm.Departamento.IdDepartamento != null && vm.Departamento.IdDepartamento != "") {
                             vm.model.EntidadNombre = vm.Departamento.Nombre;
                             vm.model.EntidadId = vm.Departamento.IdDepartamento;
                             validFind = true;

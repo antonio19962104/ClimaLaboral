@@ -102,7 +102,7 @@ namespace PL.Controllers
                 #endregion validar
                 #region calcular data
 
-                if (criterioBusquedaSeleccionado == "1")//Unidad de negocio
+                if (criterioBusquedaSeleccionado == "1")
                 {
                     /* Se debe generar el reporte a nivel GAFM * El de la Uniad de negocio actual se saca de todos estos calculos * El de las otras unidades de negocio se sacaria de la tabla de historicos tomando el mismo año que se esta consultando en AnioActual*/
                 }
@@ -113,8 +113,6 @@ namespace PL.Controllers
                 objMayorCrecimientoEA = apis.getReactivosMayorCrecimietoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objpeoresEE = apis.getReactivosPeorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objpeoresEA = apis.getReactivosPeorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-
-                //segunda validacion
                 objProcesosOrg = apis.getProcesosOrga(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta ajustar EA
                 objPracticasCulturales = apis.getPracticasCulturales(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objEsperadas = apis.getEncuestasEsperadas(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok
@@ -125,7 +123,6 @@ namespace PL.Controllers
                 objNivelColaboracion = apis.getNivelColaboracion(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objCredibilidad = apis.getCredibilidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objImparcialidad = apis.getImparcialidad(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
-                // 
                 objOrgullo = apis.getOrgullo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objRespeto = apis.getRespeto(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objCompanierismo = apis.getCompanierismo(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
@@ -133,27 +130,24 @@ namespace PL.Controllers
                 objHabgerenciales = apis.getHabGerenciales(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objAlineacionEstrategica = apis.getAlineacionEstrategica(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
                 objCambio = apis.getCambio(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ok falta EA
-                /*
-                 * Faltantes de añadir el campo año 
-                */
-                //Bienestar (17)
-                var aFiltrosEntUnNivelAbajo = getFiltros(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId, aHistorico.EntidadNombre);
+
+                // obtener los hijos de la estructura GAFM un nivel bajo de la entidad seleccionada
+                // var aFiltrosEntUnNivelAbajo = getFiltros(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId, aHistorico.EntidadNombre);
+                var aFiltrosEntUnNivelAbajo = getEstructuraUnNivelFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
+                aFiltrosEntUnNivelAbajo.RemoveAt(0);
+
                 objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
-                //
                 objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-                //
-
-
-
                 objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objComparativoAbandono = apis.getComparativoAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-                //
                 objComparativoEntidadesResultadoGeneralEE = apis.getComparativoEntidadesResultadoGeneralEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoEntidadesResultadoGeneralEA = apis.getComparativoEntidadesResultadoGeneralEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                //
-                var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
+
+                // obtener los hijos de la estructura GAFM todos los niveles bajo de la entidad seleccionada
+                // var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
+                var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
                 objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoPorAntiguedadEE = apis.getComparativoPorAntiguedadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
@@ -341,6 +335,8 @@ namespace PL.Controllers
                 default:
                     break;
             }
+
+
 
             var finalColumnas = new List<finalCols>();
             //data.Data
@@ -1633,25 +1629,32 @@ namespace PL.Controllers
         public static string UnidadNegocioFromEntidad(string entidadNombre, int? entidadId, int? tipoEntidad)
         {
             string Unidad = "";
-            switch (tipoEntidad)
+            if (entidadId == null)
             {
-                case 1:
-                    Unidad = entidadNombre;
-                    Unidad = BL.LogReporteoClima.getUnidadNegocioByUnidad(entidadId);
-                    break;
-                case 2:
-                    Unidad = BL.LogReporteoClima.getUnidadNegocioByCompany(entidadId);
-                    break;
-                case 3:
-                    Unidad = BL.LogReporteoClima.getUnidadNegocioByArea(entidadId);
-                    break;
-                case 4:
-                    Unidad = BL.LogReporteoClima.getUnidadNegocioByDepartamento(entidadId);
-                    break;
-                default:
-                    BL.LogReporteoClima.writteLogJobReporte(new Exception { }, new System.Diagnostics.StackTrace());
-                    Unidad = "";
-                    break;
+                Unidad = entidadNombre + "_" + 0;
+            }
+            else
+            {
+                switch (tipoEntidad)
+                {
+                    case 1:
+                        Unidad = entidadNombre;
+                        Unidad = BL.LogReporteoClima.getUnidadNegocioByUnidad(entidadId);
+                        break;
+                    case 2:
+                        Unidad = BL.LogReporteoClima.getUnidadNegocioByCompany(entidadId);
+                        break;
+                    case 3:
+                        Unidad = BL.LogReporteoClima.getUnidadNegocioByArea(entidadId);
+                        break;
+                    case 4:
+                        Unidad = BL.LogReporteoClima.getUnidadNegocioByDepartamento(entidadId);
+                        break;
+                    default:
+                        BL.LogReporteoClima.writteLogJobReporte(new Exception { }, new System.Diagnostics.StackTrace());
+                        Unidad = "";
+                        break;
+                }
             }
             return Unidad;
         }
@@ -1660,7 +1663,7 @@ namespace PL.Controllers
             aHistorico.Anio = aHistorico.Anio + 1;
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio && o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                 if (query.Count > 0)
                 {
                     return Content("true");
@@ -1672,7 +1675,7 @@ namespace PL.Controllers
         {
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == anio && o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                var query = context.Demo.Select(o => o).Where(o => o.Anio == anio/* && o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                 if (query.Count > 0)
                 {
                     return true;
@@ -1685,8 +1688,8 @@ namespace PL.Controllers
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
-                {
-                    var query = context.Demo.Select(o => o).Where(o => o.Anio == anio && o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                {   
+                    var query = context.Demo.Select(o => o).Where(o => o.Anio == anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                     if (query.Count > 0)
                     {
                         context.Demo.RemoveRange(query);
@@ -1978,6 +1981,60 @@ namespace PL.Controllers
                     break;
             }
             return data;
+        }
+        
+        // obtener estructura afm mediante Layout
+        // obtener un nivel hacia abajo
+        public static List<string> getEstructuraUnNivelFromExcel(int idTipoEntidad, int IdBD, string entidadNombre)
+        {
+            switch (idTipoEntidad)
+            {
+                case 1:
+                    return BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBD, entidadNombre);
+                case 2:
+                    return BL.EstructuraAFMReporte.GetAreasByCompany(IdBD, entidadNombre);
+                case 3:
+                    return BL.EstructuraAFMReporte.GetDepartamentosByArea(IdBD, entidadNombre);
+                default:
+                    return new List<string>();
+            }
+        }
+
+        // obtener todos los niveles hacia abajo
+        public static List<PL.Controllers.ApisController.myCustomArray> getEstructuraFromExcel(int IdTipoEntidad, int IdBD, string entidadNombre)
+        {
+            var listS = new List<string>();
+            var list = new List<ApisController.myCustomArray>();
+            try
+            {
+                switch (IdTipoEntidad)
+                {
+                    case 1:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl1(IdBD, entidadNombre);
+                        break;
+                    case 2:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl2(IdBD, entidadNombre);
+                        break;
+                    default:
+                    case 3:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl3(IdBD, entidadNombre);
+                        break;
+                    case 4:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4(IdBD, entidadNombre);
+                        break;
+                }
+                foreach (var item in listS)
+                {
+                    string type = item.Substring(0, 6);
+                    string value = item.Substring(6, item.Length - 6);
+                    list.Add(new ApisController.myCustomArray { type = type, value = value });
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+            }
+            return list;
         }
     }
 }

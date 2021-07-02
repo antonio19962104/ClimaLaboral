@@ -7,6 +7,9 @@ using System.Diagnostics;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
+using System.Security.Cryptography;
+using System.IO;
+using System.Security.Claims;
 
 namespace BL
 {
@@ -223,6 +226,496 @@ namespace BL
             }
             list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
             return list;
+        }
+
+
+        /*Metodos para BackGroundJob*/
+        public static List<string> GetCompaniesByCompanyCategoria(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                DataSet ds_CompanyCategoria = new DataSet();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and unidadNegocio = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_CompanyCategoria, "data");
+                    foreach (DataRow row_CompanyCategoria in ds_CompanyCategoria.Tables[0].Rows)
+                    {
+                        list.Add(row_CompanyCategoria.ItemArray[0].ToString());
+                        DataSet ds_Company = new DataSet();
+                        query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and UnidadNegocio = '{1}'", IdBaseDeDatos, row_CompanyCategoria.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Company, "data");
+                        foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                        {
+                            list.Add(row_Company.ItemArray[0].ToString());
+                            /*DataSet ds_Area = new DataSet();
+                            query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_Area, "data");
+                            foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                            {
+                                if (downLevel >= 3)
+                                    list.Add("Area=>" + row_Area.ItemArray[0].ToString());
+                                DataSet ds_Departamento = new DataSet();
+                                query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                                data = new SqlDataAdapter(query, conn);
+                                data.Fill(ds_Departamento, "data");
+                                foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                                {
+                                    if (downLevel >= 4)
+                                        list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                                    DataSet ds_SubDepartamento = new DataSet();
+                                    query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                                    data = new SqlDataAdapter(query, conn);
+                                    data.Fill(ds_SubDepartamento, "data");
+                                    foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                                    {
+                                        if (downLevel >= 5)
+                                            list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                    }
+                                }
+                            }*/
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+
+        public static List<string> GetAreasByCompany(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    DataSet ds_Company = new DataSet();
+                    query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_Company, "data");
+                    foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                    {
+                        list.Add(row_Company.ItemArray[0].ToString());
+                        DataSet ds_Area = new DataSet();
+                        query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Area, "data");
+                        foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                        {
+                            list.Add(row_Area.ItemArray[0].ToString());
+                            /*DataSet ds_Departamento = new DataSet();
+                            query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_Departamento, "data");
+                            foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                            {
+                                if (downLevel >= 4)
+                                    list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                                DataSet ds_SubDepartamento = new DataSet();
+                                query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                                data = new SqlDataAdapter(query, conn);
+                                data.Fill(ds_SubDepartamento, "data");
+                                foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                                {
+                                    if (downLevel >= 5)
+                                        list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                }
+                            }*/
+                        }
+                    }
+                    
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+
+        public static List<string> GetDepartamentosByArea(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    DataSet ds_Area = new DataSet();
+                    query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_Area, "data");
+                    foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                    {
+                        list.Add(row_Area.ItemArray[0].ToString());
+                        DataSet ds_Departamento = new DataSet();
+                        query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Departamento, "data");
+                        foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                        {
+                            list.Add(row_Depto.ItemArray[0].ToString());
+                            /*DataSet ds_SubDepartamento = new DataSet();
+                            query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_SubDepartamento, "data");
+                            foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                            {
+                                if (downLevel >= 5)
+                                    list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                            }*/
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+
+        public static List<string> GetSubDepartamentosByDepartamento(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    DataSet ds_Departamento = new DataSet();
+                    query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_Departamento, "data");
+                    foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                    {
+                        list.Add(row_Depto.ItemArray[0].ToString());
+                        DataSet ds_SubDepartamento = new DataSet();
+                        query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_SubDepartamento, "data");
+                        foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                        {
+                            list.Add(row_Subd.ItemArray[0].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+
+        public static List<string> GetEstructuraGAFMForJob_lvl1(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                DataSet ds_CompanyCategoria = new DataSet();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and UnidadNegocio = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_CompanyCategoria, "data");
+                    foreach (DataRow row_CompanyCategoria in ds_CompanyCategoria.Tables[0].Rows)
+                    {
+                        if (row_CompanyCategoria.ItemArray[0].ToString() != "-")
+                            list.Add("UNeg=>" + row_CompanyCategoria.ItemArray[0].ToString());
+                        DataSet ds_Company = new DataSet();
+                        query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and UnidadNegocio = '{1}'", IdBaseDeDatos, row_CompanyCategoria.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Company, "data");
+                        foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                        {
+                            list.Add("Comp=>" + row_Company.ItemArray[0].ToString());
+                            DataSet ds_Area = new DataSet();
+                            query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_Area, "data");
+                            foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                            {
+                                list.Add("Area=>" + row_Area.ItemArray[0].ToString());
+                                DataSet ds_Departamento = new DataSet();
+                                query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                                data = new SqlDataAdapter(query, conn);
+                                data.Fill(ds_Departamento, "data");
+                                foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                                {
+                                    list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                                    DataSet ds_SubDepartamento = new DataSet();
+                                    query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                                    data = new SqlDataAdapter(query, conn);
+                                    data.Fill(ds_SubDepartamento, "data");
+                                    foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                                    {
+                                        list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 7).ToList();
+            return list;
+        }
+
+        public static List<string> GetEstructuraGAFMForJob_lvl2(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                DataSet ds_CompanyCategoria = new DataSet();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    DataSet ds_Company = new DataSet();
+                    query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos,entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_Company, "data");
+                    foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                    {
+                        list.Add("Comp=>" + row_Company.ItemArray[0].ToString());
+                        DataSet ds_Area = new DataSet();
+                        query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Area, "data");
+                        foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                        {
+                            list.Add("Area=>" + row_Area.ItemArray[0].ToString());
+                            DataSet ds_Departamento = new DataSet();
+                            query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_Departamento, "data");
+                            foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                            {
+                                list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                                DataSet ds_SubDepartamento = new DataSet();
+                                query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                                data = new SqlDataAdapter(query, conn);
+                                data.Fill(ds_SubDepartamento, "data");
+                                foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                                {
+                                    list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+
+        public static List<string> GetEstructuraGAFMForJob_lvl3(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                DataSet ds_CompanyCategoria = new DataSet();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    DataSet ds_Area = new DataSet();
+                    query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_Area, "data");
+                    foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                    {
+                        list.Add("Area=>" + row_Area.ItemArray[0].ToString());
+                        DataSet ds_Departamento = new DataSet();
+                        query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Departamento, "data");
+                        foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                        {
+                            list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                            DataSet ds_SubDepartamento = new DataSet();
+                            query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_SubDepartamento, "data");
+                            foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                            {
+                                list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+
+        public static List<string> GetEstructuraGAFMForJob_lvl4(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                DataSet ds_CompanyCategoria = new DataSet();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    DataSet ds_Departamento = new DataSet();
+                    query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, entidadNombre);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_Departamento, "data");
+                    foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                    {
+                        list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                        DataSet ds_SubDepartamento = new DataSet();
+                        query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_SubDepartamento, "data");
+                        foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                        {
+                            list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
+            return list;
+        }
+        // encrypt
+        // This constant is used to determine the keysize of the encryption algorithm in bits.
+        // We divide this by 8 within the code below to get the equivalent number of bytes.
+        private const int Keysize = 256;
+
+        // This constant determines the number of iterations for the password bytes generation function.
+        private const int DerivationIterations = 1000;
+
+        public static string Encrypt(string plainText, string passPhrase)
+        {
+            // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
+            // so that the same Salt and IV values can be used when decrypting.  
+            var saltStringBytes = Generate256BitsOfRandomEntropy();
+            var ivStringBytes = Generate256BitsOfRandomEntropy();
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
+            {
+                var keyBytes = password.GetBytes(Keysize / 8);
+                using (var symmetricKey = new RijndaelManaged())
+                {
+                    symmetricKey.BlockSize = 256;
+                    symmetricKey.Mode = CipherMode.CBC;
+                    symmetricKey.Padding = PaddingMode.PKCS7;
+                    using (var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                            {
+                                cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
+                                cryptoStream.FlushFinalBlock();
+                                // Create the final bytes as a concatenation of the random salt bytes, the random iv bytes and the cipher bytes.
+                                var cipherTextBytes = saltStringBytes;
+                                cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
+                                cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
+                                memoryStream.Close();
+                                cryptoStream.Close();
+                                return Convert.ToBase64String(cipherTextBytes);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static string Decrypt(string cipherText, string passPhrase)
+        {
+            // Get the complete stream of bytes that represent:
+            // [32 bytes of Salt] + [32 bytes of IV] + [n bytes of CipherText]
+            var cipherTextBytesWithSaltAndIv = Convert.FromBase64String(cipherText);
+            // Get the saltbytes by extracting the first 32 bytes from the supplied cipherText bytes.
+            var saltStringBytes = cipherTextBytesWithSaltAndIv.Take(Keysize / 8).ToArray();
+            // Get the IV bytes by extracting the next 32 bytes from the supplied cipherText bytes.
+            var ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(Keysize / 8).Take(Keysize / 8).ToArray();
+            // Get the actual cipher text bytes by removing the first 64 bytes from the cipherText string.
+            var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((Keysize / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((Keysize / 8) * 2)).ToArray();
+
+            using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
+            {
+                var keyBytes = password.GetBytes(Keysize / 8);
+                using (var symmetricKey = new RijndaelManaged())
+                {
+                    symmetricKey.BlockSize = 256;
+                    symmetricKey.Mode = CipherMode.CBC;
+                    symmetricKey.Padding = PaddingMode.PKCS7;
+                    using (var decryptor = symmetricKey.CreateDecryptor(keyBytes, ivStringBytes))
+                    {
+                        using (var memoryStream = new MemoryStream(cipherTextBytes))
+                        {
+                            using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                            {
+                                var plainTextBytes = new byte[cipherTextBytes.Length];
+                                var decryptedByteCount = cryptoStream.Read(plainTextBytes, 0, plainTextBytes.Length);
+                                memoryStream.Close();
+                                cryptoStream.Close();
+                                return Encoding.UTF8.GetString(plainTextBytes, 0, decryptedByteCount);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static byte[] Generate256BitsOfRandomEntropy()
+        {
+            var randomBytes = new byte[32]; // 32 Bytes will give us 256 bits.
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                // Fill the array with cryptographically secure random bytes.
+                rngCsp.GetBytes(randomBytes);
+            }
+            return randomBytes;
         }
     }
 }
