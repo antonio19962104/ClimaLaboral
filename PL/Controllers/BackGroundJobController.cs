@@ -292,8 +292,8 @@ namespace PL.Controllers
 
                 #endregion guardar resultados
                 //Pasar estatus del JobReporte a 1 y notificar
-                BL.LogReporteoClima.updateStatusReporte((int)aHistorico.EntidadId, aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, (int)aHistorico.EntidadId, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL);
+                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL);
                 BL.LogReporteoClima.writteLogJobReporte("He terminado de generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 return Json(true);
             }

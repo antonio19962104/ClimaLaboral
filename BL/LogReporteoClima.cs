@@ -464,13 +464,14 @@ namespace BL
                 return aE.Message;
             }
         }
-        public static bool updateStatusReporte(int entidadId, string entidadNombre, int AnioActual, string user)
+        public static bool updateStatusReporte(string entidadNombre, int AnioActual, string user)
         {
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1 WHERE ENTIDADID = {0} AND ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3}", entidadId, entidadNombre, AnioActual, user);
+                    //ENTIDADID = {0} AND
+                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1 WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3}", 0, entidadNombre, AnioActual, user);
                     context.SaveChanges();
                     return true;
                 }
@@ -481,7 +482,7 @@ namespace BL
                 return false;
             }
         }
-        public static string sendMail(string entidadName, int entidadId, int Anio, string UsuarioSolicita, string url)
+        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url)
         {
             if (UsuarioSolicita.GetType().Name == "Email")
             {
