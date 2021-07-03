@@ -1,4 +1,9 @@
-﻿var dataComparativoPermanencia = [];
+﻿/*
+Error a trabajar
+En la composicion del reporte tipo arbol
+vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo] is undefined
+*/
+var dataComparativoPermanencia = [];
 var urlApisjs = "http://localhost:11124/";
 function GetDashBoard() {
     window.location.href = "/DashBoard/DashBoard"
@@ -3866,7 +3871,7 @@ function GetDashBoard() {
                 try {
                     switch (vm.criterioBusquedaSeleccionado.Id) {
                         case 1:
-                            if (vm.CompanyCategoria.IdCompanyCategoria > 0) {
+                            if (vm.CompanyCategoria.IdCompanyCategoria != "") {
                                 vm.ArrayPantalla25_EE = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data)
                                                                 .where('$.tipoEntidad <= 3')
                                                                 .toArray();
@@ -3878,7 +3883,7 @@ function GetDashBoard() {
                             }
                             break;
                         case 2:
-                            if (vm.Company.CompanyId > 0) {
+                            if (vm.Company.CompanyId != "") {
                                 vm.ArrayPantalla25_EE = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data)
                                                                 .where('$.tipoEntidad <= 4 && $.tipoEntidad > 1')
                                                                 .toArray();
@@ -3890,7 +3895,7 @@ function GetDashBoard() {
                             }
                             break;
                         case 3:
-                            if (vm.Area.IdArea > 0) {
+                            if (vm.Area.IdArea != "") {
                                 vm.ArrayPantalla25_EE = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data)
                                                                 .where('$.tipoEntidad <= 5 && $.tipoEntidad > 2')
                                                                 .toArray();
@@ -3902,7 +3907,7 @@ function GetDashBoard() {
                             }
                             break;
                         case 4:
-                            if (vm.Departamento.IdDepartamento > 0) {
+                            if (vm.Departamento.IdDepartamento != "") {
                                 vm.ArrayPantalla25_EE = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data)
                                                                 .where('$.tipoEntidad == 5')
                                                                 .toArray();
@@ -3941,7 +3946,7 @@ function GetDashBoard() {
                 try {
                     switch (vm.criterioBusquedaSeleccionado.Id) {
                         case 1:
-                            if (vm.CompanyCategoria.IdCompanyCategoria > 0) {
+                            if (vm.CompanyCategoria.IdCompanyCategoria != "") {
                                 vm.ArrayPantalla26_EA = Enumerable.from(vm.ComparativoGeneralPorNivelesEA.Data)
                                                                 .where('$.tipoEntidad <= 3')
                                                                 .toArray();
@@ -3953,7 +3958,7 @@ function GetDashBoard() {
                             }
                             break;
                         case 2:
-                            if (vm.Company.CompanyId > 0) {
+                            if (vm.Company.CompanyId != "") {
                                 vm.ArrayPantalla26_EA = Enumerable.from(vm.ComparativoGeneralPorNivelesEA.Data)
                                                                 .where('$.tipoEntidad <= 4 && $.tipoEntidad > 1')
                                                                 .toArray();
@@ -3965,7 +3970,7 @@ function GetDashBoard() {
                             }
                             break;
                         case 3:
-                            if (vm.Area.IdArea > 0) {
+                            if (vm.Area.IdArea != "") {
                                 vm.ArrayPantalla26_EA = Enumerable.from(vm.ComparativoGeneralPorNivelesEA.Data)
                                                                 .where('$.tipoEntidad <= 5 && $.tipoEntidad > 2')
                                                                 .toArray();
@@ -3977,7 +3982,7 @@ function GetDashBoard() {
                             }
                             break;
                         case 4:
-                            if (vm.Departamento.IdDepartamento > 0) {
+                            if (vm.Departamento.IdDepartamento != "") {
                                 vm.ArrayPantalla26_EA = Enumerable.from(vm.ComparativoGeneralPorNivelesEA.Data)
                                                                 .where('$.tipoEntidad == 5')
                                                                 .toArray();
@@ -6915,6 +6920,9 @@ function GetDashBoard() {
             /*#endregion limpiar arreglos por seccion*/
 
             /*#region Obtener la estructura de entidades de GAFM */
+            /*
+             * Obtencion de la estrucura ahora en base al contenido demografico de la Base de Datos
+            */
             vm.getEstructura = function () {
                 vm.isBusy = true;
                 try {
@@ -6922,10 +6930,12 @@ function GetDashBoard() {
                         switch (vm.criterioBusquedaSeleccionado.Id) {
                             case 1:
                                 /*Unidad de Negocio*/
-                                if (vm.CompanyCategoria.IdCompanyCategoria > 0) {
+                                if (vm.CompanyCategoria.IdCompanyCategoria != "" && vm.CompanyCategoria.IdCompanyCategoria != 0) {
                                     vm.EstructuraColumnas = [];
                                     vm.contadorEstructura = 1;
-                                    fillArray("apis/getEstructuraDescByUnidadNegocio/?aUnidadNegocio=" + vm.CompanyCategoria.IdCompanyCategoria, vm.EstructuraColumnas, function () {
+                                    // getEstructuraFromExcel/ int IdTipoEntidad, int IdBD, string entidadNombre
+                                    // fillArray("apis/getEstructuraDescByUnidadNegocio/?aUnidadNegocio=" + vm.CompanyCategoria.IdCompanyCategoria, vm.EstructuraColumnas, function () {
+                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
                                         vm.fillColumnas(vm.EstructuraColumnas);
                                         vm.isBusy = false;
                                     });
@@ -6933,10 +6943,10 @@ function GetDashBoard() {
                                 break;
                             case 2:
                                 /*Company*/
-                                if (vm.Company.CompanyId > 0) {
+                                if (vm.Company.CompanyId != "" && vm.Company.CompanyId != 0) {
                                     vm.EstructuraColumnas = [];
                                     vm.contadorEstructura = 1;
-                                    fillArray("apis/getEstructuraDescByCompany/?aCompany=" + vm.Company.CompanyId, vm.EstructuraColumnas, function () {
+                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 2 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.Company.CompanyName, vm.EstructuraColumnas, function () {
                                         vm.fillColumnas(vm.EstructuraColumnas);
                                         vm.isBusy = false;
                                     });
@@ -6944,10 +6954,10 @@ function GetDashBoard() {
                                 break;
                             case 3:
                                 /*Area*/
-                                if (vm.Area.IdArea > 0) {
+                                if (vm.Area.IdArea != "" && vm.Area.IdArea != 0) {
                                     vm.EstructuraColumnas = [];
                                     vm.contadorEstructura = 1;
-                                    fillArray("apis/getEstructuraByArea/?aArea=" + vm.Area.IdArea, vm.EstructuraColumnas, function () {
+                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 3 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.Area.Nombre, vm.EstructuraColumnas, function () {
                                         vm.fillColumnas(vm.EstructuraColumnas);
                                         vm.isBusy = false;
                                     });
@@ -6955,10 +6965,10 @@ function GetDashBoard() {
                                 break;
                             case 4:
                                 /*Departamento*/
-                                if (vm.Departamento.IdDepartamento > 0) {
+                                if (vm.Departamento.IdDepartamento != "" && vm.Departamento.IdDepartamento != 0) {
                                     vm.EstructuraColumnas = [];
                                     vm.contadorEstructura = 1;
-                                    fillArray("apis/getEstructuraByDepartamento/?aDepartamento=" + vm.Departamento.IdDepartamento, function () {
+                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 4 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.Departamento.Nombre, function () {
                                         vm.fillColumnas(vm.EstructuraColumnas);
                                         vm.isBusy = false;
                                     });
@@ -6981,8 +6991,8 @@ function GetDashBoard() {
             vm.fillColumnas = function (estructura) {
                 vm.finalColumnas = [];
                 try {
-                    for (var i = 0; i < estructura.Data.length; i++) {
-                        /*Tomar items elegibles*/
+                    /*for (var i = 0; i < estructura.Data.length; i++) {
+
                         if (estructura.Data[i].CompanyName == null || estructura.Data[i].Area.Nombre == "") { }
                         else {
                             vm.finalColumnas.push({ type: 'Comp=>', value: estructura.Data[i].CompanyName });
@@ -7001,8 +7011,8 @@ function GetDashBoard() {
                         else {
                             vm.finalColumnas.push({ type: 'SubD=>', value: estructura.Data[i].Area.Departamento.Subdepartamento.Nombre });
                         }
-                        /*end Tomar items elegibles*/
-                    }
+                    }*/
+                    vm.finalColumnas = estructura;
                     console.log(vm.finalColumnas);
                     if (vm.promGralesHistorico.length == 0 && vm.flagPromediosHistoricos == 0) {
                         vm.getPromediosGeneralesHistoricos();

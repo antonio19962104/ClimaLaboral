@@ -664,6 +664,7 @@
     <Content Include="Jit\Extras\excanvas.js" />
     <Content Include="Jit\jit-yc.js" />
     <Content Include="Jit\jit.js" />
+    <Content Include="log\demo.sql" />
     <Content Include="newCL\css\all.min.css" />
     <Content Include="newCL\css\animate.min.css" />
     <Content Include="newCL\css\bootstrap.css" />
@@ -1102,7 +1103,6 @@
     <Content Include="Views\Encuesta\PreviewConfig.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="log\" />
     <Folder Include="scripts\TableExport\" />
     <Folder Include="Views\ApisHistorico\" />
     <Folder Include="Views\AuxGetResp\" />

@@ -1010,6 +1010,42 @@ namespace PL.Controllers
             return File(fullPath, "application/vnd.ms-excel", file);
         }
 
+        public JsonResult getEstructuraFromExcel(int IdTipoEntidad, int IdBD, string entidadNombre)
+        {
+            var listS = new List<string>();
+            var list = new List<myCustomArray>();
+            try
+            {
+                switch (IdTipoEntidad)
+                {
+                    case 1:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl1(IdBD, entidadNombre);
+                        break;
+                    case 2:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl2(IdBD, entidadNombre);
+                        break;
+                    default:
+                    case 3:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl3(IdBD, entidadNombre);
+                        break;
+                    case 4:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4(IdBD, entidadNombre);
+                        break;
+                }
+                foreach (var item in listS)
+                {
+                    string type = item.Substring(0, 6);
+                    string value = item.Substring(6, item.Length - 6);
+                    list.Add(new myCustomArray { type = type, value = value });
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
 
     }
 }
