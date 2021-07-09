@@ -13,23 +13,27 @@ namespace PL.Extensions
 		{
             var htmlFieldPrefix = "";
 
-            if (collectionName == "NewCuestion")
+            if (collectionName == "NewCuestion" || collectionName== "NewVSCPC" || collectionName== "NewVPPSC")
             { htmlFieldPrefix = html.ViewData.TemplateInfo.HtmlFieldPrefix; }
             else
             {
-                if (collectionName == "NewAnswerEdit")
+                switch (collectionName)
                 {
+                    case "NewAnswerEdit":
                         idPadreCollectionItem = idPadreCollectionItem + ".NewAnswerEdit[0]";
                         htmlFieldPrefix = idPadreCollectionItem;
-                }
-                else {
+                        break;
+                    case "NewCat":
+                        idPadreCollectionItem = idPadreCollectionItem + ".NewCat[0]";
+                        htmlFieldPrefix = idPadreCollectionItem;
+                        break;
+                    default:
                         idPadreCollectionItem = idPadreCollectionItem + ".NewAnswer[0]";
                         htmlFieldPrefix = idPadreCollectionItem;
-                }
+                        break;
+                }               
+               
             }
-            
-
-
 
             // htmlFieldPrefix = html.ViewData.TemplateInfo.HtmlFieldPrefix;
 

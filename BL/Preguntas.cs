@@ -123,7 +123,7 @@ namespace BL
                 IList<ML.Preguntas> result = new List<ML.Preguntas>();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var IdParametro = 1;
+                    var IdParametro = 1;                    
                     var query = context.Preguntas.SqlQuery("SELECT * FROM Preguntas " +
                         " where IdEstatus = {0} and idEncuesta = {1}", IdParametro, idEncuesta);
                     if (query != null)

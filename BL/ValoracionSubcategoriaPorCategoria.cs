@@ -36,5 +36,29 @@ namespace BL
                 return valor;                
             }           
         }
+        public static int getIdVSCPC(int idEncuesta,int idCategoria,int IdSubCategoria ) {
+            int id = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.ValoracionSubcategoriaPorCategoria.Select(o => o).Where(o => o.IdEncuesta == idEncuesta && o.IdCategoria == idCategoria && o.IdSubcategoria== IdSubCategoria);
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            id = item.IdValoracionSubcategoriaPorCategoria;
+                        }
+                    }
+                    return id;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE,new System.Diagnostics.StackTrace());
+                return id;
+                //throw;
+            }
+        }
     }
 }

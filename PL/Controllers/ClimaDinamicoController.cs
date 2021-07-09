@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -96,6 +97,17 @@ namespace PL.Controllers
         {
             BackgroundJob.Enqueue(() => BL.ClimaDinamico.envioMasivoEmail(aClimaDinamico));
             return Json(true);
+        }
+        public JsonResult EnvioEmailNotificacionAFM(string pPlantillaCliente, string pPlantillaAsesor, string pCorreoCliente, string pNombreEmisor, string pCorreoAsesor, string pAsuntoCorreo, string pNomPar, string pValPar)
+        {
+            var message = new MailMessage();
+            //message.From
+            message.To.Add(new MailAddress(pCorreoCliente));
+            message.Subject = pAsuntoCorreo;
+            message.Body = pPlantillaCliente + pPlantillaAsesor;
+            message.IsBodyHtml = true;
+            message.Bcc.Add(pCorreoAsesor); message.Bcc.Add("jamurillo@grupoautofin.com");
+            return Json("success");
         }
     }
 }

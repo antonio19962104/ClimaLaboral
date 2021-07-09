@@ -53,6 +53,7 @@ namespace ML
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
         public List<Object> ListCompetencias { get; set; }
+        public List<Competencia> ListaEditCompetencia { get; set; }
         //public enum Seccion
         //{
         //    Seccion1,

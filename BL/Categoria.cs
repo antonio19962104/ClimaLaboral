@@ -99,7 +99,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.ValoracionSubcategoriaPorCategoria.Select(o => o).Where(o => o.IdEncuesta==idEncuesta).ToList();
+                    var query = context.ValoracionSubcategoriaPorCategoria.Select(o => o).Where(o => o.IdEncuesta==idEncuesta && o.IdEstatus == 1).ToList();
                     if (query.Count() > 0)
                     {
                         var sinDuplicados = query.Select(o => o.IdCategoria).Distinct();
@@ -161,7 +161,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.ValoracionPreguntaPorSubcategoria.Select(o => o).Where(o => o.IdEncuesta == idEncuesta).ToList();
+                    var query = context.ValoracionPreguntaPorSubcategoria.Select(o => o).Where(o => o.IdEncuesta == idEncuesta && o.IdEstatus == 1).ToList();
                     if (query.Count() > 0)
                     {
                         var sinDuplicados = query.Select(o => o.IdSubcategoria).Distinct();
@@ -249,7 +249,9 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.Categoria.Select(o => o).Where(o => o.IdPadre == idCat && o.Estatus == 1).ToList();
+                    var query = context.Categoria.SqlQuery("Select * from Categoria INNER JOIN ValoracionSubcategoriaPorCategoria on Categoria.IdCategoria = ValoracionSubcategoriaPorCategoria.IdCategoria or Categoria.IdCategoria = ValoracionSubcategoriaPorCategoria.IdSubcategoria "+
+                        "where ValoracionSubcategoriaPorCategoria.IdEncuesta = {0} and ValoracionSubcategoriaPorCategoria.IdCategoria = {1} and Categoria.IdPadre > 0 and ValoracionSubcategoriaPorCategoria.idEstatus =1", idEncuesta,idCat).ToList(); 
+                        //context.Categoria.Select(o => o).Where(o => o.IdPadre == idCat && o.Estatus == 1).ToList();
                     if (query != null)
                     {
                         foreach (var item in query)
@@ -260,6 +262,7 @@ namespace BL
                             cat.Descripcion = item.Descripcion;
                             cat.IdPadre = (Int32)item.IdPadre;
                             cat.Valoracion = BL.ValoracionSubcategoriaPorCategoria.getValConfig(idEncuesta,item.IdCategoria);//(decimal)item.Valoracion;
+                            cat.IdPadreObjeto = BL.ValoracionSubcategoriaPorCategoria.getIdVSCPC(idEncuesta, (Int32)item.IdPadre, item.IdCategoria).ToString();//Se Obtiene el Id de ValoracionSubcategoriaPorCategoria
                             list.Add(cat);
                         }
 
@@ -282,7 +285,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.ValoracionPreguntaPorSubcategoria.Select(o => o).Where(o => o.IdEncuesta == idEncuesta && o.IdSubcategoria == idCat).ToList();
+                    var query = context.ValoracionPreguntaPorSubcategoria.Select(o => o).Where(o => o.IdEncuesta == idEncuesta && o.IdSubcategoria == idCat && o.IdEstatus == 1).ToList();
                     if (query != null)
                     {
                         foreach (var item2 in query)
@@ -291,7 +294,8 @@ namespace BL
                             cat2.IdCategoria = (Int32)item2.IdSubcategoria;
                             cat2.IdPadre = (Int32)item2.IdPregunta;                        
                             cat2.Nombre = getNombrePreguntaByIdPregunta((Int32)item2.IdPregunta);//busca Pregunta por item.IdPregunta;                                                        
-                            cat2.Valoracion = (decimal)item2.Valor;                            
+                            cat2.Valoracion = (decimal)item2.Valor;
+                            cat2.IdPadreObjeto = item2.IdValoracionPreguntaPorSubcategoria.ToString();                          
                             list.Add(cat2);
                         }
 

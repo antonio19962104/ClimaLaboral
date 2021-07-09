@@ -1635,6 +1635,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Property Name="IdSubcategoria" Type="int" />
           <Property Name="IdPregunta" Type="int" />
           <Property Name="Valor" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IdEstatus" Type="int" />
           <Property Name="FechaHoraCreacion" Type="datetime" />
           <Property Name="UsuarioCreacion" Type="varchar" MaxLength="150" />
           <Property Name="ProgramaCreacion" Type="varchar" MaxLength="150" />
@@ -1654,6 +1655,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Property Name="IdCategoria" Type="int" />
           <Property Name="IdSubcategoria" Type="int" />
           <Property Name="Valor" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IdEstatus" Type="int" />
           <Property Name="FechaHoraCreacion" Type="datetime" />
           <Property Name="UsuarioCreacion" Type="varchar" MaxLength="150" />
           <Property Name="ProgramaCreacion" Type="varchar" MaxLength="150" />
@@ -13255,6 +13257,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <NavigationProperty Name="Categoria" Relationship="RH_DesModel.fk_tblpSub_SubCategoria" FromRole="ValoracionPreguntaPorSubcategoria" ToRole="Categoria" />
           <NavigationProperty Name="Encuesta" Relationship="RH_DesModel.fk_tblpSub_Encuesta" FromRole="ValoracionPreguntaPorSubcategoria" ToRole="Encuesta" />
           <NavigationProperty Name="Preguntas" Relationship="RH_DesModel.fk_tblpSub_Pregunta" FromRole="ValoracionPreguntaPorSubcategoria" ToRole="Preguntas" />
+          <Property Name="IdEstatus" Type="Int32" />
         </EntityType>
         <EntityType Name="ValoracionSubcategoriaPorCategoria">
           <Key>
@@ -13277,6 +13280,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <NavigationProperty Name="Categoria" Relationship="RH_DesModel.fk_tbl_Categoria" FromRole="ValoracionSubcategoriaPorCategoria" ToRole="Categoria" />
           <NavigationProperty Name="Categoria1" Relationship="RH_DesModel.fk_tbl_SubCategoria" FromRole="ValoracionSubcategoriaPorCategoria" ToRole="Categoria" />
           <NavigationProperty Name="Encuesta" Relationship="RH_DesModel.fk_tbl_Encuesta" FromRole="ValoracionSubcategoriaPorCategoria" ToRole="Encuesta" />
+          <Property Name="IdEstatus" Type="Int32" />
         </EntityType>
         <Association Name="fk_tbl_Categoria">
           <End Type="RH_DesModel.Categoria" Role="Categoria" Multiplicity="0..1" />
@@ -20369,6 +20373,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <EntitySetMapping Name="ValoracionPreguntaPorSubcategoria">
             <EntityTypeMapping TypeName="RH_DesModel.ValoracionPreguntaPorSubcategoria">
               <MappingFragment StoreEntitySet="ValoracionPreguntaPorSubcategoria">
+                <ScalarProperty Name="IdEstatus" ColumnName="IdEstatus" />
                 <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
                 <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
                 <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
@@ -20389,6 +20394,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <EntitySetMapping Name="ValoracionSubcategoriaPorCategoria">
             <EntityTypeMapping TypeName="RH_DesModel.ValoracionSubcategoriaPorCategoria">
               <MappingFragment StoreEntitySet="ValoracionSubcategoriaPorCategoria">
+                <ScalarProperty Name="IdEstatus" ColumnName="IdEstatus" />
                 <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
                 <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
                 <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />

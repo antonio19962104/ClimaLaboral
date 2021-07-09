@@ -673,7 +673,12 @@ namespace BL
                                     string msg = "El usuario: " + user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno + " no cuenta con un email registrado";
                                     BL.NLogGeneratorFile.logError(msg, new StackTrace());
                                 }
-                                if (aClimaDinamico.TipoMensaje == "default" && user.Correo != null)
+                                if (!isValidEmail(user.Correo))
+                                {
+                                    string msg = "El usuario: " + user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno + " no cuenta con un email válido";
+                                    BL.NLogGeneratorFile.logError(msg, new StackTrace());
+                                }
+                                if (aClimaDinamico.TipoMensaje == "default" && user.Correo != null && isValidEmail(user.Correo))
                                 {
                                     string FullName = user.Nombre + " " + user.ApellidoPaterno + " " + user.ApellidoMaterno;
                                     var body =
@@ -809,6 +814,43 @@ namespace BL
             catch (Exception aE)
             {
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
+            }
+        }
+        public static List<ML.Respuestas> GetRespuestasByIdPregunta(int IdPregunta)
+        {
+            var list = new List<ML.Respuestas>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var data = context.Respuestas.Where(o => o.IdPregunta == IdPregunta && o.IdEstatus == 1).ToList();
+                    if (data == null)
+                        return new List<ML.Respuestas>();
+                    foreach (var item in data)
+                    {
+                        ML.Respuestas respuestas = new ML.Respuestas() { IdRespuesta = item.IdRespuesta, Respuesta = item.Respuesta };
+                        list.Add(respuestas);
+                    }
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.Respuestas>();
+            }
+        }
+
+        public static bool isValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
     }

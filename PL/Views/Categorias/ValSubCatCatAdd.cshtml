@@ -1,16 +1,20 @@
 ﻿@using PL.Extensions
 @model ML.ValoracionSubcategoriaPorCategoria
+
+<div class="@("row mt-2 mb-2 bloqueVSCPC"+Model.UniqueId)">
     @using (Html.BeginCollectionItem("NewVSCPC", ""))
     {
-        @Html.HiddenFor(x => x.IdCategoria)
-        @Html.HiddenFor(x => x.IdSubcategoria)
-        <div class="@("row mt-2 mb-2 bloqueVSCPC"+Model.UniqueId)">
-            <div class="col-9" style="font-size: 0.8rem;text-transform: uppercase;">@(Model.NombreCat)</div>
-            <div class="col-2">
-                @Html.TextBoxFor(x => x.Valor, new { @class = "form-control p-0  valSubCatCat" })
-            </div>
-            <div class="col-1">
-                <div class="form-text ml-2 dvscp" name="dvscp" style="font-weight:bold;cursor:pointer;" id="@(Model.UniqueId)">X</div>
-            </div>
+        @Html.HiddenFor(x => x.IdValoracionSubcategoriaPorCategoria)
+        @Html.HiddenFor(x => x.IdCategoria, new { @class = "idCategoriaC2" })
+        @Html.HiddenFor(x => x.IdSubcategoria, new { @class = "idSubCategoriaC2" })
+        <div class="col-9" style="font-size: 0.8rem;text-transform: uppercase;">@(Model.NombreCat)</div>
+        <div class="col-2">
+            @Html.TextBoxFor(x => x.Valor, new { @class = "form-control p-0  valSubCatCat" })
         </div>
+            <div class="col-1">
+                <div class="form-text ml-2 dvscp" idCategoria="@(Model.IdSubcategoria)" name="dvscp" style="font-weight:bold;cursor:pointer;" id="@(Model.UniqueId)">X</div>
+            </div>
+
     }
+</div>
+

@@ -639,6 +639,10 @@
                         $("textarea").change(function (e) {
                             if (!vm.isNullOrEmpty(e.target.value)) {
                                 e.target.style.backgroundColor = "#fff";
+                                if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(e.target.name))
+                                    vm.dataRespondidasForm.push(e.target.name);
+                                if (vm.isNullOrEmpty(e.target.value) && vm.dataRespondidasForm.includes(e.target.name))
+                                    vm.dataRespondidasForm.remove(e.target.name);
                             }
                         });
 
@@ -648,6 +652,17 @@
                     }, 500);
                 });
             }
+
+            Array.prototype.remove = function () {
+                var what, a = arguments, L = a.length, ax;
+                while (L && this.length) {
+                    what = a[--L];
+                    while ((ax = this.indexOf(what)) !== -1) {
+                        this.splice(ax, 1);
+                    }
+                }
+                return this;
+            };
 
             vm.getIUD = function () {
                 return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -683,11 +698,22 @@
                             });
                             break;
                         case 1: // order por competencia, funciona para encuesta completa o para encuesta con solo algunas preguntas
+                            var idCompe = 0;
                             [].forEach.call(elems, function (item) {
-                                if (parseInt(item.attributes.idCompetencia.value) == section)
-                                    item.style.display = "";
-                                if (parseInt(item.attributes.idCompetencia.value) != section)
-                                    item.style.display = "none";
+                                if (item.attributes.idCompetencia.value == 1) {
+                                    if (parseInt(item.attributes.idCompetencia.value) == section)
+                                        item.style.display = "";
+                                    if (parseInt(item.attributes.idCompetencia.value) != section)
+                                        item.style.display = "none";
+                                }
+                                // valida cuando el primer id de competencia inicia en un numero diferente de 1
+                                if (item.attributes.idCompetencia.value > 1) {
+                                    var competenciasEncuesta = Enumerable.From(elems).Distinct(o => o.attributes.idCompetencia.value == 11).ToArray();
+                                    if (parseInt(item.attributes.idCompetencia.value) == competenciasEncuesta[section - 1].attributes.idCompetencia.value)
+                                        item.style.display = "";
+                                    if (parseInt(item.attributes.idCompetencia.value) != competenciasEncuesta[section - 1].attributes.idCompetencia.value)
+                                        item.style.display = "none";
+                                }
                             });
                             break;
                         case 2: // orden por pregunta padre, falta agregar el caso donde el la encuesta tiene solo algunas preguntas
@@ -699,10 +725,12 @@
                                         item.style.display = "none";
                                 }*/
                                 // caso para encuestas con todas o con solo algunas preguntas
-                                if (parseInt(item.attributes.idconsecutivo.value) > (section - 1) * 8 && parseInt(item.attributes.idconsecutivo.value) <= (section * 8))
-                                    item.style.display = "";
-                                else
-                                    item.style.display = "none";
+                                if (section < 13) {
+                                    if (parseInt(item.attributes.idconsecutivo.value) > (section - 1) * 8 && parseInt(item.attributes.idconsecutivo.value) <= (section * 8))
+                                        item.style.display = "";
+                                    else
+                                        item.style.display = "none";
+                                }
                                 
                                 if (item.attributes.idCompetencia.value == 13 && section == (Math.round(vm.totalSecciones) - 1)) // Permanencia
                                     item.style.display = "";
@@ -757,6 +785,8 @@
                     if (progreso.toString() == "NaN")
                         progreso = 0;
                     vm.progreso = progreso;
+                    if (vm.progreso > 100)
+                        vm.progreso = 100;
                     document.getElementsByClassName("progress-clima")[0].style.width = vm.progreso + "%";
                     document.getElementsByClassName("progress-clima")[0].style.backgroundColor = vm.getColorProgress(vm.progreso);
                     document.getElementsByClassName("txt-progreso")[0].innerText = "PROGRESO " + vm.progreso + "%";

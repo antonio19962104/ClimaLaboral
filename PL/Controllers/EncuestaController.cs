@@ -298,6 +298,18 @@ namespace PL.Controllers
             answereViewModel.IdPadreObjeto = idpadreItem;
             return PartialView("~/Views/Respuestas/RespuestasAdd.cshtml", answereViewModel);
         }
+        public ActionResult CreateNewAnswereCL(string idpadreItem, string respuesta, string idtipocontrol)
+        {
+            
+            var answereViewModel = new ML.Respuestas();
+            answereViewModel.Pregunta = new ML.Preguntas();
+            answereViewModel.Pregunta.TipoControl = new ML.TipoControl();
+            answereViewModel.Pregunta.TipoControl.IdTipoControl = Convert.ToInt32(idtipocontrol);//IdTipodeControl;
+            answereViewModel.Respuesta = idtipocontrol == "2"? "Respuesta Larga" : respuesta;
+            answereViewModel.UniqueId = Guid.NewGuid();
+            answereViewModel.IdPadreObjeto = idpadreItem;
+            return PartialView("~/Views/Respuestas/RespuestasAdd.cshtml", answereViewModel);
+        }
         public ActionResult CreateNewAnswereChkBox(string idpadreItem)
         {
             var answereViewModel = new ML.Respuestas();
@@ -597,7 +609,7 @@ namespace PL.Controllers
                 encuestaCL.IdEncuesta = idEncuesta;
                 //ML.Result encuestaCL = BL.Encuesta.getEncuestaByIdEdit(idEncuesta);
                 //return View(encuestaCL.EditaEncuesta);
-                return RedirectToAction("EditCL", encuestaCL);
+                return RedirectToAction("EditCL","Encuesta",new { idEncuestaCL = idEncuesta.ToString()});
             }
 
             ML.Result encuesta = BL.Encuesta.getEncuestaByIdEditCL(idEncuesta,idsessionAdmin);
@@ -3238,12 +3250,18 @@ namespace PL.Controllers
             cuestionViewModel.ListCompetencia = listadoCompetenciaPreguntas.ListadoCompetenciasPregunta;
             cuestionViewModel.ListEnfoque = listadoEnfoquePregunta.ListadoEnfoquesPregunta;
             cuestionViewModel.Pregunta = cuestionModel.Pregunta;
+            cuestionViewModel.IdEncuesta = cuestionModel.IdEncuesta;
+            cuestionViewModel.IdPregunta = cuestionModel.IdPregunta;
             cuestionViewModel.IdPreguntaPadre = cuestionModel.IdPreguntaPadre;
             cuestionViewModel.IdEnfoque = cuestionModel.IdEnfoque;
             cuestionViewModel.Valoracion = cuestionModel.Valoracion;
             cuestionViewModel.Competencia = new ML.Competencia();
+            //cuestionViewModel.IdentificadorTipoControl = (Int32)cuestionModel.TipoControl.IdTipoControl;
             cuestionViewModel.Competencia.IdCompetencia = cuestionModel.Competencia.IdCompetencia;
             cuestionViewModel.Competencia.Nombre = cuestionModel.Competencia.Nombre;
+            cuestionViewModel.TipoControl = new ML.TipoControl();
+            cuestionViewModel.TipoControl.IdTipoControl = cuestionModel.TipoControl.IdTipoControl;
+            cuestionViewModel.Obligatoria = cuestionModel.Obligatoria;       
             cuestionViewModel.UniqueId = Guid.NewGuid();            
             return PartialView("~/Views/Preguntas/PreguntasAddCL.cshtml", cuestionViewModel);
         }
@@ -3336,9 +3354,17 @@ namespace PL.Controllers
             else {return Json("error"); }
 
         }
-        public ActionResult EditCL(ML.Encuesta EncuestaCL) {
+        public ActionResult EditCL(string idEncuestaCL) {
             string idsessionAdmin = Convert.ToString(Session["IdAdministradorLogeado"]);
-            ML.Result encuestaCL = BL.Encuesta.getEncuestaByIdEditClimaL(EncuestaCL.IdEncuesta,idsessionAdmin);
+            ML.Result encuestaCL = BL.Encuesta.getEncuestaByIdEditClimaL(Convert.ToInt32(idEncuestaCL),idsessionAdmin);
+            encuestaCL.EditaEncuesta.ListCatCol2 = BL.Categoria.getAllConfiguration(Convert.ToInt32(idEncuestaCL));
+            encuestaCL.EditaEncuesta.ListSubCatCol3 = BL.Categoria.getAllConfigurationPreSubCat(Convert.ToInt32(idEncuestaCL));
+            List<object> permisosEstructura = new List<object>();
+            ViewBag.Permisos = Session["CompaniesPermisos"];
+            permisosEstructura = ViewBag.Permisos;
+            var resulListEmpresa = BL.Empresa.GetAll(permisosEstructura);//GetFiltrado  
+            encuestaCL.EditaEncuesta.ListEmpresas = resulListEmpresa.Objects;
+
             return View(encuestaCL.EditaEncuesta);
         }
         [HttpPost]
@@ -3388,6 +3414,7 @@ namespace PL.Controllers
             ctaValViewModel.IdSubcategoria = ctaValModel.IdSubcategoria;
             ctaValViewModel.IdPregunta = ctaValModel.IdPregunta;
             ctaValViewModel.UniqueId = Guid.NewGuid();
+            ctaValViewModel.IdValoracionPreguntaPorSubcategoria = ctaValModel.IdValoracionPreguntaPorSubcategoria;
             return PartialView("~/Views/Categorias/ValPregSubCatAdd.cshtml", ctaValViewModel);
         }
         [HttpPost]//Partial View segunda Columna
@@ -3399,6 +3426,7 @@ namespace PL.Controllers
             ctaValViewModel.IdSubcategoria = ctaValModel.IdSubcategoria;
             ctaValViewModel.IdCategoria = ctaValModel.IdCategoria;
             ctaValViewModel.UniqueId = Guid.NewGuid();
+            ctaValViewModel.IdValoracionSubcategoriaPorCategoria = ctaValModel.IdValoracionSubcategoriaPorCategoria;
             return PartialView("~/Views/Categorias/ValSubCatCatAdd.cshtml", ctaValViewModel);
 
         }
@@ -3409,6 +3437,15 @@ namespace PL.Controllers
             var listadoCompetenciaPreguntas = BL.Competencia.getCompetenciasConPreguntas(idSessionAdmin);
             modelo.ListCompetencias =listadoCompetenciaPreguntas.ListadoCompetenciasPregunta;
             return Json(modelo.ListCompetencias,JsonRequestBehavior.AllowGet);
+
+        }
+        public ActionResult ListadoCompetenciasInicioCLEdit(int aIdEncuesta)
+        {
+            ML.Encuesta modelo = new ML.Encuesta();
+            string idSessionAdmin = Convert.ToString(Session["IdAdministradorLogeado"]);
+            var listadoCompetenciaPreguntas = BL.Competencia.getcompetenciasConPreguntaCLEdit(idSessionAdmin,aIdEncuesta);
+            modelo.ListCompetencias = listadoCompetenciaPreguntas.ListadoCompetenciasPregunta;
+            return Json(modelo.ListCompetencias, JsonRequestBehavior.AllowGet);
 
         }
         public ActionResult consultaVSCpC(int idEncuesta)

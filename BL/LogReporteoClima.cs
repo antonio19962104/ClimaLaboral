@@ -98,8 +98,8 @@ namespace BL
                 }
                 catch (Exception ae)
                 {
-                    NLog.Logger demo = NLog.LogManager.GetLogger("EmailNotification");
-                    demo.Debug("Modulo demo", st.GetFrame(0).GetMethod().Name, ae, ae.Message, ae.InnerException, ae.StackTrace);
+                    //NLog.Logger demo = NLog.LogManager.GetLogger("EmailNotification");
+                    //demo.Debug("Modulo demo", st.GetFrame(0).GetMethod().Name, ae, ae.Message, ae.InnerException, ae.StackTrace);
                 }
 
                 var path1 = @"\\10.5.2.101\RHDiagnostics\log\LogPortalDeEncuestas.log";
@@ -484,12 +484,13 @@ namespace BL
         }
         public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url)
         {
-            if (UsuarioSolicita.GetType().Name == "Email")
+            if (string.IsNullOrEmpty(UsuarioSolicita))
             {
-
+                UsuarioSolicita = "jamurillo@grupoautofin.com";
             }
             var body = "<p>La creacion del reporte de la entidad</p>" +  
-                            "<p>" + entidadName + " " + " del año " + Anio + " ha finalizado </p> <br />";
+                            "<p>" + entidadName + " " + " del año " + Anio + " ha finalizado </p>" +
+                            "<p>Consultalo ingresando a http://diagnostic4u.com/reporteoClima/Index </p>";
             //body += "Accede a <a href='"+ url + "" +"'></a>";
             var message = new MailMessage();
             message.To.Add(new MailAddress(UsuarioSolicita));
@@ -520,7 +521,7 @@ namespace BL
             aHistorico.Anio = aHistorico.Anio + 1;
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio && o.EntidadId == aHistorico.EntidadId && o.EntidadNombre == aHistorico.EntidadNombre && o.objName == aliasObj && o.usuario == aHistorico.CurrentUsr).FirstOrDefault();
+                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.objName == aliasObj && o.usuario == aHistorico.CurrentUsr).FirstOrDefault();
                 if (query != null)
                 {
                     return (query.jsonString);

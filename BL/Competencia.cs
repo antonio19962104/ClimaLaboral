@@ -22,7 +22,7 @@ namespace BL
                 {
                     //var IdParametro = 1;
                     //var query = context.Competencia.SqlQuery("SELECT * FROM Competencia where IdEstatus = {0} order by Nombre",IdParametro);
-                    var query = context.Competencia.Select(o => o).Where(o => o.IdEstatus == 1 && o.IdAdminCreate == idUsuarioAdm || o.IdCompetencia < 15).ToList();
+                    var query = context.Competencia.Select(o => o).Where(o => o.IdEstatus == 1 && o.IdAdminCreate == idUsuarioAdm || o.IdCompetencia < 18).ToList();
                     result.ListadoCompetenciasPregunta = new List<object>();
                     if (query != null)
                     {
@@ -362,6 +362,8 @@ namespace BL
                                 preguntaCompetencia.Pregunta = preguntaE;
                                 preguntaCompetencia.Valoracion = item.Valoracion;
                                 preguntaCompetencia.Enfoque = item.Enfoque;
+                                preguntaCompetencia.TipoControl = new ML.TipoControl();
+                                preguntaCompetencia.TipoControl.IdTipoControl = item.IdTipoControl;
                                 preguntaCompetencia.Competencia = new ML.Competencia();
                                 preguntaCompetencia.Competencia.IdCompetencia = aIdCompetencia;
                                 preguntaCompetencia.Competencia.Nombre = getNombreCompetenciabyId(aIdCompetencia).CURRENT_USER.ToString();
@@ -386,6 +388,57 @@ namespace BL
             }
             return result;
         }
+        public static Result getPreguntasByCompetencia(int aIdCompetencia,int aIdEncuesta)
+        {
+            Result result = new Result();
+            try
+            {
+                using (RH_DesEntities context = new RH_DesEntities())
+                {
+                    var query = context.Preguntas.SqlQuery("SELECT * FROM Preguntas  INNER JOIN Competencia ON Preguntas.IdCompetencia = Competencia.IdCompetencia where Preguntas.idEncuesta = {1} and Preguntas.IdEstatus in (1,2) and Preguntas.IdCompetencia = {0}", aIdCompetencia, aIdEncuesta);
+                    string preguntaE = "";
+                    result.ListadoPreguntaCompetencias = new List<ML.Preguntas>();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            if (item.IdEnfoque == 1)
+                            {
+                                preguntaE = item.Pregunta;
+                                ML.Preguntas preguntaCompetencia = new ML.Preguntas();
+                                preguntaCompetencia.IdEncuesta = (Int32)item.idEncuesta;
+                                preguntaCompetencia.IdPregunta = item.IdPregunta;
+                                preguntaCompetencia.IdPreguntaPadre = (Int32)item.IdPreguntaPadre;
+                                preguntaCompetencia.IdEnfoque = Convert.ToInt32(item.IdEnfoque);
+                                if (item.IdEstatus == 1){ preguntaCompetencia.Obligatoria = false; }else { preguntaCompetencia.Obligatoria = true; }                                
+                                preguntaCompetencia.Pregunta = preguntaE;
+                                preguntaCompetencia.Valoracion = item.Valoracion;
+                                preguntaCompetencia.Enfoque = item.Enfoque;
+                                preguntaCompetencia.TipoControl = new ML.TipoControl();
+                                preguntaCompetencia.TipoControl.IdTipoControl = item.IdTipoControl;
+                                preguntaCompetencia.Competencia = new ML.Competencia();
+                                preguntaCompetencia.Competencia.IdCompetencia = aIdCompetencia;
+                                preguntaCompetencia.IdCompetencia = aIdCompetencia;
+                                preguntaCompetencia.Competencia.Nombre = getNombreCompetenciabyId(aIdCompetencia).CURRENT_USER.ToString();
+                                preguntaCompetencia.Respuestas = new List<ML.Respuestas>();
+                                preguntaCompetencia.Respuestas = BL.Respuestas.getRespuestasByIdPregunta(item.IdPregunta);                               
+                                result.ListadoPreguntaCompetencias.Add(preguntaCompetencia);
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message.ToString();
+
+            }
+            return result;
+        }
+
+
         public static ML.Result getIdPregPadArByIdPrePadEmp(int idPreguntaPadre)
         {
             ML.Result result = new Result();
@@ -416,6 +469,41 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage = aE.Message.ToString();
+            }
+            return result;
+        }
+
+        public static Result getcompetenciasConPreguntaCLEdit(string aIdUsuario, int aIdEncuesta) {
+            int idUsuarioAdmin = Convert.ToInt32(aIdUsuario);
+            Result result = new Result();
+            result.ListCompetenciasEdit = new List<ML.Competencia>(); 
+            try
+            {
+                using (RH_DesEntities context= new RH_DesEntities())
+                {
+                    var queryCEn = context.Preguntas.SqlQuery("SELECT *  FROM Preguntas  where idEncuesta = {0} and IdEstatus in(1,2)",aIdEncuesta).ToList();
+                    var soloCompetencias = queryCEn.Select(o => o.IdCompetencia).Distinct().ToList();
+
+                    foreach (var itemsc in soloCompetencias)
+                    {
+                        var queryC = context.Competencia.Select(o => o).Where(o => o.IdCompetencia == itemsc).OrderBy(o => o.Nombre).ToList();
+                        ML.Competencia competencias = new ML.Competencia();
+                        competencias.IdCompetencia = queryC[0].IdCompetencia;
+                        competencias.Nombre = queryC[0].Nombre;
+                        competencias.PreguntasPorCompetencia = new List<ML.Preguntas>();
+                        competencias.PreguntasPorCompetencia = getPreguntasByCompetencia(queryC[0].IdCompetencia,aIdEncuesta).ListadoPreguntaCompetencias;
+                        result.ListCompetenciasEdit.Add(competencias);
+                        result.Correct = true;
+                    }
+
+                }
+
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message.ToString();
+                
             }
             return result;
         }

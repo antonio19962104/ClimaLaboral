@@ -133,7 +133,8 @@ namespace PL.Controllers
                 // obtener los hijos de la estructura GAFM un nivel bajo de la entidad seleccionada
                 // var aFiltrosEntUnNivelAbajo = getFiltros(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId, aHistorico.EntidadNombre);
                 var aFiltrosEntUnNivelAbajo = getEstructuraUnNivelFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
-                aFiltrosEntUnNivelAbajo.RemoveAt(0);
+                if (aFiltrosEntUnNivelAbajo.Count > 0)
+                    aFiltrosEntUnNivelAbajo.RemoveAt(0);
 
                 objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE

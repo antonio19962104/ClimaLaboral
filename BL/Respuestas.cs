@@ -950,5 +950,32 @@ namespace BL
             public int Frecuencia { get; set; }
             public string Palabra { get; set; }
         }
+
+        public static List<ML.Respuestas> getRespuestasByIdPregunta(int aIdPregunta) {
+            List<ML.Respuestas> listado = new List<ML.Respuestas>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.Respuestas.Select(o => o).Where(o => o.IdEstatus == 1 && o.IdPregunta == aIdPregunta).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.Respuestas respuestas = new ML.Respuestas();
+                            respuestas.IdRespuesta = item.IdRespuesta;
+                            respuestas.Respuesta = item.Respuesta;
+                            listado.Add(respuestas);
+                        }
+
+                    }
+                    return listado;
+                }
+            }
+            catch (Exception aE)
+            {
+                return listado = null;                
+            }
+        }
     }
 }

@@ -142,7 +142,8 @@
                                                     }
 
                                                     <div class="col-6 pr-0 pl-1">
-                                                        <a class="btn btn-sm btn-block btn-actions btn-success" @*href="@Url.Action("Edit","Encuesta", new {IdEncuesta=item.IdEncuesta} )"*@ onclick="confirmEditEncuesta(@item.IdEncuesta)" title="Editar">Editar</a>
+                                                        <a class="btn btn-sm btn-block btn-actions btn-success"                                                           
+                                                           onclick="confirmEditEncuesta(@item.IdEncuesta)" title="Editar">Editar</a>
                                                     </div>
                                                     <div class="col-6 pl-0 pr-1">
                                                         <a class="btn btn-sm btn-block btn-actions btn-danger" onclick="return confirmacionEliminar(@item.IdEncuesta);" @*href="@Url.Action("Delete","Encuesta", new {IdEncuesta=item.IdEncuesta} )"*@>Eliminar</a>
@@ -485,7 +486,7 @@
                                 });
                             }
                             else {
-                                swal('No se ha pidido eliminar la encuesta', '', 'info');
+                                swal('No se ha podido eliminar la encuesta', '', 'info');
                             }
                         }
                     });

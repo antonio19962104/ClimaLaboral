@@ -1046,6 +1046,20 @@ namespace PL.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult getCompanyByCompanyCategoriaFromExcel(int IdBaseDeDatos, string UnidadNegocio)
+        {
+            return Json(BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBaseDeDatos, UnidadNegocio), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult getAreaByCompanyFromExcel(int IdBaseDeDatos, string Company)
+        {
+            return Json(BL.EstructuraAFMReporte.GetAreasByCompany(IdBaseDeDatos, Company), JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult getDepartamentoByAreaFromExcel(int IdBaseDeDatos, string Area)
+        {
+            return Json(BL.EstructuraAFMReporte.GetDepartamentosByArea(IdBaseDeDatos, Area), JsonRequestBehavior.AllowGet);
+        }
+
+
 
     }
 }

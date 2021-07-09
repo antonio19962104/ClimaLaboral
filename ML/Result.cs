@@ -65,6 +65,7 @@ namespace ML
         public List<Plantillas> ListadoDePlantillasUltimas { get; set; }     
         public List<object> ListadoEnfoquesPregunta { get; set; }
         public List<object> ListadoCompetenciasPregunta { get; set; }
+        public List<Competencia> ListCompetenciasEdit { get; set; }
         public List<Preguntas> ListadoPreguntaCompetencias { get; set; }
         public List<object> ListadoTipoControl { get; set; }
         public List<Encuesta> ListadoDeEncuestas { get; set; }

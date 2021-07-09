@@ -379,7 +379,7 @@ function GetDashBoard() {
                             }
                             catch (aE) {
                                 vm.writteLog(aE.message + aE.stack, "vm.get")
-                                swal(aE.message, "", "warning");
+                                //swal(aE.message, "", "warning");
                             }
                         },
                         function (error) {
@@ -418,7 +418,7 @@ function GetDashBoard() {
                             }
                             catch (aE) {
                                 vm.writteLog(aE.message, "vm.getCustom");
-                                swal(aE.message, "", "warning");
+                                //swal(aE.message, "", "warning");
                             }
                         },
                         function (error) {
@@ -469,7 +469,7 @@ function GetDashBoard() {
                             }
                             catch (aE) {
                                 vm.writteLog(aE.message, "vm.getCustomHisto");
-                                swal(aE.message, "", "warning");
+                                //swal(aE.message, "", "warning");
                             }
                         },
                         function (error) {
@@ -508,7 +508,7 @@ function GetDashBoard() {
                             }
                             catch (aE) {
                                 vm.writteLog(aE.message, "vm.getCustomHisto_2");
-                                swal(aE.message, "", "warning");
+                                //swal(aE.message, "", "warning");
                             }
                         },
                         function (error) {
@@ -550,8 +550,15 @@ function GetDashBoard() {
                 if (data != null) {
                     vm.isBusy = true;
                     vm.listCompany = [];
-                    fillArray("apis/getCompanyByCompanyCategoria/" + data.IdCompanyCategoria, vm.listCompany, function () {
+                    vm.listCompanyApi = [];
+                    // fillArray("apis/getCompanyByCompanyCategoria/" + data.IdCompanyCategoria, vm.listCompany, function () {
+                    fillArray("apis/getCompanyByCompanyCategoriaFromExcel/?IdBaseDeDatos=" + document.getElementById("DDLBD").value + "&UnidadNegocio=" + data.IdCompanyCategoria, vm.listCompanyApi, function () {
+                        // vm.listCompany = vm.listCompanyApi.shift();
                         vm.listCompany.unshift({ CompanyName: "-Selecciona-", CompanyId: 0 });
+                        for (var i = 0; i < vm.listCompanyApi.length; i++) {
+                            if (i != 0)
+                                vm.listCompany.push({ CompanyName: vm.listCompanyApi[i], CompanyId: vm.listCompanyApi[i] })
+                        }
                         vm.Company = vm.listCompany[0];
                         vm.CompanyForArea = vm.listCompany[0];
                         vm.CompanyForDepartamento = vm.listCompany[0];
@@ -807,7 +814,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getDiferenciaGralEE(" + entidad + ")");
-                    swal(aE.message, "", "info");
+                    //swal(aE.message, "", "info");
                 }
             }
 
@@ -1058,7 +1065,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getDiferenciaGralEA(" + entidad + ")");
-                    swal(aE.message, "", "info");
+                    //swal(aE.message, "", "info");
                     return 10000;
                 }
             }
@@ -1144,8 +1151,14 @@ function GetDashBoard() {
                 if (data != null) {
                     vm.isBusy = true;
                     vm.listArea = [];
-                    fillArray("apis/getAreaByCompany/" + data.CompanyId, vm.listArea, function () {
+                    vm.listAreaApi = [];
+                    fillArray("apis/getAreaByCompanyFromExcel/?IdBaseDeDatos=" + document.getElementById("DDLBD").value + "&Company=" + data.CompanyId, vm.listAreaApi, function () {
                         vm.listArea.unshift({ Nombre: "-Selecciona-", IdArea: 0 });
+                        for (var i = 0; i < vm.listAreaApi.length; i++) {
+                            if (i != 0) {
+                                vm.listArea.push({ Nombre: vm.listAreaApi[i], IdArea: vm.listAreaApi[i] });
+                            }
+                        }
                         vm.Area = vm.listArea[0];
                         vm.AreaForDepartamento = vm.listArea[0];
                         vm.isBusy = false;
@@ -1157,8 +1170,14 @@ function GetDashBoard() {
                 if (data != null) {
                     vm.isBusy = true;
                     vm.listDepartamento = [];
-                    fillArray("apis/getDepartamentoByArea/" + data.IdArea, vm.listDepartamento, function () {
+                    vm.listDepartamentoApi = [];
+                    fillArray("apis/getDepartamentoByAreaFromExcel/?IdBaseDeDatos=" + document.getElementById("DDLBD").value + "&Area=" + data.IdArea, vm.listDepartamentoApi, function () {
                         vm.listDepartamento.unshift({ Nombre: "-Selecciona-", IdDepartamento: 0 });
+                        for (var i = 0; i < vm.listDepartamentoApi.length; i++) {
+                            if (i != 0) {
+                                vm.listDepartamento.push({ Nombre: vm.listDepartamentoApi[i], IdDepartamento: vm.listDepartamentoApi[i] });
+                            }
+                        }
                         vm.Departamento = vm.listDepartamento[0];
                         vm.isBusy = false;
                     });
@@ -1350,7 +1369,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.changedValueAnio");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -1381,13 +1400,13 @@ function GetDashBoard() {
                                 return porcentaje;
                             }
                             else {
-                                swal("Error, verifica el historico de la pregunta con Id: " + IdPregunta, "", "warning");
+                                //swal("Error, verifica el historico de la pregunta con Id: " + IdPregunta, "", "warning");
                                 return 0;
                             }
                         }
 
                     } catch (aE) {
-                        swal(aE.message, "", "warning");
+                        //swal(aE.message, "", "warning");
                     }
                 }
             }
@@ -1419,12 +1438,12 @@ function GetDashBoard() {
                                 return porcentaje;
                             }
                             else {
-                                swal("Error, verifica el historico de la pregunta con Id: " + IdPregunta, "", "warning");
+                                //swal("Error, verifica el historico de la pregunta con Id: " + IdPregunta, "", "warning");
                                 return 0;
                             }
                         }
                     } catch (aE) {
-                        swal(aE.message, "", "warning");
+                        //swal(aE.message, "", "warning");
                     }
                 }
             }
@@ -1462,7 +1481,7 @@ function GetDashBoard() {
                         return (IdPregunta - 86);
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -1532,7 +1551,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getImage");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                     vm.portadaValida = false;
                     vm.ImagenPortada = "";
                     $("#nombreArchivo").html("<i class='fas fa-exclamation-triangle text-default' aria-hidden='true'></i> Selecciona un archivo");
@@ -1557,7 +1576,7 @@ function GetDashBoard() {
                         return false;
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                     return false;
                 }
                 return true;
@@ -1724,7 +1743,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.nextCustomIndicador()");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -1803,7 +1822,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.nextCustomReactivo()");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -2163,7 +2182,7 @@ function GetDashBoard() {
 
                     } catch (aE) {
                         vm.writteLog(aE.message, "vm.next");
-                        swal(aE.message, "", "warning");
+                        ////swal(aE.message, "", "warning");
                     }
                 }
 
@@ -2429,7 +2448,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.fillReporteCorporativo");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -2613,7 +2632,7 @@ function GetDashBoard() {
 					    }
 					    catch (aE) {
 					        vm.writteLog(aE.message, "vm.get")
-					        swal(aE.message, "", "warning");
+					        ////swal(aE.message, "", "warning");
 					    }
 					},
 					function (error) {
@@ -2682,7 +2701,7 @@ function GetDashBoard() {
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.savePDF");
                     vm.isBusy = false;
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }*/
                 try {
                     var data = $("#gridToPDF").html();
@@ -2711,7 +2730,7 @@ function GetDashBoard() {
                     document.body.appendChild(link);
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.savePDF");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*#region ExportPDF*/
@@ -2740,7 +2759,7 @@ function GetDashBoard() {
                         swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -2763,7 +2782,7 @@ function GetDashBoard() {
                         swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -2786,7 +2805,7 @@ function GetDashBoard() {
                         swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -2809,7 +2828,7 @@ function GetDashBoard() {
                         swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             vm.setClaseBGColor = function (value) {
@@ -2834,7 +2853,7 @@ function GetDashBoard() {
                     }
                 }
                 catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
 
@@ -2868,7 +2887,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     /*vm.writteLog(aE.message + " Entidad:" + entidad, "vm.getBackGroundColor");
-                    swal(aE.message, "", "warning");*/
+                    ////swal(aE.message, "", "warning");*/
                 }
             }
             /*#endregion setIconos and Class*/
@@ -3110,7 +3129,7 @@ function GetDashBoard() {
                         }
                     } catch (aE) {
                         vm.writteLog(aE.message, "vm.getReporteDataPantalla_6");
-                        swal(aE.message, "", "warning");
+                        ////swal(aE.message, "", "warning");
                     }
                 }
             }
@@ -3205,7 +3224,7 @@ function GetDashBoard() {
                         vm.isBusy = false;
                     } catch (aE) {
                         vm.writteLog(aE.message, "vm.setDataHistoricoBienestarEE()");
-                        swal(aE.message, "", "warning");
+                        ////swal(aE.message, "", "warning");
                     }
                 }
             }
@@ -3278,7 +3297,7 @@ function GetDashBoard() {
                         vm.isBusy = false;
                     } catch (aE) {
                         vm.writteLog(aE.message, "vm.setDataHistoricoBienestarEA()");
-                        swal(aE.message, "", "warning");
+                        ////swal(aE.message, "", "warning");
                     }
                 }
 
@@ -3291,7 +3310,7 @@ function GetDashBoard() {
                     }
                     return false;
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Indicadores por categoria*/
@@ -3350,7 +3369,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_7");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Indicadores de Impulsores clave*/
@@ -3417,7 +3436,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_8");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Reactivos mejor clasificados EE*/
@@ -3443,7 +3462,7 @@ function GetDashBoard() {
 
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_9");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Reactivos mejor clasificados EA*/
@@ -3469,7 +3488,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_10");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Obtencion de la pregunta por Id (Validando las de enfoque area)*/
@@ -3508,7 +3527,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_11()");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Reactivos con mayor incremento EA*/
@@ -3535,7 +3554,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_12()");
-                    swal(aE.message, "", "warning");
+                    ////swal(aE.message, "", "warning");
                 }
             }
             /*Reactivos Peor clasificados EE*/
@@ -3561,7 +3580,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_13");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             /*Reactivos Peor clasificados EA*/
@@ -3587,7 +3606,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_14");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             /*Reactivos con menor crecimiento EE*/
@@ -3643,7 +3662,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_17");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3714,7 +3733,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_18");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3751,7 +3770,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDatapantalla_19");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3784,7 +3803,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_20");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3799,7 +3818,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_21");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3814,7 +3833,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_22");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3832,7 +3851,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla23");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3850,7 +3869,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla23");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -3923,7 +3942,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_25");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 } finally {
                     
                 }
@@ -3998,7 +4017,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_26");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 } finally {
 
                 }
@@ -4017,7 +4036,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_27");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4032,7 +4051,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_28");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4047,7 +4066,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_29");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4062,7 +4081,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_30");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4077,7 +4096,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_31");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4092,7 +4111,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_32");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4107,7 +4126,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_33");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4122,7 +4141,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_34");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4137,7 +4156,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_35");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4152,7 +4171,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_36");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4168,7 +4187,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_37");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4183,7 +4202,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_38");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4245,7 +4264,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_40");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4276,7 +4295,7 @@ function GetDashBoard() {
                 }
                 catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDinamico");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             vm.flagPromediosHistoricos = 0;
@@ -4315,7 +4334,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.validGetData");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4483,7 +4502,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.createGraph");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4503,7 +4522,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getArray");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             /*#endregion Reporte en gráfico de nube*/
@@ -4570,7 +4589,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarReportePantalla_25");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4635,7 +4654,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarReportePantalla_26");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4730,7 +4749,7 @@ function GetDashBoard() {
                     $("#divPantalla" + noPantalla).append(htmlContent);
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarCollecionPantalla_25EE");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4794,7 +4813,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.SeccionarArrayEE");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -4858,7 +4877,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.SeccionarArrayEA");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -5126,7 +5145,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.SeccionarArrayEERDinamico");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
 
             }
@@ -5402,7 +5421,7 @@ function GetDashBoard() {
 
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.SeccionarArrayEARDinamico");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
 
             }
@@ -5491,7 +5510,7 @@ function GetDashBoard() {
                     $("#demostra").append(htmlContent);
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarCollecionEE");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -5578,7 +5597,7 @@ function GetDashBoard() {
                     $("#demostraEA").append(htmlContent);
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarColecionEA");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -6206,7 +6225,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.crearGraficoComparativoPermanencia");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -6255,7 +6274,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.crearGraficoComparativoAbandono");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -6293,7 +6312,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getFrecuenciaRespuestasPermanencia");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -6331,7 +6350,7 @@ function GetDashBoard() {
                     });
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getFrecuenciaRespuestasAbandono");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             /*#endregion Creacion de graficos comparativos Permanencia-Abandono*/
@@ -6633,48 +6652,50 @@ function GetDashBoard() {
             vm.demoPorcent = 25.75;
 
             vm.setPromediosBienestarEE = function () {
-                vm.arrayPromedios = [];
-                var columnas = document.getElementById('myTableEE').rows[5].cells.length - 2;
-                try {
-                    if (vm.numColumnasEE == columnas && vm.PorcentajePsicoSocialEE.length > 0) {
-                        /*Columna categoria principal EE*/
-                        var filtro1 = [];
-                        var filtro2 = [];
-                        var filtro3 = [];
-                        var columnas = document.getElementById('mergeBioEE').cells.length;
-                        for (var i = 1; i < columnas; i++) {
-                            var cellValue = document.getElementById('mergeBioEE').cells[i].innerText.split('\n\n')[0];
-                            filtro1.push(cellValue);
-                        }
-                        var columnas = document.getElementById('mergePsicoEE').cells.length;
-                        for (var i = 1; i < columnas; i++) {
-                            var cellValue = document.getElementById('mergePsicoEE').cells[i].innerText.split('\n\n')[0];
-                            filtro2.push(cellValue);
-                        }
-                        var columnas = document.getElementById('mergeSocialEE').cells.length;
-                        for (var i = 1; i < columnas; i++) {
-                            var cellValue = document.getElementById('mergeSocialEE').cells[i].innerText.split('\n\n')[0];
-                            filtro3.push(cellValue);
-                        }
-                        console.log(filtro1); console.log(filtro2); console.log(filtro3);
+                if (vm.SeccionesReporte.Id == 17) {
+                    vm.arrayPromedios = [];
+                    var columnas = document.getElementById('myTableEE').rows[5].cells.length - 2;
+                    try {
+                        if (vm.numColumnasEE == columnas && vm.PorcentajePsicoSocialEE.length > 0) {
+                            /*Columna categoria principal EE*/
+                            var filtro1 = [];
+                            var filtro2 = [];
+                            var filtro3 = [];
+                            var columnas = document.getElementById('mergeBioEE').cells.length;
+                            for (var i = 1; i < columnas; i++) {
+                                var cellValue = document.getElementById('mergeBioEE').cells[i].innerText.split('\n\n')[0];
+                                filtro1.push(cellValue);
+                            }
+                            var columnas = document.getElementById('mergePsicoEE').cells.length;
+                            for (var i = 1; i < columnas; i++) {
+                                var cellValue = document.getElementById('mergePsicoEE').cells[i].innerText.split('\n\n')[0];
+                                filtro2.push(cellValue);
+                            }
+                            var columnas = document.getElementById('mergeSocialEE').cells.length;
+                            for (var i = 1; i < columnas; i++) {
+                                var cellValue = document.getElementById('mergeSocialEE').cells[i].innerText.split('\n\n')[0];
+                                filtro3.push(cellValue);
+                            }
+                            console.log(filtro1); console.log(filtro2); console.log(filtro3);
 
-                        for (var i = 0; i < filtro1.length; i++) {
-                            var valor1 = parseFloat(filtro1[i]);
-                            var valor2 = parseFloat(filtro2[i]);
-                            var valor3 = parseFloat(filtro3[i]);
-                            var prom = (valor1 + valor2 + valor3) / 3;
-                            vm.arrayPromedios.push(prom.toFixed(2));
-                            /*$('#mergeSocialEA').append(
-                              '<th class="borde-table-headercolor" scope="col"><div class="factbio-head">' + prom.toFixed(2) + '%</div></th>'
-                            );*/
-                        }
+                            for (var i = 0; i < filtro1.length; i++) {
+                                var valor1 = parseFloat(filtro1[i]);
+                                var valor2 = parseFloat(filtro2[i]);
+                                var valor3 = parseFloat(filtro3[i]);
+                                var prom = (valor1 + valor2 + valor3) / 3;
+                                vm.arrayPromedios.push(prom.toFixed(2));
+                                /*$('#mergeSocialEA').append(
+                                  '<th class="borde-table-headercolor" scope="col"><div class="factbio-head">' + prom.toFixed(2) + '%</div></th>'
+                                );*/
+                            }
 
+                        }
+                    } catch (aE) {
+                        vm.writteLog(aE.message, "vm.setPromediosBienestarEE");
+                        return vm.arrayPromedios;
                     }
-                } catch (aE) {
-                    vm.writteLog(aE.message, "vm.setPromediosBienestarEE");
                     return vm.arrayPromedios;
                 }
-                return vm.arrayPromedios;
             }
 
             vm.setPromediosBienestarEA = function () {
@@ -6734,7 +6755,7 @@ function GetDashBoard() {
                         return vm.seccionArray;
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -6750,7 +6771,7 @@ function GetDashBoard() {
                         return vm.seccionArray;
                     }
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             /*#endregion Obtener la seccion del objeto que corresponde al numero de columnas del grid del reporte de Bienestar*/
@@ -6984,7 +7005,7 @@ function GetDashBoard() {
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getEstructura");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -7061,7 +7082,7 @@ function GetDashBoard() {
                     /*vm.getArrayFiltros();*/
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.fillColumnas");
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -7080,7 +7101,7 @@ function GetDashBoard() {
                     }
                     return array;
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -7091,7 +7112,7 @@ function GetDashBoard() {
                     });
                     return array;
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
 
@@ -7218,7 +7239,7 @@ function GetDashBoard() {
                                     console.log(response);
                                 }
                                 catch (aE) {
-                                    swal(aE.message, "", "warning");
+                                    //swal(aE.message, "", "warning");
                                 }
                             },
                             function (error) {
@@ -7234,7 +7255,7 @@ function GetDashBoard() {
                     }
                     console.warn(ex);
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             vm.writteLogData = function (data, funcionName) {
@@ -7250,7 +7271,7 @@ function GetDashBoard() {
                     });
 
                 } catch (aE) {
-                    swal(aE.message, "", "warning");
+                    //swal(aE.message, "", "warning");
                 }
             }
             /*#endregion Write Log*/
@@ -8048,7 +8069,7 @@ function GetDashBoard() {
 
 
         } catch (aE) {
-            swal(aE.message, "", "warning");
+            //swal(aE.message, "", "warning");
         }
     }
     /*#endregion Controller*/
@@ -8086,7 +8107,7 @@ loadExcel = function () {
         }
     } catch (aE) {
         /*FuncionwritteLog(aE.message, "FuncionloadExcel");*/
-        swal(aE.message, "", "warning");
+        //swal(aE.message, "", "warning");
         excelValido = false;
         excelFile = Object;
         $("#nombreExcel").html("<i class='fas fa-exclamation-triangle text-default' aria-hidden='true'></i> Selecciona un archivo");
@@ -8102,7 +8123,7 @@ FuncionvalidaTipoArchivoExcel = function () {
             return false;
         }
     } catch (aE) {
-        swal(aE.message, "", "warning");
+        //swal(aE.message, "", "warning");
         return false;
     }
     return true;
@@ -8237,7 +8258,7 @@ FuncioncreateGrid = function () {
         excelValido = false;
         $("#grid").hide();
         /*FuncionwritteLog(aE.message, "FuncioncreateGrid");*/
-        swal(aE.message, "", "warning");
+        //swal(aE.message, "", "warning");
     }
 }
 
@@ -8682,7 +8703,7 @@ function BindTable(jsondata, tableid) {
             }
         });
     } catch (aE) {
-        swal(aE.message, "", "warning");
+        //swal(aE.message, "", "warning");
     }
 }
 

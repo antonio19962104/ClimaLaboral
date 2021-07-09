@@ -23,7 +23,7 @@ namespace BL
     public class Encuesta
     {
         static int consulta = 0;
-        public string cadenaConexionFinal = "";        
+        public string cadenaConexionFinal = "";
         public static ML.Result ConsultarAvance(ML.EmpleadoRespuesta EmpleadoRespuestas)
         {
             ML.Result result = new ML.Result();
@@ -98,7 +98,7 @@ namespace BL
             return result;
         }
         public static Result getEncuestaById(int idEncuesta)
-        {            
+        {
             ML.Result result = new ML.Result();
             try
             {
@@ -111,7 +111,7 @@ namespace BL
                         " where Encuesta.IdEncuesta = {0} and Encuesta.IdEstatus = {1}", idEncuesta, idEstatus).ToList();
                     result.EditaEncuesta = new ML.Encuesta();
                     if (query != null)
-                    {                        
+                    {
                         foreach (var obj in query)
                         {
                             ML.Encuesta encuesta = new ML.Encuesta();
@@ -174,12 +174,12 @@ namespace BL
             return result;
 
         }
-        public static Result getEncuestaByIdEditCL(int idEncuesta,string idusuarioAdmin)
+        public static Result getEncuestaByIdEditCL(int idEncuesta, string idusuarioAdmin)
         {
             ML.Result result = new ML.Result();
             try
             {
-                
+
                 using (DL.RH_DesEntities contex = new DL.RH_DesEntities())
                 {
                     var idEstatus = 1;
@@ -239,7 +239,7 @@ namespace BL
                             encuesta.TipoEstatus.IdEstatus = obj.IdEstatus;
                             encuesta.UsuarioCreacion = obj.UsuarioCreacion;
                             //Preguntas
-                            encuesta.NewCuestionEdit = BL.Preguntas.getAllPreguntasByIdEncuestaEdit(obj.IdEncuesta,idusuarioAdmin);
+                            encuesta.NewCuestionEdit = BL.Preguntas.getAllPreguntasByIdEncuestaEdit(obj.IdEncuesta, idusuarioAdmin);
                             //encuesta.NewCuestion = BL.Preguntas.getAllPreguntasByIdEncuesta(obj.IdEncuesta);
                             //Base de datos
                             encuesta.BasesDeDatos = new ML.BasesDeDatos();
@@ -285,7 +285,7 @@ namespace BL
                             encuesta.TipoEstatus.IdEstatus = obj.IdEstatus;
                             //Preguntas
                             //encuesta.ListarPreguntas = BL.Preguntas.getAllPreguntasByIdEncuestaEdit(obj.IdEncuesta);
-                            encuesta.NewCuestion = BL.Preguntas.getAllPreguntasByIdEncuesta(obj.IdEncuesta,idUsuarioAdmin);
+                            encuesta.NewCuestion = BL.Preguntas.getAllPreguntasByIdEncuesta(obj.IdEncuesta, idUsuarioAdmin);
                             //Base de datos
                             result.EditaEncuesta = encuesta;
                             result.Correct = true;
@@ -328,7 +328,7 @@ namespace BL
                             encuesta.TipoEstatus.IdEstatus = obj.IdEstatus;
                             //Preguntas
                             //encuesta.ListarPreguntas = BL.Preguntas.getAllPreguntasByIdEncuestaEdit(obj.IdEncuesta);
-                            encuesta.NewCuestion = BL.Preguntas.getAllPreguntasByIdEncuesta(obj.IdEncuesta,idUsuarioAmin);
+                            encuesta.NewCuestion = BL.Preguntas.getAllPreguntasByIdEncuesta(obj.IdEncuesta, idUsuarioAmin);
                             //Base de datos
                             result.EditaEncuesta = encuesta;
                             result.Correct = true;
@@ -514,15 +514,15 @@ namespace BL
                                         "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
                                         "VALUES({0},{1},{2},{3},{4})", idEncuesta, idPreguntaLDoble, DateTime.Now, Encuesta.UsuarioCreacion, "Alta Encuesta");
 
-                                    for (int i=2; i < obj.NewAnswer.Count; i++)
+                                    for (int i = 2; i < obj.NewAnswer.Count; i++)
                                     {
                                         //Inserta pregunta likert doble
                                         var queryPreguntasLikert = context.Database.ExecuteSqlCommand("INSERT INTO PreguntasLikert " +
                                             "(idPregunta,idEncuesta,Pregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
                                             " VALUES({0},{1},{2},{3},{4},{5},{6})", idPreguntaLDoble, idEncuesta, obj.NewAnswer[i].Respuesta,
-                                        1, DateTime.Now,Encuesta.UsuarioCreacion, "Alta Encuesta");
+                                        1, DateTime.Now, Encuesta.UsuarioCreacion, "Alta Encuesta");
                                         //Obtiene maximo de pregunta Likert
-                                        int idPreguntasLikert = context.PreguntasLikert.Max(q => q.idPreguntasLikert);                                        
+                                        int idPreguntasLikert = context.PreguntasLikert.Max(q => q.idPreguntasLikert);
                                         //Inserta Respuesta por index 0 e index 1                                      
                                         var queryRespuestaColA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas " +
                                             "(Respuesta, IdPregunta,IdPreguntaLikertD, IdEstatus, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
@@ -539,7 +539,7 @@ namespace BL
                                 }
 
 
-                               
+
                             }
                             else// Con seccion
                             {
@@ -638,7 +638,7 @@ namespace BL
                                     idPregunta = 0;
                                 }
                                 else
-                                {                                   
+                                {
                                     var queryPreguntas = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
                                    "(idEncuesta,Pregunta,Valoracion,TipoControl,IdCompetencia,IdEstatus,FechaHoraCreacion, " +
                                    " UsuarioCreacion,ProgramaCreacion,Enfoque, IdTipoControl, RespuestaCondicion, PreguntasCondicion, Obligatoria) " +
@@ -745,205 +745,144 @@ namespace BL
                 {
                     //using (var transaction = context.Database.BeginTransaction())
                     //{
-                        try
+                    try
+                    {
+                        var invalidaSiguienteSubsecciones = BL.ConfiguraRespuesta.coinciden(EncuestaRespuesta);
+                        var idEncuesta = EncuestaRespuesta.IdEncuesta;
+                        var usuarioContesta = EncuestaRespuesta.UsuarioCreacion;
+                        var progCreate = "RespuestaUsuario";
+                        var idPregunta = 0;
+                        var idTipoDeControl = 0;
+                        var idRespuesta = 0;
+                        for (var r = 0; r < EncuestaRespuesta.ListarPreguntas.Count; r++)
                         {
-                            var invalidaSiguienteSubsecciones = BL.ConfiguraRespuesta.coinciden(EncuestaRespuesta);
-                            var idEncuesta = EncuestaRespuesta.IdEncuesta;
-                            var usuarioContesta = EncuestaRespuesta.UsuarioCreacion;
-                            var progCreate = "RespuestaUsuario";
-                            var idPregunta = 0;
-                            var idTipoDeControl = 0;
-                            var idRespuesta = 0;
-                            for (var r = 0; r < EncuestaRespuesta.ListarPreguntas.Count; r++)
+                            if (consulta == 1)
                             {
-                                if (consulta == 1)
+                                break;
+                            }
+                            idPregunta = EncuestaRespuesta.ListarPreguntas[r].IdPregunta;
+                            var getIdrespuestaConfig = BL.ConfiguraRespuesta.getAllAnswersConfigByIdEncuestIdPregunta(EncuestaRespuesta.IdEncuesta, idPregunta);
+                            idTipoDeControl = (int)EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl;
+                            if (idTipoDeControl != 13)
+                            {
+                                if (idTipoDeControl != 5)
                                 {
-                                    break;
-                                }
-                                idPregunta = EncuestaRespuesta.ListarPreguntas[r].IdPregunta;
-                                var getIdrespuestaConfig = BL.ConfiguraRespuesta.getAllAnswersConfigByIdEncuestIdPregunta(EncuestaRespuesta.IdEncuesta, idPregunta);
-                                idTipoDeControl = (int)EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl;
-                                if (idTipoDeControl != 13)
-                                {
-                                    if (idTipoDeControl != 5)
-                                    {
-                                        if (EncuestaRespuesta.ListarPreguntas[r].Respuestas.Count > 1)
-                                        {//Mas de una respuesta
-                                            int btermina = 0;
-                                            for (var y = 0; y < EncuestaRespuesta.ListarPreguntas[r].Respuestas.Count; y++)
+                                    if (EncuestaRespuesta.ListarPreguntas[r].Respuestas.Count > 1)
+                                    {//Mas de una respuesta
+                                        int btermina = 0;
+                                        for (var y = 0; y < EncuestaRespuesta.ListarPreguntas[r].Respuestas.Count; y++)
+                                        {
+                                            idRespuesta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[y].IdRespuesta;
+
+                                            if (EncuestaRespuesta.ListarPreguntas[r].Respuestas[y].Selected == true || idTipoDeControl == 12)
                                             {
-                                                idRespuesta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[y].IdRespuesta;
-
-                                                if (EncuestaRespuesta.ListarPreguntas[r].Respuestas[y].Selected == true || idTipoDeControl == 12)
+                                                if (getIdrespuestaConfig.Count > 0 && idTipoDeControl == 4 || idTipoDeControl == 3)
                                                 {
-                                                    if (getIdrespuestaConfig.Count > 0 && idTipoDeControl == 4 || idTipoDeControl == 3)
+                                                    List<ML.ConfiguraRespuesta> respuesta = BL.ConfiguraRespuesta.getAllAnswersConfigByIdEncuestIdPregunta(EncuestaRespuesta.IdEncuesta, EncuestaRespuesta.ListarPreguntas[r].IdPregunta, idRespuesta);
+                                                    for (var e = 0; e < respuesta.Count; e++)
                                                     {
-                                                        List<ML.ConfiguraRespuesta> respuesta = BL.ConfiguraRespuesta.getAllAnswersConfigByIdEncuestIdPregunta(EncuestaRespuesta.IdEncuesta, EncuestaRespuesta.ListarPreguntas[r].IdPregunta, idRespuesta);
-                                                        for (var e = 0; e < respuesta.Count; e++)
+                                                        for (var t = 0; t < EncuestaRespuesta.ListarPreguntas.Count; t++)
                                                         {
-                                                            for (var t = 0; t < EncuestaRespuesta.ListarPreguntas.Count; t++)
+                                                            if (respuesta[e].IdPreguntaOpen == EncuestaRespuesta.ListarPreguntas[t].IdPregunta)
                                                             {
-                                                                if (respuesta[e].IdPreguntaOpen == EncuestaRespuesta.ListarPreguntas[t].IdPregunta)
-                                                                {
-                                                                    EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion = "si";
-                                                                    EncuestaRespuesta.ListarPreguntas[t].isDisplay = true;
-
-                                                                }
+                                                                EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion = "si";
+                                                                EncuestaRespuesta.ListarPreguntas[t].isDisplay = true;
 
                                                             }
-                                                        }
 
+                                                        }
                                                     }
 
+                                                }
 
-                                                    if (EncuestaRespuesta.ListarPreguntas[r].PreguntasCondicion != "no")
+
+                                                if (EncuestaRespuesta.ListarPreguntas[r].PreguntasCondicion != "no")
+                                                {
+                                                    string nombrePregunta = "";
+                                                    if (idTipoDeControl != 12)
                                                     {
-                                                        string nombrePregunta = "";
-                                                        if (idTipoDeControl != 12)
-                                                        {
-                                                            nombrePregunta = BL.Respuestas.RegresaNombreRespuesta(idRespuesta);
-                                                        }
-                                                        else
-                                                        {
-                                                            nombrePregunta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[y].Respuesta;
-                                                        }
+                                                        nombrePregunta = BL.Respuestas.RegresaNombreRespuesta(idRespuesta);
+                                                    }
+                                                    else
+                                                    {
+                                                        nombrePregunta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[y].Respuesta;
+                                                    }
                                                     //var tieneRespuesta = BL.Encuesta.tieneRespuesta(idPregunta);
                                                     //if (tieneRespuesta == false)
                                                     //{
-                                                        if (idPregunta == 0 || idRespuesta == 0)
-                                                        {
-                                                            int IdUsr = Convert.ToInt32(usuarioContesta);
-                                                            BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
-                                                            var res = new ML.Result();
-                                                            res.Correct = false;
-                                                            res.ErrorMessage = "reload";
-                                                            return res;
-                                                        }
-                                                            var queryUpdate = context.Database.ExecuteSqlCommand
-                                                            ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado'  WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {6}",// 
-                                                            idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta, idRespuesta);//idRespuesta
-                                                        
-                                                    }
-                                                }
-                                                else
-                                                {//Aqui se validan las preguntas que se deben guardar
-
-                                                    if (getIdrespuestaConfig.Count > 0 && idTipoDeControl == 4 || idTipoDeControl == 3)
+                                                    if (idPregunta == 0 || idRespuesta == 0)
                                                     {
-
-                                                        List<ML.ConfiguraRespuesta> respuesta = BL.ConfiguraRespuesta.getAllAnswersConfigByIdEncuestIdPregunta(EncuestaRespuesta.IdEncuesta, EncuestaRespuesta.ListarPreguntas[r].IdPregunta, idRespuesta);
-                                                        for (var e = 0; e < respuesta.Count; e++)
-                                                        {
-                                                            for (var t = 0; t < EncuestaRespuesta.ListarPreguntas.Count; t++)
-                                                            {
-                                                                if (respuesta[e].IdPreguntaOpen == EncuestaRespuesta.ListarPreguntas[t].IdPregunta)
-                                                                {
-                                                                    if (EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion != "si" || EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion == null)
-                                                                    {
-                                                                        EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion = "no";
-                                                                        EncuestaRespuesta.ListarPreguntas[t].isDisplay = true;
-                                                                    }
-
-                                                                }
-
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                btermina++;
-                                            }
-                                        }
-                                        else
-                                        {//Solo una respuesta
-                                            idRespuesta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[0].IdRespuesta;
-                                            if (EncuestaRespuesta.ListarPreguntas[r].Respuestas[0].Respuesta != null)
-                                            {
-                                                if (EncuestaRespuesta.ListarPreguntas[r].PreguntasCondicion != "no")
-                                                {
-                                                    string nombrePregunta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[0].Respuesta;//BL.Respuestas.RegresaNombreRespuesta(idRespuesta);
-                                                    if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 1 || EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 2)
-                                                    {
-                                                        if (idPregunta == 0)
-                                                        {
-                                                            int IdUsr = Convert.ToInt32(usuarioContesta);
-                                                            BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
+                                                        int IdUsr = Convert.ToInt32(usuarioContesta);
+                                                        BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
                                                         var res = new ML.Result();
                                                         res.Correct = false;
                                                         res.ErrorMessage = "reload";
                                                         return res;
                                                     }
-                                                        var queryUpdate1 = context.Database.ExecuteSqlCommand
-                                                            ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",
-                                                            idEncuesta, usuarioContesta, idPregunta, nombrePregunta,DateTime.Now, usuarioContesta);
+                                                    var queryUpdate = context.Database.ExecuteSqlCommand
+                                                    ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado'  WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {6}",// 
+                                                    idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta, idRespuesta);//idRespuesta
 
-                                                        
-                                                    }
-                                                    else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 3 || EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 4)
+                                                }
+                                            }
+                                            else
+                                            {//Aqui se validan las preguntas que se deben guardar
+
+                                                if (getIdrespuestaConfig.Count > 0 && idTipoDeControl == 4 || idTipoDeControl == 3)
+                                                {
+
+                                                    List<ML.ConfiguraRespuesta> respuesta = BL.ConfiguraRespuesta.getAllAnswersConfigByIdEncuestIdPregunta(EncuestaRespuesta.IdEncuesta, EncuestaRespuesta.ListarPreguntas[r].IdPregunta, idRespuesta);
+                                                    for (var e = 0; e < respuesta.Count; e++)
                                                     {
+                                                        for (var t = 0; t < EncuestaRespuesta.ListarPreguntas.Count; t++)
+                                                        {
+                                                            if (respuesta[e].IdPreguntaOpen == EncuestaRespuesta.ListarPreguntas[t].IdPregunta)
+                                                            {
+                                                                if (EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion != "si" || EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion == null)
+                                                                {
+                                                                    EncuestaRespuesta.ListarPreguntas[t].PreguntasCondicion = "no";
+                                                                    EncuestaRespuesta.ListarPreguntas[t].isDisplay = true;
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            btermina++;
+                                        }
+                                    }
+                                    else
+                                    {//Solo una respuesta
+                                        idRespuesta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[0].IdRespuesta;
+                                        if (EncuestaRespuesta.ListarPreguntas[r].Respuestas[0].Respuesta != null)
+                                        {
+                                            if (EncuestaRespuesta.ListarPreguntas[r].PreguntasCondicion != "no")
+                                            {
+                                                string nombrePregunta = EncuestaRespuesta.ListarPreguntas[r].Respuestas[0].Respuesta;//BL.Respuestas.RegresaNombreRespuesta(idRespuesta);
+                                                if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 1 || EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 2)
+                                                {
+                                                    if (idPregunta == 0)
+                                                    {
+                                                        int IdUsr = Convert.ToInt32(usuarioContesta);
+                                                        BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
+                                                        var res = new ML.Result();
+                                                        res.Correct = false;
+                                                        res.ErrorMessage = "reload";
+                                                        return res;
+                                                    }
+                                                    var queryUpdate1 = context.Database.ExecuteSqlCommand
+                                                        ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",
+                                                        idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta);
+
+
+                                                }
+                                                else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 3 || EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 4)
+                                                {
                                                     //if (Encuesta.tieneRespuesta(idPregunta) == false)
                                                     //{
-                                                        if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 3)
-                                                        {
-                                                            if (idPregunta == 0 || idRespuesta == 0)
-                                                            {
-                                                                int IdUsr = Convert.ToInt32(usuarioContesta);
-                                                                BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
-                                                                var res = new ML.Result();
-                                                                res.Correct = false;
-                                                                res.ErrorMessage = "reload";
-                                                                return res;
-                                                            }
-                                                            var queryUpdate = context.Database.ExecuteSqlCommand
-                                                                ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {6}",
-                                                                idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta, idRespuesta);//idRespuesta
-                                                        }
-                                                        else
-                                                        {
-                                                            if (idPregunta == 0)
-                                                            {
-                                                                int IdUsr = Convert.ToInt32(usuarioContesta);
-                                                                BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
-                                                                var res = new ML.Result();
-                                                                res.Correct = false;
-                                                                res.ErrorMessage = "reload";
-                                                                return res;
-                                                            }
-                                                            var queryUpdate = context.Database.ExecuteSqlCommand
-                                                                ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",// AND IDRESPUESTA = {3}
-                                                                idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta);//idRespuesta
-                                                        }
-                                                    }
-                                                    else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 6 || EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 7)
-                                                    {
-                                                            if (idPregunta == 0)
-                                                            {
-                                                                int IdUsr = Convert.ToInt32(usuarioContesta);
-                                                                BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
-                                                                var res = new ML.Result();
-                                                                res.Correct = false;
-                                                                res.ErrorMessage = "reload";
-                                                                return res;
-                                                            }
-                                                            var queryUpdate1 = context.Database.ExecuteSqlCommand
-                                                                ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",
-                                                                idEncuesta, usuarioContesta, idPregunta, nombrePregunta,DateTime.Now, usuarioContesta);
-                                                    }
-                                                    else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl > 7 && EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl < 12)
-                                                    {
-                                                        if (idPregunta == 0)
-                                                        {
-                                                            int IdUsr = Convert.ToInt32(usuarioContesta);
-                                                            BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
-                                                            var res = new ML.Result();
-                                                            res.Correct = false;
-                                                            res.ErrorMessage = "reload";
-                                                            return res;
-                                                        }
-                                                        var queryUpdate1 = context.Database.ExecuteSqlCommand
-                                                            ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",
-                                                            idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta);
-                                                    }
-                                                    else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 12)
+                                                    if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 3)
                                                     {
                                                         if (idPregunta == 0 || idRespuesta == 0)
                                                         {
@@ -955,30 +894,57 @@ namespace BL
                                                             return res;
                                                         }
                                                         var queryUpdate = context.Database.ExecuteSqlCommand
-                                                            ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {4}, FechaHoraModificacion = {5}, UsuarioModificacion = {6}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {3}",
-                                                            idEncuesta, usuarioContesta, idPregunta, idRespuesta, nombrePregunta, DateTime.Now, usuarioContesta);
+                                                            ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {6}",
+                                                            idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta, idRespuesta);//idRespuesta
                                                     }
-                                                    
-                                                    //fill Bandera termina
-                                                    consulta = Encuesta.getConfiguracionTermina(idRespuesta);
+                                                    else
+                                                    {
+                                                        if (idPregunta == 0)
+                                                        {
+                                                            int IdUsr = Convert.ToInt32(usuarioContesta);
+                                                            BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
+                                                            var res = new ML.Result();
+                                                            res.Correct = false;
+                                                            res.ErrorMessage = "reload";
+                                                            return res;
+                                                        }
+                                                        var queryUpdate = context.Database.ExecuteSqlCommand
+                                                            ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",// AND IDRESPUESTA = {3}
+                                                            idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta);//idRespuesta
+                                                    }
                                                 }
-
-
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-
-                                        if (EncuestaRespuesta.ListarPreguntas[r].ListadoRespuestas.Count > 0)
-                                        {
-                                            for (var n = 0; n < EncuestaRespuesta.ListarPreguntas[r].ListadoRespuestas.Count; n++)
-                                            {
-                                                if (EncuestaRespuesta.ListarPreguntas[r].PreguntasCondicion != "no")
+                                                else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 6 || EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 7)
                                                 {
-                                                    idRespuesta = Convert.ToInt32(EncuestaRespuesta.ListarPreguntas[r].ListadoRespuestas[n]);
-                                                    string nombrePregunta = BL.Respuestas.RegresaNombreRespuesta(idRespuesta);
-
+                                                    if (idPregunta == 0)
+                                                    {
+                                                        int IdUsr = Convert.ToInt32(usuarioContesta);
+                                                        BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
+                                                        var res = new ML.Result();
+                                                        res.Correct = false;
+                                                        res.ErrorMessage = "reload";
+                                                        return res;
+                                                    }
+                                                    var queryUpdate1 = context.Database.ExecuteSqlCommand
+                                                        ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",
+                                                        idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta);
+                                                }
+                                                else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl > 7 && EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl < 12)
+                                                {
+                                                    if (idPregunta == 0)
+                                                    {
+                                                        int IdUsr = Convert.ToInt32(usuarioContesta);
+                                                        BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
+                                                        var res = new ML.Result();
+                                                        res.Correct = false;
+                                                        res.ErrorMessage = "reload";
+                                                        return res;
+                                                    }
+                                                    var queryUpdate1 = context.Database.ExecuteSqlCommand
+                                                        ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2}",
+                                                        idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta);
+                                                }
+                                                else if (EncuestaRespuesta.ListarPreguntas[r].TipoControl.IdTipoControl == 12)
+                                                {
                                                     if (idPregunta == 0 || idRespuesta == 0)
                                                     {
                                                         int IdUsr = Convert.ToInt32(usuarioContesta);
@@ -986,60 +952,94 @@ namespace BL
                                                         var res = new ML.Result();
                                                         res.Correct = false;
                                                         res.ErrorMessage = "reload";
-                                                        return res; 
+                                                        return res;
                                                     }
                                                     var queryUpdate = context.Database.ExecuteSqlCommand
-                                                        ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {6}",// 
-                                                        idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta, idRespuesta);
-                                                    consulta = Encuesta.getConfiguracionTermina(idRespuesta);
+                                                        ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {4}, FechaHoraModificacion = {5}, UsuarioModificacion = {6}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {3}",
+                                                        idEncuesta, usuarioContesta, idPregunta, idRespuesta, nombrePregunta, DateTime.Now, usuarioContesta);
                                                 }
+
+                                                //fill Bandera termina
+                                                consulta = Encuesta.getConfiguracionTermina(idRespuesta);
+                                            }
+
+
+                                        }
+                                    }
+                                }
+                                else
+                                {
+
+                                    if (EncuestaRespuesta.ListarPreguntas[r].ListadoRespuestas.Count > 0)
+                                    {
+                                        for (var n = 0; n < EncuestaRespuesta.ListarPreguntas[r].ListadoRespuestas.Count; n++)
+                                        {
+                                            if (EncuestaRespuesta.ListarPreguntas[r].PreguntasCondicion != "no")
+                                            {
+                                                idRespuesta = Convert.ToInt32(EncuestaRespuesta.ListarPreguntas[r].ListadoRespuestas[n]);
+                                                string nombrePregunta = BL.Respuestas.RegresaNombreRespuesta(idRespuesta);
+
+                                                if (idPregunta == 0 || idRespuesta == 0)
+                                                {
+                                                    int IdUsr = Convert.ToInt32(usuarioContesta);
+                                                    BL.Encuesta.writeLogIdResCeroAddResp(idEncuesta, IdUsr, idPregunta);
+                                                    var res = new ML.Result();
+                                                    res.Correct = false;
+                                                    res.ErrorMessage = "reload";
+                                                    return res;
+                                                }
+                                                var queryUpdate = context.Database.ExecuteSqlCommand
+                                                    ("UPDATE USUARIORESPUESTAS SET IDESTATUS = 1, RespuestaUsuario = {3}, FechaHoraModificacion = {4}, UsuarioModificacion = {5}, ProgramaModificacion = 'Autoguardado' WHERE IDENCUESTA = {0} AND IDUSUARIO = {1} AND IDPREGUNTA = {2} AND IDRESPUESTA = {6}",// 
+                                                    idEncuesta, usuarioContesta, idPregunta, nombrePregunta, DateTime.Now, usuarioContesta, idRespuesta);
+                                                consulta = Encuesta.getConfiguracionTermina(idRespuesta);
                                             }
                                         }
                                     }
                                 }
                             }
-                            if (invalidaSiguienteSubsecciones == true)
-                            {
-                                var preg = BL.ConfiguraRespuesta.getPregsToDisable(EncuestaRespuesta.IdEncuesta);
-                                foreach (var item in preg)
-                                {
-                                    var query = context.Database.ExecuteSqlCommand
-                                    ("UPDATE USUARIORESPUESTAS SET IDESTATUS = NULL, usuariomodificacion = 'Descartada', FechaHoraModificacion = {3}, UsuarioModificacion = {4}, ProgramaModificacion = 'Autoguardado' WHERE IDPREGUNTA = {0} AND IDENCUESTA = {1} AND IDUSUARIO = {2}", item.IdPregunta, idEncuesta, usuarioContesta, DateTime.Now, usuarioContesta);
-                                }
-                            }
-
-
-                            result.Correct = true;
-                            context.SaveChanges();
-                            var pathS = @"\\10.5.2.101\RHDiagnostics\log\Log" + EncuestaRespuesta.IdEncuesta + "_" + EncuestaRespuesta.UsuarioCreacion + ".txt";
-                            var fullPath1S = Path.GetFullPath(pathS);
-                            if (!File.Exists(fullPath1S))
-                            {
-                                string createText = "Log" + Environment.NewLine;
-                                File.WriteAllText(fullPath1S, createText);
-                            }
-                            string appendText1S = "Envio de encuesta correcto" + " " + DateTime.Now + Environment.NewLine;
-                            File.AppendAllText(fullPath1S, appendText1S);
-                    }
-                        catch (SqlException aE)
+                        }
+                        if (invalidaSiguienteSubsecciones == true)
                         {
-                            result.Correct = false;
-                            result.ErrorMessage = aE.Message;
-                            var path2 = @"\\10.5.2.101\RHDiagnostics\log\Log" + EncuestaRespuesta.IdEncuesta + "_" + EncuestaRespuesta.UsuarioCreacion + ".txt";
-                            var fullPath2 = Path.GetFullPath(path2);
-                            if (!File.Exists(fullPath2))
+                            var preg = BL.ConfiguraRespuesta.getPregsToDisable(EncuestaRespuesta.IdEncuesta);
+                            foreach (var item in preg)
                             {
-                                string createText = "Log" + Environment.NewLine;
-                                File.WriteAllText(fullPath2, createText);
+                                var query = context.Database.ExecuteSqlCommand
+                                ("UPDATE USUARIORESPUESTAS SET IDESTATUS = NULL, usuariomodificacion = 'Descartada', FechaHoraModificacion = {3}, UsuarioModificacion = {4}, ProgramaModificacion = 'Autoguardado' WHERE IDPREGUNTA = {0} AND IDENCUESTA = {1} AND IDUSUARIO = {2}", item.IdPregunta, idEncuesta, usuarioContesta, DateTime.Now, usuarioContesta);
                             }
-                            string appendText2 = "Envio de encuesta: Error Metodo: AddRespuestas: " + aE.Message +  " " + "  Error Code " + aE.ErrorCode + " "  + DateTime.Now + Environment.NewLine;
-                            File.AppendAllText(fullPath2, appendText2);
+                        }
 
-                            if (aE.Message.Contains("fue elegida como sujeto del interbloqueo. Ejecute de nuevo la transacción"))
-                            {
-                                Console.WriteLine("Reintento");
-                                ExceptionCode = 1205;
-                            }
+
+                        result.Correct = true;
+                        context.SaveChanges();
+                        var pathS = @"\\10.5.2.101\RHDiagnostics\log\Log" + EncuestaRespuesta.IdEncuesta + "_" + EncuestaRespuesta.UsuarioCreacion + ".txt";
+                        var fullPath1S = Path.GetFullPath(pathS);
+                        if (!File.Exists(fullPath1S))
+                        {
+                            string createText = "Log" + Environment.NewLine;
+                            File.WriteAllText(fullPath1S, createText);
+                        }
+                        string appendText1S = "Envio de encuesta correcto" + " " + DateTime.Now + Environment.NewLine;
+                        File.AppendAllText(fullPath1S, appendText1S);
+                    }
+                    catch (SqlException aE)
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = aE.Message;
+                        var path2 = @"\\10.5.2.101\RHDiagnostics\log\Log" + EncuestaRespuesta.IdEncuesta + "_" + EncuestaRespuesta.UsuarioCreacion + ".txt";
+                        var fullPath2 = Path.GetFullPath(path2);
+                        if (!File.Exists(fullPath2))
+                        {
+                            string createText = "Log" + Environment.NewLine;
+                            File.WriteAllText(fullPath2, createText);
+                        }
+                        string appendText2 = "Envio de encuesta: Error Metodo: AddRespuestas: " + aE.Message + " " + "  Error Code " + aE.ErrorCode + " " + DateTime.Now + Environment.NewLine;
+                        File.AppendAllText(fullPath2, appendText2);
+
+                        if (aE.Message.Contains("fue elegida como sujeto del interbloqueo. Ejecute de nuevo la transacción"))
+                        {
+                            Console.WriteLine("Reintento");
+                            ExceptionCode = 1205;
+                        }
                     }
                 }
             }
@@ -1085,7 +1085,7 @@ namespace BL
             }
             catch (Exception ex)
             {
-                
+
             }
             return tieneRespuesta;
         }
@@ -1540,7 +1540,7 @@ namespace BL
                             encuesta.Plantillas.FooterPlantilla = new ML.FooterPlantilla();
                             encuesta.Plantillas.FooterPlantilla.CodeHTML = obtieneTodaLaPlantilla.EditaPlantillas.FooterPlantilla.CodeHTML;
                             //alta de colores
-                            encuesta.Plantillas.FooterPlantilla.Color1= obtieneTodaLaPlantilla.EditaPlantillas.FooterPlantilla.Color1;
+                            encuesta.Plantillas.FooterPlantilla.Color1 = obtieneTodaLaPlantilla.EditaPlantillas.FooterPlantilla.Color1;
                             encuesta.Plantillas.FooterPlantilla.Color2 = obtieneTodaLaPlantilla.EditaPlantillas.FooterPlantilla.Color2;
                             encuesta.Plantillas.IdPlantilla = Convert.ToInt32(obj.IdPlantilla);
                             encuesta.ProgramaCreacion = obj.ProgramaCreacion;
@@ -1757,17 +1757,18 @@ namespace BL
             catch (Exception aE)
             {
                 result.Correct = false;
-                result.ErrorMessage = aE.Message.ToString() +"_"+ aE.StackTrace.ToString();
+                result.ErrorMessage = aE.Message.ToString() + "_" + aE.StackTrace.ToString();
             }
             return result;
         }
         public static ML.Result GetAgradecimientoEncuesta(int IdEncuesta)
         {
             ML.Result result = new ML.Result();
-            try {
+            try
+            {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.Encuesta.SqlQuery("SELECT * FROM Encuesta where IdEncuesta={0} and IdEstatus =1",IdEncuesta).ToList();
+                    var query = context.Encuesta.SqlQuery("SELECT * FROM Encuesta where IdEncuesta={0} and IdEstatus =1", IdEncuesta).ToList();
                     if (query != null)
                     {
                         foreach (var item in query)
@@ -1781,11 +1782,11 @@ namespace BL
                             {
                                 result.EditaEncuesta.Agradecimiento = item.Agradecimiento;
                             }
-                            
+
                         }
                     }
 
-                }                
+                }
             }
             catch (Exception aE)
             {
@@ -1840,7 +1841,7 @@ namespace BL
                             "left join UsuarioEstatusEncuesta on UsuarioRespuestas.IdUsuario = UsuarioEstatusEncuesta.IdUsuario " +
                             "left join EstatusEncuestaD4U on UsuarioEstatusEncuesta.IdEstatusEncuestaD4U = EstatusEncuestaD4U.IdEstatusEncuestaD4U " +
                             "WHERE USUARIO.IDESTATUS != 6 AND UsuarioRespuestas.IdEstatus = 1 and UsuarioRespuestas.IdEncuesta = " + IdENcuesta +
-                            "GROUP BY Usuario.IdUsuario, EstatusEncuestaD4U.Descripcion ORDER BY Usuario.IdUsuario ASC"; 
+                            "GROUP BY Usuario.IdUsuario, EstatusEncuestaD4U.Descripcion ORDER BY Usuario.IdUsuario ASC";
                         SqlQuery = SqlQuery + finalQuery;
                     }
                     string cadenaConexion = "";
@@ -2162,7 +2163,7 @@ namespace BL
                             encuesta.AltGustoOlfato = item.AltGustOlfato;
 
                             double temperatura = Convert.ToDouble(encuesta.NTemperatura);
-                            if (encuesta.Contacto == "SI" || encuesta.Temperatura == "SI" || 
+                            if (encuesta.Contacto == "SI" || encuesta.Temperatura == "SI" ||
                                 encuesta.Tos == "SI" || encuesta.Malestar == "SI" ||
                                 encuesta.DifRespirar == "SI" ||
                                 temperatura > 37.5 || encuesta.DolorGarganta == "SI" || encuesta.EscurrimientoNasal == "SI" ||
@@ -2170,7 +2171,8 @@ namespace BL
                                 encuesta.AltGustoOlfato == "SI")
                             {
                                 encuesta.resultAcceso = "Servicio Médico";
-                            }else
+                            }
+                            else
                             {
                                 encuesta.resultAcceso = "Acceso Permitido";
                             }
@@ -2388,7 +2390,7 @@ namespace BL
                                 var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://10.5.2.21:8882/apiEmpleadoRH/api/empleados/empleadovigente/" + encuesta.RFC.ToUpper().Trim());
                                 httpWebRequest.ContentType = "application/json";
                                 httpWebRequest.Method = "GET";
-                                
+
                                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8))
                                 {
@@ -2464,137 +2466,137 @@ namespace BL
                         //Itera ds
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            
-                                //< td > @Model.DataSet.Tables[0].Rows[i].ItemArray[j] </ td >
-                                ML.EncuestaIngreso encuesta = new ML.EncuestaIngreso();
-                                ML.Persona persona = new ML.Persona();
-                                encuesta.ID = Convert.ToInt32(ds.Tables[0].Rows[i].ItemArray[0]);
-                                encuesta.RFC = ds.Tables[0].Rows[i].ItemArray[1].ToString();
-                                encuesta.Correo = ds.Tables[0].Rows[i].ItemArray[2].ToString();
-                                encuesta.Empresa = ds.Tables[0].Rows[i].ItemArray[3].ToString();
-                                encuesta.Area = ds.Tables[0].Rows[i].ItemArray[4].ToString();
-                                encuesta.Departamento = ds.Tables[0].Rows[i].ItemArray[5].ToString();
-                                encuesta.Puesto = ds.Tables[0].Rows[i].ItemArray[6].ToString();
-                                encuesta.Contacto = ds.Tables[0].Rows[i].ItemArray[7].ToString();
 
-                                
-                                encuesta.stringFechaContacto = (ds.Tables[0].Rows[i].ItemArray[8].ToString());
-                               
-                               
-                                
+                            //< td > @Model.DataSet.Tables[0].Rows[i].ItemArray[j] </ td >
+                            ML.EncuestaIngreso encuesta = new ML.EncuestaIngreso();
+                            ML.Persona persona = new ML.Persona();
+                            encuesta.ID = Convert.ToInt32(ds.Tables[0].Rows[i].ItemArray[0]);
+                            encuesta.RFC = ds.Tables[0].Rows[i].ItemArray[1].ToString();
+                            encuesta.Correo = ds.Tables[0].Rows[i].ItemArray[2].ToString();
+                            encuesta.Empresa = ds.Tables[0].Rows[i].ItemArray[3].ToString();
+                            encuesta.Area = ds.Tables[0].Rows[i].ItemArray[4].ToString();
+                            encuesta.Departamento = ds.Tables[0].Rows[i].ItemArray[5].ToString();
+                            encuesta.Puesto = ds.Tables[0].Rows[i].ItemArray[6].ToString();
+                            encuesta.Contacto = ds.Tables[0].Rows[i].ItemArray[7].ToString();
 
-                                encuesta.Temperatura = ds.Tables[0].Rows[i].ItemArray[9].ToString();
-                                encuesta.Tos = ds.Tables[0].Rows[i].ItemArray[10].ToString();
-                                encuesta.Malestar = ds.Tables[0].Rows[i].ItemArray[11].ToString();
-                                encuesta.MalestarGastrico = ds.Tables[0].Rows[i].ItemArray[12].ToString();
-                                encuesta.DifRespirar = ds.Tables[0].Rows[i].ItemArray[13].ToString();
-                                encuesta.stringFecha = (ds.Tables[0].Rows[i].ItemArray[14].ToString());
 
-                                //new
-                                encuesta.NTemperatura = ds.Tables[0].Rows[i].ItemArray[15].ToString();
-                                if (encuesta.NTemperatura == "")
-                                {
-                                    encuesta.NTemperatura = "0";
-                                }
+                            encuesta.stringFechaContacto = (ds.Tables[0].Rows[i].ItemArray[8].ToString());
 
-                                try
-                                {
-                                    encuesta.DolorGarganta = ds.Tables[0].Rows[i].ItemArray[16].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    encuesta.DolorGarganta = "";
-                                }
-                                try
-                                {
-                                    encuesta.EscurrimientoNasal = ds.Tables[0].Rows[i].ItemArray[17].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    encuesta.EscurrimientoNasal = "";
-                                }
-                                try
-                                {
-                                    encuesta.DolorCuerpo = ds.Tables[0].Rows[i].ItemArray[18].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    encuesta.DolorCuerpo = "";
-                                }
-                                try
-                                {
-                                    encuesta.Conjuntivitis = ds.Tables[0].Rows[i].ItemArray[19].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    encuesta.Conjuntivitis = "";
-                                }
-                                try
-                                {
-                                    encuesta.Enfermedades = ds.Tables[0].Rows[i].ItemArray[20].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    encuesta.Enfermedades = "";
-                                }
-                                try
-                                {
-                                    encuesta.AltGustoOlfato = ds.Tables[0].Rows[i].ItemArray[21].ToString();
-                                }
-                                catch (Exception ex)
-                                {
-                                    encuesta.AltGustoOlfato = "";
-                                }
-                                
-                                
-                                
-                                
 
-                                double temperatura = Convert.ToDouble(encuesta.NTemperatura);
-                                if (encuesta.Contacto == "SI" || encuesta.Temperatura == "SI" ||
-                                    encuesta.Tos == "SI" || encuesta.Malestar == "SI" ||
-                                    encuesta.DifRespirar == "SI" ||
-                                    temperatura > 37.5 || encuesta.DolorGarganta == "SI" || encuesta.EscurrimientoNasal == "SI" ||
-                                    encuesta.DolorCuerpo == "SI" || encuesta.Conjuntivitis == "SI" ||
-                                    encuesta.AltGustoOlfato == "SI")
-                                {
-                                    encuesta.resultAcceso = "Servicio Médico";
-                                }
-                                else
-                                {
-                                    encuesta.resultAcceso = "Acceso Permitido";
-                                }
 
-                                //Consumir web service
-                                if (encuesta.RFC.Length == 10)
-                                {
-                                    var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://10.5.2.21:8882/apiEmpleadoRH/api/empleados/empleadovigente/" + encuesta.RFC.ToUpper().Trim());
-                                    httpWebRequest.ContentType = "application/json";
-                                    httpWebRequest.Method = "GET";
 
-                                    var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                                    using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8))
+                            encuesta.Temperatura = ds.Tables[0].Rows[i].ItemArray[9].ToString();
+                            encuesta.Tos = ds.Tables[0].Rows[i].ItemArray[10].ToString();
+                            encuesta.Malestar = ds.Tables[0].Rows[i].ItemArray[11].ToString();
+                            encuesta.MalestarGastrico = ds.Tables[0].Rows[i].ItemArray[12].ToString();
+                            encuesta.DifRespirar = ds.Tables[0].Rows[i].ItemArray[13].ToString();
+                            encuesta.stringFecha = (ds.Tables[0].Rows[i].ItemArray[14].ToString());
+
+                            //new
+                            encuesta.NTemperatura = ds.Tables[0].Rows[i].ItemArray[15].ToString();
+                            if (encuesta.NTemperatura == "")
+                            {
+                                encuesta.NTemperatura = "0";
+                            }
+
+                            try
+                            {
+                                encuesta.DolorGarganta = ds.Tables[0].Rows[i].ItemArray[16].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                encuesta.DolorGarganta = "";
+                            }
+                            try
+                            {
+                                encuesta.EscurrimientoNasal = ds.Tables[0].Rows[i].ItemArray[17].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                encuesta.EscurrimientoNasal = "";
+                            }
+                            try
+                            {
+                                encuesta.DolorCuerpo = ds.Tables[0].Rows[i].ItemArray[18].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                encuesta.DolorCuerpo = "";
+                            }
+                            try
+                            {
+                                encuesta.Conjuntivitis = ds.Tables[0].Rows[i].ItemArray[19].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                encuesta.Conjuntivitis = "";
+                            }
+                            try
+                            {
+                                encuesta.Enfermedades = ds.Tables[0].Rows[i].ItemArray[20].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                encuesta.Enfermedades = "";
+                            }
+                            try
+                            {
+                                encuesta.AltGustoOlfato = ds.Tables[0].Rows[i].ItemArray[21].ToString();
+                            }
+                            catch (Exception ex)
+                            {
+                                encuesta.AltGustoOlfato = "";
+                            }
+
+
+
+
+
+                            double temperatura = Convert.ToDouble(encuesta.NTemperatura);
+                            if (encuesta.Contacto == "SI" || encuesta.Temperatura == "SI" ||
+                                encuesta.Tos == "SI" || encuesta.Malestar == "SI" ||
+                                encuesta.DifRespirar == "SI" ||
+                                temperatura > 37.5 || encuesta.DolorGarganta == "SI" || encuesta.EscurrimientoNasal == "SI" ||
+                                encuesta.DolorCuerpo == "SI" || encuesta.Conjuntivitis == "SI" ||
+                                encuesta.AltGustoOlfato == "SI")
+                            {
+                                encuesta.resultAcceso = "Servicio Médico";
+                            }
+                            else
+                            {
+                                encuesta.resultAcceso = "Acceso Permitido";
+                            }
+
+                            //Consumir web service
+                            if (encuesta.RFC.Length == 10)
+                            {
+                                var httpWebRequest = (HttpWebRequest)WebRequest.Create("http://10.5.2.21:8882/apiEmpleadoRH/api/empleados/empleadovigente/" + encuesta.RFC.ToUpper().Trim());
+                                httpWebRequest.ContentType = "application/json";
+                                httpWebRequest.Method = "GET";
+
+                                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                                using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8))
+                                {
+                                    var resultWS = streamReader.ReadToEnd();
+                                    if (!string.Equals(resultWS, "\"No se encontró información\""))
                                     {
-                                        var resultWS = streamReader.ReadToEnd();
-                                        if (!string.Equals(resultWS, "\"No se encontró información\""))
+                                        var Resultados = JsonConvert.DeserializeObject<List<ML.Persona>>(resultWS);
+                                        if (Resultados.Count > 0)
                                         {
-                                            var Resultados = JsonConvert.DeserializeObject<List<ML.Persona>>(resultWS);
-                                            if (Resultados.Count > 0)
-                                            {
-                                                persona.IdRh = Resultados[0].IdRh;
-                                                persona.Nombre = string.IsNullOrEmpty(Resultados[0].Nombre) ? "GAM" : Resultados[0].Nombre;
-                                                persona.ApellidoPaterno = string.IsNullOrEmpty(Resultados[0].ApellidoPaterno) ? "GAM" : Resultados[0].ApellidoPaterno;
-                                                persona.ApellidoMaterno = string.IsNullOrEmpty(Resultados[0].ApellidoMaterno) ? "GAM" : Resultados[0].ApellidoMaterno;
-                                                persona.LugarTrabajo = string.IsNullOrEmpty(Resultados[0].LugarDeTrabajo) ? "GAM" : Resultados[0].LugarDeTrabajo;
-                                            }
-                                            else
-                                            {
-                                                persona.IdRh = 12;
-                                                persona.Nombre = "";
-                                                persona.ApellidoPaterno = "";
-                                                persona.ApellidoMaterno = "";
-                                            }
+                                            persona.IdRh = Resultados[0].IdRh;
+                                            persona.Nombre = string.IsNullOrEmpty(Resultados[0].Nombre) ? "GAM" : Resultados[0].Nombre;
+                                            persona.ApellidoPaterno = string.IsNullOrEmpty(Resultados[0].ApellidoPaterno) ? "GAM" : Resultados[0].ApellidoPaterno;
+                                            persona.ApellidoMaterno = string.IsNullOrEmpty(Resultados[0].ApellidoMaterno) ? "GAM" : Resultados[0].ApellidoMaterno;
+                                            persona.LugarTrabajo = string.IsNullOrEmpty(Resultados[0].LugarDeTrabajo) ? "GAM" : Resultados[0].LugarDeTrabajo;
                                         }
+                                        else
+                                        {
+                                            persona.IdRh = 12;
+                                            persona.Nombre = "";
+                                            persona.ApellidoPaterno = "";
+                                            persona.ApellidoMaterno = "";
+                                        }
+                                    }
                                     else
                                     {
                                         persona.IdRh = 0;
@@ -2602,30 +2604,30 @@ namespace BL
                                         persona.ApellidoPaterno = "";
                                         persona.ApellidoMaterno = "";
                                     }
-                                    }
                                 }
-                                else
-                                {
-                                    persona.IdRh = 0;
-                                    persona.Nombre = "";
-                                    persona.ApellidoPaterno = "";
-                                    persona.ApellidoMaterno = "";
-                                }
-                                //end cosnumir
-                                encuesta.IdRH = persona.IdRh;
-                                encuesta.Nombre = persona.Nombre;
-                                encuesta.ApellidoPaterno = persona.ApellidoPaterno;
-                                encuesta.ApellidoMaterno = persona.ApellidoMaterno;
-                                encuesta.LugarTrabajo = persona.LugarTrabajo;
+                            }
+                            else
+                            {
+                                persona.IdRh = 0;
+                                persona.Nombre = "";
+                                persona.ApellidoPaterno = "";
+                                persona.ApellidoMaterno = "";
+                            }
+                            //end cosnumir
+                            encuesta.IdRH = persona.IdRh;
+                            encuesta.Nombre = persona.Nombre;
+                            encuesta.ApellidoPaterno = persona.ApellidoPaterno;
+                            encuesta.ApellidoMaterno = persona.ApellidoMaterno;
+                            encuesta.LugarTrabajo = persona.LugarTrabajo;
 
 
-                                result.Objects.Add(encuesta);
-                                result.Correct = true;
-                            
+                            result.Objects.Add(encuesta);
+                            result.Correct = true;
 
-                        
 
-                    }
+
+
+                        }
                     }
                     if (enc.Filtro == 0)
                     {
@@ -2813,7 +2815,7 @@ namespace BL
                     }
                     else
                     {
-                        string QUERY =  "SELECT * FROM ENCUESTAINGRESO WHERE " + NameFilter + " = '" + enc.ValueFilter + "'";
+                        string QUERY = "SELECT * FROM ENCUESTAINGRESO WHERE " + NameFilter + " = '" + enc.ValueFilter + "'";
                         using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
                         {
                             try
@@ -2995,7 +2997,7 @@ namespace BL
                         }
                     }
 
-                    
+
 
                 }
             }
@@ -3024,11 +3026,11 @@ namespace BL
                             //GetTitleSeccion
                             var title = GetSeccionForTitle(listaSecciones[i], listaEncabezados);
 
-                            
+
 
                             var query = context.Database.ExecuteSqlCommand("UPDATE Preguntas SET Seccion = {0}, EncabezadoSeccion = {2} WHERE IdPregunta = {1}", listaSecciones[i], listaIdPregunta[i], title);
 
-                            
+
 
                             context.SaveChanges();
                             result.Correct = true;
@@ -3102,8 +3104,8 @@ namespace BL
                                 estatusEncuesta.Anio = conf.PeriodoAplicacion;
                             context.SaveChanges();
                         }
-                        
-                        
+
+
                         transaction.Commit();
 
                         result.Correct = true;
@@ -3278,7 +3280,7 @@ namespace BL
                             encuesta.ImagenInstruccion = obj.ImagenInstruccion;
                             encuesta.Instruccion = obj.Instruccion;
                             encuesta.Nombre = obj.Nombre;
-                            
+
                             result.EditaEncuesta = encuesta;
                             result.Correct = true;
                         }
@@ -3345,7 +3347,7 @@ namespace BL
                     foreach (ML.AdministradorCompany item in permisosEstrucura)
                     {
                         string CompanyId = Convert.ToString(item.Company.CompanyId);
-                        string CompanyIdFinal = " or (Encuesta.IdEstatus = 1 and IdEncuesta NOT IN (select IdEncuesta from EncuestaReporte) and company.COMPANYID = "+CompanyId+") ";//" OR company.COMPANYID = " + CompanyId + "";
+                        string CompanyIdFinal = " or (Encuesta.IdEstatus = 1 and IdEncuesta NOT IN (select IdEncuesta from EncuestaReporte) and company.COMPANYID = " + CompanyId + ") ";//" OR company.COMPANYID = " + CompanyId + "";
                         WHEREsql += CompanyIdFinal;
                     }
                     Console.WriteLine(WHEREsql);
@@ -3612,7 +3614,7 @@ namespace BL
                             conf.IdRespuesta = (int)item.IdRespuesta;
                             conf.TerminaEncuesta = item.TerminaEncuesta != null ? (int)item.TerminaEncuesta : 0;
                             conf.Preguntas = new ML.Preguntas();
-                            conf.Preguntas.SubSeccion = (int) item.Preguntas.SubSeccion;
+                            conf.Preguntas.SubSeccion = (int)item.Preguntas.SubSeccion;
 
                             if (conf.TerminaEncuesta == 3)
                             {
@@ -3932,7 +3934,7 @@ namespace BL
             BL.NLogGeneratorFile.logInfoEmailSender("Tarea programada de reenvio de email", 0, 0);
             sendEmail();
         }
-        public static ML.Result GetEstatusEnvioByIdBaseDeDatos(ML.Encuesta encuesta) 
+        public static ML.Result GetEstatusEnvioByIdBaseDeDatos(ML.Encuesta encuesta)
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
@@ -3995,9 +3997,9 @@ namespace BL
                             ML.Preguntas preguntas = new ML.Preguntas();
                             preguntas.IdPregunta = item.IdPregunta;
                             preguntas.Encabezado = item.EncabezadoSeccion;
-                            preguntas.Seccion = (int) item.Seccion;
+                            preguntas.Seccion = (int)item.Seccion;
 
-                            
+
                             if (preguntas.Seccion == seccionAnterior && flag > 1)
                             {
                                 //No inserta en lista
@@ -4057,7 +4059,7 @@ namespace BL
                         foreach (var item in query)
                         {
                             ML.ConfiguraRespuesta conf = new ML.ConfiguraRespuesta();
-                            tipoTerminaEncuesta = (int) item.TerminaEncuesta;
+                            tipoTerminaEncuesta = (int)item.TerminaEncuesta;
                         }
                     }
                 }
@@ -4077,7 +4079,7 @@ namespace BL
             ML.Result result = new ML.Result();
             try
             {
-                
+
                 var query = context.Encuesta.SqlQuery("SELECT * FROM Encuesta WHERE IdBasesDeDatos = {0}", IdBaseDeDatos);
                 if (query != null)
                 {
@@ -4177,7 +4179,7 @@ namespace BL
             }
             return result;
         }
-        
+
         public static ML.Result AddRespuestasVacio(int IdEncuesta, int Idusuario)
         {
             ML.Result result = new ML.Result();
@@ -4190,52 +4192,52 @@ namespace BL
                     //context.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;");
                     //var transaction = context.Database.BeginTransaction(IsolationLevel.Snapshot);
                     try
+                    {
+                        //Insercion control 1 al 11s
+                        var query = context.Database.ExecuteSqlCommand
+                        ("INSERT INTO UsuarioRespuestas(IdEncuesta, Idusuario, FechaHoraCreacion, ProgramaCreacion, UsuarioCreacion, IdPregunta) select {0}, {1}, {2}, {3}, {4}, IdPregunta from Preguntas where (IdTipoControl between 1 and 2 and idEncuesta = {0}) or (IdTipoControl between 4 and 11 and idEncuesta = {0})", IdEncuesta, Idusuario, DateTime.Now, "Autoguardado", Idusuario);
+                        //context.SaveChanges();
+                        //insercion LikertDoble
+                        var getPregLikertDoble = context.Preguntas.SqlQuery("SELECT * FROM PREGUNTAS WHERE IDTIPOCONTROL = 12 AND IDENCUESTA = {0}", IdEncuesta).ToList();
+                        foreach (var item in getPregLikertDoble)
                         {
-                            //Insercion control 1 al 11s
-                            var query = context.Database.ExecuteSqlCommand
-                            ("INSERT INTO UsuarioRespuestas(IdEncuesta, Idusuario, FechaHoraCreacion, ProgramaCreacion, UsuarioCreacion, IdPregunta) select {0}, {1}, {2}, {3}, {4}, IdPregunta from Preguntas where (IdTipoControl between 1 and 2 and idEncuesta = {0}) or (IdTipoControl between 4 and 11 and idEncuesta = {0})", IdEncuesta, Idusuario, DateTime.Now, "Autoguardado", Idusuario);
-                            //context.SaveChanges();
-                            //insercion LikertDoble
-                            var getPregLikertDoble = context.Preguntas.SqlQuery("SELECT * FROM PREGUNTAS WHERE IDTIPOCONTROL = 12 AND IDENCUESTA = {0}", IdEncuesta).ToList();
-                            foreach (var item in getPregLikertDoble)
-                            {
-                                //var getRespuestas = context.Respuestas.SqlQuery("select * from Respuestas where IdPregunta = {0}", item.IdPregunta);
+                            //var getRespuestas = context.Respuestas.SqlQuery("select * from Respuestas where IdPregunta = {0}", item.IdPregunta);
                             IList<DL.Respuestas> list = context.Respuestas.SqlQuery("select * from Respuestas where IdPregunta = {0}", item.IdPregunta).ToList();
                             foreach (var elem in list)
-                                {
-                                    var insert = context.Database.ExecuteSqlCommand
-                                    ("INSERT INTO UsuarioRespuestas(IdEncuesta, Idusuario, FechaHoraCreacion, ProgramaCreacion, UsuarioCreacion, IdRespuesta, IdPregunta) select {0}, {1}, {2}, {3}, {4}, {5}, IdPregunta from Preguntas WHERE idEncuesta = {0} and IdTipoControl != 13 and IdPregunta = {6}", IdEncuesta, Idusuario, DateTime.Now, "Autoguardado", Idusuario, elem.IdRespuesta, item.IdPregunta);
-                                    //context.SaveChanges();
-                                }
-                            }
-                            //Insercion checkbox
-                            var getPregCheckBox = context.Preguntas.SqlQuery("SELECT * FROM PREGUNTAS WHERE IDTIPOCONTROL = 3 AND IDENCUESTA = {0}", IdEncuesta).ToList();
-                            foreach (var item in getPregCheckBox)
                             {
-                                var getRespuestas = context.Respuestas.SqlQuery("select * from Respuestas where IdPregunta = {0}", item.IdPregunta).ToList();
-                                foreach (var elem in getRespuestas)
-                                {
-                                    var insert = context.Database.ExecuteSqlCommand
-                                    ("INSERT INTO UsuarioRespuestas(IdEncuesta, Idusuario, FechaHoraCreacion, ProgramaCreacion, UsuarioCreacion, IdRespuesta, IdPregunta) select {0}, {1}, {2}, {3}, {4}, {5}, IdPregunta from Preguntas WHERE idEncuesta = {0} and IdTipoControl != 13 and IdPregunta = {6}", IdEncuesta, Idusuario, DateTime.Now, "Autoguardado", Idusuario, elem.IdRespuesta, item.IdPregunta);
-                                    //context.SaveChanges();
-                                }
+                                var insert = context.Database.ExecuteSqlCommand
+                                ("INSERT INTO UsuarioRespuestas(IdEncuesta, Idusuario, FechaHoraCreacion, ProgramaCreacion, UsuarioCreacion, IdRespuesta, IdPregunta) select {0}, {1}, {2}, {3}, {4}, {5}, IdPregunta from Preguntas WHERE idEncuesta = {0} and IdTipoControl != 13 and IdPregunta = {6}", IdEncuesta, Idusuario, DateTime.Now, "Autoguardado", Idusuario, elem.IdRespuesta, item.IdPregunta);
+                                //context.SaveChanges();
                             }
-                            context.SaveChanges();
-                            //transaction.Commit();
-                            result.Correct = true;
-                            var path = @"\\10.5.2.101\RHDiagnostics\log\Log" + IdEncuesta + "_" + Idusuario + ".txt";
-                            var fullPath = Path.GetFullPath(path);
-                            if (!File.Exists(fullPath))
+                        }
+                        //Insercion checkbox
+                        var getPregCheckBox = context.Preguntas.SqlQuery("SELECT * FROM PREGUNTAS WHERE IDTIPOCONTROL = 3 AND IDENCUESTA = {0}", IdEncuesta).ToList();
+                        foreach (var item in getPregCheckBox)
+                        {
+                            var getRespuestas = context.Respuestas.SqlQuery("select * from Respuestas where IdPregunta = {0}", item.IdPregunta).ToList();
+                            foreach (var elem in getRespuestas)
                             {
-                                string createText = "Log" + Environment.NewLine;
-                                File.WriteAllText(fullPath, createText);
+                                var insert = context.Database.ExecuteSqlCommand
+                                ("INSERT INTO UsuarioRespuestas(IdEncuesta, Idusuario, FechaHoraCreacion, ProgramaCreacion, UsuarioCreacion, IdRespuesta, IdPregunta) select {0}, {1}, {2}, {3}, {4}, {5}, IdPregunta from Preguntas WHERE idEncuesta = {0} and IdTipoControl != 13 and IdPregunta = {6}", IdEncuesta, Idusuario, DateTime.Now, "Autoguardado", Idusuario, elem.IdRespuesta, item.IdPregunta);
+                                //context.SaveChanges();
                             }
-                            string appendText = "Agregado de respuestas vacias exitoso. Metodo: AddRespuestasVacio(). " + DateTime.Now + Environment.NewLine;
-                            File.AppendAllText(fullPath, appendText);
+                        }
+                        context.SaveChanges();
+                        //transaction.Commit();
+                        result.Correct = true;
+                        var path = @"\\10.5.2.101\RHDiagnostics\log\Log" + IdEncuesta + "_" + Idusuario + ".txt";
+                        var fullPath = Path.GetFullPath(path);
+                        if (!File.Exists(fullPath))
+                        {
+                            string createText = "Log" + Environment.NewLine;
+                            File.WriteAllText(fullPath, createText);
+                        }
+                        string appendText = "Agregado de respuestas vacias exitoso. Metodo: AddRespuestasVacio(). " + DateTime.Now + Environment.NewLine;
+                        File.AppendAllText(fullPath, appendText);
 
                     }
-                        catch (Exception ex)
-                        {
+                    catch (Exception ex)
+                    {
                         result.Correct = false;
                         result.ErrorMessage = ex.Message;
                         var path = @"\\10.5.2.101\RHDiagnostics\log\Log" + IdEncuesta + "_" + Idusuario + ".txt";
@@ -4287,7 +4289,7 @@ namespace BL
                     }
                     string appendText = "Autoguardado exitoso. Metodo: UpdateRespuestaT1. IdPregunta: " + preg.IdPregunta + ". Respuesta: " + preg.MLRespuestas.Respuesta + ". " + DateTime.Now + Environment.NewLine;
                     File.AppendAllText(fullPath, appendText);
-                    
+
                 }
             }
             catch (Exception ex)
@@ -4384,7 +4386,7 @@ namespace BL
             }
             return result;
         }
-        public static ML.Result UpdateRespuestaTCheck(ML.Preguntas preg, int  IdEncuesta, int IdUsuario)
+        public static ML.Result UpdateRespuestaTCheck(ML.Preguntas preg, int IdEncuesta, int IdUsuario)
         {
             ML.Result result = new ML.Result();
             try
@@ -4444,7 +4446,7 @@ namespace BL
                             userRes.Preguntas.TipoControl = new ML.TipoControl();
                             userRes.Preguntas.TipoControl.IdTipoControl = item.Preguntas.IdTipoControl;
                             userRes.Respuestas = new ML.Respuestas();
-                            userRes.Respuestas.IdRespuesta =  item.Respuestas == null ? 0: item.Respuestas.IdRespuesta;
+                            userRes.Respuestas.IdRespuesta = item.Respuestas == null ? 0 : item.Respuestas.IdRespuesta;
                             if (userRes.Preguntas.TipoControl.IdTipoControl == 7)
                             {
                                 userRes.RespuestaUsuario = item.RespuestaUsuario == null ? "" : item.RespuestaUsuario;
@@ -4453,9 +4455,9 @@ namespace BL
                             {
                                 userRes.RespuestaUsuario = item.RespuestaUsuario == null ? "0" : item.RespuestaUsuario;
                             }
-                           
+
                             //userRes.Respuestas.Selected = item.Respuestas == null ? false : item.Respuestas.Selected == null ? false: (bool)item.Respuestas.Selected ;
-                            userRes.Respuestas.Selected = item.Selected == null ? false : (bool) item.Selected;
+                            userRes.Respuestas.Selected = item.Selected == null ? false : (bool)item.Selected;
                             result.Objects.Add(userRes);
                         }
                     }
@@ -4584,14 +4586,14 @@ namespace BL
             ML.Result result = new Result();
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                using (var transaction = context.Database.BeginTransaction())
+                using (var transaction = context.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
                     try
                     {
                         //Alta Encuesta
                         var query = context.Database.ExecuteSqlCommand("INSERT INTO Encuesta (DosColumnas,Nombre,FechaInicio,FechaFin,IdEstatus,IdEmpresa,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,CodeHTML,IdBasesDeDatos,Descripcion,Instruccion,ImagenInstruccion,IdTipoEncuesta,Agradecimiento,ImagenAgradecimiento,IdTipoOrden) " +
-                            " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17})", 1, Encuesta.Nombre, Encuesta.FechaInicio, Encuesta.FechaFin, 1, Encuesta.IdEmpresa, DateTime.Now, usuarioCreacion, "Alta Encuesta", Encuesta.Instruccion,  Encuesta.BasesDeDatos.IdBaseDeDatos, Encuesta.Descripcion,
-                            Encuesta.Agradecimiento, Encuesta.ImagenInstruccion, 4, "", Encuesta.ImagenAgradecimiento,Encuesta.TipoOrden.IdTipoOrden);
+                            " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17})", 1, Encuesta.Nombre, Encuesta.FechaInicio, Encuesta.FechaFin, 1, Encuesta.IdEmpresa, DateTime.Now, usuarioCreacion, "Alta Encuesta", Encuesta.Instruccion, Encuesta.BasesDeDatos.IdBaseDeDatos, Encuesta.Descripcion,
+                            Encuesta.Agradecimiento, Encuesta.ImagenInstruccion, 4, "", Encuesta.ImagenAgradecimiento, Encuesta.TipoOrden.IdTipoOrden);
                         int idEncuesta = context.Encuesta.Max(q => q.IdEncuesta);
                         //Alta Periodo Encuesta --- ConfigClimaLab ---
                         DL.ConfigClimaLab savePeriodo = new DL.ConfigClimaLab();
@@ -4617,44 +4619,666 @@ namespace BL
                                     " VALUES({0},{1},{2},{3},{4})", obj.IdArea, idEncuesta, DateTime.Now, usuarioCreacion, "Alta Encuesta");
                             }
                         }
+                        //Alta de configuracion Encuesta clima Subcategorias por Categoria ------- Table ------------ [ValoracionSubcategoriaPorCategoria] 220621
+                        if (Encuesta.NewVSCPC != null)
+                        {
+                            if (Encuesta.NewVSCPC.Count > 0)
+                            {
+                                foreach (ML.ValoracionSubcategoriaPorCategoria item in Encuesta.NewVSCPC)
+                                {
+                                    var queryAddVSCPC = context.Database.ExecuteSqlCommand("INSERT INTO ValoracionSubcategoriaPorCategoria (IdEncuesta,IdCategoria,IdSubcategoria,Valor,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdEstatus) " +
+                                        "VALUES ({0},{1},{2},{3},{4},{5},{6},{7})", idEncuesta, item.IdCategoria, item.IdSubcategoria, item.Valor, DateTime.Now, usuarioCreacion, "Alta Encuesta",1);
+
+                                }
+
+                            }
+                        }
+                        //se crean listas de las respuestas 24/06/2021 
+
+                        List<string> RespuestasId177 = new List<string>(new string[] { "El crecimiento que puedo tener", "Los retos que representa", "Gusto por lo que hago", "El buen ambiente de trabajo", "La estabilidad laboral que tengo", "Mi sueldo y beneficios", "El prestigio de la empresa" });
+                        List<string> RespuestasId178 = new List<string>(new string[] { "Mayor crecimiento profesional", "Un mayor reto", "Una cultura de trabajo más afín a mi", "Mal liderazgo", "Mal ambiente laboral", "Un mejor sueldo y beneficios", "Nada" });
+                        List<string> RespuestasId179 = new List<string>(new string[] { "Si", "No" });
+                        List<string> RespuestasId180 = new List<string>(new string[] { "Menos de 6 meses", "6 meses a 1 año", "1 a 2 años", "3 a 5 años", "6 a 10 años", "Más de 10 años" });
+                        List<string> RespuestasId181 = new List<string>(new string[] { "23 A 31 Años", "32 A 39 Años", "40 A 55 Años", "56 Años O Más", "18 A 22 Años" });
+                        List<string> RespuestasId182 = new List<string>(new string[] { "Planta", "Sindicalizado", "Honorarios", "Comisionistas", "Temporal" });
+                        List<string> RespuestasId183 = new List<string>(new string[] { "Femenino", "Masculino" });
+                        List<string> RespuestasId184 = new List<string>(new string[] { "Primaria", "Secundaria", "Media Tecnica", "Media Superior", "Universidad Incompleta", "Universidad Completa", "PostGrado" });
+                        List<string> RespuestasId185 = new List<string>(new string[] { "Administrativo", "Comercial", "Coordinador - Supervisor - Jefe", "Director", "Gerente Departamental", "Gerente General", "Subgerente", "Tecnico - Operativo" });
+                        List<string> RespuestasLikert = new List<string>(new string[] { "Casi siempre es verdad", "Frecuentemente es verdad", "A veces es falso / A veces es verdad", "Frecuentemente es falso", "Casi siempre es falso" });
                         //Preguntas Insercion doble por el tipo de Enfoque  Empresa/Area
                         //int IdPreguntaSubseccion = 0;***** No se usa
                         foreach (ML.Preguntas obj in Encuesta.NewCuestion)
                         {
                             //Se inserta el tipo de Control segun su competencia
                             var idTipoControl = 0;
-                            switch (obj.Competencia.IdCompetencia)
+                            //se agrega el filtro que si el numero de IdPadre pregunta es >= a 190 indica que es una pregunta nueva
+                            if (obj.IdPreguntaPadre <= 189)
                             {
-                                case 1:case 2:case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:case 12:
-                                    idTipoControl = 12;
-                                    break;                              
-                                case 13: case 14: case 15:
-                                    idTipoControl = 5;
-                                    break;
-                                case 16:
-                                    idTipoControl = 2;
-                                    break;
-                                case 17:
-                                    idTipoControl = 4;
-                                    break;
-                                default:
-                                    idTipoControl  = 12;
-                                    break;
+                                switch (obj.Competencia.IdCompetencia)
+                                {
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                    case 9:
+                                    case 10:
+                                    case 11:
+                                    case 12:
+                                        idTipoControl = 12;
+                                        break;
+                                    case 13:
+                                    case 14:
+                                    case 15:
+                                        idTipoControl = 5;
+                                        break;
+                                    case 16:
+                                        idTipoControl = 2;
+                                        break;
+                                    case 17:
+                                        idTipoControl = 4;
+                                        break;
+                                    default:
+                                        idTipoControl = 12;
+                                        break;
+                                }
                             }
+                            else
+                            {
+                                idTipoControl = (Int32)obj.TipoControl.IdTipoControl;
+
+                            }
+
                             // Se inserta la pregunta Enfoque Empresa
                             var queryPreguntas = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
                                 "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,IdTipoControl,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion)" +
                                     " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, obj.Pregunta,
-                                    obj.Valoracion, obj.Competencia.IdCompetencia, obj.Obligatoria == false ? 1:2, "Enfoque Empresa", obj.IdEnfoque,obj.Seccion,obj.IdPreguntaPadre,idTipoControl, DateTime.Now,
+                                    obj.Valoracion, obj.Competencia.IdCompetencia, obj.Obligatoria == false ? 1 : 2, "Enfoque Empresa", obj.IdEnfoque, obj.Seccion, obj.IdPreguntaPadre, idTipoControl, DateTime.Now,
                                     usuarioCreacion, "Alta Encuesta");
                             //Obtiene maximo de pregunta EE
-                            int idPreguntaEE= context.Preguntas.Max(q => q.IdPregunta);
+                            int idPreguntaEE = context.Preguntas.Max(q => q.IdPregunta);
+                            // Se inserta la configuracion Pregunta => Subcategoria y su valor ------ [ValoracionPreguntaPorSubcategoria]
+                            if (Encuesta.NewVPPSC != null)
+                            {
+                                if (Encuesta.NewVPPSC.Count > 0)
+                                {
+                                    foreach (var itemvp in Encuesta.NewVPPSC)
+                                    {
+                                        if (itemvp.IdPregunta == obj.IdPreguntaPadre)
+                                        {
+                                            var queryAddVPPSC = context.Database.ExecuteSqlCommand("INSERT INTO ValoracionPreguntaPorSubcategoria " +
+                                                "(IdEncuesta,IdSubcategoria,IdPregunta,Valor,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdEstatus) " +
+                                                "VALUES ({0},{1},{2},{3},{4},{5},{6},{7})", idEncuesta, itemvp.IdSubcategoria, idPreguntaEE, itemvp.Valor, DateTime.Now, usuarioCreacion, "Alta Encuesta",1);
+                                        }
+
+                                    }
+                                }
+                            }
                             //Tabla Encuesta Pregunta
                             var queryEncuestaPreguntaEE = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
                                 "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
                                 "VALUES({0},{1},{2},{3},{4})", idEncuesta, idPreguntaEE, DateTime.Now, usuarioCreacion, "Alta Encuesta");
                             //Se omite el insertado de respuestas ya que son fijas
                             //-------------------------------------------------------------//  
+                            /// Se agrega el alta de respuestas para Enfoque Empresa  25/06/2021
+                            /// ------------------------------------------------------------///
+                            /// ------------------------------------------------------------///
+                            switch (obj.Competencia.IdCompetencia)
+                            {
+                                case 1:
+                                case 2:
+                                case 3:
+                                case 4:
+                                case 5:
+                                case 6:
+                                case 7:
+                                case 8:
+                                case 9:
+                                case 10:
+                                case 11:
+                                case 12:
+                                    if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                    {
+                                        switch (obj.TipoControl.IdTipoControl)
+                                        {
+                                            case 4://casilla de Verificacion foreach
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR4EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case 12:// Likert  foreach
+                                                foreach (var item12EE in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 5:// Lista desplegable  foreach
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR5EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case 2:// Respuesta Larga unico
+                                                var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                        }
+                                    }
+                                    else // pregunta existente
+                                    {
+                                        if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                        {
+                                            foreach (var item86EE in RespuestasLikert)
+                                            {
+                                                var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", item86EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                            }
+                                        }
+                                        switch (obj.IdPreguntaPadre)
+                                        {
+                                            case 173:
+                                            case 174:
+                                            case 175:
+                                            case 176: //Respuesta Abierta larga 2
+                                                var queriAddNewAnswerL2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                            case 177:
+                                                foreach (var item177EE in RespuestasId177)
+                                                {
+                                                    var queryAddNewAnswer177EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item177EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 178:
+                                                foreach (var item178EE in RespuestasId178)
+                                                {
+                                                    var queryAddNewAnswer178EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item178EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                foreach (var item179EE in RespuestasId179)
+                                                {
+                                                    var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item179EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 180:
+                                                foreach (var item180EE in RespuestasId180)
+                                                {
+                                                    var queryAddNewAnswer180EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item180EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 181:
+                                                foreach (var item181EE in RespuestasId181)
+                                                {
+                                                    var queryAddNewAnswer181EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item181EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 182:
+                                                foreach (var item182EE in RespuestasId182)
+                                                {
+                                                    var queryAddNewAnswer182EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item182EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 183:
+                                                foreach (var item183EE in RespuestasId183)
+                                                {
+                                                    var queryAddNewAnswer183EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item183EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 184:
+                                                foreach (var item184EE in RespuestasId184)
+                                                {
+                                                    var queryAddNewAnswer184EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item184EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 185:
+                                                foreach (var item185EE in RespuestasId185)
+                                                {
+                                                    var queryAddNewAnswer185EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item185EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+
+                                        }
+                                    }
+                                    break;
+                                case 13:
+                                case 14:
+                                case 15:
+                                    if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                    {
+                                        switch (obj.TipoControl.IdTipoControl)
+                                        {
+                                            case 4:
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR4EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+
+                                            case 12:
+                                                foreach (var item12EE in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 5:
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR5EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case 2:
+                                                var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                        }
+                                    }
+                                    else// pregunta existente
+                                    {
+                                        if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                        {
+                                            foreach (var item86EE in RespuestasLikert)
+                                            {
+                                                var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", item86EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                            }
+                                        }
+                                        switch (obj.IdPreguntaPadre)
+                                        {
+                                            case 173:
+                                            case 174:
+                                            case 175:
+                                            case 176: //Respuesta Abierta larga 2
+                                                var queriAddNewAnswerL2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                            case 177:
+                                                foreach (var item177EE in RespuestasId177)
+                                                {
+                                                    var queryAddNewAnswer177EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item177EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 178:
+                                                foreach (var item178EE in RespuestasId178)
+                                                {
+                                                    var queryAddNewAnswer178EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item178EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                foreach (var item179EE in RespuestasId179)
+                                                {
+                                                    var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item179EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 180:
+                                                foreach (var item180EE in RespuestasId180)
+                                                {
+                                                    var queryAddNewAnswer180EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item180EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 181:
+                                                foreach (var item181EE in RespuestasId181)
+                                                {
+                                                    var queryAddNewAnswer181EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item181EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 182:
+                                                foreach (var item182EE in RespuestasId182)
+                                                {
+                                                    var queryAddNewAnswer182EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item182EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 183:
+                                                foreach (var item183EE in RespuestasId183)
+                                                {
+                                                    var queryAddNewAnswer183EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item183EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 184:
+                                                foreach (var item184EE in RespuestasId184)
+                                                {
+                                                    var queryAddNewAnswer184EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item184EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 185:
+                                                foreach (var item185EE in RespuestasId185)
+                                                {
+                                                    var queryAddNewAnswer185EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item185EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+
+                                        }
+                                    }
+                                    break;
+                                case 16:
+                                    if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                    {
+                                        switch (obj.TipoControl.IdTipoControl)
+                                        {
+                                            case 4:
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR4EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+
+                                            case 12:
+                                                foreach (var item12EE in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 5:
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR5EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case 2:
+                                                var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                        }
+                                    }
+                                    else// Pregunta existente
+                                    {
+                                        if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                        {
+                                            foreach (var item86EE in RespuestasLikert)
+                                            {
+                                                var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", item86EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                            }
+                                        }
+                                        switch (obj.IdPreguntaPadre)
+                                        {
+                                            case 173:
+                                            case 174:
+                                            case 175:
+                                            case 176: //Respuesta Abierta larga 2
+                                                var queriAddNewAnswerL2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                            case 177:
+                                                foreach (var item177EE in RespuestasId177)
+                                                {
+                                                    var queryAddNewAnswer177EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item177EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 178:
+                                                foreach (var item178EE in RespuestasId178)
+                                                {
+                                                    var queryAddNewAnswer178EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item178EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                foreach (var item179EE in RespuestasId179)
+                                                {
+                                                    var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item179EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 180:
+                                                foreach (var item180EE in RespuestasId180)
+                                                {
+                                                    var queryAddNewAnswer180EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item180EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 181:
+                                                foreach (var item181EE in RespuestasId181)
+                                                {
+                                                    var queryAddNewAnswer181EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item181EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 182:
+                                                foreach (var item182EE in RespuestasId182)
+                                                {
+                                                    var queryAddNewAnswer182EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item182EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 183:
+                                                foreach (var item183EE in RespuestasId183)
+                                                {
+                                                    var queryAddNewAnswer183EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item183EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 184:
+                                                foreach (var item184EE in RespuestasId184)
+                                                {
+                                                    var queryAddNewAnswer184EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item184EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 185:
+                                                foreach (var item185EE in RespuestasId185)
+                                                {
+                                                    var queryAddNewAnswer185EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item185EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+
+                                        }
+                                    }
+                                    break;
+                                case 17:
+                                    if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                    {
+                                        switch (obj.TipoControl.IdTipoControl)
+                                        {
+                                            case 4://casilla de Verificacion foreach
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR4EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case 12:// Likert  foreach
+                                                foreach (var item12EE in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 5:// Lista desplegable  foreach
+                                                if (obj.NewAnswer != null)
+                                                {
+                                                    if (obj.NewAnswer.Count > 0)
+                                                    {
+                                                        foreach (var itemR5EE in obj.NewAnswer)
+                                                        {
+                                                            var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                    }
+                                                }
+                                                break;
+                                            case 2:// Respuesta Larga unico
+                                                var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                        }
+
+                                    }
+                                    else//pregunta existente
+                                    {
+                                        if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                        {
+                                            foreach (var item86EE in RespuestasLikert)
+                                            {
+                                                var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                           "VALUES ({0},{1},{2},{3},{4},{5})", item86EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                            }
+                                        }
+                                        switch (obj.IdPreguntaPadre)
+                                        {
+                                            case 173:
+                                            case 174:
+                                            case 175:
+                                            case 176: //Respuesta Abierta larga 2
+                                                var queriAddNewAnswerL2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                break;
+                                            case 177:
+                                                foreach (var item177EE in RespuestasId177)
+                                                {
+                                                    var queryAddNewAnswer177EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item177EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 178:
+                                                foreach (var item178EE in RespuestasId178)
+                                                {
+                                                    var queryAddNewAnswer178EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item178EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                foreach (var item179EE in RespuestasId179)
+                                                {
+                                                    var queriAddNewAnswerExistEE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item179EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 180:
+                                                foreach (var item180EE in RespuestasId180)
+                                                {
+                                                    var queryAddNewAnswer180EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item180EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 181:
+                                                foreach (var item181EE in RespuestasId181)
+                                                {
+                                                    var queryAddNewAnswer181EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item181EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 182:
+                                                foreach (var item182EE in RespuestasId182)
+                                                {
+                                                    var queryAddNewAnswer182EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item182EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 183:
+                                                foreach (var item183EE in RespuestasId183)
+                                                {
+                                                    var queryAddNewAnswer183EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item183EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 184:
+                                                foreach (var item184EE in RespuestasId184)
+                                                {
+                                                    var queryAddNewAnswer184EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item184EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+                                            case 185:
+                                                foreach (var item185EE in RespuestasId185)
+                                                {
+                                                    var queryAddNewAnswer185EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                          "VALUES ({0},{1},{2},{3},{4},{5})", item185EE, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                                break;
+
+                                        }
+
+                                    }
+                                    break;
+                            }
+
+                            /// Se termina alta de respuestas Enfoque Empresas
+                            /// ------------*****************----------------************-------------*************
+
+
+
+
+
+
+
+
+
+
                             // Se valida el Id de Competencia 
                             // Si es mayor a 12, ya no se duplican y guarda el enfoque en Null
 
@@ -4671,24 +5295,604 @@ namespace BL
                                         usuarioCreacion, "Alta Encuesta", idTipoControl);
                                 //Obtiene maximo de pregunta EA
                                 int idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
-                                //Tabla Encuesta Pregunta
+                                //Tabla Encuesta Pregunta EA
                                 var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
                                     "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
                                     "VALUES({0},{1},{2},{3},{4})", idEncuesta, idPreguntaEA, DateTime.Now, usuarioCreacion, "Alta Encuesta");
                                 //Se omite el insertado de respuestas ya que son fijas
-                                //-------------------------------------------------------------//       
+                                //-------------------------------------------------------------//  
+                                ///***************************// Se decide guardar las respuestas de todas las preguntas 25/06/2021
+                                ///solo Enfoque Area
+                                switch (obj.Competencia.IdCompetencia)
+                                {
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                    case 7:
+                                    case 8:
+                                    case 9:
+                                    case 10:
+                                    case 11:
+                                    case 12:
+                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                        {
+                                            switch (obj.TipoControl.IdTipoControl)
+                                            {
+                                                case 4://casilla de Verificacion foreach
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 12:// Likert  foreach
+                                                    foreach (var item12 in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:// Lista desplegable  foreach
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:// Respuesta Larga unico
+                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                            }
+                                        }
+                                        else // pregunta existente
+                                        {
+                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                            {
+                                                foreach (var item86 in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                            }
+                                            switch (obj.IdPreguntaPadre)
+                                            {
+                                                case 173:
+                                                case 174:
+                                                case 175:
+                                                case 176: //Respuesta Abierta larga 2
+                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                                case 177:
+                                                    foreach (var item177 in RespuestasId177)
+                                                    {
+                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 178:
+                                                    foreach (var item178 in RespuestasId178)
+                                                    {
+                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                    foreach (var item179 in RespuestasId179)
+                                                    {
+                                                        var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 180:
+                                                    foreach (var item180 in RespuestasId180)
+                                                    {
+                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 181:
+                                                    foreach (var item181 in RespuestasId181)
+                                                    {
+                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 182:
+                                                    foreach (var item182 in RespuestasId182)
+                                                    {
+                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 183:
+                                                    foreach (var item183 in RespuestasId183)
+                                                    {
+                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 184:
+                                                    foreach (var item184 in RespuestasId184)
+                                                    {
+                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 185:
+                                                    foreach (var item185 in RespuestasId185)
+                                                    {
+                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+
+                                            }
+                                        }
+                                        break;
+                                    case 13:
+                                    case 14:
+                                    case 15:
+                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                        {
+                                            switch (obj.TipoControl.IdTipoControl)
+                                            {
+                                                case 4:
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+
+                                                case 12:
+                                                    foreach (var item12 in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:
+                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                            }
+                                        }
+                                        else// pregunta existente
+                                        {
+                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                            {
+                                                foreach (var item86 in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                            }
+                                            switch (obj.IdPreguntaPadre)
+                                            {
+                                                case 173:
+                                                case 174:
+                                                case 175:
+                                                case 176: //Respuesta Abierta larga 2
+                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                                case 177:
+                                                    foreach (var item177 in RespuestasId177)
+                                                    {
+                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 178:
+                                                    foreach (var item178 in RespuestasId178)
+                                                    {
+                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                    foreach (var item179 in RespuestasId179)
+                                                    {
+                                                        var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 180:
+                                                    foreach (var item180 in RespuestasId180)
+                                                    {
+                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 181:
+                                                    foreach (var item181 in RespuestasId181)
+                                                    {
+                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 182:
+                                                    foreach (var item182 in RespuestasId182)
+                                                    {
+                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 183:
+                                                    foreach (var item183 in RespuestasId183)
+                                                    {
+                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 184:
+                                                    foreach (var item184 in RespuestasId184)
+                                                    {
+                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 185:
+                                                    foreach (var item185 in RespuestasId185)
+                                                    {
+                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+
+                                            }
+                                        }
+                                        break;
+                                    case 16:
+                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                        {
+                                            switch (obj.TipoControl.IdTipoControl)
+                                            {
+                                                case 4:
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+
+                                                case 12:
+                                                    foreach (var item12 in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:
+                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                            }
+                                        }
+                                        else// Pregunta existente
+                                        {
+                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                            {
+                                                foreach (var item86 in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                            }
+                                            switch (obj.IdPreguntaPadre)
+                                            {
+                                                case 173:
+                                                case 174:
+                                                case 175:
+                                                case 176: //Respuesta Abierta larga 2
+                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                                case 177:
+                                                    foreach (var item177 in RespuestasId177)
+                                                    {
+                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 178:
+                                                    foreach (var item178 in RespuestasId178)
+                                                    {
+                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                    foreach (var item179 in RespuestasId179)
+                                                    {
+                                                        var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 180:
+                                                    foreach (var item180 in RespuestasId180)
+                                                    {
+                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 181:
+                                                    foreach (var item181 in RespuestasId181)
+                                                    {
+                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 182:
+                                                    foreach (var item182 in RespuestasId182)
+                                                    {
+                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 183:
+                                                    foreach (var item183 in RespuestasId183)
+                                                    {
+                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 184:
+                                                    foreach (var item184 in RespuestasId184)
+                                                    {
+                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 185:
+                                                    foreach (var item185 in RespuestasId185)
+                                                    {
+                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+
+                                            }
+                                        }
+                                        break;
+                                    case 17:
+                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                        {
+                                            switch (obj.TipoControl.IdTipoControl)
+                                            {
+                                                case 4://casilla de Verificacion foreach
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 12:// Likert  foreach
+                                                    foreach (var item12 in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:// Lista desplegable  foreach
+                                                    if (obj.NewAnswer != null)
+                                                    {
+                                                        if (obj.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5 in obj.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:// Respuesta Larga unico
+                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                            }
+
+                                        }
+                                        else//pregunta existente
+                                        {
+                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                            {
+                                                foreach (var item86 in RespuestasLikert)
+                                                {
+                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                }
+                                            }
+                                            switch (obj.IdPreguntaPadre)
+                                            {
+                                                case 173:
+                                                case 174:
+                                                case 175:
+                                                case 176: //Respuesta Abierta larga 2
+                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    break;
+                                                case 177:
+                                                    foreach (var item177 in RespuestasId177)
+                                                    {
+                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 178:
+                                                    foreach (var item178 in RespuestasId178)
+                                                    {
+                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                    foreach (var item179 in RespuestasId179)
+                                                    {
+                                                        var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 180:
+                                                    foreach (var item180 in RespuestasId180)
+                                                    {
+                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 181:
+                                                    foreach (var item181 in RespuestasId181)
+                                                    {
+                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 182:
+                                                    foreach (var item182 in RespuestasId182)
+                                                    {
+                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 183:
+                                                    foreach (var item183 in RespuestasId183)
+                                                    {
+                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 184:
+                                                    foreach (var item184 in RespuestasId184)
+                                                    {
+                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 185:
+                                                    foreach (var item185 in RespuestasId185)
+                                                    {
+                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+
+                                            }
+
+                                        }
+                                        break;
+                                        //default:
+                                        //    if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                        //    {
+
+                                        //    }
+                                        //    else
+                                        //    {
+
+                                        //    }
+                                        //    break;
+                                }
+
+                                //-------------------------------------------------------------------///
+                                //-------------------------------------------------------------------///
+                                /// Se termina el alta de respuestas
+                                /// se valido el tipo de respuestas y se insertan las repuestas por default
+                                /// CAMOS  24/06/2021
+
                             }
                             //SI tiene Categorias la pregunta se insertan
-                            if (obj.NewCat != null)
-                            {
-                                foreach (ML.Categoria cat in obj.NewCat)
-                                {
-                                    var queryAddCat = context.Database.ExecuteSqlCommand("INSERT INTO PreguntaCategorias (IdPregunta,IdEncuesta,IdCategoria,Valoracion,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) VALUES ({0},{1},{2},{3},{4},{5},{6},{7})",
-                                        idPreguntaEE,idEncuesta,cat.IdCategoria,cat.Valoracion,1,DateTime.Now,usuarioCreacion.ToString(),"Alta de Categorias");
-                                    
-                                }
-                            }
-                        }
+                            /// --------------------------------------------------------------------------
+                            /// 24/06/2021 Se quita la insercion de categorias porque entran las tablas de configuracion
+                            /// ya no se necesita
+                            /// CAMOS ---------
+                            //if (obj.NewCat != null)
+                            //{
+                            //    foreach (ML.Categoria cat in obj.NewCat)
+                            //    {
+                            //        var queryAddCat = context.Database.ExecuteSqlCommand("INSERT INTO PreguntaCategorias (IdPregunta,IdEncuesta,IdCategoria,Valoracion,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) VALUES ({0},{1},{2},{3},{4},{5},{6},{7})",
+                            //            idPreguntaEE,idEncuesta,cat.IdCategoria,cat.Valoracion,1,DateTime.Now,usuarioCreacion.ToString(),"Alta de Categorias");
+
+                            //    }
+                            //}
+
+                            //-------------------------------------------------//
+                            /// Las preguntas con IdPadre >= 190 se inserta respuesta agregadas
+                            /// 24/06/2021
+                            /// CAMOS   
+                            /// Se comenta porque se crea el componente de respuestas, que valida si es pregunta existente o pregunta nueva
+                            /// camos  24/06/2021 171500
+                            //if (obj.NewAnswer != null) {
+                            //    if (obj.NewAnswer.Count > 0)
+                            //    {
+                            //        foreach (var itemR in obj.NewAnswer)
+                            //        {
+                            //            var queriAddNewAnswer = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                            //           "VALUES ({0},{1},{2},{3},{4},{5})", itemR.Respuesta, idPreguntaEE, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                            //        }
+                            //    }
+                            //}
+                        }//cierra el ciclo de Preguntas
                         result.Correct = true;
                         result.idEncuestaAlta = idEncuesta;
                         context.SaveChanges();
@@ -4702,7 +5906,7 @@ namespace BL
                         result.ErrorMessage = aE.Message.ToString();
                         result.Correct = false;
                         transaction.Rollback();
-                    }                   
+                    }
                     return result;
                 }
             }
@@ -4784,7 +5988,7 @@ namespace BL
                     {
                         result.Correct = false;
                         result.ErrorMessage = aE.Message.ToString();
-                        transaction.Rollback();                        
+                        transaction.Rollback();
                     }
                 }
 
@@ -4799,7 +6003,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities contex = new DL.RH_DesEntities())
                 {
-                    var query = contex.Encuesta.SqlQuery("SELECT * FROM Encuesta where IdEncuesta = {0}",idEncuesta).ToList();
+                    var query = contex.Encuesta.SqlQuery("SELECT * FROM Encuesta where IdEncuesta = {0}", idEncuesta).ToList();
                     if (query != null)
                     {
                         foreach (var item in query)
@@ -4811,11 +6015,11 @@ namespace BL
             }
             catch (Exception aE)
             {
-                return idtipoEncuesta;                
+                return idtipoEncuesta;
             }
             return idtipoEncuesta;
         }
-        public static Result getEncuestaByIdEditClimaL(int idEncuesta ,string idUsuarioAdmin)
+        public static Result getEncuestaByIdEditClimaL(int idEncuesta, string idUsuarioAdmin)
         {
             ML.Result result = new ML.Result();
             try
@@ -4833,27 +6037,18 @@ namespace BL
                         foreach (var obj in query)
                         {
                             ML.Encuesta encuesta = new ML.Encuesta();
-                            var resulListEmpresa = BL.Company.GetAllCompany();
-                            //var resulListTipoDeEmpresa = BL.TipoEncuesta.getAllTipoEncuesta();
-                            //var listadoPlantillas = BL.Plantillas.getPlantillas(1);
-                            //var listadoBaseDeDatos = BL.BasesDeDatos.getBaseDeDatosAll();
-                            //var listadoBaseDeDatosAnonima = BL.BasesDeDatos.getBaseDeDatosAnonima();
-                            //var listadoEnfoquePregunta = BL.Preguntas.getEnfoquePregunta();
+                            //var resulListEmpresa = BL.Company.GetAllCompany();
                             var listadoCompetenciaPreguntas = BL.Competencia.getCompetencias(idUsuarioAdmin);
-                           // var listadoTipoControl = BL.TipoControl.getTipoControl();
                             var listadoTipoOrden = BL.TipoOrden.getAllTipoOrden();
+                            var listaEditCompetencia = BL.Competencia.getcompetenciasConPreguntaCLEdit(idUsuarioAdmin, idEncuesta).ListCompetenciasEdit;
                             encuesta.ListTipoOrden = listadoTipoOrden.ListTipoOrden;
                             encuesta.IdEncuesta = obj.IdEncuesta;
                             //Periodos
                             var exists = contex.ConfigClimaLab.SqlQuery("SELECT * FROM CONFIGCLIMALAB WHERE IDENCUESTA = {0} AND IDBASEDEDATOS = {1}", obj.IdEncuesta, obj.IdBasesDeDatos).ToList();
                             encuesta.Instrucciones1 = exists.Count == 0 ? DateTime.Now.Year.ToString() : exists[0].PeriodoAplicacion.ToString();
-                            //encuesta.ListTipoEncuesta = resulListTipoDeEmpresa.ListadoTipoEncuesta;
-                            encuesta.ListEmpresas = resulListEmpresa.Objects;
-                            //encuesta.ListPlantillas = listadoPlantillas.ListadoDePlantillasPredefinidas;
-                            encuesta.ListDataBase = BasesDeDatos.GetBDClima().Objetos;//listadoBaseDeDatosAnonima.ListadoDeBaseDeDatos;
-                            //encuesta.ListEnfoquePregunta = listadoEnfoquePregunta.ListadoEnfoquesPregunta;
+                            //encuesta.ListEmpresas = resulListEmpresa.Objects;                            
+                            encuesta.ListDataBase = BasesDeDatos.GetBDClima().Objetos;
                             encuesta.ListCompetencias = listadoCompetenciaPreguntas.ListadoCompetenciasPregunta;
-                            //encuesta.ListTipoControl = listadoTipoControl.ListadoTipoControl;
                             encuesta.IdEncuesta = obj.IdEncuesta;
                             encuesta.IdEmpresa = obj.IdEmpresa;
                             encuesta.Agradecimiento = obj.Agradecimiento;
@@ -4880,11 +6075,16 @@ namespace BL
                             encuesta.TipoEstatus.IdEstatus = obj.IdEstatus;
                             encuesta.UsuarioCreacion = obj.UsuarioCreacion;
                             //Preguntas
-                            encuesta.NewCuestionEdit = BL.Preguntas.getAllPreguntasByIdEncuestaEdit(obj.IdEncuesta,idUsuarioAdmin);
-                            //encuesta.NewCuestion = BL.Preguntas.getAllPreguntasByIdEncuesta(obj.IdEncuesta);
+                            encuesta.NewCuestionEdit = BL.Preguntas.getAllPreguntasByIdEncuestaEdit(obj.IdEncuesta, idUsuarioAdmin);
                             //Base de datos
                             encuesta.BasesDeDatos = new ML.BasesDeDatos();
                             encuesta.BasesDeDatos.IdBaseDeDatos = obj.IdBasesDeDatos;
+                            //Competencia por encuesta
+                            encuesta.ListaEditCompetencia = listaEditCompetencia;
+                            encuesta.ListCategorias = BL.Categoria.getAllCategorias(idUsuarioAdmin).EditaEncuesta.ListCategorias;
+                            //Tipo de control
+                            var listadoTipoControl = BL.TipoControl.getTipoControlCL();
+                            encuesta.ListTipoControl = listadoTipoControl.ListadoTipoControl;
                             result.EditaEncuesta = encuesta;
                             result.Correct = true;
                         }
@@ -4907,7 +6107,7 @@ namespace BL
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
                 context.Database.Log = Console.Write;
-                using (var transaction = context.Database.BeginTransaction())
+                using (var transaction = context.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
                     try
                     {
@@ -4953,36 +6153,36 @@ namespace BL
                         updateEncuesta.Nombre = Encuesta.Nombre.ToString();
                         updateEncuesta.FechaInicio = Encuesta.FechaInicio;
                         updateEncuesta.FechaFin = Encuesta.FechaFin;
-                        updateEncuesta.Estatus = Encuesta.Estatus;
-                        updateEncuesta.DosColumnas = Encuesta.DosColumnas;
+                       // updateEncuesta.Estatus = Encuesta.Estatus;
+                        //updateEncuesta.DosColumnas = Encuesta.DosColumnas;
                         updateEncuesta.IdEstatus = 1;
                         updateEncuesta.FechaHoraModificacion = DateTime.Now;
                         updateEncuesta.UsuarioModificacion = UsuarioModificacion;
                         updateEncuesta.ProgramaModificacion = ProgramaModificacion;
-                        updateEncuesta.CodeHTML = Encuesta.CodeHTML;                        
+                        updateEncuesta.CodeHTML = Encuesta.CodeHTML;
                         updateEncuesta.IdBasesDeDatos = Encuesta.BasesDeDatos.IdBaseDeDatos;
                         updateEncuesta.Descripcion = Encuesta.Descripcion;
-                        updateEncuesta.Instruccion = Encuesta.Instruccion;                        
-                        updateEncuesta.ImagenInstruccion = Encuesta.ImagenInstruccion;                        
+                        updateEncuesta.Instruccion = Encuesta.Instruccion;
+                        updateEncuesta.ImagenInstruccion = Encuesta.ImagenInstruccion;
                         updateEncuesta.IdEmpresa = Encuesta.IdEmpresa;
                         updateEncuesta.Agradecimiento = Encuesta.Agradecimiento;
                         updateEncuesta.ImagenAgradecimiento = Encuesta.ImagenAgradecimiento;
                         context.SaveChanges();
 
                         //Edita Periodos  -- [ConfigClimaLab] --
-                        var idPeriodoOriginal = (from a in context.ConfigClimaLab where  a.IdEncuesta == Encuesta.IdEncuesta select (int)a.IdBaseDeDatos).FirstOrDefault();
+                        var idPeriodoOriginal = (from a in context.ConfigClimaLab where a.IdEncuesta == Encuesta.IdEncuesta select (int)a.IdBaseDeDatos).FirstOrDefault();
                         if (Encuesta.BasesDeDatos.IdBaseDeDatos != idPeriodoOriginal)
                         {
                             //Remove Config Clima
-                            var removePeriodo = context.Database.ExecuteSqlCommand("DELETE FROM ConfigClimaLab WHERE IdEncuesta = {0}",Encuesta.IdEncuesta);
+                            var removePeriodo = context.Database.ExecuteSqlCommand("DELETE FROM ConfigClimaLab WHERE IdEncuesta = {0}", Encuesta.IdEncuesta);
                             context.SaveChanges();
                             //Add Config Clima
                             var getNewPeriodo = context.ConfigClimaLab.SqlQuery("INSERT INTO ConfigClimaLab (IdEncuesta,IdBaseDeDatos,FechaInicio,FechaFin,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,PeriodoAplicacion) VALUES ({0},{1},{2},{3},{4},{5},{6},{7})",
-                                Encuesta.IdEncuesta,Encuesta.BasesDeDatos.IdBaseDeDatos,Encuesta.FechaInicio,Encuesta.FechaFin,DateTime.Now, UsuarioModificacion, "Edita Clima Laboral", Encuesta.Instrucciones1);
+                                Encuesta.IdEncuesta, Encuesta.BasesDeDatos.IdBaseDeDatos, Encuesta.FechaInicio, Encuesta.FechaFin, DateTime.Now, UsuarioModificacion, "Edita Clima Laboral", Encuesta.Instrucciones1);
                             context.SaveChanges();
                         }
                         else
-                        { 
+                        {
                             DL.ConfigClimaLab updatePeriodo = context.ConfigClimaLab.FirstOrDefault(x => x.IdEncuesta == Encuesta.IdEncuesta && x.IdBaseDeDatos == idBaseDeDatos);
                             updatePeriodo.FechaInicio = Encuesta.FechaInicio;
                             updatePeriodo.FechaFin = Encuesta.FechaFin;
@@ -4992,41 +6192,382 @@ namespace BL
                             updatePeriodo.PeriodoAplicacion = Convert.ToInt32(Encuesta.Instrucciones1);
                             context.SaveChanges();
                         }
+                        
+                        ///Edicion y/o Alta de configuracion Encuesta clima Subcategorias por Categoria ------- Table ------------ [ValoracionSubcategoriaPorCategoria] 220621
+                        if (Encuesta.NewVSCPC != null)
+                        {
+                            if (Encuesta.NewVSCPC.Count > 0)
+                            {
+                                //Se desactivan todos los registros a estatus 3
+                                var bajaVSCPC = context.Database.ExecuteSqlCommand("UPDATE ValoracionSubcategoriaPorCategoria SET IdEstatus = 3 WHERE IdEncuesta = {0}", Encuesta.IdEncuesta);
+                                context.SaveChanges();
+
+                                foreach (ML.ValoracionSubcategoriaPorCategoria item in Encuesta.NewVSCPC)
+                                {  
+                                    //consultamos uno por uno si existe de lo contrario se inserta                                    
+                                    if (item.IdValoracionSubcategoriaPorCategoria != 0)
+                                    {
+                                        var existeVSCPC = context.ValoracionSubcategoriaPorCategoria.FirstOrDefault(o => o.IdEncuesta == Encuesta.IdEncuesta && o.IdValoracionSubcategoriaPorCategoria == item.IdValoracionSubcategoriaPorCategoria);
+                                        existeVSCPC.IdEstatus = 1;
+                                        existeVSCPC.IdCategoria = item.IdCategoria;
+                                        existeVSCPC.IdSubcategoria = item.IdSubcategoria;
+                                        existeVSCPC.Valor = item.Valor;
+                                        existeVSCPC.UsuarioModificacion = UsuarioModificacion;
+                                        existeVSCPC.ProgramaModificacion = ProgramaModificacion;
+                                        existeVSCPC.FechaHoraModificacion = DateTime.Now;
+                                        context.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        var queryAddVSCPC = context.Database.ExecuteSqlCommand("INSERT INTO ValoracionSubcategoriaPorCategoria (IdEncuesta,IdCategoria,IdSubcategoria,Valor,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdEstatus) " +
+                                       "VALUES ({0},{1},{2},{3},{4},{5},{6},{7})", Encuesta.IdEncuesta, item.IdCategoria, item.IdSubcategoria, item.Valor, DateTime.Now, UsuarioModificacion, ProgramaModificacion, 1);
+                                    }
+                                   
+
+                                }
+
+                            }
+                        }
+                        ///Se dan de baja los valores de preguntas por subcategorias
+                        var bajaVPPC = context.Database.ExecuteSqlCommand("UPDATE ValoracionPreguntaPorSubcategoria SET IdEstatus = 3 WHERE IdEncuesta = {0}", Encuesta.IdEncuesta);
+                        context.SaveChanges();
 
                         //Edita Pregunta                       
                         if (Encuesta.NewCuestion != null)
-                        {
+                        {                            
                             foreach (var item in Encuesta.NewCuestion)
                             {
-                                DL.Preguntas updatePregunta = context.Preguntas.FirstOrDefault(x => x.IdPregunta == item.IdPregunta);
-                                updatePregunta.Pregunta = item.Pregunta;
-                                updatePregunta.IdEstatus = 1;
-                                updatePregunta.FechaHoraModificacion = DateTime.Now;
-                                updatePregunta.UsuarioModificacion = UsuarioModificacion;
-                                updatePregunta.ProgramaModificacion = ProgramaModificacion;
-                                updatePregunta.Valoracion = item.Valoracion;
-                                updatePregunta.Obligatoria = item.Obligatoria;
-                                context.SaveChanges();
-                                //Respuesta Update
-                                if (item.Competencia.IdCompetencia <= 12)
+                                var idTipoControl = 0;
+                                if (item.IdPregunta != 0)//Si cuenta con IdPregunta se edita de lo contrario, se agrega
                                 {
-                                    int idpadreEA = item.IdPreguntaPadre + 86;
-                                    DL.Preguntas updatePreguntaEA = context.Preguntas.FirstOrDefault(x => x.idEncuesta == Encuesta.IdEncuesta && x.IdPreguntaPadre == idpadreEA);
-                                    updatePreguntaEA.Pregunta = item.Pregunta;
-                                    updatePreguntaEA.IdEstatus = 1;
-                                    updatePreguntaEA.FechaHoraModificacion = DateTime.Now;
-                                    updatePreguntaEA.UsuarioModificacion = UsuarioModificacion;
-                                    updatePreguntaEA.ProgramaModificacion = ProgramaModificacion;
-                                    updatePreguntaEA.Obligatoria = item.Obligatoria;
+                                    //DL.Preguntas updatePregunta = context.Preguntas.FirstOrDefault(x => x.IdPregunta == item.IdPregunta);
+                                    var existePregunta = context.Preguntas.FirstOrDefault(o => o.idEncuesta == Encuesta.IdEncuesta && o.IdPregunta == item.IdPregunta);
+                                    existePregunta.Pregunta = item.Pregunta;
+                                    existePregunta.IdEstatus = item.Obligatoria == false ? 1 : 2;
+                                    existePregunta.FechaHoraModificacion = DateTime.Now;
+                                    existePregunta.UsuarioModificacion = UsuarioModificacion;
+                                    existePregunta.ProgramaModificacion = ProgramaModificacion;
+                                    existePregunta.Valoracion = item.Valoracion;
+                                    existePregunta.Obligatoria = item.Obligatoria;
                                     context.SaveChanges();
+                                    //Respuesta Update
+                                    if (item.Competencia.IdCompetencia <= 12)// se actualiza el enfoque Area, que es el siguiente id de la pregunta enfoque empresa
+                                    {
+                                        int idpadreEA = item.IdPregunta + 1;
+                                        DL.Preguntas updatePreguntaEA = context.Preguntas.FirstOrDefault(x => x.idEncuesta == Encuesta.IdEncuesta && x.IdPregunta == idpadreEA);
+                                        updatePreguntaEA.Pregunta = item.Pregunta;
+                                        updatePreguntaEA.IdEstatus = item.Obligatoria == false ? 1 : 2;
+                                        updatePreguntaEA.FechaHoraModificacion = DateTime.Now;
+                                        updatePreguntaEA.UsuarioModificacion = UsuarioModificacion;
+                                        updatePreguntaEA.ProgramaModificacion = ProgramaModificacion;
+                                        updatePreguntaEA.Obligatoria = item.Obligatoria;
+                                        context.SaveChanges();
+                                    }
+                                    //Se busca los id de pregunta existente en el listado de NewVPPSC                                    
+                                    var queryValoresConfigPreguntas = from items in Encuesta.NewVPPSC
+                                                                      where items.IdPregunta == item.IdPregunta
+                                                                      select items;
+                                    foreach (var itemvppSC in queryValoresConfigPreguntas)
+                                    {
+                                        if (itemvppSC.IdValoracionPreguntaPorSubcategoria > 0)// se actualiza
+                                        {
+                                            var updateVppsc = context.ValoracionPreguntaPorSubcategoria.Where(o => o.IdValoracionPreguntaPorSubcategoria == itemvppSC.IdValoracionPreguntaPorSubcategoria).FirstOrDefault();
+                                            updateVppsc.IdEstatus = 1;
+                                            updateVppsc.Valor = itemvppSC.Valor;
+                                            updateVppsc.UsuarioModificacion = UsuarioModificacion;
+                                            updateVppsc.FechaHoraModificacion = DateTime.Now;
+                                            updateVppsc.ProgramaModificacion = "Edita Encuesta";
+                                            context.SaveChanges();
+
+                                        }
+                                        else// se inserta
+                                        {
+                                            var insertVppsc = context.Database.ExecuteSqlCommand("INSERT INTO ValoracionPreguntaPorSubcategoria (IdEncuesta,IdSubcategoria,IdPregunta,Valor,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) VALUES "+
+                                                "({0},{1},{2},{3},{4},{5},{6},{7})", Encuesta.IdEncuesta,itemvppSC.IdSubcategoria,item.IdPregunta,itemvppSC.Valor,1,DateTime.Now,UsuarioModificacion,"Edit EncuestaCL");
+                                            context.SaveChanges();
+
+                                        }
+                                    }
+
+                                }
+                                else// se inserta nueva pregunta
+                                {
+                                    idTipoControl = (Int32)item.TipoControl.IdTipoControl;
+                                    //se crean listas de las respuestas 24/06/2021 
+
+                                    List<string> RespuestasId177 = new List<string>(new string[] { "El crecimiento que puedo tener", "Los retos que representa", "Gusto por lo que hago", "El buen ambiente de trabajo", "La estabilidad laboral que tengo", "Mi sueldo y beneficios", "El prestigio de la empresa" });
+                                    List<string> RespuestasId178 = new List<string>(new string[] { "Mayor crecimiento profesional", "Un mayor reto", "Una cultura de trabajo más afín a mi", "Mal liderazgo", "Mal ambiente laboral", "Un mejor sueldo y beneficios", "Nada" });
+                                    List<string> RespuestasId179 = new List<string>(new string[] { "Si", "No" });
+                                    List<string> RespuestasId180 = new List<string>(new string[] { "Menos de 6 meses", "6 meses a 1 año", "1 a 2 años", "3 a 5 años", "6 a 10 años", "Más de 10 años" });
+                                    List<string> RespuestasId181 = new List<string>(new string[] { "23 A 31 Años", "32 A 39 Años", "40 A 55 Años", "56 Años O Más", "18 A 22 Años" });
+                                    List<string> RespuestasId182 = new List<string>(new string[] { "Planta", "Sindicalizado", "Honorarios", "Comisionistas", "Temporal" });
+                                    List<string> RespuestasId183 = new List<string>(new string[] { "Femenino", "Masculino" });
+                                    List<string> RespuestasId184 = new List<string>(new string[] { "Primaria", "Secundaria", "Media Tecnica", "Media Superior", "Universidad Incompleta", "Universidad Completa", "PostGrado" });
+                                    List<string> RespuestasId185 = new List<string>(new string[] { "Administrativo", "Comercial", "Coordinador - Supervisor - Jefe", "Director", "Gerente Departamental", "Gerente General", "Subgerente", "Tecnico - Operativo" });
+                                    List<string> RespuestasLikert = new List<string>(new string[] { "Casi siempre es verdad", "Frecuentemente es verdad", "A veces es falso / A veces es verdad", "Frecuentemente es falso", "Casi siempre es falso" });
+                                    int idPreguntaEA = 0;
+                                    var queryPreguntas = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
+                              "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,IdTipoControl,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion)" +
+                                  " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, item.Pregunta,
+                                  item.Valoracion, item.Competencia.IdCompetencia, item.Obligatoria == false ? 1 : 2, "Enfoque Empresa", item.IdEnfoque, item.Seccion, item.IdPreguntaPadre, idTipoControl, DateTime.Now,
+                                  UsuarioModificacion, "Edita Encuesta");
+                                    //Obtiene maximo de pregunta EE
+                                    int idPreguntaEEAdd = context.Preguntas.Max(q => q.IdPregunta);
+
+                                    var queryValoresConfigPreguntasAdd = from itemsadd in Encuesta.NewVPPSC
+                                                                      where itemsadd.IdPregunta == item.IdPreguntaPadre
+                                                                      select itemsadd;
+                                    //si encuentra el idpadre indica que agregaron a pregunta nueva una configuracion
+                                    foreach (var itemvppSCAdd in queryValoresConfigPreguntasAdd)
+                                    {
+                                        var insertVppscAdd = context.Database.ExecuteSqlCommand("INSERT INTO ValoracionPreguntaPorSubcategoria (IdEncuesta,IdSubcategoria,IdPregunta,Valor,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) VALUES " +
+                                               "({0},{1},{2},{3},{4},{5},{6},{7})", Encuesta.IdEncuesta, itemvppSCAdd.IdSubcategoria, idPreguntaEEAdd, itemvppSCAdd.Valor, 1, DateTime.Now, UsuarioModificacion, "Edit EncuestaCL");
+                                        context.SaveChanges();
+                                    }
+                                    //Tabla Encuesta Pregunta
+                                    var queryEncuestaPreguntaEE = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
+                                        "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
+                                        "VALUES({0},{1},{2},{3},{4})", Encuesta.IdEncuesta, idPreguntaEEAdd, DateTime.Now, UsuarioModificacion, "Edita Encuesta");
+
+                                    if (item.Competencia.IdCompetencia <= 12)
+                                    {
+                                        int idpadreEA = item.IdPreguntaPadre;
+                                        /// Se inserta la pregunta Enfoque Area ///                                    
+                                        var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
+                                            "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
+                                                " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, item.Pregunta,
+                                                item.Valoracion, item.Competencia.IdCompetencia, item.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, item.Seccion, idpadreEA, DateTime.Now,
+                                                UsuarioModificacion, "Edita Encuesta", idTipoControl);
+                                        //Obtiene maximo de pregunta EA
+                                        idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
+                                        //Tabla Encuesta Pregunta EA
+                                        var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
+                                            "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
+                                            "VALUES({0},{1},{2},{3},{4})", Encuesta.IdEncuesta, idPreguntaEA, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                    }
+
+                                    
+
+                                    /// Se agrega el alta de respuestas para Enfoque Empresa  05/07/2021
+                                    /// ----Se combina con el Enfoque Area, segun su IdCompetencia---///
+                                    /// ------------------------------------------------------------///
+                                    switch (item.Competencia.IdCompetencia)
+                                    {
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 4:
+                                        case 5:
+                                        case 6:
+                                        case 7:
+                                        case 8:
+                                        case 9:
+                                        case 10:
+                                        case 11:
+                                        case 12:
+                                            switch (item.TipoControl.IdTipoControl)
+                                            {
+                                                case 4://casilla de Verificacion foreach
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4EE in item.NewAnswer)
+                                                            {
+                                                                if (item.Competencia.IdCompetencia <= 12)
+                                                                {
+                                                                    var queriAddNewAnswer4EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Edita Encuesta");
+                                                                }
+                                                                var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Edita Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 12:// Likert  foreach
+                                                    foreach (var item12EE in RespuestasLikert)
+                                                    {
+                                                        if (item.Competencia.IdCompetencia <= 12)
+                                                        {
+                                                            var queriAddNewAnswer12EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                            "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                        }
+                                                        var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:// Lista desplegable  foreach
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5EE in item.NewAnswer)
+                                                            {
+                                                                if (item.Competencia.IdCompetencia <= 12)
+                                                                {
+                                                                var queriAddNewAnswer5EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                                }
+                                                                var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:// Respuesta Larga unico
+                                                    if (item.Competencia.IdCompetencia <= 12)
+                                                    {
+                                                    var queriAddNewAnswer2EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    }
+                                                    var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    break;
+                                            }
+                                            break;
+                                        case 13:
+                                        case 14:
+                                        case 15:
+                                            switch (item.TipoControl.IdTipoControl)
+                                            {
+                                                case 4:
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4EE in item.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+
+                                                case 12:
+                                                    foreach (var item12EE in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5EE in item.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:
+                                                    var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    break;
+                                            }
+                                            break;
+                                        case 16:
+                                            switch (item.TipoControl.IdTipoControl)
+                                            {
+                                                case 4:
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4EE in item.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+
+                                                case 12:
+                                                    foreach (var item12EE in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5EE in item.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:
+                                                    var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    break;
+                                            }
+                                            break;
+                                        case 17:
+                                            switch (item.TipoControl.IdTipoControl)
+                                            {
+                                                case 4://casilla de Verificacion foreach
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR4EE in item.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 12:// Likert  foreach
+                                                    foreach (var item12EE in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswer12EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12EE, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    }
+                                                    break;
+                                                case 5:// Lista desplegable  foreach
+                                                    if (item.NewAnswer != null)
+                                                    {
+                                                        if (item.NewAnswer.Count > 0)
+                                                        {
+                                                            foreach (var itemR5EE in item.NewAnswer)
+                                                            {
+                                                                var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                case 2:// Respuesta Larga unico
+                                                    var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    break;
+                                            }
+
+
+                                            break;
+                                    }
+
                                 }
 
-                         
+
                             }
-                        }                       
+                        }
                         result.Correct = true;
                         context.SaveChanges();
-                        transaction.Commit();                        
+                        transaction.Commit();
                     }
                     catch (Exception aE)
                     {
@@ -5043,7 +6584,7 @@ namespace BL
             try
             {
                 var list = new List<ML.Preguntas>();
-                using (DL.RH_DesEntities context =new DL.RH_DesEntities())
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var data = context.Preguntas.Where(o => o.idEncuesta == 1 && o.IdEnfoque == 1).ToList();
                     if (data != null)
