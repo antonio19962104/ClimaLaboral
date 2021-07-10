@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Documentación - Encuestas</title>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div ng-app="app" ng-controller="documentacionController as vm" class="container mt-3">
+        <div class="parent">
+            <div class="header-docs">
+                Proyecto: {{ vm.docBL.Assembly.Name }}
+            </div>
+            <div class="child-1">
+                Miebros
+                <div class="child-2">
+                    <div ng-repeat="item in vm.docBL.Members.Member">
+                        <span>Nombre: {{ item.Name }}</span>
+                        <span>Sumary: {{ item.Summary }}</span>
+                        <span>Returns: {{ item.Returns }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table hidden class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Proyecto: {{ vm.docBL.Assembly.Name }}</th>
+                </tr>
+                <tr>
+                    <th>Miembros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in vm.docBL.Members.Member">
+                    <th>
+                        Nombre: {{ item.Name }}
+                    </th>
+                </tr>
+                <tr ng-repeat="item in vm.docBL.Members.Member">
+                    <th>
+                        Sumary: {{ item.Summary }}
+                    </th>
+                </tr>
+                <tr ng-repeat="item in vm.docBL.Members.Member">
+                    <th>
+                        Returns: {{ item.Returns }}
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
+    <script src="~/scripts/AngularJS.js"></script>
+    <script src="~/scripts/documentacion.js"></script>
+    <style>
+        .header-docs{
+            height: 30px;
+            background-color: #808080;
+            font-weight: bold;
+        }
+        .child-2{
+            margin-left: 15px;
+        }
+    </style>
+</body>
+</html>

@@ -24,7 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\SandCastleBL.XML</DocumentationFile>
+    <DocumentationFile>\\10.5.2.101\RHDiagnostics\documentation\BL.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -117,6 +117,7 @@
     <Compile Include="Competencia.cs" />
     <Compile Include="ConfiguraRespuesta.cs" />
     <Compile Include="Departamento.cs" />
+    <Compile Include="Documentacion.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="Empleado.cs" />
     <Compile Include="Empresa.cs" />

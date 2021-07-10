@@ -641,9 +641,9 @@
                                 e.target.style.backgroundColor = "#fff";
                                 if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(e.target.name))
                                     vm.dataRespondidasForm.push(e.target.name);
-                                if (vm.isNullOrEmpty(e.target.value) && vm.dataRespondidasForm.includes(e.target.name))
-                                    vm.dataRespondidasForm.remove(e.target.name);
                             }
+                            if (vm.isNullOrEmpty(e.target.value) && vm.dataRespondidasForm.includes(e.target.name))
+                                vm.dataRespondidasForm.remove(e.target.name);
                         });
 
                         var space = (document.getElementById("div_0_EE").offsetWidth - 130); // restar padding y los 20px de cada radio
