@@ -29,6 +29,8 @@ namespace BL
 
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
+                foreach (var item in docObject.Members.Member)
+                    item.Name = item.Name.Substring(5, item.Name.Length - 5);
                 return docObject;
             }
             catch (Exception aE)
@@ -52,6 +54,8 @@ namespace BL
 
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
+                foreach (var item in docObject.Members.Member)
+                    item.Name = item.Name.Substring(5, item.Name.Length - 5);
                 return docObject;
             }
             catch (Exception aE)
@@ -75,6 +79,8 @@ namespace BL
 
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
+                foreach (var item in docObject.Members.Member)
+                    item.Name = item.Name.Substring(5, item.Name.Length - 5);
                 return docObject;
             }
             catch (Exception aE)
@@ -98,6 +104,8 @@ namespace BL
 
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
+                foreach (var item in docObject.Members.Member)
+                    item.Name = item.Name.Substring(5, item.Name.Length - 5);
                 return docObject;
             }
             catch (Exception aE)

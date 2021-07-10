@@ -15,15 +15,43 @@
     <div ng-app="app" ng-controller="documentacionController as vm" class="container mt-3">
         <div class="parent">
             <div class="header-docs">
-                Proyecto: {{ vm.docBL.Assembly.Name }}
+                <p>Namespace: {{ vm.docBL.Assembly.Name }}</p>
+                <p>Assembly: {{ vm.docBL.Assembly.Name }}.dll</p>
+                <p>Syntax: </p>
+                <div class="mt-2">
+                    C#
+                    public class {{ vm.docBL.Class }}
+                </div>
+                This {{ vm.docBL.Class }} class exposes the following members
             </div>
             <div class="child-1">
-                Miebros
-                <div class="child-2">
-                    <div ng-repeat="item in vm.docBL.Members.Member">
-                        <span>Nombre: {{ item.Name }}</span>
-                        <span>Sumary: {{ item.Summary }}</span>
-                        <span>Returns: {{ item.Returns }}</span>
+                Methods:
+                <div class="child-2 mt-2 ml-3" ng-repeat="item in vm.docBL.Members.Member">
+                    <div style="padding: 5px;" hidden>
+                        <p>Name: {{ item.Name }}</p>
+                        <p>Descriptión: {{ item.Summary }}</p>
+                        <p>Returns: {{ item.Returns }}</p>
+                        <div class="params ml-5" ng-repeat="elem in item.Param">
+                            <span>Parammetro: {{ elem.Name }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in vm.docBL.Members.Member">
+                                    <td><img src="" /></td>
+                                    <td>{{ item.Name }}</td>
+                                    <td>{{ item.Summary }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -62,12 +90,12 @@
     <script src="~/scripts/documentacion.js"></script>
     <style>
         .header-docs{
-            height: 30px;
-            background-color: #808080;
+            height: auto;
+            /*background-color: #808080;*/
             font-weight: bold;
         }
         .child-2{
-            margin-left: 15px;
+            
         }
     </style>
 </body>

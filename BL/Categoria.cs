@@ -312,7 +312,7 @@ namespace BL
 
         }
         /// <summary>
-        /// consulta de SubCategorias por Id de Categoria Padre
+        /// Consulta de SubCategorias por Id de Categoria Padre
         /// </summary>
         /// <param name="idEncuesta"></param>
         /// <param name="idCat"></param>
