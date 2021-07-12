@@ -88,36 +88,25 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#idocs_layout">Bussiness Layer</a>
                         <ul class="nav flex-column">
-                            <li ng-repeat="item in vm.docBL.Members.Member" class="nav-item"><a class="nav-link" href="#">{{ item.Name }}</a></li>
+                            <li ng-repeat="item in vm.docBL.Members.Member" class="nav-item"><a class="nav-link" href="#bl-{{ item.Name }}">{{ item.Name }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#idocs_content">Data Layer</a>
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a class="nav-link" href="#idocs_typography">Typography</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_code">Code</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_table">Table</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_icons">Icons</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_image">Image</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_video">Video</a></li>
+                            <li ng-repeat="item in vm.docDL.Members.Member" class="nav-item"><a class="nav-link" href="#bl-{{ item.Name }}">{{ item.Name }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#idocs_components">Model Layer</a>
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a class="nav-link" href="#idocs_accordion">Accordion</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_tabs">Tabs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_social_icon">Social Icon</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_helper_classes">Helper Classes</a></li>
+                            <li ng-repeat="item in vm.docML.Members.Member" class="nav-item"><a class="nav-link" href="#bl-{{ item.Name }}">{{ item.Name }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#idocs_components">Presentation Layer</a>
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a class="nav-link" href="#idocs_accordion">Accordion</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_tabs">Tabs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_social_icon">Social Icon</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#idocs_helper_classes">Helper Classes</a></li>
+                            <li ng-repeat="item in vm.docPL.Members.Member" class="nav-item"><a class="nav-link" href="#bl-{{ item.Name }}">{{ item.Name }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="#idocs_faq">FAQ</a></li>
