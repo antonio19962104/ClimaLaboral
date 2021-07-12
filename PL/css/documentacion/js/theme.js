@@ -137,7 +137,11 @@ hljs.initHighlightingOnLoad();
 /*------------------------
    tooltips
 -------------------------- */
-$('[data-toggle=\'tooltip\']').tooltip({container: 'body'});
+    try {
+        $('[data-toggle=\'tooltip\']').tooltip({ container: 'body' });
+    } catch (e) {
+        console.log(e);
+    }
 
 
 /*------------------------

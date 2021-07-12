@@ -404,7 +404,7 @@
                                 });
                             }
                             if (vm.empleadoRespuestas[index]._idTipoControl == 4) { // radio
-                                var items = $("body").find("input[type=radio]"); // escluir los divs de los likert EnfE
+                                var items = $("body").find("input[type=radio]"); // excluir los divs de los likert EnfE
                                 items = $(".radio-simple input[type=radio]");
                                 [].forEach.call(items, function (dataR) {
                                     if (dataR.attributes.idPregunta.value == vm.empleadoRespuestas[index]._idPregunta && dataR.name == "pregPerm" && dataR.value == vm.empleadoRespuestas[index]._respuestaEmpleado) {
@@ -572,12 +572,15 @@
                                 });
                             }
                             else {
-                                if (!vm.isNullOrEmpty(e.target.value)) {
+                                if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(e.target.attributes.itemid.value)) {
                                     e.target.parentNode.parentNode.parentNode.style.backgroundColor = "#fff";
+                                    vm.dataRespondidasForm.push(e.target.attributes.itemid.value);
                                 }
                                 else {
                                     e.target.parentNode.parentNode.parentNode.style.backgroundColor = "rgb(255, 221, 221)";
+                                    vm.dataRespondidasForm.remove(e.target.attributes.itemid.value);
                                 }
+                                vm.getProgress();
                             }
                         });
                         $("input:radio").change(function (e) {
@@ -624,9 +627,11 @@
                             else {
                                 if (!vm.isNullOrEmpty(e.target.value)) {
                                     e.target.parentNode.parentNode.parentNode.style.backgroundColor = "#fff";
+                                    vm.dataRespondidasForm.push(e.target.attributes.itemid.value);
                                 }
                                 else {
                                     e.target.parentNode.parentNode.parentNode.style.backgroundColor = "rgb(255, 221, 221)";
+                                    vm.dataRespondidasForm.remove(e.target.attributes.itemid.value);
                                 }
                             }
                         });

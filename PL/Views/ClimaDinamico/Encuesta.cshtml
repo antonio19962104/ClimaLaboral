@@ -134,7 +134,7 @@
                 <span class="span-competencia">{{ item.Competencia.Nombre }}</span><br class="salto-compe" />
                 <p style="">{{ item.IdPregunta }}.- {{ item.Pregunta }}</p>
                 <div id="" class="col-12 dem" style="display: inline-flex;">
-                    <textarea idPregunta="{{ item.IdPregunta }}" style="width: 100%;" cols="4" name="name="Pregunta-textarea-EE-{{ item.IdPregunta }}""></textarea>
+                    <textarea idPregunta="{{ item.IdPregunta }}" style="width: 100%;" cols="4" name="Pregunta-textarea-EE-{{ item.IdPregunta }}"></textarea>
                 </div>
             </div>
         </div>
@@ -166,8 +166,8 @@
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 EE" style="padding-top: 8px;">
                 <!--<p class="mini-header">Empresa y jefes</p>-->
                 <div id="" class="col-12 dem radio-simple" style="display: inline-flex;">
-                    <input name="pregPerm" idPregunta="{{ item.IdPregunta }}" class="perm" id="rb-si" type="radio" value="Si" /> <p for="rb-si"> Si</p>
-                    <input name="pregPerm" idPregunta="{{ item.IdPregunta }}" style="margin-left: 2rem;" class="perm" id="rb-no" type="radio" value="No" /> <p for="rb-no"> No</p>
+                    <input name="pregPerm" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" class="perm" id="rb-si" type="radio" value="Si" /> <p for="rb-si"> Si</p>
+                    <input name="pregPerm" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" style="margin-left: 2rem;" class="perm" id="rb-no" type="radio" value="No" /> <p for="rb-no"> No</p>
                 </div>
             </div>
         </div>

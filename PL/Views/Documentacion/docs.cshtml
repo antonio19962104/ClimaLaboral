@@ -20,7 +20,7 @@
     <link href="~/css/documentacion/css/stylesheet.css" rel="stylesheet" />
 </head>
 
-<body data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
+<body ng-app="app" data-spy="scroll" data-target=".idocs-navigation" data-offset="125">
     <!-- loading -->
     <div id="loading" class="preloader">
         <div class="lds-ellipsis">
@@ -30,7 +30,7 @@
             <div></div>
         </div>
     </div>
-    <div id="main-wrapper">
+    <div id="main-wrapper" ng-controller="documentacionController as vm">
 
         <!-- Header
         ============================ -->
@@ -88,9 +88,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#idocs_layout">Bussiness Layer</a>
                         <ul class="nav flex-column">
-                            <div ng-repeat="item in vm.docBL.Members.Member">
-                                <li class="nav-item"><a class="nav-link" href="#">{{ item.Name }}</a></li>
-                            </div>
+                            <li ng-repeat="item in vm.docBL.Members.Member" class="nav-item"><a class="nav-link" href="#">{{ item.Name }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
