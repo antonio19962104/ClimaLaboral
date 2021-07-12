@@ -17,9 +17,21 @@
     <script src="~/scripts/AngularJS.js"></script>
     <script src="~/scripts/Clima Dinamico/climaLaboral.js"></script>
     <script>
+        var getParamByUrl = function (key) {
+            try {
+                var url_string = window.location.href;
+                var url = new URL(url_string);
+                var param = url.searchParams.get(key);
+                console.log(param);
+                return param;
+            } catch (aE) {
+                return "";
+            }
+        }
         $(document).ready(function () {
             document.getElementsByClassName("busy")[0].classList.add("loadInvisible");
             document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
+            localStorage.setItem("uid", getParamByUrl("uid"));
         });
     </script>
     <title>@ViewBag.Title - Clima Laboral</title>

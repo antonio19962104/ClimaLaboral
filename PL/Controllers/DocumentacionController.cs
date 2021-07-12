@@ -20,6 +20,14 @@ namespace PL.Controllers
             return View();
         }
         /// <summary>
+        /// Vista de documentacion del proyecto
+        /// </summary>
+        /// <returns>Vista de documentacion</returns>
+        public ActionResult docs()
+        {
+            return View();
+        }
+        /// <summary>
         /// Obtiene un objeto con la documentacion del proyecto
         /// </summary>
         /// <returns>Objeto con la documentacion del proyecto</returns>

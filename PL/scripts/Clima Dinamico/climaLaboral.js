@@ -50,7 +50,7 @@
             vm.objValores.push({ id: 1, value: vm.val1 });
             /* fin variables textos */
             vm.mensaje = "JAMG";
-            vm.ClaveAcceso = "XWIa4otM";
+            vm.ClaveAcceso = "atkSIU3o";
             vm.seccionesEncuesta = [
                 { Id: 1, Name: "Login" },
                 { Id: 2, Name: "Introduccion" },
@@ -635,15 +635,32 @@
                             if (!vm.isNullOrEmpty(e.target.value)) {
                                 e.target.style.backgroundColor = "#fff";
                             }
+                            if (vm.isNullOrEmpty(e.target.value)) {
+                                e.target.style.backgroundColor = "rgb(255, 221, 221)";
+                            }
+                            if (!vm.isNullOrEmpty(e.target.value && !vm.dataRespondidasForm.includes(e.target.name))) {
+                                vm.dataRespondidasForm.push(e.target.name);
+                            }
+                            if (vm.isNullOrEmpty(e.target.value && vm.dataRespondidasForm.includes(e.target.name))) {
+                                vm.dataRespondidasForm.remove(e.target.name);
+                            }
+                            vm.getProgress();
                         });
+
                         $("textarea").change(function (e) {
                             if (!vm.isNullOrEmpty(e.target.value)) {
                                 e.target.style.backgroundColor = "#fff";
-                                if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(e.target.name))
-                                    vm.dataRespondidasForm.push(e.target.name);
                             }
-                            if (vm.isNullOrEmpty(e.target.value) && vm.dataRespondidasForm.includes(e.target.name))
+                            if (vm.isNullOrEmpty(e.target.value)) {
+                                e.target.style.backgroundColor = "rgb(255, 221, 221)";
+                            }
+                            if (!vm.isNullOrEmpty(e.target.value && !vm.dataRespondidasForm.includes(e.target.name))) {
+                                vm.dataRespondidasForm.push(e.target.name);
+                            }
+                            if (vm.isNullOrEmpty(e.target.value && vm.dataRespondidasForm.includes(e.target.name))) {
                                 vm.dataRespondidasForm.remove(e.target.name);
+                            }
+                            vm.getProgress();
                         });
 
                         var space = (document.getElementById("div_0_EE").offsetWidth - 130); // restar padding y los 20px de cada radio
@@ -671,83 +688,78 @@
                 });
             }
 
-            vm.activateSurveySection = function (section) { // 2
+            vm.activateSurveySection = function (section) {
                 try {
-                    vm.seccionesTotales = Math.round(vm.totalSecciones);
-                    var elems = document.getElementsByClassName("mergePreguntas");
-                    switch (vm.listPreguntas[0].IdTipoOrden) {
-                        case 0: // orden por id de pregunta
-                            [].forEach.call(elems, function (item, index) {
-                                if (parseInt(item.attributes.idPreguntaPadre.value) > (section - 1) * 8 && parseInt(item.attributes.idPreguntaPadre.value) <= (section * 8))
-                                    item.style.display = "";
-                                else 
-                                    item.style.display = "none";
-                                vm.totalSecciones = Math.round(vm.totalSecciones);
-                                if (section == vm.totalSecciones - 1 || section == vm.totalSecciones) {
-                                    // sin importar la numeracion mostrar permanencia en section == vm.totalSecciones - 1
-                                    if ((item.attributes.nombreCompetencia.value) == "Permanencia" && section == (vm.totalSecciones - 1))
-                                        item.style.display = "";
-                                    if ((item.attributes.nombreCompetencia.value) != "Permanencia" && section == (vm.totalSecciones - 1))
-                                        item.style.display = "none";
-                                    // sin importar la numeracion mostrar demografico en section == vm.totalSecciones
-                                    if ((item.attributes.nombreCompetencia.value) == "Demografico" && section == (vm.totalSecciones))
-                                        item.style.display = "";
-                                    if ((item.attributes.nombreCompetencia.value) != "Demografico" && section == (vm.totalSecciones))
-                                        item.style.display = "none";
-                                }
-                            });
-                            break;
-                        case 1: // order por competencia, funciona para encuesta completa o para encuesta con solo algunas preguntas
-                            var idCompe = 0;
-                            [].forEach.call(elems, function (item) {
-                                if (item.attributes.idCompetencia.value == 1) {
-                                    if (parseInt(item.attributes.idCompetencia.value) == section)
-                                        item.style.display = "";
-                                    if (parseInt(item.attributes.idCompetencia.value) != section)
-                                        item.style.display = "none";
-                                }
-                                // valida cuando el primer id de competencia inicia en un numero diferente de 1
-                                if (item.attributes.idCompetencia.value > 1) {
-                                    var competenciasEncuesta = Enumerable.From(elems).Distinct(o => o.attributes.idCompetencia.value == 11).ToArray();
-                                    if (parseInt(item.attributes.idCompetencia.value) == competenciasEncuesta[section - 1].attributes.idCompetencia.value)
-                                        item.style.display = "";
-                                    if (parseInt(item.attributes.idCompetencia.value) != competenciasEncuesta[section - 1].attributes.idCompetencia.value)
-                                        item.style.display = "none";
-                                }
-                            });
-                            break;
-                        case 2: // orden por pregunta padre, falta agregar el caso donde el la encuesta tiene solo algunas preguntas
-                            [].forEach.call(elems, function (item, index) {
-                                /*if (elems[0].attributes.idPreguntaPadre.value == 1 && false == true) { // caso base
+                    if (vm.listPreguntas.length > 0) {
+                        vm.seccionesTotales = Math.round(vm.totalSecciones);
+                        var elems = document.getElementsByClassName("mergePreguntas");
+                        switch (vm.listPreguntas[0].IdTipoOrden) {
+                            case 0: // orden por id de pregunta
+                                [].forEach.call(elems, function (item, index) {
                                     if (parseInt(item.attributes.idPreguntaPadre.value) > (section - 1) * 8 && parseInt(item.attributes.idPreguntaPadre.value) <= (section * 8))
                                         item.style.display = "";
                                     else
                                         item.style.display = "none";
-                                }*/
-                                // caso para encuestas con todas o con solo algunas preguntas
-                                if (section < 13) {
+                                    vm.totalSecciones = Math.round(vm.totalSecciones);
+                                    if (section == vm.totalSecciones - 1 || section == vm.totalSecciones) {
+                                        // sin importar la numeracion mostrar permanencia en section == vm.totalSecciones - 1
+                                        if ((item.attributes.nombreCompetencia.value) == "Permanencia" && section == (vm.totalSecciones - 1))
+                                            item.style.display = "";
+                                        if ((item.attributes.nombreCompetencia.value) != "Permanencia" && section == (vm.totalSecciones - 1))
+                                            item.style.display = "none";
+                                        // sin importar la numeracion mostrar demografico en section == vm.totalSecciones
+                                        if ((item.attributes.nombreCompetencia.value) == "Demografico" && section == (vm.totalSecciones))
+                                            item.style.display = "";
+                                        if ((item.attributes.nombreCompetencia.value) != "Demografico" && section == (vm.totalSecciones))
+                                            item.style.display = "none";
+                                    }
+                                });
+                                break;
+                            case 1: // order por competencia, funciona para encuesta completa o para encuesta con solo algunas preguntas
+                                var idCompe = 0;
+                                [].forEach.call(elems, function (item) {
+                                    if (item.attributes.idCompetencia.value == 1) {
+                                        if (parseInt(item.attributes.idCompetencia.value) == section)
+                                            item.style.display = "";
+                                        if (parseInt(item.attributes.idCompetencia.value) != section)
+                                            item.style.display = "none";
+                                    }
+                                    // valida cuando el primer id de competencia inicia en un numero diferente de 1
+                                    if (item.attributes.idCompetencia.value > 1) {
+                                        var competenciasEncuesta = Enumerable.From(elems).Distinct(o => o.attributes.idCompetencia.value).ToArray();
+                                        if (parseInt(item.attributes.idCompetencia.value) == competenciasEncuesta[section - 1].attributes.idCompetencia.value)
+                                            item.style.display = "";
+                                        if (parseInt(item.attributes.idCompetencia.value) != competenciasEncuesta[section - 1].attributes.idCompetencia.value)
+                                            item.style.display = "none";
+                                    }
+                                });
+                                break;
+                            case 2: // orden por pregunta padre, falta agregar el caso donde el la encuesta tiene solo algunas preguntas
+                                [].forEach.call(elems, function (item, index) {
+                                    /*if (elems[0].attributes.idPreguntaPadre.value == 1 && false == true) { // caso base
+                                        if (parseInt(item.attributes.idPreguntaPadre.value) > (section - 1) * 8 && parseInt(item.attributes.idPreguntaPadre.value) <= (section * 8))
+                                            item.style.display = "";
+                                        else
+                                            item.style.display = "none";
+                                    }*/
+                                    // caso para encuestas con todas o con solo algunas preguntas
                                     if (parseInt(item.attributes.idconsecutivo.value) > (section - 1) * 8 && parseInt(item.attributes.idconsecutivo.value) <= (section * 8))
                                         item.style.display = "";
                                     else
                                         item.style.display = "none";
-                                }
-                                
-                                if (item.attributes.idCompetencia.value == 13 && section == (Math.round(vm.totalSecciones) - 1)) // Permanencia
-                                    item.style.display = "";
-                                if (item.attributes.idCompetencia.value == 14 && section == Math.round(vm.totalSecciones)) // Demografico
-                                    item.style.display = "";
-                            });
-                            break;
-                        case 3: // orden personalizado IdOrden
-                            [].forEach.call(elems, function (item, index) {
-                                if (parseInt(item.attributes.idOrden.value) > (section - 1) * 8 && parseInt(item.attributes.idOrden.value) <= (section * 8))
-                                    item.style.display = "";
-                                else
-                                    item.style.display = "none";
-                            });
-                            break;
-                        default:
-                            swal.fire("No se ha podido organizar el contenido de la encuesta", "", "info")
+                                });
+                                break;
+                            case 3: // orden personalizado IdOrden
+                                [].forEach.call(elems, function (item, index) {
+                                    if (parseInt(item.attributes.idconsecutivo.value) > (section - 1) * 8 && parseInt(item.attributes.idconsecutivo.value) <= (section * 8))
+                                        item.style.display = "";
+                                    else
+                                        item.style.display = "none";
+                                });
+                                break;
+                            default:
+                                swal.fire("No se ha podido organizar el contenido de la encuesta", "", "info")
+                        }
                     }
                 } catch (aE) {
                     console.log(aE);
@@ -1054,14 +1066,18 @@
                 }
             }*/
            
+            /*
+             * return true if exist error
+            */
             var messageBoxError = function (response) {
                 try {
                     if (response.status == 200){
                         return false;
                     } else {
                         vm.ocultarLoad();
-                        swal.fire("Ha ocurrido un error", "Status: " + response.status + ". response: " + response.statusText, "error. url: " + response.config.url);
-                        return true;
+                        swal.fire("Ha ocurrido un error", "Status: " + response.status + ". response: " + response.statusText, "error. url: " + response.config.url).then(function () {
+                            return true;
+                        });
                     }
                 } catch (aE) {
                     console.error(aE);

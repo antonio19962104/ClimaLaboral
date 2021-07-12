@@ -29,8 +29,12 @@ namespace BL
 
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
-                foreach (var item in docObject.Members.Member)
+                foreach (var item in docObject.Members.Member) {
                     item.Name = item.Name.Substring(5, item.Name.Length - 5);
+                    item.Class = item.Name.Split('.')[0];
+                    if (item.Name != item.Class)
+                        item.Name = item.Name.Replace(item.Class + ".", "");
+                }
                 return docObject;
             }
             catch (Exception aE)
@@ -55,7 +59,12 @@ namespace BL
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
                 foreach (var item in docObject.Members.Member)
+                {
                     item.Name = item.Name.Substring(5, item.Name.Length - 5);
+                    item.Class = item.Name.Split('.')[0];
+                    if (item.Name != item.Class)
+                        item.Name = item.Name.Replace(item.Class + ".", "");
+                }
                 return docObject;
             }
             catch (Exception aE)
@@ -80,7 +89,12 @@ namespace BL
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
                 foreach (var item in docObject.Members.Member)
+                {
                     item.Name = item.Name.Substring(5, item.Name.Length - 5);
+                    item.Class = item.Name.Split('.')[0];
+                    if (item.Name != item.Class)
+                        item.Name = item.Name.Replace(item.Class + ".", "");
+                }
                 return docObject;
             }
             catch (Exception aE)
@@ -105,7 +119,12 @@ namespace BL
                 Doc docObject = Deserialize<Doc>(xmlInputData); // c# object
                 xmlOutputData = Serialize<Doc>(docObject); // xml object
                 foreach (var item in docObject.Members.Member)
+                {
                     item.Name = item.Name.Substring(5, item.Name.Length - 5);
+                    item.Class = item.Name.Split('.')[0];
+                    if (item.Name != item.Class)
+                        item.Name = item.Name.Replace(item.Class + ".", "");
+                }
                 return docObject;
             }
             catch (Exception aE)
@@ -164,6 +183,7 @@ namespace BL
         [XmlRoot(ElementName = "member")]
         public class Member
         {
+            public string Class { get; set; }
             [XmlElement(ElementName = "summary")]
             public string Summary { get; set; }
 

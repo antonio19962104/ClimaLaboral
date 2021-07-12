@@ -39,6 +39,11 @@
                 vm.docDL = response.data[1];
                 vm.docML = response.data[2];
                 vm.docPL = response.data[3];
+                setTimeout(function () {
+                    $("legend").click(function (e) {
+                        copy(e.target.parentNode.innerText.replace("Copy\n", ""));
+                    });
+                }, 200);
             });
 
             function messageBoxError(s) {

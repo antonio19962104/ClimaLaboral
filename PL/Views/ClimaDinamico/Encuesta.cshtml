@@ -28,7 +28,7 @@
                 document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
             }
         });
-        var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login";
+        var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/uid=" + localStorage.getItem("uid");
         swal.fire("Tu sesión ha expirado, serás redireccionado al login", "", "info").then(function () {
             window.location.href = redirectLogin;
         });
@@ -134,7 +134,7 @@
                 <span class="span-competencia">{{ item.Competencia.Nombre }}</span><br class="salto-compe" />
                 <p style="">{{ item.IdPregunta }}.- {{ item.Pregunta }}</p>
                 <div id="" class="col-12 dem" style="display: inline-flex;">
-                    <textarea idPregunta="{{ item.IdPregunta }}" style="width: 100%;" cols="4" name="name="Pregunta-EE-{{ item.IdPregunta + 1 }}""></textarea>
+                    <textarea idPregunta="{{ item.IdPregunta }}" style="width: 100%;" cols="4" name="name="Pregunta-textarea-EE-{{ item.IdPregunta }}""></textarea>
                 </div>
             </div>
         </div>
@@ -149,7 +149,7 @@
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 EE" style="padding-top: 8px;">
                 <!--<p class="mini-header">Empresa y jefes</p>-->
                 <div id="" class="col-12 dem" style="display: inline-flex;">
-                    <select class="form-control" idPregunta="{{ item.IdPregunta }}">
+                    <select class="form-control" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}">
                         <option value="">-Selecciona-</option>
                         <option ng-repeat="item in vm.preguntas" value="{{ item.IdPregunta }}">{{ item.Pregunta }}</option>
                     </select>

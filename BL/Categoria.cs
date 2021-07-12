@@ -11,6 +11,9 @@ using System.ComponentModel;
 
 namespace BL
 {
+    /// <summary>
+    /// Clase categoria de preguntas
+    /// </summary>
     public class Categoria
     {
         public static ML.Result getAllCategorias(string idUsuarioAdmin)

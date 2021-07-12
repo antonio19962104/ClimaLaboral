@@ -15,38 +15,43 @@
     <div ng-app="app" ng-controller="documentacionController as vm" class="container mt-3">
         <div class="parent">
             <div class="header-docs">
-                <p>Namespace: {{ vm.docBL.Assembly.Name }}</p>
-                <p>Assembly: {{ vm.docBL.Assembly.Name }}.dll</p>
-                <p>Syntax: </p>
-                <div class="mt-2">
-                    C#
-                    public class {{ vm.docBL.Class }}
-                </div>
-                This {{ vm.docBL.Class }} class exposes the following members
+                <label>Namespace: <label style="color: #369191">{{ vm.docBL.Assembly.Name }}</label></label><br />
+                <label>Assembly: <label style="color: #369191">{{ vm.docBL.Assembly.Name }}.dll</label></label><br />
+                <label>Syntax: </label>
             </div>
             <div class="child-1">
-                Methods:
                 <div class="child-2 mt-2 ml-3" ng-repeat="item in vm.docBL.Members.Member">
-                    <div style="padding: 5px;" hidden>
-                        <p>Name: {{ item.Name }}</p>
-                        <p>Descriptión: {{ item.Summary }}</p>
-                        <p>Returns: {{ item.Returns }}</p>
-                        <div class="params ml-5" ng-repeat="elem in item.Param">
-                            <span>Parammetro: {{ elem.Name }}</span>
+                    <!--Vista de documento-->
+                    <div style="padding: 5px;">
+                        <fieldset ng-if="item.Class == item.Name">
+                            <legend>Copy</legend>
+                            <label class="ml-1">public class {{ item.Class }}</label>
+                        </fieldset>
+                        <label ng-if="item.Class == item.Name">Class {{ item.Class }} exposes the following members</label>
+                        <div ng-if="item.Class != item.Name" class="ml-2">
+                            <label>Name: {{ item.Name }}</label>
+                            <label>Descriptión: {{ item.Summary }}</label>
+                            <label>Returns: {{ item.Returns }}</label>
+                            <div class="params ml-5" ng-repeat="elem in item.Param">
+                                <label>Parammetro: {{ elem.Name }}</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-2">
+                    <!--Vista de tabla-->
+                    <div hidden class="mt-2">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Method</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr ng-repeat="item in vm.docBL.Members.Member">
                                     <td><img src="" /></td>
+                                    <td>{{ item.Class }}</td>
                                     <td>{{ item.Name }}</td>
                                     <td>{{ item.Summary }}</td>
                                 </tr>
@@ -56,34 +61,6 @@
                 </div>
             </div>
         </div>
-
-        <table hidden class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Proyecto: {{ vm.docBL.Assembly.Name }}</th>
-                </tr>
-                <tr>
-                    <th>Miembros</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="item in vm.docBL.Members.Member">
-                    <th>
-                        Nombre: {{ item.Name }}
-                    </th>
-                </tr>
-                <tr ng-repeat="item in vm.docBL.Members.Member">
-                    <th>
-                        Sumary: {{ item.Summary }}
-                    </th>
-                </tr>
-                <tr ng-repeat="item in vm.docBL.Members.Member">
-                    <th>
-                        Returns: {{ item.Returns }}
-                    </th>
-                </tr>
-            </tbody>
-        </table>
     </div>
     <script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
     <script src="~/scripts/AngularJS.js"></script>
@@ -96,6 +73,24 @@
         }
         .child-2{
             
+        }
+        fieldset
+        {
+            border: 2px solid #85a285;
+            -moz-border-radius:8px;
+            -webkit-border-radius:8px;	
+            border-radius:8px;	
+        }
+        legend
+        {
+          margin-bottom:0px;
+          margin-left:16px;
+          width: auto;
+          font-size: 1rem!important;
+          cursor: pointer;
+        }
+        legend:hover{
+            color: #369191;
         }
     </style>
 </body>
