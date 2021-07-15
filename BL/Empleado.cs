@@ -80,9 +80,25 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var query = context.EstatusEncuestaSuccessOkOk(estatusEncuesta.Empleado.IdEmpleado, estatusEncuesta.Encuesta.IdEncuesta);
+                    /*
+                     * 05/07/2021
+                     * jamurillo
+                     * Se detectó que hay casos donde el estatus de la encuesta y las respuestas
+                     * no tienen asignado el anio, aqui se hace un ultimo update masivo
+                    */
+                    try
+                    {
+                        var bd = context.Empleado.Where(o => o.IdEmpleado == estatusEncuesta.Empleado.IdEmpleado).FirstOrDefault();
+                        var anio = context.ConfigClimaLab.Where(o => o.IdEncuesta == estatusEncuesta.Encuesta.IdEncuesta && o.IdBaseDeDatos == bd.IdBaseDeDatos).FirstOrDefault();
+                        context.Database.ExecuteSqlCommand("UPDATE EmpleadoRespuestas SET Anio = {0} WHERE IdEmpleado = {1}", anio.PeriodoAplicacion, estatusEncuesta.Empleado.IdEmpleado);
+                        context.Database.ExecuteSqlCommand("UPDATE EstatusEncuesta SET Anio = {0} WHERE IdEmpleado = {1}", anio.PeriodoAplicacion, estatusEncuesta.Empleado.IdEmpleado);
+                    }
+                    catch (Exception Exception)
+                    {
+                        BL.NLogGeneratorFile.logError(Exception, new StackTrace());
+                    }
 
                     context.SaveChanges();
-
                     result.Correct = true;
                 }
             }

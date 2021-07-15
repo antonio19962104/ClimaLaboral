@@ -86,18 +86,11 @@ function GetDashBoard() {
                             '<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">' +
                             '<p class="label-top-graphic-clasificacion">%</p>' +
                             '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
-                                '<div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;"><!--cambia segun entidad-->' +
+                                '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                 '</div>' +
+                                '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
                                 '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
-                                '<div ng-show="item.HC <= 50" class="bar-progress4" style="height: {{ value = (item.HC) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 100 && item.HC > 50" class="bar-progress4" style="height: {{ value = (item.HC/2) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 500 && item.HC > 100" class="bar-progress4" style="height: {{ value = (item.HC/3) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 1000 && item.HC > 500" class="bar-progress4" style="height: {{ value = (item.HC/5) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC > 2000 && item.HC > 1000" class="bar-progress4" style="height: {{ value = (item.HC/7) }}px;">' +
+                                '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                 '</div>' +
                             '</div>' +
                             '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -4670,19 +4663,11 @@ function GetDashBoard() {
                                 '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                                 '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
                                 '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
-                                    '<div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;"><!--cambia segun entidad-->' +
+                                    '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                     '</div>' +
                                     '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
                                     '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
-                                    '<div ng-show="item.HC <= 50" class="bar-progress4" style="height: {{ value = (item.HC) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC <= 100 && item.HC > 50" class="bar-progress4" style="height: {{ value = (item.HC/2) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC <= 500 && item.HC > 100" class="bar-progress4" style="height: {{ value = (item.HC/3) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC <= 1000 && item.HC > 500" class="bar-progress4" style="height: {{ value = (item.HC/5) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC > 2000 && item.HC > 1000" class="bar-progress4" style="height: {{ value = (item.HC/7) }}px;">' +
+                                    '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                     '</div>' +
                                 '</div>' +
                                 '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -4690,6 +4675,8 @@ function GetDashBoard() {
                         '</div>';
                     htmlContent += initialDivForEmpresa;
                     for (var i = 0; i < array.length; i++) {
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("item.Porcentaje", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
@@ -4981,9 +4968,13 @@ function GetDashBoard() {
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                    vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
-                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
-                                                    });
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
                                                     vm.cuerpoContenidoHtml = "";
                                                 }
                                             }
@@ -5076,9 +5067,13 @@ function GetDashBoard() {
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
-                                                    name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
-                                                });
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
                                                 vm.cuerpoContenidoHtml = "";
                                             }
                                         }
@@ -5249,9 +5244,13 @@ function GetDashBoard() {
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                    vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
-                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
-                                                    });
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
                                                     vm.cuerpoContenidoHtml = "";
                                                 }
                                             }
@@ -5344,9 +5343,13 @@ function GetDashBoard() {
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
-                                                    name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
-                                                });
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
                                                 vm.cuerpoContenidoHtml = "";
                                             }
                                         }
@@ -5439,19 +5442,11 @@ function GetDashBoard() {
                                 '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                                 '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
                                 '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
-                                    '<div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;"><!--cambia segun entidad-->' +
+                                    '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                     '</div>' +
                                     '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
                                     '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
-                                    '<div ng-show="item.HC <= 50" class="bar-progress4" style="height: {{ value = (item.HC) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC <= 100 && item.HC > 50" class="bar-progress4" style="height: {{ value = (item.HC/2) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC <= 500 && item.HC > 100" class="bar-progress4" style="height: {{ value = (item.HC/3) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC <= 1000 && item.HC > 500" class="bar-progress4" style="height: {{ value = (item.HC/5) }}px;">' +
-                                    '</div>' +
-                                    '<div ng-show="item.HC > 2000 && item.HC > 1000" class="bar-progress4" style="height: {{ value = (item.HC/7) }}px;">' +
+                                    '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                     '</div>' +
                                 '</div>' +
                                 '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -5459,6 +5454,8 @@ function GetDashBoard() {
                         '</div>';
                     htmlContent += initialDivForEmpresa;
                     for (var i = 0; i < array.length; i++) {
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("item.Porcentaje", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
@@ -5526,19 +5523,11 @@ function GetDashBoard() {
                             '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                             '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
                             '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
-                                '<div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;"><!--cambia segun entidad-->' +
+                                '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                 '</div>' +
                                 '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
                                 '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
-                                '<div ng-show="item.HC <= 50" class="bar-progress4" style="height: {{ value = (item.HC) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 100 && item.HC > 50" class="bar-progress4" style="height: {{ value = (item.HC/2) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 500 && item.HC > 100" class="bar-progress4" style="height: {{ value = (item.HC/3) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 1000 && item.HC > 500" class="bar-progress4" style="height: {{ value = (item.HC/5) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC > 2000 && item.HC > 1000" class="bar-progress4" style="height: {{ value = (item.HC/7) }}px;">' +
+                                '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                 '</div>' +
                             '</div>' +
                             '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -5546,6 +5535,8 @@ function GetDashBoard() {
                     '</div>';
                     htmlContent += initialDivForEmpresa;
                     for (var i = 0; i < array.length; i++) {
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("item.Porcentaje", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
@@ -5608,19 +5599,11 @@ function GetDashBoard() {
                             '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                             '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
                             '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
-                                '<div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;"><!--cambia segun entidad-->' +
+                                '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                 '</div>' +
                                 '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
                                 '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
-                                '<div ng-show="item.HC <= 50" class="bar-progress4" style="height: {{ value = (item.HC) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 100 && item.HC > 50" class="bar-progress4" style="height: {{ value = (item.HC/2) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 500 && item.HC > 100" class="bar-progress4" style="height: {{ value = (item.HC/3) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC <= 1000 && item.HC > 500" class="bar-progress4" style="height: {{ value = (item.HC/5) }}px;">' +
-                                '</div>' +
-                                '<div ng-show="item.HC > 2000 && item.HC > 1000" class="bar-progress4" style="height: {{ value = (item.HC/7) }}px;">' +
+                                '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                 '</div>' +
                             '</div>' +
                             '<p class="text-graph">{{ item.Entidad }}</p>' +

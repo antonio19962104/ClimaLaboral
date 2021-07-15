@@ -180,16 +180,32 @@
         //
         resizeContent();
         $(document).ready(function () {
+
             if (window.location.href.split("/")[4] == "Login") {
                 localStorage.clear();
             }
         });
         try {
-            document.getElementsByClassName('btn-continuar')[0]
-                .addEventListener('click', function (event) {
-                    var redirectEncuesta = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Encuesta/?aIdusuario=" + localStorage.getItem("idEmpleado") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta");
-                    window.location.href = redirectEncuesta;
-                });
+
+            var esPV = window.location.href.indexOf("IntroduccionPV");
+            if (esPV > 0) {
+                var strIdEncuesta = window.location.href.split("/")[4].split("=")[1];
+                document.getElementsByClassName('btn-continuar')[0]
+                        .addEventListener('click', function (event) {
+                            var redirectEncuesta = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/EncuestaPV/?aIdEncuesta=" + strIdEncuesta;
+                            window.location.href = redirectEncuesta;
+                        });
+            }
+            else { 
+                document.getElementsByClassName('btn-continuar')[0]
+                        .addEventListener('click', function (event) {
+                            var redirectEncuesta = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Encuesta/?aIdusuario=" + localStorage.getItem("idEmpleado") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta");
+                            window.location.href = redirectEncuesta;
+                        });
+            }
+            
+
+
         } catch (aE) {
             console.log(aE);
         }
@@ -202,7 +218,7 @@
             try {
                 document.getElementsByClassName('btn-final')[0]
                     .addEventListener('click', function (event) {
-                        var redirectEncuesta = window.location.href = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login";
+                        var redirectEncuesta = window.location.href = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/?uid=" + localStorage.getItem("uid");
                         window.location.href = redirectEncuesta;
                     });
             } catch (aE) {

@@ -20,20 +20,12 @@
                                             <p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>
                                             <div class="bar-clasificacion">
                                                 <!--cambia segun entidad-->
-                                                <div class="bar-progress-clasificacion" style="height: {{ item.Porcentaje }}px;">
+                                                <div class="bar-progress-clasificacion" style="height: 0px;">
                                                     <!--cambia segun entidad-->
                                                 </div>
                                                 <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 2) }}%</p>
                                                 <p class="label-top-graphic-blue2">{{ item.HC }}</p>
-                                                <div ng-show="item.HC <= 50" class="bar-progress4" style="height: {{ value = (item.HC) }}px;">
-                                                </div>
-                                                <div ng-show="item.HC <= 100 && item.HC > 50" class="bar-progress4" style="height: {{ value = (item.HC/2) }}px;">
-                                                </div>
-                                                <div ng-show="item.HC <= 500 && item.HC > 100" class="bar-progress4" style="height: {{ value = (item.HC/3) }}px;">
-                                                </div>
-                                                <div ng-show="item.HC <= 1000 && item.HC > 500" class="bar-progress4" style="height: {{ value = (item.HC/5) }}px;">
-                                                </div>
-                                                <div ng-show="item.HC > 2000 && item.HC > 1000" class="bar-progress4" style="height: {{ value = (item.HC/7) }}px;">
+                                                <div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">
                                                 </div>
                                             </div>
                                             <p class="text-graph">{{ item.Entidad }}</p>

@@ -28,7 +28,7 @@
                 document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
             }
         });
-        var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/uid=" + localStorage.getItem("uid");
+        var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/?uid=" + localStorage.getItem("uid");
         swal.fire("Tu sesión ha expirado, serás redireccionado al login", "", "info").then(function () {
             window.location.href = redirectLogin;
         });
@@ -37,13 +37,13 @@
     else
     {
     <div class="row main-content-likert" style="padding-bottom: 120px;" ng-init="vm.getPreguntasByEncuesta()">
-        <div class="row col-xl-12" style="margin-right: auto; margin-left: auto; margin-bottom: 4rem" ng-show="vm.surveySection <= vm.totalSecciones - 1">
+        <div class="row col-xl-12" style="margin-right: auto; margin-left: auto; margin-bottom: 4rem" ng-if="vm.existeLikertVisible()">
             <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
                 <p class="instrucciones-likert text-justify">{{ vm.likertInstruccion1 }}</p>
                 <p class="instrucciones-likert text-justify">{{ vm.likertInstruccion2 }}</p>
             </div>-->
             @Html.Raw(Model.htmlCodeInstrucciones)
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" ng-if="vm.existeLikertVisible()">
                 <div class="col-xs-6 col-sm-12 col-md-6 col-lg-6 col-xl-6 header-enfoque text-center header-1">
                     <p class="txt-ea">{{ vm.enfoqueB }}</p>
                     <p class="txt-ee">{{ vm.enfoqueA }}</p>
@@ -53,7 +53,7 @@
                     <p class="txt-ea">{{ vm.enfoqueB }}</p>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 separador-separador offset-lg-8 offset-xl-8 metrica">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 separador-separador offset-lg-8 offset-xl-8 metrica" ng-if="vm.existeLikertVisible()">
                 <div class="likert-values col-xs-12 col-sm-12 col-lg-2 col-xl-2" style="background-color: rgb(241, 90, 36);"><p>{{ vm.val5 }}</p></div>
                 <div class="likert-values col-xs-12 col-sm-12 col-lg-2 col-xl-2" style="background-color: rgb(247, 147, 30);"><p>{{ vm.val4 }}</p></div>
                 <div class="likert-values col-xs-12 col-sm-12 col-lg-2 col-xl-2" style="background-color: #cccc01;"><p>{{ vm.val3 }}</p></div>
@@ -68,7 +68,7 @@
                 <div class="likert-values col-xs-12 col-sm-12 col-lg-2 col-xl-2" style="background-color: rgb(57, 181, 74);"><p>{{ vm.val1 }}</p></div>
             </div>
         </div>
-        <div class="row col-xl-12" style="margin-bottom: 2rem;" ng-show="vm.surveySection == vm.totalSecciones - 1 || vm.surveySection == vm.totalSecciones">
+        <div hidden class="row col-xl-12" style="margin-bottom: 2rem;" ng-if="vm.existeLikertVisible()">
             <p class="instrucciones-likert">{{ vm.likertInstruccion1 }}</p>
         </div>
 
@@ -82,7 +82,7 @@
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 EE" style="padding-top: 8px;">
                 <!--<p class="mini-header">Empresa y jefes</p>-->
                 <div id="div_{{ $index }}_EE" class="col-12 dem" style="display: inline-flex;">
-                    <input ng-repeat="elem in vm.objValores track by $index"
+                    <input ng-repeat="elem in vm.objValores track by $index" customName=""
                            name="Pregunta-EE-{{item.IdPregunta}}"
                            type="radio"
                            class="likert-input-value-{{ elem.id }}"
@@ -111,7 +111,7 @@
                     </label>
                 </div>-->
                 <div id="div_{{ $index }}_EA" class="col-12 dem" style="display: inline-flex;">
-                    <input ng-repeat="elem in vm.objValores track by $index"
+                    <input ng-repeat="elem in vm.objValores track by $index" customName=""
                            name="Pregunta-EA-{{ item.IdPregunta + 1 }}"
                            type="radio"
                            class="likert-input-value-{{ elem.id }}"
@@ -125,8 +125,6 @@
                 </div>
             </div>
         </div>
-
-
         <!--Respuesta larga-->
         <div ng-if="item.IdentificadorTipoControl == 2" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 bg-color mergePreguntas align-middle dataPregunta_{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" tipoOrden="{{ vm.listPreguntas[$index].IdTipoOrden }}" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idOrden="{{ vm.listPreguntas[$index].IdOrden }}" idCompetencia="{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" nombreCompetencia="{{ vm.listPreguntas[$index].Competencia.Nombre }}" idPregunta="{{ item.IdPregunta }}" ng-repeat="item in vm.listPreguntas track by $index" idConsecutivo="{{ $index + 1 }}">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" style="margin-bottom: 8px; padding-top: 5px;">
@@ -138,7 +136,6 @@
                 </div>
             </div>
         </div>
-
         <!--select-->
         <div ng-if="item.IdentificadorTipoControl == 5" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mergePreguntas align-middle dataPregunta_{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" tipoOrden="{{ vm.listPreguntas[$index].IdTipoOrden }}" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idOrden="{{ vm.listPreguntas[$index].IdOrden }}" idCompetencia="{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" nombreCompetencia="{{ vm.listPreguntas[$index].Competencia.Nombre }}" idPregunta="{{ item.IdPregunta }}" ng-repeat="item in vm.listPreguntas track by $index" idConsecutivo="{{ $index + 1 }}">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" style="margin-bottom: 8px; padding-top: 5px;">
@@ -147,11 +144,26 @@
                 {{ item.IdPregunta }}.- {{ item.Pregunta }}
             </div>
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 EE" style="padding-top: 8px;">
-                <!--<p class="mini-header">Empresa y jefes</p>-->
                 <div id="" class="col-12 dem" style="display: inline-flex;">
-                    <select class="form-control" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}">
+                    <!-- select unidad de negocio -->
+                    <select ng-if="item.IdPreguntaPadre == 186" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-unidad-negocio" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
                         <option value="">-Selecciona-</option>
-                        <option ng-repeat="item in vm.preguntas" value="{{ item.IdPregunta }}">{{ item.Pregunta }}</option>
+                    </select>
+                    <!-- select company -->
+                    <select ng-if="item.IdPreguntaPadre == 187" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-company hijos-unidad-negocio" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
+                    </select>
+                    <!-- select area -->
+                    <select ng-if="item.IdPreguntaPadre == 188" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-area hijos-unidad-negocio hijos-company" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
+                    </select>
+                    <!-- select departamento -->
+                    <select ng-if="item.IdPreguntaPadre == 189" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-departamento hijos-unidad-negocio hijos-company hijos-area" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
+                    </select>
+                   <!-- select no dependiente de demografico -->
+                    <select ng-if="item.IdPreguntaPadre != 186 && item.IdPreguntaPadre != 187 && item.IdPreguntaPadre != 188 && item.IdPreguntaPadre != 189" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
                     </select>
                 </div>
             </div>
@@ -159,15 +171,14 @@
         <!--radio-->
         <div ng-if="item.IdentificadorTipoControl == 4" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mergePreguntas align-middle dataPregunta_{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" tipoOrden="{{ vm.listPreguntas[$index].IdTipoOrden }}" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idOrden="{{ vm.listPreguntas[$index].IdOrden }}" idCompetencia="{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" nombreCompetencia="{{ vm.listPreguntas[$index].Competencia.Nombre }}" idPregunta="{{ item.IdPregunta }}" ng-repeat="item in vm.listPreguntas track by $index" ng-class="{'bg-color': $index % 2 != 0}" style="" idConsecutivo="{{ $index + 1 }}">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" style="margin-bottom: 8px; padding-top: 5px;">
-                <!--<p class="mini-header">Empresa y jefes</p><p class="mini-header">Área y jefe directo</p>-->
                 <span class="span-competencia">{{ item.Competencia.Nombre }}</span><br class="salto-compe" />
                 {{ item.IdPregunta }}.- {{ item.Pregunta }}
             </div>
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 EE" style="padding-top: 8px;">
-                <!--<p class="mini-header">Empresa y jefes</p>-->
-                <div id="" class="col-12 dem radio-simple" style="display: inline-flex;">
-                    <input name="pregPerm" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" class="perm" id="rb-si" type="radio" value="Si" /> <p for="rb-si"> Si</p>
-                    <input name="pregPerm" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" style="margin-left: 2rem;" class="perm" id="rb-no" type="radio" value="No" /> <p for="rb-no"> No</p>
+                <div id="merge-rb-{{ item.IdPregunta }}" class="col-12 dem radio-simple" style="display: inline-flex;">
+                    {{ vm.getContentRadioButton(item.IdPregunta) }}
+                    @*<input name="preg-rb-{{ item.IdPregunta }}" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" class="perm" id="rb-si" type="radio" value="Si" /> <p for="rb-si"> Si</p>
+                    <input name="preg-rb-{{ item.IdPregunta }}" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" style="margin-left: 2rem;" class="perm" id="rb-no" type="radio" value="No" /> <p for="rb-no"> No</p>*@
                 </div>
             </div>
         </div>
@@ -196,6 +207,199 @@
         <!--botones-->
     </div>
         <script>
+            function selectExistValue(id, value) {
+                var options = document.getElementById(id).options;
+                var exist = false;
+                [].forEach.call(options, function (elem) {
+                    if (parseInt(elem.value) == value)
+                        exist = true;
+                });
+                return exist;
+            }
+            var list = [186,187,188,189];
+            function getRespuestas(e) {
+                $(".select-unidad-negocio").change(function () {
+                    $(".hijos-unidad-negocio").find('option').remove();
+                    $(".hijos-unidad-negocio").append("<option value=''>-Selecciona-</option>");
+                });
+                $(".select-company").change(function () {
+                    $(".hijos-company").find('option').remove();
+                    $(".hijos-company").append("<option value=''>-Selecciona-</option>");
+                });
+                $(".select-area").change(function () {
+                    $(".hijos-area").find('option').remove();
+                    $(".hijos-area").append("<option value=''>-Selecciona-</option>");
+                });
+                var value = 0;
+                if (e.options.length <= 1) {
+                    document.getElementsByClassName("busy")[0].style.display = "block";
+                    var IdPreguntaPadre = e.attributes.idPreguntaPadre.value;
+                    var select = $("select");
+                    if (IdPreguntaPadre == 186) {
+                        $.ajax({
+                            url: '/ClimaDinamico/GetUnidadesNegocio/?IdPregunta=' + IdPregunta,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Descripcion != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.IdCompanyCategoria + ">"+ elem.Descripcion +"</option>");
+                                    }
+                                    else{
+                                        document.getElementById(e.id).value = elem.IdCompanyCategoria;
+                                        value = elem.IdCompanyCategoria;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                    if (IdPreguntaPadre == 187) {
+                        var elem = Enumerable.From(select).Where(o => o.attributes.idPreguntaPadre.value == 186).FirstOrDefault();
+                        $.ajax({
+                            url: '/ClimaDinamico/GetCompanies/?IdCompanyCategoria=' + elem.value,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.CompanyName != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.CompanyId + ">"+ elem.CompanyName +"</option>");
+                                    }
+                                    else{
+                                        document.getElementById(e.id).value = elem.CompanyId;
+                                        value = elem.CompanyId;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                    if (IdPreguntaPadre == 188) {
+                        var elem = Enumerable.From(select).Where(o => o.attributes.idPreguntaPadre.value == 187).FirstOrDefault();
+                        $.ajax({
+                            url: '/ClimaDinamico/GetAreas/?CompanyId=' + elem.value,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Nombre != "EmpRes") {
+                                        $("#" + e.id).append("<option value=" + elem.IdArea + ">"+ elem.Nombre +"</option>");
+                                    }
+                                    else {
+                                        document.getElementById(e.id).value = elem.IdArea;
+                                        value = elem.IdArea;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                    if (IdPreguntaPadre == 189) {
+                        var elem = Enumerable.From(select).Where(o => o.attributes.idPreguntaPadre.value == 188).FirstOrDefault();
+                        $.ajax({
+                            url: '/ClimaDinamico/GetDepartamentos/?IdArea=' + elem.value,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Nombre != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.IdDepartamento + ">"+ elem.Nombre +"</option>");
+                                    }
+                                    else {
+                                        document.getElementById(e.id).value = elem.IdDepartamento;
+                                        value = elem.IdDepartamento;
+                                    }
+                                    if (response.length == 1) {
+                                        $("#" + e.id).append("<option value='0'>-</option>");
+                                        document.getElementById(e.id).value = 0;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+
+                    if (list.includes(parseInt(IdPreguntaPadre)) == false) {
+                        document.getElementsByClassName("busy")[0].style.display = "block";
+                        var IdPregunta = e.attributes.idpregunta.value;
+                        $.ajax({
+                            url: '/ClimaDinamico/GetRespuestasByIdPregunta/?IdPregunta=' + IdPregunta + "&IdEncuesta=" + localStorage.getItem("idEncuesta"),
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Respuesta != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.IdRespuesta + ">"+ elem.Respuesta +"</option>");
+                                    }
+                                    else { // set respuesta
+                                        document.getElementById(e.id).value = elem.IdRespuesta;
+                                        value = elem.IdRespuesta;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                }
+            }
+            
             function createCSSSelector(selector, style) {
                 if (!document.styleSheets) return;
                 if (document.getElementsByTagName('head').length == 0) return;
@@ -273,48 +477,52 @@
                 });
             }
             $(window).resize(function () {
-                var space = (document.getElementById("div_0_EE").offsetWidth - 130); // restar padding y los 20px de cada radio
-                if (space <= 0) {
-                    space = (document.getElementById("div_8_EE").offsetWidth - 130);
+                try {
+                    var space = (document.getElementById("div_0_EE").offsetWidth - 130); // restar padding y los 20px de cada radio
+                    if (space <= 0) {
+                        space = (document.getElementById("div_8_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_16_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_24_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_32_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_40_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_48_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_56_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_64_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_72_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_80_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_88_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_96_EE").offsetWidth - 130);
+                    }
+                    if (space <= 0) {
+                        space = (document.getElementById("div_104_EE").offsetWidth - 130);
+                    }
+                    space = space / 4; // entre los 4 margin-left
+                    createCSSSelector('label + label', 'margin-left:' + space + "px !important");
+                } catch (e) {
+                    console.log(e);
                 }
-                if (space <= 0) {
-                    space = (document.getElementById("div_16_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_24_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_32_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_40_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_48_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_56_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_64_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_72_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_80_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_88_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_96_EE").offsetWidth - 130);
-                }
-                if (space <= 0) {
-                    space = (document.getElementById("div_104_EE").offsetWidth - 130);
-                }
-                space = space / 4; // entre los 4 margin-left
-                createCSSSelector('label + label', 'margin-left:' + space + "px !important");
             });
         </script>
         <style>

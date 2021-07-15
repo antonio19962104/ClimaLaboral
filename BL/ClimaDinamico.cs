@@ -647,7 +647,6 @@ namespace BL
             }
             return list;
         }
-
         public static ML.ClimaDinamico.statusLogin envioMasivoEmail(ML.ClimaDinamico aClimaDinamico)
         {
             try
@@ -789,7 +788,6 @@ namespace BL
             string result = mensajeOriginal.Remove(Place, Find.Length).Insert(Place, NewValue);
             return result;
         }
-
         public static void UpdateGeneracionEmpleado()
         {
             try
@@ -816,7 +814,12 @@ namespace BL
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
             }
         }
-        public static List<ML.Respuestas> GetRespuestasByIdPregunta(int IdPregunta)
+        /// <summary>
+        /// Obtiene el listado de respuestas para una pregunta
+        /// </summary>
+        /// <param name="IdPregunta"></param>
+        /// <returns>Listado del model de respuestas por Id de pregunta</returns>
+        public static List<ML.Respuestas> GetRespuestasByIdPreguntaRB(int IdPregunta, int IdEncuesta, int IdEmpleado)
         {
             var list = new List<ML.Respuestas>();
             try
@@ -831,6 +834,10 @@ namespace BL
                         ML.Respuestas respuestas = new ML.Respuestas() { IdRespuesta = item.IdRespuesta, Respuesta = item.Respuesta };
                         list.Add(respuestas);
                     }
+                    // consultar si tiene respuesta
+                    var resp = context.EmpleadoRespuestas.Where(o => o.IdPregunta == IdPregunta && o.IdEncuesta == IdEncuesta && o.IdEmpleado == IdEmpleado).FirstOrDefault();
+                    if (resp != null)
+                        list.Add(new ML.Respuestas { IdRespuesta = (int)resp.IdRespuesta, Respuesta = resp.RespuestaEmpleado, UsuarioCreacion = "EmpRes" });
                     return list;
                 }
             }
@@ -840,7 +847,11 @@ namespace BL
                 return new List<ML.Respuestas>();
             }
         }
-
+        /// <summary>
+        /// valida un email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>true si el email es valido o false en el caso contrario</returns>
         public static bool isValidEmail(string email)
         {
             try
@@ -852,6 +863,223 @@ namespace BL
             {
                 return false;
             }
+        }
+        /// <summary>
+        /// Obtiene un listado de respuestas y la respuesta guardada
+        /// </summary>
+        /// <param name="IdPregunta"></param>
+        /// <param name="IdEncuesta"></param>
+        /// <param name="IdEmpleado"></param>
+        /// <returns></returns>
+        public static List<ML.Respuestas> GetRespuestasByIdPregunta(int IdPregunta, int IdEncuesta, int IdEmpleado)
+        {
+            try
+            {
+                var list = new List<ML.Respuestas>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.Respuestas.Where(o => o.Preguntas.IdPregunta == IdPregunta && o.Preguntas.idEncuesta == IdEncuesta && o.IdEstatus == 1).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.Respuestas respuestas = new ML.Respuestas();
+                            respuestas.IdRespuesta = item.IdRespuesta;
+                            respuestas.Respuesta = item.Respuesta;
+                            list.Add(respuestas);
+                        }
+                    }
+                    // consultar si tiene respuesta
+                    var resp = context.EmpleadoRespuestas.Where(o => o.IdPregunta == IdPregunta && o.IdEncuesta == IdEncuesta && o.IdEmpleado == IdEmpleado).FirstOrDefault();
+                    if (resp != null)
+                        list.Add(new ML.Respuestas { IdRespuesta = Convert.ToInt32(resp.RespuestaEmpleado), Respuesta = "EmpRes" });
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.Respuestas>();
+            }
+        }
+        public static List<ML.CompanyCategoria> GetUnidadesNegocio(int IdEmpleado, int IdEncuesta)
+        {
+            try
+            {
+                var list = new List<ML.CompanyCategoria>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.CompanyCategoria.Where(o => o.IdCompanyCategoria != 10).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.CompanyCategoria companyCategoria = new ML.CompanyCategoria();
+                            companyCategoria.IdCompanyCategoria = item.IdCompanyCategoria;
+                            companyCategoria.Descripcion = item.Descripcion;
+                            list.Add(companyCategoria);
+                        }
+                    }
+                    // consultar si tiene respuesta
+                    var Preguntas = context.Preguntas.Where(o => o.idEncuesta == IdEncuesta && o.IdPreguntaPadre == 186).FirstOrDefault();
+                    var resp = context.EmpleadoRespuestas.Where(o => o.IdPregunta == Preguntas.IdPregunta && o.IdEncuesta == IdEncuesta && o.IdEmpleado == IdEmpleado).FirstOrDefault();
+                    if (resp != null)
+                        list.Add(new ML.CompanyCategoria { IdCompanyCategoria = Convert.ToInt32(resp.RespuestaEmpleado), Descripcion = "EmpRes" });
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.CompanyCategoria>();
+            }
+        }
+        public static List<ML.Company> GetCompanies(int IdCompanyCategoria, int IdEmpleado, int IdEncuesta)
+        {
+            try
+            {
+                var list = new List<ML.Company>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.Company.Where(o => o.IdCompanyCategoria == IdCompanyCategoria && o.IdEstatus == 1).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.Company company = new ML.Company();
+                            company.CompanyId = item.CompanyId;
+                            company.CompanyName = item.CompanyName;
+                            list.Add(company);
+                        }
+                    }
+                    // consultar si tiene respuesta
+                    var Preguntas = context.Preguntas.Where(o => o.idEncuesta == IdEncuesta && o.IdPreguntaPadre == 187).FirstOrDefault();
+                    var resp = context.EmpleadoRespuestas.Where(o => o.IdPregunta == Preguntas.IdPregunta && o.IdEncuesta == IdEncuesta && o.IdEmpleado == IdEmpleado).FirstOrDefault();
+                    if (resp != null)
+                        list.Add(new ML.Company { CompanyId = Convert.ToInt32(resp.RespuestaEmpleado), CompanyName = "EmpRes" });
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.Company>();
+            }
+        }
+        public static List<ML.Area> GetArea(int CompanyId, int IdEmpleado, int IdEncuesta)
+        {
+            try
+            {
+                var list = new List<ML.Area>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.Area.Where(o => o.CompanyId == CompanyId && o.IdEstatus == 1).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.Area area = new ML.Area();
+                            area.IdArea = item.IdArea;
+                            area.Nombre = item.Nombre;
+                            list.Add(area);
+                        }
+                    }
+                    // consultar si tiene respuesta
+                    var Preguntas = context.Preguntas.Where(o => o.idEncuesta == IdEncuesta && o.IdPreguntaPadre == 188).FirstOrDefault();
+                    var resp = context.EmpleadoRespuestas.Where(o => o.IdPregunta == Preguntas.IdPregunta && o.IdEncuesta == IdEncuesta && o.IdEmpleado == IdEmpleado).FirstOrDefault();
+                    if (resp != null)
+                        list.Add(new ML.Area { IdArea = Convert.ToInt32(resp.RespuestaEmpleado), Nombre = "EmpRes" });
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.Area>();
+            }
+        }
+        public static List<ML.Departamento> GetDepartamentos(int IdArea, int IdEmpleado, int IdEncuesta)
+        {
+            try
+            {
+                var list = new List<ML.Departamento>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.Departamento.Where(o => o.IdArea == IdArea && o.IdEstatus == 1).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.Departamento departamento = new ML.Departamento();
+                            departamento.IdDepartamento = item.IdDepartamento;
+                            departamento.Nombre = item.Nombre;
+                            list.Add(departamento);
+                        }
+                    }
+                    // consultar si tiene respuesta
+                    var Preguntas = context.Preguntas.Where(o => o.idEncuesta == IdEncuesta && o.IdPreguntaPadre == 189).FirstOrDefault();
+                    var resp = context.EmpleadoRespuestas.Where(o => o.IdPregunta == Preguntas.IdPregunta && o.IdEncuesta == IdEncuesta && o.IdEmpleado == IdEmpleado).FirstOrDefault();
+                    if (resp != null)
+                        list.Add(new ML.Departamento { IdDepartamento = Convert.ToInt32(resp.RespuestaEmpleado), Nombre = "EmpRes" });
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.Departamento>();
+            }
+        }
+        public static List<ML.Subdepartamento> GetSubDepartamentos(int IdDepartamento)
+        {
+            try
+            {
+                var list = new List<ML.Subdepartamento>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.SubDepartamento.Where(o => o.IdDepartamento == IdDepartamento && o.IdEstatus == 1).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            ML.Subdepartamento subdepartamento = new ML.Subdepartamento();
+                            subdepartamento.IdSubdepartamento = item.IdSubdepartamento;
+                            subdepartamento.Nombre = item.Nombre;
+                            list.Add(subdepartamento);
+                        }
+                    }
+                    return list;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<ML.Subdepartamento>();
+            }
+        }
+        public static ML.EmpleadoRespuesta GetRespuesta(int IdPregunta, int IdEmpleado)
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.EmpleadoRespuestas.Where(o => o.IdEmpleado == IdEmpleado && o.IdPregunta == IdPregunta).FirstOrDefault();
+                    if (query != null)
+                    {
+                        ML.EmpleadoRespuesta res = new ML.EmpleadoRespuesta()
+                        {
+                            RespuestaEmpleado = query.RespuestaEmpleado,
+                        };
+                        return res;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new ML.EmpleadoRespuesta();
+            }
+            return new ML.EmpleadoRespuesta();
         }
     }
 }

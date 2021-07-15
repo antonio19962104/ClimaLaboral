@@ -24,7 +24,7 @@
 
                 }
             })
-            var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/uid=" + localStorage.getItem("uid");
+            var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/?uid=" + localStorage.getItem("uid");
             swal.fire("Tu sesión ha expirado, serás redireccionado al login", "", "info").then(function () {
                 window.location.href = redirectLogin;
             });
