@@ -60,7 +60,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 listPreguntas.Add(new ML.Preguntas { IdPregunta = 0 , Pregunta = aE.Message });
                 return listPreguntas;
             }
@@ -126,8 +129,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                nlogClimaDinamico.Error(aE);
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 nlogClimaDinamico.Error("Params: " + aEmpleado.ClavesAcceso.ClaveAcceso);
                 return ML.ClimaDinamico.statusLogin.Exception.ToString();
             }
@@ -168,7 +173,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 nlogClimaDinamico.Error("IdEmpleado: " + aIdEmpleado);
                 nlogClimaDinamico.Error("IdEncuesta: " + aIdEncuesta);
                 list = new List<ML.ClimaDinamico>();
@@ -225,7 +233,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 nlogClimaDinamico.Error("IdEmpleado: " + aListRespuestas[0].Empleado.IdEmpleado);
                 return ML.ClimaDinamico.statusGuardado.error;
             }
@@ -282,8 +293,11 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
-                nlogAutoguardadoClimaDinamico.Error("IdEmpleado: " + aClimaDinamico.Empleado.IdEmpleado);
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
+                nlogClimaDinamico.Error("IdEmpleado: " + aClimaDinamico.Empleado.IdEmpleado);
                 return ML.ClimaDinamico.statusGuardado.error;
             }
         }
@@ -324,7 +338,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 nlogClimaDinamicoRespuestas.Error("IdEmpleado: " + (aIdUsuario == null ? "0" : aIdUsuario));
                 nlogClimaDinamicoRespuestas.Error("IdEncuesta: " + aIdEncuesta == null ? "0" : aIdEncuesta);
                 nlogClimaDinamicoRespuestas.Error("Estatus: " + aStatus == null ? 0 : aStatus);
@@ -392,7 +409,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 nlogClimaDinamicoRespuestas.Error("IdEmpleado: " + aIdUsuario == null ? 0 : aIdUsuario);
                 nlogClimaDinamicoRespuestas.Error("IdEncuesta: " + aIdEncuesta == null ? 0 : aIdEncuesta);
                 nlogClimaDinamicoRespuestas.Error("Estatus: " + aStatus == null ? 0 : aStatus);
@@ -412,7 +432,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new ML.ClimaDinamico() { htmlCodeIntroduccion = "<p style='padding-top: 100px'>Ocurrió un error al generar el contenido</p><p>" + aE.Message + "</p>" };
             }
         }
@@ -429,7 +452,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new ML.ClimaDinamico() { htmlCodeInstrucciones = "<p style='padding-top: 100px'>Ocurrió un error al generar el contenido</p><p>" + aE.Message + "</p>" };
             }
         }
@@ -446,7 +472,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new ML.ClimaDinamico() { htmlAgradecimiento = "<p style='padding-top: 100px'>Ocurrió un error al generar el contenido</p>" };
             }
         }
@@ -473,7 +502,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Antiguedad>();
             }
             return list;
@@ -502,7 +534,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.RangoEdad>();
             }
             return list;
@@ -530,7 +565,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.CondicionTrabajo>();
             }
             return list;
@@ -558,7 +596,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Perfil>();
             }
             return list;
@@ -586,7 +627,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.GradoAcademico>();
             }
             return list;
@@ -613,7 +657,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.CompanyCategoria>();
             }
             return list;
@@ -642,7 +689,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Company>();
             }
             return list;
@@ -778,7 +828,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
             }
             return ML.ClimaDinamico.statusLogin.success;
         }
@@ -811,7 +864,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
             }
         }
         /// <summary>
@@ -843,7 +899,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Respuestas>();
             }
         }
@@ -898,7 +957,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Respuestas>();
             }
         }
@@ -930,7 +992,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.CompanyCategoria>();
             }
         }
@@ -962,7 +1027,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Company>();
             }
         }
@@ -994,7 +1062,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Area>();
             }
         }
@@ -1026,7 +1097,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Departamento>();
             }
         }
@@ -1053,7 +1127,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new List<ML.Subdepartamento>();
             }
         }
@@ -1076,7 +1153,10 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                nlogClimaDinamico.Error("Method: " + new StackTrace().GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
                 return new ML.EmpleadoRespuesta();
             }
             return new ML.EmpleadoRespuesta();

@@ -53,7 +53,7 @@ public static Result getTipoControlCL()
                 using (RH_DesEntities context = new RH_DesEntities())
                 {
                     var IdParametro = 1;
-                    var query = context.TipoControl.SqlQuery("SELECT * FROM TipoControl where IdTipoControl IN (12,4,5) and IdEstatus = {0} ORDER BY NOMBRE", IdParametro);
+                    var query = context.TipoControl.SqlQuery("SELECT * FROM TipoControl where IdTipoControl IN (12,2,4,5) and IdEstatus = {0} ORDER BY NOMBRE", IdParametro);
                     result.ListadoTipoControl = new List<object>();
                     if (query != null)
                     {

@@ -5269,599 +5269,584 @@ namespace BL
 
                             /// Se termina alta de respuestas Enfoque Empresas
                             /// ------------*****************----------------************-------------*************
-
-
-
-
-
-
-
-
-
-
-                            // Se valida el Id de Competencia 
-                            // Si es mayor a 12, ya no se duplican y guarda el enfoque en Null
+                            /// Se valida el Id de Competencia 
+                            /// Si es mayor a 12, ya no se duplican y guarda el enfoque en Null
 
                             if (obj.Competencia.IdCompetencia <= 12)
                             {
-                                //al id padre EE se le suma 86 para obtener el IdPadre de EA
-                                //Se cambia a id padre original por asi convenir al reporte -- Jose 05/06/2021
-                                int idpadreEA = obj.IdPreguntaPadre;//obj.IdPreguntaPadre + 86;
-                                // Se inserta la pregunta Enfoque Area
-                                var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
-                                    "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
-                                        " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, obj.Pregunta,
-                                        obj.Valoracion, obj.Competencia.IdCompetencia, obj.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, obj.Seccion, idpadreEA, DateTime.Now,
-                                        usuarioCreacion, "Alta Encuesta", idTipoControl);
-                                //Obtiene maximo de pregunta EA
-                                int idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
-                                //Tabla Encuesta Pregunta EA
-                                var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
-                                    "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
-                                    "VALUES({0},{1},{2},{3},{4})", idEncuesta, idPreguntaEA, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                //Se omite el insertado de respuestas ya que son fijas
-                                //-------------------------------------------------------------//  
-                                ///***************************// Se decide guardar las respuestas de todas las preguntas 25/06/2021
-                                ///solo Enfoque Area
-                                switch (obj.Competencia.IdCompetencia)
+                                ///Para crear la pregunta de Enfoque Area, es necesario que la respuesta sea de tipo Likert Doble     ///
+                                ///Define Aldo 12/07/2021 104000
+                                if (obj.TipoControl.IdTipoControl == 12)
                                 {
-                                    case 1:
-                                    case 2:
-                                    case 3:
-                                    case 4:
-                                    case 5:
-                                    case 6:
-                                    case 7:
-                                    case 8:
-                                    case 9:
-                                    case 10:
-                                    case 11:
-                                    case 12:
-                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
-                                        {
-                                            switch (obj.TipoControl.IdTipoControl)
+                                    //al id padre EE se le suma 86 para obtener el IdPadre de EA
+                                    //Se cambia a id padre original por asi convenir al reporte -- Jose 05/06/2021
+                                    int idpadreEA = obj.IdPreguntaPadre;//obj.IdPreguntaPadre + 86;
+                                                                        // Se inserta la pregunta Enfoque Area
+                                    var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
+                                        "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
+                                            " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, obj.Pregunta,
+                                            obj.Valoracion, obj.Competencia.IdCompetencia, obj.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, obj.Seccion, idpadreEA, DateTime.Now,
+                                            usuarioCreacion, "Alta Encuesta", idTipoControl);
+                                    //Obtiene maximo de pregunta EA
+                                    int idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
+                                    //Tabla Encuesta Pregunta EA
+                                    var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
+                                        "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
+                                        "VALUES({0},{1},{2},{3},{4})", idEncuesta, idPreguntaEA, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                    ///Se omite el insertado de respuestas ya que son fijas
+                                    ///-------------------------------------------------------------//  
+                                    ///***************************// Se decide guardar las respuestas de todas las preguntas 25/06/2021
+                                    ///solo Enfoque Area
+                                    switch (obj.Competencia.IdCompetencia)
+                                    {
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                        case 4:
+                                        case 5:
+                                        case 6:
+                                        case 7:
+                                        case 8:
+                                        case 9:
+                                        case 10:
+                                        case 11:
+                                        case 12:
+                                            if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
                                             {
-                                                case 4://casilla de Verificacion foreach
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR4 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                case 12:// Likert  foreach
-                                                    foreach (var item12 in RespuestasLikert)
-                                                    {
-                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 5:// Lista desplegable  foreach
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR5 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                case 2:// Respuesta Larga unico
-                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                            }
-                                        }
-                                        else // pregunta existente
-                                        {
-                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
-                                            {
-                                                foreach (var item86 in RespuestasLikert)
+                                                switch (obj.TipoControl.IdTipoControl)
                                                 {
-                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    case 4://casilla de Verificacion foreach
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR4 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 12:// Likert  foreach
+                                                        foreach (var item12 in RespuestasLikert)
+                                                        {
+                                                            var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 5:// Lista desplegable  foreach
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR5 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 2:// Respuesta Larga unico
+                                                        var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
                                                 }
                                             }
-                                            switch (obj.IdPreguntaPadre)
+                                            else // pregunta existente
                                             {
-                                                case 173:
-                                                case 174:
-                                                case 175:
-                                                case 176: //Respuesta Abierta larga 2
-                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                                case 177:
-                                                    foreach (var item177 in RespuestasId177)
-                                                    {
-                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 178:
-                                                    foreach (var item178 in RespuestasId178)
-                                                    {
-                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
-                                                    foreach (var item179 in RespuestasId179)
+                                                if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                                {
+                                                    foreach (var item86 in RespuestasLikert)
                                                     {
                                                         var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
                                                     }
-                                                    break;
-                                                case 180:
-                                                    foreach (var item180 in RespuestasId180)
-                                                    {
-                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 181:
-                                                    foreach (var item181 in RespuestasId181)
-                                                    {
-                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 182:
-                                                    foreach (var item182 in RespuestasId182)
-                                                    {
-                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 183:
-                                                    foreach (var item183 in RespuestasId183)
-                                                    {
-                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 184:
-                                                    foreach (var item184 in RespuestasId184)
-                                                    {
-                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 185:
-                                                    foreach (var item185 in RespuestasId185)
-                                                    {
-                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-
-                                            }
-                                        }
-                                        break;
-                                    case 13:
-                                    case 14:
-                                    case 15:
-                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
-                                        {
-                                            switch (obj.TipoControl.IdTipoControl)
-                                            {
-                                                case 4:
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR4 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-
-                                                case 12:
-                                                    foreach (var item12 in RespuestasLikert)
-                                                    {
-                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 5:
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR5 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                case 2:
-                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                            }
-                                        }
-                                        else// pregunta existente
-                                        {
-                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
-                                            {
-                                                foreach (var item86 in RespuestasLikert)
+                                                }
+                                                switch (obj.IdPreguntaPadre)
                                                 {
-                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    case 173:
+                                                    case 174:
+                                                    case 175:
+                                                    case 176: //Respuesta Abierta larga 2
+                                                        var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
+                                                    case 177:
+                                                        foreach (var item177 in RespuestasId177)
+                                                        {
+                                                            var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 178:
+                                                        foreach (var item178 in RespuestasId178)
+                                                        {
+                                                            var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                        foreach (var item179 in RespuestasId179)
+                                                        {
+                                                            var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 180:
+                                                        foreach (var item180 in RespuestasId180)
+                                                        {
+                                                            var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 181:
+                                                        foreach (var item181 in RespuestasId181)
+                                                        {
+                                                            var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 182:
+                                                        foreach (var item182 in RespuestasId182)
+                                                        {
+                                                            var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 183:
+                                                        foreach (var item183 in RespuestasId183)
+                                                        {
+                                                            var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 184:
+                                                        foreach (var item184 in RespuestasId184)
+                                                        {
+                                                            var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 185:
+                                                        foreach (var item185 in RespuestasId185)
+                                                        {
+                                                            var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+
                                                 }
                                             }
-                                            switch (obj.IdPreguntaPadre)
+                                            break;
+                                        case 13:
+                                        case 14:
+                                        case 15:
+                                            if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
                                             {
-                                                case 173:
-                                                case 174:
-                                                case 175:
-                                                case 176: //Respuesta Abierta larga 2
-                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                                case 177:
-                                                    foreach (var item177 in RespuestasId177)
-                                                    {
-                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 178:
-                                                    foreach (var item178 in RespuestasId178)
-                                                    {
-                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
-                                                    foreach (var item179 in RespuestasId179)
-                                                    {
-                                                        var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 180:
-                                                    foreach (var item180 in RespuestasId180)
-                                                    {
-                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 181:
-                                                    foreach (var item181 in RespuestasId181)
-                                                    {
-                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 182:
-                                                    foreach (var item182 in RespuestasId182)
-                                                    {
-                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 183:
-                                                    foreach (var item183 in RespuestasId183)
-                                                    {
-                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 184:
-                                                    foreach (var item184 in RespuestasId184)
-                                                    {
-                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 185:
-                                                    foreach (var item185 in RespuestasId185)
-                                                    {
-                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-
-                                            }
-                                        }
-                                        break;
-                                    case 16:
-                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
-                                        {
-                                            switch (obj.TipoControl.IdTipoControl)
-                                            {
-                                                case 4:
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR4 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-
-                                                case 12:
-                                                    foreach (var item12 in RespuestasLikert)
-                                                    {
-                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 5:
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR5 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                case 2:
-                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                            }
-                                        }
-                                        else// Pregunta existente
-                                        {
-                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
-                                            {
-                                                foreach (var item86 in RespuestasLikert)
+                                                switch (obj.TipoControl.IdTipoControl)
                                                 {
-                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    case 4:
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR4 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+
+                                                    case 12:
+                                                        foreach (var item12 in RespuestasLikert)
+                                                        {
+                                                            var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR5 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 2:
+                                                        var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
                                                 }
                                             }
-                                            switch (obj.IdPreguntaPadre)
+                                            else// pregunta existente
                                             {
-                                                case 173:
-                                                case 174:
-                                                case 175:
-                                                case 176: //Respuesta Abierta larga 2
-                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                                case 177:
-                                                    foreach (var item177 in RespuestasId177)
-                                                    {
-                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 178:
-                                                    foreach (var item178 in RespuestasId178)
-                                                    {
-                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
-                                                    foreach (var item179 in RespuestasId179)
+                                                if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                                {
+                                                    foreach (var item86 in RespuestasLikert)
                                                     {
                                                         var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
                                                     }
-                                                    break;
-                                                case 180:
-                                                    foreach (var item180 in RespuestasId180)
-                                                    {
-                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 181:
-                                                    foreach (var item181 in RespuestasId181)
-                                                    {
-                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 182:
-                                                    foreach (var item182 in RespuestasId182)
-                                                    {
-                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 183:
-                                                    foreach (var item183 in RespuestasId183)
-                                                    {
-                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 184:
-                                                    foreach (var item184 in RespuestasId184)
-                                                    {
-                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 185:
-                                                    foreach (var item185 in RespuestasId185)
-                                                    {
-                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-
-                                            }
-                                        }
-                                        break;
-                                    case 17:
-                                        if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
-                                        {
-                                            switch (obj.TipoControl.IdTipoControl)
-                                            {
-                                                case 4://casilla de Verificacion foreach
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR4 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                case 12:// Likert  foreach
-                                                    foreach (var item12 in RespuestasLikert)
-                                                    {
-                                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 5:// Lista desplegable  foreach
-                                                    if (obj.NewAnswer != null)
-                                                    {
-                                                        if (obj.NewAnswer.Count > 0)
-                                                        {
-                                                            foreach (var itemR5 in obj.NewAnswer)
-                                                            {
-                                                                var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                            }
-                                                        }
-                                                    }
-                                                    break;
-                                                case 2:// Respuesta Larga unico
-                                                    var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                            }
-
-                                        }
-                                        else//pregunta existente
-                                        {
-                                            if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
-                                            {
-                                                foreach (var item86 in RespuestasLikert)
+                                                }
+                                                switch (obj.IdPreguntaPadre)
                                                 {
-                                                    var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    case 173:
+                                                    case 174:
+                                                    case 175:
+                                                    case 176: //Respuesta Abierta larga 2
+                                                        var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
+                                                    case 177:
+                                                        foreach (var item177 in RespuestasId177)
+                                                        {
+                                                            var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 178:
+                                                        foreach (var item178 in RespuestasId178)
+                                                        {
+                                                            var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                        foreach (var item179 in RespuestasId179)
+                                                        {
+                                                            var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 180:
+                                                        foreach (var item180 in RespuestasId180)
+                                                        {
+                                                            var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 181:
+                                                        foreach (var item181 in RespuestasId181)
+                                                        {
+                                                            var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 182:
+                                                        foreach (var item182 in RespuestasId182)
+                                                        {
+                                                            var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 183:
+                                                        foreach (var item183 in RespuestasId183)
+                                                        {
+                                                            var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 184:
+                                                        foreach (var item184 in RespuestasId184)
+                                                        {
+                                                            var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 185:
+                                                        foreach (var item185 in RespuestasId185)
+                                                        {
+                                                            var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+
                                                 }
                                             }
-                                            switch (obj.IdPreguntaPadre)
+                                            break;
+                                        case 16:
+                                            if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
                                             {
-                                                case 173:
-                                                case 174:
-                                                case 175:
-                                                case 176: //Respuesta Abierta larga 2
-                                                    var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    break;
-                                                case 177:
-                                                    foreach (var item177 in RespuestasId177)
-                                                    {
-                                                        var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 178:
-                                                    foreach (var item178 in RespuestasId178)
-                                                    {
-                                                        var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 179: // Unica respuesta de tipo Casilla de Verificacion 4
-                                                    foreach (var item179 in RespuestasId179)
+                                                switch (obj.TipoControl.IdTipoControl)
+                                                {
+                                                    case 4:
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR4 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+
+                                                    case 12:
+                                                        foreach (var item12 in RespuestasLikert)
+                                                        {
+                                                            var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR5 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 2:
+                                                        var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
+                                                }
+                                            }
+                                            else// Pregunta existente
+                                            {
+                                                if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                                {
+                                                    foreach (var item86 in RespuestasLikert)
                                                     {
                                                         var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
                                                     }
-                                                    break;
-                                                case 180:
-                                                    foreach (var item180 in RespuestasId180)
-                                                    {
-                                                        var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 181:
-                                                    foreach (var item181 in RespuestasId181)
-                                                    {
-                                                        var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 182:
-                                                    foreach (var item182 in RespuestasId182)
-                                                    {
-                                                        var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 183:
-                                                    foreach (var item183 in RespuestasId183)
-                                                    {
-                                                        var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 184:
-                                                    foreach (var item184 in RespuestasId184)
-                                                    {
-                                                        var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
-                                                case 185:
-                                                    foreach (var item185 in RespuestasId185)
-                                                    {
-                                                        var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
-                                                    }
-                                                    break;
+                                                }
+                                                switch (obj.IdPreguntaPadre)
+                                                {
+                                                    case 173:
+                                                    case 174:
+                                                    case 175:
+                                                    case 176: //Respuesta Abierta larga 2
+                                                        var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
+                                                    case 177:
+                                                        foreach (var item177 in RespuestasId177)
+                                                        {
+                                                            var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 178:
+                                                        foreach (var item178 in RespuestasId178)
+                                                        {
+                                                            var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                        foreach (var item179 in RespuestasId179)
+                                                        {
+                                                            var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 180:
+                                                        foreach (var item180 in RespuestasId180)
+                                                        {
+                                                            var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 181:
+                                                        foreach (var item181 in RespuestasId181)
+                                                        {
+                                                            var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 182:
+                                                        foreach (var item182 in RespuestasId182)
+                                                        {
+                                                            var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 183:
+                                                        foreach (var item183 in RespuestasId183)
+                                                        {
+                                                            var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 184:
+                                                        foreach (var item184 in RespuestasId184)
+                                                        {
+                                                            var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 185:
+                                                        foreach (var item185 in RespuestasId185)
+                                                        {
+                                                            var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+
+                                                }
+                                            }
+                                            break;
+                                        case 17:
+                                            if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
+                                            {
+                                                switch (obj.TipoControl.IdTipoControl)
+                                                {
+                                                    case 4://casilla de Verificacion foreach
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR4 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer4 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR4.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 12:// Likert  foreach
+                                                        foreach (var item12 in RespuestasLikert)
+                                                        {
+                                                            var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 5:// Lista desplegable  foreach
+                                                        if (obj.NewAnswer != null)
+                                                        {
+                                                            if (obj.NewAnswer.Count > 0)
+                                                            {
+                                                                foreach (var itemR5 in obj.NewAnswer)
+                                                                {
+                                                                    var queriAddNewAnswer5 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", itemR5.Respuesta, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                                }
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 2:// Respuesta Larga unico
+                                                        var queriAddNewAnswer2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
+                                                }
 
                                             }
+                                            else//pregunta existente
+                                            {
+                                                if (obj.IdPreguntaPadre <= 86) // todas las respuestas son likert
+                                                {
+                                                    foreach (var item86 in RespuestasLikert)
+                                                    {
+                                                        var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                   "VALUES ({0},{1},{2},{3},{4},{5})", item86, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                    }
+                                                }
+                                                switch (obj.IdPreguntaPadre)
+                                                {
+                                                    case 173:
+                                                    case 174:
+                                                    case 175:
+                                                    case 176: //Respuesta Abierta larga 2
+                                                        var queriAddNewAnswerL2 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        break;
+                                                    case 177:
+                                                        foreach (var item177 in RespuestasId177)
+                                                        {
+                                                            var queryAddNewAnswer177 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item177, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 178:
+                                                        foreach (var item178 in RespuestasId178)
+                                                        {
+                                                            var queryAddNewAnswer178 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item178, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 179: // Unica respuesta de tipo Casilla de Verificacion 4
+                                                        foreach (var item179 in RespuestasId179)
+                                                        {
+                                                            var queriAddNewAnswerExist = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item179, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 180:
+                                                        foreach (var item180 in RespuestasId180)
+                                                        {
+                                                            var queryAddNewAnswer180 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item180, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 181:
+                                                        foreach (var item181 in RespuestasId181)
+                                                        {
+                                                            var queryAddNewAnswer181 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item181, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 182:
+                                                        foreach (var item182 in RespuestasId182)
+                                                        {
+                                                            var queryAddNewAnswer182 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item182, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 183:
+                                                        foreach (var item183 in RespuestasId183)
+                                                        {
+                                                            var queryAddNewAnswer183 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item183, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 184:
+                                                        foreach (var item184 in RespuestasId184)
+                                                        {
+                                                            var queryAddNewAnswer184 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item184, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
+                                                    case 185:
+                                                        foreach (var item185 in RespuestasId185)
+                                                        {
+                                                            var queryAddNewAnswer185 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                  "VALUES ({0},{1},{2},{3},{4},{5})", item185, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                                        }
+                                                        break;
 
-                                        }
-                                        break;
-                                        //default:
-                                        //    if (obj.IdPreguntaPadre >= 190)// Pregunta nueva
-                                        //    {
+                                                }
 
-                                        //    }
-                                        //    else
-                                        //    {
-
-                                        //    }
-                                        //    break;
+                                            }
+                                            break;                                          
+                                    }
                                 }
 
-                                //-------------------------------------------------------------------///
-                                //-------------------------------------------------------------------///
+                                ///-------------------------------------------------------------------///
+                                ///-------------------------------------------------------------------///
                                 /// Se termina el alta de respuestas
                                 /// se valido el tipo de respuestas y se insertan las repuestas por default
                                 /// CAMOS  24/06/2021
 
                             }
-                            //SI tiene Categorias la pregunta se insertan
+                            ///SI tiene Categorias la pregunta se insertan
                             /// --------------------------------------------------------------------------
                             /// 24/06/2021 Se quita la insercion de categorias porque entran las tablas de configuracion
                             /// ya no se necesita
@@ -6140,7 +6125,7 @@ namespace BL
                         }
 
 
-                        var UsuarioModificacion = Encuesta.UsuarioModificacion == null ? "Usuario Editor" : Encuesta.UsuarioModificacion.ToString();
+                        var UsuarioModificacion = usrLog; //Encuesta.UsuarioModificacion == null ? "Usuario Editor" : Encuesta.UsuarioModificacion.ToString();
                         var ProgramaModificacion = "Actualiza Encuesta";
                         //Edita Encuesta
                         DL.Encuesta updateEncuesta = context.Encuesta.FirstOrDefault(x => x.IdEncuesta == Encuesta.IdEncuesta);
@@ -6253,15 +6238,18 @@ namespace BL
                                     //Respuesta Update
                                     if (item.Competencia.IdCompetencia <= 12)// se actualiza el enfoque Area, que es el siguiente id de la pregunta enfoque empresa
                                     {
-                                        int idpadreEA = item.IdPregunta + 1;
-                                        DL.Preguntas updatePreguntaEA = context.Preguntas.FirstOrDefault(x => x.idEncuesta == Encuesta.IdEncuesta && x.IdPregunta == idpadreEA);
-                                        updatePreguntaEA.Pregunta = item.Pregunta;
-                                        updatePreguntaEA.IdEstatus = item.Obligatoria == false ? 1 : 2;
-                                        updatePreguntaEA.FechaHoraModificacion = DateTime.Now;
-                                        updatePreguntaEA.UsuarioModificacion = UsuarioModificacion;
-                                        updatePreguntaEA.ProgramaModificacion = ProgramaModificacion;
-                                        updatePreguntaEA.Obligatoria = item.Obligatoria;
-                                        context.SaveChanges();
+                                        if (item.TipoControl.IdTipoControl == 12)
+                                        {
+                                            int idpadreEA = item.IdPregunta + 1;
+                                            DL.Preguntas updatePreguntaEA = context.Preguntas.FirstOrDefault(x => x.idEncuesta == Encuesta.IdEncuesta && x.IdPregunta == idpadreEA);
+                                            updatePreguntaEA.Pregunta = item.Pregunta;
+                                            updatePreguntaEA.IdEstatus = item.Obligatoria == false ? 1 : 2;
+                                            updatePreguntaEA.FechaHoraModificacion = DateTime.Now;
+                                            updatePreguntaEA.UsuarioModificacion = UsuarioModificacion;
+                                            updatePreguntaEA.ProgramaModificacion = ProgramaModificacion;
+                                            updatePreguntaEA.Obligatoria = item.Obligatoria;
+                                            context.SaveChanges();
+                                        }                                        
                                     }
                                     //Se busca los id de pregunta existente en el listado de NewVPPSC                                    
                                     var queryValoresConfigPreguntas = from items in Encuesta.NewVPPSC
@@ -6331,23 +6319,24 @@ namespace BL
 
                                     if (item.Competencia.IdCompetencia <= 12)
                                     {
-                                        int idpadreEA = item.IdPreguntaPadre;
-                                        /// Se inserta la pregunta Enfoque Area ///                                    
-                                        var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
-                                            "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
-                                                " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, item.Pregunta,
-                                                item.Valoracion, item.Competencia.IdCompetencia, item.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, item.Seccion, idpadreEA, DateTime.Now,
-                                                UsuarioModificacion, "Edita Encuesta", idTipoControl);
-                                        //Obtiene maximo de pregunta EA
-                                        idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
-                                        //Tabla Encuesta Pregunta EA
-                                        var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
-                                            "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
-                                            "VALUES({0},{1},{2},{3},{4})", Encuesta.IdEncuesta, idPreguntaEA, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                        /// Se meta la validacion del tipo de control, solo los Likert doble duplican pregunta CAMOS 13072021 10.53.00
+                                        if (item.TipoControl.IdTipoControl == 12)
+                                        {
+                                            int idpadreEA = item.IdPreguntaPadre;
+                                            /// Se inserta la pregunta Enfoque Area ///                                    
+                                            var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
+                                                "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
+                                                    " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, item.Pregunta,
+                                                    item.Valoracion, item.Competencia.IdCompetencia, item.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, item.Seccion, idpadreEA, DateTime.Now,
+                                                    UsuarioModificacion, "Edita Encuesta", idTipoControl);
+                                            //Obtiene maximo de pregunta EA
+                                            idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
+                                            //Tabla Encuesta Pregunta EA
+                                            var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
+                                                "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
+                                                "VALUES({0},{1},{2},{3},{4})", Encuesta.IdEncuesta, idPreguntaEA, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                        }
                                     }
-
-                                    
-
                                     /// Se agrega el alta de respuestas para Enfoque Empresa  05/07/2021
                                     /// ----Se combina con el Enfoque Area, segun su IdCompetencia---///
                                     /// ------------------------------------------------------------///
@@ -6374,11 +6363,12 @@ namespace BL
                                                         {
                                                             foreach (var itemR4EE in item.NewAnswer)
                                                             {
-                                                                if (item.Competencia.IdCompetencia <= 12)
-                                                                {
-                                                                    var queriAddNewAnswer4EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                              "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Edita Encuesta");
-                                                                }
+                                                              //  if (item.Competencia.IdCompetencia <= 12)
+                                                              //  {
+                                                              //      var queriAddNewAnswer4EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                              //"VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Edita Encuesta");
+                                                              //  }
+
                                                                 var queriAddNewAnswer4EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
                                                                "VALUES ({0},{1},{2},{3},{4},{5})", itemR4EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Edita Encuesta");
                                                             }
@@ -6404,11 +6394,11 @@ namespace BL
                                                         {
                                                             foreach (var itemR5EE in item.NewAnswer)
                                                             {
-                                                                if (item.Competencia.IdCompetencia <= 12)
-                                                                {
-                                                                var queriAddNewAnswer5EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                                "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
-                                                                }
+                                                                //if (item.Competencia.IdCompetencia <= 12)
+                                                                //{
+                                                                //var queriAddNewAnswer5EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                                //"VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                                //}
                                                                 var queriAddNewAnswer5EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
                                                                "VALUES ({0},{1},{2},{3},{4},{5})", itemR5EE.Respuesta, idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
                                                             }
@@ -6416,11 +6406,11 @@ namespace BL
                                                     }
                                                     break;
                                                 case 2:// Respuesta Larga unico
-                                                    if (item.Competencia.IdCompetencia <= 12)
-                                                    {
-                                                    var queriAddNewAnswer2EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
-                                                               "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
-                                                    }
+                                                    //if (item.Competencia.IdCompetencia <= 12)
+                                                    //{
+                                                    //var queriAddNewAnswer2EA = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                    //           "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEA, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                                    //}
                                                     var queriAddNewAnswer2EE = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
                                                                "VALUES ({0},{1},{2},{3},{4},{5})", "Respuesta Abierta", idPreguntaEEAdd, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
                                                     break;

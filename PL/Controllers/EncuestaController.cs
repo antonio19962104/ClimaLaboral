@@ -3265,6 +3265,11 @@ namespace PL.Controllers
             cuestionViewModel.UniqueId = Guid.NewGuid();            
             return PartialView("~/Views/Preguntas/PreguntasAddCL.cshtml", cuestionViewModel);
         }
+        /// <summary>
+        /// Metodo que inserta por medio del BeginCollectionItem las preguntas a la pagina de edicion (IList)
+        /// </summary>
+        /// <param name="cuestionModel">Se necesita el objeto con los datos para que se puedan editar y tomar de referencia al guardar la edición</param>
+        /// <returns>En el front inserta un objeto html con los datos a editar</returns>
         [HttpPost]
         public ActionResult EditNewCuestionCL(ML.Preguntas cuestionModel)
         {
@@ -3330,7 +3335,7 @@ namespace PL.Controllers
             return RedirectToAction("GetAll");
 
         }
-        //Orden Personalizado
+        ///Orden Personalizado
         [HttpGet]
         public ActionResult ConfiguraOrden()
         {
@@ -3353,12 +3358,19 @@ namespace PL.Controllers
             }
             else {return Json("error"); }
 
-        }
+        }       
+        /// <summary>
+        /// Metodo para la carga de una encuesta a editar del tipo 4 Clima Laboral
+        /// </summary>
+        /// <param name="idEncuestaCL">necesita del id Encuesta para traer la consulta</param>
+        /// <returns>Objeto de modelo Encuesta con lsitado de configuraciones, preguntas e informacion de la encuestas</returns>
         public ActionResult EditCL(string idEncuestaCL) {
             string idsessionAdmin = Convert.ToString(Session["IdAdministradorLogeado"]);
             ML.Result encuestaCL = BL.Encuesta.getEncuestaByIdEditClimaL(Convert.ToInt32(idEncuestaCL),idsessionAdmin);
             encuestaCL.EditaEncuesta.ListCatCol2 = BL.Categoria.getAllConfiguration(Convert.ToInt32(idEncuestaCL));
             encuestaCL.EditaEncuesta.ListSubCatCol3 = BL.Categoria.getAllConfigurationPreSubCat(Convert.ToInt32(idEncuestaCL));
+            ///se agrega el MAX de Id pregunta por si quieren agregar nueva pregunta y tener continuidad de el id padre
+            encuestaCL.EditaEncuesta.idMaxPregunta = BL.Preguntas.getMaxIdPadre(Convert.ToInt32(idEncuestaCL));
             List<object> permisosEstructura = new List<object>();
             ViewBag.Permisos = Session["CompaniesPermisos"];
             permisosEstructura = ViewBag.Permisos;
@@ -3367,11 +3379,16 @@ namespace PL.Controllers
 
             return View(encuestaCL.EditaEncuesta);
         }
+        /// <summary>
+        /// Metodo para editar la encuesta de clima dinamico, solo necesitamos el id de Encuesta y la sesion activa del usuario Administardor
+        /// </summary>
+        /// <param name="encuestaCl">Id de la encuesta a editar de tipo 4 (Encuesta Clima Laboral)</param>
+        /// <returns>La modificacion completa de la encuesta y alta de preguntas con sus respectivas respuestas y/o alta de confoguraciones de categorias o subcategorias</returns>      
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult EditCLE(ML.Encuesta encuestaCl)
-        {
-            string CURRENT_USER = Convert.ToString(Session["AdminLog"]);
+        {            
+            string CURRENT_USER = Convert.ToString(Session["IdAdministradorLogeado"]);
             encuestaCl.UsuarioModificacion = CURRENT_USER;
             ML.Result editaEncuestaCl = BL.Encuesta.EditCL(encuestaCl, CURRENT_USER);
             if (editaEncuestaCl.Correct)

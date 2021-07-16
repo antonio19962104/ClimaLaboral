@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Data;
 
 namespace BL
 {
@@ -679,6 +680,28 @@ namespace BL
                 result.ErrorMessage = aE.Message;                
             }
             return result;
+        }
+        /// <summary>
+        /// Maximo de Pregunta por IdPadre
+        /// </summary>
+        /// <param name="idEncuesta">se envia el Id encuesta</param>
+        /// <returns>Regresa el maximo de IdPreguntaPadre para saber si en la edicion se inserta una nueva pregunta y asignar el IdPreguntaPAdre consecutivo</returns>
+        public static int getMaxIdPadre(int idEncuesta) {
+            int idMPregunta = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    return idMPregunta =  (Int32)context.Preguntas.Select(o => o).Where(o => o.idEncuesta == idEncuesta && o.IdEstatus == 1).Max(o => o.IdPreguntaPadre);
+
+                }
+            }
+            catch (Exception Ea)
+            {
+                return 0;                
+            }
+             
+            
         }
     }
 }

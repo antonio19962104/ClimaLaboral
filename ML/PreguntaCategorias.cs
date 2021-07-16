@@ -12,6 +12,7 @@ namespace ML
         public int IdPregunta { get; set; }
         public int IdEncuesta { get; set; }
         public int IdCategoria { get; set; }
+        public decimal Valoracion { get; set; }
         public int IdEstatus { get; set; }
         public DateTime FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }

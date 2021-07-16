@@ -436,13 +436,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="text" placeholder="Pregunta" class="form-control" id="nomPregunta" />
-                                </div>
-                                <div class="m-0 p-0 col-lg-1 col-md-1 col-sm-1 col-xs-1" style="float:left;">
-                                    <div class="form-group">
-                                        <input class="form-control" id="intValoracion" placeholder="Valor" name="intValoracion" type="text" value="0">
-                                    </div><!--.form-group-->
-                                </div>
-                                <div class="col-md-5">
+                                </div>                               
+                                <div class="col-md-6">
                                     @Html.DropDownList("TipoControl",
                                     new SelectList(Model.ListTipoControl, "IdTipoControl", "Nombre"), "Selecciona Tipo de Respuesta",
                                     new
@@ -452,6 +447,7 @@
                                     })
                                 </div>
                             </div>
+                            <div class="row"><hr /></div>
                             <div class="row">
                                 <div class="col-12" id="newAnswer">
 
@@ -644,7 +640,7 @@
         $(document).on('click','div[name="addPregunta"]', function (e) {
             //Se limpia el formulario
             $("#nomPregunta")[0].value ="";
-            $('#intValoracion')[0].value ="";
+            //$('#intValoracion')[0].value ="";
             $('#tipoControl')[0].value ="";
             $('#ddlcategoria')[0].value ="";
             $("#idSubCatDDL").empty();
@@ -656,6 +652,10 @@
             idCompetenciaFs = "";
             nombreCompetenciaFs = e.target.offsetParent.offsetParent.children[0].textContent;
             idCompetenciaFs = e.target.parentElement.attributes[3].value;
+            var idMaxPreguntaPadre= @Html.Raw(JsonConvert.SerializeObject(Model.idMaxPregunta));
+            if (idPadrePreguntaFS == "") {
+                idPadrePreguntaFS = idMaxPreguntaPadre;
+            }
             var convert =0;
             if (Number(idPadrePreguntaFS) >= 190) {
                 convert = Number(idPadrePreguntaFS);
@@ -1411,7 +1411,7 @@
 
             var escribioRespuesta= false;
             var nomPregunta =$("#nomPregunta").val();
-            var valoracionPregunta =$('#intValoracion').val();
+            var valoracionPregunta = 0;//$('#intValoracion').val();
             var tipoRespuestaPregunta = $('#tipoControl').val();
             var categoriaPregunta =$('#ddlcategoria').val();
             var subcategoriaPregunta =$('#ddlsubCategoria').val();
@@ -1422,10 +1422,10 @@
                 swal("Escriba un nombre de pregunta, Por Favor. !", "", "error");
                 return false;
             }
-            if (valoracionPregunta == "") {
-                swal("Escriba un valor de pregunta, Por Favor. !", "", "error");
-                return false;
-            }
+            //if (valoracionPregunta == "") {
+            //    swal("Escriba un valor de pregunta, Por Favor. !", "", "error");
+            //    return false;
+            //}
             if (tipoRespuestaPregunta == "") {
                 swal("Seleccione un tipo de respuesta, Por Favor. !", "", "error");
                 return false;
@@ -1824,7 +1824,7 @@
             if (idPregunta == "0") {
                 idPregunta = e.target.offsetParent.offsetParent.offsetParent.children[9].children[0].children[0].children[0].children[0].value;
             }
-        
+
         //se cambia a IdPregunta ya que IdPadre es solo en el alta
         //e.target.offsetParent.offsetParent.offsetParent.children[9].children[0].children[0].children[0].children[0].value;
             // agrega estilos a los IdPadres iguales
@@ -1906,7 +1906,7 @@
         function contenidoColumna1() {
             document.getElementById("loading").style.display = "block";
             var vEncuestaEdit =@Html.Raw(JsonConvert.SerializeObject(Model));
-            var urlParams = new URLSearchParams(window.location.search);          
+            var urlParams = new URLSearchParams(window.location.search);
            // console.log(urlParams.toString()); // "?post=1234&action=edit"
             //console.log(urlParams.append('active', '1')); // "?
             var idEncuestaR= urlParams.toString().split("=")[1];
@@ -2259,36 +2259,36 @@
 
         }
 
-        function insertaCompetencia(intCompetencia, strNomCompetencia, idEncuesta) {
+        function insertaCompetencia() {
             //vm.isBusy = true;
-
-            strNomCompetencia = reemplazarAquoteEnie(strNomCompetencia);
-
-            var itemseleccionado = intCompetencia;//$('#muestraCompetenciadiv').find('select');
-            if (itemseleccionado >= 1) {
-                var nombreBloqueTitulo = strNomCompetencia;//$('select[name="Preguntas.Competencia.IdCompetencia"] option:selected').text();
+            var itemseleccionado = $('#muestraCompetenciadiv').find('select');
+            if (itemseleccionado.val() >= 1) {
+                var nombreBloqueTitulo = $('select[name="Preguntas.Competencia.IdCompetencia"] option:selected').text();
                 nombreBloque = nombreBloqueTitulo + "DIV";
                 nombreBloque = nombreBloque.replace(" ", "_");
                 //se crea el contenedor de la competencia
-                document.body.innerHTML += "<fieldset id='" + nombreBloque + "_fs' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet(" + nombreBloque + "_fs);' style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='" + nombreBloque + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>";
+                //document.body.innerHTML += "<fieldset id='" + nombreBloque + "_fs' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet(" + nombreBloque + "_fs);' style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='" + nombreBloque + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>";
+                document.getElementById('newCuestionTemp').innerHTML += "<fieldset id='" + nombreBloque + "_fs' class='form-group border p-3 col-12'>"+
+                            "<legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet(" + nombreBloque + "_fs);' "+
+                            "style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;"+
+                            "font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div data-toggle='modal' data-target='#modalAdd' name='addPregunta' idcompetencia='"+itemseleccionado.val()+"' "+
+                            "style='cursor:pointer;position:absolute;right: 80px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;"+
+                            "font-size:xx-large;border:0px;'><span aria-hidden='true'>+</span></div><div id='" + nombreBloque + "' class='col-12 p-0 "+
+                            "section-survey shadow-sm animated fadeInUp'></div></fieldset>";
                 $('#' + nombreBloque + "_fs").appendTo('#newCuestion');
                 $.ajax({
-                    url: '/Encuesta/CreateListCLEdit?aidEncuesta=' + idEncuesta + '&aIdCompetencia=' + intCompetencia,
+                    url: '/Encuesta/CreateListCL?aIdCompetencia=' + itemseleccionado.val(),
                     complete: function (response) {
                         for (var i = 0; i < response.responseJSON.length; i++) {
                             //if (response[i].IdEnfoque == 1) {
-                            //var idEncuesta = idEncuesta;
                             var nombrePregunta = response.responseJSON[i].Pregunta;
-                            var idPregunta = response.responseJSON[i].IdPregunta;
                             var idPreguntaPadre = response.responseJSON[i].IdPreguntaPadre;
                             var idEnfoque = response.responseJSON[i].IdEnfoque;
                             var valoracion = response.responseJSON[i].Valoracion;
                             var idCompetencia = response.responseJSON[i].Competencia.IdCompetencia;
-                            var nombreCompetencia = response.responseJSON[i].Competencia.Nombre;
+                            nombreCompetencia = response.responseJSON[i].Competencia.Nombre;
+                            var idTipoControl = response.responseJSON[i].TipoControl.IdTipoControl;
                             let model = {
-                                IdPregunta :idPregunta,
-                                IdCompetencia:intCompetencia,
-                                IdEncuesta:idEncuesta,
                                 Pregunta: nombrePregunta,
                                 IdPreguntaPadre: idPreguntaPadre,
                                 IdEnfoque: idEnfoque,
@@ -2296,28 +2296,33 @@
                                 Competencia: {
                                     IdCompetencia: idCompetencia,
                                     Nombre: nombreCompetencia
+                                },
+                                TipoControl:{
+                                    IdTipoControl: idTipoControl
                                 }
                             }
                             var nombreBloqueDiv = nombreCompetencia + "DIV";
                             nombreBloqueDiv = nombreBloqueDiv.replace(" ", "_");
                             $.ajax({
-                                url: '/Encuesta/EditNewCuestionCL',
+                                url: '/Encuesta/CreateNewCuestionCL',
                                 data: model,
                                 type: 'POST',
                                 async: false,
                                 cache: false,
                                 success: function (partialView) {
                                     $('#' + nombreBloqueDiv).append(partialView);
+
                                 }//, async: false
                             });
                             // }
                         }
                         document.getElementById("loading").style.display = "none";
                         //$(window).scrollTop($('body').height());
+
                     }
                 });
             }
-        }
+        };
 
         var swiper = new Swiper('.swiper-slides', {
             slidesPerView: 3,
@@ -2538,7 +2543,7 @@
                         $.ajax({
                             url: "/Encuesta/PreviewData",
                             type: "POST",
-                            data: $('#creaEncuesta').serialize(),
+                            data: $('#editaEncuestaCL').serialize(),
                             complete: function (response) {
                                 var dataPrev = response.responseJSON;
                                 /*

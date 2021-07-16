@@ -266,6 +266,7 @@
                     } catch (aE) {
                         console.log(aE);
                         vm.writeLogFronEnd(aE);
+                        swal.fire("Ocurrión un error al autoguardar tus respuestas", aE.message, "error");
                     }
                 }
             }
@@ -679,17 +680,19 @@
                         });
 
                         $("textarea").change(function (e) {
+                            // Pregunta-EE-9491
                             if (!vm.isNullOrEmpty(e.target.value)) {
                                 e.target.style.backgroundColor = "#fff";
                             }
                             if (vm.isNullOrEmpty(e.target.value)) {
                                 e.target.style.backgroundColor = "rgb(255, 221, 221)";
                             }
-                            if (!vm.isNullOrEmpty(e.target.value && !vm.dataRespondidasForm.includes(e.target.name))) {
-                                vm.dataRespondidasForm.push(e.target.name);
+                            var aux = "Pregunta-EE-" + e.target.attributes.idpregunta.value;
+                            if (!vm.isNullOrEmpty(e.target.value && !vm.dataRespondidasForm.includes(aux))) {
+                                vm.dataRespondidasForm.push(aux);
                             }
-                            if (vm.isNullOrEmpty(e.target.value && vm.dataRespondidasForm.includes(e.target.name))) {
-                                vm.dataRespondidasForm.remove(e.target.name);
+                            if (vm.isNullOrEmpty(e.target.value && vm.dataRespondidasForm.includes(aux))) {
+                                vm.dataRespondidasForm.remove(aux);
                             }
                             vm.getProgress();
                         });
@@ -1187,7 +1190,7 @@
                             if (response.data.length > 0) {
                                 [].forEach.call(response.data, function (item) {
                                     if (item.UsuarioCreacion != "EmpRes") {
-                                        $("#merge-rb-" + IdPregunta).append('<input customName="pregPerm" idRespuesta="' + item.IdRespuesta + '" name="preg-rb-' + IdPregunta + '" itemid="rb-' + IdPregunta + '" idPregunta="' + IdPregunta + '" class="perm" id="rb-' + item.IdRespuesta + '" type="radio" value="' + item.Respuesta + '" /> <p for="rb-' + item.IdRespuesta + '"> ' + item.Respuesta + '</p>');
+                                        $("#merge-rb-" + IdPregunta).append('<input dinamic="radio_dinamico" customName="pregPerm" idRespuesta="' + item.IdRespuesta + '" name="preg-rb-' + IdPregunta + '" itemid="rb-' + IdPregunta + '" idPregunta="' + IdPregunta + '" class="perm" id="rb-' + item.IdRespuesta + '" type="radio" value="' + item.Respuesta + '" /> <p for="rb-' + item.IdRespuesta + '"> ' + item.Respuesta + '</p>');
                                     } else {
                                         if (document.querySelectorAll('input[name="preg-rb-' + IdPregunta + '"][value="' + item.Respuesta + '"]')[0] != undefined)
                                             document.querySelectorAll('input[name="preg-rb-' + IdPregunta + '"][value="' + item.Respuesta + '"]')[0].checked = true;
@@ -1195,33 +1198,77 @@
                                     $("input:radio").click(function (e) {
                                         vm.autoSave(e);
                                     });
+                                    $("input:radio").change(function (e) {
+                                        vm.autoSave(e);
+                                    });
                                     $("input:radio").click(function (e) {
-                                        var labels = $("#" + e.target.parentNode.id == "" ? "xc" : e.target.parentNode.id).find("label");
-                                        var style = Object;
-                                        try {
-                                            [].forEach.call(labels, function (dataR) {
-                                                if (dataR.attributes.for.value == e.target.attributes.id.value) {
-                                                    style = getComputedStyle(dataR);
-                                                    dataR.style.backgroundColor = style.borderInlineEndColor;
+                                        // validar solo los rb que son armados dinamicamente
+                                        if (e.target.attributes.dinamic != null) {
+                                            if (e.target.attributes.dinamic.value == "radio_dinamico") {
+                                                var labels = $("#" + e.target.parentNode.id == "" ? "xc" : e.target.parentNode.id).find("label");
+                                                var style = Object;
+                                                var auxName = "Pregunta-EE-" + e.target.attributes.idpregunta.value;
+                                                try {
+                                                    [].forEach.call(labels, function (dataR) {
+                                                        if (dataR.attributes.for.value == e.target.attributes.id.value) {
+                                                            style = getComputedStyle(dataR);
+                                                            dataR.style.backgroundColor = style.borderInlineEndColor;
+                                                        }
+                                                        if (dataR.attributes.for.value != e.target.attributes.id.value) {
+                                                            dataR.style.backgroundColor = "#fff";
+                                                        }
+                                                    });
+                                                    if (labels.length == 0) {
+                                                        if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(auxName)) {
+                                                            e.target.parentNode.parentNode.parentNode.style.backgroundColor = "#fff";
+                                                            vm.dataRespondidasForm.push(auxName);
+                                                        }
+                                                        else if (vm.isNullOrEmpty(e.target.value)) {
+                                                            e.target.parentNode.parentNode.parentNode.style.backgroundColor = "rgb(255, 221, 221)";
+                                                            vm.dataRespondidasForm.remove(auxName);
+                                                        }
+                                                        vm.getProgress();
+                                                    }
+                                                } catch (aE) {
+                                                    console.log(aE);
+                                                    vm.writeLogFronEnd(aE);
                                                 }
-                                                if (dataR.attributes.for.value != e.target.attributes.id.value) {
-                                                    dataR.style.backgroundColor = "#fff";
-                                                }
-                                            });
-                                            if (labels.length == 0) {
-                                                if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(e.target.attributes.itemid.value)) {
-                                                    e.target.parentNode.parentNode.parentNode.style.backgroundColor = "#fff";
-                                                    vm.dataRespondidasForm.push(e.target.attributes.itemid.value);
-                                                }
-                                                else if (vm.isNullOrEmpty(e.target.value)) {
-                                                    e.target.parentNode.parentNode.parentNode.style.backgroundColor = "rgb(255, 221, 221)";
-                                                    vm.dataRespondidasForm.remove(e.target.attributes.itemid.value);
-                                                }
-                                                vm.getProgress();
                                             }
-                                        } catch (aE) {
-                                            console.log(aE);
-                                            vm.writeLogFronEnd(aE);
+                                        }
+                                    });
+                                    $("input:radio").change(function (e) {
+                                        // validar solo los rb que son armados dinamicamente
+                                        if (e.target.attributes.dinamic != null) {
+                                            if (e.target.attributes.dinamic.value == "radio_dinamico") {
+                                                var labels = $("#" + e.target.parentNode.id == "" ? "xc" : e.target.parentNode.id).find("label");
+                                                var style = Object;
+                                                var auxName = "Pregunta-EE-" + e.target.attributes.idpregunta.value;
+                                                try {
+                                                    [].forEach.call(labels, function (dataR) {
+                                                        if (dataR.attributes.for.value == e.target.attributes.id.value) {
+                                                            style = getComputedStyle(dataR);
+                                                            dataR.style.backgroundColor = style.borderInlineEndColor;
+                                                        }
+                                                        if (dataR.attributes.for.value != e.target.attributes.id.value) {
+                                                            dataR.style.backgroundColor = "#fff";
+                                                        }
+                                                    });
+                                                    if (labels.length == 0) {
+                                                        if (!vm.isNullOrEmpty(e.target.value) && !vm.dataRespondidasForm.includes(auxName)) {
+                                                            e.target.parentNode.parentNode.parentNode.style.backgroundColor = "#fff";
+                                                            vm.dataRespondidasForm.push(auxName);
+                                                        }
+                                                        else if (vm.isNullOrEmpty(e.target.value)) {
+                                                            e.target.parentNode.parentNode.parentNode.style.backgroundColor = "rgb(255, 221, 221)";
+                                                            vm.dataRespondidasForm.remove(auxName);
+                                                        }
+                                                        vm.getProgress();
+                                                    }
+                                                } catch (aE) {
+                                                    console.log(aE);
+                                                    vm.writeLogFronEnd(aE);
+                                                }
+                                            }
                                         }
                                     });
                                 });

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ML
 {
-    class ValoracionCategoria
+    public class ValoracionCategoria
     {
         public int IdValoracionCategoria { get; set; }
         public int IdEncuesta { get; set; }
@@ -22,5 +22,8 @@ namespace ML
         public DateTime FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
+        //Para el BeginCollection       
+        public string NombreValCat { get; set; }
+        public Guid UniqueId { get; set; }
     }
 }

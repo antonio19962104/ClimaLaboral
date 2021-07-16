@@ -43,7 +43,7 @@
                 <p class="instrucciones-likert text-justify">{{ vm.likertInstruccion2 }}</p>
             </div>-->
             @Html.Raw(Model.htmlCodeInstrucciones)
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" ng-if="vm.existeLikertVisible()">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4" ng-if="vm.existeLikertVisible()" style="z-index: 1;">
                 <div class="col-xs-6 col-sm-12 col-md-6 col-lg-6 col-xl-6 header-enfoque text-center header-1">
                     <p class="txt-ea">{{ vm.enfoqueB }}</p>
                     <p class="txt-ee">{{ vm.enfoqueA }}</p>
@@ -259,6 +259,12 @@
                                 // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
                                 if (value != 0 && !selectExistValue(e.id, value))
                                     document.getElementById(e.id).value = "";
+                                if (document.getElementById(e.id).value != "") {
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 255, 255)";
+                                }
+                                else{
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 221, 221)";
+                                }
                             },
                             error: function (err) {
                                 document.getElementsByClassName("busy")[0].style.display = "none";
@@ -291,6 +297,12 @@
                                 // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
                                 if (value != 0 && !selectExistValue(e.id, value))
                                     document.getElementById(e.id).value = "";
+                                if (document.getElementById(e.id).value != "") {
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 255, 255)";
+                                }
+                                else{
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 221, 221)";
+                                }
                             },
                             error: function (err) {
                                 document.getElementsByClassName("busy")[0].style.display = "none";
@@ -323,6 +335,12 @@
                                 // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
                                 if (value != 0 && !selectExistValue(e.id, value))
                                     document.getElementById(e.id).value = "";
+                                if (document.getElementById(e.id).value != "") {
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 255, 255)";
+                                }
+                                else{
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 221, 221)";
+                                }
                             },
                             error: function (err) {
                                 document.getElementsByClassName("busy")[0].style.display = "none";
@@ -356,9 +374,19 @@
                                 document.getElementById(e.id).value = value;
                                 if (value == 0)
                                     document.getElementById(e.id).value = "";
+                                if (response.length == 0 && value == 0){
+                                    $("#" + e.id).append("<option value='0'>-</option>");
+                                    document.getElementById(e.id).value = 0;
+                                }
                                 // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
                                 if (value != 0 && !selectExistValue(e.id, value))
                                     document.getElementById(e.id).value = "";
+                                if (document.getElementById(e.id).value != "") {
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 255, 255)";
+                                }
+                                else{
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 221, 221)";
+                                }
                             },
                             error: function (err) {
                                 document.getElementsByClassName("busy")[0].style.display = "none";
@@ -390,6 +418,12 @@
                                 document.getElementById(e.id).value = value;
                                 if (value == 0)
                                     document.getElementById(e.id).value = "";
+                                if (document.getElementById(e.id).value != "") {
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 255, 255)";
+                                }
+                                else{
+                                    document.getElementById(e.id).style.backgroundColor = "rgb(255, 221, 221)";
+                                }
                             },
                             error: function (err) {
                                 document.getElementsByClassName("busy")[0].style.display = "none";

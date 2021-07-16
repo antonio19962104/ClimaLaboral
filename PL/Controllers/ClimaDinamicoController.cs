@@ -47,6 +47,12 @@ namespace PL.Controllers
         {
             return View(BL.ClimaDinamico.getHtmlIntro(aIdEncuesta));
         }
+        /// <summary>
+        /// Vista de la encuesta de clima
+        /// </summary>
+        /// <param name="aIdusuario"></param>
+        /// <param name="aIdEncuesta"></param>
+        /// <returns>Vista con la encuesta de clima y las instrucciones customizadas por el administrador</returns>
         public ActionResult Encuesta(string aIdusuario, string aIdEncuesta)
         {
             /*
@@ -58,13 +64,13 @@ namespace PL.Controllers
         /// <summary>
         /// Consulta Vista previa de encuesta de clima laboral 09072021 CAMOS
         /// </summary>
-        /// <param name="idEncuesta">Es necesario el id de encuesta para consultar la vista previa</param>        
+        /// <param name="aIdEncuesta">Es necesario el id de encuesta para consultar la vista previa</param>        
         /// <returns>La encuesta con las preguntas que el Administrador dio de alta</returns>
         public ActionResult EncuestaPV(string aIdEncuesta)
         {         
             return View(BL.ClimaDinamico.getHtmlInstrucciones(aIdEncuesta));
         }
-    public ActionResult Thanks(string idEncuesta, string idUsuario, string idBaseDeDatos)
+        public ActionResult Thanks(string idEncuesta, string idUsuario, string idBaseDeDatos)
         {
             // change status
             BL.ClimaDinamico.changeEstatusEncuestaClima(idEncuesta, idUsuario, idBaseDeDatos, 3);

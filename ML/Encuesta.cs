@@ -89,7 +89,10 @@ namespace ML
         public List<Categoria> ListCatCol2 { get; set; }
         //cargar listado de SubCategorias de la configuracion existaente
         public List<Categoria> ListSubCatCol3 { get; set; }
-
+        /// <summary>
+        /// para editar requerimos el numero maximo de id padre, para hacer la continuidad si agregan una nueva pregunta
+        /// </summary>
+        public int idMaxPregunta {get; set;}
 
         //JAMG
         public ML.Company Company { get; set; }

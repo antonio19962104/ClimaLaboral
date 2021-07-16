@@ -15,7 +15,7 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var IdParametro = 1;
-                    var query = context.TipoEncuesta.SqlQuery("SELECT * FROM TipoEncuesta WHERE IdEstatus = {0} ORDER BY NombreTipoDeEncuesta",IdParametro);
+                    var query = context.TipoEncuesta.SqlQuery("SELECT * FROM TipoEncuesta WHERE IdEstatus = {0} and IdTipoEncuesta != 4 ORDER BY NombreTipoDeEncuesta", IdParametro);
                     result.ListadoTipoEncuesta = new List<ML.TipoEncuesta>();
                     if (query != null)
                     {

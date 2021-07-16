@@ -4,7 +4,7 @@
 @using (Html.BeginCollectionItem("NewAnswer", Model.IdPadreObjeto))
 {
     @Html.AntiForgeryToken()
-  
+
     switch (Model.Pregunta.TipoControl.IdTipoControl)
     {
         case 1:

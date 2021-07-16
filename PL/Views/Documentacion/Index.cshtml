@@ -17,15 +17,13 @@
             <div class="header-docs">
                 <label>Namespace: <label style="color: #369191">{{ vm.docBL.Assembly.Name }}</label></label><br />
                 <label>Assembly: <label style="color: #369191">{{ vm.docBL.Assembly.Name }}.dll</label></label><br />
-                <label>Syntax: </label>
             </div>
             <div class="child-1">
                 <div class="child-2 mt-2 ml-3" ng-repeat="item in vm.docBL.Members.Member">
                     <!--Vista de documento-->
                     <div style="padding: 5px;">
                         <fieldset ng-if="item.Class == item.Name">
-                            <legend>Copy</legend>
-                            <label class="ml-1">public class {{ item.Class }}</label>
+                            <h3 class="ml-1">public class {{ item.Class }}</h3>
                         </fieldset>
                         <label ng-if="item.Class == item.Name">Class {{ item.Class }} exposes the following members</label>
                         <div ng-if="item.Class != item.Name" class="ml-2">
@@ -76,7 +74,7 @@
         }
         fieldset
         {
-            border: 2px solid #85a285;
+            /*border: 2px solid #85a285;*/
             -moz-border-radius:8px;
             -webkit-border-radius:8px;	
             border-radius:8px;	
