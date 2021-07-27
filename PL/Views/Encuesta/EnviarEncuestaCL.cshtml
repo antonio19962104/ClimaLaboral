@@ -357,6 +357,7 @@
         });
     }
     function SaveConfig() {
+        document.getElementsByClassName("busy")[0].style.display = "block";
         var IdBD = $('#listBD').val();
         var fechaInicio = $('#FechaInicio').val();
         var fechaFin = $('#FechaFin').val();
@@ -389,6 +390,7 @@
             type: 'POST',
             data: model,
             complete: function (Response) {
+                document.getElementsByClassName("busy")[0].style.display = "none";
                 if (Response.responseJSON == "success") {
                     swal({
                         title: "La configuración se guardó con éxito, ahora puedes enviar los email a los encuestados",

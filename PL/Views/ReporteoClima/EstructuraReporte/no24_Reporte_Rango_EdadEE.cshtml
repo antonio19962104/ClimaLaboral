@@ -17,7 +17,7 @@
                                             <div class="bar-clasificacion">
                                                 <div class="bar-progress-clasificacion" style="height: 0px;">
                                                 </div>
-                                                <p class="comparativo" style="bottom: 25%;">{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
+                                                <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
                                                 <p class="label-top-graphic-blue2">{{ item.HC }}</p>
                                                 <div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">
                                                 </div>

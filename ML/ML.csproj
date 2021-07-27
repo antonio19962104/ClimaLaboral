@@ -82,10 +82,12 @@
     <Compile Include="CondicionTrabajo.cs" />
     <Compile Include="ConfigClimaLab.cs" />
     <Compile Include="ConfiguraRespuesta.cs" />
+    <Compile Include="DashBoardEncuesta.cs" />
     <Compile Include="DataReportCL.cs" />
     <Compile Include="Departamento.cs" />
     <Compile Include="DetallePlantilla.cs" />
-    <Compile Include="Empleado.cs" />
+    <Compile Include="EmailsEncuesta.cs" />
+    <Compile Include="Usuario1.cs" />
     <Compile Include="Encuesta.cs" />
     <Compile Include="EncuestaArea.cs" />
     <Compile Include="EncuestaIngreso.cs" />
@@ -143,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -23,6 +23,7 @@ function GetDashBoard() {
             vm.auxiliar = [];
             /*nameStorage*/
             vm.storeName = "";
+            vm.saludo = "Hello from angular";
             /*Busquedas custom*/
             vm.Indicador = [];
             vm.Reactivo = [];
@@ -88,7 +89,7 @@ function GetDashBoard() {
                             '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
                                 '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                 '</div>' +
-                                '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
+            (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
                                 '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
                                 '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                 '</div>' +
@@ -345,7 +346,11 @@ function GetDashBoard() {
             /*#endregion variables*/
 
             $(document).ready(function () {
-                vm.verificarStorage();
+                try {
+                    vm.verificarStorage();
+                } catch (e) {
+
+                }
             });
 
             /*#region llenar catalogos*/
@@ -1194,12 +1199,16 @@ function GetDashBoard() {
             /*#endregion Loading*/
 
             function fillArray(url, arreglo, funcion) {
-                vm.get(url, function (response) {
-                    angular.copy(response, arreglo);
-                    if (funcion != null)
-                        funcion();
-                },
-                true);
+                try {
+                    vm.get(url, function (response) {
+                        angular.copy(response, arreglo);
+                        if (funcion != null)
+                            funcion();
+                    },
+                    true);
+                } catch (e) {
+
+                }
             }
 
             function fillArrayCustom(url, arrayParameter, arreglo, funcion) {
@@ -1848,17 +1857,27 @@ function GetDashBoard() {
 
             vm.exportar = function () {
                 var elem = document.getElementById("mergeS");
-                
-                var canvas = elem.getElementsByTagName('canvas');//document.getElementsByClassName('screenshots');
+                var canvas = elem.getElementsByTagName('canvas');
+
+
+                //$("#mergeGrid").kendoGrid({
+                //    columns: [{
+                //        field: "canvas",
+                //        template: " # canvas # "
+                //    }],
+                //    dataSource: canvas,
+                //    toolbar: ["excel", "pdf"],
+                //});
+
                 var pdf = new jsPDF("landscape");
                 //pdf.internal.pageSize.width = pdf.internal.pageSize.width + 15;
                 var width = pdf.internal.pageSize.width;
                 var height = pdf.internal.pageSize.height;
                 [].forEach.call(canvas, function (item, index) {
-                    // item.style.width = width;
-                    // item.style.height = height;
-                    if (index > 0) {
+                    if (true) {
                         var context = item.getContext('2d');
+                        context.fillStyle = "white";
+                        context.fillRect(0, 0, canvas.width, canvas.height);
                         if (index > 1 && (item.width > 0 && item.height > 0))
                             pdf.addPage();
                         try {
@@ -1869,20 +1888,20 @@ function GetDashBoard() {
                             context.fillStyle = '#fff';
                             context.fill();
                             context.strokeStyle = '#fff';
+                            // context.fillRect(0, 0, item.width, item.height);
                             context.stroke();
                             var imgData = item.toDataURL("image/jpeg", 1.0);
                             
                             if (item.width > 0 && item.height > 0)
-                                pdf.addImage(imgData, 'JPEG', 0, 0, width, height); //height -15px
+                                pdf.addImage(imgData, 'JPEG', 0, 0, width, height);
                             else
                                 swal.fire("item nulo");
-                            // pdf.addImage(imgData, 'JPEG', 0, 0); // original
                         } catch (e) {
                             // console.log(e);
                         }
                     }
                 });
-                pdf.save("download.pdf");
+                pdf.save("ReporteGrafico_" + vm.UNSeleccionada + "_" + vm.Anio.value + ".pdf");
             }
 
             vm.historicoCanvas = [];
@@ -1897,68 +1916,378 @@ function GetDashBoard() {
                             // mostrar el enfoque area para la exportacion
                             vm.verComparativoEnfoques = true;
                         }
-                        if (elemId == "tab-2") {
-                            html2canvas(document.querySelector("#" + elemId)).then(canvas => {
-                                //canvas.classList.add("screenshots");
-                                //document.body.appendChild(canvas);
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
+                        if (vm.SeccionesReporte.Id == 17) {
+                            document.getElementById("demoVerComparativoEnfoques").checked = true;
                         }
 
-                        if (elemId == "tab-3" || elemId == "tab-3punto5" || elemId == "tab-5" || elemId == "tab-9" || elemId == "tab-10" || elemId == "tab-13" || elemId == "tab-14" || elemId == "tab-18" || elemId == "tab-19" || elemId == "tab-20") {
-                            elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
-                            html2canvas(elem).then(canvas => {
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
-                        }
-                        if (elemId == "tab-4") {
-                            elem = document.querySelector("#" + elemId).children[0].children[0].children[0];
-                            html2canvas(elem).then(canvas => {
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
-                        }
-                        if (elemId == "tab-6" || elemId == "tab-7" || elemId == "tab-8" || elemId == "tab-11" || elemId == "tab-12" || elemId == "tab-15" || elemId == "tab-16" || elemId == "tab-21" || elemId == "tab-22" || elemId == "tab-23" || elemId == "tab-24" || elemId == "tab-25" || elemId == "tab-26" || elemId == "tab-27" || elemId == "tab-28" || elemId == "tab-29" || elemId == "tab-30" || elemId == "tab-31" || elemId == "tab-32" || elemId == "tab-33" || elemId == "tab-34" || elemId == "tab-35" || elemId == "tab-36" || elemId == "tab-37" || elemId == "tab-38") {
-                            elem = document.querySelector("#" + elemId).children[0].children[0].children[2];
-                            html2canvas(elem).then(canvas => {
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
-                        }
-                        if (elemId == "tab-17") {
-                            elem = document.querySelector("#" + elemId).children[0].children[0].children[2];
-                            html2canvas(elem).then(canvas => {
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
-                        }
-                        switch (vm.SeccionesReporte.Id) {
-                            case 17:
-                                elem = document.querySelector("#tab-17").children[0].children[1].children[1];
+                        if (vm.SeccionesReporte.Id != 39 || vm.SeccionesReporte.Id != 40) { //quitar el apartado de palabras y el reporte dinamico
+                            /* ========== Reporte con los encabezados ========== */
+                            if (elemId == "tab-3") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
                                 html2canvas(elem).then(canvas => {
-                                    //canvas.classList.add("screenshots");
                                     canvas.id = elemId;
                                     document.getElementById("mergeS").appendChild(canvas);
                                 });
-                                break;
-                            default:
+                            }
 
-                        }
-                        if (elemId == "tab-39") {
-                            elem = document.querySelector("#" + elemId).children[1].children[3].children[0].children[3]
-                            html2canvas(elem).then(canvas => {
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
-                        }
-                        if (elemId == "tab-40") {
-                            elem = document.querySelector("#" + elemId).children[1].children[0].children[17]
-                            html2canvas(elem).then(canvas => {
-                                canvas.id = elemId;
-                                document.getElementById("mergeS").appendChild(canvas);
-                            });
+                            if (elemId == "tab-3punto5") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                            }
+
+                            if (elemId == "tab-4") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-5") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-6") {
+                                elem = document.querySelector("#" + elemId).children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-7") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-8") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-9") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-10") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-11") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-12") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-13") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-14") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-15") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-16") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-17") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-18") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-19") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-20") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-21") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-22") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-23") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-24") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-25") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-26") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-27") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-28") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-29") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-30") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-31") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-32") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-33") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-34") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-35") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-36") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-37") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
+                            if (elemId == "tab-38") {
+                                elem = document.querySelector("#" + elemId).children[0].children[0];
+                                elem.style.backgroundColor = "white";
+                                html2canvas(elem).then(canvas => {
+                                    canvas.id = elemId;
+                                    document.getElementById("mergeS").appendChild(canvas);
+                                });
+                                elem.style.backgroundColor = "#eee";
+                            }
+
                         }
                         vm.isBusy = false;
                     }
@@ -1978,9 +2307,10 @@ function GetDashBoard() {
                     report("tab-" + vm.SeccionesReporte.Id);
                 }
                 
-                if (vm.opc == 4 && vm.SeccionesReporte.Id == 39) {
-                    // saltar a la 41
-                    vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 2;
+                if ((vm.opc == 4 && vm.SeccionesReporte.Id == 38) || (vm.opc == 1 && vm.SeccionesReporte.Id == 38)) {
+                    // vistas 39 y  40 no se deben ver
+                    vm.SeccionesReporte.Id = 41;
+                    return false;
                 }
 
                 if (vm.opc == "1" || vm.opc == "4") {
@@ -2659,6 +2989,11 @@ function GetDashBoard() {
                     return vm.SeccionesReporte.Id;
                 }
 
+                if (vm.SeccionesReporte.Id == 41) {
+                    vm.SeccionesReporte.Id = 38;
+                    return vm.SeccionesReporte.Id;
+                }
+
                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
                 vm.cambioSeccion(vm.SeccionesReporte.Id);
             }
@@ -2731,6 +3066,8 @@ function GetDashBoard() {
             /*#region setIconos and Class*/
             vm.setIcono = function (value) {
                 try {
+                    if (value == 'NaN')
+                        value = 0;
                     value = parseFloat(value);
                     if (value < 70) {
                         /*lluvia*/
@@ -2804,18 +3141,20 @@ function GetDashBoard() {
 
             vm.setClase = function (value) {
                 try {
+                    if (value == 'NaN')
+                        value = 0;
                     value = parseFloat(value);
                     if (value < 70) {
-                        return "lluvia"
+                        return "lluvia fondoNuevoGris"
                     }
                     if (value >= 70 && value < 80) {
-                        return "nublado";
+                        return "nublado fondoNuevoGris";
                     }
                     if (value >= 80 && value < 90) {
-                        return "solnube";
+                        return "solnube fondoNuevoGris";
                     }
                     if (value >= 90 && value <= 100) {
-                        return "sol";
+                        return "sol fondoNuevoGris";
                     }
                     if (value > 100) {
                         swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
@@ -2942,9 +3281,11 @@ function GetDashBoard() {
                         }).then(function (isConfirm) {
                             if (isConfirm) {
                                 /*Actualizar reporte*/
-                                /*localStorage.clear(); no se usa este ya que tiene un UID especifico*/
-                                vm.limpiarStorage();/*Limpiamos los LS especificos de esta entidad*/
-                                vm.generarJob();
+                                swal("Cuando el reporte termine de generarse se le notificará por correo electrónico", "", "info").then(function () {
+                                    vm.limpiarStorage();/*Limpiamos los LS especificos de esta entidad*/
+                                    vm.generarJob();
+                                    //window.location.reload();
+                                });
                             }
                             else {
                                 /*Consultar existente*/
@@ -2954,7 +3295,7 @@ function GetDashBoard() {
                         return true;
                     }
                     else {
-                        swal("El reporte aún no se encuentra generado, este será generado y se le notificará cuando este proceso haya terminado", "", "info").then(function () {
+                        swal("El reporte aún no se encuentra generado, este será generado y se le notificará por correo electrónico cuando este proceso haya terminado", "", "info").then(function () {
                             vm.generarJob();
                             window.location.href = "/Dashboard/Dashboard/";
                         });
@@ -3136,88 +3477,90 @@ function GetDashBoard() {
                 */
                 vm.isBusy = true;
                 if (vm.SeccionesReporte.Id == 17) {
-                    try {
-                        vm.historicoBienestarEE = [];
-                        vm.historicoBienestarEE.push(vm.listDataHistoricoEE[0]);
-                        vm.dataEE = [];
-                        if (vm.ColumnasByCompanyCategoria.length > 0) {
-                            vm.ColumnasByCompanyCategoria.forEach(function (value, index, arr) {
-                                vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
+                    if (vm.hasHistorico) {
+                        try {
+                            vm.historicoBienestarEE = [];
+                            vm.historicoBienestarEE.push(vm.listDataHistoricoEE[0]);
+                            vm.dataEE = [];
+                            if (vm.ColumnasByCompanyCategoria.length > 0) {
+                                vm.ColumnasByCompanyCategoria.forEach(function (value, index, arr) {
+                                    vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
 
-                                vm.model.EntidadNombre = vm.ColumnasByCompanyCategoria[index].value;
-                                vm.model.EntidadId = 0;
-                                vm.model.Anio = vm.anioSeleccionado.value - 1;
+                                    vm.model.EntidadNombre = vm.ColumnasByCompanyCategoria[index].value;
+                                    vm.model.EntidadId = 0;
+                                    vm.model.Anio = vm.anioSeleccionado.value - 1;
 
-                                fillArrayCustom("apisHistorico/getHistorico_2EEBienestar", vm.model, vm.dataEE, function () {
-                                    vm.historicoBienestarEE.push(vm.dataEE[0]);
-                                    // console.log(vm.historicoBienestarEE);
-                                    if (vm.ColumnasByCompanyCategoria.length + 1 == vm.historicoBienestarEE.length) {
-                                        if (vm.banderaHB == 0) {
-                                            vm.banderaHB = 1;
-                                            for (var i = 0; i < vm.historicoBienestarEE.length; i++) {
-                                                if (vm.historicoBienestarEE[i] == undefined) {
-                                                    vm.historicoBienestarEE[i] = JSON.parse(JSON.stringify(_newHistorico));
+                                    fillArrayCustom("apisHistorico/getHistorico_2EEBienestar", vm.model, vm.dataEE, function () {
+                                        vm.historicoBienestarEE.push(vm.dataEE[0]);
+                                        // console.log(vm.historicoBienestarEE);
+                                        if (vm.ColumnasByCompanyCategoria.length + 1 == vm.historicoBienestarEE.length) {
+                                            if (vm.banderaHB == 0) {
+                                                vm.banderaHB = 1;
+                                                for (var i = 0; i < vm.historicoBienestarEE.length; i++) {
+                                                    if (vm.historicoBienestarEE[i] == undefined) {
+                                                        vm.historicoBienestarEE[i] = JSON.parse(JSON.stringify(_newHistorico));
+                                                    }
+                                                    var j = i + 1;
+                                                    var k = i + 2;
+                                                    document.getElementById('myTableEE').rows[1].cells[j].innerHTML = document.getElementById('myTableEE').rows[1].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bienestar + "%</p>";
+                                                    document.getElementById('myTableEE').rows[2].cells[j].innerHTML = document.getElementById('myTableEE').rows[2].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bio + "%</p>";
+                                                    document.getElementById('myTableEE').rows[3].cells[j].innerHTML = document.getElementById('myTableEE').rows[3].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Psico + "%</p>";
+                                                    document.getElementById('myTableEE').rows[4].cells[j].innerHTML = document.getElementById('myTableEE').rows[4].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Social + "%</p>";
+
+                                                    /*Preguntas Bio*/
+                                                    document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg67 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg71 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg75 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg84 + "%</p>";
+
+                                                    /*Preguntas Psico*/
+                                                    document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg79 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg81 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg83 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg86 + "%</p>";
+
+                                                    /*Preguntas Social*/
+                                                    document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg69 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg73 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg77 + "%</p>";
+                                                    document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg80 + "%</p>";
+
                                                 }
-                                                var j = i + 1;
-                                                var k = i + 2;
-                                                document.getElementById('myTableEE').rows[1].cells[j].innerHTML = document.getElementById('myTableEE').rows[1].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bienestar + "%</p>";
-                                                document.getElementById('myTableEE').rows[2].cells[j].innerHTML = document.getElementById('myTableEE').rows[2].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bio + "%</p>";
-                                                document.getElementById('myTableEE').rows[3].cells[j].innerHTML = document.getElementById('myTableEE').rows[3].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Psico + "%</p>";
-                                                document.getElementById('myTableEE').rows[4].cells[j].innerHTML = document.getElementById('myTableEE').rows[4].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Social + "%</p>";
-
-                                                /*Preguntas Bio*/
-                                                document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg67 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg71 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg75 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg84 + "%</p>";
-
-                                                /*Preguntas Psico*/
-                                                document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg79 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg81 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg83 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg86 + "%</p>";
-
-                                                /*Preguntas Social*/
-                                                document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg69 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg73 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg77 + "%</p>";
-                                                document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg80 + "%</p>";
-
                                             }
                                         }
-                                    }
 
+                                    });
                                 });
-                            });
-                        }
-                        else {
-                            /*Si no hay mas columnas para el grid*/
-                            var i = 0;
-                            document.getElementById('myTableEE').rows[1].cells[1].innerHTML = document.getElementById('myTableEE').rows[1].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bienestar + "%</p>";
-                            document.getElementById('myTableEE').rows[2].cells[1].innerHTML = document.getElementById('myTableEE').rows[2].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bio + "%</p>";
-                            document.getElementById('myTableEE').rows[3].cells[1].innerHTML = document.getElementById('myTableEE').rows[3].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Psico + "%</p>";
-                            document.getElementById('myTableEE').rows[4].cells[1].innerHTML = document.getElementById('myTableEE').rows[4].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Social + "%</p>";
-                            /*Preguntas Bio*/
-                            document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg67 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg71 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg75 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg84 + "%</p>";
-                            /*Preguntas Psico*/
-                            document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg79 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg81 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg83 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg86 + "%</p>";
+                            }
+                            else {
+                                /*Si no hay mas columnas para el grid*/
+                                var i = 0;
+                                document.getElementById('myTableEE').rows[1].cells[1].innerHTML = document.getElementById('myTableEE').rows[1].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bienestar + "%</p>";
+                                document.getElementById('myTableEE').rows[2].cells[1].innerHTML = document.getElementById('myTableEE').rows[2].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Bio + "%</p>";
+                                document.getElementById('myTableEE').rows[3].cells[1].innerHTML = document.getElementById('myTableEE').rows[3].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Psico + "%</p>";
+                                document.getElementById('myTableEE').rows[4].cells[1].innerHTML = document.getElementById('myTableEE').rows[4].cells[1].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Social + "%</p>";
+                                /*Preguntas Bio*/
+                                document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg67 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg71 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg75 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[0].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg84 + "%</p>";
+                                /*Preguntas Psico*/
+                                document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg79 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg81 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg83 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[1].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg86 + "%</p>";
 
-                            /*Preguntas Social*/
-                            document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg69 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg73 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg77 + "%</p>";
-                            document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg80 + "%</p>";
+                                /*Preguntas Social*/
+                                document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg69 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg73 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg77 + "%</p>";
+                                document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML = document.getElementById('myTableEE').tBodies[2].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEE[i].Preg80 + "%</p>";
+                            }
+                            vm.isBusy = false;
+                        } catch (aE) {
+                            vm.writteLog(aE.message, "vm.setDataHistoricoBienestarEE()");
+                            ////swal(aE.message, "", "warning");
                         }
-                        vm.isBusy = false;
-                    } catch (aE) {
-                        vm.writteLog(aE.message, "vm.setDataHistoricoBienestarEE()");
-                        ////swal(aE.message, "", "warning");
                     }
                 }
             }
@@ -3232,65 +3575,67 @@ function GetDashBoard() {
                  * vm.listDataHistoricoEA; Este pinta la columna principal
                 */
                 if (vm.SeccionesReporte.Id == 17) {
-                    vm.isBusy = true;
-                    try {
-                        vm.historicoBienestarEA = [];
-                        vm.historicoBienestarEA.push(vm.listDataHistoricoEA[0]);
-                        vm.dataEA = [];
-                        vm.ColumnasByCompanyCategoria.forEach(function (value, index, arr) {
-                            vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
+                    if (vm.hasHistorico) {
+                        vm.isBusy = true;
+                        try {
+                            vm.historicoBienestarEA = [];
+                            vm.historicoBienestarEA.push(vm.listDataHistoricoEA[0]);
+                            vm.dataEA = [];
+                            vm.ColumnasByCompanyCategoria.forEach(function (value, index, arr) {
+                                vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
 
-                            vm.model.EntidadNombre = vm.ColumnasByCompanyCategoria[index].value;
-                            vm.model.EntidadId = 0;
-                            vm.model.Anio = vm.anioSeleccionado.value - 1;
+                                vm.model.EntidadNombre = vm.ColumnasByCompanyCategoria[index].value;
+                                vm.model.EntidadId = 0;
+                                vm.model.Anio = vm.anioSeleccionado.value - 1;
 
-                            fillArrayCustom("apisHistorico/getHistorico_2EABienestar", vm.model, vm.dataEA, function () {
-                                vm.historicoBienestarEA.push(vm.dataEA[0]);
-                                // console.log(vm.historicoBienestarEA);
-                                if (vm.ColumnasByCompanyCategoria.length + 1 == vm.historicoBienestarEA.length) {
-                                    if (vm.banderaHBEA == 0) {
-                                        vm.banderaHBEA = 1;
-                                        for (var i = 0; i < vm.historicoBienestarEA.length; i++) {
-                                            if (vm.historicoBienestarEA[i] == undefined) {
-                                                vm.historicoBienestarEA[i] = JSON.parse(JSON.stringify(_newHistorico));
+                                fillArrayCustom("apisHistorico/getHistorico_2EABienestar", vm.model, vm.dataEA, function () {
+                                    vm.historicoBienestarEA.push(vm.dataEA[0]);
+                                    // console.log(vm.historicoBienestarEA);
+                                    if (vm.ColumnasByCompanyCategoria.length + 1 == vm.historicoBienestarEA.length) {
+                                        if (vm.banderaHBEA == 0) {
+                                            vm.banderaHBEA = 1;
+                                            for (var i = 0; i < vm.historicoBienestarEA.length; i++) {
+                                                if (vm.historicoBienestarEA[i] == undefined) {
+                                                    vm.historicoBienestarEA[i] = JSON.parse(JSON.stringify(_newHistorico));
+                                                }
+                                                var j = i + 1;
+                                                var k = i + 2;
+                                                document.getElementById('myTableEA').rows[1].cells[j].innerHTML = document.getElementById('myTableEA').rows[1].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Bienestar + "%</p>";
+                                                document.getElementById('myTableEA').rows[2].cells[j].innerHTML = document.getElementById('myTableEA').rows[2].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Bio + "%</p>";
+                                                document.getElementById('myTableEA').rows[3].cells[j].innerHTML = document.getElementById('myTableEA').rows[3].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Psico + "%</p>";
+                                                document.getElementById('myTableEA').rows[4].cells[j].innerHTML = document.getElementById('myTableEA').rows[4].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Social + "%</p>";
+
+                                                /*Preguntas Bio*/
+                                                document.getElementById('myTableEA').tBodies[0].rows[0].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg67 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[0].rows[1].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg71 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[0].rows[2].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg75 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[0].rows[3].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg84 + "%</p>";
+
+                                                /*Preguntas Psico*/
+                                                document.getElementById('myTableEA').tBodies[1].rows[0].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg79 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[1].rows[1].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg81 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[1].rows[2].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg83 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[1].rows[3].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg86 + "%</p>";
+
+                                                /*Preguntas Social*/
+                                                document.getElementById('myTableEA').tBodies[2].rows[0].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg69 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[2].rows[1].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg73 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[2].rows[2].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg77 + "%</p>";
+                                                document.getElementById('myTableEA').tBodies[2].rows[3].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg80 + "%</p>";
+
+
+
                                             }
-                                            var j = i + 1;
-                                            var k = i + 2;
-                                            document.getElementById('myTableEA').rows[1].cells[j].innerHTML = document.getElementById('myTableEA').rows[1].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Bienestar + "%</p>";
-                                            document.getElementById('myTableEA').rows[2].cells[j].innerHTML = document.getElementById('myTableEA').rows[2].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Bio + "%</p>";
-                                            document.getElementById('myTableEA').rows[3].cells[j].innerHTML = document.getElementById('myTableEA').rows[3].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Psico + "%</p>";
-                                            document.getElementById('myTableEA').rows[4].cells[j].innerHTML = document.getElementById('myTableEA').rows[4].cells[j].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Social + "%</p>";
-
-                                            /*Preguntas Bio*/
-                                            document.getElementById('myTableEA').tBodies[0].rows[0].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg67 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[0].rows[1].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg71 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[0].rows[2].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg75 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[0].rows[3].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[0].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg84 + "%</p>";
-
-                                            /*Preguntas Psico*/
-                                            document.getElementById('myTableEA').tBodies[1].rows[0].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg79 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[1].rows[1].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg81 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[1].rows[2].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg83 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[1].rows[3].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[1].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg86 + "%</p>";
-
-                                            /*Preguntas Social*/
-                                            document.getElementById('myTableEA').tBodies[2].rows[0].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[0].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg69 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[2].rows[1].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[1].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg73 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[2].rows[2].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[2].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg77 + "%</p>";
-                                            document.getElementById('myTableEA').tBodies[2].rows[3].cells[k].innerHTML = document.getElementById('myTableEA').tBodies[2].rows[3].cells[k].innerHTML + "<p class='bienestarHistorico'>" + vm.historicoBienestarEA[i].Preg80 + "%</p>";
-
-
-
                                         }
                                     }
-                                }
 
+                                });
                             });
-                        });
-                        vm.isBusy = false;
-                    } catch (aE) {
-                        vm.writteLog(aE.message, "vm.setDataHistoricoBienestarEA()");
-                        ////swal(aE.message, "", "warning");
+                            vm.isBusy = false;
+                        } catch (aE) {
+                            vm.writteLog(aE.message, "vm.setDataHistoricoBienestarEA()");
+                            ////swal(aE.message, "", "warning");
+                        }
                     }
                 }
 
@@ -4274,10 +4619,16 @@ function GetDashBoard() {
                             vm.seccionarArrayEARDinamico();/*se obtienen solo el string de carga Enfoque Area*/
                             break;
                         case 2:
+                            vm.seccionarArrayEERDinamico_Divis();/*se obtienen solo el string de carga Enfoque Empresa*/
+                            vm.seccionarArrayEARDinamico_Divis();/*se obtienen solo el string de carga Enfoque Area*/
                             break;
                         case 3:
+                            vm.seccionarArrayEERDinamico_AreaAgencia();/*se obtienen solo el string de carga Enfoque Empresa*/
+                            vm.seccionarArrayEARDinamico_AreaAgencia();/*se obtienen solo el string de carga Enfoque Area*/
                             break;
                         case 4:
+                            vm.seccionarArrayEERDinamico_Depto();/*se obtienen solo el string de carga Enfoque Empresa*/
+                            vm.seccionarArrayEARDinamico_Depto();/*se obtienen solo el string de carga Enfoque Area*/
                             break;
                         default:
 
@@ -4664,8 +5015,8 @@ function GetDashBoard() {
                                 '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
                                 '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
                                     '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
-                                    '</div>' +
-                                    '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
+                                    '</div>' + 
+                        (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
                                     '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
                                     '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                     '</div>' +
@@ -4868,8 +5219,11 @@ function GetDashBoard() {
                 }
             }
 
+            /* =============== Reporte dinámico =============== */
+            // nivel UnidadNegocio
             vm.seccionarArrayEERDinamico = function () {
                 try {
+                // POR UNIDAD DE NEGOCIO TIPOENTIDAD = 1
                     if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
                         if (vm.ComparativoGeneralPorNivelesEE.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEE.Data.length) {
                             var flag = 0;
@@ -4886,7 +5240,6 @@ function GetDashBoard() {
                             var iconoClase = "";
 
                             for (var i = 0; i < vm.ComparativoGeneralPorNivelesEE.Data.length; i++) {
-
                                 if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 2 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
                                     flag = flag + 1;
                                     if (flag == 1) {
@@ -4905,35 +5258,43 @@ function GetDashBoard() {
                                             "</div></div></center></div></div></div>";
                                             vm.historialDinamico.push(i);
                                             if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 2) {
-                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 colorBloque = vm.setClaseBGColor(colorClase);
-                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                vm.jsonGrafica[0].children.push({
-                                                    name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
-                                                        $color: colorBloque
-                                                    }
-                                                });
+                                                try {
+                                                    vm.jsonGrafica[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
                                                 vm.cuerpoContenidoHtml = "";
                                             }
 
                                             if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 3) {
                                                 if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 3) {
-                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                    vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
                                                     banderaPapaHijo = banderaPapaHijo + 1;
                                                     banderaPapaHijoHijo = -1;
                                                     vm.cuerpoContenidoHtml = "";
@@ -4942,31 +5303,35 @@ function GetDashBoard() {
                                                 if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 4) {
 
                                                     if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 4) {
-                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                         colorBloque = vm.setClaseBGColor(colorClase);
-                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
-                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
-                                                        });
+                                                        try {
+                                                            vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+                                                            console.log(e);
+                                                        }
                                                         banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
                                                         vm.cuerpoContenidoHtml = "";
                                                     }
                                                 }
                                                 if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
-                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
                                                     try {
                                                         vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
@@ -5012,60 +5377,72 @@ function GetDashBoard() {
                                                                                    "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
                                                                                    "</div></div></center></div></div></div>";
                                         if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 2) {
-                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                             colorBloque = vm.setClaseBGColor(colorClase);
-                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                            vm.jsonGrafica[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                            try {
+                                                vm.jsonGrafica[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                            } catch (e) {
+                                                console.log(e);
+                                            }
                                             vm.cuerpoContenidoHtml = "";
                                         }
                                         if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 3) {
                                             if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 3) {
-                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
-                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }   
                                                 banderaPapaHijo = banderaPapaHijo + 1;
                                                 vm.cuerpoContenidoHtml = "";
                                             }
 
                                             if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 4) {
                                                 if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 4) {
-                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
-                                                    vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
-                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
-                                                    });
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
                                                     banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
                                                     vm.cuerpoContenidoHtml = "";
                                                 }
                                             }
                                             if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
-                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 colorBloque = vm.setClaseBGColor(colorClase);
-                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
                                                 try {
                                                     vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
@@ -5102,16 +5479,20 @@ function GetDashBoard() {
                                         "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
                                         "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
                                         "</div></div></center></div></div></div>";
-                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Entidad);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[0].HC);
-                                    vm.jsonGrafica.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    try {
+                                        vm.jsonGrafica.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+                                    console.log(e);
+                                    }
                                     vm.cuerpoContenidoHtml = "";
                                 }
                             }
@@ -5181,35 +5562,43 @@ function GetDashBoard() {
                                             "</div></div></center></div></div></div>";
                                             vm.historialDinamicoEA.push(i);
                                             if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 2) {
-                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 colorBloque = vm.setClaseBGColor(colorClase);
-                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                vm.jsonGraficaEA[0].children.push({
-                                                    name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
-                                                        $color: colorBloque
-                                                    }
-                                                });
+                                                try {
+                                                    vm.jsonGraficaEA[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+
+                                                }
                                                 vm.cuerpoContenidoHtml = "";
                                             }
 
                                             if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 3) {
                                                 if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 3) {
-                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                    vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+
+                                                    }
                                                     banderaPapaHijo = banderaPapaHijo + 1;
                                                     banderaPapaHijoHijo = -1;
                                                     vm.cuerpoContenidoHtml = "";
@@ -5218,36 +5607,44 @@ function GetDashBoard() {
                                                 if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 4) {
 
                                                     if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 4) {
-                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                         colorBloque = vm.setClaseBGColor(colorClase);
-                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                         vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
-                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
-                                                        });
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
                                                         banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
                                                         vm.cuerpoContenidoHtml = "";
                                                     }
                                                 }
                                                 if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
-                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
                                                     try {
-                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
-                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
-                                                        });
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
                                                     } catch (e) {
                                                         console.log(e);
                                                     }
@@ -5288,60 +5685,72 @@ function GetDashBoard() {
                                                                                    "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
                                                                                    "</div></div></center></div></div></div>";
                                         if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 2) {
-                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                             colorBloque = vm.setClaseBGColor(colorClase);
-                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                             vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                            vm.jsonGraficaEA[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                            try {
+                                                vm.jsonGraficaEA[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                            } catch (e) {
+
+                                            }
                                             vm.cuerpoContenidoHtml = "";
                                         }
                                         if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 3) {
                                             if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 3) {
-                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
-                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                                } catch (e) {
+
+                                                }
                                                 banderaPapaHijo = banderaPapaHijo + 1;
                                                 vm.cuerpoContenidoHtml = "";
                                             }
 
                                             if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 4) {
                                                 if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 4) {
-                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
-                                                    vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
-                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
-                                                    });
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+
+                                                    }
                                                     banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
                                                     vm.cuerpoContenidoHtml = "";
                                                 }
                                             }
                                             if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
-                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 colorBloque = vm.setClaseBGColor(colorClase);
-                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
                                                 vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
                                                 try {
                                                     vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
@@ -5378,16 +5787,20 @@ function GetDashBoard() {
                                         "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
                                         "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
                                         "</div></div></center></div></div></div>";
-                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
                                     colorBloque = vm.setClaseBGColor(colorClase);
-                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Entidad);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
-                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
                                     vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[0].HC);
-                                    vm.jsonGraficaEA.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    try {
+                                        vm.jsonGraficaEA.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+
+                                    }
                                     vm.cuerpoContenidoHtml = "";
                                 }
                             }
@@ -5428,7 +5841,1870 @@ function GetDashBoard() {
                 }
 
             }
+            // nivel DivisionMarca
+            vm.seccionarArrayEERDinamico_Divis = function () {
+                try {
+                    // POR UNIDAD DE NEGOCIO TIPOENTIDAD = 1
+                    if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
+                        if (vm.ComparativoGeneralPorNivelesEE.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEE.Data.length) {
+                            var flag = 0;
+                            var initialIndex = 0;
+                            var finalIndex = 0;
+                            vm.newArray = [];
+                            vm.jsonGrafica = [];
+                            var ultimoInicial = 0;
+                            var banderaPapa = 0;
+                            var banderaPapaHijo = -1;
+                            var banderaPapaHijoHijo = -1;
+                            var colorClase = "";
+                            var colorBloque = "";
+                            var iconoClase = "";
 
+                            for (var i = 0; i < vm.ComparativoGeneralPorNivelesEE.Data.length; i++) {
+                                if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 3 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    flag = flag + 1;
+                                    if (flag == 1) {
+                                        initialIndex = i;
+                                    }
+                                    if (flag == 2) {
+                                        finalIndex = i;
+                                        for (var j = initialIndex; j < finalIndex; j++) {
+                                            vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                                "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                                "{{1}}" +
+                                                "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                                "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                                "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                                "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                                "</div></div></center></div></div></div>";
+                                            vm.historialDinamico.push(i);
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 3) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 4) {
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 4) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    banderaPapaHijo = banderaPapaHijo + 1;
+                                                    banderaPapaHijoHijo = -1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 5) {
+
+                                                    if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        colorBloque = vm.setClaseBGColor(colorClase);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                        try {
+                                                            vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+                                                            console.log(e);
+                                                        }
+                                                        banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                        vm.cuerpoContenidoHtml = "";
+                                                    }
+                                                }
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 6) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (j == finalIndex - 1) {
+                                                banderaPapa = banderaPapa + 1;
+                                            }
+
+                                        }
+                                        /*console.log(vm.newArray);
+                                        vm.pintarCollecionEE(vm.newArray);
+                                        vm.jsonGrafica.push(vm.newArray);
+                                        console.log(vm.jsonGrafica);
+                                        Reiniciar*/
+                                        i = i - 1;
+                                        ultimoInicial = finalIndex;
+                                        initialIndex = 0;
+                                        finalIndex = 0;
+                                        flag = 0;
+                                        banderaPapaHijo = -1;
+                                        banderaPapaHijoHijo = -1;
+                                        vm.newArray = [];
+                                    }
+                                }
+                                else if (i == vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    var inicial = ultimoInicial;
+                                    /*console.log("Indices para secionar");
+                                    console.log("Inicio:" + inicial + ". Fin: " + vm.ComparativoGeneralPorNivelesEE.Data.length - 1);*/
+                                    for (var j = inicial; j < (vm.ComparativoGeneralPorNivelesEE.Data.length); j++) {
+                                        vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                            "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                            "{{1}}" +
+                                            "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                            "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                            "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                            "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                            "</div></div></center></div></div></div>";
+                                        if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 3) {
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            colorBloque = vm.setClaseBGColor(colorClase);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                            try {
+                                                vm.jsonGrafica[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                            } catch (e) {
+                                                console.log(e);
+                                            }
+                                            vm.cuerpoContenidoHtml = "";
+                                        }
+                                        if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 4) {
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 4) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                banderaPapaHijo = banderaPapaHijo + 1;
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 5) {
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 6) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+                                        }
+                                        if (j == vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                            banderaPapa = banderaPapa + 1;
+                                        }
+
+                                    }
+                                    /*console.log(vm.jsonGrafica);
+                                    Reiniciar
+                                    i = i - 1; */
+                                    ultimoInicial = 0;
+                                    initialIndex = 0;
+                                    finalIndex = 0;
+                                    flag = 0;
+                                    banderaPapaHijo = -1;
+                                    banderaPapaHijoHijo = -1;
+                                    vm.newArray = [];
+                                }
+                                else if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 2 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                        "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                        "{{1}}" +
+                                        "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                        "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                        "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                        "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                        "</div></div></center></div></div></div>";
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Entidad);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[0].HC);
+                                    try {
+                                        vm.jsonGrafica.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                    vm.cuerpoContenidoHtml = "";
+                                }
+                            }
+                        }
+                        cargaJson = JSON.stringify(vm.jsonGrafica);
+                        cargaJson = cargaJson.slice(1, -1);
+                        let modelGrafico = { strJson: cargaJson }
+                        let model = { cadena: cargaJson, titulo: vm.UNSeleccionada, enfoque: vm.enfoqueTexto }
+                        $.ajax({
+                            url: '/Reporte/PwCicleEE/',
+                            type: 'POST',
+                            data: model,
+                            success: function (Response) {
+                                if (Response != null) {
+                                    $("#IdEE").append(Response);
+                                    initLoad();
+                                    setTimeout(function () {
+                                        if (1 == 1) {
+                                            $("#infovis").empty();
+                                            initLoad();
+                                        }
+                                    }, 5000);
+                                }
+                            }
+                        });
+                    }
+                } catch (aE) {
+                    vm.writteLog(aE.message, "vm.SeccionarArrayEERDinamico");
+                    //swal(aE.message, "", "warning");
+                }
+
+            }
+            vm.seccionarArrayEARDinamico_Divis = function () {
+                try {
+                    if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
+                        if (vm.ComparativoGeneralPorNivelesEA.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEA.Data.length) {
+                            var flag = 0;
+                            var initialIndex = 0;
+                            var finalIndex = 0;
+                            vm.newArray = [];
+                            vm.jsonGraficaEA = [];
+                            var ultimoInicial = 0;
+                            var banderaPapa = 0;
+                            var banderaPapaHijo = -1;
+                            var banderaPapaHijoHijo = -1;
+                            var colorClase = "";
+                            var colorBloque = "";
+                            var iconoClase = "";
+
+                            for (var i = 0; i < vm.ComparativoGeneralPorNivelesEA.Data.length; i++) {
+
+                                if (vm.ComparativoGeneralPorNivelesEA.Data[i].tipoEntidad == 3 && i < vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {/*Si en la ultima ya no encuentra nada aqui se cierra el recorrido*/
+                                    flag = flag + 1;
+                                    if (flag == 1) {
+                                        initialIndex = i;
+                                    }
+                                    if (flag == 2) {
+                                        finalIndex = i;
+                                        for (var j = initialIndex; j < finalIndex; j++) {
+                                            vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                                "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                                "{{1}}" +
+                                                "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                                "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                                "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                                "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                                "</div></div></center></div></div></div>";
+                                            vm.historialDinamicoEA.push(i);
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 3) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 4) {
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 4) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+
+                                                    }
+                                                    banderaPapaHijo = banderaPapaHijo + 1;
+                                                    banderaPapaHijoHijo = -1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 5) {
+
+                                                    if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        colorBloque = vm.setClaseBGColor(colorClase);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
+                                                        banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                        vm.cuerpoContenidoHtml = "";
+                                                    }
+                                                }
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 6) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (j == finalIndex - 1) {
+                                                banderaPapa = banderaPapa + 1;
+                                            }
+
+                                        }
+                                        /*console.log(vm.newArray);
+                                        vm.pintarCollecionEE(vm.newArray);
+                                        vm.jsonGrafica.push(vm.newArray);*/
+                                        console.log(vm.jsonGraficaEA);
+                                        /*Reiniciar*/
+                                        i = i - 1;
+                                        ultimoInicial = finalIndex;
+                                        initialIndex = 0;
+                                        finalIndex = 0;
+                                        flag = 0;
+                                        banderaPapaHijo = -1;
+                                        banderaPapaHijoHijo = -1;
+                                        vm.newArray = [];
+                                    }
+                                }
+                                else if (i == vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                    var inicial = ultimoInicial;
+                                    /*console.log("Indices para secionar");
+                                    console.log("Inicio:" + inicial + ". Fin: " + vm.ComparativoGeneralPorNivelesEA.Data.length - 1);*/
+                                    for (var j = inicial; j < (vm.ComparativoGeneralPorNivelesEA.Data.length); j++) {
+                                        vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                            "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                            "{{1}}" +
+                                            "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                            "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                            "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                            "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                            "</div></div></center></div></div></div>";
+                                        if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 3) {
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            colorBloque = vm.setClaseBGColor(colorClase);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                            try {
+                                                vm.jsonGraficaEA[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                            } catch (e) {
+
+                                            }
+                                            vm.cuerpoContenidoHtml = "";
+                                        }
+                                        if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 4) {
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 4) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                                } catch (e) {
+
+                                                }
+                                                banderaPapaHijo = banderaPapaHijo + 1;
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 5) {
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+
+                                                    }
+                                                    banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 6) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+                                        }
+                                        if (j == vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                            banderaPapa = banderaPapa + 1;
+                                        }
+
+                                    }
+                                    /*console.log(vm.jsonGrafica);
+                                    Reiniciar
+                                    i = i - 1; */
+                                    ultimoInicial = 0;
+                                    initialIndex = 0;
+                                    finalIndex = 0;
+                                    flag = 0;
+                                    banderaPapaHijo = -1;
+                                    banderaPapaHijoHijo = -1;
+                                    vm.newArray = [];
+                                }
+                                else if (vm.ComparativoGeneralPorNivelesEA.Data[i].tipoEntidad == 2 && i < vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                    vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                        "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                        "{{1}}" +
+                                        "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                        "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                        "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                        "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                        "</div></div></center></div></div></div>";
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Entidad);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[0].HC);
+                                    try {
+                                        vm.jsonGraficaEA.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+
+                                    }
+                                    vm.cuerpoContenidoHtml = "";
+                                }
+                            }
+                        }
+                        /*console.log(vm.jsonGrafica);
+                        document.getElementById("infovisEA").innerHTML;*/
+                        cargaJsonEA = JSON.stringify(vm.jsonGraficaEA);
+                        cargaJsonEA = cargaJsonEA.slice(1, -1);
+                        let modelGrafico = { strJson: cargaJsonEA }
+                        let model = { cadena: cargaJsonEA, titulo: vm.UNSeleccionada }
+                        $.ajax({
+                            url: '/Reporte/PwCicleEA/',
+                            type: 'POST',
+                            data: model,
+                            success: function (Response) {
+                                if (Response != null) {
+                                    $("#IdEA").append(Response);
+                                    initLoadEA();
+                                    /*vm.isBusy=true;*/
+                                    setTimeout(function () {
+                                        if (1 == 1) {
+                                            $("#infovisEA").empty();
+                                            initLoadEA();
+                                            $scope.$apply(function () {
+                                                vm.isBusy = false;
+                                            });
+
+                                        }
+                                    }, 5000);
+                                }
+                            }
+                        });
+                    }
+
+                } catch (aE) {
+                    vm.writteLog(aE.message, "vm.SeccionarArrayEARDinamico");
+                    //swal(aE.message, "", "warning");
+                }
+
+            }
+            // nivel AreaAgencia
+            vm.seccionarArrayEERDinamico_AreaAgencia = function () {
+                try {
+                    // POR UNIDAD DE NEGOCIO TIPOENTIDAD = 1
+                    if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
+                        if (vm.ComparativoGeneralPorNivelesEE.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEE.Data.length) {
+                            var flag = 0;
+                            var initialIndex = 0;
+                            var finalIndex = 0;
+                            vm.newArray = [];
+                            vm.jsonGrafica = [];
+                            var ultimoInicial = 0;
+                            var banderaPapa = 0;
+                            var banderaPapaHijo = -1;
+                            var banderaPapaHijoHijo = -1;
+                            var colorClase = "";
+                            var colorBloque = "";
+                            var iconoClase = "";
+
+                            for (var i = 0; i < vm.ComparativoGeneralPorNivelesEE.Data.length; i++) {
+                                if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 4 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    flag = flag + 1;
+                                    if (flag == 1) {
+                                        initialIndex = i;
+                                    }
+                                    if (flag == 2) {
+                                        finalIndex = i;
+                                        for (var j = initialIndex; j < finalIndex; j++) {
+                                            vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                                "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                                "{{1}}" +
+                                                "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                                "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                                "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                                "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                                "</div></div></center></div></div></div>";
+                                            vm.historialDinamico.push(i);
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 4) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 5) {
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    banderaPapaHijo = banderaPapaHijo + 1;
+                                                    banderaPapaHijoHijo = -1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 6) {
+
+                                                    if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 6) {
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        colorBloque = vm.setClaseBGColor(colorClase);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                        try {
+                                                            vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+                                                            console.log(e);
+                                                        }
+                                                        banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                        vm.cuerpoContenidoHtml = "";
+                                                    }
+                                                }
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 7) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (j == finalIndex - 1) {
+                                                banderaPapa = banderaPapa + 1;
+                                            }
+
+                                        }
+                                        /*console.log(vm.newArray);
+                                        vm.pintarCollecionEE(vm.newArray);
+                                        vm.jsonGrafica.push(vm.newArray);
+                                        console.log(vm.jsonGrafica);
+                                        Reiniciar*/
+                                        i = i - 1;
+                                        ultimoInicial = finalIndex;
+                                        initialIndex = 0;
+                                        finalIndex = 0;
+                                        flag = 0;
+                                        banderaPapaHijo = -1;
+                                        banderaPapaHijoHijo = -1;
+                                        vm.newArray = [];
+                                    }
+                                }
+                                else if (i == vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    var inicial = ultimoInicial;
+                                    /*console.log("Indices para secionar");
+                                    console.log("Inicio:" + inicial + ". Fin: " + vm.ComparativoGeneralPorNivelesEE.Data.length - 1);*/
+                                    for (var j = inicial; j < (vm.ComparativoGeneralPorNivelesEE.Data.length); j++) {
+                                        vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                            "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                            "{{1}}" +
+                                            "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                            "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                            "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                            "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                            "</div></div></center></div></div></div>";
+                                        if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 4) {
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            colorBloque = vm.setClaseBGColor(colorClase);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                            try {
+                                                vm.jsonGrafica[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                            } catch (e) {
+                                                console.log(e);
+                                            }
+                                            vm.cuerpoContenidoHtml = "";
+                                        }
+                                        if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 5) {
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                banderaPapaHijo = banderaPapaHijo + 1;
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 6) {
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 6) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 7) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+                                        }
+                                        if (j == vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                            banderaPapa = banderaPapa + 1;
+                                        }
+
+                                    }
+                                    /*console.log(vm.jsonGrafica);
+                                    Reiniciar
+                                    i = i - 1; */
+                                    ultimoInicial = 0;
+                                    initialIndex = 0;
+                                    finalIndex = 0;
+                                    flag = 0;
+                                    banderaPapaHijo = -1;
+                                    banderaPapaHijoHijo = -1;
+                                    vm.newArray = [];
+                                }
+                                else if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 3 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                        "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                        "{{1}}" +
+                                        "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                        "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                        "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                        "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                        "</div></div></center></div></div></div>";
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Entidad);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[0].HC);
+                                    try {
+                                        vm.jsonGrafica.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                    vm.cuerpoContenidoHtml = "";
+                                }
+                            }
+                        }
+                        cargaJson = JSON.stringify(vm.jsonGrafica);
+                        cargaJson = cargaJson.slice(1, -1);
+                        let modelGrafico = { strJson: cargaJson }
+                        let model = { cadena: cargaJson, titulo: vm.UNSeleccionada, enfoque: vm.enfoqueTexto }
+                        $.ajax({
+                            url: '/Reporte/PwCicleEE/',
+                            type: 'POST',
+                            data: model,
+                            success: function (Response) {
+                                if (Response != null) {
+                                    $("#IdEE").append(Response);
+                                    initLoad();
+                                    setTimeout(function () {
+                                        if (1 == 1) {
+                                            $("#infovis").empty();
+                                            initLoad();
+                                        }
+                                    }, 5000);
+                                }
+                            }
+                        });
+                    }
+                } catch (aE) {
+                    vm.writteLog(aE.message, "vm.SeccionarArrayEERDinamico");
+                    //swal(aE.message, "", "warning");
+                }
+
+            }
+            vm.seccionarArrayEARDinamico_AreaAgencia = function () {
+                try {
+                    if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
+                        if (vm.ComparativoGeneralPorNivelesEA.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEA.Data.length) {
+                            var flag = 0;
+                            var initialIndex = 0;
+                            var finalIndex = 0;
+                            vm.newArray = [];
+                            vm.jsonGraficaEA = [];
+                            var ultimoInicial = 0;
+                            var banderaPapa = 0;
+                            var banderaPapaHijo = -1;
+                            var banderaPapaHijoHijo = -1;
+                            var colorClase = "";
+                            var colorBloque = "";
+                            var iconoClase = "";
+
+                            for (var i = 0; i < vm.ComparativoGeneralPorNivelesEA.Data.length; i++) {
+
+                                if (vm.ComparativoGeneralPorNivelesEA.Data[i].tipoEntidad == 4 && i < vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {/*Si en la ultima ya no encuentra nada aqui se cierra el recorrido*/
+                                    flag = flag + 1;
+                                    if (flag == 1) {
+                                        initialIndex = i;
+                                    }
+                                    if (flag == 2) {
+                                        finalIndex = i;
+                                        for (var j = initialIndex; j < finalIndex; j++) {
+                                            vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                                "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                                "{{1}}" +
+                                                "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                                "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                                "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                                "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                                "</div></div></center></div></div></div>";
+                                            vm.historialDinamicoEA.push(i);
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 4) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 5) {
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+
+                                                    }
+                                                    banderaPapaHijo = banderaPapaHijo + 1;
+                                                    banderaPapaHijoHijo = -1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 6) {
+
+                                                    if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 6) {
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        colorBloque = vm.setClaseBGColor(colorClase);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
+                                                        banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                        vm.cuerpoContenidoHtml = "";
+                                                    }
+                                                }
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 7) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (j == finalIndex - 1) {
+                                                banderaPapa = banderaPapa + 1;
+                                            }
+
+                                        }
+                                        /*console.log(vm.newArray);
+                                        vm.pintarCollecionEE(vm.newArray);
+                                        vm.jsonGrafica.push(vm.newArray);*/
+                                        console.log(vm.jsonGraficaEA);
+                                        /*Reiniciar*/
+                                        i = i - 1;
+                                        ultimoInicial = finalIndex;
+                                        initialIndex = 0;
+                                        finalIndex = 0;
+                                        flag = 0;
+                                        banderaPapaHijo = -1;
+                                        banderaPapaHijoHijo = -1;
+                                        vm.newArray = [];
+                                    }
+                                }
+                                else if (i == vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                    var inicial = ultimoInicial;
+                                    /*console.log("Indices para secionar");
+                                    console.log("Inicio:" + inicial + ". Fin: " + vm.ComparativoGeneralPorNivelesEA.Data.length - 1);*/
+                                    for (var j = inicial; j < (vm.ComparativoGeneralPorNivelesEA.Data.length); j++) {
+                                        vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                            "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                            "{{1}}" +
+                                            "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                            "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                            "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                            "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                            "</div></div></center></div></div></div>";
+                                        if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 4) {
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            colorBloque = vm.setClaseBGColor(colorClase);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                            try {
+                                                vm.jsonGraficaEA[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                            } catch (e) {
+
+                                            }
+                                            vm.cuerpoContenidoHtml = "";
+                                        }
+                                        if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 5) {
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                                } catch (e) {
+
+                                                }
+                                                banderaPapaHijo = banderaPapaHijo + 1;
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 6) {
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 6) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+
+                                                    }
+                                                    banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 7) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+                                        }
+                                        if (j == vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                            banderaPapa = banderaPapa + 1;
+                                        }
+
+                                    }
+                                    /*console.log(vm.jsonGrafica);
+                                    Reiniciar
+                                    i = i - 1; */
+                                    ultimoInicial = 0;
+                                    initialIndex = 0;
+                                    finalIndex = 0;
+                                    flag = 0;
+                                    banderaPapaHijo = -1;
+                                    banderaPapaHijoHijo = -1;
+                                    vm.newArray = [];
+                                }
+                                else if (vm.ComparativoGeneralPorNivelesEA.Data[i].tipoEntidad == 3 && i < vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                    vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                        "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                        "{{1}}" +
+                                        "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                        "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                        "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                        "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                        "</div></div></center></div></div></div>";
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Entidad);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[0].HC);
+                                    try {
+                                        vm.jsonGraficaEA.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+
+                                    }
+                                    vm.cuerpoContenidoHtml = "";
+                                }
+                            }
+                        }
+                        /*console.log(vm.jsonGrafica);
+                        document.getElementById("infovisEA").innerHTML;*/
+                        cargaJsonEA = JSON.stringify(vm.jsonGraficaEA);
+                        cargaJsonEA = cargaJsonEA.slice(1, -1);
+                        let modelGrafico = { strJson: cargaJsonEA }
+                        let model = { cadena: cargaJsonEA, titulo: vm.UNSeleccionada }
+                        $.ajax({
+                            url: '/Reporte/PwCicleEA/',
+                            type: 'POST',
+                            data: model,
+                            success: function (Response) {
+                                if (Response != null) {
+                                    $("#IdEA").append(Response);
+                                    initLoadEA();
+                                    /*vm.isBusy=true;*/
+                                    setTimeout(function () {
+                                        if (1 == 1) {
+                                            $("#infovisEA").empty();
+                                            initLoadEA();
+                                            $scope.$apply(function () {
+                                                vm.isBusy = false;
+                                            });
+
+                                        }
+                                    }, 5000);
+                                }
+                            }
+                        });
+                    }
+
+                } catch (aE) {
+                    vm.writteLog(aE.message, "vm.SeccionarArrayEARDinamico");
+                    //swal(aE.message, "", "warning");
+                }
+
+            }
+            // nivel Departamento
+            vm.seccionarArrayEERDinamico_Depto = function () {
+                try {
+                    // POR UNIDAD DE NEGOCIO TIPOENTIDAD = 1
+                    if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
+                        if (vm.ComparativoGeneralPorNivelesEE.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEE.Data.length) {
+                            var flag = 0;
+                            var initialIndex = 0;
+                            var finalIndex = 0;
+                            vm.newArray = [];
+                            vm.jsonGrafica = [];
+                            var ultimoInicial = 0;
+                            var banderaPapa = 0;
+                            var banderaPapaHijo = -1;
+                            var banderaPapaHijoHijo = -1;
+                            var colorClase = "";
+                            var colorBloque = "";
+                            var iconoClase = "";
+
+                            for (var i = 0; i < vm.ComparativoGeneralPorNivelesEE.Data.length; i++) {
+                                if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 5 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    flag = flag + 1;
+                                    if (flag == 1) {
+                                        initialIndex = i;
+                                    }
+                                    if (flag == 2) {
+                                        finalIndex = i;
+                                        for (var j = initialIndex; j < finalIndex; j++) {
+                                            vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                                "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                                "{{1}}" +
+                                                "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                                "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                                "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                                "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                                "</div></div></center></div></div></div>";
+                                            vm.historialDinamico.push(i);
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 6) {
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 6) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    banderaPapaHijo = banderaPapaHijo + 1;
+                                                    banderaPapaHijoHijo = -1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 7) {
+
+                                                    if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 7) {
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        colorBloque = vm.setClaseBGColor(colorClase);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                        try {
+                                                            vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+                                                            console.log(e);
+                                                        }
+                                                        banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                        vm.cuerpoContenidoHtml = "";
+                                                    }
+                                                }
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 8) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (j == finalIndex - 1) {
+                                                banderaPapa = banderaPapa + 1;
+                                            }
+
+                                        }
+                                        /*console.log(vm.newArray);
+                                        vm.pintarCollecionEE(vm.newArray);
+                                        vm.jsonGrafica.push(vm.newArray);
+                                        console.log(vm.jsonGrafica);
+                                        Reiniciar*/
+                                        i = i - 1;
+                                        ultimoInicial = finalIndex;
+                                        initialIndex = 0;
+                                        finalIndex = 0;
+                                        flag = 0;
+                                        banderaPapaHijo = -1;
+                                        banderaPapaHijoHijo = -1;
+                                        vm.newArray = [];
+                                    }
+                                }
+                                else if (i == vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    var inicial = ultimoInicial;
+                                    /*console.log("Indices para secionar");
+                                    console.log("Inicio:" + inicial + ". Fin: " + vm.ComparativoGeneralPorNivelesEE.Data.length - 1);*/
+                                    for (var j = inicial; j < (vm.ComparativoGeneralPorNivelesEE.Data.length); j++) {
+                                        vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                            "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                            "{{1}}" +
+                                            "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                            "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                            "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                            "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                            "</div></div></center></div></div></div>";
+                                        if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 5) {
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            colorBloque = vm.setClaseBGColor(colorClase);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                            try {
+                                                vm.jsonGrafica[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                            } catch (e) {
+                                                console.log(e);
+                                            }
+                                            vm.cuerpoContenidoHtml = "";
+                                        }
+                                        if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 6) {
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 6) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                banderaPapaHijo = banderaPapaHijo + 1;
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad >= 7) {
+                                                if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 7) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad == 8) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[j].HC);
+                                                try {
+                                                    vm.jsonGrafica[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEE.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEE.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEE.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEE.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEE.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+                                        }
+                                        if (j == vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                            banderaPapa = banderaPapa + 1;
+                                        }
+
+                                    }
+                                    /*console.log(vm.jsonGrafica);
+                                    Reiniciar
+                                    i = i - 1; */
+                                    ultimoInicial = 0;
+                                    initialIndex = 0;
+                                    finalIndex = 0;
+                                    flag = 0;
+                                    banderaPapaHijo = -1;
+                                    banderaPapaHijoHijo = -1;
+                                    vm.newArray = [];
+                                }
+                                else if (vm.ComparativoGeneralPorNivelesEE.Data[i].tipoEntidad == 4 && i < vm.ComparativoGeneralPorNivelesEE.Data.length - 1) {
+                                    vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                        "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                        "{{1}}" +
+                                        "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                        "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                        "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                        "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                        "</div></div></center></div></div></div>";
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Entidad);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEE.Data[0].HC);
+                                    try {
+                                        vm.jsonGrafica.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+                                        console.log(e);
+                                    }
+                                    vm.cuerpoContenidoHtml = "";
+                                }
+                            }
+                        }
+                        cargaJson = JSON.stringify(vm.jsonGrafica);
+                        cargaJson = cargaJson.slice(1, -1);
+                        let modelGrafico = { strJson: cargaJson }
+                        let model = { cadena: cargaJson, titulo: vm.UNSeleccionada, enfoque: vm.enfoqueTexto }
+                        $.ajax({
+                            url: '/Reporte/PwCicleEE/',
+                            type: 'POST',
+                            data: model,
+                            success: function (Response) {
+                                if (Response != null) {
+                                    $("#IdEE").append(Response);
+                                    initLoad();
+                                    setTimeout(function () {
+                                        if (1 == 1) {
+                                            $("#infovis").empty();
+                                            initLoad();
+                                        }
+                                    }, 5000);
+                                }
+                            }
+                        });
+                    }
+                } catch (aE) {
+                    vm.writteLog(aE.message, "vm.SeccionarArrayEERDinamico");
+                    //swal(aE.message, "", "warning");
+                }
+
+            }
+            vm.seccionarArrayEARDinamico_Depto = function () {
+                try {
+                    if (vm.SeccionesReporte.Id == 39 && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
+                        if (vm.ComparativoGeneralPorNivelesEA.Data.length > 0 && vm.historialDinamico.length < vm.ComparativoGeneralPorNivelesEA.Data.length) {
+                            var flag = 0;
+                            var initialIndex = 0;
+                            var finalIndex = 0;
+                            vm.newArray = [];
+                            vm.jsonGraficaEA = [];
+                            var ultimoInicial = 0;
+                            var banderaPapa = 0;
+                            var banderaPapaHijo = -1;
+                            var banderaPapaHijoHijo = -1;
+                            var colorClase = "";
+                            var colorBloque = "";
+                            var iconoClase = "";
+
+                            for (var i = 0; i < vm.ComparativoGeneralPorNivelesEA.Data.length; i++) {
+
+                                if (vm.ComparativoGeneralPorNivelesEA.Data[i].tipoEntidad == 5 && i < vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {/*Si en la ultima ya no encuentra nada aqui se cierra el recorrido*/
+                                    flag = flag + 1;
+                                    if (flag == 1) {
+                                        initialIndex = i;
+                                    }
+                                    if (flag == 2) {
+                                        finalIndex = i;
+                                        for (var j = initialIndex; j < finalIndex; j++) {
+                                            vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                                "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                                "{{1}}" +
+                                                "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                                "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                                "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                                "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                                "</div></div></center></div></div></div>";
+                                            vm.historialDinamicoEA.push(i);
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: {
+                                                            $color: colorBloque
+                                                        }
+                                                    });
+                                                } catch (e) {
+
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 6) {
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 6) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                                    } catch (e) {
+
+                                                    }
+                                                    banderaPapaHijo = banderaPapaHijo + 1;
+                                                    banderaPapaHijoHijo = -1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 7) {
+
+                                                    if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 7) {
+                                                        colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        colorBloque = vm.setClaseBGColor(colorClase);
+                                                        iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                        vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
+                                                        banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                        vm.cuerpoContenidoHtml = "";
+                                                    }
+                                                }
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 8) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        try {
+                                                            vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                                name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                            });
+                                                        } catch (e) {
+
+                                                        }
+                                                    } catch (e) {
+                                                        console.log(e);
+                                                    }
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (j == finalIndex - 1) {
+                                                banderaPapa = banderaPapa + 1;
+                                            }
+
+                                        }
+                                        /*console.log(vm.newArray);
+                                        vm.pintarCollecionEE(vm.newArray);
+                                        vm.jsonGrafica.push(vm.newArray);*/
+                                        console.log(vm.jsonGraficaEA);
+                                        /*Reiniciar*/
+                                        i = i - 1;
+                                        ultimoInicial = finalIndex;
+                                        initialIndex = 0;
+                                        finalIndex = 0;
+                                        flag = 0;
+                                        banderaPapaHijo = -1;
+                                        banderaPapaHijoHijo = -1;
+                                        vm.newArray = [];
+                                    }
+                                }
+                                else if (i == vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                    var inicial = ultimoInicial;
+                                    /*console.log("Indices para secionar");
+                                    console.log("Inicio:" + inicial + ". Fin: " + vm.ComparativoGeneralPorNivelesEA.Data.length - 1);*/
+                                    for (var j = inicial; j < (vm.ComparativoGeneralPorNivelesEA.Data.length); j++) {
+                                        vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                            "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                            "{{1}}" +
+                                            "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                            "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                            "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                            "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                            "</div></div></center></div></div></div>";
+                                        if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 5) {
+                                            colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            colorBloque = vm.setClaseBGColor(colorClase);
+                                            iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                            vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                            try {
+                                                vm.jsonGraficaEA[0].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                            } catch (e) {
+
+                                            }
+                                            vm.cuerpoContenidoHtml = "";
+                                        }
+                                        if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 6) {
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 6) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC });
+                                                } catch (e) {
+
+                                                }
+                                                banderaPapaHijo = banderaPapaHijo + 1;
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad >= 7) {
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 7) {
+                                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                    try {
+                                                        vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children.push({
+                                                            name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                        });
+                                                    } catch (e) {
+
+                                                    }
+                                                    banderaPapaHijoHijo = banderaPapaHijoHijo + 1;
+                                                    vm.cuerpoContenidoHtml = "";
+                                                }
+                                            }
+                                            if (vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad == 8) {
+                                                colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                colorBloque = vm.setClaseBGColor(colorClase);
+                                                iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje);
+                                                vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[j].HC);
+                                                try {
+                                                    vm.jsonGraficaEA[0].children[banderaPapa].children[banderaPapaHijo].children[banderaPapaHijoHijo].children.push({
+                                                        name: vm.cuerpoContenidoHtml, id: vm.getUid(), data: { $color: colorBloque }, tipoEntidad: vm.ComparativoGeneralPorNivelesEA.Data[j].tipoEntidad, Entidad: vm.ComparativoGeneralPorNivelesEA.Data[j].Entidad, Frecuencia: vm.ComparativoGeneralPorNivelesEA.Data[j].Frecuencia, Porcentaje: vm.ComparativoGeneralPorNivelesEA.Data[j].Porcentaje, HC: vm.ComparativoGeneralPorNivelesEA.Data[j].HC
+                                                    });
+                                                } catch (e) {
+                                                    console.log(e);
+                                                }
+                                                vm.cuerpoContenidoHtml = "";
+                                            }
+                                        }
+                                        if (j == vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                            banderaPapa = banderaPapa + 1;
+                                        }
+
+                                    }
+                                    /*console.log(vm.jsonGrafica);
+                                    Reiniciar
+                                    i = i - 1; */
+                                    ultimoInicial = 0;
+                                    initialIndex = 0;
+                                    finalIndex = 0;
+                                    flag = 0;
+                                    banderaPapaHijo = -1;
+                                    banderaPapaHijoHijo = -1;
+                                    vm.newArray = [];
+                                }
+                                else if (vm.ComparativoGeneralPorNivelesEA.Data[i].tipoEntidad == 4 && i < vm.ComparativoGeneralPorNivelesEA.Data.length - 1) {
+                                    vm.cuerpoContenidoHtml = "<div class='d_flex justify-content-center'>" +
+                                        "<div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>" +
+                                        "{{1}}" +
+                                        "</center></div><div class='row d_flex justify-content-center'><div class='col-5'>" +
+                                        "<center><div class='{{2}}'><center><img class='m-2 w-icon-impulsores' ng-src='{{3}}' src='{{3}}'>" +
+                                        "</center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>{{4}}%</p>" +
+                                        "<p class='yellow-clima f-17 mb-1 ng-binding'>HC:{{5}}</p>" +
+                                        "</div></div></center></div></div></div>";
+                                    colorClase = vm.setClase(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    colorBloque = vm.setClaseBGColor(colorClase);
+                                    iconoClase = vm.setIcono(vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{1}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Entidad);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{2}}", colorClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{3}}", iconoClase);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{4}}", vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje == 'NaN' ? 0 : vm.ComparativoGeneralPorNivelesEA.Data[0].Porcentaje);
+                                    vm.cuerpoContenidoHtml = vm.cuerpoContenidoHtml.replace("{{5}}", vm.ComparativoGeneralPorNivelesEA.Data[0].HC);
+                                    try {
+                                        vm.jsonGraficaEA.push({ name: vm.cuerpoContenidoHtml, id: vm.getUid(), children: [], data: { $color: colorBloque } });
+                                    } catch (e) {
+
+                                    }
+                                    vm.cuerpoContenidoHtml = "";
+                                }
+                            }
+                        }
+                        /*console.log(vm.jsonGrafica);
+                        document.getElementById("infovisEA").innerHTML;*/
+                        cargaJsonEA = JSON.stringify(vm.jsonGraficaEA);
+                        cargaJsonEA = cargaJsonEA.slice(1, -1);
+                        let modelGrafico = { strJson: cargaJsonEA }
+                        let model = { cadena: cargaJsonEA, titulo: vm.UNSeleccionada }
+                        $.ajax({
+                            url: '/Reporte/PwCicleEA/',
+                            type: 'POST',
+                            data: model,
+                            success: function (Response) {
+                                if (Response != null) {
+                                    $("#IdEA").append(Response);
+                                    initLoadEA();
+                                    /*vm.isBusy=true;*/
+                                    setTimeout(function () {
+                                        if (1 == 1) {
+                                            $("#infovisEA").empty();
+                                            initLoadEA();
+                                            $scope.$apply(function () {
+                                                vm.isBusy = false;
+                                            });
+
+                                        }
+                                    }, 5000);
+                                }
+                            }
+                        });
+                    }
+
+                } catch (aE) {
+                    vm.writteLog(aE.message, "vm.SeccionarArrayEARDinamico");
+                    //swal(aE.message, "", "warning");
+                }
+
+            }
+            /* =============== Reporte dinámico =============== */
 
             vm.pintarCollecionEE = function (array) {
                 try {
@@ -5444,7 +7720,7 @@ function GetDashBoard() {
                                 '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
                                     '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                     '</div>' +
-                                    '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
+                    (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
                                     '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
                                     '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                     '</div>' +
@@ -5525,7 +7801,7 @@ function GetDashBoard() {
                             '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
                                 '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                 '</div>' +
-                                '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
+                    (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
                                 '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
                                 '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                 '</div>' +
@@ -5601,7 +7877,7 @@ function GetDashBoard() {
                             '<div class="bar-clasificacion"><!--cambia segun entidad-->' +
                                 '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                                 '</div>' +
-                                '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' +
+                (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
                                 '<p class="label-top-graphic-blue2">{{ item.HC }}</p>' +
                                 '<div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">' +
                                 '</div>' +
@@ -6972,7 +9248,7 @@ function GetDashBoard() {
                                 if (vm.Departamento.IdDepartamento != "" && vm.Departamento.IdDepartamento != 0) {
                                     vm.EstructuraColumnas = [];
                                     vm.contadorEstructura = 1;
-                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 4 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.Departamento.Nombre, function () {
+                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 4 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.Departamento.Nombre, vm.EstructuraColumnas, function () {
                                         vm.fillColumnas(vm.EstructuraColumnas);
                                         vm.isBusy = false;
                                     });
@@ -8032,12 +10308,11 @@ function GetDashBoard() {
                         swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
                     }
                     else {
-                        swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
-                            localStorage["tieneReporte"] = "";
-                            /*localStorage.clear(); no se usa este ya que tiene un UID especifico*/
+                        localStorage["tieneReporte"] = "";
+                        /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
                             vm.listPeticiones = [];
                             window.location.href = "/reporteoClima/Index/";
-                        });
+                        });*/
                     }
                 });
 

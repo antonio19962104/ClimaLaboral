@@ -22,5 +22,6 @@ namespace ML
         public static string LogPrintData { get; set; } = "LogPrintData";
         public static string LogAccess { get; set; } = "LogAccess";
         public static string LogClimaDinamicoBackGroundJobReporte { get; set; } = "LogClimaDinamicoBackGroundJobReporte";
+        public static string LogModuloEncuestas { get; set; } = "LogModuloEncuestas";
     }
 }

@@ -1,0 +1,202 @@
+﻿<!--
+    LLamar estos metodos
+    var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
+    objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+    objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+-->
+@model ML.Encuesta
+@{
+    ViewBag.Title = "Reporte dinámico";
+    Layout = "~/Views/ReporteoClima/_LayoutReportes_2.cshtml";
+    var anioActual = DateTime.Now.Year;
+    Model.Anio = anioActual;
+    var inicial = 2019;
+    var final = anioActual + 2;
+    var list = new List<int>();
+    for (int i = inicial; i < final; i++)
+    {
+        list.Add(i);
+    }
+    var selectList = new SelectList(list, anioActual);
+}
+
+<div class="content-wrap" ng-app="app" ng-controller="reporteDinamicoController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Seccion filtros -->
+                <div class="col-lg-4 col-md-5 col-xs-12 col-sm-12">
+                    <div class="form-group" id="sectionBD">
+                        <label style="font-weight: bold;">Base de datos</label>
+                        <select id="DDLBD" name="DDLCompanyCategoria" class="form-control"></select>
+                    </div>
+                    <div class="form-group sectionConf">
+                        <label style="font-weight:bold;">Elige una unidad de negocio para ver el reporte</label>
+                        <select id="UnidadNegocio" name="DDLCompanyCategoria" class="form-control" multiple></select>
+                    </div>
+                    <div class="form-group sectionConf">
+                        <label style="font-weight: bold;">Elige a que nivel quieres el reporte</label>
+                        <div id="selector-level">
+                            <ul style="list-style-type: disclosure-open;">
+                                <li>
+                                    <input value="" type="checkbox" checked onclick="return false;"> Unidad de Negocio
+                                </li>
+                                <ul style="margin-left: 15px; list-style-type: none;">
+                                    <li><input class="selector" value="company" type="checkbox" name="company" id="company" /><label for="company">División marca</label></li>
+                                    <li><input class="selector" value="area" type="checkbox" name="area" id="area" /><label for="area">Area agencia</label></li>
+                                    <li><input class="selected" value="departamento" type="checkbox" name="departamento" id="departamento" /><label for="departamento">Departamento</label></li>
+                                    <li><input class="selector" value="subdepartamento" type="checkbox" name="subdepartamento" id="subdepartamento" /><label for="subdepartamento">Subdepartamento</label></li>
+                                </ul>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group sectionConf">
+                        <label style="font-weight: bold;">Selecciona el periodo de aplicación</label>
+                        @Html.DropDownListFor(m => m.Anio, selectList, "-Selecciona-", htmlAttributes: new { @id = "txtAnio", @class = "form-control", @autopostback = true })
+                    </div>
+                    <div class="form-group sectionConf">
+                        <a href="#reporte">
+                            <input id="ViewReport" type="submit" class="btn btn-success" value="Ver Reporte" ng-click="vm.getDataReporte();" onclick="" style="margin-top:20px;" />
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div id="IdEE"></div>
+                    <div id="IdEA"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var listUnidadNegocio = [];
+    $(document).ready(function () {
+        document.getElementById("loading").style.display = "block";
+        try {
+            document.getElementById("UnidadNegocio").style.display = "none";
+            $(".sectionConf").hide();
+            $.ajax({
+                url: "/BD/GetAllForListadoJSON",
+                type: "GET",
+                success: function (response) {
+                    $("#DDLBD").empty();
+                    $("#DDLBD").append("<option value='" + 0 + "'>-Selecciona-</option>");
+                    [].forEach.call(response.ListadoDeBaseDeDatos, function (elem) {
+                        if (elem.TipoBD.IdTipoBD == 1)
+                            $("#DDLBD").append("<option value='" + elem.IdBaseDeDatos + "'>" + elem.Nombre + "</option>");
+                    });
+                    document.getElementsByClassName("busy")[0].style.display = "none";
+                }
+            });
+        } catch (e) {
+
+        }
+
+        document.getElementById("DDLBD").addEventListener("change", function (e) {
+            // cargar la estrucura que existe en el layout de BD
+            try {
+                var IdBaseDeDatos = e.target.value;
+                document.getElementById("loading").style.display = "block";
+                $.ajax({
+                    url: '/EstructuraAFMReporte/GetCompanyCategoria/?IdBaseDeDatos=' + IdBaseDeDatos,
+                    type: 'GET',
+                    success: function (listCompanyCategoria) {
+                        document.getElementById("loading").style.display = "none";
+                        $(".sectionConf").show();
+                        destroyMultiSelect('UnidadNegocio');
+                        document.getElementById("UnidadNegocio").innerHTML = "";
+                        [].forEach.call(listCompanyCategoria, function (companyCategoria) {
+                            $('#UnidadNegocio').append('<option value="' + companyCategoria + '">' + companyCategoria + '</option>');
+                        });
+                        // create MultiSelect from select HTML element
+                        var required = $("#UnidadNegocio").kendoMultiSelect().data("kendoMultiSelect");
+                        required.bind("change", function (e) {
+                            listUnidadNegocio = this.value();
+                        });
+                    }, error: function (err_CompanyCategoria) {
+                        document.getElementById("loading").style.display = "none";
+                        console.log(err_CompanyCategoria);
+                    }
+                });
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                console.log(aE);
+            }
+        });
+        function mergeDemograficos(listEstructura, IdBaseDeDatos, list) {
+            try {
+                document.getElementsByClassName("k-multiselect-wrap")[0].style.height = "inherit";
+                mergeEstructuraGAFM(IdBaseDeDatos, list);
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                console.log(aE);
+            }
+        }
+
+        function mergeEstructuraGAFM(IdBaseDeDatos, list) {
+            document.getElementById("loading").style.display = "block";
+            var listFilter = list;
+            var listLevel = [];
+            try {
+                var controls = $("#selector-level").find("input[type=checkbox]");
+                [].forEach.call(controls, function (elem) {
+                    if (elem.checked)
+                        listLevel.push(elem.value);
+                });
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                console.log(aE);
+            }
+        }
+
+        document.getElementById("UnidadNegocio").addEventListener("change", function (e) {
+            try {
+                var required = $("#UnidadNegocio").kendoMultiSelect().data("kendoMultiSelect");
+                $('#cellUNeg').text('UNeg=>' + required.value());
+            } catch (e) {
+
+            }
+        });
+
+        function destroyMultiSelect(id) {
+            try {
+                $('#' + id).unwrap('.k-multiselect').show().empty();
+                $(".k-multiselect-wrap").remove();
+            } catch (e) {
+
+            }
+        }
+
+        document.getElementById("txtAnio").addEventListener("change", function (e) {
+            try {
+                console.log(e);
+            } catch (e) {
+
+            }
+        });
+
+
+
+
+        function IsNullOrEmpty(data) {
+            if (data == null || data == undefined || data == "")
+                return true;
+            else
+                return false;
+        }
+
+    });
+</script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/ReporteoClima/reporteDinamico.js"></script>
+<script src="~/scripts/ReporteoClima/text3d.js"></script>
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/Jit/jit.js"></script>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.rtl.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.mobile.all.min.css">
+<script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+<link href="~/Jit/Examples/css/base.css" />
+<link href="~/Jit/Examples/css/Icicle.css" />

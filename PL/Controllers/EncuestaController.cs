@@ -3506,5 +3506,14 @@ namespace PL.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ConfigurarEmails()
+        {
+            return View();
+        }
+        public JsonResult SendEmailsCustom(ML.EmailsEncuesta emailsEncuesta)
+        {
+            return Json(BL.Encuesta.SendEmailsCustom(emailsEncuesta), JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

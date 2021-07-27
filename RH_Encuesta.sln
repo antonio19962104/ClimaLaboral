@@ -46,22 +46,4 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://10.5.2.110:8080/tfs/rrhh
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = DL\\DL\\DL.csproj
-		SccProjectName1 = DL/DL
-		SccLocalPath1 = DL\\DL
-		SccProjectUniqueName2 = PL\\PL.csproj
-		SccProjectName2 = PL
-		SccLocalPath2 = PL
-		SccProjectUniqueName3 = BL\\BL.csproj
-		SccProjectName3 = BL
-		SccLocalPath3 = BL
-		SccProjectUniqueName4 = ML\\ML.csproj
-		SccProjectName4 = ML
-		SccLocalPath4 = ML
-	EndGlobalSection
 EndGlobal

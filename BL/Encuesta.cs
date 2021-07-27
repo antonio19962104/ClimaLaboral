@@ -87,6 +87,14 @@ namespace BL
                             result.Correct = true;
                         }
                     }
+                    var queryClima = context.ConfigClimaLab.ToList();
+                    foreach (var item in queryClima)
+                    {
+                        ML.Encuesta encuestas = new ML.Encuesta();
+                        encuestas.Nombre = "Clima Laboral";
+                        encuestas.BasesDeDatos.IdBaseDeDatos = item.IdBaseDeDatos;
+                        result.ListadoDeEncuestas.Add(encuestas);
+                    }
                 }
             }
             catch (Exception aE)
@@ -3005,7 +3013,7 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
-                BL.NLogGeneratorFile.logError(ex, new StackTrace());
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -3704,7 +3712,7 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
-                BL.NLogGeneratorFile.logError(ex, new StackTrace());
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -3759,7 +3767,7 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
             }
         }
         public static int AddToEstatusEmail(ML.EstatusEmail estatusEmail)
@@ -3819,6 +3827,36 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
+            }
+        }
+        public static int AddFlagEmailToSuccess_(ML.EstatusEmail estatusEmail)
+        {
+            ML.Result result = new ML.Result();
+            DL.EstatusEmail DLestatusEmail = new DL.EstatusEmail();
+            DLestatusEmail.Mensaje = estatusEmail.Mensaje;
+            DLestatusEmail.Destinatario = estatusEmail.Destinatario;
+            DLestatusEmail.IdBaseDeDatos = estatusEmail.BaseDeDatos.IdBaseDeDatos;
+            DLestatusEmail.FechaHoraCreacion = DateTime.Now;
+            DLestatusEmail.UsuarioCreacion = "Reenvío de Mails";
+            DLestatusEmail.ProgramaCreacion = "CRON Reenvío";
+            DLestatusEmail.IdEstatusMail = 2;
+            DLestatusEmail.MsgEnvio = "Email enviado exitosamente";
+            DLestatusEmail.IdEncuesta = estatusEmail.Encuesta.IdEncuesta;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.EstatusEmail.Add(DLestatusEmail);
+                    context.SaveChanges();
+                    result.Correct = true;
+                    return DLestatusEmail.IdEstatusEmail;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.ErrorMessage = ex.Message;
+                return 0;
             }
         }
         public static void AddFlagEmailToError(ML.EstatusEmail estatusEmail, SmtpException excepcion)
@@ -5886,7 +5924,7 @@ namespace BL
                     }
                     catch (Exception aE)
                     {
-                        BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                         result.ex = aE;
                         result.ErrorMessage = aE.Message.ToString();
                         result.Correct = false;
@@ -6595,9 +6633,465 @@ namespace BL
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 return new List<ML.Preguntas>();
             }
+        }
+        public static ML.DashBoardEncuesta GetDataEncuesta(int IdEncuesta, int IdBaseDeDatos)
+        {
+            var model = new ML.DashBoardEncuesta();
+            //int IdBaseDeDatos = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var objEncuesta = context.Encuesta.Where(o => o.IdEncuesta == IdEncuesta).FirstOrDefault();
+                    if (objEncuesta != null)
+                    {
+                        if (objEncuesta.IdTipoEncuesta < 4)
+                        {
+                            // Usuario
+                            model.Esperadas = context.Usuario.Where(o => o.IdBaseDeDatos == IdBaseDeDatos && o.IdEstatus == 1).ToList().Count;
+                            model.NoIniciadas = context.UsuarioEstatusEncuesta.Where(o => o.IdEncuesta == IdEncuesta && o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.Usuario.IdEstatus == 1 && o.IdEstatusEncuestaD4U == 1).ToList().Count;
+                            model.EnProceso = context.UsuarioEstatusEncuesta.Where(o => o.IdEncuesta == IdEncuesta && o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.Usuario.IdEstatus == 1 && o.IdEstatusEncuestaD4U == 2).ToList().Count;
+                            model.Terminadas = context.UsuarioEstatusEncuesta.Where(o => o.IdEncuesta == IdEncuesta && o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.Usuario.IdEstatus == 1 && o.IdEstatusEncuestaD4U == 3).ToList().Count;
+                        }
+                        if (objEncuesta.IdTipoEncuesta == 4)
+                        {
+                            // Empleado
+                            var configClima = context.ConfigClimaLab.Where(o => o.IdEncuesta == IdEncuesta && o.IdBaseDeDatos == IdBaseDeDatos).FirstOrDefault();
+                            model.Esperadas = context.Empleado.Where(o => o.IdBaseDeDatos == IdBaseDeDatos && o.EstatusEmpleado == "Activo").ToList().Count;
+                            model.NoIniciadas = context.EstatusEncuesta.Where(o => o.IdEncuesta == IdEncuesta && o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus == "No comenzada" && o.Empleado.EstatusEmpleado == "Activo" && o.Anio == configClima.PeriodoAplicacion).ToList().Count;
+                            model.EnProceso = context.EstatusEncuesta.Where(o => o.IdEncuesta == IdEncuesta && o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus == "En proceso" && o.Empleado.EstatusEmpleado == "Activo" && o.Anio == configClima.PeriodoAplicacion).ToList().Count;
+                            model.Terminadas = context.EstatusEncuesta.Where(o => o.IdEncuesta == IdEncuesta && o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus == "Terminada" && o.Empleado.EstatusEmpleado == "Activo" && o.Anio == configClima.PeriodoAplicacion).ToList().Count;
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+                return new DashBoardEncuesta();
+            }
+            return model;
+        }
+        public static List<ML.Empleado> GetEmpleadosForEmail(int IdEncuesta, int IdBaseDeDatos, int TipoEnvio)
+        {
+            var list = new List<ML.Empleado>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var objEncuesta = context.Encuesta.Where(o => o.IdEncuesta == IdEncuesta).FirstOrDefault();
+                    if (objEncuesta != null)
+                    {
+                        switch (TipoEnvio)
+                        {
+                            case 1: // envio a todos los participantes
+                                var query1 = context.Empleado.Where(o => o.IdBaseDeDatos == IdBaseDeDatos && o.EstatusEmpleado == "Activo").ToList();
+                                if (query1 != null)
+                                {
+                                    foreach (var item in query1)
+                                    {
+                                        ML.Empleado empleado = new ML.Empleado()
+                                        {
+                                            IdEmpleado = item.IdEmpleado,
+                                            Nombre = item.Nombre,
+                                            ApellidoPaterno = item.ApellidoPaterno,
+                                            ApellidoMaterno = item.ApellidoMaterno,
+                                            Correo = item.Correo
+                                        };
+                                        empleado.ClavesAcceso = new ClavesAcceso();
+                                        empleado.ClavesAcceso.ClaveAcceso = item.ClaveAcceso;
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 2: // envio a participantes en proceso
+                                var query2 = context.EstatusEncuesta.Where(o => o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus == "En proceso" && o.Empleado.EstatusEmpleado == "Activo").ToList();
+                                if (query2 != null)
+                                {
+                                    foreach (var item in query2)
+                                    {
+                                        ML.Empleado empleado = new ML.Empleado()
+                                        {
+                                            IdEmpleado = (int)item.IdEmpleado,
+                                            Nombre = item.Empleado.Nombre,
+                                            ApellidoPaterno = item.Empleado.ApellidoPaterno,
+                                            ApellidoMaterno = item.Empleado.ApellidoMaterno,
+                                            Correo = item.Empleado.Correo
+                                        };
+                                        empleado.ClavesAcceso = new ClavesAcceso();
+                                        empleado.ClavesAcceso.ClaveAcceso = item.Empleado.ClaveAcceso;
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 3: // envio a participantes que no han iniciado
+                                var query3 = context.EstatusEncuesta.Where(o => o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus == "No comenzada" && o.Empleado.EstatusEmpleado == "Activo").ToList();
+                                if (query3 != null)
+                                {
+                                    foreach (var item in query3)
+                                    {
+                                        ML.Empleado empleado = new ML.Empleado()
+                                        {
+                                            IdEmpleado = (int)item.IdEmpleado,
+                                            Nombre = item.Empleado.Nombre,
+                                            ApellidoPaterno = item.Empleado.ApellidoPaterno,
+                                            ApellidoMaterno = item.Empleado.ApellidoMaterno,
+                                            Correo = item.Empleado.Correo
+                                        };
+                                        empleado.ClavesAcceso = new ClavesAcceso();
+                                        empleado.ClavesAcceso.ClaveAcceso = item.Empleado.ClaveAcceso;
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 4: // envio a participantes en proceso y que no han iniciado
+                                var query4 = context.EstatusEncuesta.Where(o => o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus != "Terminada" && o.Empleado.EstatusEmpleado == "Activo").ToList();
+                                if (query4 != null)
+                                {
+                                    foreach (var item in query4)
+                                    {
+                                        ML.Empleado empleado = new ML.Empleado()
+                                        {
+                                            IdEmpleado = (int)item.IdEmpleado,
+                                            Nombre = item.Empleado.Nombre,
+                                            ApellidoPaterno = item.Empleado.ApellidoPaterno,
+                                            ApellidoMaterno = item.Empleado.ApellidoMaterno,
+                                            Correo = item.Empleado.Correo
+                                        };
+                                        empleado.ClavesAcceso = new ClavesAcceso();
+                                        empleado.ClavesAcceso.ClaveAcceso = item.Empleado.ClaveAcceso;
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 5: // envio de agradecimiento a participantes que ya terminaron su encuesta
+                                var query5 = context.EstatusEncuesta.Where(o => o.Empleado.IdBaseDeDatos == IdBaseDeDatos && o.Estatus == "Terminada" && o.Empleado.EstatusEmpleado == "Activo").ToList();
+                                if (query5 != null)
+                                {
+                                    foreach (var item in query5)
+                                    {
+                                        ML.Empleado empleado = new ML.Empleado()
+                                        {
+                                            IdEmpleado = (int)item.IdEmpleado,
+                                            Nombre = item.Empleado.Nombre,
+                                            ApellidoPaterno = item.Empleado.ApellidoPaterno,
+                                            ApellidoMaterno = item.Empleado.ApellidoMaterno,
+                                            Correo = item.Empleado.Correo
+                                        };
+                                        empleado.ClavesAcceso = new ClavesAcceso();
+                                        empleado.ClavesAcceso.ClaveAcceso = item.Empleado.ClaveAcceso;
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+                return new List<ML.Empleado>();
+            }
+            return list;
+        }
+        public static List<ML.Usuario> GetUsuariosForEmail(int IdEncuesta, int IdBaseDeDatos, int TipoEnvio)
+        {
+            var list = new List<ML.Usuario>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var objEncuesta = context.Encuesta.Where(o => o.IdEncuesta == IdEncuesta).FirstOrDefault();
+                    if (objEncuesta != null)
+                    {
+                        switch (TipoEnvio)
+                        {
+                            case 1: // envio a todos los participantes
+                                var query1 = context.Usuario.Where(o => o.IdBaseDeDatos == IdBaseDeDatos && o.IdEstatus == 1).ToList();
+                                if (query1 != null)
+                                {
+                                    foreach (var item in query1)
+                                    {
+                                        ML.Usuario usuario = new ML.Usuario()
+                                        {
+                                            IdUsuario = item.IdUsuario,
+                                            Nombre = item.Nombre,
+                                            ApellidoPaterno = item.ApellidoPaterno,
+                                            ApellidoMaterno = item.ApellidoMaterno,
+                                            Email = item.Email,
+                                            ClaveAcceso = item.ClaveAcceso
+                                        };
+                                        list.Add(usuario);
+                                    }
+                                }
+                                break;
+                            case 2: // envio a participantes en proceso
+                                var query2 = context.UsuarioEstatusEncuesta.Where(o => o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.IdEstatusEncuestaD4U == 2 && o.Usuario.IdEstatus == 1).ToList();
+                                if (query2 != null)
+                                {
+                                    foreach (var item in query2)
+                                    {
+                                        ML.Usuario empleado = new ML.Usuario()
+                                        {
+                                            IdUsuario = (int)item.IdUsuario,
+                                            Nombre = item.Usuario.Nombre,
+                                            ApellidoPaterno = item.Usuario.ApellidoPaterno,
+                                            ApellidoMaterno = item.Usuario.ApellidoMaterno,
+                                            Email = item.Usuario.Email,
+                                            ClaveAcceso = item.Usuario.ClaveAcceso
+                                        };
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 3: // envio a participantes que no han iniciado
+                                var query3 = context.UsuarioEstatusEncuesta.Where(o => o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.IdEstatusEncuestaD4U == 1 && o.Usuario.IdEstatus == 1).ToList();
+                                if (query3 != null)
+                                {
+                                    foreach (var item in query3)
+                                    {
+                                        ML.Usuario empleado = new ML.Usuario()
+                                        {
+                                            IdUsuario = (int)item.IdUsuario,
+                                            Nombre = item.Usuario.Nombre,
+                                            ApellidoPaterno = item.Usuario.ApellidoPaterno,
+                                            ApellidoMaterno = item.Usuario.ApellidoMaterno,
+                                            Email = item.Usuario.Email,
+                                            ClaveAcceso = item.Usuario.ClaveAcceso
+                                        };
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 4: // envio a participantes en proceso y que no han iniciado
+                                var query4 = context.UsuarioEstatusEncuesta.Where(o => o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.IdEstatusEncuestaD4U != 3 && o.Usuario.IdEstatus == 1).ToList();
+                                if (query4 != null)
+                                {
+                                    foreach (var item in query4)
+                                    {
+                                        ML.Usuario empleado = new ML.Usuario()
+                                        {
+                                            IdUsuario = (int)item.IdUsuario,
+                                            Nombre = item.Usuario.Nombre,
+                                            ApellidoPaterno = item.Usuario.ApellidoPaterno,
+                                            ApellidoMaterno = item.Usuario.ApellidoMaterno,
+                                            Email = item.Usuario.Email,
+                                            ClaveAcceso = item.Usuario.ClaveAcceso
+                                        };
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                            case 5: // envio de agradecimiento a participantes que ya terminaron su encuesta
+                                var query5 = context.UsuarioEstatusEncuesta.Where(o => o.Usuario.IdBaseDeDatos == IdBaseDeDatos && o.IdEstatusEncuestaD4U == 3 && o.Usuario.IdEstatus == 1).ToList();
+                                if (query5 != null)
+                                {
+                                    foreach (var item in query5)
+                                    {
+                                        ML.Usuario empleado = new ML.Usuario()
+                                        {
+                                            IdUsuario = (int)item.IdUsuario,
+                                            Nombre = item.Usuario.Nombre,
+                                            ApellidoPaterno = item.Usuario.ApellidoPaterno,
+                                            ApellidoMaterno = item.Usuario.ApellidoMaterno,
+                                            Email = item.Usuario.Email,
+                                            ClaveAcceso = item.Usuario.ClaveAcceso
+                                        };
+                                        list.Add(empleado);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+                return new List<ML.Usuario>();
+            }
+            return list;
+        }
+        /*public class EmailsEncuesta
+        {
+            public int IdEncuesta { get; set; }
+            public int IdBaseDeDatos { get; set; }
+            public int TipoEnvio { get; set; }
+            public string Template { get; set; }
+            public int Prioridad { get; set; }
+            public string Asunto { get; set; }
+            public string CC { get; set; }
+            public string CurrentAdmin { get; set; }
+        }*/
+        public static bool SendEmailsCustom(ML.EmailsEncuesta emailsEncuesta)
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var objEncuesta = context.Encuesta.Where(o => o.IdEncuesta == emailsEncuesta.IdEncuesta).FirstOrDefault();
+                    if (objEncuesta != null)
+                    {
+                        if (objEncuesta.IdTipoEncuesta == 4)
+                        {
+                            var listParticipantes = GetEmpleadosForEmail(objEncuesta.IdEncuesta, emailsEncuesta.IdBaseDeDatos, emailsEncuesta.TipoEnvio);
+                            foreach (var item in listParticipantes)
+                            {
+                                SenderEmpleado(item, emailsEncuesta);
+                            }
+                        }
+                        if (objEncuesta.IdTipoEncuesta < 4)
+                        {
+                            var listParticipantes = GetUsuariosForEmail(objEncuesta.IdEncuesta, emailsEncuesta.IdBaseDeDatos, emailsEncuesta.TipoEnvio);
+                            foreach (var item in listParticipantes)
+                            {
+                                SenderUsuario(item, emailsEncuesta);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+                return false;
+            }
+            return true;
+        }
+        public static void SenderEmpleado(ML.Empleado empleado, ML.EmailsEncuesta emailsEncuesta)
+        {
+            int lastInsertEstatusEmail = 0;
+            var templateEmail = string.IsNullOrEmpty(emailsEncuesta.Template) ? GetTemplateEmail(emailsEncuesta.TipoEnvio) : emailsEncuesta.Template;
+            templateEmail = string.Format(templateEmail, empleado.Nombre, empleado.ApellidoPaterno, empleado.ApellidoMaterno, empleado.ClavesAcceso.ClaveAcceso);
+            var email = new MailMessage();
+            email.To.Add(new MailAddress(empleado.Correo));
+            email.Subject = emailsEncuesta.Asunto;
+            email.Body = templateEmail;
+            email.IsBodyHtml = true;
+            email.Priority = (MailPriority)emailsEncuesta.Prioridad; // normal 0, baja 1, alta 2
+            email.Bcc.Add(emailsEncuesta.CC);
+            using (var smtp = new SmtpClient())
+            {
+                try
+                {
+                    smtp.Send(email);
+                    var estatusEmail = GetObjEstatusEmail(emailsEncuesta);
+                    estatusEmail.Mensaje = email.Body;
+                    estatusEmail.Destinatario = empleado.Correo;
+                    estatusEmail.noIntentos = 1;
+                    estatusEmail.IdEstatusEmail = 2;
+                    lastInsertEstatusEmail = Encuesta.AddFlagEmailToSuccess_(estatusEmail);
+                    BL.NLogGeneratorFile.logInfoEmailSender("Email enviado correctamente", emailsEncuesta.IdEncuesta, emailsEncuesta.IdBaseDeDatos);
+                }
+                catch (SmtpException ex)
+                {
+                    Console.Write(ex.Message);
+                    var estatusEmail = GetObjEstatusEmail(emailsEncuesta);
+                    estatusEmail.Mensaje = email.Body;
+                    estatusEmail.Destinatario = empleado.Correo;
+                    estatusEmail.noIntentos = 1;
+                    estatusEmail.IdEstatusEmail = 1;
+                    Encuesta.UpdateFlagEmailToError(estatusEmail, ex, lastInsertEstatusEmail);
+                    BL.NLogGeneratorFile.logInfoEmailSender(ex, estatusEmail, empleado.IdEmpleado);
+                }
+                finally
+                {
+                    smtp.Dispose();
+                }
+            }
+        }
+        public static void SenderUsuario(ML.Usuario usuario, ML.EmailsEncuesta emailsEncuesta)
+        {
+            int lastInsertEstatusEmail = 0;
+            var templateEmail = string.IsNullOrEmpty(emailsEncuesta.Template) ? GetTemplateEmail(emailsEncuesta.TipoEnvio) : emailsEncuesta.Template;
+            templateEmail = string.Format(templateEmail, usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.ClaveAcceso);
+            var email = new MailMessage();
+            email.To.Add(new MailAddress(usuario.Email));
+            email.Subject = emailsEncuesta.Asunto;
+            email.Body = templateEmail;
+            email.IsBodyHtml = true;
+            email.Priority = (MailPriority)emailsEncuesta.Prioridad; // normal 0, baja 1, alta 2
+            email.Bcc.Add(emailsEncuesta.CC);
+            using (var smtp = new SmtpClient())
+            {
+                try
+                {
+                    smtp.Send(email);
+                    var estatusEmail = GetObjEstatusEmail(emailsEncuesta);
+                    estatusEmail.Mensaje = email.Body;
+                    estatusEmail.Destinatario = usuario.Email;
+                    estatusEmail.noIntentos = 1;
+                    estatusEmail.IdEstatusEmail = 2;
+                    lastInsertEstatusEmail = Encuesta.AddFlagEmailToSuccess_(estatusEmail);
+                    BL.NLogGeneratorFile.logInfoEmailSender("Email enviado correctamente", emailsEncuesta.IdEncuesta, emailsEncuesta.IdBaseDeDatos);
+                }
+                catch (SmtpException ex)
+                {
+                    Console.Write(ex.Message);
+                    var estatusEmail = GetObjEstatusEmail(emailsEncuesta);
+                    estatusEmail.Mensaje = email.Body;
+                    estatusEmail.Destinatario = usuario.Email;
+                    estatusEmail.noIntentos = 1;
+                    estatusEmail.IdEstatusEmail = 1;
+                    Encuesta.UpdateFlagEmailToError(estatusEmail, ex, lastInsertEstatusEmail);
+                    BL.NLogGeneratorFile.logInfoEmailSender(ex, estatusEmail, usuario.IdUsuario);
+                }
+                finally
+                {
+                    smtp.Dispose();
+                }
+            }
+        }
+        public static ML.EstatusEmail GetObjEstatusEmail(ML.EmailsEncuesta emailsEncuesta)
+        {
+            try
+            {
+                EstatusEmail estatusEmail = new EstatusEmail();
+                estatusEmail.BaseDeDatos = new ML.BasesDeDatos(); estatusEmail.BaseDeDatos.IdBaseDeDatos = emailsEncuesta.IdBaseDeDatos;
+                estatusEmail.FechaHoraCreacion = DateTime.Now;
+                estatusEmail.UsuarioCreacion = emailsEncuesta.CurrentAdmin;
+                estatusEmail.ProgramaCreacion = "Encuesta";
+                estatusEmail.MsgEnvio = "Email enviado exitosamente";
+                estatusEmail.Encuesta = new ML.Encuesta();
+                estatusEmail.Encuesta.IdEncuesta = emailsEncuesta.IdEncuesta;
+
+                return estatusEmail;
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+                return new ML.EstatusEmail();
+            }
+        }
+        public static string GetTemplateEmail(int TipoEnvio)
+        {
+            string template = string.Empty;
+            switch (TipoEnvio)
+            {
+                case 1: // todos
+                    template = "";
+                    break;
+                case 2: // en proceso
+                    template = "";
+                    break;
+                case 3: // no iniciadas
+                    template = "";
+                    break;
+                case 4: // en proceso y no iniciadas
+                    template = "";
+                    break;
+                case 5: // agradecimiento de terminadas
+                    template = "";
+                    break;
+                default:
+                    template = "";
+                    break;
+            }
+            return template;
         }
     }
 }

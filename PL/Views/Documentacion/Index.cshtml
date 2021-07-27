@@ -27,8 +27,8 @@
                         </fieldset>
                         <label ng-if="item.Class == item.Name">Class {{ item.Class }} exposes the following members</label>
                         <div ng-if="item.Class != item.Name" class="ml-2">
-                            <label>Name: {{ item.Name }}</label>
-                            <label>Descriptión: {{ item.Summary }}</label>
+                            <label>Name: {{ item.Name }}</label><br />
+                            <label>Descriptión: {{ item.Summary }}</label><br />
                             <label>Returns: {{ item.Returns }}</label>
                             <div class="params ml-5" ng-repeat="elem in item.Param">
                                 <label>Parammetro: {{ elem.Name }}</label>

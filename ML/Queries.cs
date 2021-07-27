@@ -32,8 +32,9 @@ namespace ML
                             FROM EMPLEADO 
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.UnidadNegocio = {2} AND EstatusEncuesta.Anio = {3}
-                            AND Empleado.IdBaseDeDatos = {4}";
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and 
+                            EstatusEncuesta.Anio = {3}
+                            AND Empleado.IdBaseDeDatos = {4}"; // Empleado.UnidadNegocio = {2} AND 
 
         public static string QUERY_ENCUESTAS_TERMINADAS_LVL2 =
                             @"SELECT * 
@@ -103,25 +104,25 @@ namespace ML
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta
                             ORDER BY 3 ASC";
 
-        public static string QUERY_INDICADORES_DE_PERMANENCIA_GAFM = 
+        public static string QUERY_INDICADORES_DE_PERMANENCIA_GAFM =
                             @"SELECT EmpleadoRespuestas.RespuestaEmpleado, COUNT(200) AS Frecuencia
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 177 and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 177 and Empleado.{0} = {1} AND Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
-        public static string QUERY_INDICADORES_DE_ABANDONO_GAFM = 
+        public static string QUERY_INDICADORES_DE_ABANDONO_GAFM =
                             @"SELECT EmpleadoRespuestas.RespuestaEmpleado, COUNT(200) AS Frecuencia
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 178 and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 178 and Empleado.{0} = {1} and Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -155,9 +156,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoAntiguedad
                             ORDER BY Empleado.RangoAntiguedad ASC";
 
@@ -168,9 +169,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoAntiguedad
                             ORDER BY Empleado.RangoAntiguedad ASC";
 
@@ -181,9 +182,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.Sexo
                             ORDER BY Empleado.Sexo ASC";
 
@@ -194,9 +195,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.Sexo
                             ORDER BY Empleado.Sexo ASC";
 
@@ -207,9 +208,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.GradoAcademico
                             ORDER BY Empleado.GradoAcademico ASC";
 
@@ -220,9 +221,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.GradoAcademico
                             ORDER BY Empleado.GradoAcademico ASC";
 
@@ -233,9 +234,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.CondicionTrabajo
                             ORDER BY Empleado.CondicionTrabajo ASC";
 
@@ -246,9 +247,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.CondicionTrabajo
                             ORDER BY Empleado.CondicionTrabajo ASC";
 
@@ -259,9 +260,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoEdad
                             ORDER BY Empleado.RangoEdad ASC";
 
@@ -272,9 +273,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoEdad
                             ORDER BY Empleado.RangoEdad ASC";
 
@@ -286,9 +287,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.TipoFuncion
                             ORDER BY Empleado.TipoFuncion ASC";
 
@@ -299,9 +300,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.TipoFuncion
                             ORDER BY Empleado.TipoFuncion ASC";
 
@@ -312,7 +313,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 173 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 173 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             group by EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -321,7 +322,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 174 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 174 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -330,7 +331,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 175 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 175 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -339,7 +340,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 176 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 176 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -430,7 +431,7 @@ namespace ML
             inicializarQueries();
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{0}", filtro);
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{1}", "'" + valor + "'");
-            QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{2}", "'" + UnidadNegocio + "'");
+            // QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{2}", "'" + UnidadNegocio + "'");
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{3}", Convert.ToString(anioActual));
             QUERY_ENCUESTAS_TERMINADAS_LVL1 = QUERY_ENCUESTAS_TERMINADAS_LVL1.Replace("{4}", Convert.ToString(idBD));
             validaQuery(QUERY_ENCUESTAS_TERMINADAS_LVL1, filtro, valor, new StackTrace());
@@ -506,20 +507,22 @@ namespace ML
             return QUERY_PEORES_REACTIVOS_ENFOQUE_AREA;
         }
         /*Seccion queries indicadores de permanencia*/
-        public static string getQueryPermanenciaAFM(string filtro, string valor)
+        public static string getQueryPermanenciaAFM(string filtro, string valor, int IdBD)
         {
             inicializarQueries();
             QUERY_INDICADORES_DE_PERMANENCIA_GAFM = QUERY_INDICADORES_DE_PERMANENCIA_GAFM.Replace("{0}", filtro);
             QUERY_INDICADORES_DE_PERMANENCIA_GAFM = QUERY_INDICADORES_DE_PERMANENCIA_GAFM.Replace("{1}", "'" + valor + "'");
+            QUERY_INDICADORES_DE_PERMANENCIA_GAFM = QUERY_INDICADORES_DE_PERMANENCIA_GAFM.Replace("{2}", Convert.ToString(IdBD));
             validaQuery(QUERY_INDICADORES_DE_PERMANENCIA_GAFM, filtro, valor, new StackTrace());
             return QUERY_INDICADORES_DE_PERMANENCIA_GAFM;
         }
         /*Seccion queries indicadores Abandono*/
-        public static string getQueryAbandonoAFM(string filtro, string valor)
+        public static string getQueryAbandonoAFM(string filtro, string valor, int IdBD)
         {
             inicializarQueries();
             QUERY_INDICADORES_DE_ABANDONO_GAFM = QUERY_INDICADORES_DE_ABANDONO_GAFM.Replace("{0}", filtro);
             QUERY_INDICADORES_DE_ABANDONO_GAFM = QUERY_INDICADORES_DE_ABANDONO_GAFM.Replace("{1}", "'" + valor + "'");
+            QUERY_INDICADORES_DE_ABANDONO_GAFM = QUERY_INDICADORES_DE_ABANDONO_GAFM.Replace("{2}", Convert.ToString(IdBD));
             validaQuery(QUERY_INDICADORES_DE_ABANDONO_GAFM, filtro, valor, new StackTrace());
             return QUERY_INDICADORES_DE_ABANDONO_GAFM;
         }
@@ -540,126 +543,138 @@ namespace ML
             validaQuery(QUERY_COMPARATIVO_DE_ABANDONO_GAFM, filtro, valor, new StackTrace());
             return QUERY_COMPARATIVO_DE_ABANDONO_GAFM;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByAntiguedad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByAntiguedad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD.Replace("{0}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD.Replace("{1}", "'" + valorEntidadAFM + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD.Replace("{2}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD.Replace("{3}", "'" +  valor + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_ANTIGUEDAD;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByAntiguedad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByAntiguedad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_ANTIGUEDAD;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByGenero(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByGenero(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GENERO;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByGenero(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByGenero(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GENERO;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByGradoAcademico(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByGradoAcademico(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_GRADO_ACADEMICO;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByGradoAcademico(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByGradoAcademico(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_GRADO_ACADEMICO;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByCondicionTrabajo(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByCondicionTrabajo(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_CONDICION_TRABAJO;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByCondicionTrabajo(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByCondicionTrabajo(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_CONDICION_TRABAJO;
         }
 
 
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByRangoEdad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByRangoEdad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_RANGO_EDAD;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByRangoEdad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByRangoEdad(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_RANGO_EDAD;
         }
 
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByFuncion(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueEmpresaByFuncion(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_EMPRESA_BY_FUNCION;
         }
-        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByFuncion(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM)
+        public static string getQueryResultadosGenerales66ReactivosEnfoqueAreaByFuncion(string filtro, string valor, string filtroEntidadAFM, string valorEntidadAFM, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION.Replace("{0}", filtro);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION.Replace("{1}", "'" + valor + "'");
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION.Replace("{2}", filtroEntidadAFM);
             QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION.Replace("{3}", "'" + valorEntidadAFM + "'");
+            QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION = QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION.Replace("{4}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION, filtro, valor, filtroEntidadAFM, valorEntidadAFM, new StackTrace());
             return QUERY_RESULTADOS_GENERALES_66_REACTIVOS_ENFOQUE_AREA_BY_FUNCION;
         }
@@ -683,21 +698,21 @@ namespace ML
         }
         
         /*Nube*/
-        public static string getQueryReporteComentariosAbiertos(ML.ReporteD4U model, int anioActual)
+        public static string getQueryReporteComentariosAbiertos(ML.ReporteD4U model, int anioActual, int IdBD)
         {
             switch (model.IdPregunta)
             {
                 case 1:
-                    return getQueryReporteComentariosAbiertosPregunta1(model, anioActual);
+                    return getQueryReporteComentariosAbiertosPregunta1(model, anioActual, IdBD);
                     break;
                 case 2:
-                    return getQueryReporteComentariosAbiertosPregunta2(model, anioActual);
+                    return getQueryReporteComentariosAbiertosPregunta2(model, anioActual, IdBD);
                     break;
                 case 3:
-                    return getQueryReporteComentariosAbiertosPregunta3(model, anioActual);
+                    return getQueryReporteComentariosAbiertosPregunta3(model, anioActual, IdBD);
                     break;
                 case 4:
-                    return getQueryReporteComentariosAbiertosPregunta4(model, anioActual);
+                    return getQueryReporteComentariosAbiertosPregunta4(model, anioActual, IdBD);
                     break;
                 default:
                     return string.Empty;
@@ -705,39 +720,43 @@ namespace ML
             }
         }
 
-        public static string getQueryReporteComentariosAbiertosPregunta1(ML.ReporteD4U model, int anioActual)
+        public static string getQueryReporteComentariosAbiertosPregunta1(ML.ReporteD4U model, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1.Replace("{0}", model.filtro);
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1.Replace("{1}", "'" + model.filtroValor + "'");
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1, model.filtro, model.filtroValor, new StackTrace());
             return QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_1;
         }
-        public static string getQueryReporteComentariosAbiertosPregunta2(ML.ReporteD4U model, int anioActual)
+        public static string getQueryReporteComentariosAbiertosPregunta2(ML.ReporteD4U model, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2.Replace("{0}", model.filtro);
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2.Replace("{1}", "'" + model.filtroValor + "'");
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2, model.filtro, model.filtroValor, new StackTrace());
             return QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_2;
         }
-        public static string getQueryReporteComentariosAbiertosPregunta3(ML.ReporteD4U model, int anioActual)
+        public static string getQueryReporteComentariosAbiertosPregunta3(ML.ReporteD4U model, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3.Replace("{0}", model.filtro);
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3.Replace("{1}", "'" + model.filtroValor + "'");
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3, model.filtro, model.filtroValor, new StackTrace());
             return QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_3;
         }
-        public static string getQueryReporteComentariosAbiertosPregunta4(ML.ReporteD4U model, int anioActual)
+        public static string getQueryReporteComentariosAbiertosPregunta4(ML.ReporteD4U model, int anioActual, int IdBD)
         {
             inicializarQueries();
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4.Replace("{0}", model.filtro);
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4.Replace("{1}", "'" + model.filtroValor + "'");
             QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4.Replace("{2}", Convert.ToString(anioActual));
+            QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4 = QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4.Replace("{3}", Convert.ToString(IdBD));
             validaQuery(QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4, model.filtro, model.filtroValor, new StackTrace());
             return QUERY_RESULTADOS_COMENTARIOS_ABIERTOS_4;
         }
@@ -907,8 +926,8 @@ namespace ML
             #region queries 
             QUERY_ENCUESTAS_ESPERADAS =
                                 @"SELECT  Empleado.UnidadNegocio FROM Empleado
-	                        INNER JOIN EstatusEncuesta on Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
-	                        WHERE 
+                            INNER JOIN EstatusEncuesta on Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
+                            WHERE 
                             Empleado.{0} = '{1}' and EstatusEmpleado = 'Activo'";
 
             QUERY_ENCUESTAS_TERMINADAS_LVL1Basic =
@@ -922,8 +941,9 @@ namespace ML
                             FROM EMPLEADO 
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado 
                             WHERE 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.UnidadNegocio = {2} AND EstatusEncuesta.Anio = {3}
-                            AND Empleado.IdBaseDeDatos = {4}";
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and 
+                            EstatusEncuesta.Anio = {3}
+                            AND Empleado.IdBaseDeDatos = {4}"; // Empleado.UnidadNegocio = {2} AND 
 
             QUERY_ENCUESTAS_TERMINADAS_LVL2 =
                                 @"SELECT * 
@@ -1000,7 +1020,7 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 177 and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 177 and Empleado.{0} = {1} AND Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -1011,7 +1031,7 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
-                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 178 and Empleado.{0} = {1})
+                            (Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND EmpleadoRespuestas.IdPregunta = 178 and Empleado.{0} = {1} and Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -1045,9 +1065,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoAntiguedad
                             ORDER BY Empleado.RangoAntiguedad ASC";
 
@@ -1058,9 +1078,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoAntiguedad
                             ORDER BY Empleado.RangoAntiguedad ASC";
 
@@ -1071,9 +1091,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.Sexo
                             ORDER BY Empleado.Sexo ASC";
 
@@ -1084,9 +1104,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.Sexo
                             ORDER BY Empleado.Sexo ASC";
 
@@ -1097,9 +1117,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.GradoAcademico
                             ORDER BY Empleado.GradoAcademico ASC";
 
@@ -1110,9 +1130,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.GradoAcademico
                             ORDER BY Empleado.GradoAcademico ASC";
 
@@ -1123,9 +1143,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.CondicionTrabajo
                             ORDER BY Empleado.CondicionTrabajo ASC";
 
@@ -1136,9 +1156,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.CondicionTrabajo
                             ORDER BY Empleado.CondicionTrabajo ASC";
 
@@ -1149,9 +1169,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoEdad
                             ORDER BY Empleado.RangoEdad ASC";
 
@@ -1162,9 +1182,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.RangoEdad
                             ORDER BY Empleado.RangoEdad ASC";
 
@@ -1176,9 +1196,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 1 AND 66 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.TipoFuncion
                             ORDER BY Empleado.TipoFuncion ASC";
 
@@ -1189,9 +1209,9 @@ namespace ML
                             left JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             left JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Casi siempre es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             OR
-                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3})
+                            (EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.EstatusEmpleado = 'ACTIVO' AND Preguntas.IdPregunta BETWEEN 87 AND 152 AND EmpleadoRespuestas.RespuestaEmpleado = 'Frecuentemente es verdad'  AND Empleado.{0} = {1} AND Empleado.{2} = {3} and Empleado.IdBaseDeDatos = {4})
                             GROUP BY Empleado.TipoFuncion
                             ORDER BY Empleado.TipoFuncion ASC";
 
@@ -1202,7 +1222,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 173 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 173 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             group by EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -1211,7 +1231,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 174 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 174 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -1220,7 +1240,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 175 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 175 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -1229,7 +1249,7 @@ namespace ML
                             FROM EmpleadoRespuestas
                             INNER JOIN Empleado ON EmpleadoRespuestas.IdEmpleado = Empleado.IdEmpleado
                             WHERE 
-                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 176 and EmpleadoRespuestas.Anio = {2} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
+                            (Empleado.{0} = {1} AND EmpleadoRespuestas.IdPregunta = 176 and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3} and RespuestaEmpleado != 'NADA' and RespuestaEmpleado != 'SIN COMENTARIOS' and RespuestaEmpleado != 'NINGUNA' and RespuestaEmpleado != 'SIN COMENTARIO' and RespuestaEmpleado != 'NINGUNO' and RespuestaEmpleado != 'NO' and RespuestaEmpleado != 'TODO BIEN' and RespuestaEmpleado != 'SI' and RespuestaEmpleado != 'NO APLICA' and RespuestaEmpleado != 'NO LO SE' and RespuestaEmpleado != 'TODAS' and RespuestaEmpleado != 'N/A' and RespuestaEmpleado != '.' and RespuestaEmpleado != 'NO SE' and RespuestaEmpleado != 'TODO ESTA BIEN' and RespuestaEmpleado != 'NA' and RespuestaEmpleado != 'nada.' and RespuestaEmpleado != 'no cambiaria nada' and RespuestaEmpleado != '...' and RespuestaEmpleado != '....' and RespuestaEmpleado != '..' and RespuestaEmpleado != 'X' and RespuestaEmpleado != 'NOSE' and RespuestaEmpleado != 'ninguna.' and RespuestaEmpleado != 'No tiene' and RespuestaEmpleado != 'a' and RespuestaEmpleado != 'SIN COMENTAR' and RespuestaEmpleado != 'sin comentarios.' and RespuestaEmpleado != 'NADA TODO ESTA BIEN' and RespuestaEmpleado != '-' and RespuestaEmpleado != 'en nada' and RespuestaEmpleado != 'S/C' and RespuestaEmpleado != 'NO LOSE' and RespuestaEmpleado != 'si con mentario' AND RespuestaEmpleado != 'desconosco' AND RespuestaEmpleado != 'no se.')
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY 2 DESC";
 
@@ -1239,7 +1259,7 @@ namespace ML
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             WHERE 
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad'
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado  = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad'
                             and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
                             (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad'
@@ -1253,7 +1273,7 @@ namespace ML
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             WHERE 
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 87 AND 172 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad')
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado  = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 87 AND 172 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad')
                             OR
                             (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 87 AND 172 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad')
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque

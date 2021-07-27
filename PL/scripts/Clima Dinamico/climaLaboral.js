@@ -196,77 +196,113 @@
                  * cada que se elige una opcion en el listado de radio buttons
                  * se envia a BD
                  * este tipo de autoguardado de activa segun la bandera del inicio del script vm.autoguardado
+                 * Terminar de validar que las peticiones de autoguardado no se hagan mas de una vez
+                 * Los textarea y radioButon dinamicos si se pueden enviar sin validacion de multiple envio
+                 * Mas que nda aplica para los Likerts
                 */
-                if (vm.previewurl <= 0) {
-                    try {
-                        if (e.target.type == "radio" && e.target.name != "pregPerm") {
-                            var value = $("input:radio[name=" + e.target.name + "]:checked").val();
-                            var enfoque = 0;
-                            if (e.target.name.split('-')[1] == "EE") { enfoque = 1 }
-                            if (e.target.name.split('-')[1] == "EA") { enfoque = 2 }
-                            if (vm.autoguardado && !vm.isNullOrEmpty(value)) {
-                                var respuesta = $("input:radio[name=" + e.target.name + "]:checked").val();
-                                vm.modelRespuesta = {
-                                    RespuestaEmpleado: respuesta,
-                                    Preguntas: { IdPregunta: e.target.name.split("-")[2], IdEnfoque: 1 },
-                                    Respuestas: { IdRespuesta: e.target.name.split("-")[2] },
-                                    Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
-                                    Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
-                                    IdEnfoque: enfoque
-                                };
-                                // post
-                                console.log(vm.modelRespuesta);
-                                vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
-                                    console.log(response);
-                                    if (response.data == 1)
-                                        swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
-                                });
+                if (vm.lastItemAutosave != e.target.id) {
+                    if (vm.previewurl <= 0) {
+                        try {
+                            if (e.target.attributes.dinamic != undefined) {
+                                if (e.target.attributes.dinamic.value == "radio_dinamico") {
+                                    // son reactivos radiobutton dinamicos de un solo enfoque
+                                    var value = $("input:radio[name=" + e.target.name + "]:checked").val();
+                                    if (vm.autoguardado && !vm.isNullOrEmpty(value)) {
+                                        var respuesta = $("input:radio[name=" + e.target.name + "]:checked").val();
+                                        vm.modelRespuesta = {
+                                            RespuestaEmpleado: respuesta,
+                                            Preguntas: { IdPregunta: e.target.name.split("-")[2], IdEnfoque: 1 },
+                                            Respuestas: { IdRespuesta: e.target.name.split("-")[2] },
+                                            Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
+                                            Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
+                                            IdEnfoque: 1
+                                        };
+                                        // post
+                                        console.log(vm.modelRespuesta);
+                                        vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
+                                            console.log(response);
+                                            if (response.data == 1)
+                                                swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
+                                        });
+                                        vm.lastItemAutosave = e.target.id;
+                                    }
+                                }
                             }
-                        }
-                        if (e.target.type == "select-one" || e.target.type == "textarea") {
-                            var respuesta = e.target.value;
-                            if (vm.autoguardado && !vm.isNullOrEmpty(respuesta)) {
-                                vm.modelRespuesta = {
-                                    RespuestaEmpleado: respuesta,
-                                    Preguntas: { IdPregunta: e.target.attributes.idPregunta.value },
-                                    Respuestas: { IdRespuesta: e.target.attributes.idPregunta.value },
-                                    Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
-                                    Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
-                                    IdEnfoque: 1
-                                };
-                                // post
-                                console.log(vm.modelRespuesta);
-                                vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
-                                    console.log(response);
-                                    if (response.data == 1)
-                                        swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
-                                });
+                            if (e.target.type == "radio" && e.target.name != "pregPerm" && e.target.attributes.dinamic == undefined) {
+                                // Reactivos de tipo likert doble, se valida el autosave para evitar multiples peticiones
+                                var value = $("input:radio[name=" + e.target.name + "]:checked").val();
+                                var enfoque = 0;
+                                if (e.target.name.split('-')[1] == "EE") { enfoque = 1 }
+                                if (e.target.name.split('-')[1] == "EA") { enfoque = 2 }
+                                if (vm.autoguardado && !vm.isNullOrEmpty(value)) {
+                                    var respuesta = $("input:radio[name=" + e.target.name + "]:checked").val();
+                                    vm.modelRespuesta = {
+                                        RespuestaEmpleado: respuesta,
+                                        Preguntas: { IdPregunta: e.target.name.split("-")[2], IdEnfoque: 1 },
+                                        Respuestas: { IdRespuesta: e.target.name.split("-")[2] },
+                                        Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
+                                        Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
+                                        IdEnfoque: enfoque
+                                    };
+                                    // post
+                                    console.log(vm.modelRespuesta);
+                                    vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
+                                        console.log(response);
+                                        if (response.data == 1)
+                                            swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
+                                    });
+                                    vm.lastItemAutosave = e.target.id;
+                                }
                             }
-                        }
-                        if (e.target.type == "radio" && e.target.name == "pregPerm") {
-                            var respuesta = e.target.value;
-                            if (vm.autoguardado && !vm.isNullOrEmpty(respuesta)) {
-                                vm.modelRespuesta = {
-                                    RespuestaEmpleado: respuesta,
-                                    Preguntas: { IdPregunta: e.target.attributes.idPregunta.value },
-                                    Respuestas: { IdRespuesta: e.target.attributes.idPregunta.value },
-                                    Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
-                                    Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
-                                    IdEnfoque: 1
-                                };
-                                // post
-                                console.log(vm.modelRespuesta);
-                                vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
-                                    console.log(response);
-                                    if (response.data == 1)
-                                        swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
-                                });
+                            if (e.target.type == "select-one" || e.target.type == "textarea") {
+                                // Reactivos de tipo select y textarea, no es necesario validar las multiples peticiones
+                                var respuesta = e.target.value;
+                                if (vm.autoguardado && !vm.isNullOrEmpty(respuesta)) {
+                                    vm.modelRespuesta = {
+                                        RespuestaEmpleado: respuesta,
+                                        Preguntas: { IdPregunta: e.target.attributes.idPregunta.value },
+                                        Respuestas: { IdRespuesta: e.target.attributes.idPregunta.value },
+                                        Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
+                                        Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
+                                        IdEnfoque: 1
+                                    };
+                                    // post
+                                    console.log(vm.modelRespuesta);
+                                    vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
+                                        console.log(response);
+                                        if (response.data == 1)
+                                            swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
+                                    });
+                                    // vm.lastItemAutosave = e.target.id;
+                                }
                             }
+                            if (e.target.type == "radio" && e.target.name == "pregPerm") {
+                                // Reactivos radiobutton, no es necesario validar las multiples peticiones
+                                var respuesta = e.target.value;
+                                if (vm.autoguardado && !vm.isNullOrEmpty(respuesta)) {
+                                    vm.modelRespuesta = {
+                                        RespuestaEmpleado: respuesta,
+                                        Preguntas: { IdPregunta: e.target.attributes.idPregunta.value },
+                                        Respuestas: { IdRespuesta: e.target.attributes.idPregunta.value },
+                                        Empleado: { IdEmpleado: localStorage.getItem("idEmpleado") },
+                                        Encuesta: { IdEncuesta: localStorage.getItem("idEncuesta") },
+                                        IdEnfoque: 1
+                                    };
+                                    // post
+                                    console.log(vm.modelRespuesta);
+                                    vm.post("AutoSave/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.modelRespuesta, function (response) {
+                                        console.log(response);
+                                        if (response.data == 1)
+                                            swal.fire("Ha ocurrido un error al hacer el guardado de la respuesta", "", "error");
+                                    });
+                                    // vm.lastItemAutosave = e.target.id;
+                                }
+                            }
+                        } catch (aE) {
+                            console.log(aE);
+                            vm.writeLogFronEnd(aE);
+                            swal.fire("Ocurrión un error al autoguardar tus respuestas", aE.message, "error");
                         }
-                    } catch (aE) {
-                        console.log(aE);
-                        vm.writeLogFronEnd(aE);
-                        swal.fire("Ocurrión un error al autoguardar tus respuestas", aE.message, "error");
                     }
                 }
             }
@@ -439,6 +475,8 @@
                 });
             }
 
+            vm.lastItemAutosave = "";
+
             vm.getPreguntasByEncuesta = function () {
                 vm.mostrarLoad();
                 // Se valida si la url es para PreView y se hace los cambios de id Encuesta ---- CAMOS 09072021                  
@@ -574,6 +612,9 @@
                                     //nameItem2 = nameItem2.split('-')[0] + "-" + nameItem2.split('-')[1] + "-" + (parseInt(nameItem2.split('-')[2]) - vm.noReactivos);
                                     nameItem2 = nameItem2.split('-')[0] + "-" + nameItem2.split('-')[1] + "-" + (parseInt(nameItem2.split('-')[2]) - 1);
                                 }
+                                if (nameItem2 == "")
+                                    nameItem2 = "demo";
+                                
                                 var val1 = $("input:radio[name=" + nameItem1 + "]:checked").val(); // EE
                                 var val2 = $("input:radio[name=" + nameItem2 + "]:checked").val(); // EA
 
@@ -627,6 +668,9 @@
                                     //nameItem2 = nameItem2.split('-')[0] + "-" + nameItem2.split('-')[1] + "-" + (parseInt(nameItem2.split('-')[2]) - vm.noReactivos);
                                     nameItem2 = nameItem2.split('-')[0] + "-" + nameItem2.split('-')[1] + "-" + (parseInt(nameItem2.split('-')[2]) - 1);
                                 }
+                                if (nameItem2 == "")
+                                    nameItem2 = "demo";
+
                                 var val1 = $("input:radio[name=" + nameItem1 + "]:checked").val(); // EE
                                 var val2 = $("input:radio[name=" + nameItem2 + "]:checked").val(); // EA
 
@@ -914,9 +958,91 @@
                         });
                     }
                     else {
-                        if (vm.listEmpleadoRespuestasEE.length > 0 && vm.listEmpleadoRespuestasEA.length > 0) {
-                            vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEE, function (response) {
-                                console.log(response);
+                        if (vm.listEmpleadoRespuestasEE != undefined && vm.listEmpleadoRespuestasEA != undefined) {
+                            if (vm.listEmpleadoRespuestasEE.length > 0 && vm.listEmpleadoRespuestasEA.length > 0) {
+                                vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEE, function (response) {
+                                    console.log(response);
+                                    vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEA, function (response) {
+                                        console.log(response);
+                                        document.getElementsByClassName("busy")[0].style.display = "none";
+                                        if (showMesage == 0) {
+                                            if (response.data == 0) { // ok
+                                                vm.ocultarLoad();
+                                                vm.surveySection++;
+                                                vm.activateSurveySection(vm.surveySection);
+                                                return true;
+                                            }
+                                            if (response.data == 1) {
+                                                swal.fire("Ocurrión un error al guardar tus respuestas de esta sección", "", "error");
+                                            }
+                                        }
+                                        if (showMesage == 1) {
+                                            vm.ocultarLoad();
+                                            if (response.data == 0) {
+                                                vm.surveySection++;
+                                                swal.fire("Tu avance se guardó correctamente", "", "success").then(function myfunction() {
+                                                    vm.activateSurveySection(vm.surveySection);
+                                                });
+                                            }
+                                            if (response.data == 1) { swal.fire("Ocurrió un error al intentar guardar tu avance", "", "error"); }
+                                        }
+                                        if (showMesage == 2) {
+                                            vm.ocultarLoad();
+                                            if (response.data == 0) {
+                                                window.location.href = "/ClimaDinamico/Thanks/?idEncuesta=" + localStorage.getItem("idEncuesta") + "&idUsuario=" + localStorage.getItem("idEmpleado") + "&idBaseDeDatos=" + localStorage.getItem("idBaseDeDatos"); // recibir id de encuesta
+                                            }
+                                            if (response.data == 1)
+                                                swal.fire("Ocurrió un error al terminar la encuesta", "", "error");
+                                        }
+                                        return response.data;
+                                    });
+                                });
+                            }
+                        }
+                        if (vm.listEmpleadoRespuestasEE != undefined) {
+                            if (vm.listEmpleadoRespuestasEA == undefined)
+                                vm.vm.listEmpleadoRespuestasEA = [];
+                            if (vm.listEmpleadoRespuestasEE.length > 0 && vm.listEmpleadoRespuestasEA.length == 0) {
+                                vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEE, function (response) {
+                                    console.log(response);
+                                    document.getElementsByClassName("busy")[0].style.display = "none";
+                                    if (showMesage == 0) {
+                                        if (response.data == 0) { // ok
+                                            vm.ocultarLoad();
+                                            vm.surveySection++;
+                                            vm.activateSurveySection(vm.surveySection);
+                                            return true;
+                                        }
+                                        if (response.data == 1) {
+                                            swal.fire("Ocurrión un error al guardar tus respuestas de esta sección", "", "error");
+                                        }
+                                    }
+                                    if (showMesage == 1) {
+                                        vm.ocultarLoad();
+                                        if (response.data == 0) {
+                                            vm.surveySection++;
+                                            swal.fire("Tu avance se guardó correctamente", "", "success").then(function myfunction() {
+                                                vm.activateSurveySection(vm.surveySection);
+                                            });
+                                        }
+                                        if (response.data == 1) { swal.fire("Ocurrió un error al intentar guardar tu avance", "", "error"); }
+                                    }
+                                    if (showMesage == 2) {
+                                        vm.ocultarLoad();
+                                        if (response.data == 0) {
+                                            window.location.href = "/ClimaDinamico/Thanks/?idEncuesta=" + localStorage.getItem("idEncuesta") + "&idUsuario=" + localStorage.getItem("idEmpleado") + "&idBaseDeDatos=" + localStorage.getItem("idBaseDeDatos"); // recibir id de encuesta
+                                        }
+                                        if (response.data == 1)
+                                            swal.fire("Ocurrió un error al terminar la encuesta", "", "error");
+                                    }
+                                    return response.data;
+                                });
+                            }
+                        }
+                        if (vm.listEmpleadoRespuestasEA != undefined) {
+                            if (vm.listEmpleadoRespuestasEE == undefined)
+                                vm.listEmpleadoRespuestasEE = [];
+                            if (vm.listEmpleadoRespuestasEA.length > 0 && vm.listEmpleadoRespuestasEE.length == 0) {
                                 vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEA, function (response) {
                                     console.log(response);
                                     document.getElementsByClassName("busy")[0].style.display = "none";
@@ -951,79 +1077,7 @@
                                     }
                                     return response.data;
                                 });
-                            });
-                        }
-                        if (vm.listEmpleadoRespuestasEE.length > 0 && vm.listEmpleadoRespuestasEA.length == 0) {
-                            vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEE, function (response) {
-                                console.log(response);
-                                document.getElementsByClassName("busy")[0].style.display = "none";
-                                if (showMesage == 0) {
-                                    if (response.data == 0) { // ok
-                                        vm.ocultarLoad();
-                                        vm.surveySection++;
-                                        vm.activateSurveySection(vm.surveySection);
-                                        return true;
-                                    }
-                                    if (response.data == 1) {
-                                        swal.fire("Ocurrión un error al guardar tus respuestas de esta sección", "", "error");
-                                    }
-                                }
-                                if (showMesage == 1) {
-                                    vm.ocultarLoad();
-                                    if (response.data == 0) {
-                                        vm.surveySection++;
-                                        swal.fire("Tu avance se guardó correctamente", "", "success").then(function myfunction() {
-                                            vm.activateSurveySection(vm.surveySection);
-                                        });
-                                    }
-                                    if (response.data == 1) { swal.fire("Ocurrió un error al intentar guardar tu avance", "", "error"); }
-                                }
-                                if (showMesage == 2) {
-                                    vm.ocultarLoad();
-                                    if (response.data == 0) {
-                                        window.location.href = "/ClimaDinamico/Thanks/?idEncuesta=" + localStorage.getItem("idEncuesta") + "&idUsuario=" + localStorage.getItem("idEmpleado") + "&idBaseDeDatos=" + localStorage.getItem("idBaseDeDatos"); // recibir id de encuesta
-                                    }
-                                    if (response.data == 1)
-                                        swal.fire("Ocurrió un error al terminar la encuesta", "", "error");
-                                }
-                                return response.data;
-                            });
-                        }
-                        if (vm.listEmpleadoRespuestasEA.length > 0 && vm.listEmpleadoRespuestasEE.length == 0) {
-                            vm.post("SaveAvance/?aIdBaseDeDatos=" + localStorage.getItem("idBaseDeDatos") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta"), vm.listEmpleadoRespuestasEA, function (response) {
-                                console.log(response);
-                                document.getElementsByClassName("busy")[0].style.display = "none";
-                                if (showMesage == 0) {
-                                    if (response.data == 0) { // ok
-                                        vm.ocultarLoad();
-                                        vm.surveySection++;
-                                        vm.activateSurveySection(vm.surveySection);
-                                        return true;
-                                    }
-                                    if (response.data == 1) {
-                                        swal.fire("Ocurrión un error al guardar tus respuestas de esta sección", "", "error");
-                                    }
-                                }
-                                if (showMesage == 1) {
-                                    vm.ocultarLoad();
-                                    if (response.data == 0) {
-                                        vm.surveySection++;
-                                        swal.fire("Tu avance se guardó correctamente", "", "success").then(function myfunction() {
-                                            vm.activateSurveySection(vm.surveySection);
-                                        });
-                                    }
-                                    if (response.data == 1) { swal.fire("Ocurrió un error al intentar guardar tu avance", "", "error"); }
-                                }
-                                if (showMesage == 2) {
-                                    vm.ocultarLoad();
-                                    if (response.data == 0) {
-                                        window.location.href = "/ClimaDinamico/Thanks/?idEncuesta=" + localStorage.getItem("idEncuesta") + "&idUsuario=" + localStorage.getItem("idEmpleado") + "&idBaseDeDatos=" + localStorage.getItem("idBaseDeDatos"); // recibir id de encuesta
-                                    }
-                                    if (response.data == 1)
-                                        swal.fire("Ocurrió un error al terminar la encuesta", "", "error");
-                                }
-                                return response.data;
-                            });
+                            }
                         }
                     }
                 } catch (aE) {

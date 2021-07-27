@@ -200,35 +200,55 @@
     }
 
     document.getElementById("UnidadNegocio").addEventListener("change", function (e) {
-        var required = $("#UnidadNegocio").kendoMultiSelect().data("kendoMultiSelect");
-        $('#cellUNeg').text('UNeg=>' + required.value());
+        try {
+            var required = $("#UnidadNegocio").kendoMultiSelect().data("kendoMultiSelect");
+            $('#cellUNeg').text('UNeg=>' + required.value());
+        } catch (e) {
+
+        }
     });
 
     function destroyMultiSelect(id) {
-        $('#' + id).unwrap('.k-multiselect').show().empty();
-        $(".k-multiselect-wrap").remove();
+        try {
+            $('#' + id).unwrap('.k-multiselect').show().empty();
+            $(".k-multiselect-wrap").remove();
+        } catch (e) {
+
+        }
     }
 
     document.getElementById("txtAnio").addEventListener("change", function (e) {
-        document.getElementById("descripcionReporte").textContent = document.getElementById("descripcionReporte").textContent.substring(0, document.getElementById("descripcionReporte").textContent.length - 4) + e.target.value;
+        try {
+            document.getElementById("descripcionReporte").textContent = document.getElementById("descripcionReporte").textContent.substring(0, document.getElementById("descripcionReporte").textContent.length - 4) + e.target.value;
+        } catch (e) {
+
+        }
     });
 
     document.getElementById("enfoque").addEventListener("change", function (e) {
-        if (e.target.value == 1)
-            document.getElementById("descripcionReporte").textContent = document.getElementById("descripcionReporte").textContent.replace("Enfoque área", "Enfoque empresa");
-        if (e.target.value == 2)
-            document.getElementById("descripcionReporte").textContent = document.getElementById("descripcionReporte").textContent.replace("Enfoque empresa", "Enfoque área");
+        try {
+            if (e.target.value == 1)
+                document.getElementById("descripcionReporte").textContent = document.getElementById("descripcionReporte").textContent.replace("Enfoque área", "Enfoque empresa");
+            if (e.target.value == 2)
+                document.getElementById("descripcionReporte").textContent = document.getElementById("descripcionReporte").textContent.replace("Enfoque empresa", "Enfoque área");
+        } catch (e) {
+
+        }
     });
 
     $(".selector").click(function () {
-        $(".egafm").remove();
-        var list = document.getElementsByClassName("k-button");
-        var uneg = [];
-        [].forEach.call(list, function (elem) {
-            uneg.push(elem.textContent);
-        });
-        var idBD = document.getElementById("DDLBD").value;
-        mergeEstructuraGAFM(idBD, uneg);
+        try {
+            $(".egafm").remove();
+            var list = document.getElementsByClassName("k-button");
+            var uneg = [];
+            [].forEach.call(list, function (elem) {
+                uneg.push(elem.textContent);
+            });
+            var idBD = document.getElementById("DDLBD").value;
+            mergeEstructuraGAFM(idBD, uneg);
+        } catch (e) {
+
+        }
     });
 
     function IsNullOrEmpty(data) {

@@ -555,11 +555,18 @@ namespace PL.Controllers
             var data = BL.ReporteD4U.getComparativoPorRangoEdadEA(filtro, valorEntidadAFM, anioActual, IdBD);
             return Json(data, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult getDatosNube(string aFiltro, string aValor, string aIdPregunta, int anioActual)
+        public JsonResult getDatosNube(string aFiltro, string aValor, string aIdPregunta, int anioActual, int IdBD)
         {
             int IdPregunta = aIdPregunta == "" ? 0 : Convert.ToInt32(aIdPregunta);
             var model = getObjReporte(aFiltro, aValor, IdPregunta);
-            return Json(BL.ReporteD4U.getDatosNube(model, anioActual), JsonRequestBehavior.AllowGet);
+            return Json(BL.ReporteD4U.getDatosNube(model, anioActual, IdBD), JsonRequestBehavior.AllowGet);
+        }
+
+        
+        public JsonResult getDataNube3D(BL.ReporteD4U.modelRep model)
+        {
+            var data = BL.ReporteD4U.getDataNube3D(model);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         /*public JsonResult getDataReporteDinamico(List<ML.minHistorico> aFiltro)

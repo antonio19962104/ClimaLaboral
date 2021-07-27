@@ -15,6 +15,7 @@ namespace BL
         public static NLog.Logger nlogClimaDinamico = NLog.LogManager.GetLogger(ML.LogTypes.LogClimaDinamico);
         public static NLog.Logger nlogClimaDinamicoSMTP = NLog.LogManager.GetLogger(ML.LogTypes.nlogClimaDinamicoSMTP);
         public static NLog.Logger nlogClimaDinamicoFrontEnd = NLog.LogManager.GetLogger(ML.LogTypes.LogClimaDinamicoFrontEnd);
+        public static NLog.Logger nlogModuloEncuestas = NLog.LogManager.GetLogger(ML.LogTypes.LogModuloEncuestas);
         public static void logBackGroundJobReporte(string data, StackTrace st, string a, int b, string c)
         {
             nlogClimaDinamicoBackGroundJobReporte.Error("/---------------------------------------------------------------------------------/");
@@ -99,6 +100,22 @@ namespace BL
         {
             nlogAccess.Info("Usuario: " + aUsuario);
             nlogAccess.Info("Nombre: " + aNombre);
+        }
+        /*Logs por modulo*/
+        public static void logErrorModuloEncuestas(Exception aE, StackTrace st)
+        {
+            try
+            {
+                nlogClimaDinamico.Error("Method: " + st.GetFrame(0).GetMethod().Name);
+                nlogClimaDinamico.Error("Message: " + aE.Message);
+                nlogClimaDinamico.Error("Exception: " + aE);
+                nlogClimaDinamico.Error("Inner Exception: " + aE.InnerException);
+                nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
         }
     }
 }

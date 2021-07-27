@@ -498,7 +498,7 @@ strong {
     visibility: hidden;
     width: 120px;
     background-color: transparent;
-    background-image: url('../img/bg-hover.png');
+    background-image: url('../../img/bg-hover.png');
     color: #fff;
     text-align: center;
     border-radius: 0;

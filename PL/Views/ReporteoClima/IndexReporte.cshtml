@@ -50,7 +50,7 @@
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no3_Contexto_Iconografia.cshtml")
         </div>
 
-
+        <!-- ============================== Graficos ============================== -->
         <div ng-show="vm.SeccionesReporte.Id == 6 && vm.opc == 1 || vm.SeccionesReporte.Id == 6 && vm.opc == 4" id="tab-6" title="Reporte de indicadores generales">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no5_Indicadores_Generales.cshtml")
         </div>
@@ -184,7 +184,7 @@
         <div ng-show="vm.SeccionesReporte.Id == 39" id="tab-39" title="Reporte Dinámico de Clima Laboral">
             <script src="~/Jit/jit.js"></script>
             <div id="IdEE"></div>
-            <div id="IdEA"></div>    
+            <div id="IdEA"></div>
         </div>
         <!-------------------------------------Reporte de Comentarios Abiertos------------------------------------>
         <div ng-show="vm.SeccionesReporte.Id == 40" id="tab-40" title="Reporte de Comentarios Abiertos">

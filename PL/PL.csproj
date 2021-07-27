@@ -1061,7 +1061,9 @@
     <Content Include="scripts\AngularJS.js" />
     <Content Include="scripts\Clima Dinamico\adminClimaDinamico.js" />
     <Content Include="scripts\Clima Dinamico\climaLaboral.js" />
+    <Content Include="scripts\Clima Dinamico\encuesta.js" />
     <Content Include="scripts\Clima Dinamico\jquery.min.js" />
+    <Content Include="scripts\Clima Dinamico\BKPreporteoClimaLaboral_FromJob.js" />
     <Content Include="scripts\collapse.js" />
     <Content Include="scripts\CreateGraphics.js" />
     <Content Include="scripts\detect-element-resize.js" />
@@ -1317,6 +1319,8 @@
     <Content Include="scripts\ReporteoClima\morris2.js" />
     <Content Include="css\ReporteoClima\multi-select.css" />
     <Content Include="scripts\ReporteoClima\PDFreactor.js" />
+    <Content Include="scripts\ReporteoClima\reporteComentarios3d.js" />
+    <Content Include="scripts\ReporteoClima\reporteDinamico.js" />
     <Content Include="scripts\ReporteoClima\reporteoClima.min.js" />
     <Content Include="scripts\ReporteoClima\split_text_to_size.js" />
     <Content Include="scripts\ReporteoClima\standard_fonts_metrics.js" />
@@ -1414,6 +1418,7 @@
     <Content Include="Views\Administrador\xmlConvert.cshtml" />
     <Content Include="Views\Documentacion\Index.cshtml" />
     <Content Include="Views\Documentacion\docs.cshtml" />
+    <Content Include="Views\Encuesta\ConfigurarEmails.cshtml" />
     <None Include="Views\Encuesta\mi vista.cshtml" />
     <Content Include="Views\Encuesta\ValidacionModal.cshtml" />
     <Content Include="Views\Home\Busy.cshtml" />
@@ -1609,6 +1614,9 @@
     <Content Include="Views\ReporteoClima\EstructuraReporte\no27_Reporte_Corpo.cshtml" />
     <Content Include="Views\Preguntas\PreguntasAddCL.cshtml" />
     <Content Include="Views\Encuesta\PreviewConfig.cshtml" />
+    <Content Include="Views\ReporteoClima\ReporteDinamico.cshtml" />
+    <Content Include="Views\ReporteoClima\ReporteComentarios3d.cshtml" />
+    <Content Include="Views\ReporteoClima\_LayoutReportes_2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

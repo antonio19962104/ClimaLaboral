@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace BL
 {
+    /// <summary>
+    /// Clase con los métodos del clima laboral dinámico
+    /// </summary>
     public class ClimaDinamico
     {
         public static NLog.Logger nlogClimaDinamico = NLog.LogManager.GetLogger(ML.LogTypes.LogClimaDinamico);
@@ -327,6 +330,9 @@ namespace BL
                                 data.Estatus = "Terminada";
                                 break;
                         }
+                        data.FechaHoraModificacion = DateTime.Now;
+                        data.UsuarioModificacion = "Clima Dinamico";
+                        data.ProgramaModificacion = "Clima Dinamico";
                         context.SaveChanges();
                         nlogClimaDinamicoRespuestas.Info("Se cambió el estatus de encuesta exitosamente");
                         nlogClimaDinamicoRespuestas.Info("IdEmpleado: " + aIdUsuario);
@@ -369,7 +375,6 @@ namespace BL
                         {
                             case 1:
                                 data.Estatus = "No comenzada";
-
                                 break;
                             case 2:
                                 data.Estatus = "En proceso";
@@ -378,6 +383,9 @@ namespace BL
                                 data.Estatus = "Terminada";
                                 break;
                         }
+                        data.FechaHoraModificacion = DateTime.Now;
+                        data.UsuarioModificacion = "Clima Dinamico";
+                        data.ProgramaModificacion = "Clima Dinamico";
                         context.SaveChanges();
                         nlogClimaDinamicoRespuestas.Info("Se cambió el estatus de encuesta exitosamente");
                         nlogClimaDinamicoRespuestas.Info("IdEmpleado: " + aIdUsuario);
@@ -834,6 +842,14 @@ namespace BL
                 nlogClimaDinamico.Error("StackTrace: " + aE.StackTrace);
             }
             return ML.ClimaDinamico.statusLogin.success;
+        }
+        public static void SendEmailError(Exception aE)
+        {
+            var message = new MailMessage();
+            message.To.Add("jamurillo@grupoautofin.com");
+            message.Subject = "Notificaciones de error";
+            message.IsBodyHtml = true;
+            message.Body = @"<p>Ocurrió la siguiente excepción</p>";
         }
         private static string ReplaceDatosMensaje(string mensajeOriginal, string Find, string NewValue)
         {

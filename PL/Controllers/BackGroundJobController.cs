@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -78,7 +81,47 @@ namespace PL.Controllers
             BackgroundJob.Enqueue(() => BackgroundJobCreateReport(aHistorico));
             return Json("success");
         }
-
+        public static string getUnidadNegocio(string entidad, int idTipoEntidad, int IdBD)
+        {
+            string query = string.Empty;
+            switch (idTipoEntidad)
+            {
+                case 1:
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBD, entidad);
+                    return entidad;
+                    break;
+                case 2:
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBD, entidad);
+                    break;
+                case 3:
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBD, entidad);
+                    break;
+                case 4:
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBD, entidad);
+                    break;
+                case 5:
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0} and Subdepartamento = '{1}'", IdBD, entidad);
+                    break;
+                default:
+                    break;
+            }
+            using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+            {
+                DataSet ds = new DataSet();
+                SqlDataAdapter data = new SqlDataAdapter(query, conn);
+                data.Fill(ds, "data");
+                var unidad = "";
+                try
+                {
+                    unidad = ds.Tables[0].Rows[0].ItemArray[0].ToString();
+                }
+                catch (Exception)
+                {
+                    unidad = "";
+                }
+                return unidad;
+            }
+        }
         public ActionResult BackgroundJobCreateReport(ML.Historico aHistorico)
         {
             try
@@ -89,10 +132,11 @@ namespace PL.Controllers
                 AnioActual = (int)aHistorico.Anio + 1;
                 AnioHistorico = (int)aHistorico.Anio;
                 string criterioBusquedaSeleccionado = Convert.ToString(aHistorico.IdTipoEntidad);
-                string uneg = UnidadNegocioFromEntidad(aHistorico.EntidadNombre, aHistorico.EntidadId, aHistorico.IdTipoEntidad);//Turismo_9
+                // string uneg = UnidadNegocioFromEntidad(aHistorico.EntidadNombre, aHistorico.EntidadId, aHistorico.IdTipoEntidad);//Turismo_9
 
-                string unidadNeg = uneg.Split('_')[0];
-                int idUneg = Convert.ToInt32(uneg.Split('_')[1]);
+                // string unidadNeg = uneg.Split('_')[0];
+                string unidadNeg = getUnidadNegocio(aHistorico.EntidadNombre, (int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos);
+                //int idUneg = Convert.ToInt32(uneg.Split('_')[1]);
 
                 if (boolExisteReporte(aHistorico, AnioActual) == true)
                 {
@@ -166,10 +210,10 @@ namespace PL.Controllers
                 objComparativoPorFuncionEA = apis.getComparativoPorFuncionEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorRangoEdadEE = apis.getComparativoPorRangoEdadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorRangoEdadEA = apis.getComparativoPorRangoEdadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
-                objNube1 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "1", AnioActual);
-                objNube2 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "2", AnioActual);
-                objNube3 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "3", AnioActual);
-                objNube4 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "4", AnioActual);
+                objNube1 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "1", AnioActual, aHistorico.IdBaseDeDatos);
+                objNube2 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "2", AnioActual, aHistorico.IdBaseDeDatos);
+                objNube3 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "3", AnioActual, aHistorico.IdBaseDeDatos);
+                objNube4 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "4", AnioActual, aHistorico.IdBaseDeDatos);
                 //ajustar queries de hasta aqui
 
                 #region Asignar alias al objeto
@@ -1926,6 +1970,13 @@ namespace PL.Controllers
             return Json(data);
         }
 
+        public ActionResult getComentariosByPalabra3D(string palabra, BL.ReporteD4U.modelRep model)
+        {
+            palabra = palabra.Replace("/", "");
+            var data = BL.ReporteD4U.getComentariosByPalabra(palabra, model);
+            return Json(data);
+        }
+
         public static int getIdPreguntaEA(int idpreguntaEE)
         {
             return idpreguntaEE + 86;
@@ -2021,6 +2072,42 @@ namespace PL.Controllers
                         break;
                     case 4:
                         listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4(IdBD, entidadNombre);
+                        break;
+                }
+                foreach (var item in listS)
+                {
+                    string type = item.Substring(0, 6);
+                    string value = item.Substring(6, item.Length - 6);
+                    list.Add(new ApisController.myCustomArray { type = type, value = value });
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+            }
+            return list;
+        }
+
+        public static List<PL.Controllers.ApisController.myCustomArray> getEstructuraFromExcelRDinamico(int IdTipoEntidad, int IdBD, string entidadNombre, List<string> niveles)
+        {
+            var listS = new List<string>();
+            var list = new List<ApisController.myCustomArray>();
+            try
+            {
+                switch (IdTipoEntidad)
+                {
+                    case 1:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl1ForRDinamico(IdBD, entidadNombre, niveles);
+                        break;
+                    case 2:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl2ForRDinamico(IdBD, entidadNombre, niveles);
+                        break;
+                    default:
+                    case 3:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl3ForRDinamico(IdBD, entidadNombre, niveles);
+                        break;
+                    case 4:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4ForRDinamico(IdBD, entidadNombre, niveles);
                         break;
                 }
                 foreach (var item in listS)

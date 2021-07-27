@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -807,17 +808,27 @@ namespace BL
             return result;
         }
 
-        //Bulk Insert ADO.net
-        public static void bulk()
+        public static void AsignarDemograficoConcatenado(int IdBaseDeDatos)
         {
-            DataTable table = new DataTable();
-            table.Columns.Add("ColA");
-            
-            SqlConnection cn = new SqlConnection("myConnection");
-            cn.Open();
-            SqlBulkCopy s = new SqlBulkCopy(cn);
-            s.DestinationTableName = "de";
-            
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var listEmple = context.Empleado.Select(o => o).Where(o => o.IdBaseDeDatos == IdBaseDeDatos).ToList();
+                    foreach (var item in listEmple)
+                    {
+                        item.DivisionMarca = string.Concat(item.UnidadNegocio.Substring(0, 4), " - ", item.DivisionMarca);
+                        item.AreaAgencia = string.Concat(item.UnidadNegocio.Substring(0, 4), " - " + item.DivisionMarca.Substring(0, 4), " - " + item.AreaAgencia);
+                        item.Depto = string.Concat(item.UnidadNegocio.Substring(0, 4), " - ", item.DivisionMarca.Substring(0, 4), " - ", item.AreaAgencia.Substring(0, 4), item.Depto);
+                        item.Subdepartamento = string.Concat(item.UnidadNegocio.Substring(0, 4), " - ", item.DivisionMarca.Substring(0, 4), " - ", item.AreaAgencia.Substring(0, 4), " - ", item.Depto.Substring(0, 4), " - ", item.Subdepartamento);
+                        context.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+            }
         }
        
     }
