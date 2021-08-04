@@ -19,8 +19,8 @@
                                                 <div class="bar-progress" style="height: 0px;">
                                                 </div>
                                                 <p class="label-top-graphic2">{{ item.Frecuencia }}</p>
-                                                <div class="bar-progress2" style="height: {{ item.Porcentaje }}px;">
-                                                </div>
+                                                <div class="bar-progress2" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 2.7 }}px;"></div>
+                                                <div class="bar-progress2" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * 2.7 }}px;"></div>                                                
                                             </div>
                                             <p class="text-graph">{{ item.Pregunta }}</p>
                                         </center>
@@ -29,6 +29,22 @@
                             </div><!--.graph-wrapper-->
                         </div>
                     </div><!--.row-->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <center>
+                                <div class="col-3">
+                                    <div class="row">                                        
+                                            <div style="width: 25px;height: 25px;background: #6259bf;margin-top: 10px;float: left;"></div>
+                                            <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                            <div style="width: 25px;height: 25px;background: #49286b;margin-top: 10px;float: left;"></div>
+                                            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                            @*<div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>*@
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
                     <div class="row mt-5">
                         <div class="col-sm-12">
                             <div class="graph-wrapper grafica-dejar">
@@ -44,8 +60,8 @@
                                                 <div class="bar-progress3" style="height: 0px;">
                                                 </div>
                                                 <p class="label-top-graphic-blue2">{{ item.Frecuencia }}</p>
-                                                <div class="bar-progress4" style="height: {{ item.Porcentaje }}px;">
-                                                </div>
+                                                <div class="bar-progress4" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 2.7 }}px;"></div>
+                                                <div class="bar-progress4" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * 2.7 }}px;"></div>
                                             </div>
                                             <p class="text-graph">{{ item.Pregunta }}</p>
                                         </center>
@@ -54,8 +70,26 @@
                             </div><!--.graph-wrapper-->
                         </div>
                     </div><!--.row-->
-                    <div class="d-flex justify-content-center mt-3">
-                        <img src="~/img/ReporteoClima/indicadores.png" class="img-fluid">
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <center>
+                                <div class="col-4">
+                                    <div class="row">
+                                        <div style="width: 25px;height: 25px;background: #87c2ee;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div style="width: 25px;height: 25px;background: #078dbd;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="col-12 p-0 m-0">
+                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                        </div>
                     </div>
                 </div>
             </div>

@@ -799,6 +799,10 @@ namespace PL.Controllers
         {
             public string type { get; set; }
             public string value { get; set; }
+            public int IdUnidadNegocio { get; set; }
+            public int CompanyId { get; set; }
+            public int IdArea { get; set; }
+            public int IdDepartamento { get; set; }
         }
         #endregion Clases Auxiliares
 

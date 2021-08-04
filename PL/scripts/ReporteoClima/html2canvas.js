@@ -6945,7 +6945,8 @@
 
     var _this = undefined;
     var parseColor$1 = function (value) { return color.parse(Parser.create(value).parseComponentValue()); };
-    var html2canvas = function (element, options) {
+    //var html2canvas =
+    async function html2canvas(element, options) {
         if (options === void 0) { options = {}; }
         return renderElement(element, options);
     };

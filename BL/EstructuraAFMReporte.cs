@@ -202,7 +202,8 @@ namespace BL
                                     foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
                                     {
                                         if (row_Depto.ItemArray[0].ToString() != "-" && level.Contains("departamento"))
-                                            list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                                            if (hasEmpleado(row_Depto.ItemArray[0].ToString(), 4, Convert.ToInt32(IdBaseDeDatos)))
+                                                list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
                                         DataSet ds_SubDepartamento = new DataSet();
                                         query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
                                         data = new SqlDataAdapter(query, conn);
@@ -210,7 +211,8 @@ namespace BL
                                         foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
                                         {
                                             if (row_Subd.ItemArray[0].ToString() != "-" && level.Contains("subdepartamento"))
-                                                list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                                if (hasEmpleado(row_Subd.ItemArray[0].ToString(), 5, Convert.ToInt32(IdBaseDeDatos)))
+                                                    list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
                                         }
                                     }
                                 }
@@ -224,6 +226,8 @@ namespace BL
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
                 return new List<string>();
             }
+            list = list.Where(o => o.Contains(" - -") == false).ToList();//
+            //list = list.Where(o => o.Contains(" - ") == false).ToList();
             list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
             return list;
         }

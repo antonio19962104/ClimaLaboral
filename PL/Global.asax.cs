@@ -15,6 +15,9 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Security.Claims;
 using BL;
+using Microsoft.Office.Interop.PowerPoint;
+using Microsoft.Office.Core;
+using Aspose.Pdf;
 
 namespace PL
 {
@@ -28,23 +31,57 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
+
+            /*var oPowerPoint = new Microsoft.Office.Interop.PowerPoint.Application();
+            oPowerPoint.Visible = Microsoft.Office.Core.MsoTriState.msoTrue;
+            var activeSlide = (Microsoft.Office.Interop.PowerPoint.Slide)oPowerPoint.ActiveWindow.View.Slide;
+            HtmlFragment htmlFragment = new HtmlFragment("");
+            htmlFragment.cop
+
+
+            string pictureFileName = "C:\\example.jpg";
+
+            Application pptApplication = new Application();
+
+            Microsoft.Office.Interop.PowerPoint.Slides slides;
+            Microsoft.Office.Interop.PowerPoint._Slide slide;
+            Microsoft.Office.Interop.PowerPoint.TextRange objText;
+            Microsoft.Office.Interop.PowerPoint.PpHTMLVersion ppHTMLVersion;
+
             
-            // https://github.com/antonio19962104/ClimaLaboral.git
-            // https://www.doodleish.com/2020/06/hosting-for-angular-app-react-app.html
-            // https://stackoverflow.com/questions/10168240/encrypting-decrypting-a-string-in-c-sharp
-            // mandar a encryptar el idusuario, nombre usuario, perfil, empresa de procedencia
-            string usuario = "jamurillo@grupoautofin.com|1|1,2,3,4,5";
-            string pass = "Pass@word01";
-            var encryptData = BL.EstructuraAFMReporte.Encrypt(usuario, pass);// esto va a la url
-            var descryptData = BL.EstructuraAFMReporte.Decrypt(encryptData, pass);
-            var usr = descryptData.Split('|')[0];
-            var perfil = descryptData.Split('|')[1];
-            var comp = descryptData.Split('|')[2];
-            var lst = comp.Split(',').Select(n => Convert.ToInt32(n)).ToList();
-            var list = new List<string>();
 
 
-            // PL.Controllers.BackGroundJobController.getUnidadNegocio("AUT - ELEGANTES", 2, 2114);
+            // Create the Presentation File
+            Presentation pptPresentation = pptApplication.Presentations.Add(MsoTriState.msoTrue);
+
+            Microsoft.Office.Interop.PowerPoint.CustomLayout customLayout = pptPresentation.SlideMaster.CustomLayouts[Microsoft.Office.Interop.PowerPoint.PpSlideLayout.ppLayoutText];
+
+            // Create new Slide
+            slides = pptPresentation.Slides;
+            slide = slides.AddSlide(1, customLayout);
+
+            // Add title
+            objText = slide.Shapes[1].TextFrame.TextRange;
+
+            objText.Text = "FPPT.com";
+            objText.Font.Name = "Arial";
+            objText.Font.Size = 32;
+
+            objText = slide.Shapes[2].TextFrame.TextRange;
+            objText.Text = "<div class='form-box'>                <img src='/img/logo.png' class='img-fluid logo-form' alt='Logo'>                <h1 class='title-form-box'>Iniciar sesión</h1>                <div class='form-group mb-4'>                                        <input class='form-control form-control-lg UserName' data-val='true' data-val-email='El campo UserName no es una dirección de correo electrónico válida.' data-val-required='El Username es requerido' id='userLogin' name='UserName' placeholder='Usuario:' type='text' value=''>                </div>                <div class='form-group mb-4'>                                        <input class='form-control form-control-lg Pass' data-val='true' data-val-length='El password debe contener un minimo de 8 caracteres' data-val-length-max='12' data-val-length-min='8' data-val-required='El Password es requerido' id='passwordLogin' name='Password' placeholder='Contraseña:' type='password' value=''>                </div>                <a href='/Account/ForgotPassword' class='text-forgot'>¿Olvidaste tu contraseña?</a>            </div>";
+
+            Microsoft.Office.Interop.PowerPoint.Shape shape = slide.Shapes[2];
+            slide.Shapes.AddPicture(pictureFileName, Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, shape.Left, shape.Top, shape.Width, shape.Height);
+
+            slide.NotesPage.Shapes[2].TextFrame.TextRange.Text = "This demo is created by FPPT using C# - Download free templates from http://FPPT.com";
+
+            
+
+
+            pptPresentation.SaveAs(@"c:\temp\fppt.pptx", Microsoft.Office.Interop.PowerPoint.PpSaveAsFileType.ppSaveAsDefault, MsoTriState.msoTrue);*/
+            //pptPresentation.Close();
+            //pptApplication.Quit();
+
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere

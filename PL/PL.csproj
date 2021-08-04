@@ -168,6 +168,10 @@
       <HintPath>..\packages\ExcelPackage.1.0.0\lib\Microsoft.Office.Interop.Excel.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.PowerPoint.15.0.4420.1017\lib\net20\Microsoft.Office.Interop.PowerPoint.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.OneDrive.Sdk, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.OneDriveSDK.2.0.7\lib\portable-net45+netcore45+wpa81+win8\Microsoft.OneDrive.Sdk.dll</HintPath>
       <Private>True</Private>
@@ -203,6 +207,11 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\..\Users\jamurillo\Downloads\office.dll</HintPath>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Owin.dll</HintPath>
@@ -1306,6 +1315,8 @@
     <Content Include="scripts\reporteoClimaLaboral_FromJob - Copia_22_04_2021.js" />
     <Content Include="scripts\reporteoClimaLaboral_FromJob.js" />
     <Content Include="scripts\reporteoClimaLaboral.js" />
+    <Content Include="scripts\ReporteoClima\EscalarImagen.js" />
+    <Content Include="scripts\ReporteoClima\FileSaver.js" />
     <Content Include="scripts\ReporteoClima\filtradoReportes.js" />
     <Content Include="scripts\ReporteoClima\html.js" />
     <Content Include="scripts\ReporteoClima\html2canvas.js" />
@@ -1320,6 +1331,7 @@
     <Content Include="css\ReporteoClima\multi-select.css" />
     <Content Include="scripts\ReporteoClima\PDFreactor.js" />
     <Content Include="scripts\ReporteoClima\reporteComentarios3d.js" />
+    <Content Include="scripts\ReporteoClima\reporteDinamico - Copia.js" />
     <Content Include="scripts\ReporteoClima\reporteDinamico.js" />
     <Content Include="scripts\ReporteoClima\reporteoClima.min.js" />
     <Content Include="scripts\ReporteoClima\split_text_to_size.js" />

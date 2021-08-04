@@ -1538,26 +1538,27 @@ input.bg-radio-black[type='radio']:checked:after {
 
 .bg-impulsores {
     background-color: #eeeeee;
-    min-height: 175px;
-    overflow:hidden;
+    min-height: 150px;
+    overflow: hidden;
 }
 
 .icono-impulsores {
     background-color: #676a6d;
     display: inline-flex;
     align-items: center;
+    max-width: 15px;
 }
 
 .icono-impulsores img {
-    margin-left: 30px;
+    /*margin-left: 30px;*/
     z-index: 1;
-    width: 199px!important;
+   /* width: 199px!important;*/
     min-width: 25px;
 }
 
 .tablaimpulsores-izq {
     border-left: solid 2px #d2d2d1;
-    padding: 70px 40px;
+    padding: 35px 40px;
     height: 136px;
 }
 
@@ -1583,7 +1584,7 @@ input.bg-radio-black[type='radio']:checked:after {
 .tablaimpulsores-der {
     background-color: #eee;
     padding: 5px 10px;
-    min-height: 175px;
+    min-height: 150px;
 }
 
 .nublado{

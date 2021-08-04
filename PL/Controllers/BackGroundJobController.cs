@@ -2074,6 +2074,7 @@ namespace PL.Controllers
                         listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4(IdBD, entidadNombre);
                         break;
                 }
+                listS = listS.Where(o => o.Contains(" - -") == false).ToList();
                 foreach (var item in listS)
                 {
                     string type = item.Substring(0, 6);
@@ -2100,18 +2101,20 @@ namespace PL.Controllers
                         listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl1ForRDinamico(IdBD, entidadNombre, niveles);
                         break;
                     case 2:
-                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl2ForRDinamico(IdBD, entidadNombre, niveles);
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl2ForRDinamico(IdBD, entidadNombre, niveles);// aqui no se usa
                         break;
                     default:
                     case 3:
-                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl3ForRDinamico(IdBD, entidadNombre, niveles);
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl3ForRDinamico(IdBD, entidadNombre, niveles);// aqui no se usa
                         break;
                     case 4:
-                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4ForRDinamico(IdBD, entidadNombre, niveles);
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl4ForRDinamico(IdBD, entidadNombre, niveles);// aqui no se usa
                         break;
                 }
+                listS = listS.Where(o => o.Contains(" - -") == false).ToList();
                 foreach (var item in listS)
                 {
+
                     string type = item.Substring(0, 6);
                     string value = item.Substring(6, item.Length - 6);
                     list.Add(new ApisController.myCustomArray { type = type, value = value });
