@@ -59,7 +59,7 @@ namespace PL.Controllers
             foreach (var item in modelRep.listUnudadesNeg)
             {
                 var aFiltrosHijosEstructura = BackGroundJobController.getEstructuraFromExcelRDinamico(1, modelRep.idBD, item, modelRep.niveles);
-                var objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA("1", modelRep.listUnudadesNeg[0], modelRep.listUnudadesNeg[0], aFiltrosHijosEstructura, modelRep.anio, modelRep.idBD);//ok
+                var objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA("1", item, item, aFiltrosHijosEstructura, modelRep.anio, modelRep.idBD);//ok
                 data.Add(objComparativoResultadoGeneralPorNivelesEA.Data);
             }
             return Json(data, JsonRequestBehavior.AllowGet);

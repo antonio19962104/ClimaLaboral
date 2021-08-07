@@ -1,18 +1,41 @@
 ﻿var pdf = Object;
 pdf = new jsPDF("landscape", "px", "a4");
-//pdf.setFillColor(0, 0, 50, 0);
-//pdf.rect(0, 0, pdf.internal.pageSize.width, pdf.internal.pageSize.height, "F");
-
+var imagenesPDF = [];
 var baderaFinalizacion = 0;
 var contadorPaginas = 0;
 var imagenesCount = 0;
 var historicoImagen = [];
+var docReporte = new jsPDF('landscape', 'pt', 'letter');
+var divs =
+    ["tab-portada", "tab-portada-azul", "tab-introduccion-amarillo", "tab-iconografia",
+        "tab-indicadores-generales", "tab-indicadores-categoria", "tab-impulsores-clave",
+        "tab-mejores-ee", "tab-mejores-ea", "tab-peores-ee", "tab-peores-ea",
+        "tab-crecimiento-ee", "tab-crecimiento-ea", "tab-decremento-ee", "tab-decremento-ea",
+        "tab-bienestar-ee", "tab-bienestar-ea", 
+        "tab-indicadores-permanencia", "tab-comparativo-permanencia", "tab-comparativo-abandono",
+        "tab-generales-departamento-ee", "tab-generales-departamento-ea",
+        "pegarReseccionado", "pegarReseccionadoEA",
+        "tab-estr-one-level-ee", "tab-estr-one-level-ea",
+        "tab-antiguedad-ee", "tab-antiguedad-ea",
+        "tab-genero-ee", "tab-genero-ea",
+        "tab-grado-aca-ee", "tab-grado-aca-ea",
+        "tab-c-trab-ee", "tab-c-trab-ea",
+        "tab-funcion-ee", "tab-funcion-ea",
+        "tab-edad-ee", "tab-edad-ea"
+    ];
+
+async function crearReportePDF() {
+    docReporte.deletePage(1);
+    docReporte.deletePage(2);
+    docReporte.save('Reporte_Grafico.pdf');
+}
+
 /**
  * Crea copia de un canvas con la escala indicada
  * @param {any} base64
  * @param {any} screenWidth
  */
-function start(base64, screenWidth, idElement) {
+async function start(base64, screenWidth, idElement) {
     if (base64 != "" && base64 != null && idElement != null) {
         var idElement = idElement + "_canvas";
         canvasElement = document.createElement('canvas');
@@ -22,9 +45,6 @@ function start(base64, screenWidth, idElement) {
 
         var ctx = myCanvas.getContext("2d");
         var canvas = myCanvas;
-        var cw = canvas.width;
-        var ch = canvas.height;
-
         var tempCanvas = document.createElement("canvas");
         document.getElementById("mergeS").appendChild(tempCanvas);
         var tctx = tempCanvas.getContext("2d");
@@ -70,24 +90,25 @@ function start(base64, screenWidth, idElement) {
                                 
                                 reader.onloadend = function () {
                                     if (baderaFinalizacion != parseInt(localStorage.getItem("paginasReporte"))) {
-                                        console.log(reader.result);
+                                        //console.log(reader.result);
 
                                         imgData = reader.result;
-                                        console.log(imgData);
+                                        //console.log(imgData);
                                         
 
                                         if (historicoImagen.includes(imgData) == false && imgData != "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAIQAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAAHRyWFlaAAABZAAAABRnWFlaAAABeAAAABRiWFlaAAABjAAAABRyVFJDAAABoAAAAChnVFJDAAABoAAAAChiVFJDAAABoAAAACh3dHB0AAAByAAAABRjcHJ0AAAB3AAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAFgAAAAcAHMAUgBHAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFhZWiAAAAAAAABvogAAOPUAAAOQWFlaIAAAAAAAAGKZAAC3hQAAGNpYWVogAAAAAAAAJKAAAA+EAAC2z3BhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABYWVogAAAAAAAA9tYAAQAAAADTLW1sdWMAAAAAAAAAAQAAAAxlblVTAAAAIAAAABwARwBvAG8AZwBsAGUAIABJAG4AYwAuACAAMgAwADEANv/bAEMAAwICAgICAwICAgMDAwMEBgQEBAQECAYGBQYJCAoKCQgJCQoMDwwKCw4LCQkNEQ0ODxAQERAKDBITEhATDxAQEP/bAEMBAwMDBAMECAQECBALCQsQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEP/AABEIAJYBLAMBIgACEQEDEQH/xAAVAAEBAAAAAAAAAAAAAAAAAAAACf/EABQQAQAAAAAAAAAAAAAAAAAAAAD/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AlUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD//2Q==") {
                                             if (contadorPaginas > 0)
                                                 pdf.addPage();
 
-                                            pdf.addImage(imgData, 'JPEG', 0, 0);
+                                            pdf.addImage(imgData, 'JPEG', -5, -4);
                                             historicoImagen.push(imgData);
                                             contadorPaginas++;
                                         }
 
                                         if (contadorPaginas == parseInt(localStorage.getItem("paginasReporte"))) {
-                                            pdf.deletePage(1);
+                                            pdf.deletePage(2);
                                             pdf.save("ReporteGrafico_" + "_UnidadNegocio" + "_" + 2021 + ".pdf");
+                                            document.getElementsByClassName("busy")[1].style.display = "none";
                                             baderaFinalizacion = parseInt(localStorage.getItem("paginasReporte"));
                                         }
                                     }

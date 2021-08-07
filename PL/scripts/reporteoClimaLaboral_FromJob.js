@@ -19,6 +19,10 @@ function GetDashBoard() {
         try {
             var vm = this;
             vm.hasHistorico = true;
+            vm.exportaImagen = true;
+            vm.mostrarMensaje = true;
+            vm.exportaSeccion = [];
+            vm.banderaMensaje = 0;
             vm.auxiliar2 = [];
             vm.auxiliar = [];
             vm.imagenes = [];
@@ -30,6 +34,7 @@ function GetDashBoard() {
             vm.Reactivo = [];
             vm.reactivoSeleccionado = Object;
             vm.dataReporteCorpo = [];
+            vm.contadorNextButton = 0;            
 
             localStorage["tieneReporte"] = "";
             vm.tableBienestarEE = "";
@@ -1871,8 +1876,12 @@ function GetDashBoard() {
 
             vm.imagenRedimensionada = "";
 
-            vm.exportar = function () {
-            localStorage.setItem("paginasReporte", vm.imagenes.length);
+            vm.exportar = async function () {
+                //contadorPaginas = 0;
+                //baderaFinalizacion = 0;
+                document.getElementsByClassName("busy")[1].style.display = "block";
+                var numPaginas = Enumerable.from(vm.imagenes).where(o => o.value != "").toList().length;
+                localStorage.setItem("paginasReporte", numPaginas);
                 var resolucion = $(window).width();
                 var elem = document.getElementById("mergeS");
                 var canvas = elem.getElementsByTagName('canvas');
@@ -1885,13 +1894,19 @@ function GetDashBoard() {
                 }
                 var width = pdf.internal.pageSize.width;
                 var height = pdf.internal.pageSize.height;
+
+                // ordenar imagenes
+                vm.imagenes = Enumerable.from(vm.imagenes).orderBy(o => o.id).toList();
+                //console.log(vm.imagenes);
                 for (var i = 0; i < vm.imagenes.length; i++) {
-                    if (vm.imagenes[i] != undefined) {
-                        try {
-                            var valor = vm.imagenes[i].value;
-                            var imgData = start(valor, resolucion, vm.imagenes[i].id);
-                        } catch (e) {
-                            swal(e.message, "", "error");
+                    if (vm.imagenes[i] != undefined && vm.imagenes[i] != "") {
+                        if (vm.imagenes.id != 23 && vm.imagenes.id != 24) {
+                            try {
+                                var valor = vm.imagenes[i].value;
+                                await start(valor, resolucion, vm.imagenes[i].id);
+                            } catch (e) {
+                                swal(e.message, "", "error");
+                            }
                         }
                     }
                 }
@@ -1899,21 +1914,60 @@ function GetDashBoard() {
 
             vm.historicoCanvas = [];
             
-            function report(elemId) {
+            async function report(elemId) {
                 try {
                     var elemId = elemId;
-                    if (!vm.isNullOrEmpty(elemId) && elemId != "tab-1") {
-                        if (!vm.historicoCanvas.includes(elemId)) {
-                            vm.isBusy = true;
-                            vm.historicoCanvas.push(elemId);
-                            var elem = Object;
-                            if (vm.SeccionesReporte.Id == 17) {
-                                // mostrar el enfoque area para la exportacion
-                                vm.verComparativoEnfoques = true;
+
+                    
+
+                    var IdOrdenamiento = "";
+                    if (elemId == "tab-3punto5") {
+                        IdOrdenamiento = 3.5;
+                    }
+                    if (elemId.split('-').length == 3 && elemId != "tab-3punto5") {
+                        IdOrdenamiento = elemId.split('-')[1] + "." + elemId.split('-')[2]; // 23.2
+                    }
+                    if (elemId.split('-').length == 2 && elemId != "tab-3punto5") {
+                        IdOrdenamiento = elemId.split('-')[1]; // 23
+                    }
+                    IdOrdenamiento = parseFloat(IdOrdenamiento);
+
+                    // Eliminar imagen que ya estaba dentro
+                    if (vm.exportaImagen == false) {
+                        // tomar el base 64 de la imagen
+                        var data = Enumerable.from(vm.imagenes).where(o => o.id == IdOrdenamiento).lastOrDefault();
+                        if (data != null) {
+                            // La imagen ya existe dentro del vm.imagenes
+                            data.value = ""; // anula el contenido base64 de la imagen
+                        }
+                    }
+                    // Agregar una imagen que no estaba pero ahora se agregó
+
+                    // Agregar una imagen que se agrego, despues se quito pero despues se agregó de nuevo
+                    if (vm.exportaImagen == true) {
+                        var data = Enumerable.from(vm.imagenes).where(o => o.id == IdOrdenamiento).lastOrDefault();
+                        if (data != null) {
+                            // La imagen ya existe dentro del vm.imagenes pero su base64 esta vacio
+                            if (data.value == "") {
+                                
                             }
-                            if (vm.SeccionesReporte.Id == 17) {
-                                document.getElementById("demoVerComparativoEnfoques").checked = true;
-                            }
+                        }
+                    }
+
+
+                    if ((vm.exportaImagen == true && elemId != "tab-23") || (vm.exportaImagen == true && elemId != "tab-24")) {
+                        if (!vm.isNullOrEmpty(elemId) && elemId != "tab-1") {
+                            if (!vm.historicoCanvas.includes(elemId)) {
+                                vm.isBusy = true;
+                                vm.historicoCanvas.push(elemId);
+                                var elem = Object;
+                                if (vm.SeccionesReporte.Id == 17) {
+                                    // mostrar el enfoque area para la exportacion
+                                    vm.verComparativoEnfoques = true;
+                                }
+                                if (vm.SeccionesReporte.Id == 17) {
+                                    document.getElementById("demoVerComparativoEnfoques").checked = true;
+                                }
 
 
                             if (vm.SeccionesReporte.Id != 39 || vm.SeccionesReporte.Id != 40) {
@@ -1921,31 +1975,39 @@ function GetDashBoard() {
                                 if (elemId.includes("tab-23-") || elemId.includes("tab-24-")) {
                                     elem = document.querySelector("." + elemId);
                                     elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
+                                    elem.style.paddingTop = "250px";
+                                    await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
                                             canvas.toBlob(function (blob) {
                                                 var reader = new FileReader();
                                                 reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
                                                 }
                                                 reader.readAsDataURL(blob);
                                             }, "image/jpeg");
                                         },
                                     });
                                     elem.style.backgroundColor = "#eee";
+                                    //elem.style.paddingTop = "0px"
                                 }
-
-
+                                
+                                
                                 if (elemId == "tab-3") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
-                                    html2canvas(elem, {
+                                    elem.style.paddingTop = "200px";
+                                    await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
                                             canvas.toBlob(function (blob) {
                                                 var reader = new FileReader();
                                                 reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    $("#tab-3")[0].children[0].children[0].children[1].removeAttribute("style");
                                                 }
                                                 reader.readAsDataURL(blob);
                                             }, "image/jpeg");
@@ -1956,181 +2018,217 @@ function GetDashBoard() {
                                 if (elemId == "tab-3punto5") {
                                     //document.getElementsByClassName("introduccion-bg")[0].style.backgroundColor = "#fff";
                                     elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
-                                    html2canvas(elem, {
+                                    elem.children[0].style.marginTop = "280px";
+                                    await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
                                             canvas.toBlob(function (blob) {
                                                 var reader = new FileReader();
                                                 reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                    //document.getElementsByClassName("introduccion-bg")[0].style.backgroundColor = "#070C39"
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    $("#tab-3punto5")[0].children[0].children[0].children[1].children[0].removeAttribute("style");
                                                 }
                                                 reader.readAsDataURL(blob);
                                             }, "image/jpeg");
                                         }
                                     });
+                                    //elem.children[0].style.marginTop = "0px";
                                 }
 
                                 if (elemId == "tab-4") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
+                                    elem.style.paddingTop = "220px";
+                                    await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
                                             canvas.toBlob(function (blob) {
                                                 var reader = new FileReader();
                                                 reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    $("#tab-4")[0].children[0].children[0].children[0].removeAttribute("style");
                                                 }
                                                 reader.readAsDataURL(blob);
                                             }, "image/jpeg");
                                         }
                                     });
                                     elem.style.backgroundColor = "#eee";
+                                    //elem.style.paddingTop = "0px"
                                 }
 
                                 if (elemId == "tab-5") {
                                     elem = document.querySelector("#tab-5").children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
+                                    elem.style.paddingTop = "350px"
+                                    await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
                                             canvas.toBlob(function (blob) {
                                                 var reader = new FileReader();
                                                 reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    $("#tab-5")[0].children[0].children[0].removeAttribute("style");
                                                 }
                                                 reader.readAsDataURL(blob);
                                             }, "image/jpeg");
                                         }
                                     });
                                     elem.style.backgroundColor = "#eee";
+                                    //elem.style.paddingTop = "0px"
                                 }
 
-                                if (elemId == "tab-6") {
-                                    elem = document.querySelector("#" + elemId).children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-7") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-8") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-9") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-10") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-11") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-12") {
-                                    try {
-                                        if (document.querySelector("#tab-12").classList.contains("ng-hide")) {
-                                            elem = document.querySelector("#tab-10").children[0].children[0];
-                                        }
-                                        else {
-                                            elem = document.querySelector("#tab-12").children[0].children[0];
-                                        }
+                                    if (elemId == "tab-6") {
+                                        elem = document.querySelector("#" + elemId).children[0];
                                         elem.style.backgroundColor = "white";
-                                        html2canvas(elem, {
+                                        await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
                                                 canvas.toBlob(function (blob) {
                                                     var reader = new FileReader();
                                                     reader.onloadend = function () {
-                                                        vm.imagenes.push({ id: elemId, value: reader.result });
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                    if (elemId == "tab-7") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                    if (elemId == "tab-8") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                if (elemId == "tab-9") {
+                                    elem = document.querySelector("#" + elemId).children[0].children[0];
+                                    elem.style.backgroundColor = "white";
+                                    elem.style.paddingTop = "250px";
+                                    await html2canvas(elem, {
+                                      onrendered: function (canvas) {
+                                            var theCanvas = canvas;
+                                            canvas.toBlob(function (blob) {
+                                                var reader = new FileReader();
+                                                reader.onloadend = function () {
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    $("#tab-9")[0].children[0].children[0].removeAttribute("style");
+                                                }
+                                                reader.readAsDataURL(blob);
+                                            }, "image/jpeg");
+                                        }
+                                    });
+                                    elem.style.backgroundColor = "#eee";
+                                    //elem.style.paddingTop = "0px"
+                                }
+
+                                    if (elemId == "tab-10") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                    if (elemId == "tab-11") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                if (elemId == "tab-12") {
+                                    try {
+                                        if (document.querySelector("#tab-12").classList.contains("ng-hide")) {
+                                            elem = document.querySelector("#tab-10").children[0].children[0];
+                                            elem.style.paddingTop = "200px";
+                                        }
+                                        else {
+                                            elem = document.querySelector("#tab-12").children[0].children[0];
+                                            elem.style.paddingTop = "200px";
+                                        }
+
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-10")[0].children[0].children[0].removeAttribute("style");                                                        
+                                                        $("#tab-12")[0].children[0].children[0].removeAttribute("style");
                                                     }
                                                     reader.readAsDataURL(blob);
                                                 }, "image/jpeg");
@@ -2140,13 +2238,17 @@ function GetDashBoard() {
                                     } catch (e) {
                                         elem = document.querySelector("#tab-10").children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        html2canvas(elem, {
+                                        elem.style.paddingTop = "200px";
+                                        await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
                                                 canvas.toBlob(function (blob) {
                                                     var reader = new FileReader();
                                                     reader.onloadend = function () {
-                                                        vm.imagenes.push({ id: elemId, value: reader.result });
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-10")[0].children[0].children[0].removeAttribute("style");
                                                     }
                                                     reader.readAsDataURL(blob);
                                                 }, "image/jpeg");
@@ -2159,89 +2261,38 @@ function GetDashBoard() {
                                 if (elemId == "tab-13") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
+                                    elem.style.paddingTop = "250px";
+                                    await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
                                             canvas.toBlob(function (blob) {
                                                 var reader = new FileReader();
                                                 reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                                    // validar id ya que con este se hace el orden
+                                                    var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                    vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    $("#tab-13")[0].children[0].children[0].removeAttribute("style");
                                                 }
                                                 reader.readAsDataURL(blob);
                                             }, "image/jpeg");
                                         }
                                     });
                                     elem.style.backgroundColor = "#eee";
+                                    ////elem.style.paddingTop = "0px";
                                 }
 
-                                if (elemId == "tab-14") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-15") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-16") {
-                                    try {
-                                        if (document.querySelector("#tab-16").classList.contains("ng-hide")) {
-                                            elem = document.querySelector("#tab-14").children[0].children[0];
-                                        }
-                                        else {
-                                            elem = document.querySelector("#tab-16").children[0].children[0];
-                                        }
+                                    if (elemId == "tab-14") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        html2canvas(elem, {
+                                        await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
                                                 canvas.toBlob(function (blob) {
                                                     var reader = new FileReader();
                                                     reader.onloadend = function () {
-                                                        vm.imagenes.push({ id: elemId, value: reader.result });
-                                                    }
-                                                    reader.readAsDataURL(blob);
-                                                }, "image/jpeg");
-                                            }
-                                        });
-                                        elem.style.backgroundColor = "#eee";
-                                    } catch (e) {
-                                        elem = document.querySelector("#tab-14").children[0].children[0];
-                                        elem.style.backgroundColor = "white";
-                                        html2canvas(elem, {
-                                            onrendered: function (canvas) {
-                                                var theCanvas = canvas;
-                                                canvas.toBlob(function (blob) {
-                                                    var reader = new FileReader();
-                                                    reader.onloadend = function () {
-                                                        vm.imagenes.push({ id: elemId, value: reader.result });
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
                                                     }
                                                     reader.readAsDataURL(blob);
                                                 }, "image/jpeg");
@@ -2249,137 +2300,225 @@ function GetDashBoard() {
                                         });
                                         elem.style.backgroundColor = "#eee";
                                     }
-                                }
 
-                                if (elemId == "tab-17") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                    if (elemId == "tab-15") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                    if (elemId == "tab-16") {
+                                        try {
+                                            if (document.querySelector("#tab-16").classList.contains("ng-hide")) {
+                                                elem = document.querySelector("#tab-14").children[0].children[0];
+                                                elem.style.paddingTop = "250px";
+                                            }
+                                            else {
+                                                elem = document.querySelector("#tab-16").children[0].children[0];
+                                            }
+                                            elem.style.backgroundColor = "white";
+                                            await html2canvas(elem, {
+                                                onrendered: function (canvas) {
+                                                    var theCanvas = canvas;
+                                                    canvas.toBlob(function (blob) {
+                                                        var reader = new FileReader();
+                                                        reader.onloadend = function () {
+                                                            // validar id ya que con este se hace el orden
+                                                            var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                            vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                            $("#tab-14")[0].children[0].children[0].removeAttribute("style");
+                                                        }
+                                                        reader.readAsDataURL(blob);
+                                                    }, "image/jpeg");
                                                 }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
-
-                                if (elemId == "tab-18") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
+                                            });
+                                            elem.style.backgroundColor = "#eee";
+                                        } catch (e) {
+                                            elem = document.querySelector("#tab-14").children[0].children[0];
+                                            elem.style.backgroundColor = "white";
+                                            elem.style.paddingTop = "250px";
+                                            await html2canvas(elem, {
+                                                onrendered: function (canvas) {
+                                                    var theCanvas = canvas;
+                                                    canvas.toBlob(function (blob) {
+                                                        var reader = new FileReader();
+                                                        reader.onloadend = function () {
+                                                            // validar id ya que con este se hace el orden
+                                                            var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                            vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                            $("#tab-14")[0].children[0].children[0].removeAttribute("style");
+                                                        }
+                                                        reader.readAsDataURL(blob);
+                                                    }, "image/jpeg");
                                                 }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
+                                            });
+                                            elem.style.backgroundColor = "#eee";
                                         }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    }
 
-                                if (elemId == "tab-19") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-17") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-20") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-18") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-21") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-19") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-19")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-22") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-20") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-20")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                // crear canvas por cada row de graficos de barras
-                                if (elemId == "tab-23") {
-                                    /*document.getElementById("loading").style.display = "block";
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    // hijos (row grafica de barras)
-                                    var items = elem.children[2].children[0].children[0].children[0].children[0].children[1].children;
-                                    var hijos = items; //var divClonado = $("#div-clonar").clone();
-                                    /*
-                                     * Se usa una plantilla en el Layout para ir colocando
-                                     * cada segmento de graficas
-                                     * sobre el div mergeCortesBarras
-                                    */
-                                    /*[].forEach.call(hijos, function (element, index, arrr) {
-                                        element.id = "barras_" + index;
-                                        $("#mergeCortesBarras").empty();
-                                        $("#barras_" + index).clone().appendTo("#mergeCortesBarras");
-                                        /*html2canvas(document.getElementById("cortesBarras")).then(function (canvas) {
-                                            var elem = canvas.toDataURL()
-                                            vm.imagenes.push({ id: elemId + "_" + index, value: elem });
-                                            swal("Guarda b64", "", "success");
-                                        });*/
+                                    if (elemId == "tab-21") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-21")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                    if (elemId == "tab-22") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-22")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
+
+                                    // crear canvas por cada row de graficos de barras
+                                    if (elemId == "tab-23") {
+                                        /*document.getElementById("loading").style.display = "block";
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        // hijos (row grafica de barras)
+                                        var items = elem.children[2].children[0].children[0].children[0].children[0].children[1].children;
+                                        var hijos = items; //var divClonado = $("#div-clonar").clone();
+                                        /*
+                                         * Se usa una plantilla en el Layout para ir colocando
+                                         * cada segmento de graficas
+                                         * sobre el div mergeCortesBarras
+                                        */
+                                        /*[].forEach.call(hijos, function (element, index, arrr) {
+                                            element.id = "barras_" + index;
+                                            $("#mergeCortesBarras").empty();
+                                            $("#barras_" + index).clone().appendTo("#mergeCortesBarras");
+                                            /*html2canvas(document.getElementById("cortesBarras")).then(function (canvas) {
+                                                var elem = canvas.toDataURL()
+                                                vm.imagenes.push({ id: elemId + "_" + index, value: elem });
+                                                swal("Guarda b64", "", "success");
+                                            });*/
 
                                         /*html2canvas(document.getElementById("cortesBarras"), {
                                             onrendered: function (canvas) {
@@ -2396,280 +2535,372 @@ function GetDashBoard() {
 
                                     })*/
 
-                                }
+                                    }
 
-                                if (elemId == "tab-24") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-24") {
+                                        //elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        //elem.style.backgroundColor = "white";
+                                        //await html2canvas(elem, {
+                                        //    onrendered: function (canvas) {
+                                        //        var theCanvas = canvas;
+                                        //        canvas.toBlob(function (blob) {
+                                        //            var reader = new FileReader();
+                                        //            reader.onloadend = function () {
+                                        //                // validar id ya que con este se hace el orden
+                                        //                var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                        //                vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                        //            }
+                                        //            reader.readAsDataURL(blob);
+                                        //        }, "image/jpeg");
+                                        //    }
+                                        //});
+                                        //elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-25") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-25") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-26") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-26") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-27") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-27") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-27")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-28") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-28") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-28")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-29") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-29") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-29")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-30") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-30") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-30")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-31") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-31") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-31")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-32") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-32") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-32")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-33") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-33") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-33")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-34") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-34") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-34")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-35") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-35") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-35")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-36") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-36") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-36")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-37") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-37") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-37")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
-                                if (elemId == "tab-38") {
-                                    elem = document.querySelector("#" + elemId).children[0].children[0];
-                                    elem.style.backgroundColor = "white";
-                                    html2canvas(elem, {
-                                        onrendered: function (canvas) {
-                                            var theCanvas = canvas;
-                                            canvas.toBlob(function (blob) {
-                                                var reader = new FileReader();
-                                                reader.onloadend = function () {
-                                                    vm.imagenes.push({ id: elemId, value: reader.result });
-                                                }
-                                                reader.readAsDataURL(blob);
-                                            }, "image/jpeg");
-                                        }
-                                    });
-                                    elem.style.backgroundColor = "#eee";
-                                }
+                                    if (elemId == "tab-38") {
+                                        elem = document.querySelector("#" + elemId).children[0].children[0];
+                                        elem.style.backgroundColor = "white";
+                                        elem.style.paddingTop = "250px";
+                                        await html2canvas(elem, {
+                                            onrendered: function (canvas) {
+                                                var theCanvas = canvas;
+                                                canvas.toBlob(function (blob) {
+                                                    var reader = new FileReader();
+                                                    reader.onloadend = function () {
+                                                        // validar id ya que con este se hace el orden
+                                                        var IdImagen = vm.imagenes.length == 0 ? 0 : vm.imagenes[vm.imagenes.length - 1].id; IdImagen = IdImagen + 1;
+                                                        vm.imagenes.push({ id: IdOrdenamiento, value: reader.result });  document.getElementsByClassName("busy")[1].style.display = "none";
+                                                        $("#tab-38")[0].children[0].children[0].removeAttribute("style");
+                                                    }
+                                                    reader.readAsDataURL(blob);
+                                                }, "image/jpeg");
+                                            }
+                                        });
+                                        elem.style.backgroundColor = "#eee";
+                                    }
 
+                                }
+                                vm.isBusy = false;
                             }
-                            vm.isBusy = false;
+                        }
+                    }
+                    else {
+                        if (elemId != "tab-23" && elemId != "tab-24") {
+                            vm.exportaImagen = true;
+                        }
+                        if (vm.mostrarMensaje == true && vm.banderaMensaje > 0) {
+                            /*swal("La seccion no se exportará", "", "info");*/
+                            swal({
+                                title: "La sección no se exportará en el PDF",
+                                text: "",
+                                icon: "info",
+                                buttons: [
+                                    'Ok',
+                                    'No mostrar de nuevo'
+                                ],
+                                dangerMode: false,
+                            }).then(function (isConfirm) {
+                                if (isConfirm)
+                                    vm.mostrarMensaje = false;
+                            });
+                        }
+                        if (vm.mostrarMensaje == true && vm.banderaMensaje == 0) {
+                            vm.banderaMensaje++;
+                            swal({
+                                title: "La sección no se exportará en el PDF",
+                                text: "",
+                                icon: "info",
+                                buttons: [
+                                    'Ok',
+                                    'No mostrar de nuevo'
+                                ],
+                                dangerMode: false,
+                            }).then(function (isConfirm) {
+                                if (isConfirm)
+                                    vm.mostrarMensaje = false;
+                            });
                         }
                     }
                 } catch (e) {
@@ -2692,73 +2923,70 @@ function GetDashBoard() {
                     nextStep();
                 });
                 nextStep();
-            }
-
-            async function crearSubCanvas (iteracion) {
-                $("#barras_" + i).clone().appendTo("#mergeCortesBarras");
-                //await html2canvas(document.getElementById("cortesBarras")).then(canvas => {
-                //    var base64 = canvas.toDataURL("image/jpeg", 1.0);
-                //    vm.imagenes.push({ id: elemId + "_" + i, value: base64 });
-                //    document.getElementById("loading").style.display = "none";
-                //});
-                try {
-                var data;
-                    var result = html2canvas(document.getElementById("cortesBarras"));
-                    result.then(function (response) {
-                    var data = response;
-                        for (var i = 0; i < length; i++) {
-                            if (response.tagName == "CANVAS") {
-                                console.log("success");
-                                break;
-                            }
-                            else {
-                                i++;
-                            }
-                        }
-                        return data;
-                    });
-                } catch (e) {
-                    
-                }
-                $("#mergeCortesBarras").empty();
-            }
+            }        
 
             vm.list1 = [];
             vm.list1.push("");
 
             /*#region Secciones*/
-            vm.next = function () {
+            vm.next = async function () {
+                try {
+                    var paginaActiva;
+                    for (var i = 0; i < divs.length; i++) {
+                        if (document.getElementById(divs[i]).offsetWidth > 0) {
+                            paginaActiva = divs[i];
+                            break;
+                        }
+                    }
+                    if (paginaActiva != undefined && paginaActiva != "") {
+                        docReporte.addPage();
+                        document.getElementById(paginaActiva).style.backgroundColor = "#fff";
+                        // docs.text("Hola", (docs.internal.pageSize.width / 2), (docs.internal.pageSize.height / 2))
+                        await docReporte.addHTML($("#" + paginaActiva)[0]);
+                        document.getElementById(paginaActiva).removeAttribute("style");
+                    }
+                } catch (e) {
+                    //alert(e.message);
+                }
+
+
+                vm.contadorNextButton++;
+                
+                // guarda la opcion seleccionada de exportacion en cada seccion
+                vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
+
 
                 if (vm.SeccionesReporte.Id == 3.5) {
-                    report("tab-3punto5");
+                    //report("tab-3punto5");
                 }
                 else {
                     if (vm.SeccionesReporte.Id == 14 || vm.SeccionesReporte.Id == 10) {
                         if (vm.hasHistorico) {
-                            report("tab-" + vm.SeccionesReporte.Id);
+                            //report("tab-" + vm.SeccionesReporte.Id);
                         }
                         else {
                             vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 2;
-                            report("tab-" + vm.SeccionesReporte.Id);
+                            //report("tab-" + vm.SeccionesReporte.Id);
                         }
                     }
-                    else if (vm.SeccionesReporte.Id != 23 || vm.SeccionesReporte.Id != 24) {
+                    else 
+                    if (vm.SeccionesReporte.Id != 23 || vm.SeccionesReporte.Id != 24) {
                         if (vm.SeccionesReporte.Id == 8) {
                             if (vm.enfoqueSeleccionado == 2) {
                                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 1;
-                            }                            
+                            }
                         }
-                        report("tab-" + vm.SeccionesReporte.Id);
-                    
+                        //report("tab-" + vm.SeccionesReporte.Id);
                     }
                 }
                 
                 if ((vm.opc == 4 && vm.SeccionesReporte.Id == 38) || (vm.opc == 1 && vm.SeccionesReporte.Id == 38)) {
                     // vistas 39 y  40 no se deben ver
                     vm.SeccionesReporte.Id = 41;
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                     return false;
                 }
-
                 if (vm.opc == "1" || vm.opc == "4") {
                     try {
                         /*Validaciones por seccion*/
@@ -2771,18 +2999,19 @@ function GetDashBoard() {
                                 }
                             }
                         }
-
                         /*intro*/
                         if (vm.SeccionesReporte.Id == 3) {
                             vm.SeccionesReporte.Id = 3.5;
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                             return vm.SeccionesReporte.Id = 3.5;
                         }
-
                         if (vm.SeccionesReporte.Id == 3.5) {
                             vm.SeccionesReporte.Id = 4;
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                             return vm.SeccionesReporte.Id = 4;
                         }
-
                         /*Reporte corpo*/
                         if (vm.SeccionesReporte.Id == 40 && vm.opc == "4") {
                             vm.SeccionesReporte.Id = 40.5;
@@ -2806,17 +3035,54 @@ function GetDashBoard() {
                             fillArrayCustomHisto("BackgroundJob/getDataReporteCorpo/", vm.modelHistorico, vm.dataReporteCorpo, function () {
                                 vm.fillReporteCorporativo(vm.dataReporteCorpo);
                             });
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                             return vm.SeccionesReporte.Id;
                         }
                         if (vm.SeccionesReporte.Id == 40.5 && vm.opc == "4") {
                             vm.SeccionesReporte.Id = 41;
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                             return vm.SeccionesReporte.Id;
                         }
 
+                        // Termina la seccion 22 e inicia con la primer subseccion de la 23
                         if (vm.SeccionesReporte.Id == 22 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
                             vm.SeccionesReporte.Id++;
+                            var childs = document.getElementById("pegarReseccionado").childNodes;
+                            childs[0].style.display = "block";
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + 1).lastOrDefault();
+                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                            return;
                         }
 
+                        // Navegando ya dentro de la seccion 23
+                        if (vm.SeccionesReporte.Id == 23) {
+                            var childs = document.getElementById("pegarReseccionado").childNodes;
+                            if (childs[childs.length - 1].style.display == "block" && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
+                                // Guardar la ultima subseccion de la seccion 23
+                                vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + childs.length, exporta: vm.exportaImagen });
+                                //report("tab-23-" + childs.length);
+
+                                vm.SeccionesReporte.Id++;
+                                var childs = document.getElementById("pegarReseccionadoEA").childNodes;
+                                childs[0].style.display = "block";
+                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                                vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                                return;
+                            }
+                            else if (childs[childs.length - 1].style.display == "block" && vm.ComparativoGeneralPorNivelesEA.Data == undefined) {
+                                vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + childs.length, exporta: vm.exportaImagen });
+                                //report("tab-23-" + childs.length);
+                                vm.SeccionesReporte.Id++;
+                                vm.getReporteDataPantalla_24();
+                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                                vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                                return;
+                            }
+                        }
+
+                        //Navegando por la seccion 23
                         if (vm.SeccionesReporte.Id >= 23 && vm.SeccionesReporte.Id < 24) {
                             try {
                                 var childs = document.getElementById("pegarReseccionado").childNodes;
@@ -2825,24 +3091,32 @@ function GetDashBoard() {
                                         var customClassName = item.classList[2];
                                         var consecutivoClase = parseInt(customClassName.split('-')[2]) + 1;
                                         if (document.getElementsByClassName(customClassName)[0].style.display == "" || document.getElementsByClassName(item.classList[2])[0].style.display == "block") {
-                                            // screen
-                                            report("tab-23-" + customClassName.split('-')[2]);
-                                            // mostrar el siguiente
+                                            vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + parseInt(customClassName.split('-')[2]), exporta: vm.exportaImagen });
+                                            //report("tab-23-" + customClassName.split('-')[2]);
+                                            
+                                            // oculto actual
                                             document.getElementsByClassName(customClassName)[0].style.display = "none";
-                                            if (document.getElementsByClassName("tab-23-" + consecutivoClase)[0] != undefined) {
-                                                document.getElementsByClassName("tab-23-" + consecutivoClase)[0].style.display = "block";
+                                            if (document.getElementsByClassName("tab-23-" + consecutivoClase)[0] != undefined) { // validar si existe el siguiente
+                                                document.getElementsByClassName("tab-23-" + consecutivoClase)[0].style.display = "block";// mostrar el siguiente
+                                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + consecutivoClase).lastOrDefault();
+                                                vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                                                 throw BreakException;
                                             }
                                             else {
                                                 // avanza a la seccion 24
-                                                //vm.SeccionesReporte.Id = 24;
-                                                console.log("Avance normal");
+                                                //console.log("Avance normal");
+                                                if (vm.ComparativoGeneralPorNivelesEA.Data == undefined) {
+                                                    vm.SeccionesReporte.Id++;
+                                                }
+                                                else {
+                                                    vm.SeccionesReporte.Id++;//mostrar el primero de la seccion 24
+                                                    var childsEA = document.getElementById("pegarReseccionadoEA").childNodes;
+                                                    childsEA[0].style.display = "block";
+                                                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + 1).lastOrDefault();
+                                                    vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                                                }
                                             }
                                         }
-                                        //else {
-                                        //    document.getElementsByClassName("tab-23-" + 1)[0].style.display = "block";
-                                        //    throw BreakException;
-                                        //}
                                     })
                                 }
                             } catch (e) {
@@ -2850,42 +3124,30 @@ function GetDashBoard() {
                             }
                         }
 
+                        //Navegando en la seccion 24
                         if (vm.SeccionesReporte.Id >= 24 && vm.SeccionesReporte.Id < 25) {
                             try {
-                                /*
-                                 * en primer instancia solo dejar visible el que tiene el indice 0
-                                 * Logica para avanzar en la seccion
-                                  * [].forEach.call(childs, function(item){
-                                  *      console.log(item.classList[2])
-                                  * })
-                                  * ir avanzando este submenu
-                                */
-
                                 var childs = document.getElementById("pegarReseccionadoEA").childNodes;
                                 [].forEach.call(childs, function (item, index) {
                                     var customClassName = item.classList[2];
                                     var consecutivoClase = parseInt(customClassName.split('-')[2]) + 1;
                                     if (document.getElementsByClassName(customClassName)[0].style.display == "" || document.getElementsByClassName(item.classList[2])[0].style.display == "block") {
-                                        // screen
-                                        report("tab-24-" + customClassName.split('-')[2]);
-                                        // mostrar el siguiente
+                                        vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + parseInt(customClassName.split('-')[2]), exporta: vm.exportaImagen });
+                                        //report("tab-24-" + customClassName.split('-')[2]);
+                                        // ocultar el actual
                                         document.getElementsByClassName(customClassName)[0].style.display = "none";
-                                        if (document.getElementsByClassName("tab-24-" + consecutivoClase)[0] != undefined) {
-                                            document.getElementsByClassName("tab-24-" + consecutivoClase)[0].style.display = "block";
+                                        if (document.getElementsByClassName("tab-24-" + consecutivoClase)[0] != undefined) {// validar el siguiente
+                                            document.getElementsByClassName("tab-24-" + consecutivoClase)[0].style.display = "block";// mostrar el siguiente
+                                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + consecutivoClase).lastOrDefault();
+                                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                                             throw BreakException;
                                             return false;
                                         }
                                         else {
                                             // avanza a la seccion 25
-                                            //vm.SeccionesReporte.Id = 25;
-                                            console.log("Avance normal");
+                                            //console.log("Avance normal");
                                         }
                                     }
-                                    //else {
-                                    //    document.getElementsByClassName("tab-24-" + 1)[0].style.display = "block";
-                                    //    throw BreakException;
-                                    //    return false;
-                                    //}
                                 })
                             } catch (e) {
                                 return;
@@ -3023,6 +3285,8 @@ function GetDashBoard() {
                             /*vm.getPDFReporte();*/
                         }
 
+                        var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                        vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
 
                     } catch (aE) {
                         vm.writteLog(aE.message, "vm.next");
@@ -3462,20 +3726,28 @@ function GetDashBoard() {
                 /*intro*/
                 if (vm.SeccionesReporte.Id == 4) {
                     vm.SeccionesReporte.Id = 3.5;
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id = 3.5;
                 }
 
                 if (vm.SeccionesReporte.Id == 3.5) {
                     vm.SeccionesReporte.Id = 3;
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id = 3;
                 }
                 /*Reporte corpo*/
                 if (vm.SeccionesReporte.Id == 41 && vm.opc == "4") {
                     vm.SeccionesReporte.Id = 40.5;
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id;
                 }
                 if (vm.SeccionesReporte.Id == 40.5 && vm.opc == "4") {
                     vm.SeccionesReporte.Id = 40;
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id;
                 }
                 if (vm.SeccionesReporte.Id == 13 || vm.SeccionesReporte.Id == 17) {
@@ -3488,22 +3760,36 @@ function GetDashBoard() {
                 }
                 if (vm.SeccionesReporte.Id == 41) {
                     vm.SeccionesReporte.Id = 38;
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id;
                 }
                 
 
                 // subsecciones en el reporte
                 if (vm.SeccionesReporte.Id == 25) {
+                    vm.SeccionesReporte.Id--;
+                    var childs = document.getElementById("pegarReseccionadoEA").childNodes;
+                    childs[childs.length - 1].style.display = "block";
+                    // Navegando de la seccion 25 a la 24 mostrando la ultima subseccion
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
+                    return;
+                }
+
+                if (vm.SeccionesReporte.Id == 24) {
                     try {
                         // ir a la sub del 24
                         var childs = document.getElementById("pegarReseccionadoEA").childNodes;
 
                         // obtengo el visible
                         var visible = Enumerable.from(childs).where(o => o.style.display == "block").toList();
-                        if (visible.length == 0 && vm.SeccionesReporte.Id == 25) {
+                        if (visible.length == 0 && vm.SeccionesReporte.Id == 24) {
                             // muestro el ultimo
                             childs[childs.length - 1].style.display = "block";
-                            //vm.SeccionesReporte.Id = 24;
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                            vm.exportaImagen = exportaConfig.exporta;
+                            vm.SeccionesReporte.Id = 24;
                             return;
                         }
                         if (visible.length == 1 && vm.SeccionesReporte.Id == 24) {
@@ -3511,11 +3797,19 @@ function GetDashBoard() {
                             document.getElementsByClassName("tab-24-" + (num))[0].style.display = "none";
                             if ((num - 1) > 0) {
                                 document.getElementsByClassName("tab-24-" + (num - 1))[0].style.display = "block";
+                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
+                                vm.exportaImagen = exportaConfig.exporta;
                                 return;
                             }
                             else if ((num - 1) == 0) {
                                 // Activar la seccion de los graficos de 23
-                                vm.SeccionesReporte.Id--;//23
+                                vm.SeccionesReporte.Id--;//22
+                                //mostrar ultimo
+                                var childsEE = document.getElementById("pegarReseccionado").childNodes;
+                                childsEE[childsEE.length - 1].style.display = "block";
+                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                                vm.exportaImagen = exportaConfig.exporta;
+                                return;
                             }
                         }
                     } catch (e) {
@@ -3533,6 +3827,8 @@ function GetDashBoard() {
                         if (visible.length == 0 && vm.SeccionesReporte.Id == 23) {
                             // muestro el ultimo
                             childs[childs.length - 1].style.display = "block";
+                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                            vm.exportaImagen = exportaConfig.exporta;
                             vm.SeccionesReporte.Id = 23;
                             return;
                         }
@@ -3541,11 +3837,15 @@ function GetDashBoard() {
                             document.getElementsByClassName("tab-23-" + (num))[0].style.display = "none";
                             if ((num - 1) > 0) {
                                 document.getElementsByClassName("tab-23-" + (num - 1))[0].style.display = "block";
+                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
+                                vm.exportaImagen = exportaConfig.exporta;
                                 return;
                             }
                             else if ((num - 1) == 0) {
                                 // Activar la seccion de los graficos de 23
                                 vm.SeccionesReporte.Id--;//22
+                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                                vm.exportaImagen = exportaConfig.exporta;
                                 return;
                             }
                         }
@@ -3559,6 +3859,8 @@ function GetDashBoard() {
                
 
                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
+                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                vm.exportaImagen = exportaConfig.exporta;
                 vm.cambioSeccion(vm.SeccionesReporte.Id);
             }
 
@@ -4300,32 +4602,32 @@ function GetDashBoard() {
                             fillArrayCustomHisto("BackGroundJob/getCoaching/", vm.modelHistorico, vm.PorcentajeCoaching, function () {
                                 vm.PorcentajeCoaching = vm.PorcentajeCoaching.Data == undefined ? vm.PorcentajeCoaching : vm.PorcentajeCoaching.Data;
                                 vm.PorcentajeCoaching = vm.rounderPorcent(vm.PorcentajeCoaching);
-                                console.log(vm.PorcentajeCoaching);
+                                //console.log(vm.PorcentajeCoaching);
                                 localStorage.setItem("coaching" + vm.storeName, JSON.stringify(vm.PorcentajeCoaching));
                                 fillArrayCustomHisto("BackGroundJob/getHabGerenciales/", vm.modelHistorico, vm.PorcentajeHabilidadesGerenciales, function () {
                                     vm.PorcentajeHabilidadesGerenciales = vm.PorcentajeHabilidadesGerenciales.Data == undefined ? vm.PorcentajeHabilidadesGerenciales : vm.PorcentajeHabilidadesGerenciales.Data;
                                     vm.PorcentajeHabilidadesGerenciales = vm.rounderPorcent(vm.PorcentajeHabilidadesGerenciales);
-                                    console.log(vm.PorcentajeHabilidadesGerenciales);
+                                    //console.log(vm.PorcentajeHabilidadesGerenciales);
                                     localStorage.setItem("habGerenciales" + vm.storeName, JSON.stringify(vm.PorcentajeHabilidadesGerenciales));
                                     fillArrayCustomHisto("BackGroundJob/getAlineacionEstrategica/", vm.modelHistorico, vm.PorcentajeAlineacionEstrategica, function () {
                                         vm.PorcentajeAlineacionEstrategica = vm.PorcentajeAlineacionEstrategica.Data == undefined ? vm.PorcentajeAlineacionEstrategica : vm.PorcentajeAlineacionEstrategica.Data;
                                         vm.PorcentajeAlineacionEstrategica = vm.rounderPorcent(vm.PorcentajeAlineacionEstrategica);
-                                        console.log(vm.PorcentajeAlineacionEstrategica);
+                                        //console.log(vm.PorcentajeAlineacionEstrategica);
                                         localStorage.setItem("alinEstrategica" + vm.storeName, JSON.stringify(vm.PorcentajeAlineacionEstrategica));
                                         fillArrayCustomHisto("BackGroundJob/getPracticasCulturales/", vm.modelHistorico, vm.PorcentajePracticasCulturales, function () {
                                             vm.PorcentajePracticasCulturales = vm.PorcentajePracticasCulturales.Data == undefined ? vm.PorcentajePracticasCulturales : vm.PorcentajePracticasCulturales.Data;
                                             vm.PorcentajePracticasCulturales = vm.rounderPorcent(vm.PorcentajePracticasCulturales);
-                                            console.log(vm.PorcentajePracticasCulturales);
+                                            //console.log(vm.PorcentajePracticasCulturales);
                                             localStorage.setItem("practCulturales" + vm.storeName, JSON.stringify(vm.PorcentajePracticasCulturales));
                                             fillArrayCustomHisto("BackGroundJob/getCambio/", vm.modelHistorico, vm.PorcentajeCambio, function () {
                                                 vm.PorcentajeCambio = vm.PorcentajeCambio.Data == undefined ? vm.PorcentajeCambio : vm.PorcentajeCambio.Data;
                                                 vm.PorcentajeCambio = vm.rounderPorcent(vm.PorcentajeCambio);
-                                                console.log(vm.PorcentajeCambio);
+                                                //console.log(vm.PorcentajeCambio);
                                                 localStorage.setItem("cambio" + vm.storeName, JSON.stringify(vm.PorcentajeCambio));
                                                 fillArrayCustomHisto("BackGroundJob/getProcesosOrga/", vm.modelHistorico, vm.PorcentajeProcesosOrganizacionales, function () {
                                                     vm.PorcentajeProcesosOrganizacionales = vm.PorcentajeProcesosOrganizacionales.Data == undefined ? vm.PorcentajeProcesosOrganizacionales : vm.PorcentajeProcesosOrganizacionales.Data;
                                                     vm.PorcentajeProcesosOrganizacionales = vm.rounderPorcent(vm.PorcentajeProcesosOrganizacionales);
-                                                    console.log(vm.PorcentajeProcesosOrganizacionales);
+                                                    //console.log(vm.PorcentajeProcesosOrganizacionales);
                                                     localStorage.setItem("procOrgan" + vm.storeName, JSON.stringify(vm.PorcentajeProcesosOrganizacionales));
                                                     vm.isBusy = false;
                                                 });
@@ -4357,7 +4659,7 @@ function GetDashBoard() {
                                 vm.MejoresReactivosEE = vm.rounderPorcentMejoresEE(vm.MejoresReactivosEE.Data);
                                 localStorage.setItem("mejoresEE" + vm.storeName, JSON.stringify(vm.MejoresReactivosEE));
                             }
-                            console.log(vm.MejoresReactivosEE);
+                            //console.log(vm.MejoresReactivosEE);
                             vm.isBusy = false;
                         });
                     }
@@ -8560,7 +8862,7 @@ function GetDashBoard() {
                     }
 
                     var htmlContent = "";
-                    var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Empresa (15. Resultados generales por nivel) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">CORPORATIVO</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">                     <p>Ordenamiento por empresa</p>';
+                    var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">' + vm.UNSeleccionada + '</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">                     <p>Ordenamiento por empresa</p>';
                     var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4 ' + idsecc + '">';
                     var finalDiv = "</div></div>";
                     var cierreGrafico = ' </div></div></div><!--.row-->            <div class="row mt-2">                        <div class="col-12">                            <center>                                <div class="col-4">                                    <div class="row">                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>                                                                               <div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;" class="ng-hide"></div>                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 ng-hide">PROM GRAL ANTERIOR</div>                                    </div>                                </div>                            </center>                        </div>                    </div><div class="d-flex justify-content-center mt-5">                        <div class="col-12 p-0 m-0">                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">                        </div>                    </div>';
@@ -8590,11 +8892,11 @@ function GetDashBoard() {
                     htmlContent += (finalDiv + cierreGrafico);
                     if (enfoque == 1) {
                         htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indice);
-                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Empresa (15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Empresa (15. Resultados generales por nivel)");
+                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel)");
                     }
                     if (enfoque == 2) {
                         htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indiceEA);
-                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Empresa (15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Área (15. Resultados generales por nivel)");
+                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Área (15. Resultados generales por nivel)");
                     }
                     if (enfoque == 1){
                         htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-23-" + indice);

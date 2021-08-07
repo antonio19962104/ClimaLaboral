@@ -201,17 +201,17 @@
 
                         perfilModulo.Modulo.Nombre = perf.Modulo.Nombre;
 
-
-
                         if (perfilModulo.Modulo.Nombre == "Encuestas")
                         {
                             <li id="Encuestas">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
-                                    <span class="tooltiptext">Encuestas</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" aria-controls="collapseSurvey" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                                        <span class="tooltiptext">Encuestas</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
                                         <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Encuestas
                                     </a>
                                 </span>
@@ -231,6 +231,9 @@
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Encuesta")">Listado</a></li>
                                                 }
+                                                <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("CreateCL", "Encuesta")">Crear Clima Laboral</a></li>
+                                                <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Competencia")">Competencias</a></li>
+                                                <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll_", "Competencia")">Categorias</a></li>
                                             }
                                         </ul>
                                     </div>
@@ -240,12 +243,14 @@
                         if (perfilModulo.Modulo.Nombre == "Plantillas")
                         {
                             <li id="Plantillas">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
-                                    <span class="tooltiptext">Plantillas</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" aria-controls="collapseTemplates" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
+                                        <span class="tooltiptext">Plantillas</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
                                         <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
                                     </a>
                                 </span>
@@ -255,7 +260,7 @@
                                             @{
                                                 if (ActionPlantillasCrear == true)
                                                 {
-                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Plantillas")">Crear</a></li>
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("creaPlantilla", "Plantillas")">Crear</a></li>
                                                 }
                                                 if (ActionPlantillasListar == true)
                                                 {
@@ -274,12 +279,14 @@
                         if (perfilModulo.Modulo.Nombre == "Reportes")
                         {
                             <li id="Reportes">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
-                                    <span class="tooltiptext">Reportes</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" aria-controls="collapseReports" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
+                                        <span class="tooltiptext">Reportes</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
                                         <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
                                     </a>
                                 </span>
@@ -308,12 +315,14 @@
                         if (perfilModulo.Modulo.Nombre == "Base de datos")
                         {
                             <li id="BD">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
-                                    <span class="tooltiptext">Bases de datos</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" aria-controls="collapseDatabase" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
+                                        <span class="tooltiptext">Bases de datos</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
                                         <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
                                     </a>
                                 </span>
@@ -342,12 +351,14 @@
                         if (perfilModulo.Modulo.Nombre == "Usuarios")
                         {
                             <li id="Usuarios">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
-                                    <span class="tooltiptext">Usuarios</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" aria-controls="collapseUsers" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
+                                        <span class="tooltiptext">Usuarios</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
                                         <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
                                     </a>
                                 </span>
@@ -376,12 +387,14 @@
                         if (perfilModulo.Modulo.Nombre == "Empresas")
                         {
                             <li id="Empresas">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
-                                    <span class="tooltiptext">Empresas</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" aria-controls="collapseEnterprises" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
+                                        <span class="tooltiptext">Empresas</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
                                         <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
                                     </a>
                                 </span>

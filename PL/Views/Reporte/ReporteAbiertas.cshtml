@@ -358,17 +358,17 @@
 
                         perfilModulo.Modulo.Nombre = perf.Modulo.Nombre;
 
-
-
                         if (perfilModulo.Modulo.Nombre == "Encuestas")
                         {
                             <li id="Encuestas">
-                                <div class="item-menu-icon" onclick="openNav()">
-                                    <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
-                                    <span class="tooltiptext">Encuestas</span>
-                                </div>
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" aria-controls="collapseSurvey" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                                        <span class="tooltiptext">Encuestas</span>
+                                    </div>
+                                </a>
                                 <span class="item-menu d-none">
-                                    <a data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
                                         <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Encuestas
                                     </a>
                                 </span>
@@ -388,183 +388,197 @@
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Encuesta")">Listado</a></li>
                                                 }
+                                                <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("CreateCL", "Encuesta")">Crear Clima Laboral</a></li>
+                                                <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Competencia")">Competencias</a></li>
+                                                <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll_", "Competencia")">Categorias</a></li>
                                             }
                                         </ul>
                                     </div>
                                 </div>
                             </li>
-                                                }
-                                                if (perfilModulo.Modulo.Nombre == "Plantillas")
+                        }
+                        if (perfilModulo.Modulo.Nombre == "Plantillas")
+                        {
+                            <li id="Plantillas">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" aria-controls="collapseTemplates" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
+                                        <span class="tooltiptext">Plantillas</span>
+                                    </div>
+                                </a>
+                                <span class="item-menu d-none">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
+                                        <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseTemplates">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (ActionPlantillasCrear == true)
                                                 {
-                                                    <li id="Plantillas">
-                                                        <div class="item-menu-icon" onclick="openNav()">
-                                                            <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
-                                                            <span class="tooltiptext">Plantillas</span>
-                                                        </div>
-                                                        <span class="item-menu d-none">
-                                                            <a onclick="openNav()" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
-                                                                <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
-                                                            </a>
-                                                        </span>
-                                                        <div class="collapse" id="collapseTemplates">
-                                                            <div class="card card-body py-2">
-                                                                <ul class="fa-ul pl-lg-4">
-                                                                    @{
-                                                                        if (ActionPlantillasCrear == true)
-                                                                        {
-                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Plantillas")">Crear</a></li>
-                                                                        }
-                                                                        if (ActionPlantillasListar == true)
-                                                                        {
-                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Plantillas", "Plantillas")">Listado</a></li>
-                                                                        }
-                                                                        if (ActionPlantillasOpc == true)
-                                                                        {
-                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
-                                                                        }
-                                                                    }
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                                        }
-                                                                        if (perfilModulo.Modulo.Nombre == "Reportes")
-                                                                        {
-                                                                            <li id="Reportes">
-                                                                                <div class="item-menu-icon" onclick="openNav()">
-                                                                                    <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
-                                                                                    <span class="tooltiptext">Reportes</span>
-                                                                                </div>
-                                                                                <span class="item-menu d-none">
-                                                                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
-                                                                                        <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
-                                                                                    </a>
-                                                                                </span>
-                                                                                <div class="collapse" id="collapseReports">
-                                                                                    <div class="card card-body py-2">
-                                                                                        <ul class="fa-ul pl-lg-4">
-                                                                                            @{
-                                                                                                if (ActionReportesCrear == true)
-                                                                                                {
-                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "ReporteD4U")">Crear</a></li>
-                                                                                                }
-                                                                                                if (ActionReportesListar == true)
-                                                                                                {
-                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Reporte")">Listado</a></li>
-                                                                                                }
-                                                                                                if (ActionReportesOpc == true)
-                                                                                                {
-                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
-                                                                                                }
-                                                                                            }
-                                                                                        </ul>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </li>
-                                                                                                }
-                                                                                                if (perfilModulo.Modulo.Nombre == "Base de datos")
-                                                                                                {
-                                                                                                    <li id="BD">
-                                                                                                        <div class="item-menu-icon" onclick="openNav()">
-                                                                                                            <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
-                                                                                                            <span class="tooltiptext">Bases de datos</span>
-                                                                                                        </div>
-                                                                                                        <span class="item-menu d-none">
-                                                                                                            <a onclick="openNav()" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
-                                                                                                                <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
-                                                                                                            </a>
-                                                                                                        </span>
-                                                                                                        <div class="collapse" id="collapseDatabase">
-                                                                                                            <div class="card card-body py-2">
-                                                                                                                <ul class="fa-ul pl-lg-4">
-                                                                                                                    @{
-                                                                                                                        if (ActionBDCrear == true)
-                                                                                                                        {
-                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "BD")">Crear</a></li>
-                                                                                                                        }
-                                                                                                                        if (ActionBDListar == true)
-                                                                                                                        {
-                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllForListado", "BD")">Listado</a></li>
-                                                                                                                        }
-                                                                                                                        if (ActionBDOpc == true)
-                                                                                                                        {
-                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEliminadas", "BD")">Administrar bases de datos eliminadas</a></li>
-                                                                                                                        }
-                                                                                                                    }
-                                                                                                                </ul>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </li>
-                                                                                                                        }
-                                                                                                                        if (perfilModulo.Modulo.Nombre == "Usuarios")
-                                                                                                                        {
-                                                                                                                            <li id="Usuarios">
-                                                                                                                                <div class="item-menu-icon" onclick="openNav()">
-                                                                                                                                    <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
-                                                                                                                                    <span class="tooltiptext">Usuarios</span>
-                                                                                                                                </div>
-                                                                                                                                <span class="item-menu d-none">
-                                                                                                                                    <a onclick="openNav()" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
-                                                                                                                                        <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
-                                                                                                                                    </a>
-                                                                                                                                </span>
-                                                                                                                                <div class="collapse" id="collapseUsers">
-                                                                                                                                    <div class="card card-body py-2">
-                                                                                                                                        <ul class="fa-ul pl-lg-4">
-                                                                                                                                            @{
-                                                                                                                                                if (ActionUsuariosCrear == true)
-                                                                                                                                                {
-                                                                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Administrador")">Crear</a></li>
-                                                                                                                                                }
-                                                                                                                                                if (ActionUsuariosListar == true)
-                                                                                                                                                {
-                                                                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Administrador")">Listado</a></li>
-                                                                                                                                                }
-                                                                                                                                                if (ActionUsuariosOpc == true)
-                                                                                                                                                {
-                                                                                                                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminados", "Administrador")">Administrar usuarios eliminadas</a></li>
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        </ul>
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                            </li>
-                                                                                                                                                }
-                                                                                                                                                if (perfilModulo.Modulo.Nombre == "Empresas")
-                                                                                                                                                {
-                                                                                                                                                    <li id="Empresas">
-                                                                                                                                                        <div class="item-menu-icon" onclick="openNav()">
-                                                                                                                                                            <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
-                                                                                                                                                            <span class="tooltiptext">Empresas</span>
-                                                                                                                                                        </div>
-                                                                                                                                                        <span class="item-menu d-none">
-                                                                                                                                                            <a onclick="openNav()" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
-                                                                                                                                                                <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
-                                                                                                                                                            </a>
-                                                                                                                                                        </span>
-                                                                                                                                                        <div class="collapse" id="collapseEnterprises">
-                                                                                                                                                            <div class="card card-body py-2">
-                                                                                                                                                                <ul class="fa-ul pl-lg-4">
-                                                                                                                                                                    @{
-                                                                                                                                                                        if (ActionEmpresasCrear == true)
-                                                                                                                                                                        {
-                                                                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Empresa")">Crear</a></li>
-                                                                                                                                                                        }
-                                                                                                                                                                        if (ActionEmpresasListar == true)
-                                                                                                                                                                        {
-                                                                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Empresa")">Listado</a></li>
-                                                                                                                                                                        }
-                                                                                                                                                                        if (chkEmpresasOpc == true)
-                                                                                                                                                                        {
-                                                                                                                                                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminadas", "Empresa")">Administrar empresas eliminadas</a></li>
-                                                                                                                                                                        }
-                                                                                                                                                                    }
-                                                                                                                                                                </ul>
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                    </li>
-                                                                                                                                                                            }
-                                                                                                                                                                        }
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("creaPlantilla", "Plantillas")">Crear</a></li>
+                                                }
+                                                if (ActionPlantillasListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Plantillas", "Plantillas")">Listado</a></li>
+                                                }
+                                                if (ActionPlantillasOpc == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        if (perfilModulo.Modulo.Nombre == "Reportes")
+                        {
+                            <li id="Reportes">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" aria-controls="collapseReports" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
+                                        <span class="tooltiptext">Reportes</span>
+                                    </div>
+                                </a>
+                                <span class="item-menu d-none">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
+                                        <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseReports">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (ActionReportesCrear == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "ReporteD4U")">Crear</a></li>
+                                                }
+                                                if (ActionReportesListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Reporte")">Listado</a></li>
+                                                }
+                                                if (ActionReportesOpc == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        if (perfilModulo.Modulo.Nombre == "Base de datos")
+                        {
+                            <li id="BD">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" aria-controls="collapseDatabase" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
+                                        <span class="tooltiptext">Bases de datos</span>
+                                    </div>
+                                </a>
+                                <span class="item-menu d-none">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
+                                        <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseDatabase">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (ActionBDCrear == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "BD")">Crear</a></li>
+                                                }
+                                                if (ActionBDListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllForListado", "BD")">Listado</a></li>
+                                                }
+                                                if (ActionBDOpc == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEliminadas", "BD")">Administrar bases de datos eliminadas</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        if (perfilModulo.Modulo.Nombre == "Usuarios")
+                        {
+                            <li id="Usuarios">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" aria-controls="collapseUsers" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
+                                        <span class="tooltiptext">Usuarios</span>
+                                    </div>
+                                </a>
+                                <span class="item-menu d-none">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
+                                        <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseUsers">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (ActionUsuariosCrear == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Administrador")">Crear</a></li>
+                                                }
+                                                if (ActionUsuariosListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Administrador")">Listado</a></li>
+                                                }
+                                                if (ActionUsuariosOpc == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminados", "Administrador")">Administrar usuarios eliminadas</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                        if (perfilModulo.Modulo.Nombre == "Empresas")
+                        {
+                            <li id="Empresas">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" aria-controls="collapseEnterprises" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
+                                        <span class="tooltiptext">Empresas</span>
+                                    </div>
+                                </a>
+                                <span class="item-menu d-none">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
+                                        <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseEnterprises">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (ActionEmpresasCrear == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Empresa")">Crear</a></li>
+                                                }
+                                                if (ActionEmpresasListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Empresa")">Listado</a></li>
+                                                }
+                                                if (chkEmpresasOpc == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminadas", "Empresa")">Administrar empresas eliminadas</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+
+                    }
                 }
                 <!--Fin seccion permisos por usuario-->
 

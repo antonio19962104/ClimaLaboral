@@ -173,7 +173,7 @@
                     vm.getComentariosByPalabra(176, vm.palabra3DP4)
                 });
             });
-
+            
             vm.getComentariosByPalabra = function (pregunta, palabra) {
                 var controls = $("#selector-level").find("input[type=checkbox]");
                 var listLevel = [];
