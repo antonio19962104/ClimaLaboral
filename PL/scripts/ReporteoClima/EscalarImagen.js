@@ -26,9 +26,11 @@ var divs =
 
 async function crearReportePDF() {
     docReporte.deletePage(1);
-    docReporte.deletePage(2);
+    //docReporte.deletePage(2);
     docReporte.save('Reporte_Grafico.pdf');
 }
+
+
 
 /**
  * Crea copia de un canvas con la escala indicada

@@ -280,5 +280,40 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Metodo consulta empresa
+        /// </summary>
+        /// <param name="idEmpresa">Id de la empresa</param>
+        /// <returns>regresa el Id de la empresa y el Nombre de la empresa por Id de la empresa</returns>
+        public static ML.Company getCompanyById(int idEmpresa)
+        {
+            ML.Company empresa = new ML.Company();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.Company.Select(o => o).Where(o => o.CompanyId == idEmpresa).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            empresa.CompanyId = item.CompanyId;
+                            empresa.CompanyName = item.CompanyName;                           
+
+                        }
+
+                    }
+
+                }
+                return empresa;
+
+            }
+            catch (Exception aE)
+            {
+                return null;
+                throw;
+            }
+            return empresa;
+        }
     }
 }

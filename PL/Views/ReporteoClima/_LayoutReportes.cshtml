@@ -450,9 +450,18 @@
                 </header>
                 <section id="page-title">
                     <div class="container-fluid px-lg-5">
-                        <h1 class="title-page-title">Bienvenido <span>Selecciona cualquiera de las herramientas para que comiences:</span></h1>
+                        <div class="row">
+                            <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                                <img class="img-fluid img-page-title" src="~/img/icon-reports.png" />
+                                @*<h1 class="title-page-survey"> Reporte / <span>Reporte de Comentarios </span></h1>*@
+                                <h1 class="title-page-survey">Bienvenido <span>Selecciona cualquiera de las herramientas para que comiences:</span></h1>
+                            </div>
+                            <div class="col-sm-6 bottom-align-right center-vertically-xs">
+                                <a href="/Reporte/GetAll">Regresar al listado</a>
+                            </div>
+                        </div>
                     </div><!--.container-fluid-->
-                </section>
+                </section>  
                 <section @*ng-controller="reporteController as vm"*@ id="content" class="">
                     @RenderBody()
 

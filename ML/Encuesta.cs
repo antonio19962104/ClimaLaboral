@@ -104,5 +104,9 @@ namespace ML
         public string Instrucciones2 { get; set; }
         public string cadenaInicio { get; set; }
         public string cadenaFin { get; set; }
+        ///Listado nuevo de Encuestas CAMOS 20/07/2021
+        public int periodo { get; set;}
+        public ML.DashBoardEncuesta resumen { get; set; }
+        public List<object> ListReportes { get; set; }
     }
 }

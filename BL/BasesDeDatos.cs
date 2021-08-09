@@ -830,6 +830,40 @@ namespace BL
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
             }
         }
-       
+
+        /// <summary>
+        /// Metodo que regresa el nombre de la base de una consulta de encuesta
+        /// </summary>
+        /// <param name="idBaseDatos">se necesita el numerico de Id de la base de datos</param>
+        /// <returns>regresa un modelo de Base de datos con idBAse de datos, nombre base de datos y estatus de la base de datos</returns>
+        public static ML.BasesDeDatos getBDbyIdEncuesta(int idBaseDatos)
+        {
+            ML.BasesDeDatos based = new ML.BasesDeDatos();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.BasesDeDatos.Select(o => o).Where(o => o.IdBasesDeDatos == idBaseDatos).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            based.IdBaseDeDatos = item.IdBasesDeDatos;
+                            based.Nombre = item.Nombre;
+                            based.TipoEstatus = new ML.TipoEstatus();
+                            based.TipoEstatus.IdEstatus = item.IdEstatus;
+                        }
+                    }
+                   // return based;
+                }
+            }
+            catch (Exception aE)
+            {
+
+                return null;
+            }
+            return based;
+
+        }
     }
 }

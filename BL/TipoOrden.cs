@@ -41,5 +41,35 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Metodo para obtener el tipo de orden para el nuevo listado de Encuestas CAMOS 20072021
+        /// </summary>
+        /// <param name="idTipoOrden">Id de Tipo de orden</param>
+        /// <returns>Regresa el idtipo de orden y el nombre del tipo de orden</returns>
+        public static ML.TipoOrden getTipoOrdenById(int idTipoOrden)
+        {
+            ML.TipoOrden orden = new ML.TipoOrden();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.TipoOrden.Select(o => o).Where(o => o.IdTipoOrden == idTipoOrden).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            orden.IdTipoOrden = item.IdTipoOrden;
+                            orden.Descripcion = item.Descripcion;                            
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                return null;                
+            }
+            return orden;
+
+        }
     }
 }

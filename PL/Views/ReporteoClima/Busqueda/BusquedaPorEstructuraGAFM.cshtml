@@ -86,58 +86,65 @@
                     ng-options="anios.value for anios in vm.listAnios track by anios.value"></select>
         </div>
     </div>
-
-    <!--Si es en global de lo que eligo tomo el primer boton, si hay que desplegar en no5_Indicadores_Generales toda la estructura tomo el segundo-->
-    <button ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.run()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar reporte</button>
-    <button hidden ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.generarJob()" class="btn btn-dark mt-3"><i class="fas fa-chart-bar"></i> Generar Job</button><br />
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @*<button hidden type="button" ng-click="vm.getReportes_1_2_3()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar Todas las vistas</button>*@
-
-
-    @*<button type="button" ng-click="vm.getEstructura()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar</button>*@
-
-
-    <!--Buscar(aIdSubDepartamento)-->
-    <!--<div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 5">
+    <div class="form-group">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Unidad de Negocio</label>
-            <select ng-model="vm.CompanyCategoriaForSubDepartamento" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForSubDepartamento)"
-                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+            <label class="control-label">Enfoque</label>
+            <select ng-model="vm.ddlEnfoques" class="form-control" @*ng-change="vm.setDepartamentos(vm.AreaForDepartamento)"*@
+                    ng-options="enfoque.Nombre for enfoque in vm.listEnfoques track by enfoque.Id"></select>
         </div>
-        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Empresa</label>
-            <select ng-model="vm.CompanyForSubDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForSubDepartamento)"
-                    ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
         </div>
-        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Area</label>
-            <select ng-model="vm.AreaForSubDepartamento" class="form-control" ng-change="vm.setDepartamentos(vm.AreaForSubDepartamento)"
-                    ng-options="area.Nombre for area in vm.listArea track by area.IdArea"></select>
-        </div>
-        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Area</label>
-            <select ng-model="vm.DepartamentoForSubDepartamento" class="form-control" ng-change="vm.setSubDepartamentos(vm.DepartamentoForSubDepartamento)"
-                    ng-options="departamento.Nombre for departamento in vm.listDepartamento track by departamento.IdDepartamento"></select>
-        </div>
-        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Area</label>
-            <select ng-model="vm.DepartamentoForSubDepartamento" class="form-control"
-                    ng-options="subDepartamento.Nombre for subDepartamento in vm.listSubDepartamento track by subDepartamento.IdSubdepartamento"></select>
-        </div>
-    </div>-->
-</div>
+
+        <!--Si es en global de lo que eligo tomo el primer boton, si hay que desplegar en no5_Indicadores_Generales toda la estructura tomo el segundo-->
+        <button ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.run()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar reporte</button>
+        <button hidden ng-hide="vm.CargaHistoricoView == true" id="btnAction" type="button" ng-click="vm.generarJob()" class="btn btn-dark mt-3"><i class="fas fa-chart-bar"></i> Generar Job</button><br />
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*<button hidden type="button" ng-click="vm.getReportes_1_2_3()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar Todas las vistas</button>*@
+
+
+        @*<button type="button" ng-click="vm.getEstructura()" class="btn btn-success"><i class="fas fa-chart-bar"></i> Generar</button>*@
+
+
+        <!--Buscar(aIdSubDepartamento)-->
+        <!--<div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 5">
+            <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                <label class="control-label">Unidad de Negocio</label>
+                <select ng-model="vm.CompanyCategoriaForSubDepartamento" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForSubDepartamento)"
+                        ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                <label class="control-label">Empresa</label>
+                <select ng-model="vm.CompanyForSubDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForSubDepartamento)"
+                        ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                <label class="control-label">Area</label>
+                <select ng-model="vm.AreaForSubDepartamento" class="form-control" ng-change="vm.setDepartamentos(vm.AreaForSubDepartamento)"
+                        ng-options="area.Nombre for area in vm.listArea track by area.IdArea"></select>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                <label class="control-label">Area</label>
+                <select ng-model="vm.DepartamentoForSubDepartamento" class="form-control" ng-change="vm.setSubDepartamentos(vm.DepartamentoForSubDepartamento)"
+                        ng-options="departamento.Nombre for departamento in vm.listDepartamento track by departamento.IdDepartamento"></select>
+            </div>
+            <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                <label class="control-label">Area</label>
+                <select ng-model="vm.DepartamentoForSubDepartamento" class="form-control"
+                        ng-options="subDepartamento.Nombre for subDepartamento in vm.listSubDepartamento track by subDepartamento.IdSubdepartamento"></select>
+            </div>
+        </div>-->
+    </div>
 <!--#endregion Reporteo por Estructura de la Empresa-->
 <hr ng-hide="vm.CargaHistoricoView == true" />
 <style>

@@ -350,7 +350,6 @@ function GetDashBoard() {
             vm.arrayStringFiltros = [];
             vm.UNSeleccionada = "";
             var uidUnidad, uidCompany, uidArea, uidDepto, uidSubd;
-            /*#endregion variables*/
             /***********se agraga la opcion de Enfoque para el reporte grafico CAMOS 03/08/2021****************/
             vm.listEnfoques= [
                 { Id: 0, Nombre: "-Ambos-" },
@@ -359,6 +358,29 @@ function GetDashBoard() {
             ];
             vm.ddlEnfoques = vm.listEnfoques[0];
             vm.enfoqueSeleccionado = 0;
+            var resolucion = $(window).width(); ///se hace global CAMOS 06/08/2021 0327
+            var paddingtop = "";
+            var paddingtop2 = "";
+            var paddingtop3 = "";
+            var paddingtop4 = "";
+            var paddingtop5 = "";
+            if (resolucion >= 1440) {
+                paddingtop = "250px";//50px !important
+                paddingtop2 = "220px";
+                paddingtop3 = "150px";
+                paddingtop4 = "280px";
+                paddingtop5 = "350px";
+            }
+            else {
+                paddingtop = "100px";
+                paddingtop2 = "80px";
+                paddingtop3 = "40px";
+                paddingtop4 = "130px";
+                paddingtop5 = "175px";
+            }
+            /*#endregion variables*/
+
+
 
             $(document).ready(function () {
                 try {
@@ -1882,7 +1904,7 @@ function GetDashBoard() {
                 document.getElementsByClassName("busy")[1].style.display = "block";
                 var numPaginas = Enumerable.from(vm.imagenes).where(o => o.value != "").toList().length;
                 localStorage.setItem("paginasReporte", numPaginas);
-                var resolucion = $(window).width();
+                //var resolucion = $(window).width(); se saca para hacerlo global   --CAMOS 06/08/2021 0322
                 var elem = document.getElementById("mergeS");
                 var canvas = elem.getElementsByTagName('canvas');
                 var pdf = Object; 
@@ -1953,7 +1975,21 @@ function GetDashBoard() {
                             }
                         }
                     }
-
+                    //se valida el pading top por valor de resolucion  ------ CAMOS 06/08/2021  0351
+                    if (resolucion >= 1440) {
+                        paddingTop = "250px";
+                        paddingtop2 = "220px";              
+                        paddingtop3 = "150px";         
+                        paddingtop4 = "280px"; 
+                        paddingtop5 = "350px"; 
+                    }
+                    else{
+                        paddingtop = "100px";
+                        paddingtop2 = "80px";              
+                        paddingtop3 = "40px";                             
+                        paddingtop4 = "130px";
+                        paddingtop5 = "175px";
+                    }
 
                     if ((vm.exportaImagen == true && elemId != "tab-23") || (vm.exportaImagen == true && elemId != "tab-24")) {
                         if (!vm.isNullOrEmpty(elemId) && elemId != "tab-1") {
@@ -1975,7 +2011,7 @@ function GetDashBoard() {
                                 if (elemId.includes("tab-23-") || elemId.includes("tab-24-")) {
                                     elem = document.querySelector("." + elemId);
                                     elem.style.backgroundColor = "white";
-                                    elem.style.paddingTop = "250px";
+                                    elem.style.paddingTop = paddingtop;
                                     await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -1990,14 +2026,13 @@ function GetDashBoard() {
                                             }, "image/jpeg");
                                         },
                                     });
-                                    elem.style.backgroundColor = "#eee";
-                                    //elem.style.paddingTop = "0px"
+                                    elem.style.backgroundColor = "#eee";                                    
                                 }
                                 
                                 
                                 if (elemId == "tab-3") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
-                                    elem.style.paddingTop = "200px";
+                                    elem.style.paddingTop = paddingtop2;
                                     await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -2018,7 +2053,7 @@ function GetDashBoard() {
                                 if (elemId == "tab-3punto5") {
                                     //document.getElementsByClassName("introduccion-bg")[0].style.backgroundColor = "#fff";
                                     elem = document.querySelector("#" + elemId).children[0].children[0].children[1];
-                                    elem.children[0].style.marginTop = "280px";
+                                    elem.children[0].style.marginTop = paddingtop4;
                                     await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -2040,7 +2075,7 @@ function GetDashBoard() {
                                 if (elemId == "tab-4") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    elem.style.paddingTop = "220px";
+                                    elem.style.paddingTop = paddingtop2;
                                     await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -2056,14 +2091,13 @@ function GetDashBoard() {
                                             }, "image/jpeg");
                                         }
                                     });
-                                    elem.style.backgroundColor = "#eee";
-                                    //elem.style.paddingTop = "0px"
+                                    elem.style.backgroundColor = "#eee";                                   
                                 }
 
                                 if (elemId == "tab-5") {
                                     elem = document.querySelector("#tab-5").children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    elem.style.paddingTop = "350px"
+                                    elem.style.paddingTop = paddingtop5;
                                     await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -2079,8 +2113,7 @@ function GetDashBoard() {
                                             }, "image/jpeg");
                                         }
                                     });
-                                    elem.style.backgroundColor = "#eee";
-                                    //elem.style.paddingTop = "0px"
+                                    elem.style.backgroundColor = "#eee";                                    
                                 }
 
                                     if (elemId == "tab-6") {
@@ -2146,7 +2179,7 @@ function GetDashBoard() {
                                 if (elemId == "tab-9") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    elem.style.paddingTop = "250px";
+                                    elem.style.paddingTop = paddingtop;
                                     await html2canvas(elem, {
                                       onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -2162,8 +2195,7 @@ function GetDashBoard() {
                                             }, "image/jpeg");
                                         }
                                     });
-                                    elem.style.backgroundColor = "#eee";
-                                    //elem.style.paddingTop = "0px"
+                                    elem.style.backgroundColor = "#eee";                                   
                                 }
 
                                     if (elemId == "tab-10") {
@@ -2210,11 +2242,11 @@ function GetDashBoard() {
                                     try {
                                         if (document.querySelector("#tab-12").classList.contains("ng-hide")) {
                                             elem = document.querySelector("#tab-10").children[0].children[0];
-                                            elem.style.paddingTop = "200px";
+                                            elem.style.paddingTop = paddingtop2;
                                         }
                                         else {
                                             elem = document.querySelector("#tab-12").children[0].children[0];
-                                            elem.style.paddingTop = "200px";
+                                            elem.style.paddingTop = paddingtop2;
                                         }
 
                                         elem.style.backgroundColor = "white";
@@ -2238,7 +2270,7 @@ function GetDashBoard() {
                                     } catch (e) {
                                         elem = document.querySelector("#tab-10").children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "200px";
+                                        elem.style.paddingTop = paddingtop2;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2261,7 +2293,7 @@ function GetDashBoard() {
                                 if (elemId == "tab-13") {
                                     elem = document.querySelector("#" + elemId).children[0].children[0];
                                     elem.style.backgroundColor = "white";
-                                    elem.style.paddingTop = "250px";
+                                    elem.style.paddingTop = paddingtop;
                                     await html2canvas(elem, {
                                         onrendered: function (canvas) {
                                             var theCanvas = canvas;
@@ -2277,8 +2309,7 @@ function GetDashBoard() {
                                             }, "image/jpeg");
                                         }
                                     });
-                                    elem.style.backgroundColor = "#eee";
-                                    ////elem.style.paddingTop = "0px";
+                                    elem.style.backgroundColor = "#eee";                                    
                                 }
 
                                     if (elemId == "tab-14") {
@@ -2325,7 +2356,7 @@ function GetDashBoard() {
                                         try {
                                             if (document.querySelector("#tab-16").classList.contains("ng-hide")) {
                                                 elem = document.querySelector("#tab-14").children[0].children[0];
-                                                elem.style.paddingTop = "250px";
+                                                elem.style.paddingTop = paddingtop;
                                             }
                                             else {
                                                 elem = document.querySelector("#tab-16").children[0].children[0];
@@ -2350,7 +2381,7 @@ function GetDashBoard() {
                                         } catch (e) {
                                             elem = document.querySelector("#tab-14").children[0].children[0];
                                             elem.style.backgroundColor = "white";
-                                            elem.style.paddingTop = "250px";
+                                            elem.style.paddingTop = paddingtop;
                                             await html2canvas(elem, {
                                                 onrendered: function (canvas) {
                                                     var theCanvas = canvas;
@@ -2413,7 +2444,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-19") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2435,7 +2466,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-20") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2457,7 +2488,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-21") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2479,7 +2510,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-22") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2600,7 +2631,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-27") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2622,7 +2653,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-28") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2644,7 +2675,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-29") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2666,7 +2697,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-30") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2688,7 +2719,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-31") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2710,7 +2741,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-32") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2732,7 +2763,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-33") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2754,7 +2785,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-34") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2776,7 +2807,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-35") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2798,7 +2829,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-36") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2820,7 +2851,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-37") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2842,7 +2873,7 @@ function GetDashBoard() {
                                     if (elemId == "tab-38") {
                                         elem = document.querySelector("#" + elemId).children[0].children[0];
                                         elem.style.backgroundColor = "white";
-                                        elem.style.paddingTop = "250px";
+                                        elem.style.paddingTop = paddingtop;
                                         await html2canvas(elem, {
                                             onrendered: function (canvas) {
                                                 var theCanvas = canvas;
@@ -2927,35 +2958,135 @@ function GetDashBoard() {
 
             vm.list1 = [];
             vm.list1.push("");
+            vm.historicoPaginaActiva = [];
 
             /*#region Secciones*/
             vm.next = async function () {
+                var paginaActiva;
                 try {
-                    var paginaActiva;
                     for (var i = 0; i < divs.length; i++) {
                         if (document.getElementById(divs[i]).offsetWidth > 0) {
                             paginaActiva = divs[i];
                             break;
                         }
                     }
-                    if (paginaActiva != undefined && paginaActiva != "") {
+                    //armar sub id
+                    if (paginaActiva.includes("pegarReseccionado")) {
+                        var elemActivo = Enumerable.from(document.getElementById(paginaActiva).children).where(o => o.style.display == "block").toList();
+                        var numElemActivo = elemActivo[0].classList[2].split('-')[2]
+                        paginaActiva = paginaActiva + "_" + numElemActivo;
+                    }
+
+                    if (paginaActiva != undefined && paginaActiva != "" && vm.exportaImagen == true && vm.historicoPaginaActiva.includes(paginaActiva) == false) {
+                        document.getElementsByClassName("busy")[1].style.display = "block";
+                        // Guardar historico
+                        vm.historicoPaginaActiva.push(paginaActiva);
+                        // Set estilos
+                        var finalPaddingTop = 0;
+                        switch (paginaActiva) {
+                            case "tab-portada": case "tab-introduccion-amarillo": case "tab-mejores-ea": case "tab-crecimiento-ee": case "tab-crecimiento-ea":
+                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop2;
+                                finalPaddingTop = paddingtop2;
+                                break;
+                            case "tab-portada-azul":
+                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop4;
+                                finalPaddingTop = paddingtop4;
+                                break;
+                            case "tab-iconografia":
+                                    document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop5;
+                                    finalPaddingTop = paddingtop5;
+                                break;
+                            case "tab-mejores-ee": case "tab-peores-ee": case "tab-peores-ea": case "tab-decremento-ee": case "tab-decremento-ea": case "tab-comparativo-permanencia": case "tab-comparativo-abandono":
+                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
+                                finalPaddingTop = paddingtop;
+                                break;
+                            case "tab-generales-departamento-ee": case "tab-generales-departamento-ea": // tab-21-22
+                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
+                                finalPaddingTop = paddingtop;
+                                break;
+                            case "pegarReseccionado": case "pegarReseccionadoEA": // tab-23-24
+                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
+                                finalPaddingTop = paddingtop;
+                                break;
+
+                            case "tab-antiguedad-ee": case "tab-antiguedad-ea":
+                            case "tab-genero-ee":     case "tab-genero-ea":
+                            case "tab-grado-aca-ee":  case "tab-grado-aca-ea":
+                            case "tab-c-trab-ee":     case "tab-c-trab-ea":
+                            case "tab-funcion-ee":    case "tab-funcion-ea":
+                            case "tab-edad-ee":       case "tab-edad-ea":
+                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
+                                finalPaddingTop = paddingtop;
+                                break;
+                            case "tab-impulsores-clave": 
+                                finalPaddingTop = "40px";
+                                break;
+                        }
+
+                        if (finalPaddingTop == 0 || finalPaddingTop == "")
+                            finalPaddingTop = "60px"; // baja a 30px
+                        if (paginaActiva.includes("pegarReseccionado"))
+                            finalPaddingTop = paddingtop;
+
+                        finalPaddingTop = parseFloat(finalPaddingTop);
                         docReporte.addPage();
+                        if (paginaActiva.includes("pegarReseccionado")) {
+                            paginaActiva = paginaActiva.split('_')[0];
+                        }
+                        document.getElementById(paginaActiva).parentNode.style.backgroundColor = "#fff";
                         document.getElementById(paginaActiva).style.backgroundColor = "#fff";
-                        // docs.text("Hola", (docs.internal.pageSize.width / 2), (docs.internal.pageSize.height / 2))
-                        await docReporte.addHTML($("#" + paginaActiva)[0]);
-                        document.getElementById(paginaActiva).removeAttribute("style");
+                        /*await docReporte.addHTML($("#" + paginaActiva)[0]);*/
+                        docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), {
+                        }, function () {
+                            //alert("success add content");
+                            document.getElementsByClassName("busy")[1].style.display = "none";
+                            document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
+                            document.getElementById(paginaActiva).parentNode.removeAttribute("style");
+                            document.getElementById(paginaActiva).removeAttribute("style");
+                        });
+                    }
+                    else if (vm.exportaImagen == false) {
+                        if (vm.mostrarMensaje == true && vm.banderaMensaje > 0) {
+                            /*swal("La seccion no se exportará", "", "info");*/
+                            swal({
+                                title: "La sección no se exportará en el PDF",
+                                text: "",
+                                icon: "info",
+                                buttons: [
+                                    'Ok',
+                                    'No mostrar de nuevo'
+                                ],
+                                dangerMode: false,
+                            }).then(function (isConfirm) {
+                                if (isConfirm)
+                                    vm.mostrarMensaje = false;
+                            });
+                        }
+                        if (vm.mostrarMensaje == true && vm.banderaMensaje == 0) {
+                            vm.banderaMensaje++;
+                            swal({
+                                title: "La sección no se exportará en el PDF",
+                                text: "",
+                                icon: "info",
+                                buttons: [
+                                    'Ok',
+                                    'No mostrar de nuevo'
+                                ],
+                                dangerMode: false,
+                            }).then(function (isConfirm) {
+                                if (isConfirm)
+                                    vm.mostrarMensaje = false;
+                            });
+                        }
                     }
                 } catch (e) {
-                    //alert(e.message);
+                    // docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                 }
 
 
                 vm.contadorNextButton++;
-                
                 // guarda la opcion seleccionada de exportacion en cada seccion
                 vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
-
-
                 if (vm.SeccionesReporte.Id == 3.5) {
                     //report("tab-3punto5");
                 }
@@ -3004,6 +3135,9 @@ function GetDashBoard() {
                             vm.SeccionesReporte.Id = 3.5;
                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
                             vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                            // cambiar vista a la fuerza
+                            //document.getElementById("tab-3").style.display = "none";
+                            //document.getElementById("tab-3punto5").classList.remove("ng-hide");
                             return vm.SeccionesReporte.Id = 3.5;
                         }
                         if (vm.SeccionesReporte.Id == 3.5) {
@@ -3015,23 +3149,6 @@ function GetDashBoard() {
                         /*Reporte corpo*/
                         if (vm.SeccionesReporte.Id == 40 && vm.opc == "4") {
                             vm.SeccionesReporte.Id = 40.5;
-                            /*
-                            * Se cambia la organizacion ya que antes de exportar se debe visualizar los graficos comparativos de todas la unidades de negocio
-                            * del grupo en las categorias
-                            * Resultado general
-                            * Nivel Confianza
-                            * Nivel Compromiso
-                            * Nivel Coolaboracion
-                            * Creedibilidad
-                            * Imparcialidad
-                            * Orgullo
-                            * Respeto
-                            * Compañerismo
-                            * Sin historicos de ningun tipo
-                            *
-                            * La info se consume de HistoricoClima
-                            * select * from Historico clima where UnidadNeg = 1....9 and Anio = Anio.value
-                            */
                             fillArrayCustomHisto("BackgroundJob/getDataReporteCorpo/", vm.modelHistorico, vm.dataReporteCorpo, function () {
                                 vm.fillReporteCorporativo(vm.dataReporteCorpo);
                             });
@@ -3045,7 +3162,6 @@ function GetDashBoard() {
                             vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                             return vm.SeccionesReporte.Id;
                         }
-
                         // Termina la seccion 22 e inicia con la primer subseccion de la 23
                         if (vm.SeccionesReporte.Id == 22 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
                             vm.SeccionesReporte.Id++;
@@ -3055,7 +3171,6 @@ function GetDashBoard() {
                             vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                             return;
                         }
-
                         // Navegando ya dentro de la seccion 23
                         if (vm.SeccionesReporte.Id == 23) {
                             var childs = document.getElementById("pegarReseccionado").childNodes;
@@ -3081,7 +3196,6 @@ function GetDashBoard() {
                                 return;
                             }
                         }
-
                         //Navegando por la seccion 23
                         if (vm.SeccionesReporte.Id >= 23 && vm.SeccionesReporte.Id < 24) {
                             try {
@@ -3123,7 +3237,6 @@ function GetDashBoard() {
                                 return;
                             }
                         }
-
                         //Navegando en la seccion 24
                         if (vm.SeccionesReporte.Id >= 24 && vm.SeccionesReporte.Id < 25) {
                             try {
@@ -3155,8 +3268,6 @@ function GetDashBoard() {
                         }
 
                         vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 1;
-
-
                         vm.cambioSeccion(vm.SeccionesReporte.Id);
 
                         if (vm.SeccionesReporte.Id == 7 && vm.PorcentajeCompanierismo.length == 0) {
@@ -3273,21 +3384,15 @@ function GetDashBoard() {
                             /*Reporte dinamico*/
                             vm.getReporteDinamico();
                         }
-
                         if (vm.SeccionesReporte.Id == 40) {
                             /*Reporte de comentarios abiertos*/
                         }
-
-
-
                         if (vm.SeccionesReporte.Id == 41) {
                             /*Seccion que muestra todas las secciones del reporte para un preview de exportación*/
                             /*vm.getPDFReporte();*/
                         }
-
                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
                         vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
-
                     } catch (aE) {
                         vm.writteLog(aE.message, "vm.next");
                         ////swal(aE.message, "", "warning");
