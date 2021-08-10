@@ -385,6 +385,16 @@ function GetDashBoard() {
             $(document).ready(function () {
                 try {
                     vm.verificarStorage();
+                    $(document).on("keydown", function (e) {
+                        console.log(e);
+                        if (e.key == "ArrowLeft") {
+                            vm.prev();
+                        }
+                        if (e.key == "ArrowRight") {
+                            vm.next();
+                        }
+                    });
+
                 } catch (e) {
 
                 }
@@ -2960,28 +2970,52 @@ function GetDashBoard() {
             vm.list1.push("");
             vm.historicoPaginaActiva = [];
 
+            var numRecursionsNeeded = 0;    //the number of times we need to call addHtml (once per div)
+            var currentRecursion = 0;
+
+            function recursiveAddHtmlAndSave(currentRecursion, totalRecursions, paginaActiva) {
+                //Once we have done all the divs save the pdf
+                if (currentRecursion == totalRecursions) {
+                    docReporte.save(pdfName);
+                } else {
+                    currentRecursion++;
+                    docReporte.addPage();
+                    //$('.myDivClass')[currentRecursion] selects one of the divs out of the jquery collection as a html element
+                    //addHtml requires an html element. Not a string like fromHtml.
+                    docReporte.addHTML($('#' + paginaActiva)[0], 15, 20, {}, function () {
+                        console.log(currentRecursion);
+                        recursiveAddHtmlAndSave(currentRecursion, totalRecursions)
+                    });
+                }
+            }
+
+            function doSetTimeout(i) {
+                setTimeout(function () { alert(i); }, 3000);
+            }
+
             /*#region Secciones*/
             vm.next = async function () {
                 var paginaActiva;
                 try {
+                    // Se obtiene la seccion del reporte activa
                     for (var i = 0; i < divs.length; i++) {
                         if (document.getElementById(divs[i]).offsetWidth > 0) {
                             paginaActiva = divs[i];
                             break;
                         }
                     }
-                    //armar sub id
+                    // Crear un subId para las secciones que se separaron (23, 24)
                     if (paginaActiva.includes("pegarReseccionado")) {
                         var elemActivo = Enumerable.from(document.getElementById(paginaActiva).children).where(o => o.style.display == "block").toList();
                         var numElemActivo = elemActivo[0].classList[2].split('-')[2]
                         paginaActiva = paginaActiva + "_" + numElemActivo;
                     }
-
+                    // Validar si se agrega o no la pagina nueva
                     if (paginaActiva != undefined && paginaActiva != "" && vm.exportaImagen == true && vm.historicoPaginaActiva.includes(paginaActiva) == false) {
                         document.getElementsByClassName("busy")[1].style.display = "block";
-                        // Guardar historico
+                        // Guardar historico de paginas
                         vm.historicoPaginaActiva.push(paginaActiva);
-                        // Set estilos
+                        // Asignar estilos para la exportacion
                         var finalPaddingTop = 0;
                         switch (paginaActiva) {
                             case "tab-portada": case "tab-introduccion-amarillo": case "tab-mejores-ea": case "tab-crecimiento-ee": case "tab-crecimiento-ea":
@@ -3014,7 +3048,7 @@ function GetDashBoard() {
                             case "tab-grado-aca-ee":  case "tab-grado-aca-ea":
                             case "tab-c-trab-ee":     case "tab-c-trab-ea":
                             case "tab-funcion-ee":    case "tab-funcion-ea":
-                            case "tab-edad-ee":       case "tab-edad-ea":
+                            case "tab-edad-ee": case "tab-edad-ea": case "tab-estr-one-level-ee": case "tab-estr-one-level-ea":
                                 document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
                                 finalPaddingTop = paddingtop;
                                 break;
@@ -3022,12 +3056,11 @@ function GetDashBoard() {
                                 finalPaddingTop = "40px";
                                 break;
                         }
-
+                        // Validar estilos para paginas que lo requieren
                         if (finalPaddingTop == 0 || finalPaddingTop == "")
-                            finalPaddingTop = "60px"; // baja a 30px
+                            finalPaddingTop = "60px";
                         if (paginaActiva.includes("pegarReseccionado"))
                             finalPaddingTop = paddingtop;
-
                         finalPaddingTop = parseFloat(finalPaddingTop);
                         docReporte.addPage();
                         if (paginaActiva.includes("pegarReseccionado")) {
@@ -3035,19 +3068,112 @@ function GetDashBoard() {
                         }
                         document.getElementById(paginaActiva).parentNode.style.backgroundColor = "#fff";
                         document.getElementById(paginaActiva).style.backgroundColor = "#fff";
-                        /*await docReporte.addHTML($("#" + paginaActiva)[0]);*/
-                        docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), {
-                        }, function () {
-                            //alert("success add content");
-                            document.getElementsByClassName("busy")[1].style.display = "none";
-                            document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
-                            document.getElementById(paginaActiva).parentNode.removeAttribute("style");
-                            document.getElementById(paginaActiva).removeAttribute("style");
-                        });
+                        // Meter el contenido html dentro de la pagina
+
+                        // Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene
+                        if (vm.SeccionesReporte.Id == 25) {
+                            // Seccionar
+                            var childs = document.getElementById("divPantalla25").childNodes;           
+                            var canvas = [];
+                            [].forEach.call(childs, function (item) { item.style.display = "none"; }); 
+                            childs = Enumerable.from(childs).toList();
+                            childs = childs.map(async (key, index) => {
+                                if (index > 0) {
+                                    childs[(index - 1)].style.display = "none";
+                                }
+                                //docReporte.addPage();//comente esta linea
+                                childs[index].style.display = "";
+                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ }
+                                    , function () {
+                                        //alert("He agregado una seccion");
+                                    });
+                                    canvas.push(data);
+                                    docReporte.addPage();
+                                    docReporte.addImage(data, 1200, 400);
+                                    //alert("Pagina donde clave la imagen" + docReporte.internal.getCurrentPageInfo().pageNumber);
+                                return data;
+                            });
+                            var termine = false;
+                            var refreshIntervalId = setInterval(function () {
+                                if (canvas.length == childs.length) {
+                                    docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber)//agregue esto
+                                    //docReporte.save();
+                                    clearInterval(refreshIntervalId);
+                                    vm.SeccionesReporte.Id++;
+                                    vm.getReporteDataPantalla_26();
+                                    document.getElementById("tab-25").classList.add("ng-hide");
+                                    document.getElementById("tab-26").classList.remove("ng-hide");
+                                    termine = true;
+                                    document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
+                                    document.getElementById(paginaActiva).parentNode.removeAttribute("style");
+                                    document.getElementById(paginaActiva).removeAttribute("style");
+                                    document.getElementsByClassName("busy")[1].style.display = "none";
+                                }
+                            }, 1000);
+
+                            
+                            if (termine == false) {
+                                return;
+                            }
+                        }
+                        if (vm.SeccionesReporte.Id == 26) {
+                            // Seccionar
+							// Seccionar
+                            var childs = document.getElementById("divPantalla26").childNodes;           
+                            var canvas = [];
+                            [].forEach.call(childs, function (item) { item.style.display = "none"; }); 
+                            childs = Enumerable.from(childs).toList();
+                            childs = childs.map(async (key, index) => {
+                                if (index > 0) {
+                                    childs[(index - 1)].style.display = "none";
+                                }
+                                //docReporte.addPage();//comente esta linea
+                                childs[index].style.display = "";
+                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ }
+                                    , function () {
+                                        //alert("He agregado una seccion");
+                                    });
+                                    canvas.push(data);
+                                    docReporte.addPage();
+                                    docReporte.addImage(data, 1200, 400);
+                                    //alert("Pagina donde clave la imagen" + docReporte.internal.getCurrentPageInfo().pageNumber);
+                                return data;
+                            });
+                            var termine = false;
+                            var refreshIntervalId = setInterval(function () {
+                                if (canvas.length == childs.length) {
+                                    docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber)//agregue esto
+                                    //docReporte.save();
+                                    clearInterval(refreshIntervalId);
+                                    vm.SeccionesReporte.Id++;
+                                    vm.getReporteDataPantalla_27();
+                                    document.getElementById("tab-26").classList.add("ng-hide");
+                                    document.getElementById("tab-27").classList.remove("ng-hide");
+                                    termine = true;
+                                    document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
+                                    document.getElementById(paginaActiva).parentNode.removeAttribute("style");
+                                    document.getElementById(paginaActiva).removeAttribute("style");
+                                    document.getElementsByClassName("busy")[1].style.display = "none";
+                                }
+                            }, 1000);
+
+                            
+                            if (termine == false) {
+                                return;
+                            }
+                        }
+                        if (vm.SeccionesReporte.Id != 25 && vm.SeccionesReporte.Id != 26) {
+                            docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), {
+                            }, function () {
+                                document.getElementsByClassName("busy")[1].style.display = "none";
+                                document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
+                                document.getElementById(paginaActiva).parentNode.removeAttribute("style");
+                                document.getElementById(paginaActiva).removeAttribute("style");
+                            });
+                        }
                     }
                     else if (vm.exportaImagen == false) {
                         if (vm.mostrarMensaje == true && vm.banderaMensaje > 0) {
-                            /*swal("La seccion no se exportará", "", "info");*/
                             swal({
                                 title: "La sección no se exportará en el PDF",
                                 text: "",
@@ -3080,15 +3206,12 @@ function GetDashBoard() {
                         }
                     }
                 } catch (e) {
-                    // docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                    console.log(e);
                 }
 
-
                 vm.contadorNextButton++;
-                // guarda la opcion seleccionada de exportacion en cada seccion
                 vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
                 if (vm.SeccionesReporte.Id == 3.5) {
-                    //report("tab-3punto5");
                 }
                 else {
                     if (vm.SeccionesReporte.Id == 14 || vm.SeccionesReporte.Id == 10) {
