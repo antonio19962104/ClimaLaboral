@@ -31,6 +31,21 @@ async function crearReportePDF() {
 }
 
 
+function addPadding(list, val) {
+    [].forEach.call(list, function (item) {
+        if (val == null) {
+            item.style.paddingTop = "350px";
+        }
+        if (val == 1) {
+            item.style.paddingTop = "400px";
+        }
+    });
+}
+function deletePadding(list) {
+    [].forEach.call(list, function (item) {
+        item.style.removeProperty("padding-top");
+    });
+}
 
 /**
  * Crea copia de un canvas con la escala indicada

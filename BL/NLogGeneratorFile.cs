@@ -88,6 +88,10 @@ namespace BL
             nlogClimaDinamicoSMTP.Error("Inner Exception: " + aE.InnerException);
             nlogClimaDinamicoSMTP.Error("StackTrace: " + aE.StackTrace);
         }
+        public static void logInfoEmailSender(string message)
+        {
+            nlogClimaDinamicoSMTP.Error(message);
+        }
         public static bool logErrorFronEnd(ML.ClimaDinamico aClimaDinamico)
         {
             nlogClimaDinamicoFrontEnd.Error("/---------------------------------------------------------------------------------/");

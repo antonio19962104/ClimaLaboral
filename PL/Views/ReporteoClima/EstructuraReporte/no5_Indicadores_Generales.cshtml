@@ -1,9 +1,4 @@
 ﻿<!--Si se deben desplegar todas las entidades dependientes se usara <div class="head-impulsores" ng-repeat="item in vm.finalColumnas" >{{item.type}}: {{item.value}}</div>-->
-<!--
-    Now    Last      diff
-    98% => 80%       +18
-    70% => 90%       -20
--->
 <div class="content-wrap">
     <div id="tab-indicadores-generales" class="container-fluid px-lg-5">
         <h2 class="robotothin mb-2 mt-n1">INDICADORES GENERALES <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}@*Sistemas*@</span></h2>
@@ -29,9 +24,7 @@
                                     <div class="col-6 p-0" style="text-align:center;">{{vm.UNSeleccionada}} EA</div>
                                 </div>
                             </div>
-
-
-                        </div><!--.row-->
+                        </div>
                     </div>
                     <!--#region categorias-->
                     <div class="col-10">                      
@@ -41,8 +34,6 @@
                             </div>
                             <div class="col-10 tablaimpulsores-izq">
                                 <h3 class="robotoblack">Nivel de Participación</h3>
-                                @*<p class="mb-n1 grey-color">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</p>
-                                <i class="f-13 yellow-clima">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</i>*@
                             </div>
                         </div>
                         <div class="row mt-3 bg-impulsores">
@@ -51,8 +42,6 @@
                             </div>
                             <div class="col-10 tablaimpulsores-izq">
                                 <h3 class="robotoblack">Calificación Global</h3>
-                                @*<p class="mb-n1 grey-color">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</p>
-                                <i class="f-13 yellow-clima">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</i>*@
                             </div>
                         </div>
                         <div class="row mt-3 bg-impulsores">
@@ -61,8 +50,6 @@
                             </div>
                             <div class="col-10 tablaimpulsores-izq">
                                 <h3 class="robotoblack">Nivel de Confianza</h3>
-                                @*<p class="mb-n1 grey-color">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</p>
-                                <i class="f-13 yellow-clima">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</i>*@
                             </div>
                         </div>
                         <div class="row mt-3 bg-impulsores">
@@ -71,8 +58,6 @@
                             </div>
                             <div class="col-10 tablaimpulsores-izq">
                                 <h3 class="robotoblack">Nivel de Compromiso</h3>
-                                @*<p class="mb-n1 grey-color">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</p>
-                                <i class="f-13 yellow-clima">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</i>*@
                             </div>
                         </div>
                         <div class="row mt-3 bg-impulsores">
@@ -81,8 +66,6 @@
                             </div>
                             <div class="col-10 tablaimpulsores-izq">
                                 <h3 class="robotoblack">Nivel de Colaboracion</h3>
-                                @*<p class="mb-n1 grey-color">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</p>
-                                <i class="f-13 yellow-clima">Lorem ipsum dolor sit amet consectetur adipiscing suspendisse</i>*@
                             </div>
                         </div>
                     </div>
@@ -100,8 +83,8 @@
                                         <!--FILA 1 RECUADRO 1 Y 2 PARTICIPACION-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="nublado"*@ class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/nublado.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" style="{{ vm.setIcono(vm.PorcentajeParticipacion[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeParticipacion[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeParticipacion[0] - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeParticipacion[0], vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
@@ -110,8 +93,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-5 p-0 ml-2 mr-1">
-                                                <div @*class="lluvia"*@ class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/lluvia.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" style="{{ vm.setIcono(vm.PorcentajeParticipacion[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeParticipacion[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeParticipacion[0] - vm.listDataHistoricoEA[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeParticipacion[0], vm.listDataHistoricoEA[0].NivelParticipacion) }}%</p>
@@ -124,8 +107,8 @@
                                         <!--FILA 2 RECUADRO 1 Y 2 REULTADOS GENERALES-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="sol"*@ class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/sol.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[0]) }}" style="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeCalificacionGlobal[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeCalificacionGlobal[0] - vm.listDataHistoricoEE[0].Promedio66R) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeCalificacionGlobal[0], vm.listDataHistoricoEE[0].Promedio66R) }}%</p>
@@ -133,8 +116,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-5 p-0 ml-2 mr-1">
-                                                <div @*class="solnube"*@ class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/solnube.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[1]) }}" style="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeCalificacionGlobal[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeCalificacionGlobal[1] - vm.listDataHistoricoEA[0].Promedio66R) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeCalificacionGlobal[1], vm.listDataHistoricoEA[0].Promedio66R) }}%</p>
@@ -146,8 +129,8 @@
                                         <!--FILA 3 RECUADRO 1 Y 2 CONFIANZA-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="nublado"*@ class="{{ vm.setClase(vm.PorcentajeNivelConfianza[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/nublado.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelConfianza[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[0]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelConfianza[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelConfianza[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelConfianza[0] - vm.listDataHistoricoEE[0].NivelConfianza) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelConfianza[0], vm.listDataHistoricoEE[0].NivelConfianza) }}%</p>
@@ -155,8 +138,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-5 p-0 ml-2 mr-1">
-                                                <div @*class="sol"*@ class="{{ vm.setClase(vm.PorcentajeNivelConfianza[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/sol.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelConfianza[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[1]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelConfianza[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelConfianza[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelConfianza[1] - vm.listDataHistoricoEA[0].NivelConfianza) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelConfianza[1], vm.listDataHistoricoEA[0].NivelConfianza) }}%</p>
@@ -168,8 +151,8 @@
                                         <!--FILA 4 RECUADRO 1 Y 2 COMPROMISO-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="nublado"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/nublado.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[0]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeCompromiso[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeCompromiso[0] - vm.listDataHistoricoEE[0].NivelCompromiso) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeCompromiso[0], vm.listDataHistoricoEE[0].NivelCompromiso) }}%</p>
@@ -177,8 +160,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-5 p-0 ml-2 mr-1">
-                                                <div @*class="solnube"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/solnube.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[1]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeCompromiso[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeCompromiso[1] - vm.listDataHistoricoEA[0].NivelCompromiso) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeCompromiso[1], vm.listDataHistoricoEA[0].NivelCompromiso) }}%</p>
@@ -190,8 +173,8 @@
                                         <!--FILA 5 RECUADRO 1 Y 2 COLABORACION-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="solnube"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/solnube.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[0]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeColaboracion[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeColaboracion[0] - vm.listDataHistoricoEE[0].NivelColaboracion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeColaboracion[0], vm.listDataHistoricoEE[0].NivelColaboracion) }}%</p>
@@ -199,8 +182,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-5 p-0 ml-2 mr-1">
-                                                <div @*class="lluvia"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/lluvia.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[1]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeColaboracion[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeColaboracion[1] - vm.listDataHistoricoEA[0].NivelColaboracion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeColaboracion[1], vm.listDataHistoricoEA[0].NivelColaboracion) }}%</p>
@@ -215,8 +198,8 @@
                                         <!--FILA 1 RECUADRO 1 Y 2 PARTICIPACION-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="nublado"*@ class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/nublado.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" style="{{ vm.setIcono(vm.PorcentajeParticipacion[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeParticipacion[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeParticipacion[0] - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeParticipacion[0], vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
@@ -229,8 +212,8 @@
                                         <!--FILA 2 RECUADRO 1 Y 2 REULTADOS GENERALES-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="sol"*@ class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/sol.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[0]) }}" style="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeCalificacionGlobal[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeCalificacionGlobal[0] - vm.listDataHistoricoEE[0].Promedio66R) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeCalificacionGlobal[0], vm.listDataHistoricoEE[0].Promedio66R) }}%</p>
@@ -244,8 +227,8 @@
                                         <!--FILA 3 RECUADRO 1 Y 2 CONFIANZA-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="nublado"*@ class="{{ vm.setClase(vm.PorcentajeNivelConfianza[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/nublado.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelConfianza[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[0]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelConfianza[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelConfianza[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelConfianza[0] - vm.listDataHistoricoEE[0].NivelConfianza) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelConfianza[0], vm.listDataHistoricoEE[0].NivelConfianza) }}%</p>
@@ -259,8 +242,8 @@
                                         <!--FILA 4 RECUADRO 1 Y 2 COMPROMISO-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="nublado"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/nublado.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[0]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeCompromiso[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeCompromiso[0] - vm.listDataHistoricoEE[0].NivelCompromiso) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeCompromiso[0], vm.listDataHistoricoEE[0].NivelCompromiso) }}%</p>
@@ -275,8 +258,8 @@
                                         <!--FILA 5 RECUADRO 1 Y 2 COLABORACION-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="solnube"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/solnube.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[0]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeColaboracion[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeColaboracion[0] - vm.listDataHistoricoEE[0].NivelColaboracion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeColaboracion[0], vm.listDataHistoricoEE[0].NivelColaboracion) }}%</p>
@@ -293,8 +276,8 @@
                                         <!--FILA 1 RECUADRO 1 Y 2 PARTICIPACION-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="lluvia"*@ class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/lluvia.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeParticipacion[0]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeParticipacion[0]) }}" style="{{ vm.setIcono(vm.PorcentajeParticipacion[0], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeParticipacion[0] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeParticipacion[0] - vm.listDataHistoricoEA[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeParticipacion[0], vm.listDataHistoricoEA[0].NivelParticipacion) }}%</p>
@@ -310,8 +293,8 @@
                                         <!--FILA 2 RECUADRO 1 Y 2 REULTADOS GENERALES-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="solnube"*@ class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/solnube.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeCalificacionGlobal[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[1]) }}" style="{{ vm.setIcono(vm.PorcentajeCalificacionGlobal[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeCalificacionGlobal[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeCalificacionGlobal[1] - vm.listDataHistoricoEA[0].Promedio66R) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeCalificacionGlobal[1], vm.listDataHistoricoEA[0].Promedio66R) }}%</p>
@@ -326,8 +309,8 @@
                                         <!--FILA 3 RECUADRO 1 Y 2 CONFIANZA-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="sol"*@ class="{{ vm.setClase(vm.PorcentajeNivelConfianza[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/sol.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelConfianza[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelConfianza[1]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelConfianza[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelConfianza[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelConfianza[1] - vm.listDataHistoricoEA[0].NivelConfianza) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelConfianza[1], vm.listDataHistoricoEA[0].NivelConfianza) }}%</p>
@@ -342,8 +325,8 @@
                                         <!--FILA 4 RECUADRO 1 Y 2 COMPROMISO-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="solnube"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/solnube.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeCompromiso[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[1]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeCompromiso[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeCompromiso[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeCompromiso[1] - vm.listDataHistoricoEA[0].NivelCompromiso) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeCompromiso[1], vm.listDataHistoricoEA[0].NivelCompromiso) }}%</p>
@@ -358,8 +341,8 @@
                                         <!--FILA 5 RECUADRO 1 Y 2 COLABORACION-->
                                         <div class="mt-3 row tablaimpulsores-der">
                                             <div class="col-5 p-0 ml-1">
-                                                <div @*class="lluvia"*@ class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[1]) }}">
-                                                    <center><img @*src="~/img/ReporteoClima/lluvia.svg"*@ ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[1]) }}" class="m-2 w-icon-impulsores"></center>
+                                                <div class="{{ vm.setClase(vm.PorcentajeNivelDeColaboracion[1]) }}">
+                                                    <center><img ng-src="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[1]) }}" style="{{ vm.setIcono(vm.PorcentajeNivelDeColaboracion[1], 1) }}" class="m-2 w-icon-impulsores"></center>
                                                     <div class="clima-porcentaje robotoblack porcentaje-clima">
                                                         <p class="mb-n2 f-21">{{ vm.PorcentajeNivelDeColaboracion[1] }}%</p>
                                                         <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(vm.PorcentajeNivelDeColaboracion[1] - vm.listDataHistoricoEA[0].NivelColaboracion) }} f-17 mb-1">{{ vm.getPorcentDiff(vm.PorcentajeNivelDeColaboracion[1], vm.listDataHistoricoEA[0].NivelColaboracion) }}%</p>
@@ -389,7 +372,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="yellow-clima f-17 mb-1">HC:325</p>
                                                     </div>
@@ -398,7 +381,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="yellow-clima f-17 mb-1">HC:325</p>
                                                     </div>
@@ -410,7 +393,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -419,7 +402,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -431,7 +414,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -440,7 +423,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -452,7 +435,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -461,7 +444,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -473,7 +456,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -482,7 +465,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -494,7 +477,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -503,7 +486,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -527,7 +510,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="yellow-clima f-17 mb-1">HC:325</p>
                                                     </div>
@@ -536,7 +519,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="yellow-clima f-17 mb-1">HC:325</p>
                                                     </div>
@@ -548,7 +531,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -557,7 +540,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -569,7 +552,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -578,7 +561,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -590,7 +573,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -599,7 +582,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -611,7 +594,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -620,7 +603,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -632,7 +615,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -641,7 +624,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -665,7 +648,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="yellow-clima f-17 mb-1">HC:325</p>
                                                     </div>
@@ -674,7 +657,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="yellow-clima f-17 mb-1">HC:325</p>
                                                     </div>
@@ -686,7 +669,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -695,7 +678,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -707,7 +690,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -716,7 +699,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -728,7 +711,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -737,7 +720,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -749,7 +732,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="nublado">
                                                     <center><img src="~/img/ReporteoClima/nublado.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>
@@ -758,7 +741,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="solnube">
                                                     <center><img src="~/img/ReporteoClima/solnube.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -770,7 +753,7 @@
                                             <div class="col-5 p-0 ml-1">
                                                 <div class="sol">
                                                     <center><img src="~/img/ReporteoClima/sol.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="red-clima f-17 mb-1">-15%</p>
                                                     </div>
@@ -779,7 +762,7 @@
                                             <div class="col-5 p-0 ml-2 mr-1">
                                                 <div class="lluvia">
                                                     <center><img src="~/img/ReporteoClima/lluvia.svg" class="m-2 w-icon-impulsores"></center>
-                                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                    <div class="clima-porcentaje robotoblack porcentaje-clima" style="min-height:70px;">
                                                         <p class="mb-n2 f-21">77.33%</p>
                                                         <p class="green-clima f-17 mb-1">+10%</p>
                                                     </div>

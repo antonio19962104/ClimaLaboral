@@ -1010,6 +1010,16 @@
     <Content Include="img\ReporteoClima\ejecutivos2.png" />
     <Content Include="img\ReporteoClima\icon-right.png" />
     <Content Include="img\ReporteoClima\falta.png" />
+    <Content Include="img\ReporteoClima\Iconos\lluvia-icono.png" />
+    <Content Include="img\ReporteoClima\Iconos\lluvia.png" />
+    <Content Include="img\ReporteoClima\Iconos\nube-icono.png" />
+    <Content Include="img\ReporteoClima\Iconos\nubes.png" />
+    <Content Include="img\ReporteoClima\Iconos\nublado.png" />
+    <Content Include="img\ReporteoClima\Iconos\sol-icono.png" />
+    <Content Include="img\ReporteoClima\Iconos\sol-nube.png" />
+    <Content Include="img\ReporteoClima\Iconos\sol.png" />
+    <Content Include="img\ReporteoClima\Iconos\solnube-icono.png" />
+    <Content Include="img\ReporteoClima\Iconos\solnube.png" />
     <Content Include="img\ReporteoClima\indicador-lluvia.png" />
     <Content Include="img\ReporteoClima\indicador-nube.png" />
     <Content Include="img\ReporteoClima\indicador-sol.png" />

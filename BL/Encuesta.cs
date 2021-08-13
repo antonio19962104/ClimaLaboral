@@ -60,7 +60,7 @@ namespace BL
                     var query = context.Encuesta.SqlQuery("SELECT *  FROM Encuesta " +
                         " INNER JOIN TipoEstatus on TipoEstatus.IdEstatus = Encuesta.IdEstatus " +
                         " INNER JOIN TipoEncuesta on TipoEncuesta.IdTipoEncuesta = Encuesta.IdTipoEncuesta " +
-                        " where Encuesta.IdEstatus ={0}", idEstatusActivo);
+                        " where Encuesta.IdEstatus ={0} and Encuesta.idEncuesta != 1", idEstatusActivo); // se cambia la consulta, todas menos la de clima Laboral
                     if (query != null)
                     {
                         foreach (var obj in query)
@@ -75,26 +75,75 @@ namespace BL
                             else
                             { encuestas.Enviada = 0; }
 
-
                             encuestas.UID = obj.UID;
                             encuestas.Nombre = obj.Nombre;
+                            //Se agrega informacion para la consulta de la nueva lista de Encuesta -------  CAMOS 20072021
+                            encuestas.BasesDeDatos = new ML.BasesDeDatos();
+                            encuestas.Company = new ML.Company();
+                            encuestas.TipoOrden = new ML.TipoOrden();
+                            encuestas.BasesDeDatos = obj.IdBasesDeDatos != null ?  BasesDeDatos.getBDbyIdEncuesta((Int32)obj.IdBasesDeDatos) : null;
+                            encuestas.Company = Company.getCompanyById((Int32)obj.IdEmpresa);
+                            encuestas.TipoOrden = obj.IdTipoOrden != null ? BL.TipoOrden.getTipoOrdenById((Int32)obj.IdTipoOrden) : null;
+                            encuestas.periodo = getPeriodoByIdencuesta(obj.IdEncuesta, (Int32)obj.IdBasesDeDatos);
+                            encuestas.FechaInicio = obj.FechaInicio;
+                            encuestas.FechaFin = obj.FechaFin;
                             encuestas.TipoEncuesta = obj.TipoEncuesta.NombreTipoDeEncuesta;
                             encuestas.TipoEstatus = new ML.TipoEstatus();
                             encuestas.TipoEstatus.IdEstatus = Convert.ToInt32(obj.IdEstatus);
                             encuestas.TipoEstatus.Descripcion = obj.TipoEstatus.Descripcion;
                             encuestas.IdTipoEncuesta = obj.TipoEncuesta.IdTipoEncuesta;
+                            encuestas.FechaHoraCreacion = (DateTime)obj.FechaHoraCreacion;
+                            encuestas.resumen =obj.IdBasesDeDatos != null ? GetDataEncuesta(obj.IdEncuesta,(Int32)obj.IdBasesDeDatos):null;
+                            if (obj.FechaHoraModificacion != null)
+                            {
+                                encuestas.FechaHoraModificacion = (DateTime)obj.FechaHoraModificacion;
+                            }                            
                             result.ListadoDeEncuestas.Add(encuestas);
                             result.Correct = true;
                         }
                     }
-                    var queryClima = context.ConfigClimaLab.ToList();
+
+                    ///Se consulta solo la de Clima Laboral con sus configuraciones Camos 20/07/2021
+                    var queryClima = context.ConfigClimaLab.Where(o => o.IdEncuesta == 1 && o.PeriodoAplicacion != null).ToList();
                     foreach (var item in queryClima)
                     {
                         ML.Encuesta encuestas = new ML.Encuesta();
                         encuestas.Nombre = "Clima Laboral";
-                        encuestas.BasesDeDatos.IdBaseDeDatos = item.IdBaseDeDatos;
+                        encuestas.IdEncuesta = (Int32)item.IdEncuesta;
+
+                        //Consulta si ya la envíe
+                        var enviada = context.EstatusEmail.SqlQuery("SELECT * FROM ESTATUSEMAIL WHERE IDENCUESTA = {0}", item.IdEncuesta).ToList();
+                        if (enviada.Count > 0)
+                        { encuestas.Enviada = 1; }
+                        else
+                        { encuestas.Enviada = 0; }
+
+                        //encuestas.UID = obj.UID;                        
+                        //Se agrega informacion para la consulta de la nueva lista de Encuesta -------  CAMOS 20072021
+                        encuestas.BasesDeDatos = new ML.BasesDeDatos();
+                        encuestas.Company = new ML.Company();
+                        encuestas.TipoOrden = new ML.TipoOrden();
+                        encuestas.BasesDeDatos = item.IdBaseDeDatos != null ? BasesDeDatos.getBDbyIdEncuesta((Int32)item.IdBaseDeDatos) : null;
+                        encuestas.Company = Company.getCompanyById(32);
+                        encuestas.TipoOrden = null;
+                        encuestas.periodo = (Int32)item.PeriodoAplicacion;
+                        encuestas.FechaInicio = item.FechaInicio;
+                        encuestas.FechaFin = item.FechaFin;
+                        encuestas.TipoEncuesta = "Clima Laboral";
+                        encuestas.TipoEstatus = new ML.TipoEstatus();
+                        //encuestas.TipoEstatus.IdEstatus = Convert.ToInt32(obj.IdEstatus);
+                        //encuestas.TipoEstatus.Descripcion = obj.TipoEstatus.Descripcion;
+                        encuestas.IdTipoEncuesta = 4;
+                        //encuestas.FechaHoraCreacion ="";
+                        encuestas.resumen = GetDataEncuesta((Int32)item.IdEncuesta, (Int32)item.IdBaseDeDatos);
+                        //if (obj.FechaHoraModificacion != null)
+                        //{
+                        //    encuestas.FechaHoraModificacion = (DateTime)obj.FechaHoraModificacion;
+                        //}
                         result.ListadoDeEncuestas.Add(encuestas);
+                       
                     }
+                        result.ListadoDeEncuestas.Sort((x,y) => string.Compare(x.IdEncuesta.ToString(),y.IdEncuesta.ToString()));
                 }
             }
             catch (Exception aE)
@@ -5303,6 +5352,7 @@ namespace BL
 
                                     }
                                     break;
+
                             }
 
                             /// Se termina alta de respuestas Enfoque Empresas
@@ -5312,14 +5362,15 @@ namespace BL
 
                             if (obj.Competencia.IdCompetencia <= 12)
                             {
-                                ///Para crear la pregunta de Enfoque Area, es necesario que la respuesta sea de tipo Likert Doble     ///
-                                ///Define Aldo 12/07/2021 104000
+                                int idpadreEA = obj.IdPreguntaPadre;//obj.IdPreguntaPadre + 86;
+                                                                    // Se inserta la pregunta Enfoque Area
+                                                                    ///Para crear la pregunta de Enfoque Area, es necesario que la respuesta sea de tipo Likert Doble     ///
+                                                                    ///Define Aldo 12/07/2021 104000
                                 if (obj.TipoControl.IdTipoControl == 12)
                                 {
                                     //al id padre EE se le suma 86 para obtener el IdPadre de EA
                                     //Se cambia a id padre original por asi convenir al reporte -- Jose 05/06/2021
-                                    int idpadreEA = obj.IdPreguntaPadre;//obj.IdPreguntaPadre + 86;
-                                                                        // Se inserta la pregunta Enfoque Area
+
                                     var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
                                         "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
                                             " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, obj.Pregunta,
@@ -5873,7 +5924,7 @@ namespace BL
                                                 }
 
                                             }
-                                            break;                                          
+                                            break;
                                     }
                                 }
 
@@ -5882,6 +5933,30 @@ namespace BL
                                 /// Se termina el alta de respuestas
                                 /// se valido el tipo de respuestas y se insertan las repuestas por default
                                 /// CAMOS  24/06/2021
+
+                            }
+                            else {
+                                if (obj.TipoControl.IdTipoControl == 12)
+                                {
+                                    int idpadreEA = obj.IdPreguntaPadre;
+                                    var queryPreguntasEA = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
+                                       "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
+                                           " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, obj.Pregunta,
+                                           obj.Valoracion, obj.Competencia.IdCompetencia, obj.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, obj.Seccion, idpadreEA, DateTime.Now,
+                                           usuarioCreacion, "Alta Encuesta", idTipoControl);
+                                    //Obtiene maximo de pregunta EA
+                                    int idPreguntaEA = context.Preguntas.Max(q => q.IdPregunta);
+                                    //Tabla Encuesta Pregunta EA
+                                    var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
+                                        "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
+                                        "VALUES({0},{1},{2},{3},{4})", idEncuesta, idPreguntaEA, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                    // se inserta sus respuestas de Likert
+                                    foreach (var item12 in RespuestasLikert)
+                                    {
+                                        var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                              "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEA, 1, DateTime.Now, usuarioCreacion, "Alta Encuesta");
+                                    }
+                                }
 
                             }
                             ///SI tiene Categorias la pregunta se insertan
@@ -6373,6 +6448,33 @@ namespace BL
                                             var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
                                                 "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
                                                 "VALUES({0},{1},{2},{3},{4})", Encuesta.IdEncuesta, idPreguntaEA, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                        }
+                                    }
+                                    else// se valida si en la competencia tiene tipo de respuesta likert
+                                    {
+                                        if (item.TipoControl.IdTipoControl == 12)
+                                        {
+                                            // se guarda enfoque Area
+                                            int idpadreEA = item.IdPreguntaPadre;
+                                            /// Se inserta la pregunta Enfoque Area ///                                    
+                                            var queryPreguntasEAN = context.Database.ExecuteSqlCommand("INSERT INTO Preguntas " +
+                                                "(idEncuesta,Pregunta,Valoracion,IdCompetencia,IdEstatus,Enfoque,IdEnfoque,Seccion,IdPreguntaPadre,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,IdTipoControl)" +
+                                                    " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", idEncuesta, item.Pregunta,
+                                                    item.Valoracion, item.Competencia.IdCompetencia, item.Obligatoria == false ? 1 : 2, "Enfoque Area", 2, item.Seccion, idpadreEA, DateTime.Now,
+                                                    UsuarioModificacion, "Edita Encuesta", idTipoControl);
+                                            //Obtiene maximo de pregunta EA
+                                            int idPreguntaEAN = context.Preguntas.Max(q => q.IdPregunta);
+                                            //Tabla Encuesta Pregunta EA
+                                            var queryEncuestaPreguntaEA = context.Database.ExecuteSqlCommand("INSERT INTO EncuestaPregunta " +
+                                                "(IdEncuesta, IdPregunta, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) " +
+                                                "VALUES({0},{1},{2},{3},{4})", Encuesta.IdEncuesta, idPreguntaEAN, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                            // se inserta sus respuestas de Likert
+                                            foreach (var item12 in RespuestasLikert)
+                                            {
+                                                var queriAddNewAnswer12 = context.Database.ExecuteSqlCommand("INSERT INTO Respuestas (Respuesta,IdPregunta,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion) " +
+                                                      "VALUES ({0},{1},{2},{3},{4},{5})", item12, idPreguntaEAN, 1, DateTime.Now, UsuarioModificacion, "Alta Encuesta");
+                                            }
+
                                         }
                                     }
                                     /// Se agrega el alta de respuestas para Enfoque Empresa  05/07/2021
@@ -7092,6 +7194,37 @@ namespace BL
                     break;
             }
             return template;
+        }
+        /// <summary>
+        /// Metodo para obtener el periodo segun la encuesta y su base de datos CAMOS 20/07/2021
+        /// </summary>
+        /// <param name="idEncuesta"></param>
+        /// <param name="idBaseDeDatos"></param>
+        /// <returns>Regresa un valor numerico con el periodo de la encuesta</returns>
+        public static int getPeriodoByIdencuesta(int idEncuesta,int idBaseDeDatos)
+        {
+            int periodo = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.ConfigClimaLab.Where(o => o.IdEncuesta == idEncuesta && o.IdBaseDeDatos == idBaseDeDatos).ToList();
+                    if (query != null)
+                    {
+                        foreach (var item in query)
+                        {
+                            periodo = (Int32)item.PeriodoAplicacion;
+                        }
+                    }
+                }
+
+            }
+            catch (Exception aE)
+            {
+                return 0;                
+            }
+            return periodo;
+
         }
     }
 }

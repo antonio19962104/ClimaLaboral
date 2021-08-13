@@ -3515,5 +3515,14 @@ namespace PL.Controllers
             return Json(BL.Encuesta.SendEmailsCustom(emailsEncuesta), JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Se rediseña el cargado de Encuestas "GetAll()" Camos 19/07/2021
+        /// </summary>
+        /// <returns>Un listado mas dinamico sin carrusel</returns>
+        public ActionResult GetAllN()
+        {
+            var result = BL.Encuesta.getEncuestas();
+            return View(result);
+        }
     }
 }
