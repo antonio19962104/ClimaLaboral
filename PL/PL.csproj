@@ -1333,6 +1333,7 @@
     <Content Include="scripts\ReporteoClima\html2pdf.bundle.min.js" />
     <Content Include="scripts\ReporteoClima\jquery.multi-select.js" />
     <Content Include="scripts\ReporteoClima\jspdf.js" />
+    <Content Include="scripts\ReporteoClima\jspdf.min.js" />
     <Content Include="scripts\ReporteoClima\kendo.all.min.js" />
     <Content Include="scripts\ReporteoClima\kendo.multiselect.min.js" />
     <Content Include="scripts\ReporteoClima\LinQ.js" />

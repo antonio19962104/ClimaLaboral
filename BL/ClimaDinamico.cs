@@ -890,6 +890,8 @@ namespace BL
         /// Obtiene el listado de respuestas para una pregunta
         /// </summary>
         /// <param name="IdPregunta"></param>
+        /// <param name="IdEmpleado"></param>
+        /// <param name="IdEncuesta"></param>
         /// <returns>Listado del model de respuestas por Id de pregunta</returns>
         public static List<ML.Respuestas> GetRespuestasByIdPreguntaRB(int IdPregunta, int IdEncuesta, int IdEmpleado)
         {

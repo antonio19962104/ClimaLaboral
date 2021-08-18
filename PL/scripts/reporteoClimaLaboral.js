@@ -4112,21 +4112,23 @@ function GetDashBoard() {
                     switch (vm.criterioBusquedaSeleccionado.Id) {
                         case 1:
                             vm.seccionarArrayEERDinamico();//se obtienen solo el string de carga Enfoque Empresa                            
-                            vm.seccionarArrayEARDinamico();//se obtienen solo el string de carga Enfoque Area
-                            //cargaJson
-                            //cargaJsonEA
-                            //vm.enfoqueTexto
-                            //vm.UNSeleccionada
-                            //vm.muestraDinamicoEnfoque();
+                            vm.seccionarArrayEARDinamico();//se obtienen solo el string de carga Enfoque Area                          
                             break;
                         case 2:
+                            vm.seccionarArrayEERDinamico();//se obtienen solo el string de carga Enfoque Empresa                            
+                            vm.seccionarArrayEARDinamico();//se obtienen solo el string de carga Enfoque Area
                             break;
                         case 3:
+                            vm.seccionarArrayEERDinamico();//se obtienen solo el string de carga Enfoque Empresa                            
+                            vm.seccionarArrayEARDinamico();//se obtienen solo el string de carga Enfoque Area
                             break;
                         case 4:
+                            vm.seccionarArrayEERDinamico();//se obtienen solo el string de carga Enfoque Empresa                            
+                            vm.seccionarArrayEARDinamico();//se obtienen solo el string de carga Enfoque Area
                             break;
                         default:
-
+                            vm.seccionarArrayEERDinamico();//se obtienen solo el string de carga Enfoque Empresa                            
+                            vm.seccionarArrayEARDinamico();//se obtienen solo el string de carga Enfoque Area
                             break;
 
                     }

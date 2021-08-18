@@ -14,7 +14,11 @@ namespace BL
 {
     public class ReporteClimaDinamico
     {
-        // numero de encuestas terminadas
+        /// <summary>
+        /// Obtiene el numero de encuestas terminadas
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con la cantidad de encuestas terminadas</returns>
         public static double getEncuestasTerminadas(ML.modelReporte aModel)
         {
             try
@@ -37,7 +41,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // numero de encuestas esperadas
+        /// <summary>
+        /// Obtiene el numero de encuestas esperadas
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con la cantidad de encuestas esperadas</returns>
         public static double getEncuestasEsperadas(ML.modelReporte aModel)
         {
             try
@@ -60,7 +68,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // porcentaje de participacion en la encuesta
+        /// <summary>
+        /// Obtiene el porcentaje de participacion en una encuesta
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con el porcentaje de participacion</returns>
         public static double getPorcentajeParticipacion(ML.modelReporte aModel)
         {
             try
@@ -72,10 +84,14 @@ namespace BL
             catch (Exception aE)
             {
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
-                return 0; ;
+                return 0;
             }
         }
-        // numero de respuestas afirmativas por pregunta
+        /// <summary>
+        /// Obtiene el numero de respuestas afirmativas de una determinada pregunta
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con la cantidad de respuestas afirmativas de una pregunta</returns>
         public static double getAfirmativasByIdPregunta(ML.modelReporte aModel)
         {
             try
@@ -98,7 +114,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // porcentaje de respuestas afirmativas por id de pregunta
+        /// <summary>
+        /// Obtiene el porcentaje de respuestas afirmativas de una determinada pregunta
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double del porcentaje de respuestas afirmativas de una pregunta</returns>
         public static double getPorcentajeAfirmativasByIdPregunta(ML.modelReporte aModel)
         {
             try
@@ -114,7 +134,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // numero de respuestas afirmativas por competencia
+        /// <summary>
+        /// Obtiene el numero de respuestas afirmativas para una determinada competencia
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con la cantidad de respuestas afirmativas de una determinada competencia</returns>
         public static double getAfirmativasByCompetencia(ML.modelReporte aModel)
         {
             try
@@ -137,7 +161,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // porcentaje de respuestas afirmativas por competencia
+        /// <summary>
+        /// Obtiene el porcentaje de respuestas afirmativas para una determinada competencia
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con el porcentaje de respuestas afirmativas de una determinada competencia</returns>
         public static double getPorcentajeAfirmativasByCompetencia(ML.modelReporte aModel)
         {
             try
@@ -153,7 +181,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // numero de respuestas afirmativas por categoria-subcategoria
+        /// <summary>
+        /// Obtiene el numero de respuestas afirmativas de una determinada Categoria
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con la catidad de respuestas afirmativas de una determinada Categoria</returns>
         public static double getAfirmativasByCategoria(ML.modelReporte aModel)
         {
             try
@@ -176,7 +208,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // porcentaje de respuestas afirmativas por categoria-subcategoria
+        /// <summary>
+        /// Obtiene el porcentaje de respuestas afirmativas de una determinada Categoria
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con el porcentaje de respuestas afirmativas de una determinada categoria</returns>
         public static double getPorcentajeAfirmativasByCategoria(ML.modelReporte aModel)
         {
             try
@@ -217,7 +253,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // reactivos mejor clasificados
+        /// <summary>
+        /// Obtiene los 5 reactivos mejor clasificados
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>Listado con los 5 mejores reactivos de la encuesta</returns>
         public static List<ML.modelMejoresPeores> getMejores(ML.modelReporte aModel)
         {
             try
@@ -249,7 +289,11 @@ namespace BL
                 return new List<ML.modelMejoresPeores>();
             }
         }
-        // reactivos peor clasificados
+        /// <summary>
+        /// Obtiene los 5 reactivos peor clasificados
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>Litado con los 5 peores reactivos de la encuesta</returns>
         public static List<ML.modelMejoresPeores> getPeores(ML.modelReporte aModel)
         {
             try
@@ -281,7 +325,11 @@ namespace BL
                 return new List<ML.modelMejoresPeores>();
             }
         }
-        // reactivos con mayor-menor crecimiento
+        /// <summary>
+        /// Obtiene los reactivos con mayor crecimiento respecto al historico
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>Listado con los reactivos con mayor crecimiento</returns>
         public static List<ML.modelCrecimientoReactivo> getCrecimiento(ML.modelReporte aModel)
         {
             try
@@ -316,7 +364,11 @@ namespace BL
                 return new List<ML.modelCrecimientoReactivo>();
             }
         }
-        // calificacion global (promedio de 66 reactivos)
+        /// <summary>
+        /// Obtiene el promedio general de 66 reactivos
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con el promedio general de 66 reactivos</returns>
         public static double getPromedio66R(ML.modelReporte aModel)
         {
             try
@@ -342,6 +394,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
+        /// <summary>
+        /// Obtiene el promedio general de 86 reactivos
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>double con el promedio general de 66 reactivos</returns>
         public static double getPorcentaje86Reactivos(ML.modelReporte aModel)
         {
             try
@@ -367,7 +424,11 @@ namespace BL
             }
             return aModel.result.TruncateNumber();
         }
-        // reporteo de la competencia de permanencia
+        /// <summary>
+        /// Obtiene los porcentajes para el reporte de Permanencia/Abandono
+        /// </summary>
+        /// <param name="aModel"></param>
+        /// <returns>Listado con los datos del reporte Permanencia/Abandono</returns>
         public static List<ML.modelPermanenciaAbandono> getDataPermanenciaAbandono(ML.modelReporte aModel)
         {
             try
@@ -414,7 +475,8 @@ namespace BL
         /// </summary>
         /// <param name="aIdEncuesta"></param>
         /// <param name="aNumPreguntas"></param>
-        /// <returns></returns>
+        /// <param name="aIdEnfoque"></param>
+        /// <returns>double con la cantidad de preguntas activas</returns>
         public static double getNumPreguntasActivasByEncuesta(int aIdEncuesta, int aNumPreguntas, int aIdEnfoque)
         {
             try
@@ -434,7 +496,12 @@ namespace BL
                 return 0;
             }
         }
-
+        /// <summary>
+        /// Valida si una pregunta esta activa en la configuracion de la encuesta
+        /// </summary>
+        /// <param name="aIdPregunta"></param>
+        /// <param name="aIdEncuesta"></param>
+        /// <returns>true si la pregunta esta activa, false en el caso contrario</returns>
         public static bool isActivePregunta(int aIdPregunta, int aIdEncuesta)
         {
             try
@@ -453,7 +520,12 @@ namespace BL
             }
             return true;
         }
-
+        /// <summary>
+        /// Valida si una competencia esta activa en la configuracion de la encuesta
+        /// </summary>
+        /// <param name="aIdCompetencia"></param>
+        /// <param name="aIdEncuesta"></param>
+        /// <returns>true si la competencia esta activa, false en el caso contrario</returns>
         public static bool isActiveCompetencia(int aIdCompetencia, int aIdEncuesta)
         {
             try
@@ -472,7 +544,12 @@ namespace BL
             }
             return true;
         }
-
+        /// <summary>
+        /// Valida si una categoria esta activa en la configuracion de la encuesta
+        /// </summary>
+        /// <param name="aIdCategoria"></param>
+        /// <param name="aidEncuesta"></param>
+        /// <returns></returns>
         public static bool isActiveCategoria(int aIdCategoria, int aidEncuesta)
         {
             try

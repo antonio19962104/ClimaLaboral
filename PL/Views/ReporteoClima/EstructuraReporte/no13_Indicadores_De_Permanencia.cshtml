@@ -14,14 +14,14 @@
                                 <div class="row mb-5 mr-1 ml-1 bg-gris">
                                     <div ng-repeat="item in vm.indicadoresPermanenciaAFM" class="col px-0 px-sm-1">
                                         <center>
-                                            <img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
+                                            @*<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">*@
                                             <p class="label-top-graphic">{{ item.Porcentaje }}%</p>
-                                            <div class="bar" style="max-height: {{ item.Porcentaje * 3 }}px; overflow: hidden; min-height: 30px;">
-                                                <div class="bar-progress" style="height: 0px;">
+                                            <div class="bar" style="min-height: {{ item.Porcentaje * 3 }}px; overflow: hidden;">
+                                                <div class="bar-progress" style="height: 0px; padding-bottom:{{ item.Porcentaje * .7 }}px;">
                                                 </div>
                                                 <p class="label-top-graphic2">{{ item.Frecuencia }}</p>
-                                                <div class="bar-progress2" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 1.3 }}px;"></div>
-                                                <div class="bar-progress2" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * .7 }}px;"></div>
+                                                <div class="bar-progress2" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 1.8 }}px;"></div>
+                                                <div class="bar-progress2" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * 1.9 }}px;"></div>
                                             </div>
                                             <p class="text-graph">{{ item.Pregunta }}</p>
                                         </center>
@@ -35,10 +35,10 @@
                             <center>
                                 <div class="col-3">
                                     <div class="row">                                        
-                                            <div style="width: 25px;height: 25px;background: #6259bf;margin-top: 10px;float: left;"></div>
-                                            <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
-                                            <div style="width: 25px;height: 25px;background: #49286b;margin-top: 10px;float: left;"></div>
-                                            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                            <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #6259bf;margin-top: 10px;float: left;"></div>
+                                            <div class="ml-2 mr-3 margin-top-nuevo" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                            <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #49286b;margin-top: 10px;float: left;"></div>
+                                            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 margin-top-nuevo">HC</div>
                                             @*<div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
                                             <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>*@
                                     </div>
@@ -46,7 +46,7 @@
                             </center>
                         </div>
                     </div>
-                    <div class="row mt-5">
+                    <div class="row mt-5 nuevomt">
                         <div class="col-sm-12">
                             <div class="graph-wrapper grafica-dejar">
                                 <center>
@@ -56,14 +56,14 @@
                                 <div class="row mb-5 mr-1 ml-1 bg-gris">
                                     <div ng-repeat="item in vm.indicadoresAbandonoAFM" class="col px-0 px-sm-1">
                                         <center>
-                                            <img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
+                                            @*<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">*@
                                             <p class="label-top-graphic-blue">{{ item.Porcentaje }}%</p>
-                                            <div class="bar2" style="max-height: {{ item.Porcentaje * 3 }}px; overflow: hidden; min-height: 30px;">
-                                                <div class="bar-progress3" style="height: 0px;">
+                                            <div class="bar2" style="min-height: {{ item.Porcentaje * 3 }}px; overflow: hidden;">
+                                                <div class="bar-progress3" style="height: 0px; padding-bottom:{{ item.Porcentaje * .7 }}px;">
                                                 </div>
                                                 <p class="label-top-graphic-blue2">{{ item.Frecuencia }}</p>
-                                                <div class="bar-progress4" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 1.3 }}px;"></div>
-                                                <div class="bar-progress4" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * .7 }}px;"></div>
+                                                <div class="bar-progress4" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 1.8 }}px;"></div>
+                                                <div class="bar-progress4" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * 1.9 }}px;"></div>
                                             </div>
                                             <p class="text-graph">{{ item.Pregunta }}</p>
                                         </center>
@@ -76,23 +76,23 @@
                         <div class="col-12">
                             <center>
                                 <div class="col-4">
-                                    <div class="row">
-                                        <div style="width: 25px;height: 25px;background: #87c2ee;margin-top: 10px;float: left;"></div>
-                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
-                                        <div style="width: 25px;height: 25px;background: #078dbd;margin-top: 10px;float: left;"></div>
-                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
-                                        <div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
-                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                    <div class="row mb-2">
+                                        <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #87c2ee;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3 margin-top-nuevo" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #078dbd;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 margin-top-nuevo">HC</div>
+                                        <div class="margin-top-nuevo" ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="margin-top-nuevo ml-2 mr-3">PROM GRAL ANTERIOR</div>
                                     </div>
                                 </div>
                             </center>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center mt-5">
+                    @*<div class="d-flex justify-content-center mt-5">
                         <div class="col-12 p-0 m-0">
                             <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>

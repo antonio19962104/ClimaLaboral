@@ -5,7 +5,7 @@
             <div id="tab-bienestar-ee" class="container-fluid px-lg-5">
                 <h2 class="robotothin mb-2 mt-n1">FACTOR PSICOSOCIAL ENFOQUE EMPRESA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
                 <!--#region switcheo comparativo-->
-                <div class="form-group">
+                <div class="form-group" id="verEA">
                     <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
                         <label class="control-label">Ver comparativo de enfoques</label>
                         <!-- Rounded switch -->
@@ -76,7 +76,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergePsicoEE" class="borde-tabla-titulo">
+                                                <tr id="mergePsicoEE" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -104,7 +104,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergeSocialEE" class="borde-tabla-titulo">
+                                                <tr id="mergeSocialEE" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -165,11 +165,11 @@
                             </div>
                         </div>
                     </div><!--.card-block-->
-                    <div class="d-flex justify-content-center mt-5">
+                    @*<div class="d-flex justify-content-center mt-5 mt-img-indicadores">
                         <div class="col-12 p-0 m-0">
                             <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                         </div>
-                    </div>
+                    </div>*@
                 </div><!--.card-->
 
                 <hr class="clearfix my-5">
@@ -237,7 +237,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergePsicoEA" class="borde-tabla-titulo">
+                                                <tr id="mergePsicoEA" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -265,7 +265,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergeSocialEA" class="borde-tabla-titulo">
+                                                <tr id="mergeSocialEA" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -325,11 +325,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center mt-5">
+                        @*<div class="d-flex justify-content-center mt-5 mt-img-indicadores">
                             <div class="col-12 p-0 m-0">
                                 <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                             </div>
-                        </div>
+                        </div>*@
                     </div><!--.card-block-->
                 </div><!--.card-->
 
@@ -399,7 +399,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergePsicoEE" class="borde-tabla-titulo">
+                                                <tr id="mergePsicoEE" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -427,7 +427,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergeSocialEE" class="borde-tabla-titulo">
+                                                <tr id="mergeSocialEE" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -488,11 +488,11 @@
                             </div>
                         </div>
                     </div><!--.card-block-->
-                    <div class="d-flex justify-content-center mt-5">
+                    @*<div class="d-flex justify-content-center mt-5 mt-img-indicadores">
                         <div class="col-12 p-0 m-0">
                             <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                         </div>
-                    </div>
+                    </div>*@
                 </div><!--.card-->
 
                 <hr class="clearfix my-5">
@@ -561,7 +561,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergePsicoEA" class="borde-tabla-titulo">
+                                                <tr id="mergePsicoEA" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -589,7 +589,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergeSocialEA" class="borde-tabla-titulo">
+                                                <tr id="mergeSocialEA" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -649,11 +649,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center mt-5">
+                        @*<div class="d-flex justify-content-center mt-5 mt-img-indicadores">
                             <div class="col-12 p-0 m-0">
                                 <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                             </div>
-                        </div>
+                        </div>*@
                     </div><!--.card-block-->
                 </div><!--.card-->
 
@@ -723,7 +723,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergePsicoEE" class="borde-tabla-titulo">
+                                                <tr id="mergePsicoEE" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -751,7 +751,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergeSocialEE" class="borde-tabla-titulo">
+                                                <tr id="mergeSocialEE" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -812,11 +812,11 @@
                             </div>
                         </div>
                     </div><!--.card-block-->
-                    <div class="d-flex justify-content-center mt-5">
+                    @*<div class="d-flex justify-content-center mt-5 mt-img-indicadores">
                         <div class="col-12 p-0 m-0">
                             <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                         </div>
-                    </div>
+                    </div>*@
                 </div><!--.card-->
 
                 <hr class="clearfix my-5">
@@ -885,7 +885,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergePsicoEA" class="borde-tabla-titulo">
+                                                <tr id="mergePsicoEA" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -913,7 +913,7 @@
                                                 </tr>
                                             </tbody>
                                             <thead class="table-dark mb-5">
-                                                <tr id="mergeSocialEA" class="borde-tabla-titulo">
+                                                <tr id="mergeSocialEA" class="borde-tabla-titulo quitar-borde">
                                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
                                                     <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                                 </tr>
@@ -973,11 +973,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-center mt-5">
+                        @*<div class="d-flex justify-content-center mt-5 mt-img-indicadores">
                             <div class="col-12 p-0 m-0">
                                 <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
                             </div>
-                        </div>
+                        </div>*@
                     </div><!--.card-block-->
                 </div><!--.card-->
 
@@ -988,7 +988,7 @@
     </div>   
 </div><!--.content-wrap-->
         @*<td ng-repeat="item in vm.PorcentajePsicoSocialEE.slice(0, vm.numColumnas)" class="factor1">{{ item }}%</td>*@<!--meter los datos del array PorcentajePsicoSocialEE en cada numColumnas-->
-        <style>
+<style>
             .bienestarHistorico{
                 /*Padding de cero px para las filas que llevan historico*/
                 border-top: 1px solid black;
@@ -1000,4 +1000,10 @@
             th .bienestarHistorico{
                 padding: 0px;
             }
-        </style>
+            @@media(max-width: 1367px)
+            {
+                .table td, .table th {
+                    padding: 5px !important;
+                }
+            }
+</style>

@@ -4,134 +4,33 @@
         <div class="card">
             <div class="card-block">
                 <div class="p-0">
-                    <div class="row mt-5 mb-5 mr-5 ml-5 bg-gris">
+                    <div class="row mt-5 mb-5 mr-5 ml-5 bg-gris nuevomt">
                         <div class="col-sm scrolling-wrapper borde-grafica-indicadores ">
                             <center>
                                 <p class="robotobold borde-grafica-indicadoresp">Lo que me motiva a trabajar en la empresa</p>
                                 <i class="fa fa-caret-down yellow-clima f-40 icono-down-center"></i>
                             </center>
-                            <div class="graph-wrapper" style="text-align: -moz-center; text-align: -webkit-center">
+                            <div class="graph-wrapper" style="text-align:-moz-center;text-align:-webkit-center;min-height:620px;">
                                 <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
                                     <div ng-repeat="item in vm.auxData track by $index" class="col px-0 px-sm-1 mt-5">
                                         <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[6].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item1 tooltips" style="height: {{ item.objRespuestaFrecuncia[6].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[6].Respuesta }}</span> {{ item.objRespuestaFrecuncia[6].Frecuencia }}</div>
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[5].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item2 tooltips" style="height: {{ item.objRespuestaFrecuncia[5].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[5].Respuesta }}</span> {{ item.objRespuestaFrecuncia[5].Frecuencia }}</div>
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[4].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item3 tooltips" style="height: {{ item.objRespuestaFrecuncia[4].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[4].Respuesta }}</span> {{ item.objRespuestaFrecuncia[4].Frecuencia }}</div>
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[3].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item4 tooltips" style="height: {{ item.objRespuestaFrecuncia[3].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[3].Respuesta }}</span> {{ item.objRespuestaFrecuncia[3].Frecuencia }}</div>
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[2].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item5 tooltips" style="height: {{ item.objRespuestaFrecuncia[2].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[2].Respuesta }}</span> {{ item.objRespuestaFrecuncia[2].Frecuencia }}</div>
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[1].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item6 tooltips" style="height: {{ item.objRespuestaFrecuncia[1].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[1].Respuesta }}</span> {{ item.objRespuestaFrecuncia[1].Frecuencia }}</div>
-                                                <div ng-show="{{ item.objRespuestaFrecuncia[0].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item7 tooltips" style="height: {{ item.objRespuestaFrecuncia[0].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[0].Respuesta }}</span> {{ item.objRespuestaFrecuncia[0].Frecuencia }}</div>
+                                            <div class="bar-clasificacion2" style="min-height:17px;height: 500px; overflow:hidden;">
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[6].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item1 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[6].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[6].Respuesta }}</span> {{ item.objRespuestaFrecuncia[6].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[5].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item2 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[5].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[5].Respuesta }}</span> {{ item.objRespuestaFrecuncia[5].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[4].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item3 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[4].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[4].Respuesta }}</span> {{ item.objRespuestaFrecuncia[4].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[3].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item4 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[3].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[3].Respuesta }}</span> {{ item.objRespuestaFrecuncia[3].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[2].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item5 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[2].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[2].Respuesta }}</span> {{ item.objRespuestaFrecuncia[2].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[1].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item6 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[1].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[1].Respuesta }}</span> {{ item.objRespuestaFrecuncia[1].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[0].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica-item7 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[0].alto  }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[0].Respuesta }}</span> {{ item.objRespuestaFrecuncia[0].Frecuencia }}</div>
                                             </div>
                                             <p class="text-graph">{{ item.entidad }}</p>
                                         </center>
                                     </div>
-                                <!--
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 10px;">10</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 20px;">15</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 80px;">70</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 80px;">60</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 10px;">10</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 25px;">40</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 15px;">2</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 20px;">50</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 30px;">60</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 40px;">80</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 60px;">120</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 40px;">80</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 25px;">55</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 25px;">55</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 20px;">7</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 20px;">5</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 50px;">15</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 50px;">20</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 50px;">25</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 25px;">10</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 25px;">6</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 20px;">3</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 25px;">5</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 50px;">8</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 50px;">4</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 10px;">2</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 45px;">7</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 40px;">6</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 20px;">50</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 30px;">60</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 40px;">80</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 60px;">120</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 40px;">80</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 25px;">55</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 25px;">55</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 10px;">10</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 20px;">15</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 80px;">70</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 80px;">60</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 10px;">10</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 25px;">40</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 15px;">2</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    <div class="col px-0 px-sm-1 mt-5">
-                                        <center>
-                                            <div class="bar-clasificacion2" style="height: 240px;">
-                                                <div class="bar-progress4 w-100 grafica-item1" style="height: 20px;">7</div>
-                                                <div class="bar-progress4 w-100 grafica-item2" style="height: 20px;">5</div>
-                                                <div class="bar-progress4 w-100 grafica-item3" style="height: 50px;">15</div>
-                                                <div class="bar-progress4 w-100 grafica-item4" style="height: 50px;">20</div>
-                                                <div class="bar-progress4 w-100 grafica-item5" style="height: 50px;">25</div>
-                                                <div class="bar-progress4 w-100 grafica-item6" style="height: 25px;">10</div>
-                                                <div class="bar-progress4 w-100 grafica-item7" style="height: 25px;">6</div>
-                                            </div>
-                                            <p class="text-graph">Diseño y <br>Comunicación</p>
-                                        </center>
-                                    </div>
-                                    -->
-
                                 </div><!--.row-->
                             </div><!--.graph-wrapper-->
                         </div>
                     </div>
-                     <div class="d-flex justify-content-center mt-5">
+                     <div class="d-flex justify-content-center mt-5 nuevomt">
                           <img src="~/img/ReporteoClima/indicadores3.png" class="img-fluid mt-3 ml-5 mb-5">
                      </div>
                 </div>

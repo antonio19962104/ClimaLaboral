@@ -394,7 +394,7 @@ strong {
     background-color: transparent;
 }
 
-#content p { line-height: 1.8; }
+#content p { line-height: 1.7; }
 
 .content-wrap {
     position: relative;
@@ -1538,8 +1538,9 @@ input.bg-radio-black[type='radio']:checked:after {
 
 .bg-impulsores {
     background-color: #eeeeee;
-    min-height: 150px;
+    min-height: 106px;
     overflow: hidden;
+    padding-top: 1.3px
 }
 
 .icono-impulsores {
@@ -1558,9 +1559,21 @@ input.bg-radio-black[type='radio']:checked:after {
 
 .tablaimpulsores-izq {
     border-left: solid 2px #d2d2d1;
-    padding: 35px 40px;
-    height: 136px;
+    padding: 10px 40px;
+    height: 105px;
 }
+
+.f-15 {
+    font-size: 1rem;
+}
+
+.margin-reporte {
+    margin-top: .5rem !important;
+}
+.col-reporte{
+    width: 90%;
+}
+
 
 .grey-color {
     color: #676a6d;
@@ -1584,7 +1597,7 @@ input.bg-radio-black[type='radio']:checked:after {
 .tablaimpulsores-der {
     background-color: #eee;
     padding: 5px 10px;
-    min-height: 150px;
+    min-height: 105px;
 }
 
 .nublado{
@@ -1641,6 +1654,19 @@ input.bg-radio-black[type='radio']:checked:after {
     height: 36px;
 }
 
+.lluvia-png{
+    width: 30px!important;
+}
+.nube-png{
+    width: 40px!important;
+}
+.sol-nube-png{
+    width: 25px!important;
+}
+.sol-png{
+    width: 23px!important;
+}
+
 .porcentaje-clima {
     background-color: #FFF;
     width: 100%;
@@ -1648,6 +1674,7 @@ input.bg-radio-black[type='radio']:checked:after {
     margin-top: 5px;
     border: solid 3px #f0af42;
     border-radius: 5px;
+    min-height: 58px;
 }
 
 .f-13 {
@@ -1685,7 +1712,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
 
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
-    padding: 40px;
+    /*padding: 40px;*/
 
 }
 
@@ -2006,6 +2033,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
         text-align: -moz-center;       
       }
 
+
       .grafica-dejar {
         border: solid 2px #f0af42;
         padding-left: 20px;
@@ -2233,9 +2261,119 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
 }
 
 
+/***Ajustes de impresion****/
+.wrapper2 {
+    margin-left: 0px !important;
+    width: 842px !important;
+    height: 595px !important;
+    background-color: #ffffff !important;
+}
+
+.bg-white {
+    background-color: #FFFFFF;
+}
+
+.bg-grey {
+    background-color: #eeeeee;
+}
+
+.mejores-impresion {
+    padding: 10px 0;
+}
+
+.f9 {
+    font-size: .9 rem;
+}
+
+.mejores-p {
+    line-height: 1 !important;
+}
+
+.mejores-peores {
+    min-height: 125px;
+}
+
+.padding15 {
+    padding: 15px;
+}
+
+.fs14 {
+    font-size: 14px;
+}
+
+.parafos-mejores {
+    line-height: 16px!important;
+    height: 145px;
+    font-size: smaller;
+}
+
 /* ----------------------------------------------------------------
     Media Queries
 -----------------------------------------------------------------*/
+
+/*xl*/
+@media(min-width: 1367px) {
+    .bg-impulsores {
+        min-height: 175px;
+    }
+
+    .tablaimpulsores-der {
+        padding: 5px 10px;
+        min-height: 175px;
+    }
+
+    .tablaimpulsores-izq {
+        padding: 70px 40px;
+        height: 136px;
+    }
+
+    .f-15 {
+        font-size: 21px;
+    }
+
+    .margin-reporte {
+        margin-top: 3rem !important;
+    }
+
+    .col-reporte {
+        width: 100%;
+    }
+
+    .porcentaje-clima {
+        min-height: 70px;
+    }
+
+    .lluvia-png {
+        width: 60px !important;
+    }
+
+    .nube-png {
+        width: 87px !important;
+    }
+
+    .sol-nube-png {
+        width: 55px !important;
+    }
+
+    .sol-png {
+        width: 53px !important;
+    }
+    #content p {
+        line-height: 1.8;
+    }
+    .bg-impulsoresEx, .tablaimpulsores-derEx {
+        min-height: 150px !important;
+    }
+    .tablaimpulsores-izqEx {
+        padding: 30px 40px !important;
+    }
+}
+/*sm*/
+@media(max-width: 1368px){
+    .grafica-trabajar {
+        min-height: 450px;
+    }
+}
 
 @media(min-width: 2200px){
     #top-bar {
@@ -2375,11 +2513,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
     padding: 10px 2px;
     }
 
-    .tablaimpulsores-izq {
+    /*.tablaimpulsores-izq {
     border-left: none;
     padding: 10px 5px;
     font-size: 11px;
-    }
+    }*/
 
     .h3, h3 {
     font-size: 13px;
