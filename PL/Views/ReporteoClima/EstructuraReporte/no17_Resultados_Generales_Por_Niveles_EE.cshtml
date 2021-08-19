@@ -13,7 +13,7 @@
                             <div ng-show="vm.criterioBusquedaSeleccionado.Id > 1" class="graph-wrapper grafica-trabajar">
                                 <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
 
-                                    <div class="col px-0 px-sm-1" ng-repeat="item in vm.ComparativoGeneralPorNivelesEE.Data track by $index">
+                                    <div class="col px-0 px-sm-1 bar-estandarW" ng-repeat="item in vm.ComparativoGeneralPorNivelesEE.Data track by $index">
                                         <center>
                                             <p hidden>{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 2) }}%</p>
                                             <img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion"/>

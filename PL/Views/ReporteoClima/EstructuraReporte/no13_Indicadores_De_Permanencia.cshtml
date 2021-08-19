@@ -6,13 +6,13 @@
                 <div class="px-4">
                     <div class="row mt-4">
                         <div class="col-sm-12">
-                            <div class="graph-wrapper grafica-trabajar">
+                            <div class="graph-wrapper grafica-trabajarEx" style="height: 350px!important;">
                                 <center>
                                     <p class="titulo-grafica1 robotobold">Lo que me motiva a trabajar en la empresa<!--Positivo--></p><br><!--vm.indicadoresPermanenciaAFM-->
                                     <i class="fa fa-caret-down yellow-clima f-40 icono-down-center"></i>
                                 </center>
-                                <div class="row mb-5 mr-1 ml-1 bg-gris">
-                                    <div ng-repeat="item in vm.indicadoresPermanenciaAFM" class="col px-0 px-sm-1">
+                                <div class="row mb-5 mr-1 ml-1 bg-gris" style="min-height: 250px!important;">
+                                    <div ng-repeat="item in vm.indicadoresPermanenciaAFM" class="col px-0" style="max-width: 140px;">
                                         <center>
                                             @*<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">*@
                                             <p class="label-top-graphic">{{ item.Porcentaje }}%</p>
@@ -48,13 +48,13 @@
                     </div>
                     <div class="row mt-5 nuevomt">
                         <div class="col-sm-12">
-                            <div class="graph-wrapper grafica-dejar">
+                            <div class="graph-wrapper grafica-dejar" style="height: 350px!important;">
                                 <center>
                                     <p class="robotobold titulo-grafica2">Lo que me haría dejar la empresa<!--Negativo--></p><br><!--vm.indicadoresAbandonoAFM-->
                                     <i class="fa fa-caret-down text-black f-40 icono-down-center"></i>
                                 </center>
-                                <div class="row mb-5 mr-1 ml-1 bg-gris">
-                                    <div ng-repeat="item in vm.indicadoresAbandonoAFM" class="col px-0 px-sm-1">
+                                <div class="row mb-5 mr-1 ml-1 bg-gris" style="min-height: 250px!important;">
+                                    <div ng-repeat="item in vm.indicadoresAbandonoAFM" class="col px-0" style="max-width: 140px">
                                         <center>
                                             @*<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">*@
                                             <p class="label-top-graphic-blue">{{ item.Porcentaje }}%</p>
@@ -107,7 +107,7 @@
         margin-left:auto;
     }
     .pl-sm-1, .px-sm-1{
-    /*max-width: 300px !important;*/
-    min-width: 150px !important;
-}
+        /*max-width: 300px !important;*/
+        min-width: 150px;
+    }
 </style>

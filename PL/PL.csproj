@@ -1442,6 +1442,9 @@
     <Content Include="Views\Documentacion\Index.cshtml" />
     <Content Include="Views\Documentacion\docs.cshtml" />
     <Content Include="Views\Encuesta\ConfigurarEmails.cshtml" />
+    <Content Include="Views\ClimaDinamico\EncuestaPV.cshtml" />
+    <Content Include="Views\ClimaDinamico\IntroduccionPV.cshtml" />
+    <Content Include="Views\ClimaDinamico\ThanksVP.cshtml" />
     <None Include="Views\Encuesta\mi vista.cshtml" />
     <Content Include="Views\Encuesta\ValidacionModal.cshtml" />
     <Content Include="Views\Home\Busy.cshtml" />

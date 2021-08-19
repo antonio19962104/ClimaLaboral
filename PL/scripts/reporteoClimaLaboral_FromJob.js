@@ -88,7 +88,7 @@ function GetDashBoard() {
             vm.numColumnasEE = 0;
             vm.numColumnasEA = 0;
             vm.cuerpoPorEntidad =
-                '<div class="col px-0 px-sm-1">' +
+                '<div class="col px-0 px-sm-1 bar-estandarW">' +
                 '<center>' +
                 '<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">' +
                 '<p class="label-top-graphic-clasificacion">%</p>' +
@@ -2911,6 +2911,17 @@ function GetDashBoard() {
 
                         /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
                         if (vm.SeccionesReporte.Id == 25) {
+                            // Agrandar al vuelo las graficas de barras en resolucion > 1367
+                            if ($(window).width() > 1367 && vm.SeccionesReporte.Id >= 21) {
+                                var graficaBarras = $(".bar-clasificacion:visible");
+                                [].forEach.call(graficaBarras, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                });
+                                var graficaHC = $(".bar-progress4:visible");
+                                [].forEach.call(graficaHC, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                });
+                            }
                             var childs = document.getElementById("divPantalla25").childNodes;
                             var canvas = [];
                             [].forEach.call(childs, function (item) { item.style.display = "none"; });
@@ -2920,6 +2931,7 @@ function GetDashBoard() {
                                     childs[(index - 1)].style.display = "none";
                                 }
                                 childs[index].style.display = "";
+                                finalPaddingTop = 100;
                                 var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ }
                                     , function () {
                                     });
@@ -2951,6 +2963,17 @@ function GetDashBoard() {
                             }
                         }
                         if (vm.SeccionesReporte.Id == 26) {
+                            // Agrandar al vuelo las graficas de barras en resolucion > 1367
+                            if ($(window).width() > 1367 && vm.SeccionesReporte.Id >= 21) {
+                                var graficaBarras = $(".bar-clasificacion:visible");
+                                [].forEach.call(graficaBarras, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                });
+                                var graficaHC = $(".bar-progress4:visible");
+                                [].forEach.call(graficaHC, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                });
+                            }
                             var childs = document.getElementById("divPantalla26").childNodes;
                             var canvas = [];
                             [].forEach.call(childs, function (item) { item.style.display = "none"; });
@@ -2960,6 +2983,7 @@ function GetDashBoard() {
                                     childs[(index - 1)].style.display = "none";
                                 }
                                 childs[index].style.display = "";
+                                finalPaddingTop = 100;
                                 var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ }
                                     , function () {
                                     });
@@ -3048,7 +3072,7 @@ function GetDashBoard() {
                                 if ($(window).width() <= 1366) {
                                     var elem = document.getElementById(paginaActiva);
                                     document.getElementById("verEA").style.display = "none";
-                                    elem.getElementsByClassName("mt-img-indicadores")[0].classList.remove("mt-5");
+                                    // elem.getElementsByClassName("mt-img-indicadores")[0].classList.remove("mt-5");
                                     // $remover clase
                                     var bordes = document.getElementsByClassName("quitar-borde");
                                     [].forEach.call(bordes, function (elem) {
@@ -3089,10 +3113,28 @@ function GetDashBoard() {
                                     })
                                 }
                             }
-                            if ($(window).width() <= 1366)
-                                finalPaddingTop = finalPaddingTop / 3;
-                            else
-                                finalPaddingTop = finalPaddingTop / 2;
+
+                            // Agrandar al vuelo las graficas de barras en resolucion > 1367
+                            if ($(window).width() > 1367 && vm.SeccionesReporte.Id >= 21) {
+                                var graficaBarras = $(".bar-clasificacion:visible");
+                                [].forEach.call(graficaBarras, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                });
+                                var graficaHC = $(".bar-progress4:visible");
+                                [].forEach.call(graficaHC, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                });
+                            }
+                            
+                            if (vm.SeccionesReporte.Id >= 21) {
+                                finalPaddingTop = 100;
+                            }
+                            if (vm.SeccionesReporte.Id == 23 || vm.SeccionesReporte.Id == 24) {
+                                if ($(window).width() <= 1366) {
+                                    finalPaddingTop = 50;
+                                }
+                            }
+
                             docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ },
                             function () {
                                 document.getElementsByClassName("busy")[1].style.display = "none";
@@ -3139,6 +3181,52 @@ function GetDashBoard() {
                                     document.getElementById(paginaActiva).classList.add("px-lg-5");
                                     document.getElementById(paginaActiva).removeAttribute("style");
                                     document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
+                                }
+                                // Regresar estilos a vista web
+                                if (paginaActiva == "tab-bienestar-ee") {
+                                    if ($(window).width() <= 1366) {
+                                        var elem = document.getElementById(paginaActiva);
+                                        document.getElementById("verEA").style.display = "";
+                                        //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
+                                        // $remover clase
+                                        var bordes = document.getElementsByClassName("quitar-borde");
+                                        [].forEach.call(bordes, function (elem) {
+                                            elem.classList.add("borde-tabla-titulo");
+                                            elem.classList.add("borde-tabla-titulo");
+                                        });
+                                    }
+                                }
+                                if (paginaActiva == "tab-indicadores-permanencia") {
+                                    if ($(window).width() <= 1366) {
+                                        var indicador = document.getElementsByClassName("margin-top-nuevo");
+                                        [].forEach.call(indicador, function (itemD) {
+                                            var mt = parseInt(itemD.style.marginTop);
+                                            var newmt = mt * 2;
+                                            itemD.style.marginTop = newmt + "px";
+                                        });
+                                        var elem = document.getElementById(paginaActiva);
+                                        elem.getElementsByClassName("card-block")[0].removeAttribute("style");
+                                        var mb = elem.getElementsByClassName("bg-gris");
+                                        [].forEach.call(mb, function (elemMB) {
+                                            elemMB.classList.add("mb-5");
+                                            elemMB.classList.remove("mb-2");
+                                        });
+                                        elem.getElementsByClassName("nuevomt")[0].classList.add("mt-5");
+                                        elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-2");
+                                    }
+                                }
+                                if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
+                                    if ($(window).width() <= 1366) {
+                                        var elem = document.getElementById(paginaActiva);
+                                        elem.getElementsByClassName("card-block")[0].removeAttribute("style");
+                                        var mb = elem.getElementsByClassName("nuevomt");
+                                        [].forEach.call(mb, function (elemMB) {
+                                            elemMB.classList.add("mb-5");
+                                            elemMB.classList.add("mt-5");
+                                            elemMB.classList.remove("mb-2");
+                                            elemMB.classList.remove("mt-2");
+                                        })
+                                    }
                                 }
                             });
                         }
@@ -6251,7 +6339,7 @@ function GetDashBoard() {
                     //swal(aE.message, "", "warning");
                 }
             }
-
+            //bar-estandarW
             vm.pintarCollecionPantalla_25EE = function (array, noPantalla) {
                 try {
                     var htmlContent = "";
@@ -6259,7 +6347,7 @@ function GetDashBoard() {
                     var finalDiv = "</div></div>";
                     var cuerpodinamic = "";
                     vm.cuerpoPorEntidad =
-                        '<div class="col px-0 px-sm-1">' +
+                        '<div class="col px-0 px-sm-1 bar-estandarW">' +
                         '<center>' +
                         '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                         '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
@@ -9023,7 +9111,7 @@ function GetDashBoard() {
                     var finalDiv = "</div></div>";
                     var cuerpodinamic = "";
                     vm.cuerpoPorEntidad =
-                        '<div class="col px-0 px-sm-1">' +
+                        '<div class="col px-0 px-sm-1 bar-estandarW">' +
                         '<center>' +
                         '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                         '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
@@ -9138,7 +9226,7 @@ function GetDashBoard() {
                     var finalDiv = "</div></div>";
                     var cierreGrafico = ' </div></div></div><!--.row-->            <div class="row mt-2">                        <div class="col-12">                            <center>                                <div class="col-4">                                    <div class="row">                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>                                                                               <div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;" class="ng-hide"></div>                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 ng-hide">PROM GRAL ANTERIOR</div>                                    </div>                                </div>                            </center>                        </div>                    </div><div class="d-flex justify-content-center mt-5">                        <div class="col-12 p-0 m-0">                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">                        </div>                    </div>';
                     vm.cuerpoPorEntidad =
-                        '<div class="col px-0 px-sm-1">' +
+                        '<div class="col px-0 px-sm-1 bar-estandarW">' +
                         '<center>' +
                         '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                         '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
@@ -9157,7 +9245,7 @@ function GetDashBoard() {
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
                         var newPercent2 = array[i].Porcentaje * 1.7;
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad); if (vm.SeccionesReporte.Id >= 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%"); } if (vm.SeccionesReporte.Id < 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%"); } if (array[i].HC <= 50) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2)); } if (array[i].HC > 50 && array[i].HC <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3)); } if (array[i].HC > 100 && array[i].HC <= 500) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5)); } if (array[i].HC > 1000) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7)); }                        /*Iconografia*/                        if (array[i].Porcentaje < 70) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/lluvia-icono.svg'"); } if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/nube-icono.svg'"); } if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/solnube-icono.svg'"); } if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/sol-icono.svg'"); } if (array[i].Porcentaje > 100) { swal("Existe un porcentaje mayor a 100, verificalo", "", "warning"); }
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad); if (vm.SeccionesReporte.Id >= 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%"); } if (vm.SeccionesReporte.Id < 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%"); } if (array[i].HC <= 50) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2)); } if (array[i].HC > 50 && array[i].HC <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3)); } if (array[i].HC > 100 && array[i].HC <= 500) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5)); } if (array[i].HC > 1000) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7)); }                        /*Iconografia*/                        if (array[i].Porcentaje < 70) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/lluvia-icono.png'"); } if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/nube-icono.png'"); } if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/solnube-icono.png'"); } if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/sol-icono.png'"); } if (array[i].Porcentaje > 100) { swal("Existe un porcentaje mayor a 100, verificalo", "", "warning"); }
                         htmlContent += vm.cuerpoPorEntidad;
                         vm.reloadCuerpoPorEntidad();
                     }
@@ -9210,7 +9298,7 @@ function GetDashBoard() {
                 var cuerpodinamic = "";
                 try {
                     vm.cuerpoPorEntidad =
-                        '<div class="col px-0 px-sm-1">' +
+                        '<div class="col px-0 px-sm-1 bar-estandarW">' +
                         '<center>' +
                         '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                         '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
@@ -9291,7 +9379,7 @@ function GetDashBoard() {
 
             vm.reloadCuerpoPorEntidad = function () {
                 vm.cuerpoPorEntidad =
-                    '<div class="col px-0 px-sm-1">' +
+                    '<div class="col px-0 px-sm-1 bar-estandarW">' +
                     '<center>' +
                     '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
                     '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
