@@ -131,9 +131,6 @@
     <Reference Include="Microsoft.AI.WindowsServer">
       <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AI.WindowsServer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ApplicationInsights">
-      <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.ApplicationInsights.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\..\Users\jamurillo\Documents\bin\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>

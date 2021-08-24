@@ -1741,8 +1741,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
 
 .mejores-peores {
     min-height: 190px;
-    padding-left: 6px;
-    padding-right: 6px;
 }
 
 .contenido-peores {
@@ -2802,44 +2800,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
         "tab-edad-ee", "tab-edad-ea"
     ];
 */
-/*
-#tab-portada, #tab-portada-azul, #tab-introduccion-amarillo, #tab-iconografia,
-#tab-indicadores-generales, #tab-indicadores-categoria, #tab-impulsores-clave,
-#tab-mejores-ee, #tab-mejores-ea, #tab-peores-ee, #tab-peores-ea,
-#tab-crecimiento-ee, #tab-crecimiento-ea, #tab-decremento-ee, #tab-decremento-ea,
-#tab-bienestar-ee, #tab-bienestar-ea,
-#tab-indicadores-permanencia, #tab-comparativo-permanencia, #tab-comparativo-abandono,
-#tab-generales-departamento-ee, #tab-generales-departamento-ea, #tab-estr-one-level-ee, #tab-estr-one-level-ea,
-#tab-antiguedad-ee, #tab-antiguedad-ea, #tab-genero-ee, #tab-genero-ea,
-#tab-grado-aca-ee, #tab-grado-aca-ea, #tab-c-trab-ee, #tab-c-trab-ea, #pegarReseccionado, #pegarReseccionadoEA,
-#tab-funcion-ee, #tab-funcion-ea, #tab-edad-ee, #tab-edad-ea {
-    width: 1912.5px;
-    min-width: 1912.5px;
-    max-width: 1912.5px;
-    height: 1348px;
-    max-height: 1348px;
-    min-height: 1348px;
-    width: 631.4175px;
-    height: 446.46px;
+#tab-generales-departamento-ee .robotothin, #tab-generales-departamento-ea .robotothin, #tab-estr-one-level-ee .robotothin, #tab-estr-one-level-ea .robotothin, #tab-antiguedad-ee .robotothin, #tab-antiguedad-ea .robotothin, #tab-genero-ee .robotothin, #tab-genero-ea .robotothin, #tab-grado-aca-ee .robotothin, #tab-grado-aca-ea .robotothin, #tab-c-trab-ee .robotothin, #tab-c-trab-ea .robotothin, #tab-funcion-ee .robotothin, #tab-funcion-ea .robotothin, #tab-edad-ee .robotothin, #tab-edad-ea .robotothin {
+    height: 77px;
 }
-
-/*
-@media(max-width: 1440px) {
-    #tab-portada, #tab-portada-azul, #tab-introduccion-amarillo, #tab-iconografia,
-    #tab-indicadores-generales, #tab-indicadores-categoria, #tab-impulsores-clave,
-    #tab-mejores-ee, #tab-mejores-ea, #tab-peores-ee, #tab-peores-ea,
-    #tab-crecimiento-ee, #tab-crecimiento-ea, #tab-decremento-ee, #tab-decremento-ea,
-    #tab-bienestar-ee, #tab-bienestar-ea, #pegarReseccionado, #pegarReseccionadoEA,
-    #tab-indicadores-permanencia, #tab-comparativo-permanencia, #tab-comparativo-abandono,
-    #tab-generales-departamento-ee, #tab-generales-departamento-ea, #tab-estr-one-level-ee, #tab-estr-one-level-ea,
-    #tab-antiguedad-ee, #tab-antiguedad-ea, #tab-genero-ee, #tab-genero-ea,
-    #tab-grado-aca-ee, #tab-grado-aca-ea, #tab-c-trab-ee, #tab-c-trab-ea,
-    #tab-funcion-ee, #tab-funcion-ea, #tab-edad-ee, #tab-edad-ea {
-        width: 1275px;
-        min-width: 1275px;
-        max-width: 1275px;
-        height: 898.6666666666666px;
-        max-height: 898.6666666666666px;
-        min-height: 898.6666666666666px;
-    }
-}*/

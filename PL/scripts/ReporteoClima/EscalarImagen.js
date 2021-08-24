@@ -174,3 +174,46 @@ var getUid = function () {
 		return v.toString(16);
 	});
 }
+
+var pruebaExp = function () {
+    for (var i = 0; i < divs.length; i++) {
+        var paginaActiva;
+        if (document.getElementById(divs[i]).offsetWidth > 0) {
+            paginaActiva = divs[i];
+            break;
+        }
+    }
+    document.getElementById(paginaActiva).style.width = "631.4175px";
+    document.getElementById(paginaActiva).style.height = "446.46px";
+    if (paginaActiva == "tab-portada") {
+        var divPrint = document.getElementById(paginaActiva);
+        divPrint.getElementsByClassName("portada-bg")[0].style.padding = "29px 25px 80px";
+        divPrint.getElementsByClassName("circle-bg")[0].style.padding = "0px";
+        var entidad = $("h1.text-white:visible");
+        entidad.css("font-size", "1.75rem");
+        entidad.css("line-height", "60px");
+        entidad.css("padding-bottom", "25px");
+        entidad.css("margin-top", "15px");
+        entidad.removeClass("mt-3");
+        divPrint.getElementsByTagName("img")[0].style.marginTop = "0px";
+        divPrint.getElementsByTagName("img")[0].classList.remove("mt-5");
+        divPrint.getElementsByClassName("date-portada")[0].style.marginTop = "31px";
+    }
+    if ("portada-azul") {
+        var divPrint = document.getElementById(paginaActiva);
+        divPrint.getElementsByClassName("introduccion-bg")[0].style.paddingTop = "15px";
+        var entidad = $("h1.text-white:visible");
+        entidad.css("font-size", "1.75rem");
+        entidad.css("line-height", "35px");
+
+        divPrint.getElementsByTagName("hr")[0].classList.add("mt-");
+    }
+    html2canvas(document.getElementById(paginaActiva)).then(function (canvas) {
+        var imgData = canvas.toDataURL("image/jpeg", 1.0);
+        // document.getElementById("img-" + paginaActiva).width = width + "px";
+        // document.getElementById("img-" + paginaActiva).height = "px";
+        var pdf = new jsPDF('l', 'px'/*, [842, 595]*/);
+        pdf.addImage(imgData, 'JPEG', 0, 0, 631.4175, 446.46);//400
+        pdf.save("screen-3.pdf");
+    });
+}

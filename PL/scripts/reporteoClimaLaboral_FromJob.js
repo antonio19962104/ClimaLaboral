@@ -2912,7 +2912,7 @@ function GetDashBoard() {
                         /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
                         if (vm.SeccionesReporte.Id == 25) {
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if ($(window).width() > 1367 && vm.SeccionesReporte.Id >= 21) {
+                            if ($(window).width() > 1440 && vm.SeccionesReporte.Id >= 21) {
                                 var graficaBarras = $(".bar-clasificacion:visible");
                                 [].forEach.call(graficaBarras, function (graf) {
                                     graf.style.height = parseFloat(graf.style.height) * 2 + "px";
@@ -2931,8 +2931,11 @@ function GetDashBoard() {
                                     childs[(index - 1)].style.display = "none";
                                 }
                                 childs[index].style.display = "";
-                                finalPaddingTop = 100;
-                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ }
+                                finalPaddingTop = 125;
+                                if ($(window).width() <= 1440)
+                                    finalPaddingTop = 140;
+
+                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, 0, { /* options */ }
                                     , function () {
                                     });
                                 canvas.push(data);
@@ -2964,7 +2967,7 @@ function GetDashBoard() {
                         }
                         if (vm.SeccionesReporte.Id == 26) {
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if ($(window).width() > 1367 && vm.SeccionesReporte.Id >= 21) {
+                            if ($(window).width() > 1440 && vm.SeccionesReporte.Id >= 21) {
                                 var graficaBarras = $(".bar-clasificacion:visible");
                                 [].forEach.call(graficaBarras, function (graf) {
                                     graf.style.height = parseFloat(graf.style.height) * 2 + "px";
@@ -2983,8 +2986,10 @@ function GetDashBoard() {
                                     childs[(index - 1)].style.display = "none";
                                 }
                                 childs[index].style.display = "";
-                                finalPaddingTop = 100;
-                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ }
+                                finalPaddingTop = 125;
+                                if ($(window).width() <= 1440)
+                                    finalPaddingTop = 140;
+                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, 0, { /* options */ }
                                     , function () {
                                     });
                                 canvas.push(data);
@@ -3017,6 +3022,7 @@ function GetDashBoard() {
                         var elem = document.getElementById(paginaActiva);
                         var itemsPadding = elem.getElementsByClassName("set-padding-pdf");;
                         if (vm.SeccionesReporte.Id != 25 && vm.SeccionesReporte.Id != 26) {
+                            var ptDefault = 0;
                             if (paginaActiva == "tab-indicadores-permanencia") 
                                 finalPaddingTop = 40;
                             if (paginaActiva == "tab-indicadores-categoria")
@@ -3069,7 +3075,9 @@ function GetDashBoard() {
                                 finalPaddingTop = 40;
                             }
                             if (paginaActiva == "tab-bienestar-ee") {
-                                if ($(window).width() <= 1366) {
+                                if ($(window).width() <= 1440) {
+                                    //finalPaddingTop = 120;
+                                    finalPaddingTop = 150;
                                     var elem = document.getElementById(paginaActiva);
                                     document.getElementById("verEA").style.display = "none";
                                     // elem.getElementsByClassName("mt-img-indicadores")[0].classList.remove("mt-5");
@@ -3082,7 +3090,8 @@ function GetDashBoard() {
                                 }
                             }
                             if (paginaActiva == "tab-indicadores-permanencia") {
-                                if ($(window).width() <= 1366) {
+                                if ($(window).width() <= 1440) {
+                                    finalPaddingTop = 160;
                                     var indicador = document.getElementsByClassName("margin-top-nuevo");
                                     [].forEach.call(indicador, function (itemD) {
                                         var mt = parseInt(itemD.style.marginTop);
@@ -3101,7 +3110,8 @@ function GetDashBoard() {
                                 }
                             }
                             if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                if ($(window).width() <= 1366) {
+                                if ($(window).width() <= 1440) {
+                                    finalPaddingTop = 187;
                                     var elem = document.getElementById(paginaActiva);
                                     elem.getElementsByClassName("card-block")[0].style.padding = "0px";
                                     var mb = elem.getElementsByClassName("nuevomt");
@@ -3115,7 +3125,7 @@ function GetDashBoard() {
                             }
 
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if ($(window).width() > 1367 && vm.SeccionesReporte.Id >= 21) {
+                            if ($(window).width() > 1440 && vm.SeccionesReporte.Id >= 21) {
                                 var graficaBarras = $(".bar-clasificacion:visible");
                                 [].forEach.call(graficaBarras, function (graf) {
                                     graf.style.height = parseFloat(graf.style.height) * 2 + "px";
@@ -3130,12 +3140,22 @@ function GetDashBoard() {
                                 finalPaddingTop = 100;
                             }
                             if (vm.SeccionesReporte.Id == 23 || vm.SeccionesReporte.Id == 24) {
-                                if ($(window).width() <= 1366) {
+                                if ($(window).width() <= 1440) {
                                     finalPaddingTop = 50;
                                 }
                             }
 
-                            docReporte.addHTML($('#' + paginaActiva)[0], 0, (finalPaddingTop / 2), { /* options */ },
+                            if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
+                                ptDefault = 40;
+                                if ($(window).width() <= 1440) {
+                                    document.getElementById(paginaActiva).style.marginTop = "95px";
+                                }
+                                else{                                  
+                                    document.getElementById(paginaActiva).style.marginTop = "80px";
+                                }
+                            }
+
+                            docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */ },
                             function () {
                                 document.getElementsByClassName("busy")[1].style.display = "none";
                                 document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
@@ -3184,7 +3204,7 @@ function GetDashBoard() {
                                 }
                                 // Regresar estilos a vista web
                                 if (paginaActiva == "tab-bienestar-ee") {
-                                    if ($(window).width() <= 1366) {
+                                    if ($(window).width() <= 1440) {
                                         var elem = document.getElementById(paginaActiva);
                                         document.getElementById("verEA").style.display = "";
                                         //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
@@ -3197,7 +3217,7 @@ function GetDashBoard() {
                                     }
                                 }
                                 if (paginaActiva == "tab-indicadores-permanencia") {
-                                    if ($(window).width() <= 1366) {
+                                    if ($(window).width() <= 1440) {
                                         var indicador = document.getElementsByClassName("margin-top-nuevo");
                                         [].forEach.call(indicador, function (itemD) {
                                             var mt = parseInt(itemD.style.marginTop);
@@ -3216,7 +3236,7 @@ function GetDashBoard() {
                                     }
                                 }
                                 if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                    if ($(window).width() <= 1366) {
+                                    if ($(window).width() <= 1440) {
                                         var elem = document.getElementById(paginaActiva);
                                         elem.getElementsByClassName("card-block")[0].removeAttribute("style");
                                         var mb = elem.getElementsByClassName("nuevomt");
