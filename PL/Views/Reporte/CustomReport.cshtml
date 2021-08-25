@@ -6,8 +6,15 @@
     try
     {
         List<object> data = (List<object>)HttpRuntime.Cache.Get("ReporteClimaLaboralTurismo");
-        var length = data.Count;
-        progreso = (length / 285) * 100;
+        if (data != null)
+        {
+            var length = data.Count;
+            progreso = (length / 285) * 100;
+        }
+        else
+        {
+            progreso = 0;
+        }
     }
     catch (Exception)
     {
