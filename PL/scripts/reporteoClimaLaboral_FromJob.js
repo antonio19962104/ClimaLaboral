@@ -367,20 +367,7 @@ function GetDashBoard() {
             var paddingtop3 = "";
             var paddingtop4 = "";
             var paddingtop5 = "";
-            if (resolucion >= 1440) {
-                paddingtop = "250px";//50px !important
-                paddingtop2 = "220px";
-                paddingtop3 = "150px";
-                paddingtop4 = "280px";
-                paddingtop5 = "350px";
-            }
-            else {
-                paddingtop = "100px";
-                paddingtop2 = "80px";
-                paddingtop3 = "40px";
-                paddingtop4 = "130px";
-                paddingtop5 = "175px";
-            }
+            var factConver = ($(window).width() * 2) / 1920;
             /*#endregion variables*/
 
 
@@ -1883,13 +1870,13 @@ function GetDashBoard() {
                 localStorage.setItem("paginasReporte", numPaginas);
                 var elem = document.getElementById("mergeS");
                 var canvas = elem.getElementsByTagName('canvas');
-                var pdf = Object;
-                if (resolucion >= 1440) {
-                    pdf = new jsPDF("landscape", "px", "a4");
-                }
-                else {
-                    pdf = new jsPDF("landscape", "mm", "b5");
-                }
+                //var pdf = Object;
+                //if (resolucion >= 1440) {
+                //    pdf = new jsPDF("landscape", "px", "a4");
+                //}
+                //else {
+                //    pdf = new jsPDF("landscape", "mm", "b5");
+                //}
                 var width = pdf.internal.pageSize.width;
                 var height = pdf.internal.pageSize.height;
                 vm.imagenes = Enumerable.from(vm.imagenes).orderBy(o => o.id).toList();
@@ -1936,20 +1923,20 @@ function GetDashBoard() {
                             }
                         }
                     }
-                    if (resolucion >= 1440) {
-                        paddingTop = "250px";
-                        paddingtop2 = "220px";
-                        paddingtop3 = "150px";
-                        paddingtop4 = "280px";
-                        paddingtop5 = "350px";
-                    }
-                    else{
-                        paddingtop = "100px";
-                        paddingtop2 = "80px";
-                        paddingtop3 = "40px";
-                        paddingtop4 = "130px";
-                        paddingtop5 = "175px";
-                    }
+                    //if (resolucion >= 1440) {
+                    //    paddingTop = "250px";
+                    //    paddingtop2 = "220px";
+                    //    paddingtop3 = "150px";
+                    //    paddingtop4 = "280px";
+                    //    paddingtop5 = "350px";
+                    //}
+                    //else{
+                    //    paddingtop = "100px";
+                    //    paddingtop2 = "80px";
+                    //    paddingtop3 = "40px";
+                    //    paddingtop4 = "130px";
+                    //    paddingtop5 = "175px";
+                    //}
                     if ((vm.exportaImagen == true && elemId != "tab-23") || (vm.exportaImagen == true && elemId != "tab-24")) {
                         if (!vm.isNullOrEmpty(elemId) && elemId != "tab-1") {
                             if (!vm.historicoCanvas.includes(elemId)) {
@@ -2824,6 +2811,7 @@ function GetDashBoard() {
 
             /*#region Secciones*/
             vm.next = async function () {
+                $('html,body').scrollTop(0);
                 var paginaActiva;
                 try {
                     /* Se obtiene la seccion del reporte activa */
@@ -2832,6 +2820,9 @@ function GetDashBoard() {
                             paginaActiva = divs[i];
                             break;
                         }
+                    }
+                    if (paginaActiva == "tab-portada" || paginaActiva == "tab-portada-azul" || paginaActiva == "tab-introduccion-amarillo" || paginaActiva == "tab-iconografia") {
+                        pruebaExp();                        
                     }
                     /* Crear un subId para las secciones que se separaron (23, 24) */
                     if (paginaActiva.includes("pegarReseccionado")) {
@@ -2847,18 +2838,18 @@ function GetDashBoard() {
                         /* Asignar estilos para la exportacion */
                         var finalPaddingTop = 0;
                         switch (paginaActiva) {
-                            case "tab-portada": case "tab-introduccion-amarillo": case "tab-mejores-ea": case "tab-crecimiento-ee": case "tab-crecimiento-ea":
+                            case "tab-mejores-ea": case "tab-crecimiento-ee": case "tab-crecimiento-ea":
                                 document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop2;
                                 finalPaddingTop = paddingtop2;
                                 break;
-                            case "tab-portada-azul":
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop4;
-                                finalPaddingTop = paddingtop4;
-                                break;
-                            case "tab-iconografia":
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop5;
-                                finalPaddingTop = paddingtop5;
-                                break;
+                            //case "tab-portada-azul":
+                            //    document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop4;
+                            //    finalPaddingTop = paddingtop4;
+                            //    break;
+                            //case "tab-iconografia":
+                            //    document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop5;
+                            //    finalPaddingTop = paddingtop5;
+                            //    break;
                             case "tab-mejores-ee": case "tab-peores-ee": case "tab-peores-ea": case "tab-decremento-ee": case "tab-decremento-ea": 
                                 document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
                                 finalPaddingTop = paddingtop;
@@ -2894,16 +2885,18 @@ function GetDashBoard() {
                         if (paginaActiva.includes("pegarReseccionado"))
                             finalPaddingTop = paddingtop;
                         finalPaddingTop = parseFloat(finalPaddingTop);
-                        docReporte.addPage();
+                        if (paginaActiva != "tab-portada" && paginaActiva != "tab-portada-azul" && paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "tab-iconografia" ) {
+                            docReporte.addPage();
+                        }                        
                         if (paginaActiva.includes("pegarReseccionado")) {
                             paginaActiva = paginaActiva.split('_')[0];
                         }
 
-                        if (paginaActiva == "tab-iconografia") {
-                            document.getElementById("tab-iconografia").classList.remove("px-lg-5");
-                            document.getElementById("tab-iconografia").style.width = "842px";
-                            document.getElementById("tab-iconografia").style.height = "595px";
-                        }
+                        //if (paginaActiva == "tab-iconografia") {
+                        //    document.getElementById("tab-iconografia").classList.remove("px-lg-5");
+                        //    document.getElementById("tab-iconografia").style.width = "842px";
+                        //    document.getElementById("tab-iconografia").style.height = "595px";
+                        //}
 
                         document.getElementById(paginaActiva).parentNode.style.backgroundColor = "#fff";
                         document.getElementById(paginaActiva).style.backgroundColor = "#fff";
@@ -2912,14 +2905,14 @@ function GetDashBoard() {
                         /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
                         if (vm.SeccionesReporte.Id == 25) {
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if ($(window).width() > 1440 && vm.SeccionesReporte.Id >= 21) {
+                            if (vm.SeccionesReporte.Id >= 21) {
                                 var graficaBarras = $(".bar-clasificacion:visible");
                                 [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                                 });
                                 var graficaHC = $(".bar-progress4:visible");
                                 [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                                 });
                             }
                             var childs = document.getElementById("divPantalla25").childNodes;
@@ -2932,10 +2925,13 @@ function GetDashBoard() {
                                 }
                                 childs[index].style.display = "";
                                 finalPaddingTop = 125;
-                                if ($(window).width() <= 1440)
+                                if ($(window).width() > 1610)
                                     finalPaddingTop = 140;
 
-                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, 0, { /* options */ }
+                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, 0, { /* options */ 
+                                    image: { type: 'jpeg', quality: 0.98},
+                                html2canvas: { scale: 2 }
+                                }
                                     , function () {
                                     });
                                 canvas.push(data);
@@ -2967,14 +2963,14 @@ function GetDashBoard() {
                         }
                         if (vm.SeccionesReporte.Id == 26) {
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if ($(window).width() > 1440 && vm.SeccionesReporte.Id >= 21) {
+                            if (vm.SeccionesReporte.Id >= 21) {
                                 var graficaBarras = $(".bar-clasificacion:visible");
                                 [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                                 });
                                 var graficaHC = $(".bar-progress4:visible");
                                 [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                                 });
                             }
                             var childs = document.getElementById("divPantalla26").childNodes;
@@ -2987,9 +2983,12 @@ function GetDashBoard() {
                                 }
                                 childs[index].style.display = "";
                                 finalPaddingTop = 125;
-                                if ($(window).width() <= 1440)
+                                if ($(window).width() > 1610)
                                     finalPaddingTop = 140;
-                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, 0, { /* options */ }
+                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, 0, { /* options */ 
+                                    image: { type: 'jpeg', quality: 0.98},
+                                html2canvas: { scale: 2 }
+                                }
                                     , function () {
                                     });
                                 canvas.push(data);
@@ -3020,34 +3019,34 @@ function GetDashBoard() {
                             }
                         }
                         var elem = document.getElementById(paginaActiva);
-                        var itemsPadding = elem.getElementsByClassName("set-padding-pdf");;
-                        if (vm.SeccionesReporte.Id != 25 && vm.SeccionesReporte.Id != 26) {
+                        var itemsPadding = elem.getElementsByClassName("set-padding-pdf");                        
+                        if (vm.SeccionesReporte.Id != 25 && vm.SeccionesReporte.Id != 26 && paginaActiva != "tab-portada" && paginaActiva != "tab-portada-azul" && paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "tab-iconografia") {
                             var ptDefault = 0;
                             if (paginaActiva == "tab-indicadores-permanencia") 
                                 finalPaddingTop = 40;
                             if (paginaActiva == "tab-indicadores-categoria")
                                 finalPaddingTop = 70;
 
-                            if (paginaActiva == "tab-portada") {
-                                document.getElementById(paginaActiva).children[0].style.height = "1400px";
-                                finalPaddingTop = 1.5;
-                                addPadding(itemsPadding, null);
-                            }
-                            if (paginaActiva == "tab-portada-azul") {
-                                document.getElementById(paginaActiva).children[0].style.height = "1400px";
-                                finalPaddingTop = 1.5;
-                                addPadding(itemsPadding, null);
-                            }
-                            if (paginaActiva == "tab-introduccion-amarillo") {
-                                document.getElementById(paginaActiva).children[0].children[0].style.height = "1400px";
-                                finalPaddingTop = 1.7;
-                                addPadding(itemsPadding, 1);
-                                document.getElementsByClassName("set-padding-pdf-280")[0].style.paddingTop = "320px";
-                                document.getElementsByClassName("set-padding-pdf-280")[1].style.paddingTop = "280px";
-                            }
-                            if (paginaActiva == "tab-iconografia") {
-                                finalPaddingTop = 20;
-                            }
+                            //if (paginaActiva == "tab-portada") {
+                            //    document.getElementById(paginaActiva).children[0].style.height = "1400px";
+                            //    finalPaddingTop = 1.5;
+                            //    addPadding(itemsPadding, null);
+                            //}
+                            //if (paginaActiva == "tab-portada-azul") {
+                            //    document.getElementById(paginaActiva).children[0].style.height = "1400px";
+                            //    finalPaddingTop = 1.5;
+                            //    addPadding(itemsPadding, null);
+                            //}
+                            //if (paginaActiva == "tab-introduccion-amarillo") {
+                            //    document.getElementById(paginaActiva).children[0].children[0].style.height = "1400px";
+                            //    finalPaddingTop = 1.7;
+                            //    addPadding(itemsPadding, 1);
+                            //    document.getElementsByClassName("set-padding-pdf-280")[0].style.paddingTop = "320px";
+                            //    document.getElementsByClassName("set-padding-pdf-280")[1].style.paddingTop = "280px";
+                            //}
+                            //if (paginaActiva == "tab-iconografia") {
+                            //    finalPaddingTop = 20;
+                            //}
                             if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
                                 paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
                                 //parafos-mejores  mt-img-indicadores
@@ -3075,7 +3074,7 @@ function GetDashBoard() {
                                 finalPaddingTop = 40;
                             }
                             if (paginaActiva == "tab-bienestar-ee") {
-                                if ($(window).width() <= 1440) {
+                                if ($(window).width() > 1610) {
                                     //finalPaddingTop = 120;
                                     finalPaddingTop = 150;
                                     var elem = document.getElementById(paginaActiva);
@@ -3090,7 +3089,7 @@ function GetDashBoard() {
                                 }
                             }
                             if (paginaActiva == "tab-indicadores-permanencia") {
-                                if ($(window).width() <= 1440) {
+                                if ($(window).width() > 1610) {
                                     finalPaddingTop = 160;
                                     var indicador = document.getElementsByClassName("margin-top-nuevo");
                                     [].forEach.call(indicador, function (itemD) {
@@ -3110,7 +3109,7 @@ function GetDashBoard() {
                                 }
                             }
                             if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                if ($(window).width() <= 1440) {
+                                if ($(window).width() > 1610) {
                                     finalPaddingTop = 187;
                                     var elem = document.getElementById(paginaActiva);
                                     elem.getElementsByClassName("card-block")[0].style.padding = "0px";
@@ -3125,14 +3124,14 @@ function GetDashBoard() {
                             }
 
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if ($(window).width() > 1440 && vm.SeccionesReporte.Id >= 21) {
+                            if (vm.SeccionesReporte.Id >= 21) {
                                 var graficaBarras = $(".bar-clasificacion:visible");
                                 [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                                 });
                                 var graficaHC = $(".bar-progress4:visible");
                                 [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * 2 + "px";
+                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                                 });
                             }
                             
@@ -3140,14 +3139,18 @@ function GetDashBoard() {
                                 finalPaddingTop = 100;
                             }
                             if (vm.SeccionesReporte.Id == 23 || vm.SeccionesReporte.Id == 24) {
-                                if ($(window).width() <= 1440) {
-                                    finalPaddingTop = 50;
+                                if ($(window).width() > 1610) {
+                                    ptDefault = 0;
+                                }
+                                else
+                                {
+                                    ptDefault = -10
                                 }
                             }
 
                             if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
-                                ptDefault = 40;
-                                if ($(window).width() <= 1440) {
+                                ptDefault = 0;
+                                if ($(window).width() > 1610) {
                                     document.getElementById(paginaActiva).style.marginTop = "95px";
                                 }
                                 else{                                  
@@ -3155,27 +3158,30 @@ function GetDashBoard() {
                                 }
                             }
 
-                            docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */ },
+                            docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */ 
+                                image: { type: 'jpeg', quality: 0.98},
+                                    html2canvas: { scale: 2 }
+                            },
                             function () {
                                 document.getElementsByClassName("busy")[1].style.display = "none";
                                 document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
                                 document.getElementById(paginaActiva).parentNode.removeAttribute("style");
                                 document.getElementById(paginaActiva).removeAttribute("style");
                                 deletePadding(itemsPadding);
-                                if (paginaActiva == "tab-introduccion-amarillo") {
-                                    document.getElementsByClassName("set-padding-pdf-280")[0].removeAttribute("style");
-                                    document.getElementsByClassName("set-padding-pdf-280")[1].removeAttribute("style"); 
-                                    var elemH = document.getElementById("tab-introduccion-amarillo").children[0].children[0];
-                                    elemH.removeAttribute("style");
-                                }
-                                else if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
+                                //if (paginaActiva == "tab-introduccion-amarillo") {
+                                //    document.getElementsByClassName("set-padding-pdf-280")[0].removeAttribute("style");
+                                //    document.getElementsByClassName("set-padding-pdf-280")[1].removeAttribute("style"); 
+                                //    var elemH = document.getElementById("tab-introduccion-amarillo").children[0].children[0];
+                                //    elemH.removeAttribute("style");
+                                //}
+                                if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
                                     var elemH = document.getElementById(paginaActiva).children[0];
                                     elemH.removeAttribute("style");
                                 }
-                                if (paginaActiva == "tab-iconografia") {
-                                    document.getElementById("tab-iconografia").classList.add("px-lg-5");
-                                    document.getElementById("tab-iconografia").removeAttribute("style");
-                                }
+                                //if (paginaActiva == "tab-iconografia") {
+                                //    document.getElementById("tab-iconografia").classList.add("px-lg-5");
+                                //    document.getElementById("tab-iconografia").removeAttribute("style");
+                                //}
                                 /*Secciones mejores/peores*/
                                 if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
                                     paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
@@ -3204,7 +3210,7 @@ function GetDashBoard() {
                                 }
                                 // Regresar estilos a vista web
                                 if (paginaActiva == "tab-bienestar-ee") {
-                                    if ($(window).width() <= 1440) {
+                                    if ($(window).width() > 1610) {
                                         var elem = document.getElementById(paginaActiva);
                                         document.getElementById("verEA").style.display = "";
                                         //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
@@ -3217,7 +3223,7 @@ function GetDashBoard() {
                                     }
                                 }
                                 if (paginaActiva == "tab-indicadores-permanencia") {
-                                    if ($(window).width() <= 1440) {
+                                    if ($(window).width() > 1610) {
                                         var indicador = document.getElementsByClassName("margin-top-nuevo");
                                         [].forEach.call(indicador, function (itemD) {
                                             var mt = parseInt(itemD.style.marginTop);
@@ -3236,7 +3242,7 @@ function GetDashBoard() {
                                     }
                                 }
                                 if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                    if ($(window).width() <= 1440) {
+                                    if ($(window).width() > 1610) {
                                         var elem = document.getElementById(paginaActiva);
                                         elem.getElementsByClassName("card-block")[0].removeAttribute("style");
                                         var mb = elem.getElementsByClassName("nuevomt");
@@ -3289,6 +3295,7 @@ function GetDashBoard() {
                 }
 
                 vm.contadorNextButton++;
+                document.getElementsByClassName("busy")[1].style.display= "none";
                 vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
                 if (vm.SeccionesReporte.Id == 3.5) {
                 }
@@ -4028,34 +4035,127 @@ function GetDashBoard() {
                     .finally(function () {
                     });
             }
+            vm.reduceGrafica = function () {
+                try {
+                    var anterior;
+                    if (vm.SeccionesReporte.Id >= 20) {
+                        if (vm.SeccionesReporte.Id == 41) {
+                            anterior = 38;
+                        }
+                        else{
+                            anterior =vm.SeccionesReporte.Id - 1;
+                        }
+                        var tab = document.getElementById("tab-" + anterior);
+                        var contenedor = tab.getElementsByClassName("grafica-trabajar")[0];
+                        if (anterior == 25 || anterior == 26) {
+                            var index = document.getElementById("tab-" + anterior).getElementsByClassName("grafica-trabajar").length - 1
+                            contenedor = document.getElementById("tab-" + anterior).getElementsByClassName("grafica-trabajar")[index]
+                        }
+                        var x = window.matchMedia("(min-width: 1610px)");//size xl                        
+                        if (x.matches) {
+                            tab.classList.remove("ng-hide");
+                            if (anterior == 23) {
+                                document.getElementById("pegarReseccionado").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                            }
+                            if (anterior == 24) {
+                                document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                            }
+                            if (contenedor.offsetHeight == 0) {
+                                var con = tab.getElementsByClassName("grafica-trabajar");
+                                for (var i = 0; i < con.length; i++) {
+                                    if (item.offsetHeight > 0) {
+                                        contenedor = item;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (contenedor.offsetHeight >= 480) { //xl si es mas de 450 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
+                                var graficaBarras = $("#tab-"+anterior+" .bar-clasificacion");
+                                [].forEach.call(graficaBarras, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                });
+                                var graficaHC = $("#tab-"+anterior+" .bar-progress4");
+                                [].forEach.call(graficaHC, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                });                                
+                            }
+                            tab.classList.add("ng-hide"); 
+                            if (anterior == 23) {
+                                document.getElementById("pegarReseccionado").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "none";
+                            }
+                            if (anterior == 24) {
+                                document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "none";
+                            }
+                        }
+                        else {
+                            tab.classList.remove("ng-hide");
+                            if (anterior == 23) {
+                                document.getElementById("pegarReseccionado").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                            }
+                            if (anterior == 24) {
+                                document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                            }
+                            if (contenedor.offsetHeight == 0) {
+                                var con = tab.getElementsByClassName("grafica-trabajar");
+                                for (var i = 0; i < con.length; i++) {
+                                    if (item.offsetHeight > 0) {
+                                        contenedor = item;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (contenedor.offsetHeight >= 475) { //sm si es mas de 450 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
+                                var graficaBarras = $("#tab-"+anterior+" .bar-clasificacion");
+                                [].forEach.call(graficaBarras, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                });
+                                var graficaHC = $("#tab-"+anterior+" .bar-progress4");
+                                [].forEach.call(graficaHC, function (graf) {
+                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                });                                
+                            }
+                            tab.classList.add("ng-hide");
+                            if (anterior == 23) {
+                                document.getElementById("pegarReseccionado").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "none";
+                            }
+                            if (anterior == 24) {
+                                document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "none";
+                            }
+                        }                        
+                    }
 
-            vm.prev = function () {
+                } catch (e) {
+    
+                }
+            }
+              vm.prev = function () {
 
                 /*intro*/
+                    vm.reduceGrafica();
                 if (vm.SeccionesReporte.Id == 4) {
                     vm.SeccionesReporte.Id = 3.5;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.exportaImagen = exportaConfig.exporta;                   
                     return vm.SeccionesReporte.Id = 3.5;
                 }
 
                 if (vm.SeccionesReporte.Id == 3.5) {
                     vm.SeccionesReporte.Id = 3;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.exportaImagen = exportaConfig.exporta;                    
                     return vm.SeccionesReporte.Id = 3;
                 }
                 /*Reporte corpo*/
                 if (vm.SeccionesReporte.Id == 41 && vm.opc == "4") {
                     vm.SeccionesReporte.Id = 40.5;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.exportaImagen = exportaConfig.exporta;                    
                     return vm.SeccionesReporte.Id;
                 }
                 if (vm.SeccionesReporte.Id == 40.5 && vm.opc == "4") {
                     vm.SeccionesReporte.Id = 40;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.exportaImagen = exportaConfig.exporta;                    
                     return vm.SeccionesReporte.Id;
                 }
                 if (vm.SeccionesReporte.Id == 13 || vm.SeccionesReporte.Id == 17) {
@@ -4076,7 +4176,7 @@ function GetDashBoard() {
 
 
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.exportaImagen = exportaConfig.exporta;                    
                     return vm.SeccionesReporte.Id;
                 }
 
@@ -4095,7 +4195,7 @@ function GetDashBoard() {
                     childs[childs.length - 1].style.display = "block";
                     /* Navegando de la seccion 25 a la 24 mostrando la ultima subseccion */
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.exportaImagen = exportaConfig.exporta;                    
                     return;
                 }
 
@@ -4117,7 +4217,7 @@ function GetDashBoard() {
                                 childs[childs.length - 1].style.display = "block";
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                 vm.exportaImagen = exportaConfig.exporta;
-                                vm.SeccionesReporte.Id = 24;
+                                vm.SeccionesReporte.Id = 24;                                
                                 return;
                             }
                             if (visible.length == 1 && vm.SeccionesReporte.Id == 24) {
@@ -4126,7 +4226,7 @@ function GetDashBoard() {
                                 if ((num - 1) > 0) {
                                     document.getElementsByClassName("tab-24-" + (num - 1))[0].style.display = "block";
                                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
-                                    vm.exportaImagen = exportaConfig.exporta;
+                                    vm.exportaImagen = exportaConfig.exporta;                                    
                                     return;
                                 }
                                 else if ((num - 1) == 0) {
@@ -4136,7 +4236,7 @@ function GetDashBoard() {
                                     var childsEE = document.getElementById("pegarReseccionado").childNodes;
                                     childsEE[childsEE.length - 1].style.display = "block";
                                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
-                                    vm.exportaImagen = exportaConfig.exporta;
+                                    vm.exportaImagen = exportaConfig.exporta;                                    
                                     return;
                                 }
                             }
@@ -4158,7 +4258,7 @@ function GetDashBoard() {
                             childs[childs.length - 1].style.display = "block";
                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                             vm.exportaImagen = exportaConfig.exporta;
-                            vm.SeccionesReporte.Id = 23;
+                            vm.SeccionesReporte.Id = 23;                            
                             return;
                         }
                         if (visible.length == 1 && vm.SeccionesReporte.Id == 23) {
@@ -4167,7 +4267,7 @@ function GetDashBoard() {
                             if ((num - 1) > 0) {
                                 document.getElementsByClassName("tab-23-" + (num - 1))[0].style.display = "block";
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
-                                vm.exportaImagen = exportaConfig.exporta;
+                                vm.exportaImagen = exportaConfig.exporta;                                
                                 return;
                             }
                             else if ((num - 1) == 0) {
@@ -4181,7 +4281,7 @@ function GetDashBoard() {
                                 }
 
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                                vm.exportaImagen = exportaConfig.exporta;
+                                vm.exportaImagen = exportaConfig.exporta;                                
                                 return;
                             }
                         }
@@ -4195,7 +4295,7 @@ function GetDashBoard() {
                 if (vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 2) {
                     if (vm.enfoqueSeleccionado == 1) {
                         if (vm.SeccionesReporte.Id == 41 || vm.SeccionesReporte.Id == 37 || vm.SeccionesReporte.Id == 35 || vm.SeccionesReporte.Id == 33 || vm.SeccionesReporte.Id == 31 || vm.SeccionesReporte.Id == 29 || vm.SeccionesReporte.Id == 27 ||  vm.SeccionesReporte.Id == 23 || vm.SeccionesReporte.Id == 21 || vm.SeccionesReporte.Id == 15 || vm.SeccionesReporte.Id == 11) {
-                            vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;
+                            vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;                            
                         }else{vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;}
 
                     }
@@ -4206,15 +4306,15 @@ function GetDashBoard() {
                 }
                 else
                 {
-                    vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
-
+                    vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;                    
                 }
 
                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
                 vm.exportaImagen = exportaConfig.exporta;
-                vm.cambioSeccion(vm.SeccionesReporte.Id);
+                vm.cambioSeccion(vm.SeccionesReporte.Id);                
 
             }
+
 
             vm.cambioSeccion = function (seccionActiva) {
                 vm.SeccionesReporte.Id = seccionActiva;
@@ -9130,6 +9230,7 @@ function GetDashBoard() {
                     var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4">';
                     var finalDiv = "</div></div>";
                     var cuerpodinamic = "";
+                    var parchepdfH ="<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img ng-src='{{ vm.setIconoSVG(item.Porcentaje) }}' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height: {{ 100 * 2.7 }}px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:{{ 100 * 1.7 }}px;'>.</p><div class='bar-progress4' style='height: {{ 100 * 2.7 }}px;'></div></div><p class='text-graph'>.</p></center></div>";
                     vm.cuerpoPorEntidad =
                         '<div class="col px-0 px-sm-1 bar-estandarW">' +
                         '<center>' +
@@ -9146,7 +9247,7 @@ function GetDashBoard() {
                         '<p class="text-graph">{{ item.Entidad }}</p>' +
                         '</center>' +
                         '</div>';
-                    htmlContent += initialDivForEmpresa;
+                    htmlContent += parchepdfH + initialDivForEmpresa;
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
                         var newPercent2 = array[i].Porcentaje * 1.7;
@@ -9241,10 +9342,11 @@ function GetDashBoard() {
                     }
 
                     var htmlContent = "";
-                    var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">' + vm.UNSeleccionada + '</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">                     <p>Ordenamiento por empresa</p>';
+                    var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">' + vm.UNSeleccionada + '</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">                     <span>Ordenamiento por empresa</span>';
                     var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4 ' + idsecc + '">';
                     var finalDiv = "</div></div>";
-                    var cierreGrafico = ' </div></div></div><!--.row-->            <div class="row mt-2">                        <div class="col-12">                            <center>                                <div class="col-4">                                    <div class="row">                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>                                                                               <div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;" class="ng-hide"></div>                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 ng-hide">PROM GRAL ANTERIOR</div>                                    </div>                                </div>                            </center>                        </div>                    </div><div class="d-flex justify-content-center mt-5">                        <div class="col-12 p-0 m-0">                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">                        </div>                    </div>';
+                    var cierreGrafico = ' </div></div></div><!--.row--><div class="row mt-2"><div class="col-12"><center> '+(vm.hasHistorico == true ? '<div class="col-12">' :'<div class="col-12">')+'<div class="row  justify-content-center"><div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div><div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div><div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div><div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;" class="ng-hide"></div>                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 ng-hide">PROM GRAL ANTERIOR</div>                                    </div>                                </div>                            </center>                        </div>                    </div><div class="d-flex justify-content-center mt-5">                        <div class="col-12 p-0 m-0">                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">                        </div>                    </div>';
+                    var parchepdfH ="<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
                     vm.cuerpoPorEntidad =
                         '<div class="col px-0 px-sm-1 bar-estandarW">' +
                         '<center>' +
@@ -9265,18 +9367,25 @@ function GetDashBoard() {
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
                         var newPercent2 = array[i].Porcentaje * 1.7;
+                        var concatAll= "";
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad); if (vm.SeccionesReporte.Id >= 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%"); } if (vm.SeccionesReporte.Id < 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%"); } if (array[i].HC <= 50) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2)); } if (array[i].HC > 50 && array[i].HC <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3)); } if (array[i].HC > 100 && array[i].HC <= 500) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5)); } if (array[i].HC > 1000) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7)); }                        /*Iconografia*/                        if (array[i].Porcentaje < 70) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/lluvia-icono.png'"); } if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/nube-icono.png'"); } if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/solnube-icono.png'"); } if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/sol-icono.png'"); } if (array[i].Porcentaje > 100) { swal("Existe un porcentaje mayor a 100, verificalo", "", "warning"); }
-                        htmlContent += vm.cuerpoPorEntidad;
+                        if (i == 0) {
+                            concatAll= parchepdfH + vm.cuerpoPorEntidad;
+                        }
+                        else{
+                            concatAll= vm.cuerpoPorEntidad;
+                        }                        
+                        htmlContent += concatAll;
                         vm.reloadCuerpoPorEntidad();
                     }
                     htmlContent += (finalDiv + cierreGrafico);
                     if (enfoque == 1) {
                         htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indice);
-                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel)");
+                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)");
                     }
                     if (enfoque == 2) {
                         htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indiceEA);
-                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa (15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Área (15. Resultados generales por nivel)");
+                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Área<br/>(15. Resultados generales por nivel)");
                     }
                     if (enfoque == 1){
                         htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-23-" + indice);

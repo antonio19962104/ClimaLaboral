@@ -25,7 +25,7 @@
         <span class="step" ng-class="{ active: vm.SeccionesReporte.Id % 2 != 0 }"></span>
         <i ng-hide="vm.SeccionesReporte.Id == 41" ng-click="vm.next()" class="fas fa-arrow-right" style="cursor:pointer"></i>
     </div>
-    <button onclick="pruebaExp()">Exporta una</button>
+    <button onclick="otraopcion()">Exporta una</button>
     <div ng-show="vm.SeccionesReporte.Id >= 3 && vm.SeccionesReporte.Id < 41" class="ml-5 col-2" style="margin-bottom: -2rem; z-index: 1;">
         <input type="checkbox" class="" ng-model="vm.exportaImagen" id="exportaImagen" /><label class="ml-1" for="exportaImagen">Exportar a PDF</label>
     </div>

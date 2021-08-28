@@ -1892,8 +1892,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
         border-bottom: 1px solid #ff0000;
       }
       .graph-wrapper > .row {
-          min-height: 745px;
-        /*min-height: 397px;*/
+          /*min-height: 745px;*/
+        min-height: 397px;
         align-items: flex-end;
         justify-content: center;
         box-sizing: content-box;
@@ -2339,13 +2339,36 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
     height: 145px;
     font-size: smaller;
 }
+.bar-hidePdf {
+width: 0px !important;
+min-width: 0px !important;
+max-width: 0px !important;
+}
+.bar-hidePdf img{
+    width: 0px !important;
+    height: 34.5px;
+}
+.bar-hidePdf .label-top-graphic-clasificacion{
+width: 0px !important;
+}
+.bar-hidePdf .bar-clasificacion{
+        width: 0px;
+}
+.bar-hidePdf .label-top-graphic-blue2{
 
+}
+.bar-hidePdf .bar-progress4{
+ width: 0px;
+}
+
+.bar-hidePdf .text-graph{
+        width: 0px !important;
+}
 /* ----------------------------------------------------------------
     Media Queries
 -----------------------------------------------------------------*/
-
 /*xl*/
-@media(min-width: 1441px) {
+@media screen and (min-width: 1610px) {
     .grafica-trabajarEx {
         min-height: 450px;
     }
@@ -2407,17 +2430,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
         padding: 30px 40px !important;
     }
     .grafica-trabajar {
-        min-height: 800px!important;
+        min-height: 450px!important;
     }
 }
 /*sm*/
-@media(max-width: 1440px) {
+@media screen and (max-width: 1609px) {
     .black-clima {
         font-size: 12px;
     }
 
     .graph-wrapper > .row {
-        min-height: 397px;
+        min-height: 420px;
     }
 
     .grafica-trabajar {
