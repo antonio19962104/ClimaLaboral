@@ -89,37 +89,18 @@ namespace BL
         {
             try
             {
-                //EmailNotification
-
-                try
-                {
-                    int n1 = 2;int n2 = 0;
-                    var data = (n1 / n2);
-                }
-                catch (Exception ae)
-                {
-                    //NLog.Logger demo = NLog.LogManager.GetLogger("EmailNotification");
-                    //demo.Debug("Modulo demo", st.GetFrame(0).GetMethod().Name, ae, ae.Message, ae.InnerException, ae.StackTrace);
-                }
-
-                var path1 = @"\\10.5.2.101\RHDiagnostics\log\LogPortalDeEncuestas.log";
-                var fullPath1 = Path.GetFullPath(path1);
-                if (!File.Exists(fullPath1))
-                {
-                    string createText = "Log Create At " + DateTime.Now + Environment.NewLine;
-                    File.WriteAllText(fullPath1, createText);
-                }
-                string 
-                appendText1 = Environment.NewLine + "Metodo: " + st.GetFrame(0).GetMethod().Name + " " + DateTime.Now + Environment.NewLine;
-                appendText1 += "Excepcion: " + e.Message + Environment.NewLine;
-                appendText1 += "Trace: " + e.StackTrace + Environment.NewLine;
-                appendText1 += "Inner Exception: " + e.InnerException + Environment.NewLine;
-                File.AppendAllText(fullPath1, appendText1);
-                nlogDiagnostics4U.Debug(e);
-                nlogDiagnostics4U.Debug("Method: " + st.GetFrame(0).GetMethod().Name);
-                nlogDiagnostics4U.Debug("Messsage: " + e.Message);
-                nlogDiagnostics4U.Debug("Inner Exception: " + e.InnerException);
-                nlogDiagnostics4U.Debug("StackTrace: " + e.StackTrace);
+                //string 
+                //appendText1 = Environment.NewLine + "Metodo: " + st.GetFrame(0).GetMethod().Name + " " + DateTime.Now + Environment.NewLine;
+                //appendText1 += "Excepcion: " + e.Message + Environment.NewLine;
+                //appendText1 += "Trace: " + e.StackTrace + Environment.NewLine;
+                //BL.NLogGeneratorFile.logError(e, new StackTrace());
+                //appendText1 += "Inner Exception: " + e.InnerException + Environment.NewLine;
+                //File.AppendAllText(fullPath1, appendText1);
+                //nlogDiagnostics4U.Debug(e);
+                //nlogDiagnostics4U.Debug("Method: " + st.GetFrame(0).GetMethod().Name);
+                //nlogDiagnostics4U.Debug("Messsage: " + e.Message);
+                //nlogDiagnostics4U.Debug("Inner Exception: " + e.InnerException);
+                //nlogDiagnostics4U.Debug("StackTrace: " + e.StackTrace);
             }
             catch (Exception ex)
             {

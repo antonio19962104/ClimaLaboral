@@ -200,6 +200,18 @@
     <Reference Include="Microsoft.Owin.Security.Twitter">
       <HintPath>..\..\Users\jamurillo\Documents\José Antonio Murillo Garcia\Proyecto RH\1.- RH_Encuesta_Backup 02012020\PL\bin\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.Common.10.0.40219.1\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.Common.10.0.40219.1\lib\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Cquential.Microsoft.ReportViewer.ProcessingObjectModel.10.0.40219.1\lib\net35\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.WebForms.10.0.40219.1\lib\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
     <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -348,6 +360,16 @@
     <Compile Include="Models\MensajesValidacion.cs" />
     <Compile Include="Models\ReporteClimaDinamico.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RH_DiagnosticsDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RH_DiagnosticsDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RH_DiagnosticsDataSet2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RH_DiagnosticsDataSet2.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Views\Admin\MPGeneral.Master.cs">
       <DependentUpon>MPGeneral.Master</DependentUpon>
@@ -1271,6 +1293,28 @@
     <Content Include="resources\LayoutIndicadoresPorcentaje - Clima Laboral.xlsx" />
     <Content Include="resources\LayoutPreguntasPorcentaje - Clima Laboral.xlsx" />
     <Content Include="resources\LayoutHistoricos.xlsx" />
+    <Content Include="RH_DiagnosticsDataSet.xsc">
+      <DependentUpon>RH_DiagnosticsDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="RH_DiagnosticsDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>RH_DiagnosticsDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="RH_DiagnosticsDataSet.xss">
+      <DependentUpon>RH_DiagnosticsDataSet.xsd</DependentUpon>
+    </Content>
+    <Content Include="RH_DiagnosticsDataSet2.xsc">
+      <DependentUpon>RH_DiagnosticsDataSet2.xsd</DependentUpon>
+    </Content>
+    <None Include="RH_DiagnosticsDataSet2.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>RH_DiagnosticsDataSet2.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="RH_DiagnosticsDataSet2.xss">
+      <DependentUpon>RH_DiagnosticsDataSet2.xsd</DependentUpon>
+    </Content>
     <None Include="scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="scripts\formProgressBar.jquery.js" />
     <Content Include="scripts\General.js" />
@@ -1695,6 +1739,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Account\Report1.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -36,7 +36,14 @@
     <script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.4.0/jszip.min.js"></script>
     <script src="~/scripts/ReporteoClima/EscalarImagen.js"></script>
-
+    <script>
+        $(document).ready(function () {
+            $(document).on("keydown", function (ev) {
+                console.log(ev.keyCode);
+                if (ev.keyCode === 27 || ev.keyCode === 122) return false
+            })
+        });
+    </script>
     @{
         if (HttpContext.Current.IsDebuggingEnabled)
         {

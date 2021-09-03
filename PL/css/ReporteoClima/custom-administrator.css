@@ -2344,9 +2344,9 @@ width: 0px !important;
 min-width: 0px !important;
 max-width: 0px !important;
 }
-.bar-hidePdf img{
+.bar-hidePdf img {
     width: 0px !important;
-    height: 34.5px;
+    height: 47.38px;
 }
 .bar-hidePdf .label-top-graphic-clasificacion{
 width: 0px !important;
@@ -2363,6 +2363,7 @@ width: 0px !important;
 
 .bar-hidePdf .text-graph{
         width: 0px !important;
+        color: #eee;
 }
 /* ----------------------------------------------------------------
     Media Queries
