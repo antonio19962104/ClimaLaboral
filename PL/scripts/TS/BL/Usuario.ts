@@ -1,10 +1,10 @@
 ﻿/// <reference path = "../ML/IUsuario.ts" />
 export class Usuario {
     Usuario() {
-        var newIser: any;
+        
     }
     getAll() {
-        
-        
+        var usr: IUsuario;
+        usr.apellidoMaterno;
     }
 }

@@ -13,6 +13,17 @@
     var _nuevoHistorico = @Html.Raw(JsonConvert.SerializeObject(new ML.Historico()));
     var _nuevoHistoricoMin = @Html.Raw(JsonConvert.SerializeObject(new ML.minHistorico()));
     var _newHistorico = @Html.Raw(JsonConvert.SerializeObject(new ML.HistoricoClima()));
+    $(document).ready(function () {
+        document.getElementsByTagName("body")[0].onclick = function (event) {
+            if (event.detail === 1) {
+                console.log("1 click");
+            } else if (event.detail === 2) {
+                console.log("doble");
+                // ajustar paleta de colores
+                //event.target.outerHTML += "<input type='color' class='form-control'>";
+            }
+        };
+    });
 </script>
 <!--original-->
 <div class=""><!--col-lg-10 offset-lg-1 o con un collg12-->
@@ -20,12 +31,11 @@
         <div style="float:right;"></div>
     </div>
     <div ng-show="vm.urlApis == 'http://localhost:11124/'" style="text-align:center;margin-top:0px;">
-        <i ng-hide="vm.SeccionesReporte.Id == 1" ng-click="vm.prev()" class="fas fa-arrow-left" style="cursor:pointer"></i>
+        <i id="prev-btn" ng-hide="vm.SeccionesReporte.Id == 1" ng-click="vm.prev()" class="fas fa-arrow-left" style="cursor:pointer"></i>
         <span class="step" ng-class="{ active: vm.SeccionesReporte.Id % 2 == 0 }"></span>
         <span class="step" ng-class="{ active: vm.SeccionesReporte.Id % 2 != 0 }"></span>
-        <i ng-hide="vm.SeccionesReporte.Id == 41" ng-click="vm.next()" class="fas fa-arrow-right" style="cursor:pointer"></i>
+        <i id="next-btn" ng-hide="vm.SeccionesReporte.Id == 41" ng-click="vm.next()" class="fas fa-arrow-right" style="cursor:pointer"></i>
     </div>
-    <button onclick="otraopcion()">Exporta una</button>
     <div ng-show="vm.SeccionesReporte.Id >= 3 && vm.SeccionesReporte.Id < 41" class="ml-5 col-2" style="margin-bottom: -2rem; z-index: 1;">
         <input type="checkbox" class="" ng-model="vm.exportaImagen" id="exportaImagen" /><label class="ml-1" for="exportaImagen">Exportar a PDF</label>
     </div>
@@ -113,7 +123,7 @@
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no14_Comparativo_Indicadores_De_Permanencia.cshtml")
         </div>
         <!-------------------------------------Reporte Comparativo de Indicadores de Abandono----------------------------------------->
-        <div ng-show="vm.SeccionesReporte.Id == 20" id="tab-20" title="Comparativo de indicadores de Abandono">
+        <div ng-show="vm.SeccionesReporte.Id == 20" id="tab-20" ng-hide="vm.SeccionesReporte.Id != 20" title="Comparativo de indicadores de Abandono">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no15_Comparativo_Indicadores_De_Abandono.cshtml")
         </div>
         <!-------------------------------------Reporte de Resultados Generales por Departamento----------------------------------------->
@@ -124,14 +134,14 @@
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEA.cshtml")
         </div>
         <!-------------------------------------Reporte de Resultados Generales por Niveles----------------------------------------->
-        <div ng-show="vm.SeccionesReporte.Id == 23" id="tab-23" title="Resultados Generales por Niveles Enfoque Empresa">
+        <div ng-show="vm.SeccionesReporte.Id == 23" id="tab-23" ng-hide="vm.enfoqueSeleccionado == 2 || vm.SeccionesReporte.Id != 23" title="Resultados Generales por Niveles Enfoque Empresa">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no17_Resultados_Generales_Por_Niveles_EE.cshtml")
         </div>
         <div ng-show="vm.SeccionesReporte.Id == 24" id="tab-24" title="Resultados generales por Niveles Enfoque Area">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no17_Resultados_Generales_Por_Niveles_EA.cshtml")
         </div>
         <!-------------------------------------Reporte de Clasificación Corporativo----------------------------------------->
-        <div ng-show="vm.SeccionesReporte.Id == 25" id="tab-25" title="Pantalla del punto numero 16 Enfoque empresa">
+        <div ng-show="vm.SeccionesReporte.Id == 25" id="tab-25" ng-hide="vm.enfoqueSeleccionado == 2 || vm.SeccionesReporte.Id != 25" title="Pantalla del punto numero 16 Enfoque empresa">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no18_Tabla_Clasificacion_CorporativoEE.cshtml")
         </div>
         <div ng-show="vm.SeccionesReporte.Id == 26" id="tab-26" title="Pantalla del punto numero 16 Enfoque Area">

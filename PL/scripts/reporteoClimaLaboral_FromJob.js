@@ -375,10 +375,10 @@ function GetDashBoard() {
                     vm.verificarStorage();
                     $(document).on("keydown", function (e) {
                         if (e.key == "ArrowLeft") {
-                            vm.prev();
+                            document.getElementById("prev-btn").click();
                         }
                         if (e.key == "ArrowRight") {
-                            vm.next();
+                            document.getElementById("next-btn").click();
                         }
                     });
 
@@ -2224,121 +2224,150 @@ function GetDashBoard() {
                                 if (vm.SeccionesReporte.Id >= 21) { ptDefault = 30; }
                             }
                             document.getElementsByClassName("busy")[1].style.display = "block";
-                            docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */
-                                image: { type: 'jpeg', quality: 0.98 },
-                                html2canvas: { scale: 2 }
-                            },
-                                function () {
-                                    if (paginaActiva == "tab-impulsores-clave") {
-                                        if (resolucion <= 1380) {
-                                            $("#tab-impulsores-clave .card-block")[0].classList.remove("mt-0", "pt-0");
-                                            $("#tab-impulsores-clave .card-block .row")[0].classList.remove("mt-0");
-                                            $(".bg-impulsoresEx").removeClass("mt-2");
-                                            $(".bg-impulsoresEx").addClass("mt-3");
-                                            $(".tablaimpulsores-derEx").removeClass("mt-2");
-                                            $(".tablaimpulsores-derEx").addClass("mt-3");
-                                            $(".grafica-trabajarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
-                                            $(".grafica-dejarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
-                                        }
-
-                                    }
-                                    if (paginaActiva == "tab-indicadores-permanencia") {
-                                        if (resolucion <= 1610) {
-                                            $(".titulo-grafica1")[0].style.padding = "20px";
-                                            $(".titulo-grafica2")[0].style.padding = "20px";
-                                            $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.remove("mt-2");
-                                            $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.add("mt-4");
-                                            $(".nuevomt")[0].classList.remove("mt-2");
-                                            $(".nuevomt")[0].classList.add("mt-5");
-                                        }
-                                    }
-                                    if (paginaActiva == "tab-bienestar-ee") {
-                                        document.getElementById("quitaSwitch").style.display = "block";
-                                    }
-                                    document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
-                                    document.getElementById(paginaActiva).parentNode.removeAttribute("style");
-                                    document.getElementById(paginaActiva).removeAttribute("style");
-                                    deletePadding(itemsPadding);
-                                    if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
-                                        var elemH = document.getElementById(paginaActiva).children[0];
-                                        elemH.removeAttribute("style");
-                                    }
-                                    /*Secciones mejores/peores*/
-                                    if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
-                                        paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
-                                        document.getElementById(paginaActiva).parentNode.parentNode.classList.remove("ng-hide");
-                                        //parafos-mejores  mt-img-indicadores
-                                        var pregs = $(".parrafo-pregunta:visible");
-                                        [].forEach.call(pregs, function (parrafo) {
-                                            parrafo.classList.remove("parafos-mejores");
-                                            parrafo.classList.add("mb-5");
-                                            parrafo.classList.remove("mb-2");
-                                        });
-                                        var margenes = $(".mt-img-indicadores:visible");
-                                        [].forEach.call(margenes, function (parrafo) {
-                                            parrafo.classList.add("mb-5");
-                                            parrafo.classList.add("mt-5");
-                                            parrafo.removeAttribute("style");
-                                        });
-                                        var cards = $(".bg-degradado-gris:visible");
-                                        [].forEach.call(cards, function (parrafo) {
-                                            parrafo.removeAttribute("style");
-                                            parrafo.style.padding = "40px";
-                                        });
-                                        document.getElementById(paginaActiva).classList.add("px-lg-5");
-                                        document.getElementById(paginaActiva).removeAttribute("style");
-                                        document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
-                                    }
-                                    // Regresar estilos a vista web
-                                    if (paginaActiva == "tab-bienestar-ee") {
-                                        if ($(window).width() > 1610) {
-                                            var elem = document.getElementById(paginaActiva);
-                                            document.getElementById("quitaSwitch").style.display = "block";
-                                            //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
-                                            // $remover clase
-                                            var bordes = document.getElementsByClassName("quitar-borde");
-                                            [].forEach.call(bordes, function (elem) {
-                                                elem.classList.add("borde-tabla-titulo");
-                                                elem.classList.add("borde-tabla-titulo");
-                                            });
-                                        }
-                                    }
-                                    if (paginaActiva == "tab-indicadores-permanencia") {
-                                        if ($(window).width() > 1610) {
-                                            var indicador = document.getElementsByClassName("margin-top-nuevo");
-                                            [].forEach.call(indicador, function (itemD) {
-                                                var mt = parseInt(itemD.style.marginTop);
-                                                var newmt = mt * 2;
-                                                itemD.style.marginTop = newmt + "px";
-                                            });
-                                            var elem = document.getElementById(paginaActiva);
-                                            elem.getElementsByClassName("card-block")[0].removeAttribute("style");
-                                            var mb = elem.getElementsByClassName("bg-gris");
-                                            [].forEach.call(mb, function (elemMB) {
-                                                elemMB.classList.add("mb-5");
-                                                elemMB.classList.remove("mb-2");
-                                            });
-                                            elem.getElementsByClassName("nuevomt")[0].classList.add("mt-5");
-                                            elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-2");
-                                        }
-                                    }
-                                    if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                        if ($(window).width() > 1610) {
-                                            var elem = document.getElementById(paginaActiva);
-                                            elem.getElementsByClassName("card-block")[0].removeAttribute("style");
-                                            var mb = elem.getElementsByClassName("nuevomt");
-                                            [].forEach.call(mb, function (elemMB) {
-                                                elemMB.classList.add("mb-5");
-                                                elemMB.classList.add("mt-5");
-                                                elemMB.classList.remove("mb-2");
-                                                elemMB.classList.remove("mt-2");
-                                            })
-                                        }
-                                    }
-                                    setTimeout(function () {
-                                        document.getElementsByClassName("busy")[1].style.display = "none";
-                                    }, 1200);
+                            var padrePaginaActiva;
+                            try {
+                                padrePaginaActiva = document.getElementById(paginaActiva).parentNode.parentNode.id;;
+                            } catch (e) {
+                                padrePaginaActiva = "";
+                            }
+                            
+                            if (padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado == 0) {
+                                var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
+                                childs = Enumerable.from(childs).toList();
+                                childs = childs.map(async (key, index) => {
+                                    var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
+                                        image: { type: 'jpeg', quality: 1.0 },
+                                        html2canvas: { scale: 2 }
+                                    }, function () {
+                                        
+                                    });
+                                    docReporte.addPage();
+                                    docReporte.addImage(data, 1200, 400);
+                                    return data;
                                 });
+                                setTimeout(function () {
+                                    document.getElementsByClassName("busy")[1].style.display = "none";
+                                    docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                                }, 2000);
+                            }
+                            else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0)  || (padrePaginaActiva != "tab-17")) {
+                                docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */
+                                    image: { type: 'jpeg', quality: 0.98 },
+                                    html2canvas: { scale: 2 }
+                                },
+                                    function () {
+                                        if (paginaActiva == "tab-impulsores-clave") {
+                                            if (resolucion <= 1380) {
+                                                $("#tab-impulsores-clave .card-block")[0].classList.remove("mt-0", "pt-0");
+                                                $("#tab-impulsores-clave .card-block .row")[0].classList.remove("mt-0");
+                                                $(".bg-impulsoresEx").removeClass("mt-2");
+                                                $(".bg-impulsoresEx").addClass("mt-3");
+                                                $(".tablaimpulsores-derEx").removeClass("mt-2");
+                                                $(".tablaimpulsores-derEx").addClass("mt-3");
+                                                $(".grafica-trabajarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
+                                                $(".grafica-dejarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
+                                            }
+
+                                        }
+                                        if (paginaActiva == "tab-indicadores-permanencia") {
+                                            if (resolucion <= 1610) {
+                                                $(".titulo-grafica1")[0].style.padding = "20px";
+                                                $(".titulo-grafica2")[0].style.padding = "20px";
+                                                $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.remove("mt-2");
+                                                $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.add("mt-4");
+                                                $(".nuevomt")[0].classList.remove("mt-2");
+                                                $(".nuevomt")[0].classList.add("mt-5");
+                                            }
+                                        }
+                                        if (paginaActiva == "tab-bienestar-ee") {
+                                            document.getElementById("quitaSwitch").style.display = "block";
+                                        }
+                                        document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
+                                        document.getElementById(paginaActiva).parentNode.removeAttribute("style");
+                                        document.getElementById(paginaActiva).removeAttribute("style");
+                                        deletePadding(itemsPadding);
+                                        if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
+                                            var elemH = document.getElementById(paginaActiva).children[0];
+                                            elemH.removeAttribute("style");
+                                        }
+                                        /*Secciones mejores/peores*/
+                                        if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
+                                            paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
+                                            document.getElementById(paginaActiva).parentNode.parentNode.classList.remove("ng-hide");
+                                            //parafos-mejores  mt-img-indicadores
+                                            var pregs = $(".parrafo-pregunta:visible");
+                                            [].forEach.call(pregs, function (parrafo) {
+                                                parrafo.classList.remove("parafos-mejores");
+                                                parrafo.classList.add("mb-5");
+                                                parrafo.classList.remove("mb-2");
+                                            });
+                                            var margenes = $(".mt-img-indicadores:visible");
+                                            [].forEach.call(margenes, function (parrafo) {
+                                                parrafo.classList.add("mb-5");
+                                                parrafo.classList.add("mt-5");
+                                                parrafo.removeAttribute("style");
+                                            });
+                                            var cards = $(".bg-degradado-gris:visible");
+                                            [].forEach.call(cards, function (parrafo) {
+                                                parrafo.removeAttribute("style");
+                                                parrafo.style.padding = "40px";
+                                            });
+                                            document.getElementById(paginaActiva).classList.add("px-lg-5");
+                                            document.getElementById(paginaActiva).removeAttribute("style");
+                                            document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
+                                        }
+                                        // Regresar estilos a vista web
+                                        if (paginaActiva == "tab-bienestar-ee") {
+                                            if ($(window).width() > 1610) {
+                                                var elem = document.getElementById(paginaActiva);
+                                                document.getElementById("quitaSwitch").style.display = "block";
+                                                //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
+                                                // $remover clase
+                                                var bordes = document.getElementsByClassName("quitar-borde");
+                                                [].forEach.call(bordes, function (elem) {
+                                                    elem.classList.add("borde-tabla-titulo");
+                                                    elem.classList.add("borde-tabla-titulo");
+                                                });
+                                            }
+                                        }
+                                        if (paginaActiva == "tab-indicadores-permanencia") {
+                                            if ($(window).width() > 1610) {
+                                                var indicador = document.getElementsByClassName("margin-top-nuevo");
+                                                [].forEach.call(indicador, function (itemD) {
+                                                    var mt = parseInt(itemD.style.marginTop);
+                                                    var newmt = mt * 2;
+                                                    itemD.style.marginTop = newmt + "px";
+                                                });
+                                                var elem = document.getElementById(paginaActiva);
+                                                elem.getElementsByClassName("card-block")[0].removeAttribute("style");
+                                                var mb = elem.getElementsByClassName("bg-gris");
+                                                [].forEach.call(mb, function (elemMB) {
+                                                    elemMB.classList.add("mb-5");
+                                                    elemMB.classList.remove("mb-2");
+                                                });
+                                                elem.getElementsByClassName("nuevomt")[0].classList.add("mt-5");
+                                                elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-2");
+                                            }
+                                        }
+                                        if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
+                                            if ($(window).width() > 1610) {
+                                                var elem = document.getElementById(paginaActiva);
+                                                elem.getElementsByClassName("card-block")[0].removeAttribute("style");
+                                                var mb = elem.getElementsByClassName("nuevomt");
+                                                [].forEach.call(mb, function (elemMB) {
+                                                    elemMB.classList.add("mb-5");
+                                                    elemMB.classList.add("mt-5");
+                                                    elemMB.classList.remove("mb-2");
+                                                    elemMB.classList.remove("mt-2");
+                                                })
+                                            }
+                                        }
+                                        setTimeout(function () {
+                                            document.getElementsByClassName("busy")[1].style.display = "none";
+                                        }, 1200);
+                                    });
+                            }
+                            
                         }
                     }
                     else if (vm.exportaImagen == false) {
@@ -3244,60 +3273,155 @@ function GetDashBoard() {
     
                 }
             }
-              vm.prev = function () {
-             
-               /*intro
-                * Ambos 0 
-                * Enfoque empresa 1
-                * Enfoque area 2
-               */
+
+            vm.prev = function () {
+
+                /*intro
+                 * Ambos 0 // OK
+                 * Enfoque empresa 1
+                 * Enfoque area 2
+                */
                 vm.reduceGrafica();
+                if (vm.SeccionesReporte.Id == 20 || vm.SeccionesReporte.Id == 19 || vm.SeccionesReporte.Id == 18) {
+                    if (vm.enfoqueSeleccionado == 2) {
+                        vm.SeccionesReporte.Id--;
+                        return;
+                    }
+                }
+                if (vm.enfoqueSeleccionado == 2 && vm.hasHistorico == false && vm.SeccionesReporte.Id <= 17) {
+                    if (vm.SeccionesReporte.Id == 17) {
+                        vm.SeccionesReporte.Id = 14;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id == 14) {
+                        vm.SeccionesReporte.Id = 10;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id == 10) {
+                        vm.SeccionesReporte.Id = 8;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id <= 8) {
+                        vm.SeccionesReporte--;
+                        return;
+                    }
+                }
+                if (vm.enfoqueSeleccionado == 2 && vm.hasHistorico == true && vm.SeccionesReporte.Id <= 17) {
+                    if (vm.SeccionesReporte.Id == 17) {
+                        vm.SeccionesReporte.Id = 16;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id == 16) {
+                        vm.SeccionesReporte.Id = 14;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id == 14) {
+                        vm.SeccionesReporte.Id = 12;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id == 12) {
+                        vm.SeccionesReporte.Id = 10;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id == 10) {
+                        vm.SeccionesReporte.Id = 8;
+                        return;
+                    }
+                    if (vm.SeccionesReporte.Id <= 8) {
+                        vm.SeccionesReporte--;
+                        return;
+                    }
+                }
+                if (vm.SeccionesReporte.Id == 21) {
+                    vm.SeccionesReporte.Id = 20;
+                    return;
+                }
+                if (vm.SeccionesReporte.Id == 20) {
+                    vm.SeccionesReporte.Id = 19;
+                    return;
+                }
+                if (vm.SeccionesReporte.Id == 17 && vm.enfoqueSeleccionado == 1 && vm.hasHistorico == false) {
+                    vm.SeccionesReporte.Id = 13;
+                    return;
+                }
+                if (vm.SeccionesReporte.Id == 17 && vm.enfoqueSeleccionado == 1 && vm.hasHistorico == true) {
+                    vm.SeccionesReporte.Id = 15;
+                    return;
+                }
+                if (vm.SeccionesReporte.Id == 13 && vm.enfoqueSeleccionado == 1 && vm.hasHistorico == false) {
+                    vm.SeccionesReporte.Id = 9;
+                    return;
+                }
+                if (vm.SeccionesReporte.Id == 13 && vm.enfoqueSeleccionado == 1 && vm.hasHistorico == true) {
+                    vm.SeccionesReporte.Id = 11;
+                    return;
+                }
+
+
+                if (vm.SeccionesReporte.Id == 27 && vm.enfoqueSeleccionado == 1) {
+                    document.getElementById("tab-26").classList.add("ng-hide");
+                    vm.SeccionesReporte.Id = 25;
+                    return;
+                }
                 if (vm.SeccionesReporte.Id == 4) {
                     vm.SeccionesReporte.Id = 3.5;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;                     
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id = 3.5;
                 }
 
                 if (vm.SeccionesReporte.Id == 3.5) {
                     vm.SeccionesReporte.Id = 3;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;                    
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id = 3;
                 }
                 /*Reporte corpo*/
                 if (vm.SeccionesReporte.Id == 41 && vm.opc == "4") {
                     vm.SeccionesReporte.Id = 40.5;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;                      
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id;
                 }
                 if (vm.SeccionesReporte.Id == 40.5 && vm.opc == "4") {
                     vm.SeccionesReporte.Id = 40;
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;                     
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id;
                 }
                 if (vm.SeccionesReporte.Id == 13 || vm.SeccionesReporte.Id == 17) {
                     if (vm.hasHistorico) {
-                        vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;                  
+                        vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
                     }
-                    else {                       
-                           vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;                                     
+                    else {
+                        vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;
                     }
                 }
                 if (vm.SeccionesReporte.Id == 41) {
                     if (vm.enfoqueSeleccionado == 1) {
-                        vm.SeccionesReporte.Id = 37;             
+                        vm.SeccionesReporte.Id = 37;
                     }
-                    else{
-                        vm.SeccionesReporte.Id = 38;       
+                    else {
+                        vm.SeccionesReporte.Id = 38;
                     }
 
 
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;      
+                    vm.exportaImagen = exportaConfig.exporta;
                     return vm.SeccionesReporte.Id;
+                }
+
+                //validar ea
+                if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22 && vm.enfoqueSeleccionado == 2 && vm.hasHistorico == false) {
+                    if (vm.SeccionesReporte.Id != 24) {
+                        vm.SeccionesReporte.Id--;
+                        vm.SeccionesReporte.Id--;
+                    }
+                    if (vm.SeccionesReporte.Id == 25 || vm.SeccionesReporte.Id == 24) {
+                        
+                    } else {
+                        return;
+                    }
                 }
 
 
@@ -3305,28 +3429,30 @@ function GetDashBoard() {
                 if (vm.SeccionesReporte.Id == 25) {
                     /* seleccion de enfoque */
                     if (vm.enfoqueSeleccionado > 0) {
-                        if (vm.enfoqueSeleccionado  == 1) {
-                            vm.SeccionesReporte.Id =vm.SeccionesReporte.Id - 2;
+                        if (vm.enfoqueSeleccionado == 1) {
+                            vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;
                         }
                     }
-                    else{vm.SeccionesReporte.Id--;}
+                    else { vm.SeccionesReporte.Id--; }
 
                     var childs = document.getElementById("pegarReseccionadoEA").childNodes;
                     childs[childs.length - 1].style.display = "block";
                     /* Navegando de la seccion 25 a la 24 mostrando la ultima subseccion */
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
-                    vm.exportaImagen = exportaConfig.exporta;                    
+                    vm.exportaImagen = exportaConfig.exporta;
                     return;
                 }
 
                 if (vm.SeccionesReporte.Id == 24) {
                     try {
+                        if (vm.enfoqueSeleccionado == 2)
+                            document.getElementById("tab-23").classList.add("ng-hide");
                         if (vm.enfoqueSeleccionado == 1) {
                             vm.SeccionesReporte.Id = 22;
                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
                             vm.exportaImagen = exportaConfig.exporta;
                         }
-                        else{
+                        else {
                             /* ir a la sub del 24 */
                             var childs = document.getElementById("pegarReseccionadoEA").childNodes;
 
@@ -3337,7 +3463,9 @@ function GetDashBoard() {
                                 childs[childs.length - 1].style.display = "block";
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                 vm.exportaImagen = exportaConfig.exporta;
-                                vm.SeccionesReporte.Id = 24;                                
+                                vm.SeccionesReporte.Id = 24;
+                                if (vm.enfoqueSeleccionado == 2)
+                                    document.getElementById("tab-25").classList.add("ng-hide");
                                 return;
                             }
                             if (visible.length == 1 && vm.SeccionesReporte.Id == 24) {
@@ -3346,18 +3474,25 @@ function GetDashBoard() {
                                 if ((num - 1) > 0) {
                                     document.getElementsByClassName("tab-24-" + (num - 1))[0].style.display = "block";
                                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
-                                    vm.exportaImagen = exportaConfig.exporta;                                    
+                                    vm.exportaImagen = exportaConfig.exporta;
                                     return;
                                 }
                                 else if ((num - 1) == 0) {
                                     /* Activar la seccion de los graficos de 23 */
-                                    vm.SeccionesReporte.Id--;/* 22 */
-                                    /* mostrar ultimo */
-                                    var childsEE = document.getElementById("pegarReseccionado").childNodes;
-                                    childsEE[childsEE.length - 1].style.display = "block";
-                                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
-                                    vm.exportaImagen = exportaConfig.exporta;                                    
-                                    return;
+                                    if (vm.enfoqueSeleccionado == 2) {
+                                        vm.SeccionesReporte.Id--;
+                                        vm.SeccionesReporte.Id--;
+                                        return;
+                                    }
+                                    else {
+                                        vm.SeccionesReporte.Id--;/* 22 */
+                                        /* mostrar ultimo */
+                                        var childsEE = document.getElementById("pegarReseccionado").childNodes;
+                                        childsEE[childsEE.length - 1].style.display = "block";
+                                        var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                                        vm.exportaImagen = exportaConfig.exporta;
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -3378,7 +3513,7 @@ function GetDashBoard() {
                             childs[childs.length - 1].style.display = "block";
                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                             vm.exportaImagen = exportaConfig.exporta;
-                            vm.SeccionesReporte.Id = 23;                            
+                            vm.SeccionesReporte.Id = 23;
                             return;
                         }
                         if (visible.length == 1 && vm.SeccionesReporte.Id == 23) {
@@ -3387,21 +3522,21 @@ function GetDashBoard() {
                             if ((num - 1) > 0) {
                                 document.getElementsByClassName("tab-23-" + (num - 1))[0].style.display = "block";
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
-                                vm.exportaImagen = exportaConfig.exporta;                                
+                                vm.exportaImagen = exportaConfig.exporta;
                                 return;
                             }
                             else if ((num - 1) == 0) {
                                 // Activar la seccion de los graficos de 23
                                 //con enfoque 2
                                 if (vm.enfoqueSeleccionado > 0) {
-                                    if (vm.enfoqueSeleccionado == 1){vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2; };//21}
+                                    if (vm.enfoqueSeleccionado == 1) { vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2; };//21}
                                 }
-                                else{
+                                else {
                                     vm.SeccionesReporte.Id--;//22
                                 }
 
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                                vm.exportaImagen = exportaConfig.exporta;                                
+                                vm.exportaImagen = exportaConfig.exporta;
                                 return;
                             }
                         }
@@ -3414,15 +3549,15 @@ function GetDashBoard() {
                 //con enfoque y de reversa
                 if (vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 2) {
                     if (vm.enfoqueSeleccionado == 1) {
-                        if (vm.SeccionesReporte.Id == 41 || vm.SeccionesReporte.Id == 37 || vm.SeccionesReporte.Id == 35 || vm.SeccionesReporte.Id == 33 || 
-                        vm.SeccionesReporte.Id == 31 || vm.SeccionesReporte.Id == 29 || vm.SeccionesReporte.Id == 27 ||  vm.SeccionesReporte.Id == 23 || 
-                        vm.SeccionesReporte.Id == 21 || vm.SeccionesReporte.Id == 11) {
-                            vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;                            
-                        }else{
+                        if (vm.SeccionesReporte.Id == 41 || vm.SeccionesReporte.Id == 37 || vm.SeccionesReporte.Id == 35 || vm.SeccionesReporte.Id == 33 ||
+                            vm.SeccionesReporte.Id == 31 || vm.SeccionesReporte.Id == 29 || vm.SeccionesReporte.Id == 27 || vm.SeccionesReporte.Id == 23 ||
+                            vm.SeccionesReporte.Id == 21 || vm.SeccionesReporte.Id == 11) {
+                            vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 2;
+                        } else {
                             if (vm.SeccionesReporte.Id != 15) {
                                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
                             }
-                        
+
                         }
 
                     }
@@ -3431,18 +3566,17 @@ function GetDashBoard() {
                     }
 
                 }
-                else
-                {
-                    vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;                    
+                else {
+                    vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
                 }
 
-                  try {
-                      var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                      vm.exportaImagen = exportaConfig.exporta;
-                      vm.cambioSeccion(vm.SeccionesReporte.Id);
-                  } catch (e) {
+                try {
+                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
+                    vm.exportaImagen = exportaConfig.exporta;
+                    vm.cambioSeccion(vm.SeccionesReporte.Id);
+                } catch (e) {
 
-                  }
+                }
 
             }
 

@@ -4,9 +4,10 @@ var Usuario = (function () {
     function Usuario() {
     }
     Usuario.prototype.Usuario = function () {
-        var newIser;
     };
     Usuario.prototype.getAll = function () {
+        var usr;
+        usr.apellidoMaterno;
     };
     return Usuario;
 }());
