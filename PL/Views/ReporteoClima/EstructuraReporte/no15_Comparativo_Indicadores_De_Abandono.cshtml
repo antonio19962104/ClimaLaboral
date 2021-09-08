@@ -14,7 +14,7 @@
                                 <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
                                     <div ng-repeat="item in vm.auxData_2 track by $index" class="col px-0 px-sm-1">
                                         <center>
-                                            <div class="bar-clasificacion2" style="min-height:17px;height: 400px; overflow:hidden;">
+                                            <div class="bar-clasificacion2" style="min-height:17px;height: {{ (400 * vm.fact) }}px; overflow:hidden;">
                                                 <div ng-show="{{ item.objRespuestaFrecuncia[6].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item1 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[6].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[6].Respuesta }}</span> {{ item.objRespuestaFrecuncia[6].Frecuencia }}</div>
                                                 <div ng-show="{{ item.objRespuestaFrecuncia[5].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item2 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[5].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[5].Respuesta }}</span> {{ item.objRespuestaFrecuncia[5].Frecuencia }}</div>
                                                 <div ng-show="{{ item.objRespuestaFrecuncia[4].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item3 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[4].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[4].Respuesta }}</span> {{ item.objRespuestaFrecuncia[4].Frecuencia }}</div>

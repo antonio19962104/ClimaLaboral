@@ -1,4 +1,5 @@
-﻿using Hangfire;
+﻿using Aspose.Pdf;
+using Hangfire;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -2125,6 +2126,18 @@ namespace PL.Controllers
                 BL.NLogGeneratorFile.logError(aE, new StackTrace());
             }
             return list;
+        }
+        public ActionResult Power()
+        {
+            // Load PDF document
+            Document pdfDocument = new Document(@"\\10.5.2.101\\ClimaLaboral\\reporte.pdf");
+            PptxSaveOptions pptxOptions = new PptxSaveOptions();
+            // Save output file
+            pptxOptions.OptimizeTextBoxes = true;
+            pptxOptions.SeparateImages = true;
+            pptxOptions.ExtractOcrSublayerOnly = true;
+            pdfDocument.Save(@"\\10.5.2.101\\ClimaLaboral\\PDF to PPT.ppt", pptxOptions);
+            return Json(string.Empty);
         }
     }
 }

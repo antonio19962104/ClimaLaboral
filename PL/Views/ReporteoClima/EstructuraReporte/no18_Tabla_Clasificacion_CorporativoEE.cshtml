@@ -16,7 +16,7 @@
                     </div><!--.row-->
                     <div class="row mt-2">
                         <div class="col-12">
-                            <center>
+                            <center ng-if="vm.enfoqueSeleccionado != 0">
                                 <div ng-show="vm.hasHistorico" class="col-12">
                                     <div class="row justify-content-center">
                                         <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
@@ -33,6 +33,30 @@
                                         <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
                                         <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
                                         <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                    </div>
+                                </div>
+                            </center>
+                            <center ng-if="vm.enfoqueSeleccionado == 0">
+                                <div ng-show="vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px; height: 25px; background: #f0af43; margin-top: 10px; float: left; "></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EE.</div>
+                                        <div style="width: 25px; height: 25px; background: #5dc3ce; margin-top: 10px; float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EA.</div>
+                                        <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                    </div>
+                                </div>
+                                <div ng-show="!vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px; height: 25px; background: #f0af43; margin-top: 10px; float: left; "></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EE.</div>
+                                        <div style="width: 25px; height: 25px; background: #5dc3ce; margin-top: 10px; float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EA.</div>
                                     </div>
                                 </div>
                             </center>

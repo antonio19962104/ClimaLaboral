@@ -70,7 +70,7 @@
                                             <td class="borde-tabla3" colspan="9">84. Normalmente me siento libre de fatiga cuando me levanto por la mañana.</td>
                                             <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(4) track by $index" class="factor1">{{ item }}%</td>
                                         </tr>
-                                    </tbody>
+                                    </tbody>                                                                        
                                     <thead class="table-dark mb-5">
                                         <tr id="mergePsicoEE" class="borde-tabla-titulo quitar-borde">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
@@ -98,7 +98,7 @@
                                             <td class="borde-tabla3" colspan="9">86. Encuentro tiempo para meditar y alinear mis expectativas de vida.</td>
                                             <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(8) track by $index" class="factor1">{{ item }}%</td>
                                         </tr>
-                                    </tbody>
+                                    </tbody>                                    
                                     <thead class="table-dark mb-5">
                                         <tr id="mergeSocialEE" class="borde-tabla-titulo quitar-borde">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
@@ -355,6 +355,9 @@
     @@media(max-width: 1609px) {
         .table td, .table th {
             padding: 5px !important;
+            /*padding: 4px 5px !important;
+            height: 30px;
+            overflow: hidden;*/
         }
 
         .table-reporte {

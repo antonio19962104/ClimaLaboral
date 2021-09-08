@@ -16,6 +16,8 @@ function GetDashBoard() {
     function reporteController($http, $scope) {
         try {
             var vm = this;
+			var countAgrandar = 0;
+			var countAgrandar2 = 0;
             vm.hasHistorico = true;
             vm.exportaImagen = true;
             vm.mostrarMensaje = true;
@@ -366,12 +368,17 @@ function GetDashBoard() {
             var paddingtop4 = "";
             var paddingtop5 = "";
             var factConver = ($(window).width() * 1.8) / 1920;
+            vm.fact = factConver - .50;
+            var factConver2 = ($(window).width() * 3) / 1920;
             /*#endregion variables*/
 
 
 
             $(document).ready(function () {
                 try {
+                    $("#tab-1 select[id!='Anio'] ").change(function () { 
+                        document.getElementById('Anio').value = '-Selecciona-';
+                    });
                     vm.verificarStorage();
                     $(document).on("keydown", function (e) {
                         if (e.key == "ArrowLeft") {
@@ -386,6 +393,69 @@ function GetDashBoard() {
 
                 }
             });
+
+            vm.agrandarGraficas = function () {
+                if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado != 0) {
+                    var graficaBarras = $(".bar-clasificacion:visible");
+                    [].forEach.call(graficaBarras, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                    });
+                    var graficaHCN = $(".hc:visible");
+                    [].forEach.call(graficaHCN,function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver +"px";
+                        graf.style.marginTop= parseFloat(graf.style.marginTop) * factConver +"px";
+                    });
+                    var grafHC = $(".hc-doble:visible");
+                    [].forEach.call(grafHC, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                    });
+                    var graficaHC = $(".bar-progress4:visible");
+                    [].forEach.call(graficaHC, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                    });
+                }
+                if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
+                    var graficaBarras = $(".bar-progress-clasificacion:visible");
+                    [].forEach.call(graficaBarras, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                    });
+                    var graficaHCN = $(".hc:visible");
+                    [].forEach.call(graficaHCN,function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver +"px";
+                        graf.style.marginTop= parseFloat(graf.style.marginTop) * factConver +"px";
+                        //aumentar mt
+                        graf.style.marginTop = (parseFloat(graf.style.marginTop) + 20) + "px";
+                    });
+                    var grafHC = $(".hc-doble:visible");
+                    [].forEach.call(grafHC, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                    });
+                    var graficaHC = $(".row .bg-gris:visible");
+                    [].forEach.call(graficaHC, function (graf) {
+                        graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
+                    });
+                }
+            }
+
+            vm.CrearHC = function (currentHC, arr) {
+                /*Crear HC*/
+                //Obtener las graficas de barras que representan el porcentaje
+                $(".barras-doblel:visible, .barras-dobler:visible");
+                //De estas obtener la que tiene un alto mas grande
+                //Las graficas de 100% tienen 330px de alto
+                //Como el HC solo llegara a la mitad mi 100% de personas equivale a 150px
+                //Calcular a que porcentaje equivale la cantidad de HC
+                var maxHC = Enumerable.from(arr).max(o => o.HC);
+                var px = (currentHC * 165) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a
+                                                    //una grafica de 100% por la de mas altura en el array data
+                return px;
+            }
+
+            vm.setMargin = function (currentHeight) {//55
+                var marginTop = -190;//quiere pedir -191
+                var dif = 165 - currentHeight;
+                return marginTop + dif;
+            }
 
             /*#region llenar catalogos*/
             vm.get = function (url, functionOK, mostrarAnimacion) {
@@ -1591,6 +1661,12 @@ function GetDashBoard() {
             }
 
             vm.run = function () {
+                if (document.getElementById("Anio").value == "-Selecciona-") {
+                    swal("Debe elegir un periodo de aplicación de la encuesta", "", "info").then(function () {
+                        return;
+                    });
+                    return;
+                }
                 try {
                     /****Se guarda el tipo de enfoque seleccionado*****/
                     vm.enfoqueSeleccionado = vm.ddlEnfoques.Id;
@@ -1900,21 +1976,17 @@ function GetDashBoard() {
                         if (paginaActiva.includes("pegarReseccionado"))
                             paginaActiva = paginaActiva.split('_')[0];
                         document.getElementById(paginaActiva).parentNode.style.backgroundColor = "#fff";
+                        if (paginaActiva == "tab-bienestar-ea") {
+                            document.getElementById("tab-bienestar-ea").parentNode.style.backgroundColor = "#fff";
+                            document.getElementById("tab-17").getElementsByClassName("content-wrap")[1].style.backgroundColor = "#fff";
+                        }
                         document.getElementById(paginaActiva).style.backgroundColor = "#fff";
                         /* Meter el contenido html dentro de la pagina */
                         /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
                         if (vm.SeccionesReporte.Id == 25) {
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if (vm.SeccionesReporte.Id >= 21) {
-                                var graficaBarras = $(".bar-clasificacion:visible");
-                                [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                                });
-                                var graficaHC = $(".bar-progress4:visible");
-                                [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                                });
-                            }
+                            vm.agrandarGraficas();
+
                             var childs = document.getElementById("divPantalla25").childNodes;
                             var canvas = [];
                             [].forEach.call(childs, function (item) { item.style.display = "none"; });
@@ -1929,8 +2001,8 @@ function GetDashBoard() {
                                     topMarging = 30;
 
                                 var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, topMarging, { /* options */
-                                    image: { type: 'jpeg', quality: 0.98 },
-                                    html2canvas: { scale: 2 }
+                                    image: { type: 'jpeg', quality: 1},
+                                    html2canvas: { scale: 1 }
                                 }
                                     , function () {
                                     });
@@ -1977,16 +2049,7 @@ function GetDashBoard() {
                         }
                         if (vm.SeccionesReporte.Id == 26) {
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if (vm.SeccionesReporte.Id >= 21) {
-                                var graficaBarras = $(".bar-clasificacion:visible");
-                                [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                                });
-                                var graficaHC = $(".bar-progress4:visible");
-                                [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                                });
-                            }
+                            vm.agrandarGraficas();
                             var childs = document.getElementById("divPantalla26").childNodes;
                             var canvas = [];
                             [].forEach.call(childs, function (item) { item.style.display = "none"; });
@@ -2000,8 +2063,8 @@ function GetDashBoard() {
                                 if ($(window).width() > 1610)
                                     topMarging = 30;
                                 var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, topMarging, { /* options */
-                                    image: { type: 'jpeg', quality: 0.98 },
-                                    html2canvas: { scale: 2 }
+                                    image: { type: 'jpeg', quality: 1},
+                                    html2canvas: { scale: 1 }
                                 }
                                     , function () {
                                     });
@@ -2118,6 +2181,8 @@ function GetDashBoard() {
                                         elem.classList.remove("borde-tabla-titulo");
                                         elem.classList.remove("borde-tabla-titulo");
                                     });
+                                }else{
+                                    ptDefault = 30;
                                 }
                             }
                             if (paginaActiva == "tab-indicadores-permanencia") {
@@ -2156,16 +2221,7 @@ function GetDashBoard() {
                             }
 
                             // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            if (vm.SeccionesReporte.Id >= 21) {
-                                var graficaBarras = $(".bar-clasificacion:visible");
-                                [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                                });
-                                var graficaHC = $(".bar-progress4:visible");
-                                [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                                });
-                            }
+                            vm.agrandarGraficas();
 
                             if (vm.SeccionesReporte.Id >= 21) {
                                 finalPaddingTop = 100;
@@ -2174,21 +2230,27 @@ function GetDashBoard() {
                                 if ($(window).width() > 1610) {
                                     ptDefault = 0;
                                 }
-                                else {
+                                else
+                                {
                                     ptDefault = -10
                                 }
                             }
 
                             if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
                                 ptDefault = 0;
-                                if ($(window).width() > 1610) {
+                                if (resolucion >= 1900) {
                                     document.getElementById(paginaActiva).style.marginTop = "95px";
+                                     ptDefault = 0;
+                                }                                
+                                else if (resolucion >= 1550 && resolucion <= 1899) {
+                                    document.getElementById(paginaActiva).style.marginTop = "95px";
+                                     ptDefault = 30;
                                 }
-                                else {
+                                else{                                  
                                     document.getElementById(paginaActiva).style.marginTop = "80px";
                                 }
-                            }
-                            if ($(window).width() > 1700) {
+                            }    
+                            if ($(window).width() >= 1550) {                       
                                 switch (paginaActiva) {
                                     case "tab-mejores-ee":
                                         ptDefault = 15;
@@ -2218,10 +2280,31 @@ function GetDashBoard() {
                                         ptDefault = 50;
                                         break;
                                     default:
-                                        ptDefault = 0;
-
+                                        ptDefault=ptDefault;
+        
                                 }
                                 if (vm.SeccionesReporte.Id >= 21) { ptDefault = 30; }
+                            }
+                            if ($(window).width() <= 1440 && paginaActiva == "tab-comparativo-") {
+                                ptDefault = 20;
+                            }
+                            if (vm.fact > 1.1 && paginaActiva.includes("tab-comparativo-permanencia")) {
+                                ptDefault += 10;
+                                if (countAgrandar == 0) {
+                                    await [].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
+                                        item.style.height = (parseFloat(item.style.height) + 80) + "px";
+                                    });
+                                    countAgrandar++;
+                                }
+                            }
+                            if (vm.fact > 1.1 && paginaActiva == "tab-comparativo-abandono") {
+                                ptDefault += 10;
+                                if (countAgrandar2 == 0) {
+                                    await [].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
+                                        item.style.height = (parseFloat(item.style.height) + 80) + "px";
+                                    });
+                                    countAgrandar2++;
+                                }
                             }
                             document.getElementsByClassName("busy")[1].style.display = "block";
                             var padrePaginaActiva;
@@ -2661,7 +2744,6 @@ function GetDashBoard() {
                                 return;
                             }
                         }
-                        
                         /* Navegando en la seccion 24 */
                         if (vm.SeccionesReporte.Id >= 24 && vm.SeccionesReporte.Id < 25) {
                             try {
@@ -3183,12 +3265,21 @@ function GetDashBoard() {
             vm.reduceGrafica = function () {
                 try {
                     var anterior;
+                    if (vm.SeccionesReporte.Id == 4) {
+                        vm.SeccionesReporte.Id = 3.5
+                        return;
+                    }
                     if (vm.SeccionesReporte.Id >= 20) {
                         if (vm.SeccionesReporte.Id == 41) {
                             anterior = 38;
                         }
                         else{
-                            anterior =vm.SeccionesReporte.Id - 1;
+                            if (vm.enfoqueSeleccionado != 0) {
+                                anterior = vm.SeccionesReporte.Id - 2;
+                            }
+                            if (vm.enfoqueSeleccionado == 0) {
+                                anterior = vm.SeccionesReporte.Id - 2;
+                            }
                         }
                         var tab = document.getElementById("tab-" + anterior);
                         var contenedor = tab.getElementsByClassName("grafica-trabajar")[0];
@@ -3204,8 +3295,11 @@ function GetDashBoard() {
                             }
                             if (anterior == 24) {
                                 document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                                [].forEach.call(document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5"), function (item) {
+                                    item.style.display = "";
+                                });
                             }
-                            if (contenedor.offsetHeight == 0) {
+                            if (contenedor.offsetHeight == 0 || contenedor.offsetHeight == undefined) {
                                 var con = tab.getElementsByClassName("grafica-trabajar");
                                 for (var i = 0; i < con.length; i++) {
                                     if (item.offsetHeight > 0) {
@@ -3215,14 +3309,46 @@ function GetDashBoard() {
                                 }
                             }
                             if (contenedor.offsetHeight >= 480) { //xl si es mas de 450 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
-                                var graficaBarras = $("#tab-"+anterior+" .bar-clasificacion");
-                                [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                });
-                                var graficaHC = $("#tab-"+anterior+" .bar-progress4");
-                                [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                });                                
+                                if (vm.enfoqueSeleccionado != 0) {
+                                    var graficaBarras = $("#tab-" + anterior + " .bar-clasificacion");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    var graficaHCN = $(".hc:visible");
+                                    [].forEach.call(graficaHCN,function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                        graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                    });
+                                    var grafHC = $(".hc-doble:visible");
+                                    [].forEach.call(grafHC, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    var graficaHC = $("#tab-" + anterior + " .bar-progress4");
+                                    [].forEach.call(graficaHC, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                }
+                                if (vm.enfoqueSeleccionado == 0) {
+                                    var graficaBarras = $(".bar-progress-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    var graficaHCN = $(".hc:visible");
+                                    [].forEach.call(graficaHCN,function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                        graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                        //disminuir mt
+                                        graf.style.marginTop = (parseFloat(graf.style.marginTop) - 11) + "px";
+                                    });
+                                    var grafHC = $(".hc-doble:visible");
+                                    [].forEach.call(grafHC, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    var graficaHC = $(".row .bg-gris:visible");
+                                    [].forEach.call(graficaHC, function (graf) {
+                                        graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                    });
+                                }
                             }
                             tab.classList.add("ng-hide"); 
                             if (anterior == 23) {
@@ -3230,6 +3356,9 @@ function GetDashBoard() {
                             }
                             if (anterior == 24) {
                                 document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "none";
+                                [].forEach.call(document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5"), function (item) {
+                                    item.style.display = "none";
+                                });
                             }
                         }
                         else {
@@ -3240,7 +3369,7 @@ function GetDashBoard() {
                             if (anterior == 24) {
                                 document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
                             }
-                            if (contenedor.offsetHeight == 0) {
+                            if (contenedor.offsetHeight == 0 || contenedor.offsetHeight == undefined) {
                                 var con = tab.getElementsByClassName("grafica-trabajar");
                                 for (var i = 0; i < con.length; i++) {
                                     if (item.offsetHeight > 0) {
@@ -3250,14 +3379,36 @@ function GetDashBoard() {
                                 }
                             }
                             if (contenedor.offsetHeight >= 475) { //sm si es mas de 450 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
-                                var graficaBarras = $("#tab-"+anterior+" .bar-clasificacion");
-                                [].forEach.call(graficaBarras, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                });
-                                var graficaHC = $("#tab-"+anterior+" .bar-progress4");
-                                [].forEach.call(graficaHC, function (graf) {
-                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                });                                
+                                if (vm.enfoqueSeleccionado != 0) {
+                                    var graficaBarras = $("#tab-" + anterior + " .bar-clasificacion");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    var graficaHCN = $(".hc:visible");
+                                    [].forEach.call(graficaHCN,function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                        graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                    });
+                                    var graficaHC = $("#tab-" + anterior + " .bar-progress4");
+                                    [].forEach.call(graficaHC, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                }
+                                if (vm.enfoqueSeleccionado == 0) {
+                                    var graficaBarras = $(".bar-progress-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    var graficaHCN = $(".hc:visible");
+                                    [].forEach.call(graficaHCN,function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                        graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                    });
+                                    var graficaHC = $(".row .bg-gris:visible");
+                                    [].forEach.call(graficaHC, function (graf) {
+                                        graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                    });
+                                }
                             }
                             tab.classList.add("ng-hide");
                             if (anterior == 23) {
@@ -3282,13 +3433,21 @@ function GetDashBoard() {
                  * Enfoque area 2
                 */
                 vm.reduceGrafica();
-                if (vm.SeccionesReporte.Id == 20 || vm.SeccionesReporte.Id == 19 || vm.SeccionesReporte.Id == 18) {
-                    if (vm.enfoqueSeleccionado == 2) {
+                // validar seleccion de ambos enfoques
+                if (vm.enfoqueSeleccionado == 0) {
+                    if (vm.SeccionesReporte.Id == 8) {
                         vm.SeccionesReporte.Id--;
                         return;
                     }
                 }
-                if (vm.enfoqueSeleccionado == 2 && vm.hasHistorico == false && vm.SeccionesReporte.Id <= 17) {
+
+                if (vm.SeccionesReporte.Id == 20 || vm.SeccionesReporte.Id == 19 || vm.SeccionesReporte.Id == 18) {
+                    if (vm.enfoqueSeleccionado == 2 || vm.SeccionesReporte.Id == 0) {
+                        vm.SeccionesReporte.Id--;
+                        return;
+                    }
+                }
+                if ((vm.enfoqueSeleccionado == 2 && vm.hasHistorico == false && vm.SeccionesReporte.Id <= 17) || (vm.enfoqueSeleccionado == 0 && vm.hasHistorico == false && vm.SeccionesReporte.Id <= 17)) {
                     if (vm.SeccionesReporte.Id == 17) {
                         vm.SeccionesReporte.Id = 14;
                         return;
@@ -3302,11 +3461,11 @@ function GetDashBoard() {
                         return;
                     }
                     if (vm.SeccionesReporte.Id <= 8) {
-                        vm.SeccionesReporte--;
+                        vm.SeccionesReporte.Id--;
                         return;
                     }
                 }
-                if (vm.enfoqueSeleccionado == 2 && vm.hasHistorico == true && vm.SeccionesReporte.Id <= 17) {
+                if ((vm.enfoqueSeleccionado == 2 && vm.hasHistorico == true && vm.SeccionesReporte.Id <= 17) || (vm.enfoqueSeleccionado == 0 && vm.hasHistorico == true && vm.SeccionesReporte.Id <= 17)) {
                     if (vm.SeccionesReporte.Id == 17) {
                         vm.SeccionesReporte.Id = 16;
                         return;
@@ -3328,7 +3487,7 @@ function GetDashBoard() {
                         return;
                     }
                     if (vm.SeccionesReporte.Id <= 8) {
-                        vm.SeccionesReporte--;
+                        vm.SeccionesReporte.Id--;
                         return;
                     }
                 }
@@ -3412,7 +3571,7 @@ function GetDashBoard() {
                 }
 
                 //validar ea
-                if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22 && vm.enfoqueSeleccionado == 2 && vm.hasHistorico == false) {
+                if ((vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22 && vm.enfoqueSeleccionado == 2 && vm.hasHistorico == false) || (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22 && vm.enfoqueSeleccionado == 0 && vm.hasHistorico == false)) {
                     if (vm.SeccionesReporte.Id != 24) {
                         vm.SeccionesReporte.Id--;
                         vm.SeccionesReporte.Id--;
@@ -3445,7 +3604,7 @@ function GetDashBoard() {
 
                 if (vm.SeccionesReporte.Id == 24) {
                     try {
-                        if (vm.enfoqueSeleccionado == 2)
+                        if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0)
                             document.getElementById("tab-23").classList.add("ng-hide");
                         if (vm.enfoqueSeleccionado == 1) {
                             vm.SeccionesReporte.Id = 22;
@@ -3464,7 +3623,7 @@ function GetDashBoard() {
                                 var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                 vm.exportaImagen = exportaConfig.exporta;
                                 vm.SeccionesReporte.Id = 24;
-                                if (vm.enfoqueSeleccionado == 2)
+                                if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0)
                                     document.getElementById("tab-25").classList.add("ng-hide");
                                 return;
                             }
@@ -3479,7 +3638,7 @@ function GetDashBoard() {
                                 }
                                 else if ((num - 1) == 0) {
                                     /* Activar la seccion de los graficos de 23 */
-                                    if (vm.enfoqueSeleccionado == 2) {
+                                    if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0) {
                                         vm.SeccionesReporte.Id--;
                                         vm.SeccionesReporte.Id--;
                                         return;
@@ -3561,13 +3720,22 @@ function GetDashBoard() {
                         }
 
                     }
-                    if (vm.enfoqueSeleccionado == 2) {
-
-                    }
-
                 }
                 else {
-                    vm.SeccionesReporte.Id = vm.SeccionesReporte.Id - 1;
+                    if (typeof (vm.SeccionesReporte.Id) == "undefined") {
+                        // obtener la pagina activa
+                        var tabA;
+                        var tabs = document.getElementById("grid").children;
+                        [].forEach.call(tabs, function (item) {
+                            if (item.offsetWidth > 0)
+                                tabA = item.id;
+                        });
+                        vm.SeccionesReporte.Id = parseInt(tabA.split("-")[1]);
+                        vm.SeccionesReporte.Id--;
+                    }
+                    else {
+                        vm.SeccionesReporte.Id--;
+                    }
                 }
 
                 try {
@@ -4665,6 +4833,12 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_21();
                     fillArrayCustomHisto("BackGroundJob/getComparativoEntidadesResultadoGeneralEE/", vm.modelHistorico, vm.ComparativosGeneralesEE, function () {
                         vm.ComparativosGeneralesEE.Data = vm.ComparativosGeneralesEE.Data.Data == undefined ? vm.ComparativosGeneralesEE.Data : vm.ComparativosGeneralesEE.Data.Data;
+                        document.getElementsByClassName("busy")[1].style.display = "block";
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 22;
+                            vm.getReporteDataPantalla_22();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -4679,6 +4853,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_22();
                     fillArrayCustomHisto("BackGroundJob/getComparativoEntidadesResultadoGeneralEA/", vm.modelHistorico, vm.ComparativosGeneralesEA, function () {
                         vm.ComparativosGeneralesEA.Data = vm.ComparativosGeneralesEA.Data.Data == undefined ? vm.ComparativosGeneralesEA.Data : vm.ComparativosGeneralesEA.Data.Data;
+                        document.getElementsByClassName("busy")[1].style.display = "none";
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -4689,7 +4864,7 @@ function GetDashBoard() {
 
             vm.getReporteDataPantalla_23 = function () {
                 /*El listFiltros se envia con vm.finalColumnas pues trae toda la estructura a partir del padre hasta el nivel más bajo(Subdepartamento)
-                vm.ComparativoGeneralPorNivelesEE;*/
+                vm.ComparativoGeneralPorNivelesEE; Pantallas 17 EE EA*/
                 try {
                     vm.isBusy = true;
                     vm.flagini = 0;
@@ -4747,7 +4922,13 @@ function GetDashBoard() {
                         });
                         //limpiar duplicados
                         vm.ComparativoGeneralPorNivelesEE.Data = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data).where(o => !o.Entidad.includes("- -")).toList();
-                        if (vm.flagini == 0) {
+                        if (vm.enfoqueSeleccionado == 0) {
+                            // Avanzar a las columnas dobles
+                            vm.SeccionesReporte.Id = 24;
+                            vm.getReporteDataPantalla_24();
+                            return;
+                        }
+                        if (vm.flagini == 0 && vm.enfoqueSeleccionado != 0) {
                             vm.seccionarArrayEEN(vm.ComparativoGeneralPorNivelesEE.Data,1);
                         }
                         vm.flagini = vm.flagini + 1;
@@ -4858,6 +5039,11 @@ function GetDashBoard() {
                                     .toArray();
                                 vm.ArrayPantalla25_EE.Data = Object;
                                 vm.ArrayPantalla25_EE.Data = vm.ArrayPantalla25_EE;
+                                if (vm.enfoqueSeleccionado == 0) {
+                                    vm.SeccionesReporte.Id = 26;
+                                    vm.getReporteDataPantalla_26();
+                                    return;
+                                }
                                 vm.pintarReportePantalla_25(2, 25);
                                 vm.isBusy = false;
                             }
@@ -4869,6 +5055,11 @@ function GetDashBoard() {
                                     .toArray();
                                 vm.ArrayPantalla25_EE.Data = Object;
                                 vm.ArrayPantalla25_EE.Data = vm.ArrayPantalla25_EE;
+                                if (vm.enfoqueSeleccionado == 0) {
+                                    vm.SeccionesReporte.Id = 26;
+                                    vm.getReporteDataPantalla_26();
+                                    return;
+                                }
                                 vm.pintarReportePantalla_25(3, 25);
                                 vm.isBusy = false;
                             }
@@ -4880,6 +5071,11 @@ function GetDashBoard() {
                                     .toArray();
                                 vm.ArrayPantalla25_EE.Data = Object;
                                 vm.ArrayPantalla25_EE.Data = vm.ArrayPantalla25_EE;
+                                if (vm.enfoqueSeleccionado == 0) {
+                                    vm.SeccionesReporte.Id = 26;
+                                    vm.getReporteDataPantalla_26();
+                                    return;
+                                }
                                 vm.pintarReportePantalla_25(4, 25);
                                 vm.isBusy = false;
                             }
@@ -4891,6 +5087,11 @@ function GetDashBoard() {
                                     .toArray();
                                 vm.ArrayPantalla25_EE.Data = Object;
                                 vm.ArrayPantalla25_EE.Data = vm.ArrayPantalla25_EE;
+                                if (vm.enfoqueSeleccionado == 0) {
+                                    vm.SeccionesReporte.Id = 26;
+                                    vm.getReporteDataPantalla_26();
+                                    return;
+                                }
                                 vm.pintarReportePantalla_25(5, 25);
                                 vm.isBusy = false;
                             }
@@ -4985,6 +5186,11 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorAntiguedadEE/", vm.modelHistorico, vm.ComparativoAntiguedadEE, function () {
                         vm.ComparativoAntiguedadEE = vm.ComparativoAntiguedadEE.Data == null ? vm.ComparativoAntiguedadEE : vm.ComparativoAntiguedadEE.Data;
                         vm.flagDemografico = 1;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 28;
+                            vm.getReporteDataPantalla_28();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -5013,6 +5219,11 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_29();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGeneroEE/", vm.modelHistorico, vm.ComparativoGeneroEE, function () {
                         vm.ComparativoGeneroEE = vm.ComparativoGeneroEE.Data == undefined ? vm.ComparativoGeneroEE : vm.ComparativoGeneroEE.Data;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 30;
+                            vm.getReporteDataPantalla_30();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -5041,6 +5252,11 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_31();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGradoAcademicoEE/", vm.modelHistorico, vm.ComparativoGradoAcademicoEE, function () {
                         vm.ComparativoGradoAcademicoEE = vm.ComparativoGradoAcademicoEE.Data == undefined ? vm.ComparativoGradoAcademicoEE : vm.ComparativoGradoAcademicoEE.Data;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 32;
+                            vm.getReporteDataPantalla_32();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -5069,6 +5285,11 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_33();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorCondicionTrabajoEE/", vm.modelHistorico, vm.ComparativoCondicionTrabajoEE, function () {
                         vm.ComparativoCondicionTrabajoEE = vm.ComparativoCondicionTrabajoEE.Data == undefined ? vm.ComparativoCondicionTrabajoEE : vm.ComparativoCondicionTrabajoEE.Data;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 34;
+                            vm.getReporteDataPantalla_34();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -5097,6 +5318,11 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_35();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorFuncionEE/", vm.modelHistorico, vm.ComparativoFuncionEE, function () {
                         vm.ComparativoFuncionEE = vm.ComparativoFuncionEE.Data == undefined ? vm.ComparativoFuncionEE : vm.ComparativoFuncionEE.Data;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 36;
+                            vm.getReporteDataPantalla_36();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -5126,6 +5352,11 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_37();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorRangoEdadEE/", vm.modelHistorico, vm.ComparativoRangoEdadEE, function () {
                         vm.ComparativoRangoEdadEE = vm.ComparativoRangoEdadEE.Data == undefined ? vm.ComparativoRangoEdadEE : vm.ComparativoRangoEdadEE.Data;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.SeccionesReporte.Id = 38;
+                            vm.getReporteDataPantalla_38();
+                            return;
+                        }
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -5565,100 +5796,214 @@ function GetDashBoard() {
             //bar-estandarW
             vm.pintarCollecionPantalla_25EE = function (array, noPantalla) {
                 try {
-                    var parchepdfH = "<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
-                    var htmlContent = "";
-                    var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4">';
-                    var finalDiv = "</div></div>";
-                    var cuerpodinamic = "";
-                    vm.cuerpoPorEntidad =
-                        '<div class="col px-0 px-sm-1 bar-estandarW">' +
-                        '<center>' +
-                        '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
-                        '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
-                        '<div class="bar-clasificacion" style="overflow:hidden;height: {{ item.PorcentajeH }}px;"><!--cambia segun entidad-->' +
-                        '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
-                        '</div>' +
-                        (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
-                        '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
-                        '<div class="bar-progress4" style="height: {{ item.PorcentajeH }}px;">' +
-                        '</div>' +
-                        '</div>' +
-                        '<p class="text-graph">{{ item.Entidad }}</p>' +
-                        '</center>' +
-                        '</div>';
-                    htmlContent += initialDivForEmpresa;
-                    for (var i = 0; i < array.length; i++) {
-                        var newPercent = array[i].Porcentaje * 2.7;
-                        var newPercent2 = array[i].Porcentaje * 1.7;
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje );
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
-                        //vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("item.Porcentaje", array[i].Porcentaje);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad);
-                        if (noPantalla % 2 == 0) {/*Los pares son enfoque Area*/
-                            if (vm.SeccionesReporte.Id >= 27) {
-                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEA(array[i].Entidad, array[i].Porcentaje, 1) + "%");
+                    if (vm.enfoqueSeleccionado != 0) {
+                        var parchepdfH = "<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
+                        var htmlContent = "";
+                        var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4">';
+                        var finalDiv = "</div></div>";
+                        var cuerpodinamic = "";
+                        vm.cuerpoPorEntidad =
+                            '<div class="col px-0 px-sm-1 bar-estandarW">' +
+                            '<center>' +
+                            '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
+                            '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
+                            '<div class="bar-clasificacion" style="overflow:hidden;height: {{ item.PorcentajeH }}px;"><!--cambia segun entidad-->' +
+                            '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
+                            '</div>' +
+                            (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
+                            '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                            '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
+                            '</div>' +
+                            '</div>' +
+                            '<p class="text-graph">{{ item.Entidad }}</p>' +
+                            '</center>' +
+                            '</div>';
+                        htmlContent += initialDivForEmpresa;
+                        for (var i = 0; i < array.length; i++) {
+                            var newPercent = array[i].Porcentaje * 2.7;
+                            var newPercentB = (array[i].Porcentaje * 2.7) / 2;
+                            var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7) / 2) - 20 : ((array[i].Porcentaje * 2.7) / 2) - 10//array[i].Porcentaje * 1.7;
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                            //vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("item.Porcentaje", array[i].Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHB }}", newPercentB);
+                            if (noPantalla % 2 == 0) {/*Los pares son enfoque Area*/
+                                if (vm.SeccionesReporte.Id >= 27) {
+                                    vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEA(array[i].Entidad, array[i].Porcentaje, 1) + "%");
+                                }
+                                if (vm.SeccionesReporte.Id < 27) {
+                                    vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEA(array[i].Entidad, array[i].Porcentaje, 2) + "%");
+                                }
                             }
-                            if (vm.SeccionesReporte.Id < 27) {
-                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEA(array[i].Entidad, array[i].Porcentaje, 2) + "%");
+                            else {/*impares enfoque empresa*/
+                                if (vm.SeccionesReporte.Id >= 27) {
+                                    vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%");
+                                }
+                                if (vm.SeccionesReporte.Id < 27) {
+                                    vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%");
+                                }
                             }
-                        }
-                        else {/*impares enfoque empresa*/
-                            if (vm.SeccionesReporte.Id >= 27) {
-                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%");
-                            }
-                            if (vm.SeccionesReporte.Id < 27) {
-                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%");
-                            }
-                        }
 
-                        if (array[i].HC <= 50) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2));
-                        }
-                        if (array[i].HC > 50 && array[i].HC <= 100) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3));
-                        }
-                        if (array[i].HC > 100 && array[i].HC <= 500) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5));
-                        }
-                        if (array[i].HC > 1000) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7));
-                        }
+                            if (array[i].HC <= 50) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2));
+                            }
+                            if (array[i].HC > 50 && array[i].HC <= 100) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3));
+                            }
+                            if (array[i].HC > 100 && array[i].HC <= 500) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5));
+                            }
+                            if (array[i].HC > 1000) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7));
+                            }
 
-                        /*Iconografia*/
-                        if (array[i].Porcentaje < 70) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/lluvia-icono.png'");
-                        }
-                        if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/nube-icono.png'");
-                        }
-                        if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/solnube-icono.png'");
-                        }
-                        if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) {
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/sol-icono.png'");
-                        }
-                        if (array[i].Porcentaje > 100) {
-                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
-                        }
+                            /*Iconografia*/
+                            if (array[i].Porcentaje < 70) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/lluvia-icono.png'");
+                            }
+                            if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/nube-icono.png'");
+                            }
+                            if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/solnube-icono.png'");
+                            }
+                            if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/sol-icono.png'");
+                            }
+                            if (array[i].Porcentaje > 100) {
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                            }
 
-                        var concatAll = "";
-                        if (i == 0) {
-                            concatAll = parchepdfH + vm.cuerpoPorEntidad;
+                            var concatAll = "";
+                            if (i == 0) {
+                                concatAll = parchepdfH + vm.cuerpoPorEntidad;
+                            }
+                            else {
+                                concatAll = vm.cuerpoPorEntidad;
+                            }
+                            htmlContent += concatAll;
+                            vm.reloadCuerpoPorEntidad();
                         }
-                        else {
-                            concatAll = vm.cuerpoPorEntidad;
-                        }
-                        htmlContent += concatAll;
-                        vm.reloadCuerpoPorEntidad();
+                        htmlContent += finalDiv;
+                        $("#divPantalla" + noPantalla).append(htmlContent);
                     }
+                    if (vm.enfoqueSeleccionado == 0) {
+                        var parchepdfH = "";//"<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
+                        var htmlContent = "";
+                        var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4">';
+                        var finalDiv = "</div></div>";
+                        var cuerpodinamic = "";
+                        
+                        htmlContent += initialDivForEmpresa;
+                        for (var i = 0; i < array.length; i++) {
+                            vm.cuerpoPorEntidad = `
+                                <div agrupado class="col px-2">
+                                <center>
+                                    <div class="row px-2 position-relative">
+                                        <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                            <img src="imagenClasificacionEE" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion" style="width: 80%;">porcentajeEE</p>
+                                            <div class="bar-clasificacion" style="width:80%;">
+                                                <div class="bar-progress-clasificacion" style="height: alturaEEpx;">
+                                                    ` + (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo">comparativoHEE%</p>' : '') + `
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                            <img src="imagenClasificacionEA" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">porcentajeEA</p>
+                                            <div class="bar-clasificacion" style="width: 80%;">
+                                                <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: alturaEApx;">
+                                                    ` + (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo">comparativoHEA%</p>' : '') + `
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hc" style="margin-top: marginTopHCpx;">
+                                        <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px;">headCount</p>
+                                        <div class="bar-progress4 hc-doble" style="height: altoNaranjapx; width: 42px;"></div>
+                                    </div>
+                                    <p class="text-graph entidad-nombre">entidadColumna</p>
+                                </center>
+                            </div>
+                            `;
+                            var concatAll = "";
+                            //imagenClasificacionEE, imagenClasificacionEA
+                            var ElementoEA = array[i];// ElementoEA.HC, ElementoEA.Porcentaje, ElementoEA.Entidad, ElementoEA.tipoEntidad
+                            var ElementoEE = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data).where(o => o.Entidad == ElementoEA.Entidad && o.tipoEntidad == ElementoEA.tipoEntidad).firstOrDefault();
+                            //Ajusta pantalla 25 26
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("marginTopHC", vm.setMargin(vm.CrearHC(ElementoEE.HC, array)));
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoNaranja", vm.CrearHC(ElementoEE.HC, array));
 
-                    htmlContent += finalDiv;
-                    $("#divPantalla" + noPantalla).append(htmlContent);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("porcentajeEA", ElementoEA.Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("alturaEA", (ElementoEA.Porcentaje * 2.7));
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("porcentajeEE", ElementoEE.Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("alturaEE", (ElementoEE.Porcentaje * 2.7));
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("headCount", ElementoEE.HC);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("entidadColumna", ElementoEE.Entidad);
+                            var comparativoEA = vm.getDiferenciaGralEA(ElementoEA.Entidad, ElementoEA.Porcentaje, 2);
+                            var comparativoEE = vm.getDiferenciaGralEE(ElementoEE.Entidad, ElementoEE.Porcentaje, 2);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEE", comparativoEE);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEA", comparativoEA);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("mtopNaranja", ElementoEE.Porcentaje >= 80 ? "0" : ElementoEE.Porcentaje >= 50 ? "25" : "0");
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoNaranja", ElementoEE.Porcentaje * 2.7);
+                            /*Iconografia*/
+                            if (ElementoEA.Porcentaje < 70) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/lluvia-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje >= 70 && ElementoEA.Porcentaje < 80) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/nube-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje >= 80 && ElementoEA.Porcentaje < 90) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/solnube-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje >= 90 && ElementoEA.Porcentaje <= 100) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/sol-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje > 100) {
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                            }
+                            /*Iconografia*/
+                            if (ElementoEE.Porcentaje < 70) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/lluvia-icono.png");// /img/ReporteoClima/Iconos/nube-icono.png
+                            }
+                            if (ElementoEE.Porcentaje >= 70 && ElementoEE.Porcentaje < 80) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/nube-icono.png");
+                            }
+                            if (ElementoEE.Porcentaje >= 80 && ElementoEE.Porcentaje < 90) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/solnube-icono.png");
+                            }
+                            if (ElementoEE.Porcentaje >= 90 && ElementoEE.Porcentaje <= 100) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/sol-icono.png");
+                            }
+                            if (ElementoEE.Porcentaje > 100) {
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                            }
+
+                            if (i == 0) {
+                                concatAll = parchepdfH + vm.cuerpoPorEntidad;
+                            }
+                            else {
+                                concatAll = vm.cuerpoPorEntidad;
+                            }
+                            htmlContent += concatAll;
+                        }
+                        htmlContent += finalDiv;
+                        if (vm.enfoqueSeleccionado == 0) {
+                            htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-24-" + indiceEA);
+                            htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indiceEA);
+                            $("#divPantalla" + noPantalla).append(htmlContent);
+                        } else {
+                            $("#divPantalla" + noPantalla).append(htmlContent);
+                        }
+                        
+                    }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarCollecionPantalla_25EE");
                     //swal(aE.message, "", "warning");
@@ -8483,7 +8828,7 @@ function GetDashBoard() {
                         '</div>' +
                         (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
                         '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
-                        '<div class="bar-progress4" style="height: {{ item.PorcentajeH }}px;">' +
+                        '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
                         '</div>' +
                         '</div>' +
                         '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -8492,7 +8837,8 @@ function GetDashBoard() {
                     htmlContent += parchepdfH + initialDivForEmpresa;
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
-                        var newPercent2 = array[i].Porcentaje * 1.7;
+                        var newPercentB = (array[i].Porcentaje * 2.7) / 2;
+                        var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - 20 : ((array[i].Porcentaje * 2.7)/2) - 10//array[i].Porcentaje * 1.7;
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
@@ -8502,7 +8848,7 @@ function GetDashBoard() {
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad);
-
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHB }}", newPercentB);
 
                         if (vm.SeccionesReporte.Id >= 27) {
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%");
@@ -8583,80 +8929,239 @@ function GetDashBoard() {
                             break;
                     }
 
-                    var htmlContent = "";
-                    var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel) (Ordenamiento por empresa) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">' + vm.UNSeleccionada + '</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">';
-                    var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4 ' + idsecc + '">';
-                    var finalDiv = "</div></div>";
-                    var cierreGrafico = ' </div></div></div><!--.row--><div class="row mt-2"><div class="col-12"><center> '+(vm.hasHistorico == true ? '<div class="col-12">' :'<div class="col-12">')+'<div class="row  justify-content-center"><div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div><div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div><div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div><div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;" class="ng-hide"></div>                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 ng-hide">PROM GRAL ANTERIOR</div>                                    </div>                                </div>                            </center>                        </div>                    </div><div class="d-flex justify-content-center mt-5">                        <div class="col-12 p-0 m-0">                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">                        </div>                    </div>';
-                    var parchepdfH ="<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
-                    vm.cuerpoPorEntidad =
-                        '<div class="col px-0 px-sm-1 bar-estandarW">' +
-                        '<center>' +
-                        '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
-                        '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
-                        '<div class="bar-clasificacion" style="overflow:hidden;height: {{ item.PorcentajeH }}px;"><!--cambia segun entidad-->' +
-                        '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
-                        '</div>' +
-                        (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
-                        '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
-                        '<div class="bar-progress4" style="height: {{ item.PorcentajeH }}px;">' +
-                        '</div>' +
-                        '</div>' +
-                        '<p class="text-graph">{{ item.Entidad }}</p>' +
-                        '</center>' +
-                        '</div>';
-                    htmlContent += (contenidoHeader + initialDivForEmpresa);
-                    for (var i = 0; i < array.length; i++) {
-                        var newPercent = array[i].Porcentaje * 2.7;
-                        var newPercent2 = array[i].Porcentaje * 1.7;
-                        var concatAll= "";
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje); vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad); if (vm.SeccionesReporte.Id >= 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%"); } if (vm.SeccionesReporte.Id < 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%"); } if (array[i].HC <= 50) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2)); } if (array[i].HC > 50 && array[i].HC <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3)); } if (array[i].HC > 100 && array[i].HC <= 500) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5)); } if (array[i].HC > 1000) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7)); }                        /*Iconografia*/                        if (array[i].Porcentaje < 70) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/lluvia-icono.png'"); } if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/nube-icono.png'"); } if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/solnube-icono.png'"); } if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/sol-icono.png'"); } if (array[i].Porcentaje > 100) { swal("Existe un porcentaje mayor a 100, verificalo", "", "warning"); }
-                        if (i == 0) {
-                            concatAll= parchepdfH + vm.cuerpoPorEntidad;
+                    if (vm.enfoqueSeleccionado != 0) {
+                        var htmlContent = "";
+                        var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel) (Ordenamiento por empresa) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">' + vm.UNSeleccionada + '</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">';
+                        var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4 ' + idsecc + '">';
+                        var finalDiv = "</div></div>";
+                        var cierreGrafico = ' </div></div></div><!--.row--><div class="row mt-2"><div class="col-12"><center> ' + (vm.hasHistorico == true ? '<div class="col-12">' : '<div class="col-12">') + '<div class="row  justify-content-center"><div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div><div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div><div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div><div ng-hide="!vm.hasHistorico" style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;" class="ng-hide"></div>                                        <div ng-hide="!vm.hasHistorico" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 ng-hide">PROM GRAL ANTERIOR</div>                                    </div>                                </div>                            </center>                        </div>                    </div><div class="d-flex justify-content-center mt-5">                        <div class="col-12 p-0 m-0">                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">                        </div>                    </div>';
+                        var parchepdfH = "<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
+                        vm.cuerpoPorEntidad =
+                            '<div class="col px-0 px-sm-1 bar-estandarW">' +
+                            '<center>' +
+                            '<img imagenClasificacion class="img-fluid svg-clasificacion">' +
+                            '<p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>' +
+                            '<div class="bar-clasificacion" style="overflow:hidden;height: {{ item.PorcentajeH }}px;"><!--cambia segun entidad-->' +
+                            '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
+                            '</div>' +
+                            (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
+                            '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                            '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
+                            '</div>' +
+                            '</div>' +
+                            '<p class="text-graph">{{ item.Entidad }}</p>' +
+                            '</center>' +
+                            '</div>';
+                        htmlContent += (contenidoHeader + initialDivForEmpresa);
+                        for (var i = 0; i < array.length; i++) {
+                            var newPercent = array[i].Porcentaje * 2.7;
+                            var newPercentB = (array[i].Porcentaje * 3.3);
+                            var newPercent2 =array[i].Porcentaje >= 80 ? ((100 * 2.7)/2) : array[i].Porcentaje >= 50 ? ((100 * 2.7)/2) - 25 : ((100 * 2.7)/2) - 45;//array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - 20 : ((array[i].Porcentaje * 2.7)/2) - 10;//array[i].Porcentaje * 1.7;
+                            var concatAll= "";
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje );
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHB }}", newPercentB);
+                            if (vm.SeccionesReporte.Id >= 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 1) + "%"); }
+                            if (vm.SeccionesReporte.Id < 27) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("diferenciaHistorico", vm.getDiferenciaGralEE(array[i].Entidad, array[i].Porcentaje, 2) + "%"); }
+                            if (array[i].HC <= 50) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/2) }}", (array[i].HC / 2)); }
+                            if (array[i].HC > 50 && array[i].HC <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/3) }}", (array[i].HC / 3)); }
+                            if (array[i].HC > 100 && array[i].HC <= 500) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/5) }}", (array[i].HC / 5)); }
+                            if (array[i].HC > 1000) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ value = (item.HC/7) }}", (array[i].HC / 7)); }
+                            /*Iconografia*/
+                            if (array[i].Porcentaje < 70) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/lluvia-icono.png'"); }
+                            if (array[i].Porcentaje >= 70 && array[i].Porcentaje < 80) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/nube-icono.png'"); }
+                            if (array[i].Porcentaje >= 80 && array[i].Porcentaje < 90) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/solnube-icono.png'"); } if (array[i].Porcentaje >= 90 && array[i].Porcentaje <= 100) { vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacion", "src='/img/ReporteoClima/Iconos/sol-icono.png'"); } if (array[i].Porcentaje > 100) { swal("Existe un porcentaje mayor a 100, verificalo", "", "warning"); }
+                            if (i == 0) {
+                                concatAll= parchepdfH + vm.cuerpoPorEntidad;
+                            }
+                            else{
+                                concatAll= vm.cuerpoPorEntidad;
+                            }
+                            htmlContent += concatAll;
+                            vm.reloadCuerpoPorEntidad();
                         }
-                        else{
-                            concatAll= vm.cuerpoPorEntidad;
-                        }                        
-                        htmlContent += concatAll;
-                        vm.reloadCuerpoPorEntidad();
-                    }
-                    htmlContent += (finalDiv + cierreGrafico);
-                    if (enfoque == 1) {
-                        htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indice);
-                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)");
-                    }
-                    if (enfoque == 2) {
-                        htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indiceEA);
-                        htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Área<br/>(15. Resultados generales por nivel)");
-                    }
-                    if (enfoque == 1){
-                        htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-23-" + indice);
-                        $("#pegarReseccionado").append(htmlContent);
-                    }
-                    if (enfoque == 2) {
-                        htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-24-" + indiceEA);
-                        $("#pegarReseccionadoEA").append(htmlContent);
+                        htmlContent += (finalDiv + cierreGrafico);
+                        if (enfoque == 1) {
+                            htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indice);
+                            htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)");
+                        }
+                        if (enfoque == 2) {
+                            htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indiceEA);
+                            htmlContent = htmlContent.replace("TABLA DE CLASIFICACIÓN POR ESTRUCTURA Enfoque Empresa<br/>(15. Resultados generales por nivel)", "TABLA DE CLASIFICACIÓN POR NIVELES Enfoque Área<br/>(15. Resultados generales por nivel)");
+                        }
+                        if (enfoque == 1){
+                            htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-23-" + indice);
+                            $("#pegarReseccionado").append(htmlContent);
+                        }
+                        if (enfoque == 2) {
+                            htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-24-" + indiceEA);
+                            $("#pegarReseccionadoEA").append(htmlContent);
+                        }
+
+                        if (indice == 1 && enfoque == 1)
+                            document.getElementsByClassName("tab-23-" + indice)[0].style.display = "block";
+                        else if (indice > 1 && enfoque == 1)
+                            document.getElementsByClassName("tab-23-" + indice)[0].style.display = "none";
+
+                        if (indiceEA == 1 && enfoque == 2)
+                            document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "block";
+                        else if (indiceEA > 1 && enfoque == 2)
+                            document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "none";
+
+                        /*
+                         * en primer instancia solo dejar visible el que tiene el indice 0
+                         * Logica para avanzar en la seccion
+                          * [].forEach.call(childs, function(item){
+                          *      console.log(item.classList[2])
+                          * })
+                          * ir avanzando este submenu
+                        */
                     }
 
-                    if (indice == 1 && enfoque == 1)
-                        document.getElementsByClassName("tab-23-" + indice)[0].style.display = "block";
-                    else if (indice > 1 && enfoque == 1)
-                        document.getElementsByClassName("tab-23-" + indice)[0].style.display = "none";
+                    /* Enfoques combinados */
+                    if (vm.enfoqueSeleccionado == 0) {
+                        var htmlContent = "";
+                        var contenidoHeader = '<div class="container-fluid px-lg-5">   <p class="mb-n1">Resultado General</p>   <h2 class="robotothin mb-2 mt-n1">TABLA DE CLASIFICACIÓN POR ESTRUCTURA<br/>(15. Resultados generales por nivel) (Ordenamiento por empresa) <span class="robotobold yellow-clima area-empresa ml-3 ng-binding">' + vm.UNSeleccionada + '</span></h2>   <div class="card">      <div class="card-block">         <div class="px-4">            <div class="row mt-4">               <div class="col-sm-12">                  <div id="demostra" ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="">';
+                        var initialDivForEmpresa = '<div class="graph-wrapper grafica-trabajar mb-3"><div class="row bg-gris mr-2 ml-2 mb-4 mt-4 ' + idsecc + '">';
+                        var finalDiv = "</div></div>";
+                        var cierreGrafico = ' </div></div></div>'+
+                            (vm.hasHistorico == true ? 
+                            '<div class="row mt-2"><div class="col-12"><center> <div class="col-12"><div class="row justify-content-center"><div style="width: 25px; height: 25px; background: #f0af43; margin-top: 10px; float: left; "></div><div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div><div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EE.</div><div style="width: 25px; height: 25px; background: #5dc3ce; margin-top: 10px; float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EA.</div><div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div><div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div></div></div> </div></div></center><div class="d-flex justify-content-center mt-5"><div class="col-12 p-0 m-0"><img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;"></div></div>' :
+                            '<div class="row mt-2"><div class="col-12"><center> <div class="col-12"><div class="row justify-content-center"><div style="width: 25px; height: 25px; background: #f0af43; margin-top: 10px; float: left; "></div><div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div><div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EE.</div><div style="width: 25px; height: 25px; background: #5dc3ce; margin-top: 10px; float: left;"></div><div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EA.</div></div></div> </div></div></center><div class="d-flex justify-content-center mt-5"><div class="col-12 p-0 m-0"><img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;"></div></div>');
+                        var parchepdfH = ""; //"<div class='col px-0 px-sm-1 bar-estandarW bar-hidePdf' style='min-width: 0px !important;max-width: 0px !important;'><center><img src='/img/ReporteoClima/Iconos/sol-icono.png' class='img-fluid svg-clasificacion'><p class='label-top-graphic-clasificacion'>.</p><div class='bar-clasificacion' style='overflow:hidden;height:270px;'><div class='bar-progress-clasificacion' style='height: 0px;'></div><p ng-hide='!vm.hasHistorico' class='comparativo' style='bottom: 25%;'>.</p><p class='label-top-graphic-blue2' style='margin-top:170px;'>.</p><div class='bar-progress4' style='height:270px;'></div></div><p class='text-graph'>.</p></center></div>";
+                        // Cambiar cuerpo por entidad a la nueva estructura pero usando otra variable para no alterar lo usado
+                        // este es el array que llega, puedo buscar por Entidad y tipoEntidad directo en el array de vm.ComparativoGeneralPorNivelesEE.Data
+                        // Buscar homologo en el enfoque empresa
+                        htmlContent += (contenidoHeader + initialDivForEmpresa);
+                        for (var i = 0; i < array.length; i++) {
+                            vm.cuerpoPorEntidad = `
+                                <div agrupado class="col px-2">
+                                <center>
+                                    <div class="row px-2 position-relative">
+                                        <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                            <img src="imagenClasificacionEE" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion" style="width: 80%;">porcentajeEE</p>
+                                            <div class="bar-clasificacion" style="width:80%;">
+                                                <div class="bar-progress-clasificacion" style="height: alturaEEpx;">
+                                                    ` + (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo">comparativoHEE%</p>' : '') + `
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                            <img src="imagenClasificacionEA" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">porcentajeEA</p>
+                                            <div class="bar-clasificacion" style="width: 80%;">
+                                                <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: alturaEApx;">
+                                                    ` + (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo">comparativoHEA%</p>' : '') + `
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hc" style="margin-top: marginTopHCpx;">
+                                        <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px;">headCount</p>
+                                        <div class="bar-progress4 hc-doble" style="height: altoNaranjapx; width: 42px;"></div>
+                                    </div>
+                                    <p class="text-graph entidad-nombre">entidadColumna</p>
+                                </center>
+                            </div>
+                            `;
+                            var concatAll = "";
+                            //imagenClasificacionEE, imagenClasificacionEA
+                            var ElementoEA = array[i];// ElementoEA.HC, ElementoEA.Porcentaje, ElementoEA.Entidad, ElementoEA.tipoEntidad
+                            var ElementoEE = Enumerable.from(vm.ComparativoGeneralPorNivelesEE.Data).where(o => o.Entidad == ElementoEA.Entidad && o.tipoEntidad == ElementoEA.tipoEntidad).firstOrDefault();
 
-                    if (indiceEA == 1 && enfoque == 2)
-                        document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "block";
-                    else if (indiceEA > 1 && enfoque == 2)
-                        document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "none";
+                            //Reemplazar HC
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("marginTopHC", vm.setMargin(vm.CrearHC(ElementoEE.HC, array)));
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoNaranja", vm.CrearHC(ElementoEE.HC, array));
 
-                    /* 
-                     * en primer instancia solo dejar visible el que tiene el indice 0
-                     * Logica para avanzar en la seccion
-                      * [].forEach.call(childs, function(item){
-                      *      console.log(item.classList[2])
-                      * })
-                      * ir avanzando este submenu
-                    */
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("porcentajeEA", ElementoEA.Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("alturaEA", (ElementoEA.Porcentaje * 2.7));
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("porcentajeEE", ElementoEE.Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("alturaEE", (ElementoEE.Porcentaje * 2.7));
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("headCount", ElementoEE.HC);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("entidadColumna", ElementoEE.Entidad);
+                            var comparativoEA = vm.getDiferenciaGralEA(ElementoEA.Entidad, ElementoEA.Porcentaje, 2);
+                            var comparativoEE = vm.getDiferenciaGralEE(ElementoEE.Entidad, ElementoEE.Porcentaje, 2);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEE", comparativoEE);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEA", comparativoEA);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("mtopNaranja", ElementoEE.Porcentaje >= 80 ? "0" : ElementoEE.Porcentaje >= 50 ? "25" : "0");
+                            
+                            /*Iconografia*/                      
+                            if (ElementoEA.Porcentaje < 70) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/lluvia-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje >= 70 && ElementoEA.Porcentaje < 80) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/nube-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje >= 80 && ElementoEA.Porcentaje < 90) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/solnube-icono.png");
+                            } 
+                            if (ElementoEA.Porcentaje >= 90 && ElementoEA.Porcentaje <= 100) { 
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/sol-icono.png");
+                            }
+                            if (ElementoEA.Porcentaje > 100) { 
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning"); 
+                            }
+                            /*Iconografia*/
+                            if (ElementoEE.Porcentaje < 70) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/lluvia-icono.png");// /img/ReporteoClima/Iconos/nube-icono.png
+                            }
+                            if (ElementoEE.Porcentaje >= 70 && ElementoEE.Porcentaje < 80) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/nube-icono.png");
+                            }
+                            if (ElementoEE.Porcentaje >= 80 && ElementoEE.Porcentaje < 90) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/solnube-icono.png");
+                            }
+                            if (ElementoEE.Porcentaje >= 90 && ElementoEE.Porcentaje <= 100) {
+                                vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEE", "/img/ReporteoClima/Iconos/sol-icono.png");
+                            }
+                            if (ElementoEE.Porcentaje > 100) {
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                            }
+                            
+                            if (i == 0) {
+                                concatAll = parchepdfH + vm.cuerpoPorEntidad;
+                            }
+                            else {
+                                concatAll = vm.cuerpoPorEntidad;
+                            }
+                            htmlContent += concatAll;
+                        }
+                        htmlContent += (finalDiv + cierreGrafico);
+                        if (vm.enfoqueSeleccionado == 0) {
+                            htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-24-" + indiceEA);
+                            htmlContent = htmlContent.replace("Ordenamiento por empresa", "Ordenamiento por empresa parte " + indiceEA);
+                            $("#pegarReseccionadoEA").append(htmlContent);
+                        }
+                        if (indiceEA == 1 && vm.enfoqueSeleccionado == 0)
+                            document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "block";
+                        else if (indiceEA > 1 && enfoque == 2)
+                            document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "none";
+                        /*if (enfoque == 1) {
+                            htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-23-" + indice);
+                            $("#pegarReseccionado").append(htmlContent);
+                        }
+                        if (enfoque == 2) {
+                            htmlContent = htmlContent.replace("container-fluid px-lg-5", "container-fluid px-lg-5 tab-24-" + indiceEA);
+                            $("#pegarReseccionadoEA").append(htmlContent);
+                        }
 
+                        if (indice == 1 && enfoque == 1)
+                            document.getElementsByClassName("tab-23-24" + indice)[0].style.display = "block";
+                        else if (indice > 1 && enfoque == 1)
+                            document.getElementsByClassName("tab-23-24" + indice)[0].style.display = "none";
+
+                        if (indiceEA == 1 && enfoque == 2)
+                            document.getElementsByClassName("tab-23-24-" + indiceEA)[0].style.display = "block";
+                        else if (indiceEA > 1 && enfoque == 2)
+                            document.getElementsByClassName("tab-23-24-" + indiceEA)[0].style.display = "none";*/
+                    }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.pintarCollecionEE");
                 }
@@ -8678,7 +9183,7 @@ function GetDashBoard() {
                         '</div>' +
                         (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
                         '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
-                        '<div class="bar-progress4" style="height: {{ item.PorcentajeH }}px;">' +
+                        '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
                         '</div>' +
                         '</div>' +
                         '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -8687,16 +9192,18 @@ function GetDashBoard() {
                     htmlContent += initialDivForEmpresa;
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
-                        var newPercent2 = array[i].Porcentaje * 1.7;
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                        var newPercentB = (array[i].Porcentaje * 2.7) / 2;
+                        var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - 20 : ((array[i].Porcentaje * 2.7)/2) - 10//array[i].Porcentaje * 1.7;
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje );
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         //vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("item.Porcentaje", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeH }}", newPercent);                        
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.HC }}", array[i].HC);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Entidad }}", array[i].Entidad);
+                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHB }}", newPercentB);
 
 
                         if (vm.SeccionesReporte.Id >= 27) {

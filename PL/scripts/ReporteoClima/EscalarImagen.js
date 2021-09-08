@@ -24,6 +24,7 @@ var divs =
         "tab-edad-ee", "tab-edad-ea"
     ];
 var contadorD = 0;
+var resolucion = $(window).width();
 async function crearReportePDF() {
     if (contadorD == 0)
         docReporte.deletePage(1);
@@ -186,11 +187,21 @@ var pruebaExp = function () {
             break;
         }
     }
-    document.getElementById(paginaActiva).style.width = "631.4175px";
-    document.getElementById(paginaActiva).style.height = "446.46px";
+    //document.getElementById(paginaActiva).style.width = "631.4175px";
+    //document.getElementById(paginaActiva).style.height = "446.46px";
+    document.getElementById(paginaActiva).style.width = "842px";
+    document.getElementById(paginaActiva).style.height = "595px";
     if (paginaActiva == "tab-portada") {
         var divPrint = document.getElementById(paginaActiva);
-        divPrint.getElementsByClassName("portada-bg")[0].style.padding = "29px 25px 80px";
+        if (resolucion >= 1701) {
+                divPrint.getElementsByClassName("portada-bg")[0].style.padding = "81px 45px 121px";    
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            divPrint.getElementsByClassName("portada-bg")[0].style.padding = "81px 45px 121px";
+            var entidadP =$("#tab-portada .row .col-xl-4")[0];
+            entidadP.style.backgroundPosition="center top";
+        }else {
+                divPrint.getElementsByClassName("portada-bg")[0].style.padding = "125px 25px 80px";
+        }        
         divPrint.getElementsByClassName("circle-bg")[0].style.padding = "0px";
         var entidad = $("h1.text-white:visible");
         entidad.css("font-size", "1.75rem");
@@ -207,7 +218,13 @@ var pruebaExp = function () {
         divPrint.getElementsByClassName("introduccion-bg")[0].style.marginTop = "0px";
         divPrint.getElementsByClassName("introduccion-bg")[0].style.setProperty("margin-left", "0px", "important");
         divPrint.getElementsByClassName("introduccion-bg")[0].style.setProperty("margin-right", "0px", "important");
-        divPrint.getElementsByClassName("introduccion-bg")[0].style.setProperty("padding", "0px", "important");
+        if (resolucion >= 1701) {
+            divPrint.getElementsByClassName("introduccion-bg")[0].style.setProperty("padding", "87px 8px", "important");
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            divPrint.getElementsByClassName("introduccion-bg")[0].style.setProperty("padding", "87px 8px", "important");
+        }else {
+            divPrint.getElementsByClassName("introduccion-bg")[0].style.setProperty("padding", "70px 13px", "important");
+        }
         divPrint.getElementsByClassName("set-padding-pdf")[0].classList.remove("col-xl-7");
         divPrint.getElementsByClassName("set-padding-pdf")[0].classList.add("col-xl-6");
         divPrint.getElementsByClassName("set-padding-pdf")[1].classList.remove("col-xl-7");
@@ -217,7 +234,13 @@ var pruebaExp = function () {
         entidad.css("line-height", "30px");
         var entidad2 = $("h2.text-white:visible");
         entidad2.css("line-height", "28px");
-        divPrint.getElementsByTagName("img")[1].classList.add("mt-5");
+        if (resolucion >= 1701) {
+            divPrint.getElementsByTagName("img")[1].classList.add("mt-2");
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            divPrint.getElementsByTagName("img")[1].classList.add("mt-2");
+        }else {
+            divPrint.getElementsByTagName("img")[1].classList.add("mt-5");
+        }         
         var elemento = entidad2[0];
         elemento.style.setProperty("font-size", "1rem", "important");
         elemento = entidad2[1];
@@ -229,11 +252,19 @@ var pruebaExp = function () {
         divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding", "0px", "important");
         divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("margin-left", "0px", "important");
         divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("margin-right", "0px", "important");
-        divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "1.5rem", "important");
-        var entidad = $("button.btn-outline-dark:visible")[0];
-        entidad.style.setProperty("font-size", ".9rem", "important");
+        var entidad = $("button.btn-outline-dark:visible")[0];        
         entidad.style.setProperty("margin-bottom", "35px", "important");
         entidad.style.setProperty("padding", "6px 9px", "important");
+        if (resolucion >= 1701) {
+            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "6.5rem", "important");
+            entidad.style.setProperty("font-size", "1.2rem", "important");
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "6.5rem", "important");
+            entidad.style.setProperty("font-size", "1.2rem", "important");
+        }else {
+            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "6.5rem", "important");
+            entidad.style.setProperty("font-size", "1rem", "important");
+        }   
         var entidad2 = $(".yellow-clima.mt-n3:visible");
         entidad2.css("font-size", "20px");
         entidad2.css("padding-left", "10px");
@@ -251,6 +282,13 @@ var pruebaExp = function () {
         entidad6.style.setProperty("padding", "0px", "important");
         entidad6.style.setProperty("margin-left", "0px", "important");
         entidad6.style.setProperty("margin-right", "0px", "important");
+        if (resolucion >= 1701) {
+            entidad6.style.setProperty("padding-top","5.3rem", "important");
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            entidad6.style.setProperty("padding-top","5.3rem", "important");
+        }else {
+            entidad6.style.setProperty("padding-top","5.3rem", "important");
+        }        
         var entidad7 = $(".clima-laboral2 .row:visible")[0];
         entidad7.style.setProperty("margin-left", "0px", "important");
         entidad7.style.setProperty("margin-right", "0px", "important");
@@ -260,7 +298,6 @@ var pruebaExp = function () {
         document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-left", " 0px");
         document.getElementsByClassName("p-clima2")[0].style.setProperty("padding", "0px", "important");
         $(".p-clima2 .btn")[0].style.setProperty("margin-left", "0px", "important");
-        $(".p-clima2 .btn")[0].style.setProperty("font-size", "0.9rem", "important");
         $(".p-clima2 .btn")[0].style.setProperty("margin-top", "28px", "important");
         $(".p-clima2 .btn")[0].style.setProperty("padding", "0.375rem 0.75rem", "important");
         $(".p-clima2 > .row")[0].children[0].style.setProperty("padding-left", "0px", "important");
@@ -284,23 +321,56 @@ var pruebaExp = function () {
         document.getElementsByClassName("p-clima2")[0].children[0].outerHTML = "<center>" + document.getElementsByClassName("p-clima2")[0].children[0].outerHTML + "</center>";
         var img1 = $(".bg-clima3 img");
         img1[0].style.display = "none";
-        img1[2].style.display = "none";
-        $(".bg-clima3 span")[0].style.setProperty("font-size", ".9rem", "important");
-        $(".bg-clima3 span")[0].style.setProperty("margin", "31px 0 0 0", "important");
-        $(".bg-clima3 span")[0].style.removeProperty("font-family");
-        $(".bg-clima3 img")[1].style.setProperty("max-width", "70%", "important");
-        $(".bg-clima3 i")[0].style.setProperty("margin-top", "110px", "important");
-        $(".bg-clima3 h3")[0].style.setProperty("font-size", "20px");
+        img1[2].style.display = "none"; 
+        if (resolucion >= 1701) {
+            $(".bg-clima3 span")[0].style.setProperty("margin", "114px 0 0 0", "important");
+            $(".bg-clima3 span")[0].style.setProperty("font-size", "1.2rem", "important");
+            $(".bg-clima3 h3")[0].style.setProperty("font-size", "22px");
+            $(".bg-clima3 img")[1].style.setProperty("max-width", "100%", "important");
+            $(".p-clima2 .btn")[0].style.setProperty("font-size", "1.2rem", "important");
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            $(".bg-clima3 span")[0].style.setProperty("margin", "114px 0 0 0", "important");
+            $(".bg-clima3 span")[0].style.setProperty("font-size", "1.2rem", "important");
+            $(".bg-clima3 h3")[0].style.setProperty("font-size", "22px");
+            $(".bg-clima3 img")[1].style.setProperty("max-width", "100%", "important");
+            $(".p-clima2 .btn")[0].style.setProperty("font-size", "1.2rem", "important");
+        }else {
+            $(".bg-clima3 span")[0].style.setProperty("margin", "114px 0 0 0", "important");
+            $(".bg-clima3 span")[0].style.setProperty("font-size", "1.2rem", "important");
+            $(".bg-clima3 h3")[0].style.setProperty("font-size", "22px");
+            $(".bg-clima3 img")[1].style.setProperty("max-width", "100%", "important");
+            $(".p-clima2 .btn")[0].style.setProperty("font-size", "1.2rem", "important");
+        }                     
+        $(".bg-clima3 span")[0].style.removeProperty("font-family");        
+        $(".bg-clima3 i")[0].style.setProperty("margin-top", "110px", "important");        
         $(".bg-clima3 img")[1].classList.remove("mt-3");
         $(".bg-clima3 img")[1].classList.add("mt-5");
         $(".bg-clima3 img")[1].classList.add("mb-3");
-        $("#tab-introduccion-amarillo .row")[0].style.width = "644px";
+        if (resolucion >= 1701) {
+            $("#tab-introduccion-amarillo .row")[0].style.width = "100%";
+            $("#tab-introduccion-amarillo .row")[0].style.height = "595px";
+            $("#tab-introduccion-amarillo .row")[0].style.margin = "0px";
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            $("#tab-introduccion-amarillo .row")[0].style.width = "100%";
+            $("#tab-introduccion-amarillo .row")[0].style.height = "595px";
+            $("#tab-introduccion-amarillo .row")[0].style.margin = "0px";
+        }else {
+            $("#tab-introduccion-amarillo .row")[0].style.width = "100%";
+            $("#tab-introduccion-amarillo .row")[0].style.height = "595px";
+            $("#tab-introduccion-amarillo .row")[0].style.margin = "0px";
+        }       
     }
     if (paginaActiva == "tab-iconografia") {
         document.getElementById(paginaActiva).style.backgroundColor = "#FFF";
         $("#tab-iconografia p")[0].style.display = "none";
         $("#tab-iconografia h2")[0].style.fontSize = "23px";
-        $("#tab-iconografia")[0].style.setProperty("padding", "0px 10px", "important");
+        if (resolucion >= 1701) {
+            $("#tab-iconografia")[0].style.setProperty("padding", "84px 10px", "important");
+        }else if ( resolucion >= 1367 && resolucion <= 1700) {
+            $("#tab-iconografia")[0].style.setProperty("padding", "84px 10px", "important");
+        }else {
+            $("#tab-iconografia")[0].style.setProperty("padding", "107px 10px", "important");
+        } 
         $("#tab-iconografia .card-block")[0].style.setProperty("padding", ".8rem", "important");
         $("#tab-iconografia .card-block")[0].classList.remove("mt-5");
         $("#tab-iconografia .card-block")[0].classList.add("mt-3");
@@ -310,22 +380,19 @@ var pruebaExp = function () {
         $("#tab-iconografia h3").css("font-size", "22px");
         $("#tab-iconografia a").css("padding", "9px");
         $("#tab-iconografia a").css("width", "100%");
-
-
-
     }
     if (!histo.includes(paginaActiva)) {
         histo.push(paginaActiva);
         html2canvas(document.getElementById(paginaActiva), {
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 }
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: { scale: 1 }
         }).then(function (canvas) {
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            // document.getElementById("img-" + paginaActiva).width = width + "px";
-            // document.getElementById("img-" + paginaActiva).height = "px";
-            var pdf = new jsPDF('l', 'px'/*, [842, 595]*/);
-            docReporte.addPage(631.4175, 446.46);
-            docReporte.addImage(imgData, 'JPEG', 0, 0, 631.4175, 446.46);//400
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);           
+            var pdf = new jsPDF('l', 'px');
+            //docReporte.addPage(631.4175, 446.46);
+            docReporte.addPage(842,595);//595
+            //docReporte.addImage(imgData, 'JPEG', 0, 0, 631.4175, 446.46);//400
+            docReporte.addImage(imgData, 'JPEG', 0, 0, 842, 595);//400//595//----842, 595
             document.getElementsByClassName("busy")[1].style.display = "none";
             returnEstilosWeb(paginaActiva);
         });
@@ -365,6 +432,8 @@ var returnEstilosWeb = function (paginaActiva) {
             document.getElementById("tab-portada").getElementsByTagName("h1")[1].removeAttribute("style");
             divPrint.getElementsByClassName("portada-bg")[0].removeAttribute("style");
             divPrint.getElementsByClassName("circle-bg")[0].removeAttribute("style");
+            var entidadP =$("#tab-portada .row .col-xl-4")[0];
+            entidadP.style.backgroundPosition="right top";
             var entidad = $("h1.text-white")[0];
             entidad.removeAttribute("style");
             entidad.removeAttribute("style");

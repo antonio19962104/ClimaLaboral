@@ -6,7 +6,7 @@
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label ng-show="vm.CargaHistoricoView == false" class="control-label">Criterio para el reporte por estructura del Grupo</label>
             <label ng-show="vm.CargaHistoricoView == true" class="control-label">Elige a que entidad del grupo pertenece el histórico</label>
-            <select ng-model="vm.criterioBusquedaSeleccionado" class="form-control" ng-change="vm.changedValueCriterioBusqueda(vm.criterioBusquedaSeleccionado)"
+            <select ng-model="vm.criterioBusquedaSeleccionado" class="form-control" ng-change="vm.changedValueCriterioBusqueda(vm.criterioBusquedaSeleccionado); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="criterioReporte.Nombre for criterioReporte in vm.criteriosReporte track by criterioReporte.Id"></select>
         </div>
     </div>
@@ -22,14 +22,14 @@
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Unidad de Negocio</label>
             <select ng-model="vm.CompanyCategoria" class="form-control"
-                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
+                    ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria" ng-change="vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"></select>
         </div>
     </div>
     <!--Buscar(aIdEmpresa)-->
     <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 2">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Unidad de Negocio</label>
-            <select ng-model="vm.CompanyCategoriaForEmpresa" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForEmpresa)"
+            <select ng-model="vm.CompanyCategoriaForEmpresa" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForEmpresa); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
@@ -42,12 +42,12 @@
     <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 3">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Unidad de Negocio</label>
-            <select ng-model="vm.CompanyCategoriaForArea" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForArea)"
+            <select ng-model="vm.CompanyCategoriaForArea" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForArea); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Empresa</label>
-            <select ng-model="vm.CompanyForArea" class="form-control" ng-change="vm.setAreas(vm.CompanyForArea)"
+            <select ng-model="vm.CompanyForArea" class="form-control" ng-change="vm.setAreas(vm.CompanyForArea); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
@@ -60,17 +60,17 @@
     <div class="form-group" ng-show="vm.criterioBusquedaSeleccionado.Id == 4">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Unidad de Negocio</label>
-            <select ng-model="vm.CompanyCategoriaForDepartamento" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForDepartamento)"
+            <select ng-model="vm.CompanyCategoriaForDepartamento" class="form-control" ng-change="vm.setCompanies(vm.CompanyCategoriaForDepartamento); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Empresa</label>
-            <select ng-model="vm.CompanyForDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForDepartamento)"
+            <select ng-model="vm.CompanyForDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForDepartamento); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Área</label>
-            <select ng-model="vm.AreaForDepartamento" class="form-control" ng-change="vm.setDepartamentos(vm.AreaForDepartamento)"
+            <select ng-model="vm.AreaForDepartamento" class="form-control" ng-change="vm.setDepartamentos(vm.AreaForDepartamento); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="area.Nombre for area in vm.listArea track by area.IdArea"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
@@ -82,7 +82,7 @@
     <div ng-hide="vm.cargarHistoricoView == true" class="form-group">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Año:</label>
-            <select ng-model="vm.Anio" class="form-control" ng-change="vm.changedValueAnio(vm.Anio)"
+            <select id="Anio" ng-model="vm.Anio" class="form-control" ng-change="vm.changedValueAnio(vm.Anio); vm.Anio.value = '-Selecciona-'; document.getElementById('Anio').value = '-Selecciona-'"
                     ng-options="anios.value for anios in vm.listAnios track by anios.value"></select>
         </div>
     </div>
