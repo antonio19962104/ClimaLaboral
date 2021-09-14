@@ -215,3 +215,21 @@
     <div ng-click="vm.prev()" ng-hide="vm.SeccionesReporte.Id == 1" class="swiper-button-prev swiper-prev"></div>
     <div ng-click="vm.next()" ng-hide="(vm.SeccionesReporte.Id == 1) || (vm.SeccionesReporte.Id == 41) || (vm.opc > 1 && vm.SeccionesReporte.Id == 6)" class="swiper-button-next swiper-next"></div>
 </div>
+<script>
+    // https://stackoverflow.com/questions/38559604/how-encode-in-base64-a-file-generated-with-jspdf-and-html2canvas
+    var file = docReporte.output('blob');
+    var fd = new FormData();     // To carry on your data  
+    fd.append('mypdf', file);
+
+    $.ajax({
+        url: '/ReporteoClima/SavePDF',   //here is also a problem, depends on your 
+        data: fd,           //backend language, it may looks like '/model/send.php'
+        type: 'POST',
+        success: function (response) {
+            alter('Exit to send request');
+        },
+        error: function (jqXHR) {
+            alter('Failure to send request');
+        }
+    });
+</script>

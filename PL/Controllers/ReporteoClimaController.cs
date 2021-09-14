@@ -85,6 +85,12 @@ namespace PL.Controllers
             return Json(CrearImagenEnDirectorio(result.tableBody, result.ParteGuardada, result.CURRENT_USER));
         }
 
+        [HttpPost]
+        public JsonResult SavePDF(FormCollection result)
+        {
+            return Json(result);
+        }
+
         public static bool CrearImagenEnDirectorio(string cadenaBase64, string seccion, string usr)
         {
             try
