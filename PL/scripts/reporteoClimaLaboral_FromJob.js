@@ -397,6 +397,9 @@ function GetDashBoard() {
                         if (e.key == "ArrowRight") {
                             document.getElementById("next-btn").click();
                         }
+                        if (e.key == "p" || e.key == "P") {
+                            docReporte.save("document.pdf")
+                        }
                     });
 
                 } catch (e) {
@@ -405,6 +408,15 @@ function GetDashBoard() {
             });
 
             vm.agrandarGraficas = function () {
+			 if (resolucion <= 2500 && resolucion >= 1901) {
+                factMt= 20;
+            }
+            if (resolucion <= 1900 && resolucion >= 1370) {
+                factMt= 12;
+            }
+            if (resolucion <= 1369) {
+                factMt= 7;
+            }
                 if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado != 0) {
                     var graficaBarras = $(".bar-clasificacion:visible");
                     [].forEach.call(graficaBarras, function (graf) {
@@ -476,6 +488,7 @@ function GetDashBoard() {
                         }
                         return px;
                     }
+
                 } catch (e) {
 
                 }
@@ -1956,10 +1969,11 @@ function GetDashBoard() {
                     }
                     else {
                         if (vm.hasHistorico) {
-                            
+                            vm.SeccionesReporte.Id++;
                         }
-                        else {
-                            
+                        if (!vm.hasHistorico) {
+                            vm.SeccionesReporte.Id++;
+                            vm.SeccionesReporte.Id++;
                         }
                     }
                 }
@@ -2185,7 +2199,7 @@ function GetDashBoard() {
                                     topMarging = 30;
 
                                 var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, topMarging, { /* options */
-                                    image: { type: 'jpeg', quality: 1 },
+                                    image: { type: 'jpeg', quality: 1},
                                     html2canvas: { scale: 1 }
                                 }
                                     , function () {
@@ -2247,7 +2261,7 @@ function GetDashBoard() {
                                 if ($(window).width() > 1610)
                                     topMarging = 30;
                                 var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, topMarging, { /* options */
-                                    image: { type: 'jpeg', quality: 1 },
+                                    image: { type: 'jpeg', quality: 1},
                                     html2canvas: { scale: 1 }
                                 }
                                     , function () {
@@ -2278,6 +2292,10 @@ function GetDashBoard() {
                                     document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
                                     document.getElementById(paginaActiva).parentNode.removeAttribute("style");
                                     document.getElementById(paginaActiva).removeAttribute("style");
+									  var unhide = document.getElementById("divPantalla26");
+                                    [].forEach.call(unhide.children,function (divs) {
+                                        divs.removeAttribute("style");    
+                                    });
                                     document.getElementsByClassName("busy")[1].style.display = "none";
                                 }
                             }, 1000);
@@ -2365,7 +2383,7 @@ function GetDashBoard() {
                                         elem.classList.remove("borde-tabla-titulo");
                                         elem.classList.remove("borde-tabla-titulo");
                                     });
-                                } else {
+                                }else{
                                     ptDefault = 30;
                                 }
                             }
@@ -2414,8 +2432,9 @@ function GetDashBoard() {
                                 if ($(window).width() > 1610) {
                                     ptDefault = 0;
                                 }
-                                else {
-                                    ptDefault = -25; //se cambia por crecimiento de -10 a -25 09/09/2021 camos
+                                else
+								{                                    
+									ptDefault = -25; //se cambia por crecimiento de -10 a -25 09/09/2021 camos
                                 }
                             }
 
@@ -2429,7 +2448,7 @@ function GetDashBoard() {
                                     document.getElementById(paginaActiva).style.marginTop = "95px";
                                     ptDefault = 30;
                                 }
-                                else {
+                                else{
                                     document.getElementById(paginaActiva).style.marginTop = "80px";
                                 }
                             }
@@ -2463,7 +2482,7 @@ function GetDashBoard() {
                                         ptDefault = 50;
                                         break;
                                     default:
-                                        ptDefault = ptDefault;
+                                        ptDefault=ptDefault;
 
                                 }
                                 if (vm.SeccionesReporte.Id >= 21) { ptDefault = 30; }
@@ -2474,7 +2493,7 @@ function GetDashBoard() {
                             if (vm.fact > 1.1 && paginaActiva.includes("tab-comparativo-permanencia")) {
                                 ptDefault += 10;
                                 if (countAgrandar == 0) {
-                                    await[].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
+                                    await [].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
                                         item.style.height = (parseFloat(item.style.height) + 80) + "px";
                                     });
                                     countAgrandar++;
@@ -2483,7 +2502,7 @@ function GetDashBoard() {
                             if (vm.fact > 1.1 && paginaActiva == "tab-comparativo-abandono") {
                                 ptDefault += 10;
                                 if (countAgrandar2 == 0) {
-                                    await[].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
+                                    await [].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
                                         item.style.height = (parseFloat(item.style.height) + 80) + "px";
                                     });
                                     countAgrandar2++;
@@ -2520,12 +2539,58 @@ function GetDashBoard() {
                                     docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                                 }, 2000);
                             }
-                            else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0) || (padrePaginaActiva != "tab-17")) {
+                            else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0)  || (padrePaginaActiva != "tab-17")) {
                                 docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */
                                     image: { type: 'jpeg', quality: 0.98 },
                                     html2canvas: { scale: 1 }
                                 },
                                     function () {
+										if (vm.SeccionesReporte.Id == 24 && paginaActiva != "tab-generales-departamento-ea") {
+                                            try {
+                                                if (resolucion <= 2500 && resolucion >= 1901) {
+                                                    factMt= 12;
+                                                }
+                                                if (resolucion <= 1900 && resolucion >= 1370) {
+                                                    factMt= 12;
+                                                }
+                                                if (resolucion <= 1369) {
+                                                    factMt= 7;
+                                                }
+                                                var hvisible;
+                                                for (var i = 0; i < 200; i++) {
+                                                    if(document.getElementsByClassName("tab-24-"+i)[0] != undefined){
+                                                        if (document.getElementsByClassName("tab-24-"+i)[0].offsetWidth > 0) {
+                                                            hvisible = "tab-24-" + (i - 1);
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                var graficaHC = $("."+hvisible+" .row .bg-gris");
+                                                [].forEach.call(graficaHC, function (graf) {
+                                                    graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";                                                    
+                                                });
+                                                var grafHC = $("."+hvisible+" .hc-doble");
+                                                [].forEach.call(grafHC, function (graf) {
+                                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                });
+                                                var graficaHCN = $("."+hvisible+" .hc");
+                                                [].forEach.call(graficaHCN,function (graf) {
+                                                    graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                                    graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                                    //aumentar mt
+                                                    graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                                                });
+                                                var graficaBarras = $("."+hvisible+" .bar-progress-clasificacion");
+                                                [].forEach.call(graficaBarras, function (graf) {
+                                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                });
+                                                $("."+hvisible+" .row .bg-gris")[0].removeAttribute("style")
+                                               
+                                            } catch (e) {
+    
+                                            }
+                                        }
+
                                         if (paginaActiva == "tab-impulsores-clave") {
                                             if (resolucion <= 1380) {
                                                 $("#tab-impulsores-clave .card-block")[0].classList.remove("mt-0", "pt-0");
@@ -3176,6 +3241,36 @@ function GetDashBoard() {
                                             document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
                                         }
                                         // Regresar estilos a vista web
+										if (paginaActiva == "tab-generales-departamento-ea") {
+                                                var graficaBarras = $("#tab-22 #tab-generales-departamento-ea .bar-progress-clasificacion");
+                                                [].forEach.call(graficaBarras, function (graf) {
+                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                });
+                                                var graficaHCN = $("#tab-22 #tab-generales-departamento-ea .hc");
+                                                [].forEach.call(graficaHCN,function (graf) {
+                                                graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                                graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                                //aumentar mt
+                                                if (resolucion <= 2500 && resolucion >= 1901) {
+                                                    factMt= 12;
+                                                }
+                                                if (resolucion <= 1900 && resolucion >= 1370) {
+                                                    factMt= 12;
+                                                }
+                                                if (resolucion <= 1369) {
+                                                    factMt= 7;
+                                                }
+                                                graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                                                });
+                                                var grafHC = $("#tab-22 #tab-generales-departamento-ea .hc-doble");
+                                                [].forEach.call(grafHC, function (graf) {
+                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                });
+                                                var graficaHC = $("#tab-22 #tab-generales-departamento-ea .bg-gris");
+                                                [].forEach.call(graficaHC, function (graf) {
+                                                graf.style.minHeight = parseFloat(graf.style.minHeight) / factConver + "px";
+                                                });
+                                        }/********************/
                                         if (paginaActiva == "tab-bienestar-ee") {
                                             if ($(window).width() > 1610) {
                                                 var elem = document.getElementById(paginaActiva);
@@ -3275,7 +3370,7 @@ function GetDashBoard() {
                     // pasar a las seccionadas enumeradas
                     vm.SeccionesReporte.Id = 23;
                 }
-                if (vm.SeccionesReporte.Id == 23) {
+                if (vm.SeccionesReporte.Id == 23 && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
                     if (vm.criterioBusquedaSeleccionado.Id == 1) {
                         var childs = document.getElementById("pegarReseccionado").childNodes;
                         if (childs[childs.length - 1].style.display == "block" && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
@@ -3322,6 +3417,14 @@ function GetDashBoard() {
                     try {
                         if (vm.criterioBusquedaSeleccionado.Id == 1) {
                             var childs = document.getElementById("pegarReseccionadoEA").childNodes;
+                            if (childs[(childs.length - 1)].style.display == "block") {
+                                //Debe avanzar a la siguiente
+                                if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
+                                    vm.SeccionesReporte.Id = 26;
+                                    vm.getReporteDataPantalla_26();
+                                }
+                            }
+                            var entre = false;
                             [].forEach.call(childs, function (item, index) {
                                 var customClassName = item.classList[2];
                                 var consecutivoClase = parseInt(customClassName.split('-')[2]) + 1;
@@ -3333,6 +3436,7 @@ function GetDashBoard() {
                                         document.getElementsByClassName("tab-24-" + consecutivoClase)[0].style.display = "block";/* mostrar el siguiente */
                                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + consecutivoClase).lastOrDefault();
                                         vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                                        entre=true;
                                         throw BreakException;
                                         return false;
                                     }
@@ -3348,6 +3452,10 @@ function GetDashBoard() {
                                     }
                                 }
                             });
+                            if (entre == false && vm.SeccionesReporte.Id == 24) {
+                                // mostrar el primero
+                                document.getElementsByClassName("tab-24-" + 1)[0].style.display = "block";
+                            }
                         }
                         else {
                             vm.SeccionesReporte.Id++;
@@ -3615,11 +3723,61 @@ function GetDashBoard() {
                             try {
                                 if (vm.criterioBusquedaSeleccionado.Id == 1) {
                                     var childs = document.getElementById("pegarReseccionadoEA").childNodes;
+									var maxchilds = childs.length - 1;
                                     [].forEach.call(childs, function (item, index) {
                                         var customClassName = item.classList[2];
                                         var consecutivoClase = parseInt(customClassName.split('-')[2]) + 1;
                                         if (document.getElementsByClassName(customClassName)[0].style.display == "" || document.getElementsByClassName(item.classList[2])[0].style.display == "block") {
                                             vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + parseInt(customClassName.split('-')[2]), exporta: vm.exportaImagen });
+											/*Se bajan los tamaños de los graficos de la ultima de Id 24  -----Camos 13/09/2021*/
+                                            if (maxchilds == index) {
+                                                if (vm.SeccionesReporte.Id == 24) {
+                                                    try {
+                                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                                            factMt= 12;
+                                                        }
+                                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                                            factMt= 12;
+                                                        }
+                                                        if (resolucion <= 1369) {
+                                                            factMt= 7;
+                                                        }
+                                                        var hvisible;                                                   
+                                                        for (var i = 0; i < 200; i++) {
+                                                            if(document.getElementsByClassName("tab-24-"+i)[0] != undefined){
+                                                                if (document.getElementsByClassName("tab-24-"+i)[0].offsetWidth > 0) {
+                                                                    hvisible = "tab-24-" + i;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        var graficaHC = $("."+hvisible+" .row .bg-gris");
+                                                        [].forEach.call(graficaHC, function (graf) {
+                                                            graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";                                                    
+                                                        });
+                                                        var grafHC = $("."+hvisible+" .hc-doble");
+                                                        [].forEach.call(grafHC, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        });
+                                                        var graficaHCN = $("."+hvisible+" .hc");
+                                                        [].forEach.call(graficaHCN,function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver +"px";
+                                                            graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
+                                                            //aumentar mt
+                                                            graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                                                        });
+                                                        var graficaBarras = $("."+hvisible+" .bar-progress-clasificacion");
+                                                        [].forEach.call(graficaBarras, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        });
+                                                        $("."+hvisible+" .row .bg-gris")[0].removeAttribute("style")
+                                               
+                                                    } catch (e) {
+    
+                                                    }
+                                                }
+                                            }
+                                            
                                             /* ocultar el actual */
                                             document.getElementsByClassName(customClassName)[0].style.display = "none";
                                             if (document.getElementsByClassName("tab-24-" + consecutivoClase)[0] != undefined) {
@@ -4175,7 +4333,7 @@ function GetDashBoard() {
                                 }
                             }
                             if (contenedor.offsetHeight >= 480) { //xl si es mas de 450 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
-                                if (vm.enfoqueSeleccionado != 0) {
+                                if (vm.enfoqueSeleccionado != 0 && vm.SeccionesReporte.Id != 24) {
                                     var graficaBarras = $("#tab-" + anterior + " .bar-clasificacion");
                                     [].forEach.call(graficaBarras, function (graf) {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
@@ -4199,7 +4357,7 @@ function GetDashBoard() {
                                         graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 10) + "px";
                                     });
                                 }
-                                if (vm.enfoqueSeleccionado == 0) {
+                                if (vm.enfoqueSeleccionado == 0 && vm.SeccionesReporte.Id != 24) {
                                     var graficaBarras = $(".bar-progress-clasificacion:visible");
                                     [].forEach.call(graficaBarras, function (graf) {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
@@ -4220,6 +4378,7 @@ function GetDashBoard() {
                                         graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
                                     });
                                 }
+
                             }
                             tab.classList.add("ng-hide"); 
                             if (anterior == 23) {
@@ -4466,7 +4625,7 @@ function GetDashBoard() {
                     }
                     else { vm.SeccionesReporte.Id--; }
 
-                    var childs = document.getElementById("pegarReseccionadoEA").childNodes;
+                    var childs = document.getElementById("pegarReseccionadoEA").children;
                     childs[childs.length - 1].style.display = "block";
                     /* Navegando de la seccion 25 a la 24 mostrando la ultima subseccion */
                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();

@@ -2,16 +2,16 @@
     // Initialize Editor   
     try {
         $('.textarea-editor').summernote(
-{
-    height: 150,                 // set editor height
-    minHeight: null,             // set minimum height of editor
-    maxHeight: null,             // set maximum height of editor
-    focus: false,
-    placeholder: '',
-    tabsize: 2,
-    dialogsInBody: true,
-    dialogsFade: false
-});
+        {
+            height: 150,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: false,
+            placeholder: '',
+            tabsize: 2,
+            dialogsInBody: true,
+            dialogsFade: false
+        });
         $('.textarea-editor-header').summernote(
             {
                 toolbar: [
