@@ -1,6 +1,8 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Usuario = void 0;
 /// <reference path = "../ML/IUsuario.ts" />
-var Usuario = (function () {
+var Usuario = /** @class */ (function () {
     function Usuario() {
     }
     Usuario.prototype.Usuario = function () {

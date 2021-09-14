@@ -1,4 +1,5 @@
-﻿/*
+﻿var lh = [];
+/*
  * Script principal del reporte gráfico de Clima Laboral
  */
 var dataComparativoPermanencia = [];
@@ -96,8 +97,8 @@ function GetDashBoard() {
                 '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                 '</div>' +
                 (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
-            '<p class="label-top-graphic-blue2" style="margin-top: margenHCpx;">{{ item.HC }}</p>' +
-            '<div class="bar-progress4" style="height: altoHCpx;">' +
+                '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                '<div class="bar-progress4" style="height: {{ item.PorcentajeH }}px;">' +
                 '</div>' +
                 '</div>' +
                 '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -370,25 +371,15 @@ function GetDashBoard() {
             var factConver = ($(window).width() * 1.8) / 1920;
             vm.fact = factConver - .50;
             var factConver2 = ($(window).width() * 3) / 1920;
-            var factMt = 0;
-            if (resolucion <= 2500 && resolucion >= 1901) {
-                factMt= 20;
-            }
-            if (resolucion <= 1900 && resolucion >= 1370) {
-                factMt= 12;
-            }
-            if (resolucion <= 1369) {
-                factMt= 7;
-            }
             /*#endregion variables*/
 
 
 
             $(document).ready(function () {
                 try {
-                    /*$("#tab-1 select[id!='Anio'] ").change(function () { 
-                        document.getElementById('Anio').value = '-Selecciona-';
-                    });*/
+                    //$("#tab-1 select[id!='Anio'] ").change(function () { 
+                    //    document.getElementById('Anio').value = '-Selecciona-';
+                    //});
                     vm.verificarStorage();
                     $(document).on("keydown", function (e) {
                         if (e.key == "ArrowLeft") {
@@ -424,10 +415,6 @@ function GetDashBoard() {
                     [].forEach.call(graficaHC, function (graf) {
                         graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                     });
-                    var parrafoHC = $(".label-top-graphic-blue2:visible");
-                    [].forEach.call(parrafoHC, function (graf) {
-                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
-                    });
                 }
                 if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
                     var graficaBarras = $(".bar-progress-clasificacion:visible");
@@ -439,7 +426,7 @@ function GetDashBoard() {
                         graf.style.height = parseFloat(graf.style.height) * factConver +"px";
                         graf.style.marginTop= parseFloat(graf.style.marginTop) * factConver +"px";
                         //aumentar mt
-                        graf.style.marginTop = (parseFloat(graf.style.marginTop) + factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                        graf.style.marginTop = (parseFloat(graf.style.marginTop) + 20) + "px";//1920 => +20 ; para 1366 debe sumar 8
                     });
                     var grafHC = $(".hc-doble:visible");
                     [].forEach.call(grafHC, function (graf) {
@@ -451,52 +438,43 @@ function GetDashBoard() {
                     });
                 }
             }
-
-            vm.CrearHC = function (currentHC, arr, enfoque) {
-                try {
-                    if (enfoque == 0 || enfoque == undefined) {
-                        /*Crear HC*/
-                        //Obtener las graficas de barras que representan el porcentaje
-                        $(".barras-doblel:visible, .barras-dobler:visible");
-                        //De estas obtener la que tiene un alto mas grande
-                        //Las graficas de 100% tienen 330px de alto
-                        //Como el HC solo llegara a la mitad mi 100% de personas equivale a 150px
-                        //Calcular a que porcentaje equivale la cantidad de HC
-                        var maxHC = Enumerable.from(arr).max(o => o.HC);
-                        var px = (currentHC * 165) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
-                        return px;
-                    }
-                    if (enfoque != 0) {
-                        /*Crear HC*/
-                        $(".bar-clasificacion"); // la altura maxima de un 100% en la encuesta es 270px
-                        var maxHC = Enumerable.from(arr).max(o => o.HC);
-                        var px = (currentHC * 135) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
-                        if (px > 135) {
-                            alert();
-                        }
-                        return px;
-                    }
-                } catch (e) {
-
-                }
-            }
+            var historicoMaxAlto = 0;
             
-            vm.setMargin = function (currentHeight, enfoque, porcentajeE) {//55
-                if (currentHeight != undefined) {
-                    if (enfoque == 0 || enfoque == undefined) {
-                        var marginTop = -190;//quiere pedir -191
-                        var dif = 165 - currentHeight;
-                        return marginTop + dif;
-                    }
-                    if (enfoque != 0) {
-                        //alto del azul bar-clasificacion
-                        return (porcentajeE * 2.7) - currentHeight - 23;
-                        //menos el alto del hc
-                        //menos 23 del alto del parrafo
-
-                    }
-                }
+            vm.CrearHC = function (currentHC, arr, enfoque) {
+                /*Crear HC*/
+                //Obtener las graficas de barras que representan el porcentaje
+                $(".barras-doblel:visible, .barras-dobler:visible");
+                //De estas obtener la que tiene un alto mas grande
+                //Las graficas de 100% tienen 330px de alto
+                //Como el HC solo llegara a la mitad mi 100% de personas equivale a 150px
+                //Calcular a que porcentaje equivale la cantidad de HC
+                //
+                //obter el grafico mas alto de porcentaje segun lo que viene en el arr
+                //
+                var maxAltoG;
+                if ($(window).width() <= 1609)
+                    maxAltoG = 309;//319;
+                if ($(window).width() >= 1610)
+                    maxAltoG = 320;//330;
+                var maxHC = Enumerable.from(arr).max(o => o.HC);
+                var px = (currentHC * (maxAltoG / 2)) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a
+                //una grafica de 100% por la de mas altura en el array data
+                return px;
             }
+
+            vm.setMargin = function (currentHeight) {//55
+                var maxAltoG;
+                var maxAltoG;
+                if (window.matchMedia("max-width: 1609px"))
+                    maxAltoG = 319;
+                else
+                    maxAltoG = 330;
+                var marginTop = -190;//quiere pedir -191
+                var dif = (maxAltoG / 2) - currentHeight;
+                return marginTop + dif + 5;
+            }
+
+
 
             /*#region llenar catalogos*/
             vm.get = function (url, functionOK, mostrarAnimacion) {
@@ -1941,743 +1919,6 @@ function GetDashBoard() {
             vm.list1.push("");
             vm.historicoPaginaActiva = [];
 
-
-            vm.nextReport = async function () {
-                var topMarging = 0; $('html,body').scrollTop(0); 
-                var paginaActiva = vm.getPaginaActiva();
-                await vm.generaPaginaPDF(paginaActiva);
-
-                if (vm.SeccionesReporte.Id == 3) {
-                    vm.SeccionesReporte.Id = 3.5; return;
-                }
-                else {
-                    if (vm.SeccionesReporte.Id <= 7) {
-                        vm.SeccionesReporte++;
-                    }
-                    else {
-                        if (vm.hasHistorico) {
-                            
-                        }
-                        else {
-                            
-                        }
-                    }
-                }
-
-                if (vm.SeccionesReporte.Id == 7 && vm.PorcentajeCompanierismo.length == 0) {
-                    vm.getReporteDataPantalla_7();
-                }
-                if (vm.SeccionesReporte.Id == 8 && vm.PorcentajeProcesosOrganizacionales.length == 0) {
-                    vm.getReporteDataPantalla_8();
-                }
-                if (vm.SeccionesReporte.Id == 9 && vm.MejoresReactivosEE.length == 0) {
-                    vm.getReporteDataPantalla_9();
-                }
-                if (vm.SeccionesReporte.Id == 10 && vm.MejoresReactivosEA.length == 0) {
-                    vm.getReporteDataPantalla_10();
-                }
-                if (vm.SeccionesReporte.Id == 11 && vm.MayorCrecimientoEE.length == 0) {
-                    vm.getReporteDataPantalla_11();
-                }
-                if (vm.SeccionesReporte.Id == 12 && vm.MayorCrecimientoEA.length == 0) {
-                    vm.getReporteDataPantalla_12();
-                }
-                if (vm.SeccionesReporte.Id == 13 && vm.PeoresReactivosEE.length == 0) {
-                    vm.getReporteDataPantalla_13();
-                }
-                if (vm.SeccionesReporte.Id == 14 && vm.PeoresReactivosEA.length == 0) {
-                    vm.getReporteDataPantalla_14();
-                }
-                if (vm.SeccionesReporte.Id == 15) {
-                    /*Seccion que falta de los de menor crecimiento EE*/
-                }
-                if (vm.SeccionesReporte.Id == 16) {
-                    /*Seccion que falta de los de menor crecimiento EA*/
-                }
-                if (vm.SeccionesReporte.Id == 17 && vm.PorcentajePsicoSocialEE.length == 0 && vm.PorcentajePsicoSocialEA.length == 0) {
-                    vm.getReporteDataPantalla_17();/*Bienestar*/
-                }
-                if (vm.SeccionesReporte.Id == 18 && vm.indicadoresPermanenciaAFM.length == 0) {
-                    /*Antes de pasar al sig copiar el htmlContent de las tablas*/
-                    vm.tableBienestarEE = document.getElementById("myTableEE").parentElement.innerHTML;
-                    vm.tableBienestarEA = document.getElementById("myTableEA").parentElement.innerHTML;
-                    /*Eliminar la tabla generada y pegar el html content*/
-                    var elem = document.getElementById("myTableEE").parentElement;
-                    elem.innerHTML = "";
-                    elem.innerHTML = vm.tableBienestarEE;
-                    var elem2 = document.getElementById("myTableEA").parentElement;
-                    elem2.innerHTML = "";
-                    elem2.innerHTML = vm.tableBienestarEA;
-                    vm.getReporteDataPantalla_18();
-                }
-                if (vm.SeccionesReporte.Id == 19 && vm.ComparativosPermanencia.length == 0) {
-                    vm.getReporteDataPantalla_19();
-                }
-                if (vm.SeccionesReporte.Id == 20 && vm.ComparativosAbandono.length == 0) {
-                    vm.getReporteDataPantalla_20();
-                }
-                if (vm.SeccionesReporte.Id == 21 && vm.ComparativosGeneralesEE.length == 0) {
-                    vm.getReporteDataPantalla_21();
-                }
-                if (vm.SeccionesReporte.Id == 22 && vm.ComparativosGeneralesEA.length == 0) {
-                    vm.getReporteDataPantalla_22();
-                }
-                if (vm.SeccionesReporte.Id == 23 && vm.ComparativoGeneralPorNivelesEE.Data == undefined) {
-                    vm.getReporteDataPantalla_23();
-                }
-                if (vm.SeccionesReporte.Id == 24 && vm.ComparativoGeneralPorNivelesEA.Data == undefined) {
-                    vm.getReporteDataPantalla_24();
-                }
-                if (vm.SeccionesReporte.Id == 25 && vm.ComparativoGeneralPorNivelesEE.Data.length > 0) {/*Valida con este objeto porque aqui uso la misma data*/
-                    vm.getReporteDataPantalla_25();
-                }
-                if (vm.SeccionesReporte.Id == 26 && vm.ComparativoGeneralPorNivelesEA.Data.length > 0) {/*Valida con este objeto aqui uso la misma data*/
-                    vm.getReporteDataPantalla_26();
-                }
-                if (vm.SeccionesReporte.Id == 27 && vm.ComparativoAntiguedadEE.length == 0) {
-                    vm.getReporteDataPantalla_27();
-                }
-                if (vm.SeccionesReporte.Id == 28 && vm.ComparativoAntiguedadEA.length == 0) {
-                    vm.getReporteDataPantalla_28();
-                }
-                if (vm.SeccionesReporte.Id == 29 && vm.ComparativoGeneroEE.length == 0) {
-                    vm.getReporteDataPantalla_29();
-                }
-                if (vm.SeccionesReporte.Id == 30 && vm.ComparativoGeneroEA.length == 0) {
-                    vm.getReporteDataPantalla_30();
-                }
-                if (vm.SeccionesReporte.Id == 31 && vm.ComparativoGradoAcademicoEE.length == 0) {
-                    vm.getReporteDataPantalla_31();
-                }
-                if (vm.SeccionesReporte.Id == 32 && vm.ComparativoGradoAcademicoEA.length == 0) {
-                    vm.getReporteDataPantalla_32();
-                }
-                if (vm.SeccionesReporte.Id == 33 && vm.ComparativoCondicionTrabajoEE.length == 0) {
-                    vm.getReporteDataPantalla_33();
-                }
-                if (vm.SeccionesReporte.Id == 34 && vm.ComparativoCondicionTrabajoEA.length == 0) {
-                    vm.getReporteDataPantalla_34();
-                }
-                if (vm.SeccionesReporte.Id == 35 && vm.ComparativoFuncionEE.length == 0) {
-                    vm.getReporteDataPantalla_35();
-                }
-                if (vm.SeccionesReporte.Id == 36 && vm.ComparativoFuncionEA.length == 0) {
-                    vm.getReporteDataPantalla_36();
-                }
-                if (vm.SeccionesReporte.Id == 37 && vm.ComparativoRangoEdadEE.length == 0) {
-                    vm.getReporteDataPantalla_37();
-                }
-                if (vm.SeccionesReporte.Id == 38 && vm.ComparativoRangoEdadEA.length == 0) {
-                    vm.getReporteDataPantalla_38();
-                }
-                if (vm.SeccionesReporte.Id == 39) {
-                    /*Reporte dinamico*/
-                    vm.getReporteDinamico();
-                }
-                if (vm.SeccionesReporte.Id == 40) {
-                    /*Reporte de comentarios abiertos*/
-                }
-                if (vm.SeccionesReporte.Id == 41) {
-                    /*Seccion que muestra todas las secciones del reporte para un preview de exportación*/
-                    /*vm.getPDFReporte();*/
-                }
-            }
-
-
-            vm.getPaginaActiva = function () {
-                for (var i = 0; i < divs.length; i++) {
-                    if (document.getElementById(divs[i]).offsetWidth > 0) {
-                        return divs[i];
-                        break;
-                    }
-                }
-            }
-
-            vm.generaPaginaPDF = async function (paginaActiva) {
-                try {
-                    /* Se obtiene la seccion del reporte activa */
-                    for (var i = 0; i < divs.length; i++) {
-                        if (document.getElementById(divs[i]).offsetWidth > 0) {
-                            paginaActiva = divs[i];
-                            break;
-                        }
-                    }
-                    if (paginaActiva == "tab-portada" || paginaActiva == "tab-portada-azul" || paginaActiva == "tab-introduccion-amarillo" || paginaActiva == "tab-iconografia") {
-                        pruebaExp();
-                    }
-                    /* Crear un subId para las secciones que se separaron (23, 24) */
-                    if (paginaActiva.includes("pegarReseccionado")) {
-                        if (vm.criterioBusquedaSeleccionado.Id == 1) {
-                            var elemActivo = Enumerable.from(document.getElementById(paginaActiva).children).where(o => o.style.display == "block").toList();
-                            var numElemActivo = elemActivo[0].classList[2].split('-')[2]
-                            paginaActiva = paginaActiva + "_" + numElemActivo;
-                        }
-                    }
-                    /* Validar si se agrega o no la pagina nueva */
-                    if (paginaActiva != undefined && paginaActiva != "" && vm.exportaImagen == true && vm.historicoPaginaActiva.includes(paginaActiva) == false) {
-                        document.getElementsByClassName("busy")[1].style.display = "block";
-                        /* Guardar historico de paginas */
-                        vm.historicoPaginaActiva.push(paginaActiva);
-                        /* Asignar estilos para la exportacion */
-                        var finalPaddingTop = 0;
-                        switch (paginaActiva) {
-                            case "tab-mejores-ea": case "tab-crecimiento-ee": case "tab-crecimiento-ea":
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop2;
-                                finalPaddingTop = paddingtop2;
-                                break;
-                            case "tab-mejores-ee": case "tab-peores-ee": case "tab-peores-ea": case "tab-decremento-ee": case "tab-decremento-ea":
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
-                                finalPaddingTop = paddingtop;
-                                break;
-                            case "tab-comparativo-permanencia": case "tab-comparativo-abandono":
-                                finalPaddingTop = parseFloat(paddingtop) / 2;
-                                break;
-                            case "tab-generales-departamento-ee": case "tab-generales-departamento-ea": /* tab-21-22 */
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
-                                finalPaddingTop = paddingtop;
-                                break;
-                            case "pegarReseccionado": case "pegarReseccionadoEA": /* tab-23-24 */
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
-                                finalPaddingTop = paddingtop;
-                                break;
-                            case "tab-antiguedad-ee": case "tab-antiguedad-ea": case "tab-genero-ee": case "tab-genero-ea": case "tab-grado-aca-ee": case "tab-grado-aca-ea": case "tab-c-trab-ee": case "tab-c-trab-ea":
-                            case "tab-funcion-ee": case "tab-funcion-ea": case "tab-edad-ee": case "tab-edad-ea": case "tab-estr-one-level-ee": case "tab-estr-one-level-ea":
-                                document.getElementById(paginaActiva).parentNode.parentNode.style.paddingTop = paddingtop;
-                                finalPaddingTop = paddingtop;
-                                break;
-                            case "tab-impulsores-clave":
-                                finalPaddingTop = "40px";
-                                break;
-                        }
-                        /* Validar estilos para paginas que lo requieren */
-                        if (finalPaddingTop == 0 || finalPaddingTop == "")
-                            finalPaddingTop = "60px";
-                        if (paginaActiva.includes("pegarReseccionado"))
-                            finalPaddingTop = paddingtop;
-                        finalPaddingTop = parseFloat(finalPaddingTop);
-                        if (paginaActiva != "tab-portada" && paginaActiva != "tab-portada-azul" && paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "tab-iconografia")
-                            docReporte.addPage();
-                        if (paginaActiva.includes("pegarReseccionado"))
-                            paginaActiva = paginaActiva.split('_')[0];
-                        document.getElementById(paginaActiva).parentNode.style.backgroundColor = "#fff";
-                        if (paginaActiva == "tab-bienestar-ee") {
-                            document.getElementById("tab-bienestar-ea").parentNode.style.backgroundColor = "#fff";
-                            document.getElementById("tab-17").getElementsByClassName("content-wrap")[1].style.backgroundColor = "#fff";
-                        }
-                        document.getElementById(paginaActiva).style.backgroundColor = "#fff";
-                        /* Meter el contenido html dentro de la pagina */
-                        /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
-                        if (vm.SeccionesReporte.Id == 25) {
-                            // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            vm.agrandarGraficas();
-
-                            var childs = document.getElementById("divPantalla25").childNodes;
-                            var canvas = [];
-                            [].forEach.call(childs, function (item) { item.style.display = "none"; });
-                            childs = Enumerable.from(childs).toList();
-                            childs = childs.map(async (key, index) => {
-                                if (index > 0) {
-                                    childs[(index - 1)].style.display = "none";
-                                }
-                                childs[index].style.display = "";
-                                finalPaddingTop = 125;
-                                if ($(window).width() > 1610)
-                                    topMarging = 30;
-
-                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, topMarging, { /* options */
-                                    image: { type: 'jpeg', quality: 1 },
-                                    html2canvas: { scale: 1 }
-                                }
-                                    , function () {
-                                    });
-                                canvas.push(data);
-                                docReporte.addPage();
-                                docReporte.addImage(data, 1200, 400);
-                                return data;
-                            });
-                            var termine = false;
-                            var refreshIntervalId = setInterval(function () {
-                                if (canvas.length == childs.length) {
-                                    docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
-                                    clearInterval(refreshIntervalId);
-
-                                    if (vm.enfoqueSeleccionado == 1) {
-                                        document.getElementById("tab-26").classList.add("ng-hide");
-                                        vm.SeccionesReporte.Id = 27;
-                                        vm.getReporteDataPantalla_27();
-                                    }
-                                    else {
-                                        vm.SeccionesReporte.Id++;
-                                        vm.getReporteDataPantalla_26();
-                                        document.getElementById("tab-25").classList.add("ng-hide");
-                                        document.getElementById("tab-26").classList.remove("ng-hide");
-                                    }
-                                    termine = true;
-                                    document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
-                                    document.getElementById(paginaActiva).parentNode.removeAttribute("style");
-                                    document.getElementById(paginaActiva).removeAttribute("style");
-                                    document.getElementsByClassName("busy")[1].style.display = "none";
-                                }
-                            }, 1000);
-
-
-                            if (termine == false) {
-                                //validar enfoque seleccionado
-                                if (vm.enfoqueSeleccionado == 1) {
-                                    document.getElementById("tab-26").classList.add("ng-hide");
-                                    vm.SeccionesReporte.Id = 27;
-                                    vm.getReporteDataPantalla_27();
-                                }
-                                return;
-                            }
-                        }
-                        if (vm.SeccionesReporte.Id == 26) {
-                            // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            vm.agrandarGraficas();
-                            var childs = document.getElementById("divPantalla26").childNodes;
-                            var canvas = [];
-                            [].forEach.call(childs, function (item) { item.style.display = "none"; });
-                            childs = Enumerable.from(childs).toList();
-                            childs = childs.map(async (key, index) => {
-                                if (index > 0) {
-                                    childs[(index - 1)].style.display = "none";
-                                }
-                                childs[index].style.display = "";
-                                finalPaddingTop = 125;
-                                if ($(window).width() > 1610)
-                                    topMarging = 30;
-                                var data = await docReporte.addHTML($('#' + paginaActiva)[0], 0, topMarging, { /* options */
-                                    image: { type: 'jpeg', quality: 1 },
-                                    html2canvas: { scale: 1 }
-                                }
-                                    , function () {
-                                    });
-                                canvas.push(data);
-                                docReporte.addPage();
-                                docReporte.addImage(data, 1200, 400);
-                                return data;
-                            });
-                            var termine = false;
-                            var refreshIntervalId = setInterval(function () {
-                                if (canvas.length == childs.length) {
-                                    docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
-                                    clearInterval(refreshIntervalId);
-                                    if (vm.enfoqueSeleccionado == 2) {
-                                        vm.SeccionesReporte.Id = 28;
-                                        document.getElementById("tab-26").classList.add("ng-hide");
-                                        document.getElementById("tab-28").classList.remove("ng-hide");
-                                        vm.getReporteDataPantalla_28();
-                                    }
-                                    else {
-                                        vm.SeccionesReporte.Id++;
-                                        vm.getReporteDataPantalla_27();
-                                        document.getElementById("tab-26").classList.add("ng-hide");
-                                        document.getElementById("tab-27").classList.remove("ng-hide");
-                                    }
-                                    termine = true;
-                                    document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
-                                    document.getElementById(paginaActiva).parentNode.removeAttribute("style");
-                                    document.getElementById(paginaActiva).removeAttribute("style");
-                                    document.getElementsByClassName("busy")[1].style.display = "none";
-                                }
-                            }, 1000);
-
-
-                            if (termine == false) {
-                                //validar enfoque seleccionado
-                                if (vm.enfoqueSeleccionado == 1) {
-                                    // falta terminar de validar
-                                    //document.getElementById("tab-26").classList.add("ng-hide");
-                                    //vm.SeccionesReporte.Id = 27;
-                                    //vm.getReporteDataPantalla_27();
-                                }
-                                return;
-                            }
-                        }
-                        var elem = document.getElementById(paginaActiva);
-                        var itemsPadding = elem.getElementsByClassName("set-padding-pdf");
-                        if (vm.SeccionesReporte.Id != 25 && vm.SeccionesReporte.Id != 26 && paginaActiva != "tab-portada" && paginaActiva != "tab-portada-azul" && paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "tab-iconografia") {
-                            document.getElementsByClassName("busy")[1].style.display = "block";
-                            var ptDefault = 0;
-                            if (paginaActiva == "tab-indicadores-permanencia") {
-                                finalPaddingTop = 40;
-                                if (resolucion <= 1610) {
-                                    $(".titulo-grafica1")[0].style.padding = "5px";
-                                    $(".titulo-grafica2")[0].style.padding = "5px";
-                                    $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.remove("mt-4");
-                                    $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.add("mt-2");
-                                    $(".nuevomt")[0].classList.remove("mt-5");
-                                    $(".nuevomt")[0].classList.add("mt-2");
-                                    $(".grafica-trabajarEx .bg-gris")[0].style.setProperty("margin-bottom", "1rem", "Important");
-                                    $(".grafica-dejarEx .bg-gris")[0].style.setProperty("margin-bottom", "1rem", "Important");
-                                }
-                            }
-                            if (paginaActiva == "tab-indicadores-categoria")
-                                finalPaddingTop = 70;
-                            if (paginaActiva == "tab-impulsores-clave") {
-                                if (resolucion <= 1380) {
-                                    $("#tab-impulsores-clave .card-block")[0].classList.add("mt-0", "pt-0");
-                                    $("#tab-impulsores-clave .card-block .row")[0].classList.add("mt-0");
-                                    $(".bg-impulsoresEx").removeClass("mt-3");
-                                    $(".bg-impulsoresEx").addClass("mt-2");
-                                    $(".tablaimpulsores-derEx").removeClass("mt-3");
-                                    $(".tablaimpulsores-derEx").addClass("mt-2");
-                                }
-
-                            }
-                            if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
-                                paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
-                                //parafos-mejores  mt-img-indicadores
-                                var pregs = $(".parrafo-pregunta:visible");//document.getElementsByClassName("parrafo-pregunta");
-                                [].forEach.call(pregs, function (parrafo) {
-                                    parrafo.classList.add("parafos-mejores");
-                                    parrafo.classList.remove("mb-5");
-                                    parrafo.classList.add("mb-2");
-                                });
-                                var margenes = $(".mt-img-indicadores:visible");//document.getElementsByClassName("mt-img-indicadores");
-                                [].forEach.call(margenes, function (parrafo) {
-                                    parrafo.classList.remove("mb-5");
-                                    parrafo.classList.remove("mt-5");
-                                    parrafo.style.marginTop = "0.5rem";
-                                    parrafo.style.marginBottom = "0.5rem";
-                                });
-                                var cards = $(".bg-degradado-gris:visible");//document.getElementsByClassName("bg-degradado-gris");
-                                [].forEach.call(cards, function (parrafo) {
-                                    parrafo.removeAttribute("style");
-                                    parrafo.style.paddingTop = "20px";
-                                });
-                                document.getElementById(paginaActiva).classList.remove("px-lg-5");
-                                document.getElementById(paginaActiva).style.width = "842px";
-                                document.getElementById(paginaActiva).style.height = "595px";
-                                finalPaddingTop = 40;
-                            }
-                            if (paginaActiva == "tab-bienestar-ee") {
-                                document.getElementById("quitaSwitch").style.display = "none";
-                                if ($(window).width() > 1610) {
-                                    //finalPaddingTop = 120;
-                                    finalPaddingTop = 150;
-                                    var elem = document.getElementById(paginaActiva);
-                                    //document.getElementById("verEA").style.display = "none";
-                                    // elem.getElementsByClassName("mt-img-indicadores")[0].classList.remove("mt-5");
-                                    // $remover clase
-                                    var bordes = document.getElementsByClassName("quitar-borde");
-                                    [].forEach.call(bordes, function (elem) {
-                                        elem.classList.remove("borde-tabla-titulo");
-                                        elem.classList.remove("borde-tabla-titulo");
-                                    });
-                                } else {
-                                    ptDefault = 30;
-                                }
-                            }
-                            if (paginaActiva == "tab-indicadores-permanencia") {
-                                if ($(window).width() > 1610) {
-                                    finalPaddingTop = 160;
-                                    var indicador = document.getElementsByClassName("margin-top-nuevo");
-                                    [].forEach.call(indicador, function (itemD) {
-                                        var mt = parseInt(itemD.style.marginTop);
-                                        var newmt = mt / 2;
-                                        itemD.style.marginTop = newmt + "px";
-                                    });
-                                    var elem = document.getElementById(paginaActiva);
-                                    elem.getElementsByClassName("card-block")[0].style.padding = "0px";
-                                    var mb = elem.getElementsByClassName("bg-gris");
-                                    [].forEach.call(mb, function (elemMB) {
-                                        elemMB.classList.remove("mb-5");
-                                        elemMB.classList.add("mb-2");
-                                    });
-                                    elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-5");
-                                    elem.getElementsByClassName("nuevomt")[0].classList.add("mt-2");
-                                }
-                            }
-                            if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                if ($(window).width() > 1610) {
-                                    finalPaddingTop = 187;
-                                    var elem = document.getElementById(paginaActiva);
-                                    elem.getElementsByClassName("card-block")[0].style.padding = "0px";
-                                    var mb = elem.getElementsByClassName("nuevomt");
-                                    [].forEach.call(mb, function (elemMB) {
-                                        elemMB.classList.remove("mb-5");
-                                        elemMB.classList.remove("mt-5");
-                                        elemMB.classList.add("mb-2");
-                                        elemMB.classList.add("mt-2");
-                                    })
-                                }
-                            }
-
-                            // Agrandar al vuelo las graficas de barras en resolucion > 1367
-                            vm.agrandarGraficas();
-
-                            if (vm.SeccionesReporte.Id >= 21) {
-                                finalPaddingTop = 100;
-                            }
-                            if (vm.SeccionesReporte.Id == 23 || vm.SeccionesReporte.Id == 24) {
-                                if ($(window).width() > 1610) {
-                                    ptDefault = 0;
-                                }
-                                else {
-                                    ptDefault = -25; //se cambia por crecimiento de -10 a -25 09/09/2021 camos
-                                }
-                            }
-
-                            if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
-                                ptDefault = 0;
-                                if (resolucion >= 1900) {
-                                    document.getElementById(paginaActiva).style.marginTop = "95px";
-                                    ptDefault = 0;
-                                }
-                                else if (resolucion >= 1550 && resolucion <= 1899) {
-                                    document.getElementById(paginaActiva).style.marginTop = "95px";
-                                    ptDefault = 30;
-                                }
-                                else {
-                                    document.getElementById(paginaActiva).style.marginTop = "80px";
-                                }
-                            }
-                            if ($(window).width() >= 1550) {
-                                switch (paginaActiva) {
-                                    case "tab-mejores-ee":
-                                        ptDefault = 15;
-                                        break;
-                                    case "tab-mejores-ea":
-                                        ptDefault = 15;
-                                        break;
-                                    case "tab-peores-ee":
-                                        ptDefault = 15;
-                                        break;
-                                    case "tab-peores-ea":
-                                        ptDefault = 15;
-                                        break;
-                                    case "tab-bienestar-ee":
-                                        ptDefault = 30;
-                                        break;
-                                    case "tab-bienestar-ea":
-                                        ptDefault = 30;
-                                        break;
-                                    case "tab-indicadores-permanencia":
-                                        ptDefault = 50;
-                                        break;
-                                    case "tab-comparativo-permanencia":
-                                        ptDefault = 50;
-                                        break;
-                                    case "tab-comparativo-abandono":
-                                        ptDefault = 50;
-                                        break;
-                                    default:
-                                        ptDefault = ptDefault;
-
-                                }
-                                if (vm.SeccionesReporte.Id >= 21) { ptDefault = 30; }
-                            }
-                            if ($(window).width() <= 1440 && paginaActiva == "tab-comparativo-") {
-                                ptDefault = 20;
-                            }
-                            if (vm.fact > 1.1 && paginaActiva.includes("tab-comparativo-permanencia")) {
-                                ptDefault += 10;
-                                if (countAgrandar == 0) {
-                                    await[].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
-                                        item.style.height = (parseFloat(item.style.height) + 80) + "px";
-                                    });
-                                    countAgrandar++;
-                                }
-                            }
-                            if (vm.fact > 1.1 && paginaActiva == "tab-comparativo-abandono") {
-                                ptDefault += 10;
-                                if (countAgrandar2 == 0) {
-                                    await[].forEach.call(document.getElementsByClassName("bar-clasificacion2"), function (item) {
-                                        item.style.height = (parseFloat(item.style.height) + 80) + "px";
-                                    });
-                                    countAgrandar2++;
-                                }
-                            }
-                            document.getElementsByClassName("busy")[1].style.display = "block";
-                            var padrePaginaActiva;
-                            try {
-                                padrePaginaActiva = document.getElementById(paginaActiva).parentNode.parentNode.id;;
-                            } catch (e) {
-                                padrePaginaActiva = "";
-                            }
-
-                            if (padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado == 0) {
-                                var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
-                                childs = Enumerable.from(childs).toList();
-                                childs = childs.map(async (key, index) => {
-                                    //Se forza el backgroud en Blanco
-                                    $('#' + key)[0].style.backgroundColor = "#fff";
-                                    document.getElementById(key).parentNode.style.backgroundColor = "#fff";
-                                    document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
-                                    var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
-                                        image: { type: 'jpeg', quality: 1.0 },
-                                        html2canvas: { scale: 1 }
-                                    }, function () {
-
-                                    });
-                                    docReporte.addPage();
-                                    docReporte.addImage(data, 1200, 400);
-                                    return data;
-                                });
-                                setTimeout(function () {
-                                    document.getElementsByClassName("busy")[1].style.display = "none";
-                                    docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
-                                }, 2000);
-                            }
-                            else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0) || (padrePaginaActiva != "tab-17")) {
-                                docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */
-                                    image: { type: 'jpeg', quality: 0.98 },
-                                    html2canvas: { scale: 1 }
-                                },
-                                    function () {
-                                        if (paginaActiva == "tab-impulsores-clave") {
-                                            if (resolucion <= 1380) {
-                                                $("#tab-impulsores-clave .card-block")[0].classList.remove("mt-0", "pt-0");
-                                                $("#tab-impulsores-clave .card-block .row")[0].classList.remove("mt-0");
-                                                $(".bg-impulsoresEx").removeClass("mt-2");
-                                                $(".bg-impulsoresEx").addClass("mt-3");
-                                                $(".tablaimpulsores-derEx").removeClass("mt-2");
-                                                $(".tablaimpulsores-derEx").addClass("mt-3");
-                                                $(".grafica-trabajarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
-                                                $(".grafica-dejarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
-                                            }
-
-                                        }
-                                        if (paginaActiva == "tab-indicadores-permanencia") {
-                                            if (resolucion <= 1610) {
-                                                $(".titulo-grafica1")[0].style.padding = "20px";
-                                                $(".titulo-grafica2")[0].style.padding = "20px";
-                                                $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.remove("mt-2");
-                                                $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.add("mt-4");
-                                                $(".nuevomt")[0].classList.remove("mt-2");
-                                                $(".nuevomt")[0].classList.add("mt-5");
-                                            }
-                                        }
-                                        if (paginaActiva == "tab-bienestar-ee") {
-                                            document.getElementById("quitaSwitch").style.display = "block";
-                                        }
-                                        document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
-                                        document.getElementById(paginaActiva).parentNode.removeAttribute("style");
-                                        document.getElementById(paginaActiva).removeAttribute("style");
-                                        deletePadding(itemsPadding);
-                                        if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
-                                            var elemH = document.getElementById(paginaActiva).children[0];
-                                            elemH.removeAttribute("style");
-                                        }
-                                        /*Secciones mejores/peores*/
-                                        if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
-                                            paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
-                                            document.getElementById(paginaActiva).parentNode.parentNode.classList.remove("ng-hide");
-                                            //parafos-mejores  mt-img-indicadores
-                                            var pregs = $(".parrafo-pregunta:visible");
-                                            [].forEach.call(pregs, function (parrafo) {
-                                                parrafo.classList.remove("parafos-mejores");
-                                                parrafo.classList.add("mb-5");
-                                                parrafo.classList.remove("mb-2");
-                                            });
-                                            var margenes = $(".mt-img-indicadores:visible");
-                                            [].forEach.call(margenes, function (parrafo) {
-                                                parrafo.classList.add("mb-5");
-                                                parrafo.classList.add("mt-5");
-                                                parrafo.removeAttribute("style");
-                                            });
-                                            var cards = $(".bg-degradado-gris:visible");
-                                            [].forEach.call(cards, function (parrafo) {
-                                                parrafo.removeAttribute("style");
-                                                parrafo.style.padding = "40px";
-                                            });
-                                            document.getElementById(paginaActiva).classList.add("px-lg-5");
-                                            document.getElementById(paginaActiva).removeAttribute("style");
-                                            document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
-                                        }
-                                        // Regresar estilos a vista web
-                                        if (paginaActiva == "tab-bienestar-ee") {
-                                            if ($(window).width() > 1610) {
-                                                var elem = document.getElementById(paginaActiva);
-                                                document.getElementById("quitaSwitch").style.display = "block";
-                                                //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
-                                                // $remover clase
-                                                var bordes = document.getElementsByClassName("quitar-borde");
-                                                [].forEach.call(bordes, function (elem) {
-                                                    elem.classList.add("borde-tabla-titulo");
-                                                    elem.classList.add("borde-tabla-titulo");
-                                                });
-                                            }
-                                        }
-                                        if (paginaActiva == "tab-indicadores-permanencia") {
-                                            if ($(window).width() > 1610) {
-                                                var indicador = document.getElementsByClassName("margin-top-nuevo");
-                                                [].forEach.call(indicador, function (itemD) {
-                                                    var mt = parseInt(itemD.style.marginTop);
-                                                    var newmt = mt * 2;
-                                                    itemD.style.marginTop = newmt + "px";
-                                                });
-                                                var elem = document.getElementById(paginaActiva);
-                                                elem.getElementsByClassName("card-block")[0].removeAttribute("style");
-                                                var mb = elem.getElementsByClassName("bg-gris");
-                                                [].forEach.call(mb, function (elemMB) {
-                                                    elemMB.classList.add("mb-5");
-                                                    elemMB.classList.remove("mb-2");
-                                                });
-                                                elem.getElementsByClassName("nuevomt")[0].classList.add("mt-5");
-                                                elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-2");
-                                            }
-                                        }
-                                        if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                            if ($(window).width() > 1610) {
-                                                var elem = document.getElementById(paginaActiva);
-                                                elem.getElementsByClassName("card-block")[0].removeAttribute("style");
-                                                var mb = elem.getElementsByClassName("nuevomt");
-                                                [].forEach.call(mb, function (elemMB) {
-                                                    elemMB.classList.add("mb-5");
-                                                    elemMB.classList.add("mt-5");
-                                                    elemMB.classList.remove("mb-2");
-                                                    elemMB.classList.remove("mt-2");
-                                                })
-                                            }
-                                        }
-                                        setTimeout(function () {
-                                            document.getElementsByClassName("busy")[1].style.display = "none";
-                                        }, 1200);
-                                    });
-                            }
-
-                        }
-                    }
-                    else if (vm.exportaImagen == false) {
-                        if (vm.mostrarMensaje == true && vm.banderaMensaje > 0) {
-                            swal({
-                                title: "La sección no se exportará en el PDF",
-                                text: "",
-                                icon: "info",
-                                buttons: [
-                                    'Ok',
-                                    'No mostrar de nuevo'
-                                ],
-                                dangerMode: false,
-                            }).then(function (isConfirm) {
-                                if (isConfirm)
-                                    vm.mostrarMensaje = false;
-                            });
-                        }
-                        if (vm.mostrarMensaje == true && vm.banderaMensaje == 0) {
-                            vm.banderaMensaje++;
-                            swal({
-                                title: "La sección no se exportará en el PDF",
-                                text: "",
-                                icon: "info",
-                                buttons: [
-                                    'Ok',
-                                    'No mostrar de nuevo'
-                                ],
-                                dangerMode: false,
-                            }).then(function (isConfirm) {
-                                if (isConfirm)
-                                    vm.mostrarMensaje = false;
-                            });
-                        }
-                    }
-                } catch (e) {
-                    console.log(e);
-                }
-            }
-
             /*#region Secciones*/
             vm.next = async function () {
                 var topMarging = 0; $('html,body').scrollTop(0); var paginaActiva;
@@ -3004,7 +2245,7 @@ function GetDashBoard() {
                                 }
                                 else
                                 {
-                                    ptDefault = -25; //se cambia por crecimiento de -10 a -25 09/09/2021 camos
+                                    ptDefault = -10
                                 }
                             }
 
@@ -3269,96 +2510,6 @@ function GetDashBoard() {
                 /*========== Avanzar en el reporte ==========*/
                 vm.contadorNextButton++;
                 vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
-
-
-                if (vm.SeccionesReporte.Id == 21 && vm.enfoqueSeleccionado == 1 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
-                    // pasar a las seccionadas enumeradas
-                    vm.SeccionesReporte.Id = 23;
-                }
-                if (vm.SeccionesReporte.Id == 23) {
-                    if (vm.criterioBusquedaSeleccionado.Id == 1) {
-                        var childs = document.getElementById("pegarReseccionado").childNodes;
-                        if (childs[childs.length - 1].style.display == "block" && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
-                            /* Guardar la ultima subseccion de la seccion 23 */
-                            vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + childs.length, exporta: vm.exportaImagen });
-                            /* report("tab-23-" + childs.length); */
-
-                            vm.SeccionesReporte.Id++;
-                            var childs = document.getElementById("pegarReseccionadoEA").childNodes;
-                            childs[0].style.display = "block";
-                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
-                            return;
-                        }
-                        else if (childs[childs.length - 1].style.display == "block" && vm.ComparativoGeneralPorNivelesEA.Data == undefined) {
-                            vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + childs.length, exporta: vm.exportaImagen });
-                            /* report("tab-23-" + childs.length); */
-                            if (vm.enfoqueSeleccionado == 1) {
-                                vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 2;
-                                vm.getReporteDataPantalla_25();
-                            }
-                            else {
-                                vm.SeccionesReporte.Id++;
-                                vm.getReporteDataPantalla_24();
-                            }
-                            var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id).lastOrDefault();
-                            vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
-                            return;
-                        }
-                    }
-                    else {
-                        //avanzar
-                        vm.SeccionesReporte.Id++;
-                        vm.getReporteDataPantalla_24();
-                        return;
-                    }
-                    return;
-                }
-                if (vm.SeccionesReporte.Id == 22 && vm.enfoqueSeleccionado != 1 && vm.ComparativoGeneralPorNivelesEA.Data != undefined) {
-                    // pasar a las seccionadas enumeradas
-                    vm.SeccionesReporte.Id = 24;
-                }
-                if (vm.SeccionesReporte.Id >= 24 && vm.SeccionesReporte.Id < 25) {
-                    try {
-                        if (vm.criterioBusquedaSeleccionado.Id == 1) {
-                            var childs = document.getElementById("pegarReseccionadoEA").childNodes;
-                            [].forEach.call(childs, function (item, index) {
-                                var customClassName = item.classList[2];
-                                var consecutivoClase = parseInt(customClassName.split('-')[2]) + 1;
-                                if (document.getElementsByClassName(customClassName)[0].style.display == "" || document.getElementsByClassName(item.classList[2])[0].style.display == "block") {
-                                    vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + parseInt(customClassName.split('-')[2]), exporta: vm.exportaImagen });
-                                    /* ocultar el actual */
-                                    document.getElementsByClassName(customClassName)[0].style.display = "none";
-                                    if (document.getElementsByClassName("tab-24-" + consecutivoClase)[0] != undefined) {
-                                        document.getElementsByClassName("tab-24-" + consecutivoClase)[0].style.display = "block";/* mostrar el siguiente */
-                                        var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + consecutivoClase).lastOrDefault();
-                                        vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
-                                        throw BreakException;
-                                        return false;
-                                    }
-                                    else {
-                                        if (vm.enfoqueSeleccionado == 2) {
-                                            if (vm.hasHistorico == false) {
-                                                //vm.SeccionesReporte.Id = 26;
-                                                //vm.getReporteDataPantalla_26();
-                                                //return false;
-                                            }
-                                        }
-                                        /* avanza a la seccion 25 */
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            vm.SeccionesReporte.Id++;
-                            vm.getReporteDataPantalla_25();
-                            return;
-                        }
-                    } catch (e) {
-                        return;
-                    }
-                    return;
-                }
 
                 /*Validar enfoques*/
                 //EE
@@ -4193,10 +3344,6 @@ function GetDashBoard() {
                                     var graficaHC = $("#tab-" + anterior + " .bar-progress4");
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                    });
-                                    var parrafoHC = $(".label-top-graphic-blue2:visible");
-                                    [].forEach.call(parrafoHC, function (graf) {
-                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 10) + "px";
                                     });
                                 }
                                 if (vm.enfoqueSeleccionado == 0) {
@@ -6683,8 +5830,8 @@ function GetDashBoard() {
                             '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                             '</div>' +
                             (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
-                            '<p class="label-top-graphic-blue2" style="margin-top: margenHCpx;">{{ item.HC }}</p>' +
-                            '<div class="bar-progress4" style="height: altoHCpx;">' +
+                            '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                            '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
                             '</div>' +
                             '</div>' +
                             '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -6694,12 +5841,7 @@ function GetDashBoard() {
                         for (var i = 0; i < array.length; i++) {
                             var newPercent = array[i].Porcentaje * 2.7;
                             var newPercentB = (array[i].Porcentaje * 2.7) / 2;
-                            var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7) / 2) - factMt : ((array[i].Porcentaje * 2.7) / 2) - 10//array[i].Porcentaje * 1.7;
-                            
-                            var altoHC = vm.CrearHC(array[i].HC, array, 2);
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoHC", altoHC);
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("margenHC", vm.setMargin(altoHC, 2, array[i].Porcentaje));
-
+                            var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7) / 2) - 20 : ((array[i].Porcentaje * 2.7) / 2) - 10//array[i].Porcentaje * 1.7;
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
@@ -6828,8 +5970,6 @@ function GetDashBoard() {
                             var comparativoEE = vm.getDiferenciaGralEE(ElementoEE.Entidad, ElementoEE.Porcentaje, 2);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEE", comparativoEE);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEA", comparativoEA);
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("mtopNaranja", ElementoEE.Porcentaje >= 80 ? "0" : ElementoEE.Porcentaje >= 50 ? "25" : "0");
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoNaranja", ElementoEE.Porcentaje * 2.7);
                             /*Iconografia*/
                             if (ElementoEA.Porcentaje < 70) {
                                 vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("imagenClasificacionEA", "/img/ReporteoClima/Iconos/lluvia-icono.png");
@@ -9704,8 +8844,8 @@ function GetDashBoard() {
                         '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                         '</div>' +
                         (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">diferenciaHistorico</p>' : '') +
-                    '<p class="label-top-graphic-blue2" style="margin-top: margenHCpx;">{{ item.HC }}</p>' +
-                    '<div class="bar-progress4" style="height: altoHCpx;">' +
+                        '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                        '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
                         '</div>' +
                         '</div>' +
                         '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -9715,10 +8855,7 @@ function GetDashBoard() {
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
                         var newPercentB = (array[i].Porcentaje * 2.7) / 2;
-                        var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - factMt : ((array[i].Porcentaje * 2.7)/2) - 10//array[i].Porcentaje * 1.7;
-                        var altoHC = vm.CrearHC(array[i].HC, array, 2);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoHC", altoHC);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("margenHC", vm.setMargin(altoHC, 2, array[i].Porcentaje));
+                        var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - 20 : ((array[i].Porcentaje * 2.7)/2) - 10//array[i].Porcentaje * 1.7;
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
@@ -9825,8 +8962,8 @@ function GetDashBoard() {
                             '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                             '</div>' +
                             (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
-                            '<p class="label-top-graphic-blue2" style="margin-top: margenHCpx;">{{ item.HC }}</p>' +
-                            '<div class="bar-progress4" style="height: altoHCpx;">' +
+                            '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                            '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
                             '</div>' +
                             '</div>' +
                             '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -9838,10 +8975,7 @@ function GetDashBoard() {
                             var newPercentB = (array[i].Porcentaje * 3.3);
                             var newPercent2 =array[i].Porcentaje >= 80 ? ((100 * 2.7)/2) : array[i].Porcentaje >= 50 ? ((100 * 2.7)/2) - 25 : ((100 * 2.7)/2) - 45;//array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - 20 : ((array[i].Porcentaje * 2.7)/2) - 10;//array[i].Porcentaje * 1.7;
                             var concatAll= "";
-                            var altoHC = vm.CrearHC(array[i].HC, array, 2);
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoHC", altoHC);
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("margenHC", vm.setMargin(altoHC, 2, array[i].Porcentaje));
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
+                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje );
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.PorcentajeHH }}", newPercent2);
@@ -9973,7 +9107,6 @@ function GetDashBoard() {
                             var comparativoEE = vm.getDiferenciaGralEE(ElementoEE.Entidad, ElementoEE.Porcentaje, 2);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEE", comparativoEE);
                             vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("comparativoHEA", comparativoEA);
-                            vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("mtopNaranja", ElementoEE.Porcentaje >= 80 ? "0" : ElementoEE.Porcentaje >= 50 ? "25" : "0");
                             
                             /*Iconografia*/                      
                             if (ElementoEA.Porcentaje < 70) {
@@ -10065,8 +9198,8 @@ function GetDashBoard() {
                         '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                         '</div>' +
                         (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
-                    '<p class="label-top-graphic-blue2" style="margin-top: margenHCpx;">{{ item.HC }}</p>' +
-                    '<div class="bar-progress4" style="height: altoHCpx;">' +
+                        '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                        '<div class="bar-progress4" style="height: {{ item.PorcentajeHB }}px;">' +
                         '</div>' +
                         '</div>' +
                         '<p class="text-graph">{{ item.Entidad }}</p>' +
@@ -10076,11 +9209,7 @@ function GetDashBoard() {
                     for (var i = 0; i < array.length; i++) {
                         var newPercent = array[i].Porcentaje * 2.7;
                         var newPercentB = (array[i].Porcentaje * 2.7) / 2;
-                        var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - factMt : ((array[i].Porcentaje * 2.7)/2) - 10//array[i].Porcentaje * 1.7;
-                        var altoHC = vm.CrearHC(array[i].HC, array, 2);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("altoHC", altoHC);
-                        vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("margenHC", vm.setMargin(altoHC, 2, array[i].Porcentaje));
-
+                        var newPercent2 = array[i].Porcentaje >= 50 ? ((array[i].Porcentaje * 2.7)/2) - 20 : ((array[i].Porcentaje * 2.7)/2) - 10//array[i].Porcentaje * 1.7;
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje );
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
                         vm.cuerpoPorEntidad = vm.cuerpoPorEntidad.replace("{{ item.Porcentaje }}", array[i].Porcentaje);
@@ -10152,8 +9281,8 @@ function GetDashBoard() {
                     '<div class="bar-progress-clasificacion" style="height: 0px;"><!--cambia segun entidad-->' +
                     '</div>' +
                     (vm.hasHistorico == true ? '<p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>diferenciaHistorico</p>' : '') +
-                '<p class="label-top-graphic-blue2" style="margin-top: margenHCpx;">{{ item.HC }}</p>' +
-                '<div class="bar-progress4" style="height: altoHCpx;">' +
+                    '<p class="label-top-graphic-blue2" style="margin-top:{{ item.PorcentajeHH }}px;">{{ item.HC }}</p>' +
+                    '<div class="bar-progress4" style="height: {{ item.PorcentajeH }}px;">' +
                     '</div>' +
                     '</div>' +
                     '<p class="text-graph">{{ item.Entidad }}</p>' +

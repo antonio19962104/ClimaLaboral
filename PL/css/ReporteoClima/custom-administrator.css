@@ -2480,6 +2480,9 @@ width: 0px !important;
 }
 /*sm*/
 @media screen and (max-width: 1609px) {
+    .entidad-nombre {
+        width: 90px;
+    }
     .black-clima {
         font-size: 12px;
     }

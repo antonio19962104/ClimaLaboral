@@ -21,8 +21,8 @@
                                                 <div class="bar-progress-clasificacion" style="height: 0px;">
                                                 </div>
                                                 <p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 2) }}%</p>
-                                                <p class="label-top-graphic-blue2" style="margin-top:{{ item.Porcentaje >= 80 ? ((100 * 2.7)/2) : item.Porcentaje >= 50 ? ((100 * 2.7)/2) - 25 : ((100 * 2.7)/2) - 45 }}px;">{{ item.HC }}</p>
-                                                <div class="bar-progress4" style="height: {{ item.Porcentaje * 2.7 }}px;">
+                                                <p class="label-top-graphic-blue2" style="margin-top: {{ vm.setMargin(vm.CrearHC(item.HC, vm.ComparativosGeneralesEA.Data, 2), 2, item.Porcentaje) }}px;">{{ item.HC }}</p>
+                                                <div class="bar-progress4" style="height: {{ vm.CrearHC(item.HC, vm.ComparativosGeneralesEA.Data, 2) }}px;">
                                                 </div>
                                             </div>
                                             <p class="text-graph">{{ item.Entidad }}</p>

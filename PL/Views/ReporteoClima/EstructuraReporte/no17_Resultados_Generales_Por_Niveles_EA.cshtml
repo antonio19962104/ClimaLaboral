@@ -24,8 +24,8 @@
                                                     <!--cambia segun entidad-->
                                                 </div>
                                                 <p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 2) }}%</p>
-                                                <p class="label-top-graphic-blue2" style="margin-top: {{ item.Porcentaje * 1.7 }}px;">{{ item.HC }}</p>
-                                                <div class="bar-progress4" style="height: {{ item.Porcentaje * 2.7 }}px;">
+                                                <p class="label-top-graphic-blue2" style="margin-top: {{ vm.setMargin(vm.CrearHC(item.HC, vm.ComparativoGeneralPorNivelesEA.Data, 2), 2, item.Porcentaje) }}px;">{{ item.HC }}</p>
+                                                <div class="bar-progress4" style="height:{{ vm.CrearHC(item.HC, vm.ComparativoGeneralPorNivelesEA.Data, 2) }}px;">
                                                 </div>
                                             </div>
                                             <p class="text-graph">{{ item.Entidad }}</p>
@@ -149,9 +149,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="hc">
-                                                <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px;">{{ item.HC }}</p>
-                                                <div class="bar-progress4 hc-doble" style="height: 27px; width: 42px;"></div>
+                                            <div class="hc" style="overflow: hidden;height: 147px;margin-top: -147px;">
+                                                <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px; margin-top:{{ vm.ComparativoGeneralPorNivelesEE.Data[$index].Porcentaje >= 80 ? 0 : vm.ComparativoGeneralPorNivelesEE.Data[$index].Porcentaje >= 50 ?  25 : 70 }}px;">{{ item.HC }}</p>
+                                                <div class="bar-progress4 hc-doble" style="height:{{ vm.ComparativoGeneralPorNivelesEE.Data[$index].Porcentaje > vm.ComparativoGeneralPorNivelesEA.Data[$index].Porcentaje ? vm.ComparativoGeneralPorNivelesEE.Data[$index].Porcentaje * 2.7 : vm.ComparativoGeneralPorNivelesEA.Data[$index].Porcentaje * 2.7 }}px; width: 42px;"></div>
                                             </div>
                                             <p class="text-graph entidad-nombre">{{ item.Entidad }}</p>
                                         </center>
