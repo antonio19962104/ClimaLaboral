@@ -32,20 +32,20 @@
                                     </thead>
                                     <thead class="mt-5 table-bienestar">
                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">BIENESTAR</th><!--Globales de bienestar-->
-                                    <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                    <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                     </thead>
                                     <thead class="table-dark mb-5">
                                         <!--globales de bio-->
                                         <tr id="mergeBioEE">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">I. FACTOR BIOLÓGICO</th>
-                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }} ">{{ item }}%</div></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="bg-impulsores" title="fila 1">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td colspan="9" class="borde-tabla3">67. Encuentro tiempo para realizar alguna actividad física y mantenerme saludable.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(1) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(1) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
 
                                         <!--
@@ -54,12 +54,12 @@
                                         <tr class="bg-impulsores" title="fila 2">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td colspan="9" class="borde-tabla3">71. Normalmente me ocupo de mantener hábitos alimenticios saludables.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(2) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(2) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores" title="fila 3">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">75. Normalmente me siento con energía y motivado cuando me levanto por la mañana.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(3) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(3) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <!--
                                             end fail
@@ -68,63 +68,63 @@
                                         <tr class="bg-impulsores" title="fila4">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">84. Normalmente me siento libre de fatiga cuando me levanto por la mañana.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(4) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(4) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                     </tbody>                                                                        
                                     <thead class="table-dark mb-5">
                                         <tr id="mergePsicoEE" class="borde-tabla-titulo quitar-borde">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
-                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">79. Considero que lo que hago está alineado con lo que disfruto hacer.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(5) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(5) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">81. Confío que mis capacidades, experiencia y acciones me garantizan crecimiento personal y profesional.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(6) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(6) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">83. Siento que mi vida tiene sentido y propósito determinados.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(7) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(7) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">86. Encuentro tiempo para meditar y alinear mis expectativas de vida.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(8) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(8) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                     </tbody>                                    
                                     <thead class="table-dark mb-5">
                                         <tr id="mergeSocialEE" class="borde-tabla-titulo quitar-borde">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
-                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">69. Siempre produzco un efecto positivo y contribuyo a la alegría en los demás.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(9) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(9) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">73. Considero que mis relaciones interpersonales benefician mi desarrollo como persona.</td>
-                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(10) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEE(10) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">77. Normalmente me siento libre de estrés y ansiedad.</td>
-                                            <td style="padding: 0px!important" ng-repeat="item in vm.getSeccionArrayEE(11) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px!important" ng-repeat="item in vm.getSeccionArrayEE(11) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                         <tr class="bg-impulsores">
                                             <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                             <td class="borde-tabla3" colspan="9">80. Encuentro tiempo de calidad para socializar y compartir con familiares o amigos.</td>
-                                            <td style="padding: 0px!important" ng-repeat="item in vm.getSeccionArrayEE(12) track by $index" class="factor1">{{ item }}%</td>
+                                            <td style="padding: 0px!important" ng-repeat="item in vm.getSeccionArrayEE(12) track by $index" class="factor1  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -199,20 +199,20 @@
                                 </thead>
                                 <thead class="mt-5 table-bienestar">
                                 <th colspan="10" scope="col" class="yellow-clima robotobold f-21">BIENESTAR</th><!--Globales de bienestar-->
-                                <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                 </thead>
                                 <thead class="table-dark mb-5">
                                     <!--globales de bio-->
                                     <tr id="mergeBioEA">
                                         <th colspan="10" scope="col" class="yellow-clima robotobold f-21">I. FACTOR BIOLÓGICO</th>
-                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="bg-impulsores" title="fila 1">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td colspan="9" class="borde-tabla3">67. Encuentro tiempo para realizar alguna actividad física y mantenerme saludable.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(1) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(1) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
 
                                     <!--
@@ -221,12 +221,12 @@
                                     <tr class="bg-impulsores" title="fila 2">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td colspan="9" class="borde-tabla3">71. Normalmente me ocupo de mantener hábitos alimenticios saludables.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(2) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(2) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores" title="fila 3">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">75. Normalmente me siento con energía y motivado cuando me levanto por la mañana.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(3) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(3) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <!--
                                         end fail
@@ -235,63 +235,63 @@
                                     <tr class="bg-impulsores" title="fila4">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">84. Normalmente me siento libre de fatiga cuando me levanto por la mañana.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(4) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(4) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                 </tbody>
                                 <thead class="table-dark mb-5">
                                     <tr id="mergePsicoEA" class="borde-tabla-titulo quitar-borde">
                                         <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
-                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">79. Considero que lo que hago está alineado con lo que disfruto hacer.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(5) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(5) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">81. Confío que mis capacidades, experiencia y acciones me garantizan crecimiento personal y profesional.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(6) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(6) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">83. Siento que mi vida tiene sentido y propósito determinados.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(7) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(7) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">86. Encuentro tiempo para meditar y alinear mis expectativas de vida.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(8) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(8) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                 </tbody>
                                 <thead class="table-dark mb-5">
                                     <tr id="mergeSocialEA" class="borde-tabla-titulo quitar-borde">
                                         <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
-                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
+                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">69. Siempre produzco un efecto positivo y contribuyo a la alegría en los demás.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(9) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(9) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">73. Considero que mis relaciones interpersonales benefician mi desarrollo como persona.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(10) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(10) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">77. Normalmente me siento libre de estrés y ansiedad.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(11) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(11) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                     <tr class="bg-impulsores">
                                         <td class="borde-tabla3"><center><img src="~/img/ReporteoClima/chevron-right.png"></center></td>
                                         <td class="borde-tabla3" colspan="9">80. Encuentro tiempo de calidad para socializar y compartir con familiares o amigos.</td>
-                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(12) track by $index" class="factor1">{{ item }}%</td>
+                                        <td style="padding: 0px !important" ng-repeat="item in vm.getSeccionArrayEA(12) track by $index" class="factor1 {{ vm.bienestarTxtClass(item) }}">{{ item }}%</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -351,6 +351,10 @@
     th .bienestarHistorico {
         padding: 0px;
     }
+    .min-value-bienestar{
+        color: red;
+        font-weight: bold;
+    }
     /*sm*/
     @@media(max-width: 1609px) {
         .table td, .table th {
@@ -364,4 +368,5 @@
             font-size: 12px;
         }
     }
+
 </style>

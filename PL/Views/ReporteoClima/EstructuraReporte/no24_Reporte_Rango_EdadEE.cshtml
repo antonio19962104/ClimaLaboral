@@ -14,7 +14,7 @@
                                             <p hidden>{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
                                             <img @*src="~/img/ReporteoClima/sol-icono.svg"*@ ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
                                             <p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>
-                                            <div class="bar-clasificacion"  style="overflow:hidden;height: {{ item.Porcentaje  * 2.7 }}px;">
+                                            <div class="bar-clasificacion" style="overflow:hidden;height: {{ item.Porcentaje  * 2.7 }}px;">
                                                 <div class="bar-progress-clasificacion" style="height: 0px;">
                                                 </div>
                                                 <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
@@ -26,7 +26,7 @@
                                         </center>
                                     </div>
                                     <div class="col px-0 px-sm-1 bar-estandarW bar-hidePdf" style="min-width: 0px !important;max-width: 0px !important;">
-                                        <center>                                            
+                                        <center>
                                             <img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
                                             <p class="label-top-graphic-clasificacion">.</p>
                                             <div class="bar-clasificacion" style="overflow:hidden;height: {{ 100 * 2.7 }}px;">
@@ -42,6 +42,14 @@
                                     </div>
 
                                 </div><!--.row-->
+
+                                <div ng-if="vm.enfoqueSeleccionado == 1 && vm.resumenDemo == true" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                    <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;">TOTAL</p>
+                                    <img style="margin-left: -2rem;" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[0]) }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ vm.PorcentajeCalificacionGlobal[0] }}%</span>
+                                    <p style="margin-bottom: -20px;"></p>
+                                    <small style="color: blue;margin-left: 50px;">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
+
                             </div><!--.graph-wrapper-->
 
                         </div><!--.row-->
@@ -50,25 +58,25 @@
                     <div class="row mt-2">
                         <div class="col-12">
                             <center>
-    <div ng-show="vm.hasHistorico" class="col-12">
-        <div class="row justify-content-center">
-            <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
-            <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
-            <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
-            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
-            <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
-            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
-        </div>
-    </div>
-    <div ng-show="!vm.hasHistorico" class="col-12">
-        <div class="row justify-content-center">
-            <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
-            <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
-            <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
-            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
-        </div>
-    </div>
-</center>
+                                <div ng-show="vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                    </div>
+                                </div>
+                                <div ng-show="!vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                    </div>
+                                </div>
+                            </center>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mt-5">

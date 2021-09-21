@@ -1684,6 +1684,7 @@
     <Content Include="Views\ReporteoClima\ReporteDinamico.cshtml" />
     <Content Include="Views\ReporteoClima\ReporteComentarios3d.cshtml" />
     <Content Include="Views\ReporteoClima\_LayoutReportes_2.cshtml" />
+    <Content Include="Views\ReporteoClima\EstructuraReporte\barras_resumen.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

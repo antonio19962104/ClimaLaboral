@@ -42,6 +42,14 @@
                                     </div>
 
                                 </div><!--.row-->
+
+                                <div ng-if="vm.enfoqueSeleccionado == 2 && vm.resumenDemo == true" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                    <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;">TOTAL</p>
+                                    <img style="margin-left: -2rem;" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[1]) }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ vm.PorcentajeCalificacionGlobal[1] }}%</span>
+                                    <p style="margin-bottom: -20px;"></p>
+                                    <small style="color: blue;margin-left: 50px;">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
+
                             </div><!--.graph-wrapper-->
 
                         </div><!--.row-->
@@ -123,6 +131,21 @@
                                     </div>
 
                                 </div><!--.row-->
+
+                                <div ng-if="vm.enfoqueSeleccionado == 0 && vm.resumenDemo == true" class="contenedor-resumen">
+                                    <p class="txt-total">TOTAL</p>
+                                    <div class="images-resumen center-vertically">
+                                        <!-- IMG EE -->
+                                        <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[0]) }}" width="60" height="50">
+                                        <!-- IMG EA -->
+                                        <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[1]) }}" width="60" height="50">
+                                    </div>
+                                    <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ vm.PorcentajeCalificacionGlobal[0] }}%</span>
+                                    <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ vm.PorcentajeCalificacionGlobal[1] }}%</span>
+                                    <p style="margin-bottom: 0px;"></p>
+                                    <small class="head-count-resumen">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
+
                             </div><!--.graph-wrapper-->
 
                         </div><!--.row-->

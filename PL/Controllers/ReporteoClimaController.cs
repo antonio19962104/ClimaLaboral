@@ -88,6 +88,7 @@ namespace PL.Controllers
         [HttpPost]
         public JsonResult SavePDF(FormCollection result)
         {
+            HttpPostedFileBase file = Request.Files["mypdf"];
             return Json(result);
         }
 

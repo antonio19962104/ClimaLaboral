@@ -217,19 +217,69 @@
 </div>
 <script>
     // https://stackoverflow.com/questions/38559604/how-encode-in-base64-a-file-generated-with-jspdf-and-html2canvas
-    var file = docReporte.output('blob');
-    var fd = new FormData();     // To carry on your data  
-    fd.append('mypdf', file);
+    function SaveServer() {
+        var file = docReporte.output('blob');
+        var formData = new FormData();     // To carry on your data  
+        formData.append('mypdf', file);
 
-    $.ajax({
-        url: '/ReporteoClima/SavePDF',   //here is also a problem, depends on your 
-        data: fd,           //backend language, it may looks like '/model/send.php'
-        type: 'POST',
-        success: function (response) {
-            alter('Exit to send request');
-        },
-        error: function (jqXHR) {
-            alter('Failure to send request');
-        }
-    });
+        $.ajax({
+            url: '/ReporteoClima/SavePDF',   //here is also a problem, depends on your 
+            data: formData,           //backend language, it may looks like '/model/send.php'
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            success: function (response) {
+                alert('Exit to send request');
+            },
+            error: function (jqXHR) {
+                alert('Failure to send request');
+            }
+        });
+    }
+    function iframeSet() {
+        var blob = docReporte.output('blob');
+        /* Write Pdf into #display Iframe */
+        var blob_url = URL.createObjectURL(blob);
+        var iframeElementContainer = document.getElementById('display');
+        iframeElementContainer.src = blob_url;
+    }
 </script>
+<style>
+    /* vm.enfoqueSeleccionado == 0 */
+    .contenedor-resumen {
+        float: right;
+        margin-top: -25rem;
+        width: 220px;
+        height: 180px;
+        border: 2px solid #959292;
+        border-radius: 8px;
+    }
+
+    .txt-total {
+        color: #000073;
+        font-weight: bold;
+        border-bottom: 2px solid #959292;
+        /*margin-bottom: 2px;*/
+        margin-bottom: -5px;
+    }
+
+    .img-resumen {
+        margin-left: -2rem;
+    }
+
+    .porcentaje-obtenido {
+        margin-left: 28px;
+        color: #000073;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+
+    .head-count-resumen {
+        color: #000073;
+        margin-left: -9.5rem;
+        font-weight: bold;
+    }
+    .images-resumen img + img{
+        margin-left: 2rem;
+    }
+</style>

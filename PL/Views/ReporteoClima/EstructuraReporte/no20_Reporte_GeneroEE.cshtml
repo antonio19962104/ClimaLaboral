@@ -14,7 +14,7 @@
                                             <p hidden>{{ vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
                                             <img @*src="~/img/ReporteoClima/sol-icono.svg"*@ ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
                                             <p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>
-                                            <div class="bar-clasificacion"  style="overflow:hidden;height: {{ item.Porcentaje * 2.7 }}px;">
+                                            <div class="bar-clasificacion" style="overflow:hidden;height: {{ item.Porcentaje * 2.7 }}px;">
                                                 <div class="bar-progress-clasificacion" style="height: 0px;">
                                                 </div>
                                                 <p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>{{  vm.getDiferenciaGralEE(item.Entidad, item.Porcentaje, 1) }}%</p>
@@ -42,6 +42,14 @@
                                     </div>
 
                                 </div><!--.row-->
+
+                                <div ng-if="vm.enfoqueSeleccionado == 1 && vm.resumenDemo == true" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                    <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;">TOTAL</p>
+                                    <img style="margin-left: -2rem;" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[0]) }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ vm.PorcentajeCalificacionGlobal[0] }}%</span>
+                                    <p style="margin-bottom: -20px;"></p>
+                                    <small style="color: blue;margin-left: 50px;">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
+
                             </div><!--.graph-wrapper-->
 
                         </div><!--.row-->

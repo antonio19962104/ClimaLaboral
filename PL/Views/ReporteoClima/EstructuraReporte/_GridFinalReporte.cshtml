@@ -12,11 +12,13 @@
             </div>
 
             <div class="form-group">
-                <input type="button" onclick="crearReportePDF()" class="btn btn-danger" value="Exportar reporte a PDF" />
+                <input type="button" onclick="crearReportePDF(); iframeSet();" class="btn btn-danger" value="Exportar reporte a PDF" />
             </div>
             <div class="form-group">
                 <input type="button" onclick="window.location.reload();" class="btn btn-info" value="Generar nuevo reporte" />
             </div>
+
+            <iframe id="display" style="width: 100%; height: 1366px;" hidden></iframe>
 
             <div class="clearfix"></div>
             <div hidden id="mergeDataCorpo">
