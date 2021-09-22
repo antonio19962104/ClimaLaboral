@@ -10,15 +10,20 @@
 </style>
 
 <script>
+    var historicoPaginasAux = [];
+    var tabs = [];
     var _nuevoHistorico = @Html.Raw(JsonConvert.SerializeObject(new ML.Historico()));
     var _nuevoHistoricoMin = @Html.Raw(JsonConvert.SerializeObject(new ML.minHistorico()));
     var _newHistorico = @Html.Raw(JsonConvert.SerializeObject(new ML.HistoricoClima()));
     $(document).ready(function () {
+        [].forEach.call(document.getElementById("grid").children, function (item) {
+            tabs.push(item.id)
+        });
         document.getElementsByTagName("body")[0].onclick = function (event) {
             if (event.detail === 1) {
-                console.log("1 click");
+                //console.log("1 click");
             } else if (event.detail === 2) {
-                console.log("doble");
+                //console.log("doble");
                 // ajustar paleta de colores
                 //event.target.outerHTML += "<input type='color' class='form-control'>";
             }
@@ -115,7 +120,7 @@
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no12_Reactivos_Factor_PsicoSocial.cshtml")
         </div>
         <!-------------------------------------Reporte de Indicadores de Permanencia----------------------------------------->
-        <div ng-show="vm.SeccionesReporte.Id == 18" id="tab-18" title="Indicadores de permanencia">
+        <div ng-show="vm.SeccionesReporte.Id == 18" ng-hide="vm.SeccionesReporte.Id != 18" id="tab-18" title="Indicadores de permanencia">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no13_Indicadores_De_Permanencia.cshtml")
         </div>
         <!-------------------------------------Reporte comparativo de Indicadores de Permanencia----------------------------------------->
