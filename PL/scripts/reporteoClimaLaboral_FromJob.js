@@ -3963,48 +3963,54 @@ function GetDashBoard() {
                                     vm.SeccionesReporte.Id++;
                                     vm.SeccionesReporte.Id++;
                                     document.getElementById("tab-" + vm.SeccionesReporte.Id).classList.remove("ng-hide");
-                                    var item = $(".row .bg-gris:visible")[1];
+                                    var item = $(".row .bg-gris:visible")[$(".row .bg-gris:visible").length - 1];//var item = $(".row .bg-gris:visible")[1];
                                     item.style.removeProperty("min-height");
+                                    auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id == 28 && vm.ComparativoGeneroEA.length > 0) { 
                                     vm.SeccionesReporte.Id++;
                                     vm.SeccionesReporte.Id++;
                                     document.getElementById("tab-" + vm.SeccionesReporte.Id).classList.remove("ng-hide");
-                                    var item = $(".row .bg-gris:visible")[1];
+                                    var item = $(".row .bg-gris:visible")[$(".row .bg-gris:visible").length - 1];//var item = $(".row .bg-gris:visible")[1];
                                     item.style.removeProperty("min-height");
+                                    auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id == 30 && vm.ComparativoGradoAcademicoEA.length > 0) {
                                     vm.SeccionesReporte.Id++;
                                     vm.SeccionesReporte.Id++;
                                     document.getElementById("tab-" + vm.SeccionesReporte.Id).classList.remove("ng-hide");
-                                    var item = $(".row .bg-gris:visible")[1];
+                                    var item = $(".row .bg-gris:visible")[$(".row .bg-gris:visible").length - 1];//var item = $(".row .bg-gris:visible")[1];
                                     item.style.removeProperty("min-height");
+                                    auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id == 32 && vm.ComparativoCondicionTrabajoEA.length > 0) {
                                     vm.SeccionesReporte.Id++;
                                     vm.SeccionesReporte.Id++;
                                     document.getElementById("tab-" + vm.SeccionesReporte.Id).classList.remove("ng-hide");
-                                    var item = $(".row .bg-gris:visible")[1];
+                                    var item = $(".row .bg-gris:visible")[$(".row .bg-gris:visible").length - 1];//var item = $(".row .bg-gris:visible")[1];
                                     item.style.removeProperty("min-height");
+                                    auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id == 34 && vm.ComparativoFuncionEA.length > 0) {
                                     vm.SeccionesReporte.Id++;
                                     vm.SeccionesReporte.Id++;
                                     document.getElementById("tab-" + vm.SeccionesReporte.Id).classList.remove("ng-hide");
-                                    var item = $(".row .bg-gris:visible")[1];
+                                    var item = $(".row .bg-gris:visible")[$(".row .bg-gris:visible").length - 1];//var item = $(".row .bg-gris:visible")[1];
                                     item.style.removeProperty("min-height");
+                                    auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id == 36 && vm.ComparativoRangoEdadEA.length > 0) {
                                     vm.SeccionesReporte.Id++;
                                     vm.SeccionesReporte.Id++;
                                     document.getElementById("tab-" + vm.SeccionesReporte.Id).classList.remove("ng-hide");
-                                    var item = $(".row .bg-gris:visible")[1];
+                                    var item = $(".row .bg-gris:visible")[$(".row .bg-gris:visible").length - 1];//var item = $(".row .bg-gris:visible")[1];
                                     item.style.removeProperty("min-height");
+                                    auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
                                 vm.SeccionesReporte.Id++;
@@ -4110,6 +4116,9 @@ function GetDashBoard() {
                                         if (document.getElementsByClassName("tab-24-" + consecutivoClase)[0] != undefined) {
                                             document.getElementsByClassName("tab-24-" + consecutivoClase)[0].style.display = "block";/* mostrar el siguiente */
                                             try { $(".indiceResumen_" + (consecutivoClase)).show(); } catch (e) { }
+                                            [].forEach.call($(".indiceResumen_" + (consecutivoClase)), function(item){
+                                                item.removeAttribute("style");
+                                            });
                                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + consecutivoClase).lastOrDefault();
                                             vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
                                             entre = true;
@@ -4681,6 +4690,74 @@ function GetDashBoard() {
                     }
                 }
             }
+            var auxAgrandar = function(item) {
+                //Validar si debe agrandar o ya asi esta correcto el tamaño para la vista web
+                var x = window.matchMedia("(min-width: 1610px)");//size xl  
+                var contenedor = item.getElementsByClassName("grafica-trabajar")[0];                  
+                if (x.matches) {
+                    if (contenedor.offsetHeight >= 480) { //xl si es mas de 480 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
+                        //El tamaño del contenedor ya es grande, por tanto no es valido volver a crecerla, debe ser reducido
+                        return;
+                    }
+                }
+                else {
+                    if (contenedor.offsetHeight >= 475) { //sm si es mas de 475 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
+                        //El tamaño del contenedor ya es grande, por tanto no es valido volver a crecerla
+                        return;
+                    }
+                }
+                var flag = 0;
+                if (vm.enfoqueSeleccionado == 0) {
+                    for (var i = 0; i < item.getElementsByClassName("hc-doble").length; i++) {
+                        if (parseFloat(item.getElementsByClassName("hc-doble")[i].style.height) >= 165) {//ya tiene el valor maximo //La otra variante es un nivel de 135 en vez de 165
+                            flag = 1;
+                            break;
+                        }
+                    }
+                }
+                if (vm.enfoqueSeleccionado != 0) {
+                    for (var i = 0; i < item.getElementsByClassName("hc-doble").length; i++) {
+                        if (parseFloat(item.getElementsByClassName("hc-doble")[i].style.height) >= 135) {//ya tiene el valor maximo //La otra variante es un nivel de 135 en vez de 165
+                            flag = 1;
+                            break;
+                        }
+                    }
+                }
+                if (flag == 1)
+                    return;
+                
+
+                var factMt;
+                if (resolucion <= 2500 && resolucion >= 1901) {
+                    factMt = 20;
+                }
+                if (resolucion <= 1900 && resolucion >= 1370) {
+                    factMt = 12;
+                }
+                if (resolucion <= 1369) {
+                    factMt = 7;
+                }
+                var graficaBarras = $("#" + item.id + " .bar-progress-clasificacion:visible"); // $("#" + item.id + " .bar-progress-clasificacion:visible");
+                [].forEach.call(graficaBarras, function (graf) {
+                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                });
+                var graficaHCN = $("#" + item.id + " .hc:visible");
+                [].forEach.call(graficaHCN, function (graf) {
+                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                    graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
+                    //aumentar mt
+                    graf.style.marginTop = (parseFloat(graf.style.marginTop) + factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                });
+                var grafHC = $("#" + item.id + " .hc-doble:visible");
+                [].forEach.call(grafHC, function (graf) {
+                    graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                });
+                /*var graficaHC = $(".row .bg-gris:visible");
+                [].forEach.call(graficaHC, function (graf) {
+                    graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
+                });*/
+            }
+
 
             vm.peticiones = function () {
                 if (true) {
@@ -5458,6 +5535,9 @@ function GetDashBoard() {
                                                 /* muestro el ultimo */
                                                 childs[childs.length - 1].style.display = "block";
                                                 try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (childs.length)).show(); } catch (e) { }
+                                                [].forEach.call($(".indiceResumen_" + (childs.length)), function (item) {
+                                                    item.removeAttribute("style")
+                                                })
                                                 try {
                                                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                                     vm.exportaImagen = exportaConfig.exporta;
@@ -5477,6 +5557,9 @@ function GetDashBoard() {
                                                 if ((num - 1) > 0) {
                                                     document.getElementsByClassName("tab-24-" + (num - 1))[0].style.display = "block";
                                                     try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (num - 1)).show(); } catch (e) { }
+                                                    [].forEach.call($(".indiceResumen_" + (num - 1)), function (item) {
+                                                        item.removeAttribute("style")
+                                                    })
                                                     var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
                                                     vm.exportaImagen = exportaConfig.exporta;
                                                     return;
@@ -5494,6 +5577,9 @@ function GetDashBoard() {
                                                         var childsEE = document.getElementById("pegarReseccionado").childNodes;
                                                         childsEE[childsEE.length - 1].style.display = "block";
                                                         try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (childsEE.length - 1)).show(); } catch (e) { }
+                                                        [].forEach.call($(".indiceResumen_" + (childsEE.length - 1)), function (item) {
+                                                            item.removeAttribute("style")
+                                                        })
                                                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                                         vm.exportaImagen = exportaConfig.exporta;
                                                         return;
@@ -5574,6 +5660,9 @@ function GetDashBoard() {
                                                     /* muestro el ultimo */
                                                     childs[childs.length - 1].style.display = "block";
                                                     try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (childs.length)).show(); } catch (e) { }
+                                                    [].forEach.call($(".indiceResumen_" + (childs.length)), function (item) {
+                                                        item.removeAttribute("style")
+                                                    })
                                                     try {
                                                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                                         vm.exportaImagen = exportaConfig.exporta;
@@ -5647,6 +5736,9 @@ function GetDashBoard() {
                                                     if ((num - 1) > 0) {
                                                         document.getElementsByClassName("tab-24-" + (num - 1))[0].style.display = "block";
                                                         try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (num - 1)).show(); } catch (e) { }
+                                                        [].forEach.call($(".indiceResumen_" + (num - 1)), function (item) {
+                                                            item.removeAttribute("style")
+                                                        })
                                                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
                                                         vm.exportaImagen = exportaConfig.exporta;
                                                         return;
@@ -5664,6 +5756,9 @@ function GetDashBoard() {
                                                             var childsEE = document.getElementById("pegarReseccionado").childNodes;
                                                             childsEE[childsEE.length - 1].style.display = "block";
                                                             try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (childsEE.length - 1)).show(); } catch (e) { }
+                                                            [].forEach.call($(".indiceResumen_" + (childsEE.length - 1)), function (item) {
+                                                                item.removeAttribute("style")
+                                                            })
                                                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                                             vm.exportaImagen = exportaConfig.exporta;
                                                             return;
@@ -5894,6 +5989,9 @@ function GetDashBoard() {
                         var childs = document.getElementById("pegarReseccionadoEA").childNodes;
                         childs[childs.length - 1].style.display = "block";
                         try { $("#tab-25 .contenedor-resumen").hide(); $(".indiceResumen_" + (childs.length - 1)).show(); } catch (e) { }
+                        [].forEach.call($(".indiceResumen_" + (childs.length - 1)), function(item){
+                            item.removeAttribute("style");
+                        });
                         /* Navegando de la seccion 25 a la 24 mostrando la ultima subseccion */
                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                         vm.exportaImagen = exportaConfig.exporta;
@@ -5919,6 +6017,9 @@ function GetDashBoard() {
                                     /* muestro el ultimo */
                                     childs[childs.length - 1].style.display = "block";
                                     try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (childs.length)).show(); } catch (e) { }
+                                    [].forEach.call($(".indiceResumen_" + (childs.length)), function(item){
+                                        item.removeAttribute("style");
+                                    });
                                     try {
                                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                         vm.exportaImagen = exportaConfig.exporta;
@@ -5938,6 +6039,9 @@ function GetDashBoard() {
                                     if ((num - 1) > 0) {
                                         document.getElementsByClassName("tab-24-" + (num - 1))[0].style.display = "block";
                                         try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (num - 1)).show(); } catch (e) { }
+                                        [].forEach.call($(".indiceResumen_" + (num - 1)), function(item){
+                                            item.removeAttribute("style");
+                                        });
                                         var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
                                         vm.exportaImagen = exportaConfig.exporta;
                                         return;
@@ -5955,6 +6059,9 @@ function GetDashBoard() {
                                             var childsEE = document.getElementById("pegarReseccionado").childNodes;
                                             childsEE[childsEE.length - 1].style.display = "block";
                                             try { $("#tab-24 .contenedor-resumen").hide(); $(".indiceResumen_" + (childsEE.length - 1)).show(); } catch (e) { }
+                                            [].forEach.call($(".indiceResumen_" + (childsEE.length - 1)), function(item){
+                                                item.removeAttribute("style");
+                                            });
                                             var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
                                             vm.exportaImagen = exportaConfig.exporta;
                                             return;

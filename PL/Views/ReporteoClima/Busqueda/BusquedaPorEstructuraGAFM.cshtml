@@ -33,7 +33,7 @@
                     ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Empresa</label>
+            <label class="control-label">Dirección</label>
             <select ng-model="vm.Company" class="form-control"
                     ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
         </div>
@@ -46,7 +46,7 @@
                     ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Empresa</label>
+            <label class="control-label">Dirección</label>
             <select ng-model="vm.CompanyForArea" class="form-control" ng-change="vm.setAreas(vm.CompanyForArea)"
                     ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
         </div>
@@ -64,7 +64,7 @@
                     ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
         </div>
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-            <label class="control-label">Empresa</label>
+            <label class="control-label">Dirección</label>
             <select ng-model="vm.CompanyForDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForDepartamento)"
                     ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
         </div>
@@ -124,7 +124,7 @@
                         ng-options="companyCategoria.Descripcion for companyCategoria in vm.listCompanyCategoria track by companyCategoria.IdCompanyCategoria"></select>
             </div>
             <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
-                <label class="control-label">Empresa</label>
+                <label class="control-label">Dirección</label>
                 <select ng-model="vm.CompanyForSubDepartamento" class="form-control" ng-change="vm.setAreas(vm.CompanyForSubDepartamento)"
                         ng-options="company.CompanyName for company in vm.listCompany track by company.CompanyId"></select>
             </div>
