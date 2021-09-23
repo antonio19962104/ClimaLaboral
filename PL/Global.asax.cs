@@ -30,6 +30,8 @@ namespace PL
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
+
+            
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere
             */

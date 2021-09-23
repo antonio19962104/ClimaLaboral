@@ -17,6 +17,7 @@ function GetDashBoard() {
         try {
             var vm = this;
 		var contadorResumen = 1;
+        var flagDecremento = 0;
             vm.resumenDemo = true;
             var countAgrandar = 0;
             var countAgrandar2 = 0;
@@ -2354,6 +2355,33 @@ function GetDashBoard() {
             }
 
 
+            var mergeFantasma = function () {
+                var fantasma = `<div class="col px-0 px-sm-1 bar-estandarW bar-hidePdf" style="min-width: 0px !important;max-width: 0px !important;">
+                                    <center>
+                                        <img class="img-fluid svg-clasificacion">
+                                        <p class="label-top-graphic-clasificacion">.</p>
+                                        <div class="bar-clasificacion" style="overflow: hidden; height: 270px;">
+                                            <div class="bar-progress-clasificacion" style="height: 0px;">
+                                            </div>
+                                            <p ng-hide="!vm.hasHistorico" class="comparativo ng-hide" style="bottom: 25%;">.</p>
+                                            <p class="label-top-graphic-blue2" style="margin-top: 321.291px;">.</p>
+                                            <div class="bar-progress4" style="height: 270px;">
+                                            </div>
+                                        </div>
+                                        <p class="text-graph">.</p>
+                                    </center>
+                                </div>`;
+                [].forEach.call($("#tab-" + vm.SeccionesReporte.Id + " .bg-gris"), function (item) {
+                    var flag = false;
+                    item.children.forEach(function(item){
+                        if (item.classList.contains("bar-hidePdf"))
+                            flag = true;
+                    })
+                    if (flag == false)
+                        item.innerHTML += fantasma;
+                });
+            }
+
             vm.savePaginaPDF = async function () {
                 try {
                     var paginaActiva;
@@ -3781,13 +3809,25 @@ function GetDashBoard() {
                         vm.SeccionesReporte.Id = 4;
                         return;
                     }
+                    if (vm.enfoqueSeleccionado == 1 && vm.SeccionesReporte.Id == 37) {
+                        vm.SeccionesReporte.Id = 41;
+                        return;
+                    }
                     if (vm.SeccionesReporte.Id == 38) {
                         vm.SeccionesReporte.Id = 41;
                         return;
                     }
-                    if (vm.enfoqueSeleccionado == 0) {
+                    // Enfoque Doble y Enfoque Área
+                    if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                         if (vm.hasHistorico) {
                             if (vm.SeccionesReporte.Id < 20) {
+                                if (vm.enfoqueSeleccionado == 2) {//Validacion EA
+                                    if (vm.SeccionesReporte.Id == 8 || vm.SeccionesReporte.Id == 10 || vm.SeccionesReporte.Id == 12 || vm.SeccionesReporte.Id == 14) {
+                                        vm.SeccionesReporte.Id++;
+                                        vm.SeccionesReporte.Id++;
+                                        return vm.peticiones();
+                                    }
+                                }
                                 vm.SeccionesReporte.Id++;
                                 return vm.peticiones();
                             }
@@ -3842,7 +3882,12 @@ function GetDashBoard() {
                                         if (document.getElementsByClassName("tab-24-" + childs.length)[0] != undefined) {
                                             if (document.getElementsByClassName("tab-24-" + childs.length)[0].offsetWidth > 0) {
                                                 // ya se va a ocultar la ultima subpagina y se debe avanzar de seccion
-                                                vm.SeccionesReporte.Id++;//No se hace incremento por dos porque el metodo de la peticion valida el incremento
+                                                if (vm.enfoqueSeleccionado == 2) {
+                                                    vm.SeccionesReporte.Id++;//el incremento doble se hace directo porque no necesito grafico combinado
+                                                    vm.SeccionesReporte.Id++;
+                                                    return vm.peticiones();
+                                                }
+                                                vm.SeccionesReporte.Id++;//No se hace incremento por dos porque el metodo de la peticion valida el incremento doble para el grafico combinado
                                                 return vm.peticiones();
                                             }
                                         }
@@ -3934,10 +3979,21 @@ function GetDashBoard() {
                             }
                             // fin validar subsecciones
                             if (vm.SeccionesReporte.Id < 10 || vm.SeccionesReporte.Id == 13) {
+                                if (vm.enfoqueSeleccionado == 2) {
+                                    if (vm.SeccionesReporte.Id == 8) {
+                                        vm.SeccionesReporte.Id++;
+                                        vm.SeccionesReporte.Id++;
+                                        return vm.peticiones();
+                                    }
+                                }
                                 vm.SeccionesReporte.Id++;
                                 return vm.peticiones();
                             }
                             if (vm.SeccionesReporte.Id == 10) {
+                                if (vm.enfoqueSeleccionado == 2) {
+                                    vm.SeccionesReporte.Id = 14;
+                                    return vm.peticiones();
+                                }
                                 vm.SeccionesReporte.Id = 13;
                                 return vm.peticiones();
                             }
@@ -4013,9 +4069,168 @@ function GetDashBoard() {
                                     auxAgrandar(document.getElementById("tab-" + vm.SeccionesReporte.Id));
                                     return;
                                 }
+                                if (vm.enfoqueSeleccionado == 2 && vm.SeccionesReporte.Id == 22 && vm.ComparativoGeneralPorNivelesEA.Data == undefined) {
+                                    //swal("", "", "success");
+                                    vm.SeccionesReporte.Id = 24;
+                                    return vm.peticiones();
+                                }
                                 vm.SeccionesReporte.Id++;
                                 vm.peticiones();
                                 vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                        }
+                    }
+
+                    // Enfoque Empresa
+                    if (vm.enfoqueSeleccionado == 1) {
+                        if (vm.hasHistorico) {
+                            if (vm.SeccionesReporte.Id <= 8) {
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id >= 9 && vm.SeccionesReporte.Id <= 15) {
+                                vm.SeccionesReporte.Id++;
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id >= 17 && vm.SeccionesReporte.Id <= 20) {
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id >= 21 && vm.SeccionesReporte.Id <= 35) {
+                                vm.SeccionesReporte.Id++;
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                        }
+                        if (vm.hasHistorico == false) {
+                            if (vm.SeccionesReporte.Id == 23) {
+                                try {
+                                    if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                                        var childs = document.getElementById("pegarReseccionado").childNodes;
+                                        var maxchilds = childs.length - 1;
+                                        if (document.getElementsByClassName("tab-23-" + childs.length)[0] != undefined) {
+                                            if (document.getElementsByClassName("tab-23-" + childs.length)[0].offsetWidth > 0) {
+                                                // ya se va a ocultar la ultima subpagina y se debe avanzar de seccion
+                                                if (vm.enfoqueSeleccionado == 1) {
+                                                    vm.SeccionesReporte.Id++;//el incremento doble se hace directo porque no necesito grafico combinado
+                                                    vm.SeccionesReporte.Id++;
+                                                    return vm.peticiones();
+                                                }
+                                                vm.SeccionesReporte.Id++;//No se hace incremento por dos porque el metodo de la peticion valida el incremento doble para el grafico combinado
+                                                return vm.peticiones();
+                                            }
+                                        }
+                                        [].forEach.call(childs, function (item, index) {
+                                            var customClassName = item.classList[2];
+                                            var consecutivoClase = parseInt(customClassName.split('-')[2]) + 1;
+                                            if (document.getElementsByClassName(customClassName)[0].style.display == "" || document.getElementsByClassName(item.classList[2])[0].style.display == "block") {
+                                                vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id + "_" + parseInt(customClassName.split('-')[2]), exporta: vm.exportaImagen });
+                                                /*Se bajan los tamaños de los graficos de la ultima de Id 23  -----Camos 13/09/2021*/
+                                                if (maxchilds == index) {
+                                                    if (vm.SeccionesReporte.Id == 23) {
+                                                        try {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                factMt = 12;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                factMt = 12;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                factMt = 7;
+                                                            }
+                                                            var hvisible;
+                                                            for (var i = 0; i < 200; i++) {
+                                                                if (document.getElementsByClassName("tab-23-" + i)[0] != undefined) {
+                                                                    if (document.getElementsByClassName("tab-23-" + i)[0].offsetWidth > 0) {
+                                                                        hvisible = "tab-23-" + i;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                            var graficaHC = $("." + hvisible + " .row .bg-gris");
+                                                            [].forEach.call(graficaHC, function (graf) {
+                                                                graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                                            });
+                                                            var grafHC = $("." + hvisible + " .hc-doble");
+                                                            [].forEach.call(grafHC, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            });
+                                                            var graficaHCN = $("." + hvisible + " .hc");
+                                                            [].forEach.call(graficaHCN, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                                graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                                                //aumentar mt
+                                                                graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                                                            });
+                                                            var graficaBarras = $("." + hvisible + " .bar-progress-clasificacion");
+                                                            [].forEach.call(graficaBarras, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            });
+                                                            $("." + hvisible + " .row .bg-gris")[0].removeAttribute("style")
+
+                                                        } catch (e) {
+
+                                                        }
+                                                    }
+                                                }
+
+                                                /* ocultar el actual */
+                                                document.getElementsByClassName(customClassName)[0].style.display = "none";
+                                                if (document.getElementsByClassName("tab-23-" + consecutivoClase)[0] != undefined) {
+                                                    document.getElementsByClassName("tab-23-" + consecutivoClase)[0].style.display = "block";/* mostrar el siguiente */
+                                                    $(".contenedor-resumen").hide();
+                                                    $(".indiceResumen_" + (consecutivoClase)).show();
+                                                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + consecutivoClase).lastOrDefault();
+                                                    vm.exportaImagen = exportaConfig == null ? true : exportaConfig.exporta;
+                                                    throw BreakException;
+                                                    return false;
+                                                }
+                                                else {
+                                                    if (vm.enfoqueSeleccionado == 1) {
+                                                        if (vm.hasHistorico == false) {
+                                                            //vm.SeccionesReporte.Id = 26;
+                                                            //vm.getReporteDataPantalla_26();
+                                                            //return false;
+                                                        }
+                                                    }
+                                                    /* avanza a la seccion 25 */
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        vm.SeccionesReporte.Id++;
+                                        return vm.peticiones();
+                                    }
+                                } catch (e) {
+                                    return;
+                                }
+                            }
+                            if (vm.SeccionesReporte.Id <= 8) {
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id == 9) {
+                                vm.SeccionesReporte.Id = 13;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id == 13) {
+                                vm.SeccionesReporte.Id = 17;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id >= 17 && vm.SeccionesReporte.Id <= 20) {
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id >= 21 && vm.SeccionesReporte.Id <= 35) {
+                                vm.SeccionesReporte.Id++;
+                                vm.SeccionesReporte.Id++;
+                                if (vm.SeccionesReporte.Id == 23 && vm.ComparativoGeneralPorNivelesEE.Data != undefined) {
+                                    //mostrar el primero de los enumerados
+                                    document.getElementsByClassName("tab-23-1")[0].style.display = "block";
+                                }
                                 return vm.peticiones();
                             }
                         }
@@ -5170,6 +5385,32 @@ function GetDashBoard() {
                     }
                 }
             }
+            var contadorReduceEE = 0;
+            var eeReduce = function (seccion) {
+                if (contadorReduceEE == 0) {
+                    contadorReduceEE++;
+                    var anterior = seccion;
+                    var factConver = ($(window).width() * 1.8) / 1920;
+                    var graficaBarras = $("#tab-" + anterior + " .bar-clasificacion");
+                    [].forEach.call(graficaBarras, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                    });
+                    var graficaHCN = $(".hc:visible");
+                    [].forEach.call(graficaHCN, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                        graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                        graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                    });
+                    var grafHC = $(".hc-doble:visible");
+                    [].forEach.call(grafHC, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                    });
+                    var graficaHC = $("#tab-" + anterior + " .bar-progress4");
+                    [].forEach.call(graficaHC, function (graf) {
+                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                    });
+                }
+            }
 
             vm.reduceGrafica = function () {
                 try {
@@ -5499,11 +5740,18 @@ function GetDashBoard() {
                             vm.SeccionesReporte.Id = 3;
                             return;
                         }
+                        if (vm.enfoqueSeleccionado == 1 && vm.SeccionesReporte.Id == 41) {
+                            vm.SeccionesReporte.Id = 37;
+                            //reducir
+                            eeReduce(vm.SeccionesReporte.Id);
+                            return;
+                        }
                         if (vm.SeccionesReporte.Id == 41) {
                             vm.SeccionesReporte.Id = 38;
                             return;
                         }
-                        if (vm.enfoqueSeleccionado == 0) {
+                        // Enfoque combinado y Enfoque Área
+                        if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                             if (vm.hasHistorico) {
                                 if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22) {
                                     vm.SeccionesReporte.Id--;
@@ -5511,6 +5759,13 @@ function GetDashBoard() {
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id <= 20) {
+                                    if (vm.enfoqueSeleccionado == 2) {
+                                        if (vm.SeccionesReporte.Id == 16 || vm.SeccionesReporte.Id == 14 || vm.SeccionesReporte.Id == 12 || vm.SeccionesReporte.Id == 10) {
+                                            vm.SeccionesReporte.Id--;
+                                            vm.SeccionesReporte.Id--;
+                                            return;
+                                        }
+                                    }
                                     vm.SeccionesReporte.Id--;
                                     return;
                                 }
@@ -5569,6 +5824,29 @@ function GetDashBoard() {
                                                     if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0) {
                                                         vm.SeccionesReporte.Id--;
                                                         vm.SeccionesReporte.Id--;
+                                                        if (vm.enfoqueSeleccionado == 2 && vm.SeccionesReporte.Id == 22 && flagDecremento == 0) {
+                                                            //Validacion jamg
+                                                            var anterior = 22;
+                                                            var graficaBarras = $("#tab-" + anterior + " .bar-clasificacion");
+                                                            [].forEach.call(graficaBarras, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                                flagDecremento++;
+                                                            });
+                                                            /*var graficaHCN = $(".hc:visible");
+                                                            [].forEach.call(graficaHCN, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                                graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                                                graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                                            });
+                                                            var grafHC = $(".hc-doble:visible");
+                                                            [].forEach.call(grafHC, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            });
+                                                            var graficaHC = $("#tab-" + anterior + " .bar-progress4");
+                                                            [].forEach.call(graficaHC, function (graf) {
+                                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            });*/
+                                                        }
                                                         return;
                                                     }
                                                     else {
@@ -5641,6 +5919,13 @@ function GetDashBoard() {
                                 if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
+                                    if (vm.enfoqueSeleccionado == 2 && vm.SeccionesReporte.Id == 26) {
+                                        document.getElementById("tab-26").classList.remove("ng-hide");
+                                        [].forEach.call($(".contenedor-resumen:visible"), function (item) {
+                                            item.removeAttribute("style");
+                                        });
+                                        return;
+                                    }
                                     if (vm.SeccionesReporte.Id == 24) {
                                         try {
                                             if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0)
@@ -5784,6 +6069,10 @@ function GetDashBoard() {
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id == 14) {
+                                    if (vm.enfoqueSeleccionado == 2) {
+                                        vm.SeccionesReporte.Id = 10;
+                                        return;
+                                    }
                                     vm.SeccionesReporte.Id = 13;
                                     return;
                                 }
@@ -5792,13 +6081,181 @@ function GetDashBoard() {
                                     return;
                                 }
                                 if (vm.SeccionesReporte.Id <= 10) {
+                                    if (vm.enfoqueSeleccionado == 2 && vm.SeccionesReporte.Id == 10) {
+                                        vm.SeccionesReporte.Id = 8;
+                                        return;
+                                    }
                                     vm.SeccionesReporte.Id--;
                                     return;
                                 }
                             }
                         }
 
-                        
+                        // ENfoque Empresa
+                        if (vm.enfoqueSeleccionado == 1) {
+                            if (vm.hasHistorico) {
+                                if (vm.SeccionesReporte.Id <= 37 && vm.SeccionesReporte.Id >= 23) {
+                                    vm.SeccionesReporte.Id--;
+                                    vm.SeccionesReporte.Id--;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id <= 21 && vm.SeccionesReporte.Id >= 18) {
+                                    vm.SeccionesReporte.Id--;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 17 || vm.SeccionesReporte.Id == 15 || vm.SeccionesReporte.Id == 13 || vm.SeccionesReporte.Id == 11) {
+                                    vm.SeccionesReporte.Id--;
+                                    vm.SeccionesReporte.Id--;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id <= 9) {
+                                    vm.SeccionesReporte.Id--;
+                                    return;
+                                }
+                            }
+                            if (vm.hasHistorico == false) {
+                                // meter 23
+                                if (vm.SeccionesReporte.Id == 23) {
+                                    try {
+                                        /* ir a la sub del 23 */
+                                        var childs = document.getElementById("pegarReseccionado").childNodes;
+                                        /* obtengo el visible */
+                                        var visible = Enumerable.from(childs).where(o => o.style.display == "block").toList();
+                                        if (visible.length == 0 && vm.SeccionesReporte.Id == 23) {
+                                            /* muestro el ultimo */
+                                            childs[childs.length - 1].style.display = "block";
+                                            try { $("#tab-23 .contenedor-resumen").hide(); $(".indiceResumen_" + (childs.length)).show(); } catch (e) { }
+                                            [].forEach.call($(".indiceResumen_" + (childs.length)), function (item) {
+                                                item.removeAttribute("style")
+                                            })
+                                            try {
+                                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                                                vm.exportaImagen = exportaConfig.exporta;
+                                            } catch (e) {
+
+                                            }
+                                            vm.SeccionesReporte.Id = 23;
+                                            if (vm.enfoqueSeleccionado == 1)
+                                                document.getElementById("tab-25").classList.add("ng-hide");
+                                            return;
+                                            return false;
+                                            return vm.SeccionesReporte.Id;
+                                        }
+                                        if (visible.length == 1 && vm.SeccionesReporte.Id == 23) {
+                                            var num = parseInt(visible[0].classList[2].split('-')[2]);
+                                            document.getElementsByClassName("tab-23-" + (num))[0].style.display = "none";
+                                            if ((num - 1) > 0) {
+                                                document.getElementsByClassName("tab-23-" + (num - 1))[0].style.display = "block";
+                                                try { $("#tab-23 .contenedor-resumen").hide(); $(".indiceResumen_" + (num - 1)).show(); } catch (e) { }
+                                                [].forEach.call($(".indiceResumen_" + (num - 1)), function (item) {
+                                                    item.removeAttribute("style")
+                                                })
+                                                var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + (num - 1)).lastOrDefault();
+                                                vm.exportaImagen = exportaConfig.exporta;
+                                                return;
+                                            }
+                                            else if ((num - 1) == 0) {
+                                                /* Activar la seccion de los graficos de 23 */
+                                                if (vm.enfoqueSeleccionado == 1) {
+                                                    vm.SeccionesReporte.Id--;
+                                                    vm.SeccionesReporte.Id--;
+                                                    if (vm.enfoqueSeleccionado == 1 && vm.SeccionesReporte.Id == 21 && flagDecremento == 0) {
+                                                        //Validacion jamg
+                                                        var anterior = 21;
+                                                        var graficaBarras = $("#tab-" + anterior + " .bar-clasificacion");
+                                                        [].forEach.call(graficaBarras, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            flagDecremento++;
+                                                        });
+                                                        /*var graficaHCN = $(".hc:visible");
+                                                        [].forEach.call(graficaHCN, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                                            graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                                        });
+                                                        var grafHC = $(".hc-doble:visible");
+                                                        [].forEach.call(grafHC, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        });
+                                                        var graficaHC = $("#tab-" + anterior + " .bar-progress4");
+                                                        [].forEach.call(graficaHC, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        });*/
+                                                    }
+                                                    return;
+                                                }
+                                                else {
+                                                    vm.SeccionesReporte.Id--;/* 22 */
+                                                    /* mostrar ultimo */
+                                                    var childsEE = document.getElementById("pegarReseccionado").childNodes;
+                                                    childsEE[childsEE.length - 1].style.display = "block";
+                                                    try { $("#tab-23 .contenedor-resumen").hide(); $(".indiceResumen_" + (childsEE.length - 1)).show(); } catch (e) { }
+                                                    [].forEach.call($(".indiceResumen_" + (childsEE.length - 1)), function (item) {
+                                                        item.removeAttribute("style")
+                                                    })
+                                                    var exportaConfig = Enumerable.from(vm.exportaSeccion).where(o => o.IdSeccion == vm.SeccionesReporte.Id + "_" + childs.length).lastOrDefault();
+                                                    vm.exportaImagen = exportaConfig.exporta;
+                                                    return;
+                                                }
+                                            }
+                                        }
+                                        
+                                    } catch (e) {
+
+                                    }
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                if (vm.SeccionesReporte.Id <= 37 && vm.SeccionesReporte.Id >= 23) {
+                                    vm.SeccionesReporte.Id--;
+                                    vm.SeccionesReporte.Id--;
+                                    if (vm.SeccionesReporte.Id == 25) {
+                                        // mostrar ambos y quitar margin al resumen
+                                        $("#tab-25 .grafica-trabajar").css("display", "");
+                                        var resumen = $("#tab-25 .contenedor-resumen:visible");
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.removeProperty("margin-top");
+                                        });
+                                    }
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id <= 21 && vm.SeccionesReporte.Id >= 18) {
+                                    vm.SeccionesReporte.Id--;
+                                    if (vm.SeccionesReporte.Id == 20) {
+                                        document.getElementById("tab-19").classList.add("ng-hide");
+                                    }
+                                    if (vm.SeccionesReporte.Id == 19) {
+                                        document.getElementById("tab-18").classList.add("ng-hide");
+                                    }
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 17) {
+                                    vm.SeccionesReporte.Id = 13;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 13) {
+                                    vm.SeccionesReporte.Id = 9;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id <= 9) {
+                                    vm.SeccionesReporte.Id--;
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }
                 
@@ -7367,6 +7824,7 @@ function GetDashBoard() {
                             vm.getReporteDataPantalla_22();
                             return;
                         }
+                        document.getElementsByClassName("busy")[1].style.display = "none";
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -11639,7 +12097,9 @@ function GetDashBoard() {
                             document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "block";
                         else if (indiceEA > 1 && enfoque == 2)
                             document.getElementsByClassName("tab-24-" + indiceEA)[0].style.display = "none";
-
+                        if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 1) {
+                            mergeFantasma();
+                        }
                         /*
                          * en primer instancia solo dejar visible el que tiene el indice 0
                          * Logica para avanzar en la seccion

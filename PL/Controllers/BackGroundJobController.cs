@@ -181,8 +181,12 @@ namespace PL.Controllers
                 if (aFiltrosEntUnNivelAbajo.Count > 0)
                     aFiltrosEntUnNivelAbajo.RemoveAt(0);
 
-                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+                /*
+                 * Bienestar solamente traia los elementos de un nivel abajo del padre
+                 * jamurillo 23/09/2021
+                 * objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                 * objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+                 */
                 objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
                 objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
@@ -193,6 +197,15 @@ namespace PL.Controllers
                 // obtener los hijos de la estructura GAFM todos los niveles bajo de la entidad seleccionada
                 // var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
                 var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
+                var descendientesForBienestar = aFiltrosHijosEstructura.Select(o => o.value).ToList();
+                /*
+                 * Ahora bienestar traerá toda la info de todos los hijos y nietos etc del padre
+                 * jamurillo 23/09/2021
+                 * Adjuntar el campo type para saber su prefijo, sobrecargar el metodo
+                 */
+                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+
                 objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
 
