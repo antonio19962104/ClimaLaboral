@@ -110,6 +110,97 @@ namespace PL.Controllers
             
         }
 
+        public JsonResult AutenticarAdmin_(ML.Administrador admin, HttpSessionStateBase Session)
+        {
+            string HtmlCodeAlertProgress = "";
+            HttpRuntime.Cache.Add("statusReporteFinal", HtmlCodeAlertProgress, null, System.Web.Caching.Cache.NoAbsoluteExpiration, TimeSpan.FromHours(8),
+                System.Web.Caching.CacheItemPriority.High, null);
+            Session["statusReporte"] = "";
+            Session["EmailCompleted"] = 0;
+            Session["EstatusEmails"] = 0;
+            var result = BL.Administrador.AutenticarAdmin(admin);
+
+            Session["CompanyDelAdminLog"] = result.CompanyDelAdmin;
+            Session["IdAdministradorLogeado"] = result.CURRENTIDADMINLOG;
+
+            Session["SuperAdmin"] = result.IsSuperAdmin;
+
+            try
+            {
+                if (result.PerfilesList != null || result.PerfilesList.Count != 0)
+                {
+                    Console.WriteLine();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json("error");
+            }
+
+            if (result.PerfilesList != null || result.PerfilesList.Count != 0)
+            {
+                foreach (string item in result.PerfilesList.ToList())
+                {
+                    if (item == "Administrador Master")
+                    {
+                        Session["Master"] = true;
+                    }
+                    else
+                    {
+                        Session["Master"] = false;
+                    }
+                }
+                /****************GetCompaniesForPermission*****************************/
+                Session["CurrentIdAdminLog"] = result.CURRENTIDADMINLOG;
+                var getCompanies = BL.Administrador.GetCompaniesForPermisos(result.CURRENTIDADMINLOG);
+
+
+                ViewBag.CompaniesPermisos = getCompanies.Objects;
+                Session["CompaniesPermisos"] = getCompanies.Objects;
+                /********************End GetCompanies***************************/
+
+
+                if (result.Correct == true)
+                {
+                    //result contiene las acciones que se pueden realizar por el usuario
+                    string Nombre = ((ML.PerfilModulo)result.Object).Administrador.Empleado.Nombre;
+                    string ApellidoP = ((ML.PerfilModulo)result.Object).Administrador.Empleado.ApellidoPaterno;
+                    string ApellidoM = ((ML.PerfilModulo)result.Object).Administrador.Empleado.ApellidoMaterno;
+
+                    string color = ((ML.Administrador)result.DataColors).Company.Color;
+                    string logo = ((ML.Administrador)result.DataColors).Company.LogoEmpresa;
+
+                    Session["color"] = color;
+                    Session["logo"] = logo;
+                    //para obtener perfil sería iterar sobre un objects para obtener uno o los que salgan Objects.Aux
+                    //string PerfilD4U = ((ML.PerfilModulo)result.Object).PerfilD4U.Descripcion;
+
+                    Session["IdEmpleadoLog"] = result.CURRENT_IDEMPLEADOLOG;
+                    Session["AdminLog"] = Nombre + " " + ApellidoP + " " + ApellidoM;
+                    Session["PerfilAdminLog"] = result.PerfilesList;
+                    Session["Permisos"] = result.ObjectsPermisos;
+                    Session["Modulos"] = result.ObjectsAux;
+                    BL.NLogGeneratorFile.logAccesCMS(admin.UserName, Nombre + " " + ApellidoP + " " + ApellidoM);
+                    return Json("success");
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Claves de acceso no válidas";
+                    Session["resultLogin"] = 1;
+                    return Json("error");
+                }
+
+            }
+            else
+            {
+                return Json("error");
+            }
+
+
+
+
+        }
+
         public ActionResult IsLogged()
         {
             //logError => ex.message

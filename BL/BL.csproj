@@ -116,11 +116,15 @@
     <Compile Include="CompanyCategoria.cs" />
     <Compile Include="Competencia.cs" />
     <Compile Include="ConfiguraRespuesta.cs" />
+    <Compile Include="Decryptor.cs" />
+    <Compile Include="DecryptTransformer.cs" />
     <Compile Include="Departamento.cs" />
     <Compile Include="Documentacion.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="Empleado.cs" />
     <Compile Include="Empresa.cs" />
+    <Compile Include="Encryptor.cs" />
+    <Compile Include="EncryptTransformer.cs" />
     <Compile Include="Encuesta.cs" />
     <Compile Include="Estatus.cs" />
     <Compile Include="EstructuraAFMReporte.cs" />
@@ -145,6 +149,7 @@
     <Compile Include="ReporteD4U.cs" />
     <Compile Include="ReportesClima.cs" />
     <Compile Include="Respuestas.cs" />
+    <Compile Include="Seguridad.cs" />
     <Compile Include="SubDepartamento.cs" />
     <Compile Include="TipoControl.cs" />
     <Compile Include="TipoEncuesta.cs" />

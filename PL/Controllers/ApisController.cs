@@ -376,6 +376,117 @@ namespace PL.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        // Nuevo ajuste a los calculos de bienestar para obtener todos los hijos
+        public JsonResult getPorcentajePsicoSocialEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody] List<myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
+        {
+            aFiltros = aFiltros == null ? new List<myCustomArray>() : aFiltros;
+            var data = new List<double>();
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
+            foreach (var item in aFiltros)
+            {
+                /*
+                 * type: prefijo
+                 * value: nombre de la entidad
+                 */
+                model.ListFiltros.Add(item.type + item.value);
+            }
+            model.IdPregunta = 67;
+            var fila1 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 71;
+            var fila2 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 75;
+            var fila3 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 84;
+            var fila4 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+
+            model.IdPregunta = 79;
+            var fila5 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 81;
+            var fila6 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 83;
+            var fila7 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 86;
+            var fila8 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+
+            model.IdPregunta = 69;
+            var fila9 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 73;
+            var fila10 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 77;
+            var fila11 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 80;
+            var fila12 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+
+            //el js para pintar dara saltos en el array segun el numero de afiltros
+            data.AddRange(fila1);
+            data.AddRange(fila2);
+            data.AddRange(fila3);
+            data.AddRange(fila4);
+            data.AddRange(fila5);
+            data.AddRange(fila6);
+            data.AddRange(fila7);
+            data.AddRange(fila8);
+            data.AddRange(fila9);
+            data.AddRange(fila10);
+            data.AddRange(fila11);
+            data.AddRange(fila12);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+        // Nuevo ajuste a los calculos de bienestar para obtener todos los hijos
+        public JsonResult getPorcentajePsicoSocialEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody] List<myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
+        {
+            aFiltros = aFiltros == null ? new List<myCustomArray>() : aFiltros;
+            var data = new List<double>();
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
+            foreach (var item in aFiltros)
+            {
+                /*Validar prefijo segun criterio de busqueda*/
+                model.ListFiltros.Add(item.type + item.value);
+            }
+            model.IdPregunta = 153;
+            var fila1 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 157;
+            var fila2 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 161;
+            var fila3 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 170;
+            var fila4 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+
+            model.IdPregunta = 165;
+            var fila5 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 167;
+            var fila6 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 169;
+            var fila7 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 172;
+            var fila8 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+
+            model.IdPregunta = 155;
+            var fila9 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 159;
+            var fila10 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 163;
+            var fila11 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+            model.IdPregunta = 166;
+            var fila12 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
+
+            data.AddRange(fila1);
+            data.AddRange(fila2);
+            data.AddRange(fila3);
+            data.AddRange(fila4);
+            data.AddRange(fila5);
+            data.AddRange(fila6);
+            data.AddRange(fila7);
+            data.AddRange(fila8);
+            data.AddRange(fila9);
+            data.AddRange(fila10);
+            data.AddRange(fila11);
+            data.AddRange(fila12);
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult getIndicadoresPermanencia(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);

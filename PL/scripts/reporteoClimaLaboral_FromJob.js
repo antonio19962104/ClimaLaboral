@@ -385,13 +385,54 @@ function GetDashBoard() {
             }
             /*#endregion variables*/
 
+            var getParamByUrl = function (key) {
+                try {
+                    var url_string = window.location.href;
+                    var url = new URL(url_string);
+                    var param = url.searchParams.get(key);
+                    console.log(param);
+                    return param;
+                } catch (aE) {
+                    return "";
+                }
+            }
 
-
+            /*
+             * Verificar si la url trae un token de autorizacion
+             * Decodificarla y hacer el proceso de seleccion de los filtros automaticamente
+             * Partir con el reporte en la página donde selecciona la imagen de portada
+             */
             $(document).ready(function () {
                 try {
-                    /*$("#tab-1 select[id!='Anio'] ").change(function () { 
-                        document.getElementById('Anio').value = '-Selecciona-';
-                    });*/
+                    
+                    var token = getParamByUrl("token");
+                    if (token != null && token != "") {
+                        // Procesar filtros
+                        $.ajax({
+                            url: "/ReporteoClima/GetFiltrosR/?cadena=" + token,
+                            type: "GET",
+                            success: function (respose) {
+                                //usuario|pass|opc|nivel|f1,f2,f3,f4|enfoque
+                                var cadenaFiltros = respose.responseJSON;
+                                var opc = cadenaFiltros.split("|")[2];
+                                var tipoEntidad = cadenaFiltros.split("|")[3];
+                                var cadenaSelects = cadenaFiltros.split("|")[4];
+                                var selectUnidadNegocio = cadenaSelects.split(",")[0];
+                                var selectDireccion = cadenaSelects.split(",")[1];
+                                var selectArea = cadenaSelects.split(",")[2];
+                                var selectDepartamento = cadenaSelects.split(",")[3];
+                                //Otro camino en llenar directo los vm
+                                vm.opc = opc;
+                                vm.tipoEntidad = tipoEntidad;
+                                vm.EntidadNombre = "";
+                                vm.enfoqueSeleccionado = cadenaFiltros.split("|")[5];
+                            },
+                            error: function (err) {
+                                alert(err);
+                            }
+                        });
+                    }
+
                     vm.verificarStorage();
                     $(document).on("keydown", function (e) {
                         if (e.key == "ArrowLeft") {
@@ -4932,7 +4973,7 @@ function GetDashBoard() {
             var auxAgrandar = function(item) {
                 //Validar si debe agrandar o ya asi esta correcto el tamaño para la vista web
                 var x = window.matchMedia("(min-width: 1610px)");//size xl  
-                var contenedor = item.getElementsByClassName("grafica-trabajar")[0];                  
+                var contenedor = item.getElementsByClassName("grafica-trabajar")[0];
                 if (x.matches) {
                     if (contenedor.offsetHeight >= 480) { //xl si es mas de 480 quiere decir que las barras ya empujaron su contenedor a un tamaño mas grande
                         //El tamaño del contenedor ya es grande, por tanto no es valido volver a crecerla, debe ser reducido

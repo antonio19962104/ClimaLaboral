@@ -21,9 +21,34 @@ namespace PL.Controllers
         {
             return View("~/Views/ReporteoClima/EstructuraReporte/no1_Portada.cshtml");
         }
-        public ActionResult Index()
+        public ActionResult Index(string token = "")
         {
-            return View("~/Views/ReporteoClima/IndexReporte.cshtml");
+            if (!string.IsNullOrEmpty(token))
+            {
+                token = "576B6E58355245594E5750564957504E315977465A716932646263463331344C67434974635268523261764E486E4D414D6B50303531526E777557484A744A4C61476D784C652B7268316E423051456C39474B4539413D3D";
+                //tomar claves del token
+                LoginAdminController loginAdminController = new LoginAdminController();
+                BL.Seguridad seguridad = new BL.Seguridad();
+                var credenciales = seguridad.DesencriptarCadena(token);
+                ML.Administrador administrador = new ML.Administrador();
+                administrador.UserName = credenciales.Split('|')[0];
+                administrador.Password = credenciales.Split('|')[1];
+                var result = loginAdminController.AutenticarAdmin_(administrador, this.Session);
+                if (result.Data.ToString() == "success")
+                {
+                    return View("~/Views/ReporteoClima/IndexReporte.cshtml", new ML.Result() { Correct = true });
+                }
+                else
+                {
+                    return View("~/Views/ReporteoClima/IndexReporte.cshtml", new ML.Result() { Correct = false });
+                }
+            }
+            return View("~/Views/ReporteoClima/IndexReporte.cshtml", new ML.Result() { Correct = true });
+        }
+        public JsonResult GetFiltrosR(string cadena)
+        {
+            BL.Seguridad seguridad = new BL.Seguridad();
+            return Json(seguridad.DesencriptarCadena(cadena), JsonRequestBehavior.AllowGet);
         }
         public ActionResult CargarHistorico()
         {
