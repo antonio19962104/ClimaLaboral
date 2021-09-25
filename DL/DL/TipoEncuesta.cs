@@ -17,8 +17,8 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TipoEncuesta()
         {
-            this.Encuesta = new HashSet<Encuesta>();
             this.BasesDeDatos = new HashSet<BasesDeDatos>();
+            this.Encuesta = new HashSet<Encuesta>();
         }
     
         public int IdTipoEncuesta { get; set; }
@@ -36,9 +36,9 @@ namespace DL
         public string ProgramaEliminacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BasesDeDatos> BasesDeDatos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Encuesta> Encuesta { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BasesDeDatos> BasesDeDatos { get; set; }
     }
 }

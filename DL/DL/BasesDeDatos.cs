@@ -17,11 +17,11 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public BasesDeDatos()
         {
-            this.Encuesta = new HashSet<Encuesta>();
-            this.Usuario = new HashSet<Usuario>();
-            this.Empleado = new HashSet<Empleado>();
             this.ConfigClimaLab = new HashSet<ConfigClimaLab>();
+            this.Empleado = new HashSet<Empleado>();
+            this.Encuesta = new HashSet<Encuesta>();
             this.EstatusEmail = new HashSet<EstatusEmail>();
+            this.Usuario = new HashSet<Usuario>();
         }
     
         public int IdBasesDeDatos { get; set; }
@@ -40,19 +40,19 @@ namespace DL
         public Nullable<int> IdTipoEncuesta { get; set; }
         public Nullable<int> IdTipoBD { get; set; }
     
-        public virtual TipoEstatus TipoEstatus { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Encuesta> Encuesta { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Usuario> Usuario { get; set; }
         public virtual Administrador Administrador { get; set; }
-        public virtual TipoEncuesta TipoEncuesta { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Empleado> Empleado { get; set; }
+        public virtual TipoEstatus TipoEstatus { get; set; }
         public virtual TipoBD TipoBD { get; set; }
+        public virtual TipoEncuesta TipoEncuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ConfigClimaLab> ConfigClimaLab { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Empleado> Empleado { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Encuesta> Encuesta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstatusEmail> EstatusEmail { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Usuario> Usuario { get; set; }
     }
 }

@@ -22,6 +22,7 @@ namespace DL
             this.Area = new HashSet<Area>();
             this.BasesDeDatos = new HashSet<BasesDeDatos>();
             this.BodyPlantilla = new HashSet<BodyPlantilla>();
+            this.Company = new HashSet<Company>();
             this.Competencia = new HashSet<Competencia>();
             this.Departamento = new HashSet<Departamento>();
             this.DetallePlantilla = new HashSet<DetallePlantilla>();
@@ -34,8 +35,8 @@ namespace DL
             this.SubDepartamento = new HashSet<SubDepartamento>();
             this.TipoEncuesta = new HashSet<TipoEncuesta>();
             this.Usuario = new HashSet<Usuario>();
-            this.Company = new HashSet<Company>();
             this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
+            this.ValoracionCategoria = new HashSet<ValoracionCategoria>();
         }
     
         public int IdEstatus { get; set; }
@@ -61,6 +62,8 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BodyPlantilla> BodyPlantilla { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Company> Company { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Competencia> Competencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Departamento> Departamento { get; set; }
@@ -85,8 +88,8 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usuario> Usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Company> Company { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ValoracionCategoria> ValoracionCategoria { get; set; }
     }
 }

@@ -17,24 +17,27 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Encuesta()
         {
+            this.ConfigClimaLab = new HashSet<ConfigClimaLab>();
+            this.ConfiguraRespuesta = new HashSet<ConfiguraRespuesta>();
+            this.EmpleadoRespuestas = new HashSet<EmpleadoRespuestas>();
             this.EncuestaArea = new HashSet<EncuestaArea>();
             this.EncuestaPregunta = new HashSet<EncuestaPregunta>();
             this.EncuestaReporte = new HashSet<EncuestaReporte>();
             this.EncuestaUnidadNegocio = new HashSet<EncuestaUnidadNegocio>();
             this.EstatusEncuesta = new HashSet<EstatusEncuesta>();
-            this.Preguntas = new HashSet<Preguntas>();
-            this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
-            this.ConfiguraRespuesta = new HashSet<ConfiguraRespuesta>();
-            this.ConfigClimaLab = new HashSet<ConfigClimaLab>();
-            this.UsuarioEstatusEncuesta = new HashSet<UsuarioEstatusEncuesta>();
             this.EstatusEmail = new HashSet<EstatusEmail>();
-            this.EmpleadoRespuestas = new HashSet<EmpleadoRespuestas>();
+            this.Preguntas = new HashSet<Preguntas>();
             this.ValoracionSubcategoriaPorCategoria = new HashSet<ValoracionSubcategoriaPorCategoria>();
             this.ValoracionPreguntaPorSubcategoria = new HashSet<ValoracionPreguntaPorSubcategoria>();
+            this.UsuarioEstatusEncuesta = new HashSet<UsuarioEstatusEncuesta>();
+            this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
+            this.ValoracionCategoria = new HashSet<ValoracionCategoria>();
         }
     
         public int IdEncuesta { get; set; }
+        public string UID { get; set; }
         public string Nombre { get; set; }
+        public Nullable<bool> DosColumnas { get; set; }
         public Nullable<System.DateTime> FechaInicio { get; set; }
         public Nullable<System.DateTime> FechaFin { get; set; }
         public Nullable<bool> Estatus { get; set; }
@@ -58,11 +61,18 @@ namespace DL
         public Nullable<int> IdEmpresa { get; set; }
         public string Agradecimiento { get; set; }
         public string ImagenAgradecimiento { get; set; }
-        public string UID { get; set; }
-        public Nullable<bool> DosColumnas { get; set; }
         public Nullable<int> IdTipoOrden { get; set; }
     
         public virtual BasesDeDatos BasesDeDatos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConfigClimaLab> ConfigClimaLab { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EmpleadoRespuestas> EmpleadoRespuestas { get; set; }
+        public virtual Encuesta Encuesta1 { get; set; }
+        public virtual Encuesta Encuesta2 { get; set; }
+        public virtual TipoOrden TipoOrden { get; set; }
         public virtual Plantillas Plantillas { get; set; }
         public virtual TipoEncuesta TipoEncuesta { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
@@ -77,25 +87,18 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstatusEncuesta> EstatusEncuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Preguntas> Preguntas { get; set; }
-        public virtual Encuesta Encuesta1 { get; set; }
-        public virtual Encuesta Encuesta2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ConfigClimaLab> ConfigClimaLab { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UsuarioEstatusEncuesta> UsuarioEstatusEncuesta { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstatusEmail> EstatusEmail { get; set; }
-        public virtual TipoOrden TipoOrden { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EmpleadoRespuestas> EmpleadoRespuestas { get; set; }
+        public virtual ICollection<Preguntas> Preguntas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValoracionSubcategoriaPorCategoria> ValoracionSubcategoriaPorCategoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValoracionPreguntaPorSubcategoria> ValoracionPreguntaPorSubcategoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UsuarioEstatusEncuesta> UsuarioEstatusEncuesta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ValoracionCategoria> ValoracionCategoria { get; set; }
     }
 }

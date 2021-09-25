@@ -17,12 +17,12 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Administrador()
         {
-            this.PerfilModulo = new HashSet<PerfilModulo>();
-            this.AdministradorCompany = new HashSet<AdministradorCompany>();
-            this.BasesDeDatos = new HashSet<BasesDeDatos>();
             this.Administrador1 = new HashSet<Administrador>();
+            this.BasesDeDatos = new HashSet<BasesDeDatos>();
             this.Company1 = new HashSet<Company>();
             this.Competencia = new HashSet<Competencia>();
+            this.PerfilModulo = new HashSet<PerfilModulo>();
+            this.AdministradorCompany = new HashSet<AdministradorCompany>();
         }
     
         public int IdAdministrador { get; set; }
@@ -45,21 +45,21 @@ namespace DL
         public Nullable<int> AdminSA { get; set; }
     
         public virtual TipoEstatus TipoEstatus { get; set; }
-        public virtual Empleado Empleado { get; set; }
-        public virtual PerfilD4U PerfilD4U { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PerfilModulo> PerfilModulo { get; set; }
         public virtual Company Company { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AdministradorCompany> AdministradorCompany { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BasesDeDatos> BasesDeDatos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Administrador> Administrador1 { get; set; }
         public virtual Administrador Administrador2 { get; set; }
+        public virtual Empleado Empleado { get; set; }
+        public virtual PerfilD4U PerfilD4U { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BasesDeDatos> BasesDeDatos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Company> Company1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Competencia> Competencia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PerfilModulo> PerfilModulo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AdministradorCompany> AdministradorCompany { get; set; }
     }
 }

@@ -54,5 +54,7 @@ namespace DL
         public string AreaAgencia { get; set; }
         public string Depto { get; set; }
         public string Subdepartamento { get; set; }
+        public Nullable<int> IdBaseDeDatos { get; set; }
+        public Nullable<int> IdEmpleadoRH { get; set; }
     }
 }

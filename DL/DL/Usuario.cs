@@ -18,8 +18,8 @@ namespace DL
         public Usuario()
         {
             this.PuntuacionCompetencia = new HashSet<PuntuacionCompetencia>();
-            this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
             this.UsuarioEstatusEncuesta = new HashSet<UsuarioEstatusEncuesta>();
+            this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
         }
     
         public int IdUsuario { get; set; }
@@ -79,8 +79,8 @@ namespace DL
         public virtual ICollection<PuntuacionCompetencia> PuntuacionCompetencia { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UsuarioEstatusEncuesta> UsuarioEstatusEncuesta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
     }
 }

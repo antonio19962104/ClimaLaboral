@@ -30,8 +30,8 @@ namespace DL
         public Nullable<int> IdEnfoque { get; set; }
     
         public virtual Empleado Empleado { get; set; }
+        public virtual Encuesta Encuesta { get; set; }
         public virtual Preguntas Preguntas { get; set; }
         public virtual Respuestas Respuestas { get; set; }
-        public virtual Encuesta Encuesta { get; set; }
     }
 }

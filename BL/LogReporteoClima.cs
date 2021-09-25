@@ -400,7 +400,7 @@ namespace BL
                 return aE.Message;
             }
         }
-        public static string addJsonReporte(int? entidadId, string entidadNombre, object data, int AnioActual, string usuario)
+        public static string addJsonReporte(int? entidadId, string entidadNombre, object data, int AnioActual, string usuario, string nivelDetalle)
         {
             var jsonData = (JsonResult)data;
             var jsonEE = JsonConvert.SerializeObject(jsonData);
@@ -408,7 +408,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var demo = new DL.Demo { EntidadId = entidadId, EntidadNombre = entidadNombre, jsonString = jsonEE, Anio = AnioActual, objName = jsonData.ContentType, status = 0, usuario = usuario };
+                    var demo = new DL.Demo { EntidadId = entidadId, EntidadNombre = entidadNombre, jsonString = jsonEE, Anio = AnioActual, objName = jsonData.ContentType, status = 0, usuario = usuario, NivelDetalle = nivelDetalle };
                     var query = context.Demo.Add(demo);
                     context.SaveChanges();
                     BL.LogReporteoClima.writteLogJobReporte(jsonEE, new StackTrace(), usuario, 0, entidadNombre);
@@ -422,7 +422,7 @@ namespace BL
                 return aE.Message;
             }
         }
-        public static string addJsonReporte(int? entidadId, string entidadNombre, object data, int AnioActual, string objname, string usuario)
+        public static string addJsonReporte(int? entidadId, string entidadNombre, object data, int AnioActual, string objname, string usuario, string nivelDetalle)
         {
             var jsonData = (JsonResult)data;
             var jsonEE = JsonConvert.SerializeObject(jsonData);
@@ -430,7 +430,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var demo = new DL.Demo { EntidadId = entidadId, EntidadNombre = entidadNombre, jsonString = jsonEE, Anio = AnioActual, objName = objname, status = 0, usuario = usuario };
+                    var demo = new DL.Demo { EntidadId = entidadId, EntidadNombre = entidadNombre, jsonString = jsonEE, Anio = AnioActual, objName = objname, status = 0, usuario = usuario, NivelDetalle = nivelDetalle };
                     demo.FechaHoraCreacion = DateTime.Now; demo.UsuarioCreacion = usuario; demo.ProgramaCreacion = "JobCreacionReporte";
                     var query = context.Demo.Add(demo);
                     context.SaveChanges();
@@ -445,14 +445,14 @@ namespace BL
                 return aE.Message;
             }
         }
-        public static bool updateStatusReporte(string entidadNombre, int AnioActual, string user)
+        public static bool updateStatusReporte(string entidadNombre, int AnioActual, string user, string nivelDetalle)
         {
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     //ENTIDADID = {0} AND
-                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1 WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3}", 0, entidadNombre, AnioActual, user);
+                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1, NivelDetalle = {4} WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3}", 0, entidadNombre, AnioActual, user, nivelDetalle);
                     context.SaveChanges();
                     return true;
                 }
@@ -463,17 +463,36 @@ namespace BL
                 return false;
             }
         }
-        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url)
+        /*
+                   public int opc { get; set; } = 0;
+                    public int tipoEntidad { get; set; } = 0;
+                    public string EntidadName { get; set; } = "";
+                    public int anio { get; set; } = 0;
+                 */
+        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url, string ps, string nivelDetalle, int opc, int tipoEntidad, int enfoqueSeleccionado, string lvlDetalle)
         {
+            string token = string.Empty;
+            BL.Seguridad seguridad = new Seguridad();
+            ps = seguridad.DesencriptarCadena(ps);
+            //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque|lvlDetalle
+            token = UsuarioSolicita + "|" + ps + "|"+opc+"|"+tipoEntidad+"|"+entidadName+"|"+Anio+"|"+ enfoqueSeleccionado + "|" + lvlDetalle;
+            token = seguridad.EncriptarCadena(token);
             if (string.IsNullOrEmpty(UsuarioSolicita))
             {
                 UsuarioSolicita = "jamurillo@grupoautofin.com";
             }
-            var body = "<p>La creacion del reporte de la entidad</p>" +  
-                            "<p>" + entidadName + " " + " del año " + Anio + " ha finalizado </p>" +
-                            "<p>Consultalo ingresando a http://diagnostic4u.com/reporteoClima/Index </p>";
-            //body += "Accede a <a href='"+ url + "" +"'></a>";
-            var message = new MailMessage();
+            string nivelDetalleMsg = (nivelDetalle.Contains("1") == true ? "Unidad de Negocio - " : "") +
+                                     (nivelDetalle.Contains("2") == true ? "Dirección - " : "") +
+                                     (nivelDetalle.Contains("3") == true ? "Área - " : "") +
+                                     (nivelDetalle.Contains("4") == true ? "Departamento - " : "") +
+                                     (nivelDetalle.Contains("5") == true ? "Subdepartamento" : "");
+            var body =
+                 "<p style='font-weight:bold;'>Que tal " + GetFullNameByAdmin(UsuarioSolicita, ps) + "</p>" +
+                "<p>La creacion del reporte de la entidad " + entidadName + " " + " del año " + Anio + " con el nivel de detalle: " + nivelDetalleMsg + " ha finalizado </p>" +
+                "<p>Consultalo dando click en a siguiente imágen</p>" +
+                "<p><a href='" + url + "reporteoClima/Index/?token=" + token + "'><img src='http://www.diagnostic4u.com/img/Logo_emails.png' style='border-radius: 5px;'></a></p>";
+             //body += "Accede a <a href='"+ url + "" +"'></a>";
+             var message = new MailMessage();
             message.To.Add(new MailAddress(UsuarioSolicita));
             message.Subject = "Notificación Diagnostic4U";
             message.Body = string.Format(body, "DIAGNOSTIC4U", "", "");
@@ -499,12 +518,30 @@ namespace BL
             }
             return "success";
         }
+
+        public static string GetFullNameByAdmin(string usr, string pass)
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var admin = context.Administrador.Where(o => o.UserName == usr && o.Password == pass).FirstOrDefault();
+                    var empleado = context.Empleado.Where(o => o.IdEmpleado == admin.IdEmpleado).FirstOrDefault();
+                    return empleado.Nombre + " " + empleado.ApellidoPaterno + " " + empleado.ApellidoMaterno;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return usr;
+            }
+        }
         public static string getJsonString(ML.Historico aHistorico, string aliasObj)
         {
             aHistorico.Anio = aHistorico.Anio + 1;
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.objName == aliasObj && o.usuario == aHistorico.CurrentUsr).FirstOrDefault();
+                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio && o.NivelDetalle == aHistorico.nivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.objName == aliasObj && o.usuario == aHistorico.CurrentUsr).FirstOrDefault();
                 if (query != null)
                 {
                     return (query.jsonString);

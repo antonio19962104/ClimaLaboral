@@ -28,13 +28,24 @@ namespace DL
         }
     
         public virtual DbSet<Administrador> Administrador { get; set; }
+        public virtual DbSet<AdministradorCompany> AdministradorCompany { get; set; }
         public virtual DbSet<Aling> Aling { get; set; }
+        public virtual DbSet<Antiguedad> Antiguedad { get; set; }
         public virtual DbSet<Area> Area { get; set; }
         public virtual DbSet<BasesDeDatos> BasesDeDatos { get; set; }
         public virtual DbSet<BodyPlantilla> BodyPlantilla { get; set; }
+        public virtual DbSet<Categoria> Categoria { get; set; }
         public virtual DbSet<ClavesAcceso> ClavesAcceso { get; set; }
+        public virtual DbSet<ColorPlantilla> ColorPlantilla { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<CompanyCategoria> CompanyCategoria { get; set; }
         public virtual DbSet<Competencia> Competencia { get; set; }
+        public virtual DbSet<CondicionTrabajo> CondicionTrabajo { get; set; }
+        public virtual DbSet<ConfigClimaLab> ConfigClimaLab { get; set; }
+        public virtual DbSet<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
+        public virtual DbSet<DATAREPORTCL> DATAREPORTCL { get; set; }
+        public virtual DbSet<Demo> Demo { get; set; }
+        public virtual DbSet<DemoReporteClimaDinamico> DemoReporteClimaDinamico { get; set; }
         public virtual DbSet<Departamento> Departamento { get; set; }
         public virtual DbSet<DetallePlantilla> DetallePlantilla { get; set; }
         public virtual DbSet<Empleado> Empleado { get; set; }
@@ -44,9 +55,17 @@ namespace DL
         public virtual DbSet<EncuestaPregunta> EncuestaPregunta { get; set; }
         public virtual DbSet<EncuestaReporte> EncuestaReporte { get; set; }
         public virtual DbSet<EncuestaUnidadNegocio> EncuestaUnidadNegocio { get; set; }
+        public virtual DbSet<Enfoque> Enfoque { get; set; }
+        public virtual DbSet<EstatusEmail> EstatusEmail { get; set; }
         public virtual DbSet<EstatusEncuesta> EstatusEncuesta { get; set; }
+        public virtual DbSet<EstatusEncuestaD4U> EstatusEncuestaD4U { get; set; }
+        public virtual DbSet<EstatusMail> EstatusMail { get; set; }
         public virtual DbSet<FooterPlantilla> FooterPlantilla { get; set; }
+        public virtual DbSet<Generaciones> Generaciones { get; set; }
+        public virtual DbSet<GradoAcademico> GradoAcademico { get; set; }
         public virtual DbSet<HeaderPlantilla> HeaderPlantilla { get; set; }
+        public virtual DbSet<Historico> Historico { get; set; }
+        public virtual DbSet<HistoricoClima> HistoricoClima { get; set; }
         public virtual DbSet<Modulo> Modulo { get; set; }
         public virtual DbSet<Perfil> Perfil { get; set; }
         public virtual DbSet<PerfilD4U> PerfilD4U { get; set; }
@@ -54,46 +73,90 @@ namespace DL
         public virtual DbSet<PerfilModuloAccion> PerfilModuloAccion { get; set; }
         public virtual DbSet<Plantillas> Plantillas { get; set; }
         public virtual DbSet<Preguntas> Preguntas { get; set; }
+        public virtual DbSet<PreguntasLikert> PreguntasLikert { get; set; }
         public virtual DbSet<PuntuacionCompetencia> PuntuacionCompetencia { get; set; }
+        public virtual DbSet<RangoEdad> RangoEdad { get; set; }
+        public virtual DbSet<REPORTCL> REPORTCL { get; set; }
         public virtual DbSet<Reporte> Reporte { get; set; }
         public virtual DbSet<Respuestas> Respuestas { get; set; }
         public virtual DbSet<SubDepartamento> SubDepartamento { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<TipoBD> TipoBD { get; set; }
         public virtual DbSet<TipoControl> TipoControl { get; set; }
         public virtual DbSet<TipoEncuesta> TipoEncuesta { get; set; }
         public virtual DbSet<TipoEstatus> TipoEstatus { get; set; }
-        public virtual DbSet<UsuarioRespuestas> UsuarioRespuestas { get; set; }
-        public virtual DbSet<Usuario> Usuario { get; set; }
-        public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<TipoPlantilla> TipoPlantilla { get; set; }
-        public virtual DbSet<AdministradorCompany> AdministradorCompany { get; set; }
-        public virtual DbSet<Antiguedad> Antiguedad { get; set; }
-        public virtual DbSet<ColorPlantilla> ColorPlantilla { get; set; }
-        public virtual DbSet<CondicionTrabajo> CondicionTrabajo { get; set; }
-        public virtual DbSet<GradoAcademico> GradoAcademico { get; set; }
-        public virtual DbSet<RangoEdad> RangoEdad { get; set; }
-        public virtual DbSet<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
-        public virtual DbSet<TipoBD> TipoBD { get; set; }
-        public virtual DbSet<EncuestaIngreso> EncuestaIngreso { get; set; }
-        public virtual DbSet<ConfigClimaLab> ConfigClimaLab { get; set; }
-        public virtual DbSet<EstatusEncuestaD4U> EstatusEncuestaD4U { get; set; }
-        public virtual DbSet<UsuarioEstatusEncuesta> UsuarioEstatusEncuesta { get; set; }
-        public virtual DbSet<PreguntasLikert> PreguntasLikert { get; set; }
-        public virtual DbSet<EstatusEmail> EstatusEmail { get; set; }
-        public virtual DbSet<EstatusMail> EstatusMail { get; set; }
-        public virtual DbSet<REPORTCL> REPORTCL { get; set; }
-        public virtual DbSet<DATAREPORTCL> DATAREPORTCL { get; set; }
-        public virtual DbSet<HistoricoClima> HistoricoClima { get; set; }
-        public virtual DbSet<Historico> Historico { get; set; }
-        public virtual DbSet<Demo> Demo { get; set; }
-        public virtual DbSet<Enfoque> Enfoque { get; set; }
         public virtual DbSet<TipoOrden> TipoOrden { get; set; }
-        public virtual DbSet<Categoria> Categoria { get; set; }
-        public virtual DbSet<PreguntaCategorias> PreguntaCategorias { get; set; }
+        public virtual DbSet<TipoPlantilla> TipoPlantilla { get; set; }
+        public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<UsuarioEstatusEncuesta> UsuarioEstatusEncuesta { get; set; }
+        public virtual DbSet<UsuarioRespuestas> UsuarioRespuestas { get; set; }
+        public virtual DbSet<ValoracionCategoria> ValoracionCategoria { get; set; }
         public virtual DbSet<ValoracionPreguntaPorSubcategoria> ValoracionPreguntaPorSubcategoria { get; set; }
         public virtual DbSet<ValoracionSubcategoriaPorCategoria> ValoracionSubcategoriaPorCategoria { get; set; }
-        public virtual DbSet<DemoReporteClimaDinamico> DemoReporteClimaDinamico { get; set; }
-        public virtual DbSet<Generaciones> Generaciones { get; set; }
+        public virtual DbSet<AggregatedCounter> AggregatedCounter { get; set; }
+        public virtual DbSet<Hash> Hash { get; set; }
+        public virtual DbSet<Job> Job { get; set; }
+        public virtual DbSet<JobParameter> JobParameter { get; set; }
+        public virtual DbSet<JobQueue> JobQueue { get; set; }
+        public virtual DbSet<List> List { get; set; }
+        public virtual DbSet<Schema> Schema { get; set; }
+        public virtual DbSet<Server> Server { get; set; }
+        public virtual DbSet<Set> Set { get; set; }
+        public virtual DbSet<State> State { get; set; }
+        public virtual DbSet<EncuestaIngreso> EncuestaIngreso { get; set; }
+        public virtual DbSet<PreguntaCategorias> PreguntaCategorias { get; set; }
+        public virtual DbSet<Counter> Counter { get; set; }
+        public virtual DbSet<View_1> View_1 { get; set; }
+        public virtual DbSet<View_2> View_2 { get; set; }
+        public virtual DbSet<VistaDemo1> VistaDemo1 { get; set; }
+        public virtual DbSet<VistaDemo2> VistaDemo2 { get; set; }
+    
+        [DbFunction("RH_DesEntities", "splitstring_COMA")]
+        public virtual IQueryable<splitstring_COMA_Result> splitstring_COMA(string stringToSplit)
+        {
+            var stringToSplitParameter = stringToSplit != null ?
+                new ObjectParameter("stringToSplit", stringToSplit) :
+                new ObjectParameter("stringToSplit", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<splitstring_COMA_Result>("[RH_DesEntities].[splitstring_COMA](@stringToSplit)", stringToSplitParameter);
+        }
+    
+        [DbFunction("RH_DesEntities", "splitstring_SPACES")]
+        public virtual IQueryable<splitstring_SPACES_Result> splitstring_SPACES(string stringToSplit)
+        {
+            var stringToSplitParameter = stringToSplit != null ?
+                new ObjectParameter("stringToSplit", stringToSplit) :
+                new ObjectParameter("stringToSplit", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<splitstring_SPACES_Result>("[RH_DesEntities].[splitstring_SPACES](@stringToSplit)", stringToSplitParameter);
+        }
+    
+        public virtual ObjectResult<f_getEstructuraDescByCompanyId_Result> f_getEstructuraDescByCompanyId(Nullable<int> aCompanyId)
+        {
+            var aCompanyIdParameter = aCompanyId.HasValue ?
+                new ObjectParameter("aCompanyId", aCompanyId) :
+                new ObjectParameter("aCompanyId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByCompanyId_Result>("f_getEstructuraDescByCompanyId", aCompanyIdParameter);
+        }
+    
+        public virtual ObjectResult<f_getEstructuraDescByIdArea_Result> f_getEstructuraDescByIdArea(Nullable<int> aIdArea)
+        {
+            var aIdAreaParameter = aIdArea.HasValue ?
+                new ObjectParameter("aIdArea", aIdArea) :
+                new ObjectParameter("aIdArea", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByIdArea_Result>("f_getEstructuraDescByIdArea", aIdAreaParameter);
+        }
+    
+        public virtual ObjectResult<f_getEstructuraDescByIdDepartamento_Result> f_getEstructuraDescByIdDepartamento(Nullable<int> aIdDepartamento)
+        {
+            var aIdDepartamentoParameter = aIdDepartamento.HasValue ?
+                new ObjectParameter("aIdDepartamento", aIdDepartamento) :
+                new ObjectParameter("aIdDepartamento", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByIdDepartamento_Result>("f_getEstructuraDescByIdDepartamento", aIdDepartamentoParameter);
+        }
     
         public virtual int AddDepartamentoDemo(string nOMBRE_NEW_DEPARTAMENTO, string nombreAreaLayout, string nombreCompanyLayout, Nullable<int> iD_ESTATUS)
         {
@@ -735,6 +798,32 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteEmpresa", companyIdParameter, currentuserParameter);
         }
     
+        public virtual ObjectResult<demoJA_Result> demoJA(Nullable<int> idEncuesta, string sqlQuery)
+        {
+            var idEncuestaParameter = idEncuesta.HasValue ?
+                new ObjectParameter("IdEncuesta", idEncuesta) :
+                new ObjectParameter("IdEncuesta", typeof(int));
+    
+            var sqlQueryParameter = sqlQuery != null ?
+                new ObjectParameter("sqlQuery", sqlQuery) :
+                new ObjectParameter("sqlQuery", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<demoJA_Result>("demoJA", idEncuestaParameter, sqlQueryParameter);
+        }
+    
+        public virtual ObjectResult<demoJA1_Result> demoJA1(Nullable<int> idEncuesta, string sqlQuery)
+        {
+            var idEncuestaParameter = idEncuesta.HasValue ?
+                new ObjectParameter("IdEncuesta", idEncuesta) :
+                new ObjectParameter("IdEncuesta", typeof(int));
+    
+            var sqlQueryParameter = sqlQuery != null ?
+                new ObjectParameter("sqlQuery", sqlQuery) :
+                new ObjectParameter("sqlQuery", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<demoJA1_Result>("demoJA1", idEncuestaParameter, sqlQueryParameter);
+        }
+    
         public virtual ObjectResult<DepartamentoGetByArea_Result> DepartamentoGetByArea(Nullable<int> idArea)
         {
             var idAreaParameter = idArea.HasValue ?
@@ -1318,6 +1407,19 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminEliminadosForMasterOK__Result>("GetAdminEliminadosForMasterOK_", idEmpleadoLogeadoParameter);
         }
     
+        public virtual ObjectResult<GetAdminEliminadosForMasterOK___Result> GetAdminEliminadosForMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
+        {
+            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
+                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
+                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
+    
+            var idAdminLogParameter = idAdminLog.HasValue ?
+                new ObjectParameter("IdAdminLog", idAdminLog) :
+                new ObjectParameter("IdAdminLog", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminEliminadosForMasterOK___Result>("GetAdminEliminadosForMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
+        }
+    
         public virtual ObjectResult<GetAdminEliminadosForNotMasterOK__Result> GetAdminEliminadosForNotMasterOK_(Nullable<int> idEmpleadoLogeado)
         {
             var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
@@ -1325,6 +1427,19 @@ namespace DL
                 new ObjectParameter("IdEmpleadoLogeado", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminEliminadosForNotMasterOK__Result>("GetAdminEliminadosForNotMasterOK_", idEmpleadoLogeadoParameter);
+        }
+    
+        public virtual ObjectResult<GetAdminEliminadosForNotMasterOK___Result> GetAdminEliminadosForNotMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
+        {
+            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
+                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
+                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
+    
+            var idAdminLogParameter = idAdminLog.HasValue ?
+                new ObjectParameter("IdAdminLog", idAdminLog) :
+                new ObjectParameter("IdAdminLog", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminEliminadosForNotMasterOK___Result>("GetAdminEliminadosForNotMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
         }
     
         public virtual ObjectResult<GetAdminForMasterOK__Result> GetAdminForMasterOK_(Nullable<int> idEmpleadoLogeado)
@@ -1336,6 +1451,19 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminForMasterOK__Result>("GetAdminForMasterOK_", idEmpleadoLogeadoParameter);
         }
     
+        public virtual ObjectResult<GetAdminForMasterOK___Result> GetAdminForMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
+        {
+            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
+                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
+                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
+    
+            var idAdminLogParameter = idAdminLog.HasValue ?
+                new ObjectParameter("IdAdminLog", idAdminLog) :
+                new ObjectParameter("IdAdminLog", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminForMasterOK___Result>("GetAdminForMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
+        }
+    
         public virtual ObjectResult<GetAdminForNotMasterOK__Result> GetAdminForNotMasterOK_(Nullable<int> idEmpleadoLogeado)
         {
             var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
@@ -1343,6 +1471,19 @@ namespace DL
                 new ObjectParameter("IdEmpleadoLogeado", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminForNotMasterOK__Result>("GetAdminForNotMasterOK_", idEmpleadoLogeadoParameter);
+        }
+    
+        public virtual ObjectResult<GetAdminForNotMasterOK___Result> GetAdminForNotMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
+        {
+            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
+                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
+                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
+    
+            var idAdminLogParameter = idAdminLog.HasValue ?
+                new ObjectParameter("IdAdminLog", idAdminLog) :
+                new ObjectParameter("IdAdminLog", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminForNotMasterOK___Result>("GetAdminForNotMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
         }
     
         public virtual int GetAll()
@@ -1506,7 +1647,76 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByIdEmpleadoResultOK_Result>("GetByIdEmpleadoResultOK", idEmpleadoParameter);
         }
     
-        public virtual int GetByUNegocio(string unidadNegocio, Nullable<int> idBD)
+        public virtual ObjectResult<GetByMultiUnidad_Result> GetByMultiUnidad(string unidad1, string unidad2, string unidad3, string unidad4, string unidad5, string unidad6, string unidad7, string unidad8, string unidad9, string unidad10, string unidad11, string unidad12, string unidad13, string unidad14, string unidad15, Nullable<int> idBD)
+        {
+            var unidad1Parameter = unidad1 != null ?
+                new ObjectParameter("unidad1", unidad1) :
+                new ObjectParameter("unidad1", typeof(string));
+    
+            var unidad2Parameter = unidad2 != null ?
+                new ObjectParameter("unidad2", unidad2) :
+                new ObjectParameter("unidad2", typeof(string));
+    
+            var unidad3Parameter = unidad3 != null ?
+                new ObjectParameter("unidad3", unidad3) :
+                new ObjectParameter("unidad3", typeof(string));
+    
+            var unidad4Parameter = unidad4 != null ?
+                new ObjectParameter("unidad4", unidad4) :
+                new ObjectParameter("unidad4", typeof(string));
+    
+            var unidad5Parameter = unidad5 != null ?
+                new ObjectParameter("unidad5", unidad5) :
+                new ObjectParameter("unidad5", typeof(string));
+    
+            var unidad6Parameter = unidad6 != null ?
+                new ObjectParameter("unidad6", unidad6) :
+                new ObjectParameter("unidad6", typeof(string));
+    
+            var unidad7Parameter = unidad7 != null ?
+                new ObjectParameter("unidad7", unidad7) :
+                new ObjectParameter("unidad7", typeof(string));
+    
+            var unidad8Parameter = unidad8 != null ?
+                new ObjectParameter("unidad8", unidad8) :
+                new ObjectParameter("unidad8", typeof(string));
+    
+            var unidad9Parameter = unidad9 != null ?
+                new ObjectParameter("unidad9", unidad9) :
+                new ObjectParameter("unidad9", typeof(string));
+    
+            var unidad10Parameter = unidad10 != null ?
+                new ObjectParameter("unidad10", unidad10) :
+                new ObjectParameter("unidad10", typeof(string));
+    
+            var unidad11Parameter = unidad11 != null ?
+                new ObjectParameter("unidad11", unidad11) :
+                new ObjectParameter("unidad11", typeof(string));
+    
+            var unidad12Parameter = unidad12 != null ?
+                new ObjectParameter("unidad12", unidad12) :
+                new ObjectParameter("unidad12", typeof(string));
+    
+            var unidad13Parameter = unidad13 != null ?
+                new ObjectParameter("unidad13", unidad13) :
+                new ObjectParameter("unidad13", typeof(string));
+    
+            var unidad14Parameter = unidad14 != null ?
+                new ObjectParameter("unidad14", unidad14) :
+                new ObjectParameter("unidad14", typeof(string));
+    
+            var unidad15Parameter = unidad15 != null ?
+                new ObjectParameter("unidad15", unidad15) :
+                new ObjectParameter("unidad15", typeof(string));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByMultiUnidad_Result>("GetByMultiUnidad", unidad1Parameter, unidad2Parameter, unidad3Parameter, unidad4Parameter, unidad5Parameter, unidad6Parameter, unidad7Parameter, unidad8Parameter, unidad9Parameter, unidad10Parameter, unidad11Parameter, unidad12Parameter, unidad13Parameter, unidad14Parameter, unidad15Parameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<GetByUNegocio_Result> GetByUNegocio(string unidadNegocio, Nullable<int> idBD)
         {
             var unidadNegocioParameter = unidadNegocio != null ?
                 new ObjectParameter("UnidadNegocio", unidadNegocio) :
@@ -1516,7 +1726,7 @@ namespace DL
                 new ObjectParameter("IdBD", idBD) :
                 new ObjectParameter("IdBD", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetByUNegocio", unidadNegocioParameter, idBDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByUNegocio_Result>("GetByUNegocio", unidadNegocioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<GetByUnidad_Result> GetByUnidad(string uNIDAD, Nullable<int> idBD)
@@ -1532,9 +1742,248 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByUnidad_Result>("GetByUnidad", uNIDADParameter, idBDParameter);
         }
     
+        public virtual ObjectResult<GetByUnidadNula_Result> GetByUnidadNula(Nullable<int> idBD)
+        {
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByUnidadNula_Result>("GetByUnidadNula", idBDParameter);
+        }
+    
+        public virtual ObjectResult<getComentarios_Result> getComentarios(string unegocio, Nullable<int> idBD)
+        {
+            var unegocioParameter = unegocio != null ?
+                new ObjectParameter("Unegocio", unegocio) :
+                new ObjectParameter("Unegocio", typeof(string));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("idBD", idBD) :
+                new ObjectParameter("idBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getComentarios_Result>("getComentarios", unegocioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<getComentariosMultiUnidad_Result> getComentariosMultiUnidad(string unegocio1, string unegocio2, string unegocio3, string unegocio4, string unegocio5, string unegocio6, string unegocio7, string unegocio8, string unegocio9, string unegocio10, string unegocio11, string unegocio12, Nullable<int> idBD)
+        {
+            var unegocio1Parameter = unegocio1 != null ?
+                new ObjectParameter("Unegocio1", unegocio1) :
+                new ObjectParameter("Unegocio1", typeof(string));
+    
+            var unegocio2Parameter = unegocio2 != null ?
+                new ObjectParameter("Unegocio2", unegocio2) :
+                new ObjectParameter("Unegocio2", typeof(string));
+    
+            var unegocio3Parameter = unegocio3 != null ?
+                new ObjectParameter("Unegocio3", unegocio3) :
+                new ObjectParameter("Unegocio3", typeof(string));
+    
+            var unegocio4Parameter = unegocio4 != null ?
+                new ObjectParameter("Unegocio4", unegocio4) :
+                new ObjectParameter("Unegocio4", typeof(string));
+    
+            var unegocio5Parameter = unegocio5 != null ?
+                new ObjectParameter("Unegocio5", unegocio5) :
+                new ObjectParameter("Unegocio5", typeof(string));
+    
+            var unegocio6Parameter = unegocio6 != null ?
+                new ObjectParameter("Unegocio6", unegocio6) :
+                new ObjectParameter("Unegocio6", typeof(string));
+    
+            var unegocio7Parameter = unegocio7 != null ?
+                new ObjectParameter("Unegocio7", unegocio7) :
+                new ObjectParameter("Unegocio7", typeof(string));
+    
+            var unegocio8Parameter = unegocio8 != null ?
+                new ObjectParameter("Unegocio8", unegocio8) :
+                new ObjectParameter("Unegocio8", typeof(string));
+    
+            var unegocio9Parameter = unegocio9 != null ?
+                new ObjectParameter("Unegocio9", unegocio9) :
+                new ObjectParameter("Unegocio9", typeof(string));
+    
+            var unegocio10Parameter = unegocio10 != null ?
+                new ObjectParameter("Unegocio10", unegocio10) :
+                new ObjectParameter("Unegocio10", typeof(string));
+    
+            var unegocio11Parameter = unegocio11 != null ?
+                new ObjectParameter("Unegocio11", unegocio11) :
+                new ObjectParameter("Unegocio11", typeof(string));
+    
+            var unegocio12Parameter = unegocio12 != null ?
+                new ObjectParameter("Unegocio12", unegocio12) :
+                new ObjectParameter("Unegocio12", typeof(string));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("idBD", idBD) :
+                new ObjectParameter("idBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getComentariosMultiUnidad_Result>("getComentariosMultiUnidad", unegocio1Parameter, unegocio2Parameter, unegocio3Parameter, unegocio4Parameter, unegocio5Parameter, unegocio6Parameter, unegocio7Parameter, unegocio8Parameter, unegocio9Parameter, unegocio10Parameter, unegocio11Parameter, unegocio12Parameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByCompany(string company, string uNegocio)
+        {
+            var companyParameter = company != null ?
+                new ObjectParameter("Company", company) :
+                new ObjectParameter("Company", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByCompany", companyParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByCondicionTrabajo(string condicionTrab, string uNegocio)
+        {
+            var condicionTrabParameter = condicionTrab != null ?
+                new ObjectParameter("CondicionTrab", condicionTrab) :
+                new ObjectParameter("CondicionTrab", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByCondicionTrabajo", condicionTrabParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByFuncion(string funcion, string uNegocio)
+        {
+            var funcionParameter = funcion != null ?
+                new ObjectParameter("Funcion", funcion) :
+                new ObjectParameter("Funcion", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByFuncion", funcionParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByGenero(string genero, string uNegocio)
+        {
+            var generoParameter = genero != null ?
+                new ObjectParameter("Genero", genero) :
+                new ObjectParameter("Genero", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByGenero", generoParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByGradoAcademico(string gradoAcad, string uNegocio)
+        {
+            var gradoAcadParameter = gradoAcad != null ?
+                new ObjectParameter("GradoAcad", gradoAcad) :
+                new ObjectParameter("GradoAcad", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByGradoAcademico", gradoAcadParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByRangoAntiguedad(string rangoAntig, string uNegocio)
+        {
+            var rangoAntigParameter = rangoAntig != null ?
+                new ObjectParameter("RangoAntig", rangoAntig) :
+                new ObjectParameter("RangoAntig", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByRangoAntiguedad", rangoAntigParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByRangoEdad(string rangoEdad, string uNegocio)
+        {
+            var rangoEdadParameter = rangoEdad != null ?
+                new ObjectParameter("RangoEdad", rangoEdad) :
+                new ObjectParameter("RangoEdad", typeof(string));
+    
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByRangoEdad", rangoEdadParameter, uNegocioParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetEsperadasByUNegocio(string uNegocio)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByUNegocio", uNegocioParameter);
+        }
+    
         public virtual ObjectResult<GetEstatusAvance_Result> GetEstatusAvance()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstatusAvance_Result>("GetEstatusAvance");
+        }
+    
+        public virtual ObjectResult<GetEstatusAvanceByUnegocio_Result> GetEstatusAvanceByUnegocio(string companyCategoria)
+        {
+            var companyCategoriaParameter = companyCategoria != null ?
+                new ObjectParameter("CompanyCategoria", companyCategoria) :
+                new ObjectParameter("CompanyCategoria", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstatusAvanceByUnegocio_Result>("GetEstatusAvanceByUnegocio", companyCategoriaParameter);
+        }
+    
+        public virtual ObjectResult<GetEstructuraByUNegocio_Result> GetEstructuraByUNegocio(Nullable<int> unidadNegocio)
+        {
+            var unidadNegocioParameter = unidadNegocio.HasValue ?
+                new ObjectParameter("UnidadNegocio", unidadNegocio) :
+                new ObjectParameter("UnidadNegocio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocio_Result>("GetEstructuraByUNegocio", unidadNegocioParameter);
+        }
+    
+        public virtual ObjectResult<GetEstructuraByUNegocioD4U_Result> GetEstructuraByUNegocioD4U(Nullable<int> unidadNegocio)
+        {
+            var unidadNegocioParameter = unidadNegocio.HasValue ?
+                new ObjectParameter("UnidadNegocio", unidadNegocio) :
+                new ObjectParameter("UnidadNegocio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocioD4U_Result>("GetEstructuraByUNegocioD4U", unidadNegocioParameter);
+        }
+    
+        public virtual ObjectResult<GetEstructuraByUNegocioD4UOK_Result> GetEstructuraByUNegocioD4UOK(Nullable<int> unidadNegocio)
+        {
+            var unidadNegocioParameter = unidadNegocio.HasValue ?
+                new ObjectParameter("UnidadNegocio", unidadNegocio) :
+                new ObjectParameter("UnidadNegocio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocioD4UOK_Result>("GetEstructuraByUNegocioD4UOK", unidadNegocioParameter);
+        }
+    
+        public virtual ObjectResult<GetEstructuraByUNegocioD4USucces_Result> GetEstructuraByUNegocioD4USucces(Nullable<int> unidadNegocio)
+        {
+            var unidadNegocioParameter = unidadNegocio.HasValue ?
+                new ObjectParameter("UnidadNegocio", unidadNegocio) :
+                new ObjectParameter("UnidadNegocio", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocioD4USucces_Result>("GetEstructuraByUNegocioD4USucces", unidadNegocioParameter);
+        }
+    
+        public virtual int GetIdEmpleadoForAddAdmin()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetIdEmpleadoForAddAdmin");
+        }
+    
+        public virtual int GetIdEmpleadoForAddAdmin_1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetIdEmpleadoForAddAdmin_1");
+        }
+    
+        public virtual int GetIdEmpleadoForAddAdminOK()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetIdEmpleadoForAddAdminOK");
         }
     
         public virtual ObjectResult<Nullable<decimal>> GetLastIndex()
@@ -1601,6 +2050,24 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPermisosForDashBoardSuccess_Result>("GetPermisosForDashBoardSuccess", idEmpleadoParameter);
         }
     
+        public virtual ObjectResult<GetPermisosList_Result> GetPermisosList(Nullable<int> idEmpleado)
+        {
+            var idEmpleadoParameter = idEmpleado.HasValue ?
+                new ObjectParameter("IdEmpleado", idEmpleado) :
+                new ObjectParameter("IdEmpleado", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPermisosList_Result>("GetPermisosList", idEmpleadoParameter);
+        }
+    
+        public virtual ObjectResult<GetPermisosList__Result> GetPermisosList_(Nullable<int> idEmpleado)
+        {
+            var idEmpleadoParameter = idEmpleado.HasValue ?
+                new ObjectParameter("IdEmpleado", idEmpleado) :
+                new ObjectParameter("IdEmpleado", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPermisosList__Result>("GetPermisosList_", idEmpleadoParameter);
+        }
+    
         public virtual ObjectResult<GetPorcentAfirmativas_Result> GetPorcentAfirmativas(Nullable<int> idPregunta)
         {
             var idPreguntaParameter = idPregunta.HasValue ?
@@ -1619,6 +2086,19 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativas_4_Result>("GetPorcentAfirmativas_4", idPreguntaParameter);
         }
     
+        public virtual ObjectResult<GetPorcentAfirmativasByAntiguedad_Result> GetPorcentAfirmativasByAntiguedad(Nullable<int> idPregunta, string antiguedad)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var antiguedadParameter = antiguedad != null ?
+                new ObjectParameter("Antiguedad", antiguedad) :
+                new ObjectParameter("Antiguedad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByAntiguedad_Result>("GetPorcentAfirmativasByAntiguedad", idPreguntaParameter, antiguedadParameter);
+        }
+    
         public virtual ObjectResult<GetPorcentAfirmativasByAntiguedad_2_Result> GetPorcentAfirmativasByAntiguedad_2(string antiguedad)
         {
             var antiguedadParameter = antiguedad != null ?
@@ -1628,6 +2108,15 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByAntiguedad_2_Result>("GetPorcentAfirmativasByAntiguedad_2", antiguedadParameter);
         }
     
+        public virtual ObjectResult<GetPorcentAfirmativasByArea_3_Result> GetPorcentAfirmativasByArea_3(string area)
+        {
+            var areaParameter = area != null ?
+                new ObjectParameter("Area", area) :
+                new ObjectParameter("Area", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByArea_3_Result>("GetPorcentAfirmativasByArea_3", areaParameter);
+        }
+    
         public virtual ObjectResult<GetPorcentAfirmativasByCondicionTrabajo_3_Result> GetPorcentAfirmativasByCondicionTrabajo_3(string condicionTrabajo)
         {
             var condicionTrabajoParameter = condicionTrabajo != null ?
@@ -1635,6 +2124,42 @@ namespace DL
                 new ObjectParameter("CondicionTrabajo", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByCondicionTrabajo_3_Result>("GetPorcentAfirmativasByCondicionTrabajo_3", condicionTrabajoParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentAfirmativasByDepartamento_3_Result> GetPorcentAfirmativasByDepartamento_3(string depto)
+        {
+            var deptoParameter = depto != null ?
+                new ObjectParameter("Depto", depto) :
+                new ObjectParameter("Depto", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDepartamento_3_Result>("GetPorcentAfirmativasByDepartamento_3", deptoParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentAfirmativasByDepto_3_Result> GetPorcentAfirmativasByDepto_3(string depto)
+        {
+            var deptoParameter = depto != null ?
+                new ObjectParameter("Depto", depto) :
+                new ObjectParameter("Depto", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDepto_3_Result>("GetPorcentAfirmativasByDepto_3", deptoParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentAfirmativasBydEPTO_4_Result> GetPorcentAfirmativasBydEPTO_4(string depto)
+        {
+            var deptoParameter = depto != null ?
+                new ObjectParameter("Depto", depto) :
+                new ObjectParameter("Depto", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasBydEPTO_4_Result>("GetPorcentAfirmativasBydEPTO_4", deptoParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentAfirmativasByDivisionMarca_3_Result> GetPorcentAfirmativasByDivisionMarca_3(string company)
+        {
+            var companyParameter = company != null ?
+                new ObjectParameter("Company", company) :
+                new ObjectParameter("Company", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDivisionMarca_3_Result>("GetPorcentAfirmativasByDivisionMarca_3", companyParameter);
         }
     
         public virtual ObjectResult<GetPorcentAfirmativasByFuncion_3_Result> GetPorcentAfirmativasByFuncion_3(string funcion)
@@ -1702,6 +2227,389 @@ namespace DL
                 new ObjectParameter("IdPregunta", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasOK_Result>("GetPorcentAfirmativasOK", idPreguntaParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByAreaEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string area, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var areaParameter = area != null ?
+                new ObjectParameter("Area", area) :
+                new ObjectParameter("Area", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByAreaEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, areaParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCompanyEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string company, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var companyParameter = company != null ?
+                new ObjectParameter("Company", company) :
+                new ObjectParameter("Company", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCompanyEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, companyParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentajeAfirmativasByCondicionTrabajo_Result> GetPorcentajeAfirmativasByCondicionTrabajo(Nullable<int> idPregunta, string condicionTrabajo)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var condicionTrabajoParameter = condicionTrabajo != null ?
+                new ObjectParameter("CondicionTrabajo", condicionTrabajo) :
+                new ObjectParameter("CondicionTrabajo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByCondicionTrabajo_Result>("GetPorcentajeAfirmativasByCondicionTrabajo", idPreguntaParameter, condicionTrabajoParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string condicionTrabajo, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var condicionTrabajoParameter = condicionTrabajo != null ?
+                new ObjectParameter("CondicionTrabajo", condicionTrabajo) :
+                new ObjectParameter("CondicionTrabajo", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, condicionTrabajoParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string departamento, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var departamentoParameter = departamento != null ?
+                new ObjectParameter("Departamento", departamento) :
+                new ObjectParameter("Departamento", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, departamentoParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDeptoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string depto)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var deptoParameter = depto != null ?
+                new ObjectParameter("Depto", depto) :
+                new ObjectParameter("Depto", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByDeptoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, deptoParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentajeAfirmativasByFuncion_Result> GetPorcentajeAfirmativasByFuncion(Nullable<int> idPregunta, string funcion)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var funcionParameter = funcion != null ?
+                new ObjectParameter("Funcion", funcion) :
+                new ObjectParameter("Funcion", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByFuncion_Result>("GetPorcentajeAfirmativasByFuncion", idPreguntaParameter, funcionParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByFuncionEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string funcion, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var funcionParameter = funcion != null ?
+                new ObjectParameter("Funcion", funcion) :
+                new ObjectParameter("Funcion", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByFuncionEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, funcionParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string genero)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var generoParameter = genero != null ?
+                new ObjectParameter("Genero", genero) :
+                new ObjectParameter("Genero", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGeneroEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, generoParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, string genero, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var generoParameter = genero != null ?
+                new ObjectParameter("Genero", genero) :
+                new ObjectParameter("Genero", typeof(string));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, generoParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentajeAfirmativasByGradoAcademico_Result> GetPorcentajeAfirmativasByGradoAcademico(Nullable<int> idPregunta, string gradoAcademico)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var gradoAcademicoParameter = gradoAcademico != null ?
+                new ObjectParameter("GradoAcademico", gradoAcademico) :
+                new ObjectParameter("GradoAcademico", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByGradoAcademico_Result>("GetPorcentajeAfirmativasByGradoAcademico", idPreguntaParameter, gradoAcademicoParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string gradoAcad, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var gradoAcadParameter = gradoAcad != null ?
+                new ObjectParameter("GradoAcad", gradoAcad) :
+                new ObjectParameter("GradoAcad", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, gradoAcadParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoAnt, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var rangoAntParameter = rangoAnt != null ?
+                new ObjectParameter("RangoAnt", rangoAnt) :
+                new ObjectParameter("RangoAnt", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoAntParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentajeAfirmativasByRangoEdad_Result> GetPorcentajeAfirmativasByRangoEdad(Nullable<int> idPregunta, string rangoEdad)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var rangoEdadParameter = rangoEdad != null ?
+                new ObjectParameter("RangoEdad", rangoEdad) :
+                new ObjectParameter("RangoEdad", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByRangoEdad_Result>("GetPorcentajeAfirmativasByRangoEdad", idPreguntaParameter, rangoEdadParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoEdad, Nullable<int> anio, Nullable<int> idbD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var rangoEdadParameter = rangoEdad != null ?
+                new ObjectParameter("RangoEdad", rangoEdad) :
+                new ObjectParameter("RangoEdad", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idbDParameter = idbD.HasValue ?
+                new ObjectParameter("IdbD", idbD) :
+                new ObjectParameter("IdbD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoEdadParameter, anioParameter, idbDParameter);
+        }
+    
+        public virtual ObjectResult<GetPorcentajeAfirmativasBySexo_Result> GetPorcentajeAfirmativasBySexo(Nullable<int> idPregunta, string sexo)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var sexoParameter = sexo != null ?
+                new ObjectParameter("Sexo", sexo) :
+                new ObjectParameter("Sexo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasBySexo_Result>("GetPorcentajeAfirmativasBySexo", idPreguntaParameter, sexoParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string subdepartamento, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var subdepartamentoParameter = subdepartamento != null ?
+                new ObjectParameter("Subdepartamento", subdepartamento) :
+                new ObjectParameter("Subdepartamento", typeof(string));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, subdepartamentoParameter, anioParameter, idBDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK", uNegocioParameter, idPreguntaParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var uNegocioParameter = uNegocio != null ?
+                new ObjectParameter("UNegocio", uNegocio) :
+                new ObjectParameter("UNegocio", typeof(string));
+    
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, idBDParameter);
         }
     
         public virtual ObjectResult<GetResP1_Result> GetResP1(Nullable<int> idEmpleado)
@@ -2300,6 +3208,19 @@ namespace DL
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sd_Result>("sd", nombreParameter, apellidoPaternoParameter, apellidoMaternoParameter);
         }
     
+        public virtual ObjectResult<SoredProcedureDemo_Result> SoredProcedureDemo(Nullable<int> param1, Nullable<int> param2)
+        {
+            var param1Parameter = param1.HasValue ?
+                new ObjectParameter("param1", param1) :
+                new ObjectParameter("param1", typeof(int));
+    
+            var param2Parameter = param2.HasValue ?
+                new ObjectParameter("param2", param2) :
+                new ObjectParameter("param2", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SoredProcedureDemo_Result>("SoredProcedureDemo", param1Parameter, param2Parameter);
+        }
+    
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
             var diagramnameParameter = diagramname != null ?
@@ -2694,898 +3615,6 @@ namespace DL
                 new ObjectParameter("NombreArea", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ValidateNombreAreaOK_", nombreAreaParameter);
-        }
-    
-        public virtual int GetIdEmpleadoForAddAdmin()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetIdEmpleadoForAddAdmin");
-        }
-    
-        public virtual int GetIdEmpleadoForAddAdminOK()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetIdEmpleadoForAddAdminOK");
-        }
-    
-        public virtual int GetIdEmpleadoForAddAdmin_1()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetIdEmpleadoForAddAdmin_1");
-        }
-    
-        public virtual ObjectResult<GetPermisosList_Result> GetPermisosList(Nullable<int> idEmpleado)
-        {
-            var idEmpleadoParameter = idEmpleado.HasValue ?
-                new ObjectParameter("IdEmpleado", idEmpleado) :
-                new ObjectParameter("IdEmpleado", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPermisosList_Result>("GetPermisosList", idEmpleadoParameter);
-        }
-    
-        public virtual ObjectResult<GetPermisosList__Result> GetPermisosList_(Nullable<int> idEmpleado)
-        {
-            var idEmpleadoParameter = idEmpleado.HasValue ?
-                new ObjectParameter("IdEmpleado", idEmpleado) :
-                new ObjectParameter("IdEmpleado", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPermisosList__Result>("GetPermisosList_", idEmpleadoParameter);
-        }
-    
-        public virtual ObjectResult<GetAdminForMasterOK___Result> GetAdminForMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
-        {
-            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
-                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
-                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
-    
-            var idAdminLogParameter = idAdminLog.HasValue ?
-                new ObjectParameter("IdAdminLog", idAdminLog) :
-                new ObjectParameter("IdAdminLog", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminForMasterOK___Result>("GetAdminForMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
-        }
-    
-        public virtual ObjectResult<GetAdminForNotMasterOK___Result> GetAdminForNotMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
-        {
-            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
-                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
-                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
-    
-            var idAdminLogParameter = idAdminLog.HasValue ?
-                new ObjectParameter("IdAdminLog", idAdminLog) :
-                new ObjectParameter("IdAdminLog", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminForNotMasterOK___Result>("GetAdminForNotMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
-        }
-    
-        public virtual ObjectResult<GetAdminEliminadosForMasterOK___Result> GetAdminEliminadosForMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
-        {
-            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
-                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
-                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
-    
-            var idAdminLogParameter = idAdminLog.HasValue ?
-                new ObjectParameter("IdAdminLog", idAdminLog) :
-                new ObjectParameter("IdAdminLog", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminEliminadosForMasterOK___Result>("GetAdminEliminadosForMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
-        }
-    
-        public virtual ObjectResult<GetAdminEliminadosForNotMasterOK___Result> GetAdminEliminadosForNotMasterOK__(Nullable<int> idEmpleadoLogeado, Nullable<int> idAdminLog)
-        {
-            var idEmpleadoLogeadoParameter = idEmpleadoLogeado.HasValue ?
-                new ObjectParameter("IdEmpleadoLogeado", idEmpleadoLogeado) :
-                new ObjectParameter("IdEmpleadoLogeado", typeof(int));
-    
-            var idAdminLogParameter = idAdminLog.HasValue ?
-                new ObjectParameter("IdAdminLog", idAdminLog) :
-                new ObjectParameter("IdAdminLog", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAdminEliminadosForNotMasterOK___Result>("GetAdminEliminadosForNotMasterOK__", idEmpleadoLogeadoParameter, idAdminLogParameter);
-        }
-    
-        public virtual ObjectResult<GetEstructuraByUNegocio_Result> GetEstructuraByUNegocio(Nullable<int> unidadNegocio)
-        {
-            var unidadNegocioParameter = unidadNegocio.HasValue ?
-                new ObjectParameter("UnidadNegocio", unidadNegocio) :
-                new ObjectParameter("UnidadNegocio", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocio_Result>("GetEstructuraByUNegocio", unidadNegocioParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentAfirmativasByAntiguedad_Result> GetPorcentAfirmativasByAntiguedad(Nullable<int> idPregunta, string antiguedad)
-        {
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var antiguedadParameter = antiguedad != null ?
-                new ObjectParameter("Antiguedad", antiguedad) :
-                new ObjectParameter("Antiguedad", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByAntiguedad_Result>("GetPorcentAfirmativasByAntiguedad", idPreguntaParameter, antiguedadParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentAfirmativasByArea_3_Result> GetPorcentAfirmativasByArea_3(string area)
-        {
-            var areaParameter = area != null ?
-                new ObjectParameter("Area", area) :
-                new ObjectParameter("Area", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByArea_3_Result>("GetPorcentAfirmativasByArea_3", areaParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentAfirmativasByDepto_3_Result> GetPorcentAfirmativasByDepto_3(string depto)
-        {
-            var deptoParameter = depto != null ?
-                new ObjectParameter("Depto", depto) :
-                new ObjectParameter("Depto", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDepto_3_Result>("GetPorcentAfirmativasByDepto_3", deptoParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentAfirmativasByDivisionMarca_3_Result> GetPorcentAfirmativasByDivisionMarca_3(string company)
-        {
-            var companyParameter = company != null ?
-                new ObjectParameter("Company", company) :
-                new ObjectParameter("Company", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDivisionMarca_3_Result>("GetPorcentAfirmativasByDivisionMarca_3", companyParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByAreaEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string area, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var areaParameter = area != null ?
-                new ObjectParameter("Area", area) :
-                new ObjectParameter("Area", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByAreaEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, areaParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCompanyEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string company, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var companyParameter = company != null ?
-                new ObjectParameter("Company", company) :
-                new ObjectParameter("Company", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCompanyEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, companyParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentajeAfirmativasByCondicionTrabajo_Result> GetPorcentajeAfirmativasByCondicionTrabajo(Nullable<int> idPregunta, string condicionTrabajo)
-        {
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var condicionTrabajoParameter = condicionTrabajo != null ?
-                new ObjectParameter("CondicionTrabajo", condicionTrabajo) :
-                new ObjectParameter("CondicionTrabajo", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByCondicionTrabajo_Result>("GetPorcentajeAfirmativasByCondicionTrabajo", idPreguntaParameter, condicionTrabajoParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string condicionTrabajo, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var condicionTrabajoParameter = condicionTrabajo != null ?
-                new ObjectParameter("CondicionTrabajo", condicionTrabajo) :
-                new ObjectParameter("CondicionTrabajo", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByCondicionTrabajoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, condicionTrabajoParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDeptoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string depto)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var deptoParameter = depto != null ?
-                new ObjectParameter("Depto", depto) :
-                new ObjectParameter("Depto", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByDeptoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, deptoParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentajeAfirmativasByFuncion_Result> GetPorcentajeAfirmativasByFuncion(Nullable<int> idPregunta, string funcion)
-        {
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var funcionParameter = funcion != null ?
-                new ObjectParameter("Funcion", funcion) :
-                new ObjectParameter("Funcion", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByFuncion_Result>("GetPorcentajeAfirmativasByFuncion", idPreguntaParameter, funcionParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByFuncionEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string funcion, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var funcionParameter = funcion != null ?
-                new ObjectParameter("Funcion", funcion) :
-                new ObjectParameter("Funcion", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByFuncionEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, funcionParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string genero)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var generoParameter = genero != null ?
-                new ObjectParameter("Genero", genero) :
-                new ObjectParameter("Genero", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGeneroEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, generoParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentajeAfirmativasByGradoAcademico_Result> GetPorcentajeAfirmativasByGradoAcademico(Nullable<int> idPregunta, string gradoAcademico)
-        {
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var gradoAcademicoParameter = gradoAcademico != null ?
-                new ObjectParameter("GradoAcademico", gradoAcademico) :
-                new ObjectParameter("GradoAcademico", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByGradoAcademico_Result>("GetPorcentajeAfirmativasByGradoAcademico", idPreguntaParameter, gradoAcademicoParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string gradoAcad, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var gradoAcadParameter = gradoAcad != null ?
-                new ObjectParameter("GradoAcad", gradoAcad) :
-                new ObjectParameter("GradoAcad", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGradoAcademicoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, gradoAcadParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoAnt, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var rangoAntParameter = rangoAnt != null ?
-                new ObjectParameter("RangoAnt", rangoAnt) :
-                new ObjectParameter("RangoAnt", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoAntiguedadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoAntParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string rangoEdad, Nullable<int> anio, Nullable<int> idbD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var rangoEdadParameter = rangoEdad != null ?
-                new ObjectParameter("RangoEdad", rangoEdad) :
-                new ObjectParameter("RangoEdad", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idbDParameter = idbD.HasValue ?
-                new ObjectParameter("IdbD", idbD) :
-                new ObjectParameter("IdbD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByRangoEdadEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, rangoEdadParameter, anioParameter, idbDParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentajeAfirmativasBySexo_Result> GetPorcentajeAfirmativasBySexo(Nullable<int> idPregunta, string sexo)
-        {
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var sexoParameter = sexo != null ?
-                new ObjectParameter("Sexo", sexo) :
-                new ObjectParameter("Sexo", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasBySexo_Result>("GetPorcentajeAfirmativasBySexo", idPreguntaParameter, sexoParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string subdepartamento, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var subdepartamentoParameter = subdepartamento != null ?
-                new ObjectParameter("Subdepartamento", subdepartamento) :
-                new ObjectParameter("Subdepartamento", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasBySubDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, subdepartamentoParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK", uNegocioParameter, idPreguntaParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK(string uNegocio, Nullable<int> idPregunta, string departamento, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var departamentoParameter = departamento != null ?
-                new ObjectParameter("Departamento", departamento) :
-                new ObjectParameter("Departamento", typeof(string));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByDepartamentoEnfEmpresaOK", uNegocioParameter, idPreguntaParameter, departamentoParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<GetEstatusAvanceByUnegocio_Result> GetEstatusAvanceByUnegocio(string companyCategoria)
-        {
-            var companyCategoriaParameter = companyCategoria != null ?
-                new ObjectParameter("CompanyCategoria", companyCategoria) :
-                new ObjectParameter("CompanyCategoria", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstatusAvanceByUnegocio_Result>("GetEstatusAvanceByUnegocio", companyCategoriaParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentAfirmativasBydEPTO_4_Result> GetPorcentAfirmativasBydEPTO_4(string depto)
-        {
-            var deptoParameter = depto != null ?
-                new ObjectParameter("Depto", depto) :
-                new ObjectParameter("Depto", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasBydEPTO_4_Result>("GetPorcentAfirmativasBydEPTO_4", deptoParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentajeAfirmativasByRangoEdad_Result> GetPorcentajeAfirmativasByRangoEdad(Nullable<int> idPregunta, string rangoEdad)
-        {
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var rangoEdadParameter = rangoEdad != null ?
-                new ObjectParameter("RangoEdad", rangoEdad) :
-                new ObjectParameter("RangoEdad", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentajeAfirmativasByRangoEdad_Result>("GetPorcentajeAfirmativasByRangoEdad", idPreguntaParameter, rangoEdadParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByCompany(string company, string uNegocio)
-        {
-            var companyParameter = company != null ?
-                new ObjectParameter("Company", company) :
-                new ObjectParameter("Company", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByCompany", companyParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByCondicionTrabajo(string condicionTrab, string uNegocio)
-        {
-            var condicionTrabParameter = condicionTrab != null ?
-                new ObjectParameter("CondicionTrab", condicionTrab) :
-                new ObjectParameter("CondicionTrab", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByCondicionTrabajo", condicionTrabParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByFuncion(string funcion, string uNegocio)
-        {
-            var funcionParameter = funcion != null ?
-                new ObjectParameter("Funcion", funcion) :
-                new ObjectParameter("Funcion", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByFuncion", funcionParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByGenero(string genero, string uNegocio)
-        {
-            var generoParameter = genero != null ?
-                new ObjectParameter("Genero", genero) :
-                new ObjectParameter("Genero", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByGenero", generoParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByGradoAcademico(string gradoAcad, string uNegocio)
-        {
-            var gradoAcadParameter = gradoAcad != null ?
-                new ObjectParameter("GradoAcad", gradoAcad) :
-                new ObjectParameter("GradoAcad", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByGradoAcademico", gradoAcadParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByRangoAntiguedad(string rangoAntig, string uNegocio)
-        {
-            var rangoAntigParameter = rangoAntig != null ?
-                new ObjectParameter("RangoAntig", rangoAntig) :
-                new ObjectParameter("RangoAntig", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByRangoAntiguedad", rangoAntigParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByRangoEdad(string rangoEdad, string uNegocio)
-        {
-            var rangoEdadParameter = rangoEdad != null ?
-                new ObjectParameter("RangoEdad", rangoEdad) :
-                new ObjectParameter("RangoEdad", typeof(string));
-    
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByRangoEdad", rangoEdadParameter, uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetEsperadasByUNegocio(string uNegocio)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetEsperadasByUNegocio", uNegocioParameter);
-        }
-    
-        public virtual ObjectResult<getComentarios_Result> getComentarios(string unegocio, Nullable<int> idBD)
-        {
-            var unegocioParameter = unegocio != null ?
-                new ObjectParameter("Unegocio", unegocio) :
-                new ObjectParameter("Unegocio", typeof(string));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("idBD", idBD) :
-                new ObjectParameter("idBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getComentarios_Result>("getComentarios", unegocioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<GetEstructuraByUNegocioD4U_Result> GetEstructuraByUNegocioD4U(Nullable<int> unidadNegocio)
-        {
-            var unidadNegocioParameter = unidadNegocio.HasValue ?
-                new ObjectParameter("UnidadNegocio", unidadNegocio) :
-                new ObjectParameter("UnidadNegocio", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocioD4U_Result>("GetEstructuraByUNegocioD4U", unidadNegocioParameter);
-        }
-    
-        public virtual ObjectResult<GetEstructuraByUNegocioD4UOK_Result> GetEstructuraByUNegocioD4UOK(Nullable<int> unidadNegocio)
-        {
-            var unidadNegocioParameter = unidadNegocio.HasValue ?
-                new ObjectParameter("UnidadNegocio", unidadNegocio) :
-                new ObjectParameter("UnidadNegocio", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocioD4UOK_Result>("GetEstructuraByUNegocioD4UOK", unidadNegocioParameter);
-        }
-    
-        public virtual ObjectResult<GetPorcentAfirmativasByDepartamento_3_Result> GetPorcentAfirmativasByDepartamento_3(string depto)
-        {
-            var deptoParameter = depto != null ?
-                new ObjectParameter("Depto", depto) :
-                new ObjectParameter("Depto", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPorcentAfirmativasByDepartamento_3_Result>("GetPorcentAfirmativasByDepartamento_3", deptoParameter);
-        }
-    
-        public virtual ObjectResult<demoJA_Result> demoJA(Nullable<int> idEncuesta, string sqlQuery)
-        {
-            var idEncuestaParameter = idEncuesta.HasValue ?
-                new ObjectParameter("IdEncuesta", idEncuesta) :
-                new ObjectParameter("IdEncuesta", typeof(int));
-    
-            var sqlQueryParameter = sqlQuery != null ?
-                new ObjectParameter("sqlQuery", sqlQuery) :
-                new ObjectParameter("sqlQuery", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<demoJA_Result>("demoJA", idEncuestaParameter, sqlQueryParameter);
-        }
-    
-        public virtual ObjectResult<demoJA1_Result> demoJA1(Nullable<int> idEncuesta, string sqlQuery)
-        {
-            var idEncuestaParameter = idEncuesta.HasValue ?
-                new ObjectParameter("IdEncuesta", idEncuesta) :
-                new ObjectParameter("IdEncuesta", typeof(int));
-    
-            var sqlQueryParameter = sqlQuery != null ?
-                new ObjectParameter("sqlQuery", sqlQuery) :
-                new ObjectParameter("sqlQuery", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<demoJA1_Result>("demoJA1", idEncuestaParameter, sqlQueryParameter);
-        }
-    
-        public virtual ObjectResult<GetEstructuraByUNegocioD4USucces_Result> GetEstructuraByUNegocioD4USucces(Nullable<int> unidadNegocio)
-        {
-            var unidadNegocioParameter = unidadNegocio.HasValue ?
-                new ObjectParameter("UnidadNegocio", unidadNegocio) :
-                new ObjectParameter("UnidadNegocio", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEstructuraByUNegocioD4USucces_Result>("GetEstructuraByUNegocioD4USucces", unidadNegocioParameter);
-        }
-    
-        public virtual ObjectResult<f_getEstructuraDescByCompanyId_Result> f_getEstructuraDescByCompanyId(Nullable<int> aCompanyId)
-        {
-            var aCompanyIdParameter = aCompanyId.HasValue ?
-                new ObjectParameter("aCompanyId", aCompanyId) :
-                new ObjectParameter("aCompanyId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByCompanyId_Result>("f_getEstructuraDescByCompanyId", aCompanyIdParameter);
-        }
-    
-        public virtual ObjectResult<f_getEstructuraDescByIdArea_Result> f_getEstructuraDescByIdArea(Nullable<int> aIdArea)
-        {
-            var aIdAreaParameter = aIdArea.HasValue ?
-                new ObjectParameter("aIdArea", aIdArea) :
-                new ObjectParameter("aIdArea", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByIdArea_Result>("f_getEstructuraDescByIdArea", aIdAreaParameter);
-        }
-    
-        public virtual ObjectResult<f_getEstructuraDescByIdDepartamento_Result> f_getEstructuraDescByIdDepartamento(Nullable<int> aIdDepartamento)
-        {
-            var aIdDepartamentoParameter = aIdDepartamento.HasValue ?
-                new ObjectParameter("aIdDepartamento", aIdDepartamento) :
-                new ObjectParameter("aIdDepartamento", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<f_getEstructuraDescByIdDepartamento_Result>("f_getEstructuraDescByIdDepartamento", aIdDepartamentoParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByUNegocioEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio(string uNegocio, Nullable<int> idPregunta, Nullable<int> anio, string genero, Nullable<int> idBD)
-        {
-            var uNegocioParameter = uNegocio != null ?
-                new ObjectParameter("UNegocio", uNegocio) :
-                new ObjectParameter("UNegocio", typeof(string));
-    
-            var idPreguntaParameter = idPregunta.HasValue ?
-                new ObjectParameter("IdPregunta", idPregunta) :
-                new ObjectParameter("IdPregunta", typeof(int));
-    
-            var anioParameter = anio.HasValue ?
-                new ObjectParameter("Anio", anio) :
-                new ObjectParameter("Anio", typeof(int));
-    
-            var generoParameter = genero != null ?
-                new ObjectParameter("Genero", genero) :
-                new ObjectParameter("Genero", typeof(string));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasByGeneroEnfEmpresaOK_Anio", uNegocioParameter, idPreguntaParameter, anioParameter, generoParameter, idBDParameter);
-        }
-    
-        [DbFunction("RH_DesEntities", "splitstring_COMA")]
-        public virtual IQueryable<string> splitstring_COMA(string stringToSplit)
-        {
-            var stringToSplitParameter = stringToSplit != null ?
-                new ObjectParameter("stringToSplit", stringToSplit) :
-                new ObjectParameter("stringToSplit", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[RH_DesEntities].[splitstring_COMA](@stringToSplit)", stringToSplitParameter);
-        }
-    
-        [DbFunction("RH_DesEntities", "splitstring_SPACES")]
-        public virtual IQueryable<string> splitstring_SPACES(string stringToSplit)
-        {
-            var stringToSplitParameter = stringToSplit != null ?
-                new ObjectParameter("stringToSplit", stringToSplit) :
-                new ObjectParameter("stringToSplit", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<string>("[RH_DesEntities].[splitstring_SPACES](@stringToSplit)", stringToSplitParameter);
-        }
-    
-        public virtual ObjectResult<GetByUnidadNula_Result> GetByUnidadNula(Nullable<int> idBD)
-        {
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByUnidadNula_Result>("GetByUnidadNula", idBDParameter);
-        }
-    
-        public virtual ObjectResult<GetByMultiUnidad_Result> GetByMultiUnidad(string unidad1, string unidad2, string unidad3, string unidad4, string unidad5, string unidad6, string unidad7, string unidad8, string unidad9, string unidad10, string unidad11, string unidad12, string unidad13, string unidad14, string unidad15, Nullable<int> idBD)
-        {
-            var unidad1Parameter = unidad1 != null ?
-                new ObjectParameter("unidad1", unidad1) :
-                new ObjectParameter("unidad1", typeof(string));
-    
-            var unidad2Parameter = unidad2 != null ?
-                new ObjectParameter("unidad2", unidad2) :
-                new ObjectParameter("unidad2", typeof(string));
-    
-            var unidad3Parameter = unidad3 != null ?
-                new ObjectParameter("unidad3", unidad3) :
-                new ObjectParameter("unidad3", typeof(string));
-    
-            var unidad4Parameter = unidad4 != null ?
-                new ObjectParameter("unidad4", unidad4) :
-                new ObjectParameter("unidad4", typeof(string));
-    
-            var unidad5Parameter = unidad5 != null ?
-                new ObjectParameter("unidad5", unidad5) :
-                new ObjectParameter("unidad5", typeof(string));
-    
-            var unidad6Parameter = unidad6 != null ?
-                new ObjectParameter("unidad6", unidad6) :
-                new ObjectParameter("unidad6", typeof(string));
-    
-            var unidad7Parameter = unidad7 != null ?
-                new ObjectParameter("unidad7", unidad7) :
-                new ObjectParameter("unidad7", typeof(string));
-    
-            var unidad8Parameter = unidad8 != null ?
-                new ObjectParameter("unidad8", unidad8) :
-                new ObjectParameter("unidad8", typeof(string));
-    
-            var unidad9Parameter = unidad9 != null ?
-                new ObjectParameter("unidad9", unidad9) :
-                new ObjectParameter("unidad9", typeof(string));
-    
-            var unidad10Parameter = unidad10 != null ?
-                new ObjectParameter("unidad10", unidad10) :
-                new ObjectParameter("unidad10", typeof(string));
-    
-            var unidad11Parameter = unidad11 != null ?
-                new ObjectParameter("unidad11", unidad11) :
-                new ObjectParameter("unidad11", typeof(string));
-    
-            var unidad12Parameter = unidad12 != null ?
-                new ObjectParameter("unidad12", unidad12) :
-                new ObjectParameter("unidad12", typeof(string));
-    
-            var unidad13Parameter = unidad13 != null ?
-                new ObjectParameter("unidad13", unidad13) :
-                new ObjectParameter("unidad13", typeof(string));
-    
-            var unidad14Parameter = unidad14 != null ?
-                new ObjectParameter("unidad14", unidad14) :
-                new ObjectParameter("unidad14", typeof(string));
-    
-            var unidad15Parameter = unidad15 != null ?
-                new ObjectParameter("unidad15", unidad15) :
-                new ObjectParameter("unidad15", typeof(string));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("IdBD", idBD) :
-                new ObjectParameter("IdBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetByMultiUnidad_Result>("GetByMultiUnidad", unidad1Parameter, unidad2Parameter, unidad3Parameter, unidad4Parameter, unidad5Parameter, unidad6Parameter, unidad7Parameter, unidad8Parameter, unidad9Parameter, unidad10Parameter, unidad11Parameter, unidad12Parameter, unidad13Parameter, unidad14Parameter, unidad15Parameter, idBDParameter);
-        }
-    
-        public virtual ObjectResult<getComentariosMultiUnidad_Result> getComentariosMultiUnidad(string unegocio1, string unegocio2, string unegocio3, string unegocio4, string unegocio5, string unegocio6, string unegocio7, string unegocio8, string unegocio9, string unegocio10, string unegocio11, string unegocio12, Nullable<int> idBD)
-        {
-            var unegocio1Parameter = unegocio1 != null ?
-                new ObjectParameter("Unegocio1", unegocio1) :
-                new ObjectParameter("Unegocio1", typeof(string));
-    
-            var unegocio2Parameter = unegocio2 != null ?
-                new ObjectParameter("Unegocio2", unegocio2) :
-                new ObjectParameter("Unegocio2", typeof(string));
-    
-            var unegocio3Parameter = unegocio3 != null ?
-                new ObjectParameter("Unegocio3", unegocio3) :
-                new ObjectParameter("Unegocio3", typeof(string));
-    
-            var unegocio4Parameter = unegocio4 != null ?
-                new ObjectParameter("Unegocio4", unegocio4) :
-                new ObjectParameter("Unegocio4", typeof(string));
-    
-            var unegocio5Parameter = unegocio5 != null ?
-                new ObjectParameter("Unegocio5", unegocio5) :
-                new ObjectParameter("Unegocio5", typeof(string));
-    
-            var unegocio6Parameter = unegocio6 != null ?
-                new ObjectParameter("Unegocio6", unegocio6) :
-                new ObjectParameter("Unegocio6", typeof(string));
-    
-            var unegocio7Parameter = unegocio7 != null ?
-                new ObjectParameter("Unegocio7", unegocio7) :
-                new ObjectParameter("Unegocio7", typeof(string));
-    
-            var unegocio8Parameter = unegocio8 != null ?
-                new ObjectParameter("Unegocio8", unegocio8) :
-                new ObjectParameter("Unegocio8", typeof(string));
-    
-            var unegocio9Parameter = unegocio9 != null ?
-                new ObjectParameter("Unegocio9", unegocio9) :
-                new ObjectParameter("Unegocio9", typeof(string));
-    
-            var unegocio10Parameter = unegocio10 != null ?
-                new ObjectParameter("Unegocio10", unegocio10) :
-                new ObjectParameter("Unegocio10", typeof(string));
-    
-            var unegocio11Parameter = unegocio11 != null ?
-                new ObjectParameter("Unegocio11", unegocio11) :
-                new ObjectParameter("Unegocio11", typeof(string));
-    
-            var unegocio12Parameter = unegocio12 != null ?
-                new ObjectParameter("Unegocio12", unegocio12) :
-                new ObjectParameter("Unegocio12", typeof(string));
-    
-            var idBDParameter = idBD.HasValue ?
-                new ObjectParameter("idBD", idBD) :
-                new ObjectParameter("idBD", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<getComentariosMultiUnidad_Result>("getComentariosMultiUnidad", unegocio1Parameter, unegocio2Parameter, unegocio3Parameter, unegocio4Parameter, unegocio5Parameter, unegocio6Parameter, unegocio7Parameter, unegocio8Parameter, unegocio9Parameter, unegocio10Parameter, unegocio11Parameter, unegocio12Parameter, idBDParameter);
         }
     }
 }

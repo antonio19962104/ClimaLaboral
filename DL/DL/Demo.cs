@@ -31,5 +31,6 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
+        public string NivelDetalle { get; set; }
     }
 }

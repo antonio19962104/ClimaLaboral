@@ -69,6 +69,7 @@ namespace DL
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Administrador> Administrador { get; set; }
+        public virtual BasesDeDatos BasesDeDatos { get; set; }
         public virtual ClavesAcceso ClavesAcceso { get; set; }
         public virtual Departamento Departamento { get; set; }
         public virtual Perfil Perfil { get; set; }
@@ -79,6 +80,5 @@ namespace DL
         public virtual ICollection<EstatusEncuesta> EstatusEncuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usuario> Usuario { get; set; }
-        public virtual BasesDeDatos BasesDeDatos { get; set; }
     }
 }

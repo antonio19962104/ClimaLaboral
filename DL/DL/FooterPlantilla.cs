@@ -21,8 +21,11 @@ namespace DL
         }
     
         public int IdFooterPlantilla { get; set; }
+        public Nullable<int> IdPlantillaDefinida { get; set; }
         public string Nombre { get; set; }
         public string CodeHTML { get; set; }
+        public string Color1 { get; set; }
+        public string Color2 { get; set; }
         public string ImagenFondo { get; set; }
         public string LogoIco { get; set; }
         public Nullable<int> LogoAlinea { get; set; }
@@ -37,9 +40,6 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<int> IdPlantillaDefinida { get; set; }
-        public string Color1 { get; set; }
-        public string Color2 { get; set; }
     
         public virtual Aling Aling { get; set; }
         public virtual Aling Aling1 { get; set; }

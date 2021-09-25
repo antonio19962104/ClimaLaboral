@@ -2,12 +2,12 @@
     <div id="tab-bienestar-ee" class="container-fluid px-lg-5">
         <h2 class="robotothin mb-2 mt-n1">FACTOR PSICOSOCIAL ENFOQUE EMPRESA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
         <!--#region switcheo comparativo-->
-        <div class="form-group" id="quitaSwitch">
+        <div hidden class="form-group" id="quitaSwitch">
             <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
                 <label class="control-label">Ver comparativo de enfoques</label>
                 <!-- Rounded switch -->
-                <label class="switch">
-                    <input type="checkbox" id="demoVerComparativoEnfoques" ng-model="vm.verComparativoEnfoques">
+                <label class="switch" hidden>
+                    <input type="checkbox" hidden id="demoVerComparativoEnfoques" ng-model="vm.verComparativoEnfoques">
                     <span class="slider round"></span>
                 </label>
             </div>
@@ -27,18 +27,18 @@
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite" ng-class="{{ vm.Company.CompanyId }}" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite" ng-class="{{ vm.Area.IdArea }}" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite" ng-class="{{ vm.Departamento.IdDepartamento }}" scope="col"><div class="contr-head">{{ vm.Departamento.Descripcion }}</div></th>
-                                            <th ng-repeat="item in vm.ColumnasByCompanyCategoria" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ item.value }}</div></th>
+                                            <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                         </tr>
                                     </thead>
                                     <thead class="mt-5 table-bienestar">
                                     <th colspan="10" scope="col" class="yellow-clima robotobold f-21">BIENESTAR</th><!--Globales de bienestar-->
-                                    <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                    <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head @*{{ vm.bienestarTxtClass(item) }}*@">{{ item }}%</div></th>
                                     </thead>
                                     <thead class="table-dark mb-5">
                                         <!--globales de bio-->
                                         <tr id="mergeBioEE">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">I. FACTOR BIOLÓGICO</th>
-                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }} ">{{ item }}%</div></th>
+                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head @*{{ vm.bienestarTxtClass(item) }}*@ ">{{ item }}%</div></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -74,7 +74,7 @@
                                     <thead class="table-dark mb-5">
                                         <tr id="mergePsicoEE" class="borde-tabla-titulo quitar-borde">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
-                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head  @*{{ vm.bienestarTxtClass(item) }}*@">{{ item }}%</div></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -102,7 +102,7 @@
                                     <thead class="table-dark mb-5">
                                         <tr id="mergeSocialEE" class="borde-tabla-titulo quitar-borde">
                                             <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
-                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head  {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                            <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEE() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head  @*{{ vm.bienestarTxtClass(item) }}*@">{{ item }}%</div></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -194,18 +194,18 @@
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ vm.Departamento.Descripcion }}</div></th>
-                                        <th ng-repeat="item in vm.ColumnasByCompanyCategoria" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ item.value }}</div></th>
+                                        <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                     </tr>
                                 </thead>
                                 <thead class="mt-5 table-bienestar">
                                 <th colspan="10" scope="col" class="yellow-clima robotobold f-21">BIENESTAR</th><!--Globales de bienestar-->
-                                <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                <th style="padding: 0px !important" ng-repeat="item in vm.setPromediosBienestarEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head">{{ item }}%</div></th>
                                 </thead>
                                 <thead class="table-dark mb-5">
                                     <!--globales de bio-->
                                     <tr id="mergeBioEA">
                                         <th colspan="10" scope="col" class="yellow-clima robotobold f-21">I. FACTOR BIOLÓGICO</th>
-                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorBioEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head @*{{ vm.bienestarTxtClass(item) }}*@">{{ item }}%</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -241,7 +241,7 @@
                                 <thead class="table-dark mb-5">
                                     <tr id="mergePsicoEA" class="borde-tabla-titulo quitar-borde">
                                         <th colspan="10" scope="col" class="yellow-clima robotobold f-21">II. FACTOR PSICOLÓGICO</th>
-                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorPsicoEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head @*{{ vm.bienestarTxtClass(item) }}*@">{{ item }}%</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -269,7 +269,7 @@
                                 <thead class="table-dark mb-5">
                                     <tr id="mergeSocialEA" class="borde-tabla-titulo quitar-borde">
                                         <th colspan="10" scope="col" class="yellow-clima robotobold f-21">III. FACTOR SOCIAL</th>
-                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head {{ vm.bienestarTxtClass(item) }}">{{ item }}%</div></th>
+                                        <th style="padding: 0px !important" ng-repeat="item in vm.setFactorSocialEA() track by $index" class="borde-table-headercolor" scope="col"><div class="factbio-head @*{{ vm.bienestarTxtClass(item) }}*@">{{ item }}%</div></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -351,26 +351,71 @@
     th .bienestarHistorico {
         padding: 0px;
     }
-    /*Colores tabla*/
-    .lluvia-value-bienestar {
-        background-color: #999292;
+    .lluvia-value-bienestar{
+        color: red;
         font-weight: bold;
     }
-    .nublado-value-bienestar {
-        background-color: #d2a370;
+    .paleta_1 {
+        background-color: #f20a05;
         font-weight: bold;
     }
-    .sol-nube-value-bienestar {
-        background-color: #fbd8b3;
+
+    .paleta_2 {
+        background-color: #f44805;
         font-weight: bold;
     }
-    .sol-value-bienestar {
-        background-color: #2b7b25;
+
+    .paleta_3 {
+        background-color: #f56105;
         font-weight: bold;
     }
-    .factbio-head{
-        background-color: inherit;
+
+    .paleta_4 {
+        background-color: #f67a05;
+        font-weight: bold;
     }
+
+    .paleta_5 {
+        background-color: #f79406;
+        font-weight: bold;
+    }
+
+    .paleta_6 {
+        background-color: #f8ae06;
+        font-weight: bold;
+    }
+
+    .paleta_7 {
+        background-color: #f8c706;
+        font-weight: bold;
+    }
+
+    .paleta_8 {
+        background-color: #dfee05;
+        font-weight: bold;
+    }
+
+    .paleta_9 {
+        background-color: #70ca02;
+        font-weight: bold;
+    }
+
+    .paleta_10 {
+        background-color: #37b800;
+        font-weight: bold;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     /*sm*/
     @@media(max-width: 1609px) {
         .table td, .table th {

@@ -17,8 +17,11 @@ namespace DL
         public int IdUsuarioRespuestas { get; set; }
         public Nullable<int> IdPregunta { get; set; }
         public string RespuestaUsuario { get; set; }
+        public Nullable<bool> Selected { get; set; }
         public Nullable<int> IdRespuesta { get; set; }
         public Nullable<int> IdUsuario { get; set; }
+        public Nullable<int> IdEncuesta { get; set; }
+        public Nullable<int> IdEstatus { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
@@ -28,14 +31,11 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<bool> Selected { get; set; }
-        public Nullable<int> IdEncuesta { get; set; }
-        public Nullable<int> IdEstatus { get; set; }
     
+        public virtual Encuesta Encuesta { get; set; }
         public virtual Preguntas Preguntas { get; set; }
         public virtual Respuestas Respuestas { get; set; }
-        public virtual Usuario Usuario { get; set; }
-        public virtual Encuesta Encuesta { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
+        public virtual Usuario Usuario { get; set; }
     }
 }

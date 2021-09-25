@@ -129,7 +129,7 @@ namespace PL.Controllers
             {
                 Console.Write(aHistorico.IdBaseDeDatos);
                 #region validar
-                BL.LogReporteoClima.writteLogJobReporte("Entré a generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
+                BL.LogReporteoClima.writteLogJobReporte("Entré a generar el reporte", new StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 AnioActual = (int)aHistorico.Anio + 1;
                 AnioHistorico = (int)aHistorico.Anio;
                 string criterioBusquedaSeleccionado = Convert.ToString(aHistorico.IdTipoEntidad);
@@ -139,9 +139,9 @@ namespace PL.Controllers
                 string unidadNeg = getUnidadNegocio(aHistorico.EntidadNombre, (int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos);
                 //int idUneg = Convert.ToInt32(uneg.Split('_')[1]);
 
-                if (boolExisteReporte(aHistorico, AnioActual) == true)
+                if (boolExisteReporte(aHistorico, AnioActual, aHistorico.nivelDetalle) == true)
                 {
-                    eliminarReporte(aHistorico, AnioActual);
+                    eliminarReporte(aHistorico, AnioActual, aHistorico.nivelDetalle);
                 }
                 #endregion validar
                 #region calcular data
@@ -197,14 +197,26 @@ namespace PL.Controllers
                 // obtener los hijos de la estructura GAFM todos los niveles bajo de la entidad seleccionada
                 // var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
                 var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
-                var descendientesForBienestar = aFiltrosHijosEstructura.Select(o => o.value).ToList();
+                var descendientesForBienestar = aFiltrosHijosEstructura;
                 /*
                  * Ahora bienestar traerá toda la info de todos los hijos y nietos etc del padre
                  * jamurillo 23/09/2021
                  * Adjuntar el campo type para saber su prefijo, sobrecargar el metodo
                  */
-                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+                //Ajustar array de entidades segun el nivel de detalle
+                if (!aHistorico.nivelDetalle.Contains("1"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "UNeg=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("2"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Comp=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("3"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Area=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("4"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Dpto=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("5"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "SubD=>").ToList();
+
+                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
 
                 objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
@@ -282,77 +294,83 @@ namespace PL.Controllers
                 var list = new List<JsonResult>();
                 #region Guardar resultados
                 //guradar cadena json 1
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objEsperadas.Data, AnioActual, "dataEsperadas", aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objParticipacion.Data, AnioActual, "dataParticipacion", aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCalificacionGlobal, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objConfianza, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNivelCompromiso, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNivelColaboracion, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objEsperadas.Data, AnioActual, "dataEsperadas", aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objParticipacion.Data, AnioActual, "dataParticipacion", aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCalificacionGlobal, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objConfianza, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNivelCompromiso, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNivelColaboracion, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //guardar cadena json 2
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCredibilidad, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objImparcialidad, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objOrgullo, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objRespeto, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCompanierismo, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCredibilidad, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objImparcialidad, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objOrgullo, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objRespeto, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCompanierismo, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //guardar 3
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCoaching, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objHabgerenciales, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objAlineacionEstrategica, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objPracticasCulturales, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCambio, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objProcesosOrg, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCoaching, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objHabgerenciales, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objAlineacionEstrategica, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objPracticasCulturales, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCambio, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objProcesosOrg, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEE, AnioActual, aHistorico.CurrentUsr, aHistorico.EntidadNombre);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objpeoresEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objpeoresEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objpeoresEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objpeoresEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objBienestarEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objBienestarEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objBienestarEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objBienestarEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objPermanencia, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objAbandono, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objPermanencia, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objAbandono, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPermanencia, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoAbandono, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPermanencia, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoAbandono, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoEntidadesResultadoGeneralEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoEntidadesResultadoGeneralEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoEntidadesResultadoGeneralEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoEntidadesResultadoGeneralEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoResultadoGeneralPorNivelesEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoResultadoGeneralPorNivelesEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoResultadoGeneralPorNivelesEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoResultadoGeneralPorNivelesEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorAntiguedadEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorAntiguedadEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorAntiguedadEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorAntiguedadEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGeneroEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGeneroEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGeneroEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGeneroEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGradoAcademicoEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGradoAcademicoEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGradoAcademicoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGradoAcademicoEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorCondicionTrabajoEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorCondicionTrabajoEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorCondicionTrabajoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorCondicionTrabajoEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorFuncionEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorFuncionEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorFuncionEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorFuncionEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorRangoEdadEE, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorRangoEdadEA, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorRangoEdadEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorRangoEdadEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube1, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube2, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube3, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube4, AnioActual, aHistorico.CurrentUsr);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube1, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube2, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube3, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube4, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
 
                 #endregion guardar resultados
                 //Pasar estatus del JobReporte a 1 y notificar
-                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr);
-                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL);
+                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                /*
+                   public int opc { get; set; } = 0;
+                    public int tipoEntidad { get; set; } = 0;
+                    public string EntidadName { get; set; } = "";
+                    public int anio { get; set; } = 0;
+                 */
+                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL, aHistorico.ps, aHistorico.nivelDetalle, aHistorico.opc, aHistorico.tipoEntidad, aHistorico.enfoqueSeleccionado, aHistorico.nivelDetalle);
                 BL.LogReporteoClima.writteLogJobReporte("He terminado de generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 return Json(true);
             }
@@ -1721,7 +1739,7 @@ namespace PL.Controllers
             aHistorico.Anio = aHistorico.Anio + 1;
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio && o.NivelDetalle == aHistorico.nivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                 if (query.Count > 0)
                 {
                     return Content("true");
@@ -1729,11 +1747,11 @@ namespace PL.Controllers
                 return Content("false");
             }
         }
-        public bool boolExisteReporte(ML.Historico aHistorico, int anio)
+        public bool boolExisteReporte(ML.Historico aHistorico, int anio, string NivelDetalle)
         {
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == anio/* && o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                var query = context.Demo.Select(o => o).Where(o => o.Anio == anio && o.NivelDetalle == NivelDetalle/* && o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                 if (query.Count > 0)
                 {
                     return true;
@@ -1741,13 +1759,13 @@ namespace PL.Controllers
                 return false;
             }
         }
-        public void eliminarReporte(ML.Historico aHistorico, int anio)
+        public void eliminarReporte(ML.Historico aHistorico, int anio, string NivelDetalle)
         {
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.Demo.Select(o => o).Where(o => o.Anio == anio /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                    var query = context.Demo.Select(o => o).Where(o => o.Anio == anio && o.NivelDetalle == NivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                     if (query.Count > 0)
                     {
                         context.Demo.RemoveRange(query);

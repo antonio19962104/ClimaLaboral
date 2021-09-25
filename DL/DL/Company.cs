@@ -17,9 +17,9 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Company()
         {
-            this.Area = new HashSet<Area>();
             this.Administrador = new HashSet<Administrador>();
             this.AdministradorCompany = new HashSet<AdministradorCompany>();
+            this.Area = new HashSet<Area>();
         }
     
         public int CompanyId { get; set; }
@@ -42,13 +42,13 @@ namespace DL
         public Nullable<int> IdAdministradorCreate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Administrador> Administrador { get; set; }
+        public virtual Administrador Administrador1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AdministradorCompany> AdministradorCompany { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Area> Area { get; set; }
         public virtual CompanyCategoria CompanyCategoria { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Administrador> Administrador { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AdministradorCompany> AdministradorCompany { get; set; }
-        public virtual Administrador Administrador1 { get; set; }
     }
 }

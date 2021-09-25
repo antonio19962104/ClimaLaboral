@@ -56,9 +56,10 @@
         }
     }
 
-    <script>
-            localStorage["AdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
-    </script>
+<script>
+        localStorage["AdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
+        localStorage["ps"] = @Html.Raw(JsonConvert.SerializeObject(Session["ps"]));
+</script>
     <style>
         canvas {
             border: 0px none black;

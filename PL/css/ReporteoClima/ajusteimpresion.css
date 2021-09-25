@@ -1,0 +1,105 @@
+﻿.wrapper2 {
+	margin-left: 0px!important;
+	width: 842px!important;
+	height: 595px!important;
+	background-color: #ffffff!important;
+}
+
+.bg-white {
+	background-color: #FFFFFF;
+}
+
+.bg-grey {
+	background-color: #eeeeee;
+}
+
+.mejores-impresion {
+	padding: 10px 0;
+}
+
+.f9 {
+	font-size: .9 rem;
+}
+
+.mejores-p {
+    line-height: 1!important;
+}
+
+.mejores-peores {
+    min-height: 125px;
+}
+
+.padding15 {
+	padding: 15px;
+}
+
+.fs14 {
+	font-size: 14px!important;
+}
+
+.f20 {
+	font-size: 20px;
+}
+
+.f10 {
+	font-size: 10px!important;
+}
+
+.clima-laboral2-2 span {
+	width: 1px;
+	height: 100%;
+	margin-left: 14px;
+	color: #FFFFFF;
+	border: solid 1px;
+	position: absolute;
+}
+
+.no-border {
+	border: none!important;
+}
+
+.mt-generando {
+	margin-top: 29px;
+}
+
+.text-white b {
+	color: #eab04c!important;
+}
+
+.azul-bg {
+	background-color: #070c38!important;
+}
+
+.borde-row {
+	border-bottom: solid 2px #eab04c;
+}
+
+.logo-clima {
+	margin-top: -60px;
+}
+
+.titulo-introduccion {
+	margin-top: 20px;
+	line-height: 1.4;
+}
+
+.intro-content {
+	margin-top: 21px;
+	margin-left: 20px;
+}
+
+.bg-circulo {
+    padding: 49px 0 !important;
+    background-image: url(../../img/bg-circle.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: #efaf43;
+}
+
+.bg-circulo i{
+    font-size: 50px;
+    position: absolute;
+    margin-top: 105px!important;
+}
+

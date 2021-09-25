@@ -25,6 +25,7 @@ namespace DL
         public Nullable<int> IdHeaderPlantilla { get; set; }
         public Nullable<int> IdFooterPlantilla { get; set; }
         public Nullable<int> IdBodyPlantilla { get; set; }
+        public Nullable<int> IdTipoPlantilla { get; set; }
         public string Nombre { get; set; }
         public Nullable<int> IdEstatus { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
@@ -36,7 +37,6 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<int> IdTipoPlantilla { get; set; }
     
         public virtual BodyPlantilla BodyPlantilla { get; set; }
         public virtual DetallePlantilla DetallePlantilla { get; set; }

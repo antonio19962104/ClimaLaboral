@@ -48,6 +48,23 @@ namespace DL
         public string CAMPOTEXTO_2 { get; set; }
         public string CAMPOTEXTO_3 { get; set; }
         public string CVE_ACCESO { get; set; }
-        public string Column1 { get; set; }
+        public string EMP_RES { get; set; }
+        public string EMP_RES1 { get; set; }
+        public string EMP_RES2 { get; set; }
+        public string EMP_RES3 { get; set; }
+        public string EMP_RES4 { get; set; }
+        public string EMP_RES5 { get; set; }
+        public string EMP_RES6 { get; set; }
+        public string EMP_RES7 { get; set; }
+        public string EMP_RES8 { get; set; }
+        public string EMP_RES9 { get; set; }
+        public string EMP_RES10 { get; set; }
+        public string EMP_RES11 { get; set; }
+        public string EMP_RES12 { get; set; }
+        public string EMP_RES13 { get; set; }
+        public string EMP_RES14 { get; set; }
+        public string EMP_RES15 { get; set; }
+        public string EMP_RES16 { get; set; }
+        public string EMP_RES17 { get; set; }
     }
 }

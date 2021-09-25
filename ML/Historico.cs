@@ -17,6 +17,15 @@ namespace ML
     }
     public class Historico
     {
+        //usuario|password|opc|tipoEntidad|entidadNombre|anio
+        public int opc { get; set; } = 0;
+        public int tipoEntidad { get; set; } = 0;
+        public string EntidadName { get; set; } = "";
+        
+        public int enfoqueSeleccionado { get; set; }
+
+        public string nivelDetalle { get; set; }
+        public string ps { get; set; } = string.Empty;
         public int IdBaseDeDatos { get; set; } = 0;
         public int idEncuesta { get; set; }
         public string currentURL { get; set; } = "";

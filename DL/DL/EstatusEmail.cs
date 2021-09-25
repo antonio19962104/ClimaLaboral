@@ -33,7 +33,7 @@ namespace DL
         public Nullable<int> noIntentos { get; set; }
     
         public virtual BasesDeDatos BasesDeDatos { get; set; }
-        public virtual EstatusMail EstatusMail { get; set; }
         public virtual Encuesta Encuesta { get; set; }
+        public virtual EstatusMail EstatusMail { get; set; }
     }
 }

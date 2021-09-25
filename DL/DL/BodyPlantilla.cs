@@ -25,6 +25,8 @@ namespace DL
         public string CodeHTML { get; set; }
         public string ImagenFondo { get; set; }
         public string LogoIco { get; set; }
+        public string Color1 { get; set; }
+        public string Color2 { get; set; }
         public string LogoAlinea { get; set; }
         public string ImagenFondoAlinea { get; set; }
         public Nullable<int> IdEstatus { get; set; }
@@ -37,8 +39,6 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public string Color1 { get; set; }
-        public string Color2 { get; set; }
     
         public virtual TipoEstatus TipoEstatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -17,15 +17,17 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Respuestas()
         {
+            this.ConfiguraRespuesta = new HashSet<ConfiguraRespuesta>();
             this.EmpleadoRespuestas = new HashSet<EmpleadoRespuestas>();
             this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
-            this.ConfiguraRespuesta = new HashSet<ConfiguraRespuesta>();
         }
     
         public int IdRespuesta { get; set; }
         public string Respuesta { get; set; }
         public Nullable<int> IdPregunta { get; set; }
+        public Nullable<int> IdPreguntaLikertD { get; set; }
         public Nullable<int> IdEstatus { get; set; }
+        public Nullable<bool> Selected { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
@@ -35,16 +37,14 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<bool> Selected { get; set; }
-        public Nullable<int> IdPreguntaLikertD { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpleadoRespuestas> EmpleadoRespuestas { get; set; }
         public virtual Preguntas Preguntas { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
     }
 }

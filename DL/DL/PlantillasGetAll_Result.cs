@@ -18,6 +18,7 @@ namespace DL
         public Nullable<int> IdHeaderPlantilla { get; set; }
         public Nullable<int> IdFooterPlantilla { get; set; }
         public Nullable<int> IdBodyPlantilla { get; set; }
+        public Nullable<int> IdTipoPlantilla { get; set; }
         public string Nombre { get; set; }
         public Nullable<int> IdEstatus { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }

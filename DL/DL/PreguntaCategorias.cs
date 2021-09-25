@@ -18,6 +18,7 @@ namespace DL
         public Nullable<int> IdPregunta { get; set; }
         public Nullable<int> IdEncuesta { get; set; }
         public Nullable<int> IdCategoria { get; set; }
+        public Nullable<decimal> Valoracion { get; set; }
         public Nullable<int> IdEstatus { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
@@ -28,6 +29,5 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<decimal> Valoracion { get; set; }
     }
 }

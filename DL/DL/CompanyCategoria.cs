@@ -17,8 +17,8 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CompanyCategoria()
         {
-            this.EncuestaUnidadNegocio = new HashSet<EncuestaUnidadNegocio>();
             this.Company = new HashSet<Company>();
+            this.EncuestaUnidadNegocio = new HashSet<EncuestaUnidadNegocio>();
         }
     
         public int IdCompanyCategoria { get; set; }
@@ -34,8 +34,8 @@ namespace DL
         public string ProgramaEliminacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EncuestaUnidadNegocio> EncuestaUnidadNegocio { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Company> Company { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EncuestaUnidadNegocio> EncuestaUnidadNegocio { get; set; }
     }
 }

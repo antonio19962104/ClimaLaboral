@@ -104,7 +104,7 @@
                                             <div class="row px-2 position-relative">
                                                 <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
                                                     <img ng-src="{{ vm.setIconoSVG(vm.ComparativosGeneralesEE.Data[$index].Porcentaje) }}" class="img-fluid svg-clasificacion">
-                                                    <p class="label-top-graphic-clasificacion" style="width: 80%;">{{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje }}</p>
+                                                    <p class="label-top-graphic-clasificacion" style="width: 80%;">{{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje }}%</p>
                                                     <div class="bar-clasificacion" style="width:80%;">
                                                         <div class="bar-progress-clasificacion" style="height: {{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje * 2.7 }}px;">
                                                             <p ng-hide="!vm.hasHistorico" class="comparativo">{{ vm.getDiferenciaGralEE(item.Entidad, vm.ComparativosGeneralesEE.Data[$index].Porcentaje, 2) }}%</p>
@@ -113,7 +113,7 @@
                                                 </div>
                                                 <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
                                                     <img src="img/sol-icono.svg" ng-src="{{ vm.setIconoSVG(vm.ComparativosGeneralesEA.Data[$index].Porcentaje) }}" class="img-fluid svg-clasificacion">
-                                                    <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">{{ vm.ComparativosGeneralesEA.Data[$index].Porcentaje }}</p>
+                                                    <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">{{ vm.ComparativosGeneralesEA.Data[$index].Porcentaje }}%</p>
                                                     <div class="bar-clasificacion" style="width: 80%;">
                                                         <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ vm.ComparativosGeneralesEA.Data[$index].Porcentaje * 2.7 }}px;">
                                                             <p ng-hide="!vm.hasHistorico" class="comparativo">{{ vm.getDiferenciaGralEA(item.Entidad, vm.ComparativosGeneralesEA.Data[$index].Porcentaje, 2) }}%</p>

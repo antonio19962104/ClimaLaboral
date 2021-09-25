@@ -19,6 +19,7 @@ namespace DL
         public Nullable<int> IdCategoria { get; set; }
         public Nullable<int> IdSubcategoria { get; set; }
         public Nullable<decimal> Valor { get; set; }
+        public Nullable<int> IdEstatus { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
@@ -28,7 +29,6 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<int> IdEstatus { get; set; }
     
         public virtual Categoria Categoria { get; set; }
         public virtual Categoria Categoria1 { get; set; }

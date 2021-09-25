@@ -33,7 +33,8 @@ namespace PL.Controllers
             Session["IdAdministradorLogeado"] = result.CURRENTIDADMINLOG;
 
             Session["SuperAdmin"] = result.IsSuperAdmin;
-
+            BL.Seguridad seguridad = new BL.Seguridad();
+            Session["ps"] = seguridad.EncriptarCadena(admin.Password);
             try
             {
                 if (result.PerfilesList != null || result.PerfilesList.Count != 0)
@@ -124,6 +125,8 @@ namespace PL.Controllers
             Session["IdAdministradorLogeado"] = result.CURRENTIDADMINLOG;
 
             Session["SuperAdmin"] = result.IsSuperAdmin;
+            BL.Seguridad seguridad = new BL.Seguridad();
+            Session["ps"] = seguridad.EncriptarCadena(admin.Password);
 
             try
             {

@@ -17,12 +17,12 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Preguntas()
         {
+            this.ConfiguraRespuesta = new HashSet<ConfiguraRespuesta>();
             this.EmpleadoRespuestas = new HashSet<EmpleadoRespuestas>();
             this.EncuestaPregunta = new HashSet<EncuestaPregunta>();
             this.Respuestas = new HashSet<Respuestas>();
-            this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
-            this.ConfiguraRespuesta = new HashSet<ConfiguraRespuesta>();
             this.ValoracionPreguntaPorSubcategoria = new HashSet<ValoracionPreguntaPorSubcategoria>();
+            this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
         }
     
         public int IdPregunta { get; set; }
@@ -31,6 +31,7 @@ namespace DL
         public Nullable<decimal> Valoracion { get; set; }
         public string TipoControl { get; set; }
         public Nullable<int> IdCompetencia { get; set; }
+        public Nullable<int> IdDesencadenador { get; set; }
         public Nullable<int> IdEstatus { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
@@ -46,7 +47,6 @@ namespace DL
         public string RespuestaCondicion { get; set; }
         public string PreguntasCondicion { get; set; }
         public Nullable<bool> Obligatoria { get; set; }
-        public Nullable<int> IdDesencadenador { get; set; }
         public Nullable<int> Seccion { get; set; }
         public string EncabezadoSeccion { get; set; }
         public Nullable<int> SubSeccion { get; set; }
@@ -56,20 +56,20 @@ namespace DL
     
         public virtual Competencia Competencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmpleadoRespuestas> EmpleadoRespuestas { get; set; }
         public virtual Encuesta Encuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EncuestaPregunta> EncuestaPregunta { get; set; }
+        public virtual Enfoque Enfoque1 { get; set; }
         public virtual TipoControl TipoControl1 { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Respuestas> Respuestas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ConfiguraRespuesta> ConfiguraRespuesta { get; set; }
-        public virtual Enfoque Enfoque1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValoracionPreguntaPorSubcategoria> ValoracionPreguntaPorSubcategoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
     }
 }

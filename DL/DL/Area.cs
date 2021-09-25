@@ -36,11 +36,11 @@ namespace DL
         public Nullable<int> Tipo { get; set; }
         public Nullable<int> IdEstatus { get; set; }
     
+        public virtual Company Company { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Departamento> Departamento { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EncuestaArea> EncuestaArea { get; set; }
-        public virtual Company Company { get; set; }
     }
 }
