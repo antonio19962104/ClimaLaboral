@@ -7,12 +7,11 @@
             <div class="form-group">
                 <button class="btn btn-success" ng-click="vm.createObjectsHistorico()">Guardar los resultados obtenidos en el Historico</button><br />
             </div>
-            <div hidden class="form-group">
-                <input type="button" ng-click="vm.exportar()" value="Exportar a PDF" />
-            </div>
-
             <div class="form-group">
                 <input type="button" onclick="crearReportePDF(); iframeSet();" class="btn btn-danger" value="Exportar reporte a PDF" />
+            </div>
+            <div class="form-group">
+                <input type="button" value="Guardar en el servidor" class="btn-sm btn-info" ng-show="vm.urlApis == 'http://localhost:11124/'" ng-click="vm.SaveServer()" />
             </div>
             <div class="form-group">
                 <input type="button" onclick="window.location.reload();" class="btn btn-info" value="Generar nuevo reporte" />
@@ -26,82 +25,6 @@
             </div>
             <div hidden class="clearfix"></div>
             <iframe hidden ng-show="vm.reportePDF == true" id="result" style="width: 100%; height: 95vh"></iframe>
-            @*@Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no1_Portada.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no2_Contexto_Descripcion.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no3_Contexto_Iconografia.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no5_Indicadores_Generales.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no6_Indicadores_Por_Categoria.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no7_Impulsores_Clave.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no8_Reactivos_Mejor_ClasificadosEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no8_Reactivos_Mejor_ClasificadosEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no9_Reactivos_Mayor_CrecimientoEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no9_Reactivos_Mayor_CrecimientoEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no10_Reactivos_Peor_ClasificadosEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no10_Reactivos_Peor_ClasificadosEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no11_Reactivos_Menor_CrecimientoEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no11_Reactivos_Menor_CrecimientoEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no12_Reactivos_Factor_PsicoSocial.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no13_Indicadores_De_Permanencia.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no14_Comparativo_Indicadores_De_Permanencia.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no15_Comparativo_Indicadores_De_Abandono.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no17_Resultados_Generales_Por_Niveles_EE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no17_Resultados_Generales_Por_Niveles_EA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no18_Tabla_Clasificacion_CorporativoEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no18_Tabla_Clasificacion_CorporativoEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no19_Reporte_Rango_AntiguedadEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no19_Reporte_Rango_AntiguedadEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no20_Reporte_GeneroEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no20_Reporte_GeneroEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no21_Reporte_Grado_AcademicoEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no21_Reporte_Grado_AcademicoEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no22_Reporte_Condicion_TrabajoEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no22_Reporte_Condicion_TrabajoEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no23_Reporte_FuncionEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no23_Reporte_FuncionEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no24_Reporte_Rango_EdadEE.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no24_Reporte_Rango_EdadEA.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no25_Reporte_Dinamico.cshtml")
-
-        @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no26_Reporte_Comentarios.cshtml")*@
-
         </div>
     </div>
 </div>

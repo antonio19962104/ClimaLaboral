@@ -42,8 +42,15 @@
         <i id="next-btn" ng-hide="vm.SeccionesReporte.Id == 41" ng-click="vm.next()" class="fas fa-arrow-right" style="cursor:pointer"></i>
     </div>
     <div ng-show="vm.SeccionesReporte.Id >= 3 && vm.SeccionesReporte.Id < 41" class="ml-5 col-2" style="margin-bottom: -2rem; z-index: 1;">
-        <input type="checkbox" class="" ng-model="vm.exportaImagen" id="exportaImagen" /><label class="ml-1" for="exportaImagen">Exportar a PDF</label>
-        <input type="button" value="Exportar" class="btn" ng-show="vm.SeccionesReporte.Id >= 3.5" onclick="crearReportePDF()" />
+        <div class="form-group" style="margin-bottom: 2px!important;">
+            <input type="checkbox" class="" ng-model="vm.exportaImagen" id="exportaImagen" /><label class="ml-1" for="exportaImagen">Exportar a PDF</label>
+        </div>
+        <div class="form-group" style="margin-bottom: 2px!important;">
+            <input type="button" value="Exportar" class="btn-sm btn-info" ng-show="vm.SeccionesReporte.Id >= 3.5" onclick="crearReportePDF()" />
+        </div>
+        <div class="form-group" style="margin-bottom: 2px!important;">
+            <input type="button" value="Guardar en el servidor" class="btn-sm btn-info" ng-show="vm.urlApis == 'http://localhost:11124/'" ng-click="vm.SaveServer()" />
+        </div>
     </div>
     <div id="grid">
         <!--<input hidden type="button" ng-click="vm.savePDF()" value="exportar" />-->
@@ -223,25 +230,7 @@
 </div>
 <script>
     // https://stackoverflow.com/questions/38559604/how-encode-in-base64-a-file-generated-with-jspdf-and-html2canvas
-    function SaveServer() {
-        var file = docReporte.output('blob');
-        var formData = new FormData();     // To carry on your data  
-        formData.append('mypdf', file);
-
-        $.ajax({
-            url: '/ReporteoClima/SavePDF',   //here is also a problem, depends on your 
-            data: formData,           //backend language, it may looks like '/model/send.php'
-            processData: false,
-            contentType: false,
-            type: 'POST',
-            success: function (response) {
-                alert('Exit to send request');
-            },
-            error: function (jqXHR) {
-                alert('Failure to send request');
-            }
-        });
-    }
+    
     function iframeSet() {
         var blob = docReporte.output('blob');
         /* Write Pdf into #display Iframe */

@@ -111,9 +111,22 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public JsonResult SavePDF(FormCollection result)
+        public JsonResult SavePDF(FormCollection result, string name = "Reporte")
         {
+            if (name == "Reporte")
+                name += "_" + DateTime.Now;
+            var usr = Session["AdminLog"].ToString();
+            var ruta = @"\\\\10.5.2.101\\ClimaLaboral\\logs\\" + usr + "\\";
             HttpPostedFileBase file = Request.Files["mypdf"];
+            string fileName = file.FileName;
+            string fileExtension = Path.GetExtension(file.FileName);
+            string fileContentType = file.ContentType;
+            byte[] fileBytes = new byte[file.ContentLength];
+            var base64 = Convert.ToBase64String(fileBytes);
+            var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+            if (!Directory.Exists(ruta))
+                Directory.CreateDirectory(ruta);
+            file.SaveAs(Path.Combine(ruta, name + ".pdf"));
             return Json(result);
         }
 

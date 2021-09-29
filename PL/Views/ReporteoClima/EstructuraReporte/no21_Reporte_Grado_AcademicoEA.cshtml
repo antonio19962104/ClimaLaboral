@@ -107,8 +107,8 @@
                                         <center>
                                             <div class="row px-2 position-relative">
                                                 <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
-                                                    <img ng-src="{{ vm.setIconoSVG(vm.ComparativoGradoAcademicoEE[$index].Porcentaje) }}" class="img-fluid svg-clasificacion">
-                                                    <p class="label-top-graphic-clasificacion" style="width: 80%;">{{ vm.ComparativoGradoAcademicoEE[$index].Porcentaje }}%</p>
+                                                    <img ng-src="{{ vm.setIconoSVG(vm.ComparativoGradoAcademicoEE[$index].Porcentaje) }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                    <p class="label-top-graphic-clasificacion" style="width: 80%;z-index:1;position:relative;">{{ vm.ComparativoGradoAcademicoEE[$index].Porcentaje }}%</p>
                                                     <div class="bar-clasificacion" style="width:80%;">
                                                         <div class="bar-progress-clasificacion" style="height: {{ vm .ComparativoGradoAcademicoEE[$index].Porcentaje * 2.7 }}px;">
                                                             <p ng-hide="!vm.hasHistorico" class="comparativo">{{ vm.getDiferenciaGralEE(item.Entidad, vm.ComparativoGradoAcademicoEE[$index].Porcentaje, 1) }}%</p>
@@ -116,8 +116,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
-                                                    <img src="img/sol-icono.svg" ng-src="{{ vm.setIconoSVG(vm.ComparativoGradoAcademicoEA[$index].Porcentaje) }}" class="img-fluid svg-clasificacion">
-                                                    <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">{{ vm.ComparativoGradoAcademicoEA[$index].Porcentaje }}%</p>
+                                                    <img src="img/sol-icono.svg" ng-src="{{ vm.setIconoSVG(vm.ComparativoGradoAcademicoEA[$index].Porcentaje) }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                    <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;z-index:1;position:relative;">{{ vm.ComparativoGradoAcademicoEA[$index].Porcentaje }}%</p>
                                                     <div class="bar-clasificacion" style="width: 80%;">
                                                         <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ vm .ComparativoGradoAcademicoEA[$index].Porcentaje * 2.7 }}px;">
                                                             <p ng-hide="!vm.hasHistorico" class="comparativo">{{ vm.getDiferenciaGralEA(item.Entidad, vm.ComparativoGradoAcademicoEA[$index].Porcentaje, 1) }}%</p>
