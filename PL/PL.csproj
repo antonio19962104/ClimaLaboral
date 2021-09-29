@@ -931,6 +931,7 @@
     <Content Include="img\asdf.min.js" />
     <Content Include="img\background\bg-login-1.jpg" />
     <Content Include="img\background\bg-login-2.jpg" />
+    <Content Include="img\bg-circle.jpg" />
     <Content Include="img\bg-header-survey-full.png" />
     <Content Include="img\bg-header-survey.jpg" />
     <Content Include="img\bg-hover.png" />

@@ -390,6 +390,7 @@ namespace PL.Controllers
                  */
                 model.ListFiltros.Add(item.type + item.value);
             }
+            model.ListFiltros.RemoveAt(0);
             model.IdPregunta = 67;
             var fila1 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
             model.IdPregunta = 71;
@@ -444,6 +445,7 @@ namespace PL.Controllers
                 /*Validar prefijo segun criterio de busqueda*/
                 model.ListFiltros.Add(item.type + item.value);
             }
+            model.ListFiltros.RemoveAt(0);
             model.IdPregunta = 153;
             var fila1 = dataLayer.GetPorcentajeAfirmativasEnfoqueEmpresa(model, anioActual);
             model.IdPregunta = 157;

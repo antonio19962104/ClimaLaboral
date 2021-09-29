@@ -8,7 +8,10 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -314,7 +317,7 @@ namespace PL.Controllers
                 BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCambio, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objProcesosOrg, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
-                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEE, AnioActual, aHistorico.CurrentUsr, aHistorico.EntidadNombre);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
                 //
                 BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
@@ -370,7 +373,7 @@ namespace PL.Controllers
                     public string EntidadName { get; set; } = "";
                     public int anio { get; set; } = 0;
                  */
-                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL, aHistorico.ps, aHistorico.nivelDetalle, aHistorico.opc, aHistorico.tipoEntidad, aHistorico.enfoqueSeleccionado, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL, aHistorico.ps, aHistorico.nivelDetalle, aHistorico.opc, criterioBusquedaSeleccionado, aHistorico.enfoqueSeleccionado, aHistorico.nivelDetalle);
                 BL.LogReporteoClima.writteLogJobReporte("He terminado de generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 return Json(true);
             }
@@ -2169,6 +2172,69 @@ namespace PL.Controllers
             pptxOptions.ExtractOcrSublayerOnly = true;
             pdfDocument.Save(@"\\10.5.2.101\\ClimaLaboral\\PDF to PPT.ppt", pptxOptions);
             return Json(string.Empty);
+        }
+        public JsonResult GetPromo()
+        {
+            try
+            {
+                var contentHtml = string.Empty;
+                HttpWebRequest request = WebRequest.Create("http://autofin.com/auto") as HttpWebRequest;
+                request.Method = "GET";
+                request.ContentType = "application/x-www-form-urlencoded";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    string resp = reader.ReadToEnd();
+                    contentHtml = resp;
+                }
+                var img = new List<string>();
+                var linkParser = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var rawString = contentHtml;
+                foreach (Match m in linkParser.Matches(rawString))
+                    img.Add(m.Value);
+                img = img.Where(o => o.Contains("http://www.autofin.com/pub/media/wysiwyg/Promociones")).ToList();
+                var ls = new List<string>();
+                foreach (var item in img)
+                    ls.Add(item.Substring(0, (item.IndexOf("jpg") + 3)));
+                ls = ls.Distinct().ToList();
+                var listPromos = new List<prom>();
+                for (int i = 0; i < ls.Count; i++)
+                {
+                    if (i < (ls.Count - 1))
+                    {
+                        var promo = new prom();
+                        promo.Id = i;
+                        promo.ImagenDesktop = ls[i];
+                        promo.ImagenMobile = ls[i + 1];
+                        promo.estatus = 1;
+                        listPromos.Add(promo);
+                    }
+                }
+                var indicesRemove = new List<int>();
+                for (int i = 0; i < listPromos.Count; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        indicesRemove.Add(i);
+                    }
+                }
+                foreach (var item in indicesRemove.OrderByDescending(o => o))
+                {
+                    listPromos.RemoveAt(item);
+                }
+                return Json(listPromos, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new List<string>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+        public class prom
+        {
+            public int Id { get; set; }
+            public string ImagenDesktop { get; set; }
+            public string ImagenMobile { get; set; }
+            public int estatus { get; set; }
         }
     }
 }

@@ -43,6 +43,7 @@
     </div>
     <div ng-show="vm.SeccionesReporte.Id >= 3 && vm.SeccionesReporte.Id < 41" class="ml-5 col-2" style="margin-bottom: -2rem; z-index: 1;">
         <input type="checkbox" class="" ng-model="vm.exportaImagen" id="exportaImagen" /><label class="ml-1" for="exportaImagen">Exportar a PDF</label>
+        <input type="button" value="Exportar" class="btn" ng-show="vm.SeccionesReporte.Id >= 3.5" onclick="crearReportePDF()" />
     </div>
     <div id="grid">
         <!--<input hidden type="button" ng-click="vm.savePDF()" value="exportar" />-->

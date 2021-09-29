@@ -17,9 +17,6 @@
 	padding: 10px 0;
 }
 
-.f9 {
-	font-size: .9 rem;
-}
 
 .mejores-p {
     line-height: 1!important;
@@ -33,8 +30,20 @@
 	padding: 15px;
 }
 
+.f9 {
+	font-size: .9 rem;
+}
+
+.fs12 {
+	font-size: 12px!important;
+}
+
 .fs14 {
 	font-size: 14px!important;
+}
+
+.fs15 {
+	font-size: 15px!important;
 }
 
 .f20 {

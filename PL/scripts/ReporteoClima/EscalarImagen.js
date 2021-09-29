@@ -289,36 +289,41 @@ var pruebaExp = function () {
         //}else {
         //    entidad6.style.setProperty("padding-top","5.3rem", "important");
         //}        
-        //var entidad7 = $(".clima-laboral2 .row:visible")[0];
-        //entidad7.style.setProperty("margin-left", "0px", "important");
-        //entidad7.style.setProperty("margin-right", "0px", "important");
-        //document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("margin-left", "0px", "important");
-        //document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("margin-right", "0px", "important");
-        //document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-right", "0px");
-        //document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-left", " 0px");
+        var entidad7 = $(".clima-laboral2 .row:visible")[0];
+        entidad7.style.setProperty("margin-left", "0px", "important");
+        entidad7.style.setProperty("margin-right", "0px", "important");
+        document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("margin-left", "0px", "important");
+        document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("margin-right", "0px", "important");
+        document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-right", "0px");
+        document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-left", " 0px");
         //document.getElementsByClassName("p-clima2")[0].style.setProperty("padding", "0px", "important");
-        //$(".p-clima2 .btn")[0].style.setProperty("margin-left", "0px", "important");
-        //$(".p-clima2 .btn")[0].style.setProperty("margin-top", "28px", "important");
-        //$(".p-clima2 .btn")[0].style.setProperty("padding", "0.375rem 0.75rem", "important");
-        ////$(".p-clima2 > .row")[0].children[0].style.setProperty("padding-left", "0px", "important");
-        ////$(".p-clima2 > .row")[0].children[0].style.setProperty("padding-right", "0px", "important");
-        //$(".p-clima2 > .row")[0].children[1].style.setProperty("padding-left", "25px", "important");
-        //$(".p-clima2 > .row")[0].children[1].style.setProperty("padding-right", "0px", "important");
-        //$(".p-clima2 > .row")[1].children[0].style.setProperty("padding-left", "0px", "important");
-        //$(".p-clima2 > .row")[1].children[0].style.setProperty("padding-right", "0px", "important");
-        //$(".p-clima2 > .row")[1].children[1].style.setProperty("padding-left", "25px", "important");
-        ////$(".p-clima2 > .row")[1].children[1].style.setProperty("padding-right", "0px", "important");
-        ////$(".p-clima2 > .row")[2].children[0].style.setProperty("padding-left", "0px", "important");
-        ////$(".p-clima2 > .row")[2].children[0].style.setProperty("padding-right", "0px", "important");
-        //$(".p-clima2 > .row")[2].children[1].style.setProperty("padding-left", "25px", "important");
-        ////$(".p-clima2 > .row")[2].children[1].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 .btn")[0].style.setProperty("margin-left", "20px", "important");
+        $(".p-clima2 .btn")[0].style.setProperty("margin-top", "14px", "important");
+        $(".p-clima2 .btn")[0].style.setProperty("margin-bottom", "30px", "important");
+        $(".p-clima2 > .row")[0].children[0].style.setProperty("padding-left", "0px", "important");
+        $(".p-clima2 > .row")[0].children[0].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 > .row")[0].children[1].style.setProperty("padding-left", "25px", "important");
+        $(".p-clima2 > .row")[0].children[1].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 > .row")[1].children[0].style.setProperty("padding-left", "0px", "important");
+        $(".p-clima2 > .row")[1].children[0].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 > .row")[1].children[1].style.setProperty("padding-left", "25px", "important");
+        $(".p-clima2 > .row")[1].children[1].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 > .row")[2].children[0].style.setProperty("padding-left", "0px", "important");
+        $(".p-clima2 > .row")[2].children[0].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 > .row")[2].children[1].style.setProperty("padding-left", "25px", "important");
+        $(".p-clima2 > .row")[2].children[1].style.setProperty("padding-right", "0px", "important");
         ////solo se quedaron 3 filas
         ////$(".p-clima2 > .row")[3].children[0].style.setProperty("padding-left", "0px", "important");
         ////$(".p-clima2 > .row")[3].children[0].style.setProperty("padding-right", "0px", "important");
         ////$(".p-clima2 > .row")[3].children[1].style.setProperty("padding-left", "10px", "important");
         ////$(".p-clima2 > .row")[3].children[1].style.setProperty("padding-right", "0px", "important");
-        //$(".clima-laboral2 .yellow-clima").css("font-size", "15px");
-        ////$(".arrow-clima2").css("margin-left", "1px");
+        $(".clima-laboral2 .yellow-clima").css("font-size", "15px");
+        $(".arrow-clima2").css("margin-left", "1px");
+        $(".p-clima2 .col-xl-9 .yellow-clima").removeClass("ml-n5");
+        $(".p-clima2 .col-xl-9 .yellow-clima").addClass("ml-n4");
+        $(".clima-laboral2 .row .col-10")[0].style.setProperty("padding","80px 0 95px","important");
+        $(".clima-laboral2-2 span")[0].style.setProperty("margin-left","33px","important");
+
         ////document.getElementsByClassName("p-clima2")[0].children[0].outerHTML = "<center>" + document.getElementsByClassName("p-clima2")[0].children[0].outerHTML + "</center>";
         ////se comenta porque se estadariza con el de diseño  22/09/2021
         ////var img1 = $(".bg-clima3 img");
@@ -359,6 +364,8 @@ var pruebaExp = function () {
         var padcopa = $(".bg-circulo .mt-4");       
         padcopa.removeClass("mt-4");
         padcopa.addClass("mt-5");
+        $(".bg-circulo h3").removeClass("f20");
+        $(".bg-circulo h3").addClass("fs15");
        
         // se desplaza la flecha negra un poco hacia abajo 23/09/2021
         $(".bg-circulo .fa-caret-right")[0].style.setProperty("margin-top", "84px", "important");
@@ -637,23 +644,4 @@ var returnEstilosWeb = function (paginaActiva) {
 
         }
     }
-}
-var doc = new jsPDF("landscape"); // using defaults: orientation=portrait, unit=mm, size=A4
-var createDoc_v2 = function (tab) {
-    var divHeight = $('#' + tab).height();
-    var divWidth = $('#' + tab).width();
-    var ratio = divHeight / divWidth;
-    html2canvas(document.getElementById(tab), {
-        height: divHeight,
-        width: divWidth,
-        onrendered: function (canvas) {
-            var image = canvas.toDataURL("image/jpeg");
-            var width = doc.internal.pageSize.width;
-            var height = doc.internal.pageSize.height;
-            height = ratio * width;
-            doc.addPage(width, height);
-            doc.addImage(image, 'JPEG', 0, 0, width, height);
-            //doc.save('myPage.pdf'); //Download the rendered PDF.
-        }
-    });
 }

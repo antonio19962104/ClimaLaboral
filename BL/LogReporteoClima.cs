@@ -452,7 +452,7 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     //ENTIDADID = {0} AND
-                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1, NivelDetalle = {4} WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3}", 0, entidadNombre, AnioActual, user, nivelDetalle);
+                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1 WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3} AND NivelDetalle = {4}", 0, entidadNombre, AnioActual, user, nivelDetalle);
                     context.SaveChanges();
                     return true;
                 }
@@ -469,13 +469,13 @@ namespace BL
                     public string EntidadName { get; set; } = "";
                     public int anio { get; set; } = 0;
                  */
-        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url, string ps, string nivelDetalle, int opc, int tipoEntidad, int enfoqueSeleccionado, string lvlDetalle)
+        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url, string ps, string nivelDetalle, int opc, string criterioBusquedaSeleccionado, int enfoqueSeleccionado, string lvlDetalle)
         {
             string token = string.Empty;
             BL.Seguridad seguridad = new Seguridad();
             ps = seguridad.DesencriptarCadena(ps);
             //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque|lvlDetalle
-            token = UsuarioSolicita + "|" + ps + "|"+opc+"|"+tipoEntidad+"|"+entidadName+"|"+Anio+"|"+ enfoqueSeleccionado + "|" + lvlDetalle;
+            token = UsuarioSolicita + "|" + ps + "|"+opc+"|"+criterioBusquedaSeleccionado+"|"+entidadName+"|"+Anio+"|"+ enfoqueSeleccionado + "|" + lvlDetalle;
             token = seguridad.EncriptarCadena(token);
             if (string.IsNullOrEmpty(UsuarioSolicita))
             {
