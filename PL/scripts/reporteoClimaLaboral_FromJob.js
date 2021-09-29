@@ -2651,67 +2651,35 @@ function GetDashBoard() {
                                     }, 2000);
                                 }
                                 else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0) || (padrePaginaActiva != "tab-17")) {
-                                    var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
-                                    var itemsMapeo = $("#" + idTabla + " .Comp");
-                                    var cortesS = itemsMapeo.map(async (llave, indice) => {
-                                        if (!historicoCorte.includes(llave)) {
+                                    var histo = [];
+                                    if (padrePaginaActiva == "tab-17") {
+                                        var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
+                                        var itemsMapeo = $("#" + idTabla + " .Comp");
+                                        var cortesS = itemsMapeo.map(async (llave, indice) => {
                                             //historicoCorte.push(llave);
                                             document.getElementById("tab-17").classList.remove("ng-hide");
                                             document.getElementById("tab-17").classList.remove("ng-hide");
-                                            var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
+                                            var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), idTabla, ptDefault);
                                             console.log(data);
-                                        }
-                                    });
+                                            if (data != null)
+                                                histo.push(data);
+                                            if (histo.length == itemsMapeo.length) {
+                                                document.getElementsByClassName("busy")[1].style.display = "none";
+                                                var last = docReporte.internal.getCurrentPageInfo().pageNumber;
+                                                docReporte.deletePage(last);
+                                            }
+                                        });
+                                    }
 
-                                    docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */
-                                        image: { type: 'jpeg', quality: 0.98 },
-                                        html2canvas: { scale: 1 }
-                                    },
-                                        function () {
-										if (vm.SeccionesReporte.Id == 41) {
-                                            if (resolucion <= 2500 && resolucion >= 1901) {
-                                                factMt= 20;
-                                            }
-                                            if (resolucion <= 1900 && resolucion >= 1370) {
-                                                factMt= 12;
-                                            }
-                                            if (resolucion <= 1369) {
-                                                factMt= 7;
-                                            }
-                                            var graficaBarras = $("#tab-edad-ee .bar-clasificacion");
-                                            [].forEach.call(graficaBarras, function (graf) {
-                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                            });
-                                            var graficaHCN = $("#tab-edad-ee .hc");
-                                            [].forEach.call(graficaHCN,function (graf) {
-                                                graf.style.height = parseFloat(graf.style.height) / factConver +"px";
-                                                graf.style.marginTop= parseFloat(graf.style.marginTop) / factConver +"px";
-                                                graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver +"px";
-                                            });
-                                            var grafHC = $("#tab-edad-ee .hc-doble");
-                                            [].forEach.call(grafHC, function (graf) {
-                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                            });
-                                            var graficaHC = $("#tab-edad-ee .bar-progress4");
-                                            [].forEach.call(graficaHC, function (graf) {
-                                                graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                            });
-                                            var parrafoHC = $("#tab-edad-ee .label-top-graphic-blue2");
-                                            [].forEach.call(parrafoHC, function (graf) {
-                                                graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) + 18) + "px";
-                                            });
-                                        }
-                                            var resumen = $(".contenedor-resumen")
-                                            if (resumen.length > 0) {
-                                                [].forEach.call(resumen, function (item) {
-                                                    item.style.removeProperty = "margin-top";
-                                                    item.style.marginTop = "-25rem";
-                                                });
-                                            }
-                                            if (vm.SeccionesReporte.Id == 24 && paginaActiva != "tab-generales-departamento-ea") {
-                                                try {
+                                    if (padrePaginaActiva != "tab-17") {
+                                        docReporte.addHTML($('#' + paginaActiva)[0], 0, ptDefault, { /* options */
+                                            image: { type: 'jpeg', quality: 0.98 },
+                                            html2canvas: { scale: 1 }
+                                        },
+                                            function () {
+                                                if (vm.SeccionesReporte.Id == 41) {
                                                     if (resolucion <= 2500 && resolucion >= 1901) {
-                                                        factMt = 12;
+                                                        factMt = 20;
                                                     }
                                                     if (resolucion <= 1900 && resolucion >= 1370) {
                                                         factMt = 12;
@@ -2719,186 +2687,228 @@ function GetDashBoard() {
                                                     if (resolucion <= 1369) {
                                                         factMt = 7;
                                                     }
-                                                    var hvisible;
-                                                    for (var i = 0; i < 200; i++) {
-                                                        if (document.getElementsByClassName("tab-24-" + i)[0] != undefined) {
-                                                            if (document.getElementsByClassName("tab-24-" + i)[0].offsetWidth > 0) {
-                                                                hvisible = "tab-24-" + (i - 1);
-                                                                break;
-                                                            }
-                                                        }
-                                                    }
-                                                    var graficaHC = $("." + hvisible + " .row .bg-gris");
-                                                    [].forEach.call(graficaHC, function (graf) {
-                                                        graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                                    var graficaBarras = $("#tab-edad-ee .bar-clasificacion");
+                                                    [].forEach.call(graficaBarras, function (graf) {
+                                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                                     });
-                                                    var grafHC = $("." + hvisible + " .hc-doble");
+                                                    var graficaHCN = $("#tab-edad-ee .hc");
+                                                    [].forEach.call(graficaHCN, function (graf) {
+                                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                                        graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                                    });
+                                                    var grafHC = $("#tab-edad-ee .hc-doble");
                                                     [].forEach.call(grafHC, function (graf) {
                                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                                     });
-                                                    var graficaHCN = $("." + hvisible + " .hc");
+                                                    var graficaHC = $("#tab-edad-ee .bar-progress4");
+                                                    [].forEach.call(graficaHC, function (graf) {
+                                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                    });
+                                                    var parrafoHC = $("#tab-edad-ee .label-top-graphic-blue2");
+                                                    [].forEach.call(parrafoHC, function (graf) {
+                                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) + 18) + "px";
+                                                    });
+                                                }
+                                                var resumen = $(".contenedor-resumen")
+                                                if (resumen.length > 0) {
+                                                    [].forEach.call(resumen, function (item) {
+                                                        item.style.removeProperty = "margin-top";
+                                                        item.style.marginTop = "-25rem";
+                                                    });
+                                                }
+                                                if (vm.SeccionesReporte.Id == 24 && paginaActiva != "tab-generales-departamento-ea") {
+                                                    try {
+                                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                                            factMt = 12;
+                                                        }
+                                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                                            factMt = 12;
+                                                        }
+                                                        if (resolucion <= 1369) {
+                                                            factMt = 7;
+                                                        }
+                                                        var hvisible;
+                                                        for (var i = 0; i < 200; i++) {
+                                                            if (document.getElementsByClassName("tab-24-" + i)[0] != undefined) {
+                                                                if (document.getElementsByClassName("tab-24-" + i)[0].offsetWidth > 0) {
+                                                                    hvisible = "tab-24-" + (i - 1);
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                        var graficaHC = $("." + hvisible + " .row .bg-gris");
+                                                        [].forEach.call(graficaHC, function (graf) {
+                                                            graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                                        });
+                                                        var grafHC = $("." + hvisible + " .hc-doble");
+                                                        [].forEach.call(grafHC, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        });
+                                                        var graficaHCN = $("." + hvisible + " .hc");
+                                                        [].forEach.call(graficaHCN, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                            graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                                            //aumentar mt
+                                                            graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                                                        });
+                                                        var graficaBarras = $("." + hvisible + " .bar-progress-clasificacion");
+                                                        [].forEach.call(graficaBarras, function (graf) {
+                                                            graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                        });
+                                                        $("." + hvisible + " .row .bg-gris")[0].removeAttribute("style")
+
+                                                    } catch (e) {
+
+                                                    }
+                                                }
+
+                                                if (paginaActiva == "tab-impulsores-clave") {
+                                                    if (resolucion <= 1380) {
+                                                        $("#tab-impulsores-clave .card-block")[0].classList.remove("mt-0", "pt-0");
+                                                        $("#tab-impulsores-clave .card-block .row")[0].classList.remove("mt-0");
+                                                        $(".bg-impulsoresEx").removeClass("mt-2");
+                                                        $(".bg-impulsoresEx").addClass("mt-3");
+                                                        $(".tablaimpulsores-derEx").removeClass("mt-2");
+                                                        $(".tablaimpulsores-derEx").addClass("mt-3");
+                                                        $(".grafica-trabajarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
+                                                        $(".grafica-dejarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
+                                                    }
+
+                                                }
+                                                if (paginaActiva == "tab-indicadores-permanencia") {
+                                                    if (resolucion <= 1610) {
+                                                        $(".titulo-grafica1")[0].style.padding = "20px";
+                                                        $(".titulo-grafica2")[0].style.padding = "20px";
+                                                        $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.remove("mt-2");
+                                                        $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.add("mt-4");
+                                                        $(".nuevomt")[0].classList.remove("mt-2");
+                                                        $(".nuevomt")[0].classList.add("mt-5");
+                                                    }
+                                                }
+                                                if (paginaActiva == "tab-bienestar-ee") {
+                                                    document.getElementById("quitaSwitch").style.display = "block";
+                                                }
+                                                document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
+                                                document.getElementById(paginaActiva).parentNode.removeAttribute("style");
+                                                document.getElementById(paginaActiva).removeAttribute("style");
+                                                deletePadding(itemsPadding);
+                                                if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
+                                                    var elemH = document.getElementById(paginaActiva).children[0];
+                                                    elemH.removeAttribute("style");
+                                                }
+                                                /*Secciones mejores/peores*/
+                                                if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
+                                                    paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
+                                                    document.getElementById(paginaActiva).parentNode.parentNode.classList.remove("ng-hide");
+                                                    //parafos-mejores  mt-img-indicadores
+                                                    var pregs = $(".parrafo-pregunta:visible");
+                                                    [].forEach.call(pregs, function (parrafo) {
+                                                        parrafo.classList.remove("parafos-mejores");
+                                                        parrafo.classList.add("mb-5");
+                                                        parrafo.classList.remove("mb-2");
+                                                    });
+                                                    var margenes = $(".mt-img-indicadores:visible");
+                                                    [].forEach.call(margenes, function (parrafo) {
+                                                        parrafo.classList.add("mb-5");
+                                                        parrafo.classList.add("mt-5");
+                                                        parrafo.removeAttribute("style");
+                                                    });
+                                                    var cards = $(".bg-degradado-gris:visible");
+                                                    [].forEach.call(cards, function (parrafo) {
+                                                        parrafo.removeAttribute("style");
+                                                        parrafo.style.padding = "40px";
+                                                    });
+                                                    document.getElementById(paginaActiva).classList.add("px-lg-5");
+                                                    document.getElementById(paginaActiva).removeAttribute("style");
+                                                    document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
+                                                }
+                                                // Regresar estilos a vista web
+                                                if (paginaActiva == "tab-generales-departamento-ea") {
+                                                    var graficaBarras = $("#tab-22 #tab-generales-departamento-ea .bar-progress-clasificacion");
+                                                    [].forEach.call(graficaBarras, function (graf) {
+                                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                                    });
+                                                    var graficaHCN = $("#tab-22 #tab-generales-departamento-ea .hc");
                                                     [].forEach.call(graficaHCN, function (graf) {
                                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                                         graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
                                                         //aumentar mt
+                                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                                            factMt = 12;
+                                                        }
+                                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                                            factMt = 12;
+                                                        }
+                                                        if (resolucion <= 1369) {
+                                                            factMt = 7;
+                                                        }
                                                         graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
                                                     });
-                                                    var graficaBarras = $("." + hvisible + " .bar-progress-clasificacion");
-                                                    [].forEach.call(graficaBarras, function (graf) {
+                                                    var grafHC = $("#tab-22 #tab-generales-departamento-ea .hc-doble");
+                                                    [].forEach.call(grafHC, function (graf) {
                                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                                     });
-                                                    $("." + hvisible + " .row .bg-gris")[0].removeAttribute("style")
-
-                                                } catch (e) {
-
-                                                }
-                                            }
-
-                                            if (paginaActiva == "tab-impulsores-clave") {
-                                                if (resolucion <= 1380) {
-                                                    $("#tab-impulsores-clave .card-block")[0].classList.remove("mt-0", "pt-0");
-                                                    $("#tab-impulsores-clave .card-block .row")[0].classList.remove("mt-0");
-                                                    $(".bg-impulsoresEx").removeClass("mt-2");
-                                                    $(".bg-impulsoresEx").addClass("mt-3");
-                                                    $(".tablaimpulsores-derEx").removeClass("mt-2");
-                                                    $(".tablaimpulsores-derEx").addClass("mt-3");
-                                                    $(".grafica-trabajarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
-                                                    $(".grafica-dejarEx .bg-gris")[0].style.removeProperty("margin-bottom", "1rem", "Important");
-                                                }
-
-                                            }
-                                            if (paginaActiva == "tab-indicadores-permanencia") {
-                                                if (resolucion <= 1610) {
-                                                    $(".titulo-grafica1")[0].style.padding = "20px";
-                                                    $(".titulo-grafica2")[0].style.padding = "20px";
-                                                    $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.remove("mt-2");
-                                                    $("#tab-indicadores-permanencia .card .card-block .px-4 .row")[0].classList.add("mt-4");
-                                                    $(".nuevomt")[0].classList.remove("mt-2");
-                                                    $(".nuevomt")[0].classList.add("mt-5");
-                                                }
-                                            }
-                                            if (paginaActiva == "tab-bienestar-ee") {
-                                                document.getElementById("quitaSwitch").style.display = "block";
-                                            }
-                                            document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
-                                            document.getElementById(paginaActiva).parentNode.removeAttribute("style");
-                                            document.getElementById(paginaActiva).removeAttribute("style");
-                                            deletePadding(itemsPadding);
-                                            if (paginaActiva != "tab-introduccion-amarillo" && paginaActiva != "pegarReseccionado" && paginaActiva != "pegarReseccionadoEA") {
-                                                var elemH = document.getElementById(paginaActiva).children[0];
-                                                elemH.removeAttribute("style");
-                                            }
-                                            /*Secciones mejores/peores*/
-                                            if (paginaActiva == "tab-mejores-ee" || paginaActiva == "tab-mejores-ea" || paginaActiva == "tab-peores-ee" || paginaActiva == "tab-peores-ea" ||
-                                                paginaActiva == "tab-crecimiento-ee" || paginaActiva == "tab-crecimiento-ea" || paginaActiva == "tab-decremento-ee" || paginaActiva == "tab-decremento-ea") {
-                                                document.getElementById(paginaActiva).parentNode.parentNode.classList.remove("ng-hide");
-                                                //parafos-mejores  mt-img-indicadores
-                                                var pregs = $(".parrafo-pregunta:visible");
-                                                [].forEach.call(pregs, function (parrafo) {
-                                                    parrafo.classList.remove("parafos-mejores");
-                                                    parrafo.classList.add("mb-5");
-                                                    parrafo.classList.remove("mb-2");
-                                                });
-                                                var margenes = $(".mt-img-indicadores:visible");
-                                                [].forEach.call(margenes, function (parrafo) {
-                                                    parrafo.classList.add("mb-5");
-                                                    parrafo.classList.add("mt-5");
-                                                    parrafo.removeAttribute("style");
-                                                });
-                                                var cards = $(".bg-degradado-gris:visible");
-                                                [].forEach.call(cards, function (parrafo) {
-                                                    parrafo.removeAttribute("style");
-                                                    parrafo.style.padding = "40px";
-                                                });
-                                                document.getElementById(paginaActiva).classList.add("px-lg-5");
-                                                document.getElementById(paginaActiva).removeAttribute("style");
-                                                document.getElementById(paginaActiva).parentNode.parentNode.classList.add("ng-hide");
-                                            }
-                                            // Regresar estilos a vista web
-                                            if (paginaActiva == "tab-generales-departamento-ea") {
-                                                var graficaBarras = $("#tab-22 #tab-generales-departamento-ea .bar-progress-clasificacion");
-                                                [].forEach.call(graficaBarras, function (graf) {
-                                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                                });
-                                                var graficaHCN = $("#tab-22 #tab-generales-departamento-ea .hc");
-                                                [].forEach.call(graficaHCN, function (graf) {
-                                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                                    graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
-                                                    //aumentar mt
-                                                    if (resolucion <= 2500 && resolucion >= 1901) {
-                                                        factMt = 12;
-                                                    }
-                                                    if (resolucion <= 1900 && resolucion >= 1370) {
-                                                        factMt = 12;
-                                                    }
-                                                    if (resolucion <= 1369) {
-                                                        factMt = 7;
-                                                    }
-                                                    graf.style.marginTop = (parseFloat(graf.style.marginTop) - factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
-                                                });
-                                                var grafHC = $("#tab-22 #tab-generales-departamento-ea .hc-doble");
-                                                [].forEach.call(grafHC, function (graf) {
-                                                    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
-                                                });
-                                                var graficaHC = $("#tab-22 #tab-generales-departamento-ea .bg-gris");
-                                                [].forEach.call(graficaHC, function (graf) {
-                                                    graf.style.minHeight = parseFloat(graf.style.minHeight) / factConver + "px";
-                                                });
-                                            }/********************/
-                                            if (paginaActiva == "tab-bienestar-ee") {
-                                                if ($(window).width() > 1610) {
-                                                    var elem = document.getElementById(paginaActiva);
-                                                    document.getElementById("quitaSwitch").style.display = "block";
-                                                    //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
-                                                    // $remover clase
-                                                    var bordes = document.getElementsByClassName("quitar-borde");
-                                                    [].forEach.call(bordes, function (elem) {
-                                                        elem.classList.add("borde-tabla-titulo");
-                                                        elem.classList.add("borde-tabla-titulo");
+                                                    var graficaHC = $("#tab-22 #tab-generales-departamento-ea .bg-gris");
+                                                    [].forEach.call(graficaHC, function (graf) {
+                                                        graf.style.minHeight = parseFloat(graf.style.minHeight) / factConver + "px";
                                                     });
+                                                }/********************/
+                                                if (paginaActiva == "tab-bienestar-ee") {
+                                                    if ($(window).width() > 1610) {
+                                                        var elem = document.getElementById(paginaActiva);
+                                                        document.getElementById("quitaSwitch").style.display = "block";
+                                                        //elem.getElementsByClassName("mt-img-indicadores")[0].classList.add("mt-5");
+                                                        // $remover clase
+                                                        var bordes = document.getElementsByClassName("quitar-borde");
+                                                        [].forEach.call(bordes, function (elem) {
+                                                            elem.classList.add("borde-tabla-titulo");
+                                                            elem.classList.add("borde-tabla-titulo");
+                                                        });
+                                                    }
                                                 }
-                                            }
-                                            if (paginaActiva == "tab-indicadores-permanencia") {
-                                                if ($(window).width() > 1610) {
-                                                    var indicador = document.getElementsByClassName("margin-top-nuevo");
-                                                    [].forEach.call(indicador, function (itemD) {
-                                                        var mt = parseInt(itemD.style.marginTop);
-                                                        var newmt = mt * 2;
-                                                        itemD.style.marginTop = newmt + "px";
-                                                    });
-                                                    var elem = document.getElementById(paginaActiva);
-                                                    elem.getElementsByClassName("card-block")[0].removeAttribute("style");
-                                                    var mb = elem.getElementsByClassName("bg-gris");
-                                                    [].forEach.call(mb, function (elemMB) {
-                                                        elemMB.classList.add("mb-5");
-                                                        elemMB.classList.remove("mb-2");
-                                                    });
-                                                    elem.getElementsByClassName("nuevomt")[0].classList.add("mt-5");
-                                                    elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-2");
-													 //se disminuye el tamaño minimo de los bg-gris 20/09/2021
-                                                var elembg1 = $(".grafica-trabajarEx .bg-gris");
-                                                elembg1[0].style.minHeight ='250px';
-                                                var elembg2 = $(".grafica-dejarEx .bg-gris");
-                                                elembg2[0].style.minHeight ='250px';
+                                                if (paginaActiva == "tab-indicadores-permanencia") {
+                                                    if ($(window).width() > 1610) {
+                                                        var indicador = document.getElementsByClassName("margin-top-nuevo");
+                                                        [].forEach.call(indicador, function (itemD) {
+                                                            var mt = parseInt(itemD.style.marginTop);
+                                                            var newmt = mt * 2;
+                                                            itemD.style.marginTop = newmt + "px";
+                                                        });
+                                                        var elem = document.getElementById(paginaActiva);
+                                                        elem.getElementsByClassName("card-block")[0].removeAttribute("style");
+                                                        var mb = elem.getElementsByClassName("bg-gris");
+                                                        [].forEach.call(mb, function (elemMB) {
+                                                            elemMB.classList.add("mb-5");
+                                                            elemMB.classList.remove("mb-2");
+                                                        });
+                                                        elem.getElementsByClassName("nuevomt")[0].classList.add("mt-5");
+                                                        elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-2");
+                                                        //se disminuye el tamaño minimo de los bg-gris 20/09/2021
+                                                        var elembg1 = $(".grafica-trabajarEx .bg-gris");
+                                                        elembg1[0].style.minHeight = '250px';
+                                                        var elembg2 = $(".grafica-dejarEx .bg-gris");
+                                                        elembg2[0].style.minHeight = '250px';
+                                                    }
                                                 }
-                                            }
-                                            if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
-                                                if ($(window).width() > 1610) {
-                                                    var elem = document.getElementById(paginaActiva);
-                                                    elem.getElementsByClassName("card-block")[0].removeAttribute("style");
-                                                    var mb = elem.getElementsByClassName("nuevomt");
-                                                    [].forEach.call(mb, function (elemMB) {
-                                                        elemMB.classList.add("mb-5");
-                                                        elemMB.classList.add("mt-5");
-                                                        elemMB.classList.remove("mb-2");
-                                                        elemMB.classList.remove("mt-2");
-                                                    })
+                                                if (paginaActiva == "tab-comparativo-permanencia" || paginaActiva == "tab-comparativo-abandono") {
+                                                    if ($(window).width() > 1610) {
+                                                        var elem = document.getElementById(paginaActiva);
+                                                        elem.getElementsByClassName("card-block")[0].removeAttribute("style");
+                                                        var mb = elem.getElementsByClassName("nuevomt");
+                                                        [].forEach.call(mb, function (elemMB) {
+                                                            elemMB.classList.add("mb-5");
+                                                            elemMB.classList.add("mt-5");
+                                                            elemMB.classList.remove("mb-2");
+                                                            elemMB.classList.remove("mt-2");
+                                                        })
+                                                    }
                                                 }
-                                            }
-                                            setTimeout(function () {
-                                                document.getElementsByClassName("busy")[1].style.display = "none";
-                                            }, 1200);
-                                        });
+                                                setTimeout(function () {
+                                                    document.getElementsByClassName("busy")[1].style.display = "none";
+                                                }, 1200);
+                                            });
+                                    }
                                 }
 
                             }
@@ -14451,11 +14461,14 @@ var getNameH = function (criterio) {
 var cortes = async function (tipoEntidad = 1, iteracion = 0, tabla, padding) { //la iteracion es mas 1
     //alert("padding " + padding);
     var idTabla;
-    if (tabla == "tab-bienestar-ee") {
+    var auxDivTabla;
+    if (tabla == "tab-bienestar-ee" || tabla == "myTableEE") {
         idTabla = "myTableEE";
+        auxDivTabla = "tab-bienestar-ee";
     }
-    if (tabla == "tab-bienestar-ea") {
+    if (tabla == "tab-bienestar-ea" || tabla == "myTableEA") {
         idTabla = "myTableEA";
+        auxDivTabla = "tab-bienestar-ea";
     }
     ocultaCeldas();
     mostrarcolumnaUnoPadre(idTabla);
@@ -14509,7 +14522,7 @@ var cortes = async function (tipoEntidad = 1, iteracion = 0, tabla, padding) { /
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 1 }
         });*/
-        var data = await docReporte.addHTML($('#' + tabla)[0], 0, padding, { /* options */
+        var data = await docReporte.addHTML($('#' + auxDivTabla)[0], 0, padding, { /* options */
             image: { type: 'jpeg', quality: 1 },
             html2canvas: { scale: 1 }
         }
