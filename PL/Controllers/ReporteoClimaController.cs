@@ -116,7 +116,7 @@ namespace PL.Controllers
             if (name == "Reporte")
                 name += "_" + DateTime.Now;
             var usr = Session["AdminLog"].ToString();
-            var ruta = @"\\\\10.5.2.101\\ClimaLaboral\\logs\\" + usr + "\\";
+            var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\Reportes\\" + usr + "\\";
             HttpPostedFileBase file = Request.Files["mypdf"];
             string fileName = file.FileName;
             string fileExtension = Path.GetExtension(file.FileName);
@@ -128,6 +128,31 @@ namespace PL.Controllers
                 Directory.CreateDirectory(ruta);
             file.SaveAs(Path.Combine(ruta, name + ".pdf"));
             return Json(result);
+        }
+
+        [HttpGet]
+        public JsonResult GetReportesPDF()
+        {
+            try
+            {
+                var usr = Session["AdminLog"].ToString();
+                var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\Reportes\\" + usr + "\\";
+                var files = new List<string>();
+                if (Directory.Exists(ruta))
+                {
+                    files.AddRange(Directory.GetFiles(ruta).ToList());
+                }
+                for (var i = 0; i < files.Count; i++)
+                {
+                    files[i] = files[i].Remove(0, 30);
+                    files[i] += "http://diagnostic4u.com" + files[i];
+                }
+                return Json(files, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception aE)
+            {
+                return Json(aE.Message);
+            }
         }
 
         public static bool CrearImagenEnDirectorio(string cadenaBase64, string seccion, string usr)

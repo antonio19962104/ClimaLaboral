@@ -1422,6 +1422,7 @@
     <Content Include="scripts\tableexport.js" />
     <Content Include="scripts\templates-functions.js" />
     <Content Include="scripts\touchswipe.js" />
+    <Content Include="scripts\TS\html2canvas.js" />
     <Content Include="scripts\UAParser.js" />
     <Content Include="scripts\ValidarEntradas.js" />
     <Content Include="scripts\ValidateLayoutEncuesta.js" />

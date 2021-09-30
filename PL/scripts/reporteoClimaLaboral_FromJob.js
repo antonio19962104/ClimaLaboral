@@ -1929,24 +1929,6 @@ function GetDashBoard() {
                 });
             }
 
-            /*var doSome = function () {
-                return new Promise(function (resolve, reject) {
-                    try {
-                        resolve();
-                    } catch (e) {
-                        reject();
-                    }
-                });
-            }
-
-            doSome()
-                .then(function (res) {
-
-                })
-                .catch(function () {
-
-                });*/
-
             vm.run = function () {
                 try {
                     /****Se guarda el tipo de enfoque seleccionado*****/
@@ -4888,6 +4870,10 @@ function GetDashBoard() {
                                     [].forEach.call(graficaHCN, function (graf) {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                         graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                    });                                   
+                                    var grafHC = $(".hc-doble:visible");
+                                    [].forEach.call(grafHC, function (graf) {
+                                        graf.style.height = (parseFloat(graf.style.height) / factConver) - factMt + "px";
                                     });
 									  var grafHC = $(".hc-doble:visible");
                                     [].forEach.call(grafHC, function (graf) {

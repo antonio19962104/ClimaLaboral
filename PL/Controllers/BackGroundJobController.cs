@@ -2229,6 +2229,65 @@ namespace PL.Controllers
                 return Json(new List<string>(), JsonRequestBehavior.AllowGet);
             }
         }
+
+        public JsonResult GetPromoC()
+        {
+            try
+            {
+                var contentHtml = string.Empty;
+                HttpWebRequest request = WebRequest.Create("http://autofin.com/casa") as HttpWebRequest;
+                request.Method = "GET";
+                request.ContentType = "application/x-www-form-urlencoded";
+                HttpWebResponse response = request.GetResponse() as HttpWebResponse;
+                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                {
+                    string resp = reader.ReadToEnd();
+                    contentHtml = resp;
+                }
+                var img = new List<string>();
+                var linkParser = new Regex(@"\b(?:https?://|www\.)\S+\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var rawString = contentHtml;
+                foreach (Match m in linkParser.Matches(rawString))
+                    img.Add(m.Value);
+                img = img.Where(o => o.Contains("http://www.autofin.com/pub/media/wysiwyg/aima")).ToList();
+                var ls = new List<string>();
+                foreach (var item in img)
+                    ls.Add(item.Substring(0, (item.IndexOf("jpg") + 3)));
+                ls = ls.Distinct().ToList();
+                var listPromos = new List<prom>();
+                for (int i = 0; i < ls.Count; i++)
+                {
+                    if (i < (ls.Count - 1))
+                    {
+                        var promo = new prom();
+                        promo.Id = i;
+                        promo.ImagenDesktop = ls[i];
+                        promo.ImagenMobile = ls[i + 1];
+                        promo.estatus = 1;
+                        listPromos.Add(promo);
+                    }
+                }
+                var indicesRemove = new List<int>();
+                for (int i = 0; i < listPromos.Count; i++)
+                {
+                    if (i % 2 != 0)
+                    {
+                        indicesRemove.Add(i);
+                    }
+                }
+                foreach (var item in indicesRemove.OrderByDescending(o => o))
+                {
+                    listPromos.RemoveAt(item);
+                }
+                listPromos.Add(new prom() { Id = 0, estatus = 1, ImagenDesktop = "http://www.autofin.com/pub/media/wysiwyg/casa-informacion.jpg", ImagenMobile = "http://www.autofin.com/pub/media/wysiwyg/casa-informacion.jpg" });
+                return Json(listPromos, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception)
+            {
+                return Json(new List<string>(), JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public class prom
         {
             public int Id { get; set; }
