@@ -113,26 +113,42 @@ namespace PL.Controllers
         [HttpPost]
         public JsonResult SavePDF(FormCollection result, string name = "Reporte")
         {
-            if (name == "Reporte")
-                name += "_" + DateTime.Now;
-            string usr;
-            if (Session["AdminLog"] != null)
-                usr = Session["AdminLog"].ToString();
-            else
-                usr = "Invitado";
-            var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\Reportes\\" + usr + "\\";
             try
             {
+                if (name == "Reporte")
+                    name += "_" + DateTime.Now;
+                string usr;
+                if (Session["AdminLog"] != null)
+                    usr = Session["AdminLog"].ToString();
+                else
+                    usr = "Invitado";
+                var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\Reportes\\" + usr + "\\";
                 HttpPostedFileBase file = Request.Files["mypdf"];
-                if (!Directory.Exists(ruta))
-                    Directory.CreateDirectory(ruta);
-                file.SaveAs(Path.Combine(ruta, name + ".pdf"));
-                BL.NLogGeneratorFile.logSaveReporte(true, (ruta + name + ".pdf"), new Exception());
-                return Json(true);
+                try
+                {
+                    if (!Directory.Exists(ruta))
+                        Directory.CreateDirectory(ruta);
+                    file.SaveAs(Path.Combine(ruta, name + ".pdf"));
+                    BL.NLogGeneratorFile.logSaveReporte(true, (ruta + name + ".pdf"), new Exception());
+                    return Json(true);
+                }
+                catch (Exception aE)
+                {
+                    if (aE.Message.Contains("está siendo utilizado en otro proceso"))
+                    {
+                        if (!Directory.Exists(ruta))
+                            Directory.CreateDirectory(ruta);
+                        file.SaveAs(Path.Combine(ruta, name + ".pdf"));
+                        BL.NLogGeneratorFile.logSaveReporte(true, (ruta + name + "_" + DateTime.Now + ".pdf"), new Exception());
+                        return Json(true);
+                    }
+                    BL.NLogGeneratorFile.logSaveReporte(true, (ruta + name + "_" + DateTime.Now + ".pdf"), aE);
+                    return Json(aE.Message);
+                }
             }
             catch (Exception aE)
             {
-                BL.NLogGeneratorFile.logSaveReporte(false, (ruta + name + ".pdf"), aE);
+                BL.NLogGeneratorFile.logSaveReporte(false, (name + ".pdf"), aE);
                 return Json(aE.Message);
             }
         }

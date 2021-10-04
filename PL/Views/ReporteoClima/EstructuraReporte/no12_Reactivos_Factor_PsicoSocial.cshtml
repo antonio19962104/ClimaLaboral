@@ -23,10 +23,10 @@
                                     <thead class="table-contr">
                                         <tr id="entidadesEmpresa">
                                             <th colspan="10" scope="col" class="td-bgwhite">&nbsp;</th>
-                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="borde-table-headerwhite padre" ng-class="{{ vm.CompanyCategoria.Id }}" scope="col"><div class="contr-head">{{ vm.CompanyCategoria.Descripcion }}</div></th>
-                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" ng-class="{{ vm.Company.CompanyId }}" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
-                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" ng-class="{{ vm.Area.IdArea }}" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
-                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" ng-class="{{ vm.Departamento.IdDepartamento }}" scope="col"><div class="contr-head">{{ vm.Departamento.Nombre }}</div></th>
+                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.CompanyCategoria.Descripcion }}</div></th>
+                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
+                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
+                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Departamento.Nombre }}</div></th>
                                             <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                         </tr>
                                     </thead>

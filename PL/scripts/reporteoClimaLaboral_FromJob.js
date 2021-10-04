@@ -1,5 +1,5 @@
 ﻿/*
- * Script principal del reporte gráfico de Clima Laboral
+ * Script principal del reporte gráfico de Clima Laboral v1
  */
 var dataComparativoPermanencia = [];
 var urlApisjs = "http://localhost:11124/";
@@ -6756,6 +6756,28 @@ function GetDashBoard() {
                 }
             }
 
+            vm.mostrarPadreBienestarDem = function (idTabla) {
+                var tipoEntidad = vm.criterioBusquedaSeleccionado.Id;
+                switch (tipoEntidad) {
+                    case 1:
+                        document.getElementById(idTabla).rows[0].cells[1].style.display = "";//name col
+                        break;
+                    case 2:
+                        document.getElementById(idTabla).rows[0].cells[2].style.display = "";//name col
+                        break;
+                    case 3:
+                        document.getElementById(idTabla).rows[0].cells[3].style.display = "";//name col
+                        break;
+                    case 4:
+                        document.getElementById(idTabla).rows[0].cells[4].style.display = "";//name col
+                        break;
+                    case 5:
+                        document.getElementById(idTabla).rows[0].cells[5].style.display = "";//name col
+                        break;
+                    default:
+                }
+            }
+
             /*Porcentajes Factor PsicoSocial*/
             vm.getReporteDataPantalla_17 = function () {
                 try {
@@ -6828,6 +6850,21 @@ function GetDashBoard() {
                                                 //EE (primera mitad)
                                                 $(".divExportacionBienestarClass").css("display", "none");
                                                 $(".divExportacionBienestarClass")[0].style.display = "";
+                                            }
+                                            switch (vm.criterioBusquedaSeleccionado.Id) {
+                                                case 1:
+                                                    $(".borde-table-headerwhite")[0].style.display = "";
+                                                    break;
+                                                case 2:
+                                                    $(".borde-table-headerwhite")[1].style.display = "";
+                                                    break;
+                                                case 3:
+                                                    $(".borde-table-headerwhite")[2].style.display = "";
+                                                    break;
+                                                case 4:
+                                                    $(".borde-table-headerwhite")[3].style.display = "";
+                                                    break;
+                                                default:
                                             }
                                             vm.isBusy = false;
                                         }, 3000);
@@ -12986,6 +13023,9 @@ function GetDashBoard() {
                     if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
                     }
+
+                    // Filtrar columnas bienestar elimiando subdepartamentos redundantes cuyo nombre termina es - -
+                    vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where(o => o.value.includes(" - -") == false).toList();//AUT - ELE - AEP - ADM
                     
                     //vm.ColumnasBienestar.shift();//Eliminar duplicado inicial
                     /*Configuracion para factor psicosocial*/
@@ -14907,25 +14947,13 @@ var getHijo = function (tipoEntidad) {
         (document.getElementsByClassName("lvlComp")[0].checked == true || tipoEntidad == 2 ? "2" : "") +
         (document.getElementsByClassName("lvlArea")[0].checked == true || tipoEntidad == 3 ? "3" : "") +
         (document.getElementsByClassName("lvlDpto")[0].checked == true || tipoEntidad == 4 ? "4" : "") +
-        (document.getElementsByClassName("lvlSubD")[0].checked == true || tipoEntidad == 5 ? "5" : "");
+        (document.getElementsByClassName("lvlSubD")[0].checked == true || tipoEntidad == 5 ? "5" : "");//345
     var padre = nivelDetalle.charAt(0);
     var hijo = nivelDetalle.charAt(1);
     if (hijo == "")
         hijo = padre;
     switch (parseInt(hijo)) {
-        /*case 1:
-            return "UNeg";
-        case 2:
-            return "Comp";
-        case 3:
-            return "Area";
-        case 4:
-            return "Dpto";
-        case 4:
-            return "SubD";*/
-        case 1:
-            /*if (nivelDetalle.includes("2"))
-                return "Comp";*/
+        case 1: // Unidad de negocio
             if (nivelDetalle.includes("3"))
                 return "Area";
             if (nivelDetalle.includes("4"))
@@ -14933,7 +14961,7 @@ var getHijo = function (tipoEntidad) {
             if (nivelDetalle.includes("5"))
                 return "SubD";
             return "UNeg";
-        case 2:
+        case 2: // Direccion
             if (nivelDetalle.includes("3"))
                 return "Area";
             if (nivelDetalle.includes("4"))
@@ -14941,28 +14969,64 @@ var getHijo = function (tipoEntidad) {
             if (nivelDetalle.includes("5"))
                 return "SubD";
             return "Comp";
-        case 3:
+        case 3: // Area
             if (nivelDetalle.includes("4"))
                 return "Dpto";
             if (nivelDetalle.includes("5"))
                 return "SubD";
             return "Area";
-        case 4:
+        case 4: // Depto
             if (nivelDetalle.includes("5"))
-                return "SubD";
+                return "Dpto";
             return "Dpto";
     }
 }
 
-var ocultaCeldas = function () {
-    $(".borde-table-headerwhite").css("display", "none");
-    $(".factor1").css("display", "none");
-    $(".borde-table-headercolor").css("display", "none");
+var ocultaCeldas = function (tipoEntidad) {
+    $("#myTableEE .borde-table-headerwhite").css("display", "none");
+    $("#myTableEE .factor1").css("display", "none");
+    $("#myTableEE .borde-table-headercolor").css("display", "none");
+    $("#myTableEA .borde-table-headerwhite").css("display", "none");
+    $("#myTableEA .factor1").css("display", "none");
+    $("#myTableEA .borde-table-headercolor").css("display", "none");
+    // mostrar el padre
+    /*switch (tipoEntidad) {
+        case 1:
+            $(".borde-table-headerwhite")[0].style.display = "";
+            break;
+        case 2:
+            $(".borde-table-headerwhite")[1].style.display = "";
+            break;
+        case 3:
+            $(".borde-table-headerwhite")[2].style.display = "";
+            break;
+        case 4:
+            $(".borde-table-headerwhite")[3].style.display = "";
+            break;
+        default:
+    }*/
 }
 
 
-var mostrarcolumnaUnoPadre = function (idTabla) {
-    document.getElementById(idTabla).rows[0].cells[1].style.display = "";//name col
+var mostrarcolumnaUnoPadre = function (idTabla, tipoEntidad) {
+    switch (tipoEntidad) {
+        case 1:
+            document.getElementById(idTabla).rows[0].cells[1].style.display = "";//name col
+            break;
+        case 2:
+            document.getElementById(idTabla).rows[0].cells[2].style.display = "";//name col
+            break;
+        case 3:
+            document.getElementById(idTabla).rows[0].cells[3].style.display = "";//name col
+            break;
+        case 4:
+            document.getElementById(idTabla).rows[0].cells[4].style.display = "";//name col
+            break;
+        case 5:
+            document.getElementById(idTabla).rows[0].cells[5].style.display = "";//name col
+            break;
+        default:
+    }
     document.getElementById(idTabla).rows[1].cells[1].style.display = "";//porcentaje col
     document.getElementById(idTabla).tBodies[0].rows[0].cells[2].style.display = "";//porcentaje pregunta
     document.getElementById(idTabla).tBodies[0].rows[1].cells[2].style.display = "";
@@ -15063,8 +15127,8 @@ var crearTablasNuevas = async function (tipoEntidad = 1, iteracion = 0, tabla, p
         idTabla = "myTableEA";
         auxDivTabla = "tab-bienestar-ea";
     }
-    ocultaCeldas();
-    mostrarcolumnaUnoPadre(idTabla);
+    ocultaCeldas(tipoEntidad);
+    mostrarcolumnaUnoPadre(idTabla, tipoEntidad);
     var hijo = getHijo(tipoEntidad);
     var count = 0;
     var inicial;
@@ -15197,7 +15261,24 @@ var crearTablasNuevas = async function (tipoEntidad = 1, iteracion = 0, tabla, p
             //alert("La tabla " + id + " debe ser seccionada");
             //seccionarTablaGrande(id, idDivExportacion, contadorColumnas);
         }
-
+        switch (tipoEntidad) {
+            case 1:
+                document.getElementById(idTabla).rows[0].cells[1].style.display = "";//name col
+                break;
+            case 2:
+                document.getElementById(idTabla).rows[0].cells[2].style.display = "";//name col
+                break;
+            case 3:
+                document.getElementById(idTabla).rows[0].cells[3].style.display = "";//name col
+                break;
+            case 4:
+                document.getElementById(idTabla).rows[0].cells[4].style.display = "";//name col
+                break;
+            case 5:
+                document.getElementById(idTabla).rows[0].cells[5].style.display = "";//name col
+                break;
+            default:
+        }
         return contenidoNuevo;
     } catch (e) {
         alert("Falle en elsecionado");
