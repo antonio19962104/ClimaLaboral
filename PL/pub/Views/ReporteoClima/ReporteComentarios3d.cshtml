@@ -1,0 +1,328 @@
+﻿@using Newtonsoft.Json
+@model ML.Encuesta
+@{
+    ViewBag.Title = "Reporte dinámico de comentarios";
+    Layout = "~/Views/ReporteoClima/_LayoutReportes_2.cshtml";
+    // lista de años
+    var anioActual = DateTime.Now.Year;
+    Model.Anio = anioActual;
+    var inicial = 2019;
+    var final = anioActual + 2;
+    var list = new List<int>();
+    for (int i = inicial; i < final; i++)
+    {
+        list.Add(i);
+    }
+    var selectList = new SelectList(list, anioActual);
+}
+
+<div class="content-wrap" ng-app="app2" ng-controller="reporteComentariosController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                    <p class="mb-n1">Reporte Gráfico de</p>
+                    <h2 class="robotothin mb-2 mt-n1">COMENTARIOS ABIERTOS <span hidden class="robotobold yellow-clima area-empresa ml-3"></span></h2>
+                    <div style="display: none;">
+                        <button value="1" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(173)" class="btn preg robotobold yellow-clima area-empresa ml-3 d-none"><i class="far fa-question-circle"></i> ¿Existe algo especial o único en tu empresa que la caracterice como un excelente lugar para trabajar?</button><br /><br />
+                        <button value="2" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(174)" class="btn preg robotobold yellow-clima area-empresa ml-3 d-none"><i class="far fa-question-circle"></i> Si pudieras cambiar algo acerca de tu empresa para hacerla un mejor lugar para trabajar, ¿qué cambiarías?</button><br /><br />
+                        <button value="3" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(175)" class="btn preg robotobold yellow-clima area-empresa ml-3 d-none"><i class="far fa-question-circle"></i> ¿Cuáles son las fortalezas de tu jefe directo?</button><br /><br />
+                        <button value="4" ng-model="vm.IdPregunta" ng-click="vm.getReporteDataPantalla_40(176)" class="btn preg robotobold yellow-clima area-empresa ml-3 d-none"><i class="far fa-question-circle"></i> ¿Cuáles son las áreas de oportunidad de tu jefe directo?</button><br /><br />
+                    </div>
+                    <div class="col-lg-4 col-md-5 col-xs-12 col-sm-12">
+                        <div class="form-group" id="sectionBD">
+                            <label style="font-weight: bold;">Base de datos</label>
+                            <select id="DDLBD" name="DDLCompanyCategoria" class="form-control"></select>
+                        </div>
+                        <div class="form-group sectionConf">
+                            <label style="font-weight:bold;">Elige una unidad de negocio para ver el reporte</label>
+                            <select id="UnidadNegocio" name="DDLCompanyCategoria" class="form-control" multiple></select>
+                        </div>
+                        <div class="form-group sectionConf">
+                            <label style="font-weight: bold;">Elige a que nivel quieres el reporte</label>
+                            <div id="selector-level">
+                                <ul style="list-style-type: disclosure-open;">
+                                    <li>
+                                        <input value="" type="checkbox" checked onclick="return false;"> Unidad de Negocio
+                                    </li>
+                                    <ul style="margin-left: 15px; list-style-type: none;">
+                                        <li><input class="selector" value="company" type="checkbox" name="company" id="company" /><label for="company">División marca</label></li>
+                                        <li><input class="selector" value="area" type="checkbox" name="area" id="area" /><label for="area">Area agencia</label></li>
+                                        <li><input class="selected" value="departamento" type="checkbox" name="departamento" id="departamento" /><label for="departamento">Departamento</label></li>
+                                        <li><input class="selector" value="subdepartamento" type="checkbox" name="subdepartamento" id="subdepartamento" /><label for="subdepartamento">Subdepartamento</label></li>
+                                    </ul>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group sectionConf">
+                            <label style="font-weight: bold;">Selecciona el periodo de aplicación</label>
+                            @Html.DropDownListFor(m => m.Anio, selectList, "-Selecciona-", htmlAttributes: new { @id = "txtAnio", @class = "form-control", @autopostback = true })
+                        </div>
+                        <div class="form-group sectionConf">
+                            <a href="#reporte">
+                                <input id="ViewReport" type="submit" class="btn btn-success" value="Ver Reporte" ng-click="vm.getDataReporte();" onclick="" style="margin-top:20px;" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Seccion filtrado -->
+        <!-- Seccion filtrado -->
+        <div class="row" id="reporte">
+            <div class="col-lg-12">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-block">
+                            <div class="p-0">
+                                <div hidden class="row mt-3 mb-3 mr-3 ml-3">
+                                    <div ng-show="vm.IdPregunta == 1 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                                        <center><canvas id="preg1" class="word_cloud" width="400" height="400"></canvas></center>
+                                    </div>
+                                    <div ng-show="vm.IdPregunta == 2 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                                        <center><canvas id="preg2" class="word_cloud" width="400" height="400"></canvas></center>
+                                    </div>
+                                    <div ng-show="vm.IdPregunta == 3 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                                        <center><canvas id="preg3" class="word_cloud" width="400" height="400"></canvas></center>
+                                    </div>
+                                    <div ng-show="vm.IdPregunta == 4 || vm.IdPregunta == 5" class="col-sm grafica-dejar">
+                                        <center><canvas id="preg4" class="word_cloud" width="400" height="400"></canvas></center>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer173">
+                                        <!---->
+                                        <canvas width="300" height="300" id="myCanvas173">
+                                            <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                            <ul id="lista173"></ul>
+                                        </canvas>
+                                    </div>
+                                    <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                                        <!---->
+                                        <ul class="respuestasMergeA" id="mergeRespuestasA173"></ul>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer174">
+                                        <canvas width="300" height="300" id="myCanvas174">
+                                            <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                            <ul id="lista174"></ul>
+                                        </canvas>
+                                    </div>
+                                    <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                                        <ul class="respuestasMergeA" id="mergeRespuestasA174">
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer175">
+                                        <canvas width="300" height="300" id="myCanvas175">
+                                            <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                            <ul id="lista175"></ul>
+                                        </canvas>
+                                    </div>
+                                    <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                                        <ul class="respuestasMergeA" id="mergeRespuestasA175">
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 col-lg-3" id="myCanvasContainer176">
+                                        <canvas width="300" height="300" id="myCanvas176">
+                                            <p>Anything in here will be replaced on browsers that support the canvas element</p>
+                                            <ul id="lista176"></ul>
+                                        </canvas>
+                                    </div>
+                                    <div style="float: right;" class="col-sm-12 col-md-8 col-lg-9 comentarios">
+                                        <ul class="respuestasMergeA" id="mergeRespuestasA176">
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div><!--.card-block-->
+                    </div><!--.card-->
+                </div>
+            </div>
+        </div>
+
+
+
+        <hr class="clearfix my-5">
+
+    </div><!--.container-->
+
+</div><!--.content-wrap-->
+<script src="https://pulipulichen.github.io/blogger/posts/2016/11/r-text-mining/wordcloud2.js"></script>
+<script type="text/javascript">
+    //alto del canvas debe ser el de su div
+    $(window).resize(function () {
+        //console.log('window was resized');
+        document.getElementById("myCanvas173").offsetHeight;
+        document.getElementsByClassName("comentarios")[0].style.maxHeight = document.getElementById("myCanvas173").offsetHeight + "px";
+        document.getElementById("myCanvas174").offsetHeight;
+        document.getElementsByClassName("comentarios")[1].style.maxHeight = document.getElementById("myCanvas174").offsetHeight + "px";
+        document.getElementById("myCanvas175").offsetHeight;
+        document.getElementsByClassName("comentarios")[2].style.maxHeight = document.getElementById("myCanvas175").offsetHeight + "px";
+        document.getElementById("myCanvas176").offsetHeight;
+        document.getElementsByClassName("comentarios")[3].style.maxHeight = document.getElementById("myCanvas176").offsetHeight + "px";
+    });
+</script>
+<style>
+    .preg:hover {
+        color: #f0af42;
+    }
+
+    canvas {
+        /*border: 1px solid #000000;*/
+        /*width: 450px;*/
+        width: inherit !important;
+    }
+
+    .comentarios {
+        background-color: white;
+        /*border: 1px solid #000000;*/
+        overflow-x: scroll;
+        overflow-y: scroll;
+        margin-bottom: 15px;
+    }
+
+    .respuestasMergeA {
+        padding-left: 10px;
+    }
+</style>
+<script>
+    var listUnidadNegocio = [];
+    $(document).ready(function () {
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("reporte").style.display = "none";
+        try {
+            document.getElementById("UnidadNegocio").style.display = "none";
+            $(".sectionConf").hide();
+            $.ajax({
+                url: "/BD/GetAllForListadoJSON",
+                type: "GET",
+                success: function (response) {
+                    $("#DDLBD").empty();
+                    $("#DDLBD").append("<option value='" + 0 + "'>-Selecciona-</option>");
+                    [].forEach.call(response.ListadoDeBaseDeDatos, function (elem) {
+                        if (elem.TipoBD.IdTipoBD == 1)
+                            $("#DDLBD").append("<option value='" + elem.IdBaseDeDatos + "'>" + elem.Nombre + "</option>");
+                    });
+                    document.getElementsByClassName("busy")[0].style.display = "none";
+                }
+            });
+        } catch (e) {
+
+        }
+
+        document.getElementById("DDLBD").addEventListener("change", function (e) {
+            // cargar la estrucura que existe en el layout de BD
+            try {
+                var IdBaseDeDatos = e.target.value;
+                document.getElementById("loading").style.display = "block";
+                $.ajax({
+                    url: '/EstructuraAFMReporte/GetCompanyCategoria/?IdBaseDeDatos=' + IdBaseDeDatos,
+                    type: 'GET',
+                    success: function (listCompanyCategoria) {
+                        document.getElementById("loading").style.display = "none";
+                        $(".sectionConf").show();
+                        destroyMultiSelect('UnidadNegocio');
+                        document.getElementById("UnidadNegocio").innerHTML = "";
+                        [].forEach.call(listCompanyCategoria, function (companyCategoria) {
+                            $('#UnidadNegocio').append('<option value="' + companyCategoria + '">' + companyCategoria + '</option>');
+                        });
+                        // create MultiSelect from select HTML element
+                        var required = $("#UnidadNegocio").kendoMultiSelect().data("kendoMultiSelect");
+                        required.bind("change", function (e) {
+                            listUnidadNegocio = this.value();
+                        });
+                    }, error: function (err_CompanyCategoria) {
+                        document.getElementById("loading").style.display = "none";
+                        console.log(err_CompanyCategoria);
+                    }
+                });
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                console.log(aE);
+            }
+        });
+        function mergeDemograficos(listEstructura, IdBaseDeDatos, list) {
+            try {
+                document.getElementsByClassName("k-multiselect-wrap")[0].style.height = "inherit";
+                mergeEstructuraGAFM(IdBaseDeDatos, list);
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                console.log(aE);
+            }
+        }
+
+        function mergeEstructuraGAFM(IdBaseDeDatos, list) {
+            document.getElementById("loading").style.display = "block";
+            var listFilter = list;
+            var listLevel = [];
+            try {
+                var controls = $("#selector-level").find("input[type=checkbox]");
+                [].forEach.call(controls, function (elem) {
+                    if (elem.checked)
+                        listLevel.push(elem.value);
+                });
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                console.log(aE);
+            }
+        }
+
+        document.getElementById("UnidadNegocio").addEventListener("change", function (e) {
+            try {
+                var required = $("#UnidadNegocio").kendoMultiSelect().data("kendoMultiSelect");
+                $('#cellUNeg').text('UNeg=>' + required.value());
+            } catch (e) {
+
+            }
+        });
+
+        function destroyMultiSelect(id) {
+            try {
+                $('#' + id).unwrap('.k-multiselect').show().empty();
+                $(".k-multiselect-wrap").remove();
+            } catch (e) {
+
+            }
+        }
+
+        document.getElementById("txtAnio").addEventListener("change", function (e) {
+            try {
+                console.log(e);
+            } catch (e) {
+
+            }
+        });
+
+
+        
+
+        function IsNullOrEmpty(data) {
+            if (data == null || data == undefined || data == "")
+                return true;
+            else
+                return false;
+        }
+
+    });
+</script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/ReporteoClima/reporteComentarios3d.js"></script>
+<script src="~/scripts/ReporteoClima/text3d.js"></script>
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.rtl.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css">
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.mobile.all.min.css">
+<script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>

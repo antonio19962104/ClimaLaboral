@@ -1,0 +1,113 @@
+﻿<div class="content-wrap">
+    <div id="tab-decremento-ea" class="container-fluid px-lg-5">
+        <h1 hidden>Pendiente de calcular</h1>
+        <h2 class="robotothin mb-2 mt-n1">LOS 5 CON MAYOR DECREMENTO ENFOQUE ÁREA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card mb-4 mb-md-0 pr-3 pl-3">
+            <div class="card-block mt-3 mb-3">
+                <div class="row mb-5 mt-img-indicadores">
+
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MayorCrecimientoEA.Data[85].PorcentajeActual) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2 parrafo-pregunta">{{ vm.getPreguntaById(vm.MayorCrecimientoEA.Data[85].IdPregunta) }}</p>
+                                </div>
+                                <div class="contenido-peores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MayorCrecimientoEA.Data[85].PorcentajeActual }}%</h3>
+                                    <center ng-hide="!vm.hasHistorico"><p class="{{ vm.MayorCrecimientoEA.Data[85].DiferenciaActualAnterior  >= 0 ? 'porcentaje-mejores' : 'porcentaje-peores' }}">{{ vm.MayorCrecimientoEA.Data[85].DiferenciaActualAnterior }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MayorCrecimientoEA.Data[84].PorcentajeActual) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2 parrafo-pregunta">{{ vm.getPreguntaById(vm.MayorCrecimientoEA.Data[84].IdPregunta) }}</p>
+                                </div>
+                                <div class="contenido-peores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MayorCrecimientoEA.Data[84].PorcentajeActual }}%</h3>
+                                    <center ng-hide="!vm.hasHistorico"><p class="{{ vm.MayorCrecimientoEA.Data[84].DiferenciaActualAnterior  >= 0 ? 'porcentaje-mejores' : 'porcentaje-peores' }}">{{ vm.MayorCrecimientoEA.Data[84].DiferenciaActualAnterior }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MayorCrecimientoEA.Data[83].PorcentajeActual) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2 parrafo-pregunta">{{ vm.getPreguntaById(vm.MayorCrecimientoEA.Data[83].IdPregunta) }}</p>
+                                </div>
+                                <div class="contenido-peores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MayorCrecimientoEA.Data[83].PorcentajeActual }}%</h3>
+                                    <center ng-hide="!vm.hasHistorico"><p class="{{ vm.MayorCrecimientoEA.Data[83].DiferenciaActualAnterior  >= 0 ? 'porcentaje-mejores' : 'porcentaje-peores' }}">{{ vm.MayorCrecimientoEA.Data[83].DiferenciaActualAnterior }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MayorCrecimientoEA.Data[82].PorcentajeActual) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2 parrafo-pregunta">{{ vm.getPreguntaById(vm.MayorCrecimientoEA.Data[82].IdPregunta) }}</p>
+                                </div>
+                                <div class="contenido-peores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MayorCrecimientoEA.Data[82].PorcentajeActual }}%</h3>
+                                    <center ng-hide="!vm.hasHistorico"><p class="{{ vm.MayorCrecimientoEA.Data[82].DiferenciaActualAnterior  >= 0 ? 'porcentaje-mejores' : 'porcentaje-peores' }}">{{ vm.MayorCrecimientoEA.Data[82].DiferenciaActualAnterior }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+
+                    <div class="col-xl">
+                        <div class="border-mejores">
+                            <div class="bg-degradado-gris">
+                                <center><img ng-src="{{ vm.setIconoMejoresPeores(vm.MayorCrecimientoEA.Data[81].PorcentajeActual) }}" class="img-fluid"></center>
+                            </div>
+                            <center>
+                                <div class="mejores-peores">
+                                    <p class="black-clima mb-5 mt-2 parrafo-pregunta">{{ vm.getPreguntaById(vm.MayorCrecimientoEA.Data[81].IdPregunta) }}</p>
+                                </div>
+                                <div class="contenido-peores pt-0">
+                                    <i class="fa fa-caret-down text-white icono-mejores-down"></i>
+                                    <h3 class="text-white robotobold">{{ vm.MayorCrecimientoEA.Data[81].PorcentajeActual }}%</h3>
+                                    <center ng-hide="!vm.hasHistorico"><p class="{{ vm.MayorCrecimientoEA.Data[81].DiferenciaActualAnterior  >= 0 ? 'porcentaje-mejores' : 'porcentaje-peores' }}">{{ vm.MayorCrecimientoEA.Data[81].DiferenciaActualAnterior }}%</p></center>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                <div class="d-flex justify-content-center mt-5 mt-img-indicadores">
+                    <div class="col-12 p-0 m-0">
+                        <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                    </div>
+                </div>
+            </div><!--.card-block-->
+        </div><!--.card-->
+        <hr class="clearfix my-5">
+
+    </div><!--.container-->
+
+</div><!--.content-wrap-->

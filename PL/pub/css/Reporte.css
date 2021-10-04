@@ -1,0 +1,60 @@
+﻿html, body {
+    color: white;
+    font-family: 'Opens Sans',helvetica;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+p, h1, h2, h3, h4, h5, h6, label{
+    color:black;
+    font-weight:700;
+}
+th{
+    font-weight:bold;
+}
+.logoCLR {
+    width: 25%;
+    height: auto;
+    position: relative;
+    opacity: 1;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.headerSuperiorR {
+    color: #000080;
+    opacity: 1;
+    height: 100px;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    position: absolute;
+    background-color: #000080;
+    justify-content: center;
+}
+
+.footerR {
+    color: #000080;
+    opacity: 1;
+    height: 50px;
+    width: 100%;
+    max-width:100%;
+    min-width:100%;
+    position: fixed;
+    background-color: #000080;
+    bottom: 0;
+    z-index:2500;
+}
+
+.imgFotterR {
+    opacity: 1;
+    height: 25px;
+    width: auto;
+    position: relative;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}

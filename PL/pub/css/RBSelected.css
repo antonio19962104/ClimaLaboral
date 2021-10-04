@@ -1,0 +1,191 @@
+﻿
+
+/*New section*/
+.AS {
+    background-color: transparent;
+    border: 5px solid transparent;
+}
+
+input[type='radio'], [id=CSF]:after {
+    /*-moz-appearance: none;*/
+    /*-webkit-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #f15a24;
+}
+
+
+input[type='radio'], [id=CSF]:checked:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #f15a24;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #f15a24;
+}
+
+/*********************************************/
+input[type='radio'], [id=FF]:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #f7931e;
+}
+
+input[type='radio'], [id=FF]:checked:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #f7931e;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #f7931e;
+}
+
+/****************************************/
+input[type='radio'], [id=AV]:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #cccc01;
+}
+
+input[type='radio'], [id=AV]:checked:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #cccc01;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #cccc01;
+}
+/****************************************/
+input[type='radio'], [id=FV]:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #8CC63F;
+}
+
+input[type='radio'], [id=FV]:checked:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #8CC63F;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #8CC63F;
+}
+/********************************/
+input[type='radio'], [id=CSV]:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #ffffff;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #39b54a;
+}
+
+input[type='radio'], [id=CSV]:checked:after {
+    /*-moz-appearance:none;*/
+    width: 23px;
+    height: 23px;
+    border-radius: 15px;
+    top: 0px;
+    left: -1px;
+    position: relative;
+    background-color: #39b54a;
+    content: '';
+    display: inline-block;
+    visibility: visible;
+    border: 5px solid #39b54a;
+}
+
+
+/*Oculta en safari movil*/
+input[type='radio'], [id=DEMO]:after {
+    /*-moz-appearance:none;*/
+    width:23px;
+    height:23px;
+    border-radius:15px;
+    top:0px;
+    left:-1px;
+    position:relative;
+    background-color: #ffffff;
+    content:'';
+    display:inline-block;
+    visibility:hidden;
+    border:5px solid #ffffff;
+}
+input[type='radio'], [id=DEMO]:checked:after {
+    width:23px;
+    height:23px;
+    border-radius:15px;
+    top:0px;
+    left:-1px;
+    position:relative;
+    background-color:#ffffff;
+    content:'';
+    display:inline-block;
+    visibility:hidden;
+    border:5px solid #ffffff;
+}

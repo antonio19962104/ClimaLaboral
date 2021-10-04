@@ -1,0 +1,282 @@
+﻿@using PL.Extensions
+@*@using HtmlHelpers.BeginCollectionItem*@
+@model ML.Preguntas
+
+
+@using (Html.BeginCollectionItem("NewCuestionEdit", ""))
+{
+    @Html.AntiForgeryToken()
+    <div class="section-survey shadow-sm animated fadeInUp col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@(Model.IdPregunta)">
+        <div class="body-survey">
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Pregunta, new { @class = "form-control", @placeholder = "Pregunta", @autofocus = "true", })
+                    @*<p>example</p>*@
+                    </div><!--.form-group-->
+                </div><!--.col-md-6-->
+                @Html.HiddenFor(m =>m.TipoControl.IdTipoControl)
+                @Html.HiddenFor(m => m.IdPregunta) 
+                @Html.HiddenFor(m => m.TipoEstatus.IdEstatus, new { @Id = "IdEstatus" + Model.IdPregunta })                
+            </div>
+
+            <hr class="clearfix" />
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">                
+                <div class="col-md-12" id="@("newAnswer" + Model.UniqueId)">
+                    @{
+                        if (Model.NewAnswerEdit != null)
+                        {
+                            if (Model.TipoEstatus.IdEstatus > 0)
+                            {
+                                foreach (var respuesta in Model.NewAnswerEdit)
+                                {
+                                    @Html.Partial("~/Views/Respuestas/RespuestasAddEdit.cshtml", respuesta);
+                                }
+                            }                          
+                        }
+
+                    }
+
+                    <hr class="clearfix" />
+                    <script type="text/javascript">
+                        $(document).on('click', '@("#addAnswere" + Model.UniqueId)', function () {
+                             const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+                            const nombreselect = '@("#tipoControl" + Model.UniqueId)';
+                            const selectedValue = $(nombreselect).val();
+                            switch (selectedValue) {
+                                case "1":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "2":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "3":
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereOpcionMultiple/',
+                                        data: { idpadreItem: padreItem },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "4":
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereChkBox/',
+                                        data: { idpadreItem: padreItem },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "5":
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereListaDesplegable/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "6":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "7":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "8":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "9":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "10":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "11":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "12":
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '/Encuesta/CreateNewAnswereLikertDoble/',
+                                        data: { idpadreItem: padreItem, columna: 2 },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+
+                                default:
+                                    swal("Tipo de Respuesta no seleccionada. !", "", "error");
+                                    break;
+                            }
+                        });
+                        $(document).on('change', '@("#tipoControl" + Model.UniqueId)', function () {
+                            const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+                            var selectedValue = $(this).val();
+                            const contenedorAnswere = '@("#newAnswer" +Model.UniqueId)';
+                            const masAnswere = '@("#agregaAnswere" + Model.UniqueId)';
+                            switch (selectedValue) {
+                                case "1":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereRespuestaCorta/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "2":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereRespuestaLarga/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "3":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        type:"GET",
+                                        url: '/Encuesta/CreateNewAnswereOpcionMultiple/',
+                                        data: { idpadreItem:padreItem},
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "4":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        type:"GET",
+                                        url: '/Encuesta/CreateNewAnswereChkBox/',
+                                        data: { idpadreItem: padreItem },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "5":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereListaDesplegable/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "6":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereSentimiento/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "7":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereRango/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "8":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertAcuerdo/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "9":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertFrecuencia/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+
+                                case "10":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertImportacia/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "11":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertProbabilidad/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "12":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        type: "GET",
+                                        url: '/Encuesta/CreateNewAnswereLikertDoble/',
+                                        data: { idpadreItem: padreItem, columna: 1 },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                            $.ajax({
+                                                type: "GET",
+                                                url: '/Encuesta/CreateNewAnswereLikertDoble/',
+                                                data: { idpadreItem: padreItem, columna: 1 },
+                                                success: function (partialView) {
+                                                    $('@("#newAnswer" + Model.UniqueId)').append(partialView);
+                                                }
+                                            });
+                                        }
+                                    });
+                                    break;
+
+                                default:
+                                    swal("Tipo de Respuesta no seleccionada. !", "", "error");
+                                    break;
+                            }
+                        });
+                    </script>
+                </div><!--.col-md-12-->
+                <hr class="clearfix" />
+                <div class="col-md-6">
+                @*JAMG*@
+                    <div class="form-check">
+                        @Html.CheckBoxFor(Model => Model.Obligatoria, new { @checked = "checked" })
+                        @Html.LabelFor(Model => Model.Obligatoria)
+                    </div><!--.form-check-->
+                </div><!--.col-md-6-->
+                <div class="col-md-6">
+                    <ul class="list-inline crud-questions">
+                        @*<li class="list-inline-item"><i class="fas fa-trash-alt"></i> Duplicar</li>*@
+                        <li class="list-inline-item" style="cursor:pointer;" onclick="javascript: deleteCuestion(document.getElementById('@Model.IdPregunta'))"><i class="fas fa-trash-alt"></i> Borrar</li>
+                        @*<li class="list-inline-item" style="cursor:pointer;" id="@("addAnswere" + Model.UniqueId)" name="@("addAnswere" + Model.UniqueId)">
+                            <i class="fas fa-plus-square"></i> Agregar respuesta
+                        </li>*@
+                    </ul>
+                </div>
+            <!--.col-md-6-->
+                <hr class="clearfix" />
+
+            </div><!--.row-->
+        </div><!--.body-survey-->
+    </div>
+
+
+                        }

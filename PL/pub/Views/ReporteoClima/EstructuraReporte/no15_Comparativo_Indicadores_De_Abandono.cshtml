@@ -1,0 +1,86 @@
+﻿<div class="content-wrap">
+    <div id="tab-comparativo-abandono" class="container-fluid px-lg-5">
+        <h2 class="robotothin mb-2 mt-n1">INDICADORES DE ABANDONO <span class="robotobold yellow-clima area-empresa ml-3">{{ vm.UNSeleccionada }}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="p-0">
+                    <div class="row mt-5 mb-5 mr-5 ml-5 bg-gris nuevomt">
+                        <div class="col-sm scrolling-wrapper grafica-dejar bg-gris">
+                            <center>
+                                <p class="robotobold titulo-grafica2">Lo que me motiva a dejar la empresa</p>
+                                <i class="fa fa-caret-down text-black f-40 icono-down-center"></i>
+                            </center>
+                            <div class="graph-wrapper" style="text-align: -moz-center;">
+                                <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
+                                    <div ng-repeat="item in vm.auxData_2 track by $index" class="col px-0 px-sm-1">
+                                        <center>
+                                            <div class="bar-clasificacion2" style="min-height:17px;height: {{ (400 * vm.fact) }}px; overflow:hidden;">
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[6].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item1 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[6].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[6].Respuesta }}</span> {{ item.objRespuestaFrecuncia[6].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[5].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item2 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[5].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[5].Respuesta }}</span> {{ item.objRespuestaFrecuncia[5].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[4].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item3 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[4].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[4].Respuesta }}</span> {{ item.objRespuestaFrecuncia[4].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[3].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item4 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[3].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[3].Respuesta }}</span> {{ item.objRespuestaFrecuncia[3].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[2].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item5 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[2].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[2].Respuesta }}</span> {{ item.objRespuestaFrecuncia[2].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[1].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item6 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[1].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[1].Respuesta }}</span> {{ item.objRespuestaFrecuncia[1].Frecuencia }}</div>
+                                                <div ng-show="{{ item.objRespuestaFrecuncia[0].Frecuencia > 0 }}" class="bar-progress4 w-100 grafica2-item7 tooltips" style="min-height:17px;height: {{ item.objRespuestaFrecuncia[0].alto }}%;"><span class="tooltiptext">{{ item.objRespuestaFrecuncia[0].Respuesta }}</span> {{ item.objRespuestaFrecuncia[0].Frecuencia }}</div>
+                                            </div>
+                                            <p class="text-graph">{{ item.entidad }}</p>
+                                        </center>
+                                    </div>
+                                 
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-5 nuevomt">
+                        <img src="~/img/ReporteoClima/indicadores4.png" class="img-fluid mt-3 ml-5 mb-5">
+                    </div>
+                    </div>
+
+            </div><!--.card-block-->
+        </div><!--.card-->
+
+        <hr class="clearfix my-5">
+
+    </div><!--.container-->
+
+</div><!--.content-wrap-->
+<style>
+    .bg-tabla-motivos {
+        /*background-color: white !important;*/
+    }
+    .tooltiptext{
+        visibility: hidden;
+        display:none;
+    }
+</style>
+<!--<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <h2 class="robotothin mb-2 mt-n1">INDICADORES DE ABANDONO <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="p-0">
+                    <div class="row mt-5 mb-5 mr-5 ml-5">
+                        <div class="col-sm scrolling-wrapper grafica-dejar bg-tabla-motivos">
+                            <center>
+                                <p class="robotobold titulo-grafica2">Lo que me motiva a dejar la empresa</p>
+                                <i class="fa fa-caret-down text-black f-40 icono-down-center"></i>
+                            </center>
+                            <div id="graph2" class="mb-4"></div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <img src="~/img/ReporteoClima/indicadores.png" class="img-fluid">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <hr class="clearfix my-5">
+
+    </div>
+
+</div>
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css" />
+<script src="~/scripts/ReporteoClima/morris2.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>-->

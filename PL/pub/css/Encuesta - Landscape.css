@@ -1,0 +1,2494 @@
+﻿#u6065 {
+    border: 4px solid #000080;
+    border-radius: 7px;
+}
+
+.imagenFondo {
+    width: 100%;
+    z-index: -1;
+}
+
+.logoCL {
+    height: 75px;
+    width: auto;
+    position: absolute;
+    opacity: 1;
+    margin-top: 10px;
+    margin-left: 0px;
+}
+
+.headerSuperior {
+    color: #000080;
+    opacity: 1;
+    height: 100px;
+    width: 107%;
+    max-width: 110%;
+    position: absolute;
+    background-color: #000080;
+}
+
+.footer {
+    color: #000080;
+    opacity: 1;
+    height: 50px;
+    width: 100%;
+    position: relative;
+    background-color: #000080;
+    margin-top: -50px;
+    bottom: 0;
+}
+
+.imgFotter {
+    opacity: 1;
+    height: 25px;
+    width: auto;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: auto;
+}
+
+
+
+/*@media only screen and (min-width: 940px) and (max-width: 3000px) {
+    .indicadores {
+        margin-left: 70%;
+    }
+
+    .pos {
+        margin-top: -50px;
+    }
+
+    #u6096-4 {
+        font-size: 16px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 0px;
+    }
+
+    #buttonu12118 {*/
+/*EA => CSF
+        left: -30.91%;
+    }
+
+    .originalEnfoques {
+        margin-top: 20px;
+    }
+
+    .originalEnfoques {
+        margin-top: 30px;
+    }
+
+    #indicadores {
+        margin-bottom: 15px;
+    }
+
+    .indicators {
+        margin-top: 30px;
+    }
+
+    #pbuttonu12118 { Botones EA
+        margin-top: -100px;
+        margin-left: 48%;
+    }
+
+    #buttonu12036 {
+        EA => CSV
+        height: 30px;
+        margin-left: -18%;
+    }
+
+    #pbuttonu12118 {
+        margin-top: -18%;
+    }
+
+    #buttonu12118 {
+        width: 150px;
+    }
+
+    #buttonu12036 {
+        width: 150px;
+        z-index: 100;
+    }
+
+    #buttonu12080 {
+        width: 150px;
+    }
+
+    #buttonu12099 {
+        EA => FF
+        width: 150px;
+        margin-left: -9%;
+    }
+
+    #buttonu12061 {
+        EA => FV
+        width: 150px;
+        margin-left: -13%;
+    }
+
+    #buttonu12080 {
+        EA => A veces
+        z-index: 62;
+        margin-left: -9.76%;
+    }
+
+    #buttonu4377, #buttonu5609, #buttonu5597, #buttonu5621, #buttonu5633 {
+        margin-top: -40px;
+        width: 150px;
+        min-width: 150px;
+    }
+
+    #buttonu4377 {
+        EE => CSF
+        margin-left: -4%;
+    }
+
+    #buttonu5597 {
+        margin-left: -3%;
+    }
+
+    #buttonu5609 {
+        EE => A veces
+        z-index: 55;
+    }
+
+    #buttonu5633 {
+        z-index: 70;
+    }
+
+    #buttonu5633 {
+        EE => CSV
+        height: 26px;
+    }
+
+    #buttonu5621 {
+        EE => FV
+    }
+}*/
+
+@media only screen and (min-width: 992px) and (max-width: 1050px) { /*Desktop View*/
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 18%;
+    }
+
+    .EE {
+        margin-left: -5%;
+    }
+
+    .EA {
+        margin-left: 45%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: -30px;
+        padding-left: -15px;
+        min-width:120px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 100%;
+        margin-top: -30px;
+    }
+
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1051px) and (max-width: 1135px) {
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 19.5%;
+    }
+
+    .EE {
+        margin-left: -3%;
+    }
+
+    .EA {
+        margin-left: 45%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: -30px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 83%;
+        margin-top: -17px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+
+@media only screen and (min-width: 1136px) and (max-width: 1200px) {
+    /*HAs*/
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 19.5%;
+    }
+
+    .EE {
+        margin-left: -1%;
+    }
+
+    .EA {
+        margin-left: 46.5%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1250px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:50px;
+    }
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 18%;
+    }
+
+    .EE {
+        margin-left: -0.2%;
+    }
+
+    .EA {
+        margin-left: 48%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1251px) and (max-width: 1290px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:50px;
+    }
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 18%;
+    }
+
+    .EE {
+        margin-left: -0.2%;
+    }
+
+    .EA {
+        margin-left: 48%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1291px) and (max-width: 1350px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:50px;
+    }
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 19%;
+    }
+
+    .EE {
+        margin-left: 1%;
+    }
+
+    .EA {
+        margin-left: 49%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -3px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1351px) and (max-width: 1480px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:50px;
+    }
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 21%;
+        margin-bottom: 50px;
+    }
+
+    .EE {
+        margin-left: 1.5%;
+    }
+
+    .EA {
+        margin-left: 50%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+        margin-bottom: 160px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -3px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+
+@media only screen and (min-width: 1481px) and (max-width: 1565px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:60px;
+    }
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 22%;
+        margin-bottom: 50px;
+    }
+
+    .EE {
+        margin-left: 2.5%;
+    }
+
+    .EA {
+        margin-left: 51%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+        margin-bottom: 160px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -3px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1566px) and (max-width: 1667px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:68px;
+    }
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 18%;
+        margin-bottom: 50px;
+    }
+
+    .EE {
+        margin-left: 3%;
+    }
+
+    .EA {
+        margin-left: 52%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+        height: 43px;
+        width: 70%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -4px;
+        margin-bottom: 160px;
+        height: 43px;
+        width: 70%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -7.5px;
+        z-index: 250;
+        height: 43px;
+        width: 70%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -11px;
+        height: 43px;
+        width: 70%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -17px;
+        height: 41px;
+        width: 70%;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1668px) and (max-width: 3000px) {
+    /*HAs*/
+    #indicators{
+        margin-bottom:85px;
+    }
+    .logoCL {
+        margin-left: 0px;
+    }
+
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 15%;
+        margin-bottom: 50px;
+    }
+
+    .EE {
+        margin-left: 5%;
+    }
+
+    .EA {
+        margin-left: 53.5%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+        height: 43px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -4px;
+        margin-bottom: 160px;
+        height: 43px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -7.5px;
+        z-index: 250;
+        height: 43px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -11px;
+        height: 43px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -17px;
+        height: 43px;
+        width: 60%;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 45%;
+        margin-top: 0px;
+    }
+
+    #u6065 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+#indicadores {
+    display: none;
+}
+
+#progreso {
+    font-size: 16px;
+}
+
+#paginacion {
+    font-size: 25px;
+}
+
+#pu6065 {
+    margin-bottom: 50px;
+}
+
+.pregunta1 {
+    margin-top: 100px;
+}
+
+.EEMobile {
+    display: none;
+}
+
+.EAMobile {
+    display: none;
+}
+
+#u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+    margin-top: 1px;
+}
+
+
+
+
+
+
+@media only screen and (min-width: 601px) and (max-width: 614px) {
+    #u14547 {
+        margin-top: -57px;
+        position: static;
+        margin-left: 30px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u19523 {
+        margin-left: 0px;
+        padding-right: 5px;
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+}
+
+@media only screen and (min-width: 350px) and (max-width:600px) and (orientation: landscape) {
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: #ffffff;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 57%;
+        margin-top: 15.5%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 5%;
+        margin-top: 15.5%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 40px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 5px;
+    }
+
+    #u6065 {
+        width: 25%;
+    }
+
+    #progreso {
+        font-size: 13px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 0px;
+    }
+
+    #paginacion {
+        margin-top: 40px;
+        margin-left: -15px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u14547 {
+        margin-top: -57px;
+        position: static;
+        margin-left: 30px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u19523 {
+        margin-left: 5px;
+        padding-right: 5px;
+        
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+
+    #u6065 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 75%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 100%;
+        max-width: 100%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        max-width:100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+@media only screen and (min-width: 601px) and (max-width:614px) {
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: #ffffff;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 57%;
+        margin-top: 15.5%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 5%;
+        margin-top: 15.5%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 40px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 5px;
+    }
+
+    #u6065 {
+        width: 25%;
+    }
+
+    #progreso {
+        font-size: 15px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 0px;
+    }
+
+    #paginacion {
+        margin-top: 40px;
+        margin-left: -15px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u14547 {
+        margin-top: -57px;
+        position: static;
+        margin-left: 30px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u19523 {
+        margin-left: 5px;
+        padding-right: 5px;
+        
+    }
+
+    #u15488 {
+        margin-left: 1%;
+    }
+
+    #u19528{
+        left:68%;
+    }
+
+    #u14554{
+        left:85%;
+    }
+
+    #u6065 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 75%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 110%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+
+
+@media only screen and (min-width: 686px) and (max-width:767px) {
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: #ffffff;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 59%;
+        margin-top: 17.5%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 7%;
+        margin-top: 17.5%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 65px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 67px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 68px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 67px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 65px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065 {
+        width: 30%;
+    }
+
+    #progreso {
+        font-size: 15px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 50px;
+        margin-left: -8px;
+        font-size: 25px;
+        position: static;
+        width:80px;
+    }
+
+    #u19528{
+        left:70%;
+    }
+
+    #u14554{
+        left:85%;
+    }
+
+    #u14547 {
+        margin-top: -67px;
+        position: static;
+        margin-left: 55px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+
+    #u6065 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 70%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 100%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (min-width: 615px) and (max-width:685px) {
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: #ffffff;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 59%;
+        margin-top: 15.5%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 6.5%;
+        margin-top: 15.5%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065 {
+        width: 30%;
+    }
+
+    #progreso {
+        font-size: 15px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 50px;
+        margin-left: -5px;
+        font-size: 25px;
+        position: static;
+        width:80px;
+    }
+
+    #u19528{
+        left:70%;
+    }
+
+    #u14554{
+        left:85%;
+    }
+
+    #u14547 {
+        margin-top: -67px;
+        position: static;
+        margin-left: 55px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+
+    #u6065 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 75%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 100%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+/************Desktop/Tablet View**************/
+
+@media only screen and (min-width: 768px) and (max-width:991px) {
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: #ffffff;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 60%;
+        margin-top: 20%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 8%;
+        margin-top: 20%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #viewTablet {
+        max-width: 100%;
+        min-width:100%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 68px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065 {
+        width: 30%;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: 0px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 50px;
+        margin-left: 12px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u19528 {
+        left: 70%;
+    }
+
+    #u14554 {
+        left: 85%;
+    }
+
+    #u14547 {
+        margin-top: -67px;
+        position: static;
+        margin-left: 55px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+
+    #u6065 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 60%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 110%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+/*Desktop*/
+@media only screen and (min-width: 992px) and (max-width:1200px) {
+    .EEMobile {
+        display: none;
+    }
+
+    .EAMobile {
+        display: none;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: 10px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        /*margin-top: 30px;*/
+        /*background-color: #ffffff;*/
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        /*background-color: #ffffff;*/
+    }
+
+    #indicators {
+        margin-bottom: 35px;
+    }
+
+
+
+    .EA {
+        margin-left: 50%;
+        margin-top: 20%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 0%;
+        margin-top: 20%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        /*height: 70px;
+        width: 60%;*/
+    }
+
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        /*height: 70px;
+        width: 60%;*/
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        /*height: 70px;
+        width: 60%;*/
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        /*height: 70px;
+        width: 60%;*/
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        /*height: 68px;
+        width: 60%;*/
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 1%;
+    }
+
+    #u6065 {
+        width: 30%;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: 0px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 50px;
+        margin-left: 12px;
+        font-size: 25px;
+        position: static;
+        width: 50px;
+    }
+
+    #u19528 {
+        left: 85%;
+    }
+
+    #u14554 {
+        left: 90%;
+    }
+
+    #u14547 {
+        margin-top: -67px;
+        position: static;
+        margin-left: 55px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+
+    #u6065 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+#u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        /*margin-top: 30px;*/
+        /*background-color: #ffffff;*/
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        /*background-color: #ffffff;*/
+    }

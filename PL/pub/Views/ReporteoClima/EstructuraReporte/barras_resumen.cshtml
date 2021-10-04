@@ -1,0 +1,49 @@
+﻿<div class="contenedor-resumen">
+    <p class="txt-total">TOTAL</p>
+    <!-- IMG EE -->
+    <img ng-if="vm.ComparativoRangoEdadEE[0].Porcentaje < 70" class="img-resumen" src="~/img/ReporteoClima/Iconos/lluvia-icono.png" width="60" height="50">
+    <img ng-if="vm.ComparativoRangoEdadEE[0].Porcentaje >= 70 && vm.ComparativoRangoEdadEE[0] <= 79" class="img-resumen" src="/img/ReporteoClima/Iconos/nube-icono.png" width="60" height="50">
+    <img ng-if="vm.ComparativoRangoEdadEE[0].Porcentaje >= 80 && vm.ComparativoRangoEdadEE[0] <= 89" class="img-resumen" src="~/img/ReporteoClima/Iconos/solnube-icono.png" width="60" height="50">
+    <img ng-if="vm.ComparativoRangoEdadEE[0].Porcentaje > 90" class="img-resumen" src="/img/ReporteoClima/Iconos/sol-icono.png" width="60" height="50">
+    <!-- IMG EA -->
+    <img ng-if="vm.ComparativoRangoEdadEA[0].Porcentaje < 70" class="img-resumen" src="~/img/ReporteoClima/Iconos/lluvia-icono.png" width="60" height="50">
+    <img ng-if="vm.ComparativoRangoEdadEA[0].Porcentaje >= 70 && vm.ComparativoRangoEdadEA[0] <= 79" class="img-resumen" src="/img/ReporteoClima/Iconos/nube-icono.png" width="60" height="50">
+    <img ng-if="vm.ComparativoRangoEdadEA[0].Porcentaje >= 80 && vm.ComparativoRangoEdadEA[0] <= 89" class="img-resumen" src="~/img/ReporteoClima/Iconos/solnube-icono.png" width="60" height="50">
+    <img ng-if="vm.ComparativoRangoEdadEA[0].Porcentaje > 90" class="img-resumen" src="/img/ReporteoClima/Iconos/sol-icono.png" width="60" height="50">
+
+    <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" class="porcentaje-obtenido">EE {{ vm.ComparativoRangoEdadEE[0].Porcentaje }}%</span>
+    <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" class="porcentaje-obtenido">EA {{ vm.ComparativoRangoEdadEA[0].Porcentaje }}%</span>
+    <p style="margin-bottom: -20px;"></p>
+    <small class="head-count-resumen">HC: {{ vm.ComparativoRangoEdadEA[0].HC }}</small>
+</div>
+<style>
+    .contenedor-resumen {
+        float: right;
+        margin-top: -25rem;
+        width: 220px;
+        height: 130px;
+        border: 2px solid #959292;
+        border-radius: 8px;
+    }
+
+    .txt-total {
+        color: blue;
+        font-weight: bold;
+        border-bottom: 2px solid #959292;
+    }
+
+    .img-resumen {
+        margin-left: -2rem;
+    }
+
+    .porcentaje-obtenido {
+        margin-left: 28px;
+        color: blue;
+        margin-bottom: 0;
+    }
+
+    .head-count-resumen {
+        color: blue;
+        margin-left: 50px;
+    }
+</style>

@@ -1,0 +1,1093 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "GetAllEliminadas";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+}
+
+
+<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img class="img-fluid" src="~/img/icon-enterprises.png" /><h1 class="title-page-survey">Empresas eliminadas / <span>Listado</span></h1>
+    </div>
+</section>
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8  offset-lg-2">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+
+                        <select class="form-control" id="option">
+                            <option value="0">Selecciona una opcion</option>
+                            <option value="1">Empresas</option>
+                            <option value="2">Áreas</option>
+                            <option value="3">Departamentos</option>
+                        </select>
+                        <br />
+
+
+                        <table id="tableEmpresa" class="table table-hover table-responsive">
+                            <caption>Lista de empresas eliminadas</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        <strong>Nombre_Empresa</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Unidad de Neocio a la que pertenece</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Estatus</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Editar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Eliminar definitivamente
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Company company in Model.ListCompanyDelete)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @company.CompanyName
+                                        </td>
+                                        <td class="text-center">
+                                            @company.CompanyCategoria.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                          @company.TipoEstatus.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="text-center buttonEditWrapper">
+                                                @*<a href="@Url.Action("GetModalEdit", "Empresa", new { CompanyId = company.CompanyId, CompanyName = company.CompanyName, IdCompanyCategoria = company.CompanyCategoria.IdCompanyCategoria })">*@
+                                                <button value="@company.CompanyId" onclick="GetUpdateEmpresa($(this).val())" class="btn btn-secondary btn-action btn-sm buttonEdit" data-toggle="modal" data-target="#modalEditEmpresa">
+                                                    Edit<i class="fas fa-pencil-square-o ml-1"></i>
+                                                </button>
+                                                @*</a>*@
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="button" name="name" value="Eliminar" class="btn btn-danger" onclick="eliminarDef('Empresa', @company.CompanyId)" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        @*Tabla Areas*@
+                        <table id="tableArea" class="table table-hover table-responsive">
+                            <caption>Lista de Areas eliminadas</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        IdArea
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Nombre del Área
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Empresa a la que pertenece
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Unidad de Negocio
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Estatus
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Editar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Eliminar 
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Area area in Model.ListAreaDelete)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @area.IdArea
+                                        </td>
+                                        <td class="text-center IsEditable">
+                                            @area.Nombre
+                                        </td>
+                                        <td class="text-center">
+                                            @area.Company.CompanyName
+                                        </td>
+                                        <td class="text-center">
+                                            @area.Company.CompanyCategoria.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            @area.TipoEstatus.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="text-center buttonEditWrapper">
+                                                @*<a href="@Url.Action("GetModalEdit", "Empresa", new { CompanyId = company.CompanyId, CompanyName = company.CompanyName, IdCompanyCategoria = company.CompanyCategoria.IdCompanyCategoria })">*@
+                                                <button value="@area.IdArea" onclick="GetUpdateArea($(this).val())" class="btn btn-secondary btn-action btn-sm buttonEdit" data-toggle="modal" data-target="#modalEditArea">
+                                                    Edit<i class="fas fa-pencil-square-o ml-1"></i>
+                                                </button>
+                                                @*</a>*@
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="button" name="name" value="Eliminar" class="btn btn-danger" onclick="eliminarDef('Area', @area.IdArea)" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+                        @*Table Depto*@
+                        <table id="tableDepartamento" class="table table-hover table-responsive">
+                            <caption>Lista de los departamentos eliminados</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        IdDepartamento
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Nombre del Departamento
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Area a la que pertenece
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Empresa a la que pertenece
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Estatus
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Editar
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Eliminar
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Departamento departamento in Model.ListDepartamentoDelete)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @departamento.IdDepartamento
+                                        </td>
+                                        <td class="text-center IsEditable">
+                                            @departamento.Nombre
+                                        </td>
+                                        <td class="text-center">
+                                            @departamento.Area.Nombre
+                                        </td>
+                                        <td class="text-center">
+                                            @departamento.Area.Company.CompanyName
+                                        </td>
+                                        <td class="text-center">
+                                            @departamento.TipoEstatus.Descripcion
+                                        </td>
+                                        <td>
+                                            <div class="text-center buttonEditWrapper">
+                                                @*<a href="@Url.Action("GetModalEdit", "Empresa", new { CompanyId = company.CompanyId, CompanyName = company.CompanyName, IdCompanyCategoria = company.CompanyCategoria.IdCompanyCategoria })">*@
+                                                <button value="@departamento.IdDepartamento" onclick="GetUpdateDepartamento($(this).val())" class="btn btn-secondary btn-action btn-sm buttonEdit" data-toggle="modal" data-target="#modalEditDepartamento">
+                                                    Edit<i class="fas fa-pencil-square-o ml-1"></i>
+                                                </button>
+                                                @*</a>*@
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <input type="button" name="name" value="Eliminar" class="btn btn-danger" onclick="eliminarDef('Departamento', @departamento.IdDepartamento)" />
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@*Seccion Modal*@
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+
+
+        <div class="modal fade modalEditClass" id="modalEditEmpresa" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar Empresa</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre de la nueva empresa:</label>
+                            <input placeholder="Ingresa el nombre de la empresa" type="text" id="inputNameEmpresa" class="form-control validate NombreEmpresaUpdate">
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Unidad de Negocio a la que pertenece</label>
+                            <select class="form-control" id="DDLUNegocioUpdate">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">AUTOFINANCIAMIENTO</option>
+                                <option value="2">AUTOMOTRIZ</option>
+                                <option value="3">CORPORATIVO</option>
+                                <option value="4">FINANCIERA</option>
+                                <option value="5">INTERNACIONAL</option>
+                                <option value="6">MANUFACTURA</option>
+                                <option value="7">OTROS NEGOCIOS</option>
+                                <option value="8">PRESIDENCIA</option>
+                                <option value="9">TURISMO</option>
+                            </select>
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus de la Empresa</label>
+                            <select class="form-control" id="DDLEstatusUpdate">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                                <option value="3">Eliminado</option>
+                            </select>
+                        </div>
+
+                        <label data-error="wrong" data-success="right" for="inputName" style="display:none">CompanyId: </label>
+                        <input placeholder="" type="text" id="CompanyId" style="display:none" class="form-control validate NombreEmpresaUpdate" disabled>
+
+
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="PostUpdateEmpresa()" class="btn btn-outline-primary btn-block buttonAdd">
+                                Guardar cambios
+                                <i class="fas fa-pencil-square-o ml-1"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade modalEditClass" id="modalEditArea" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar Área</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputName">Id del Área:</label>
+                            <input type="text" id="TxtIdArea" class="form-control validate" disabled>
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre del Área:</label>
+                            <input type="text" id="inputNameArea" class="form-control validate NombreAreaUpdate">
+                        </div>
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Unidad de Negocio a la que pertenece</label>
+                            <select class="form-control" id="DDLUNegocioUpdateForArea">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">AUTOFINANCIAMIENTO</option>
+                                <option value="2">AUTOMOTRIZ</option>
+                                <option value="3">CORPORATIVO</option>
+                                <option value="4">FINANCIERA</option>
+                                <option value="5">INTERNACIONAL</option>
+                                <option value="6">MANUFACTURA</option>
+                                <option value="7">OTROS NEGOCIOS</option>
+                                <option value="8">PRESIDENCIA</option>
+                                <option value="9">TURISMO</option>
+                            </select>
+                        </div>
+
+                        @*DDL de comoany*@
+
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Empresa a la que pertenece</label>
+                            @Html.DropDownList("Company", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @onclick = "", @id = "CompanyForArea", @class = "form-control" })
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus deL Área</label>
+                            <select class="form-control" id="DDLEstatusUpdateForArea">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                                <option value="3">Eliminado</option>
+                            </select>
+                        </div>
+
+
+
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="PostUpdateArea()" class="btn btn-outline-primary btn-block buttonAdd">
+                                Guardar cambios
+                                <i class="fas fa-pencil-square-o ml-1"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade modalEditClass" id="modalEditDepartamento" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar Departamento</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputName">Id del Departamento:</label>
+                            <input type="text" id="TxtIdDepartamento" class="form-control validate" disabled>
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Nombre del Departamento:</label>
+                            <input type="text" id="inputNameDepartamento" class="form-control validate NombreDepartamentoUpdate">
+                        </div>
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Unidad de Negocio a la que pertenece</label>
+                            <select class="form-control" id="DDLUNegocioUpdate2">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">AUTOFINANCIAMIENTO</option>
+                                <option value="2">AUTOMOTRIZ</option>
+                                <option value="3">CORPORATIVO</option>
+                                <option value="4">FINANCIERA</option>
+                                <option value="5">INTERNACIONAL</option>
+                                <option value="6">MANUFACTURA</option>
+                                <option value="7">OTROS NEGOCIOS</option>
+                                <option value="8">PRESIDENCIA</option>
+                                <option value="9">TURISMO</option>
+                            </select>
+                        </div>
+
+                        @*DDL de comoany*@
+
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Empresa a la que pertenece</label>
+                            @Html.DropDownList("Company", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @onclick = "", @id = "Company2", @class = "form-control" })
+                        </div>
+
+                        <div class="md-form mb-5" style="display:none">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Area a la que pertenece</label>
+                            @Html.DropDownList("Area", new SelectList(string.Empty, "Value", "Text"), "Selecciona una respuesta", new { @onclick = "", @id = "Area", @class = "form-control" })
+                        </div>
+
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputPosition">Estatus deL Área</label>
+                            <select class="form-control" id="DDLEstatusUpdate2">
+                                <option value="0">Selecciona una opcion</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Inactivo</option>
+                                <option value="3">Eliminado</option>
+                            </select>
+                        </div>
+
+
+
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="PostUpdateDepartamento()" class="btn btn-outline-primary btn-block buttonAdd">
+                                Guardar cambios
+                                <i class="fas fa-pencil-square-o ml-1"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+</style>
+@*Fin seccion modal*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+
+<script src="~/scripts/jquery-1.8.3.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#tableEmpresa').css('display', 'none');
+        $('#tableArea').css('display', 'none');
+        $('#tableDepartamento').css('display', 'none');
+    });
+
+    function GetUpdateEmpresa(CompanyIdentificador) {
+        $('#modalEdit').css('display', 'block');
+
+        var companyIde = CompanyIdentificador;
+
+        let ModelCompany = {
+            companyId: companyIde
+        }
+        //Ajax request for get Data where CompanyId = parameter CompanyId
+        $.ajax({
+
+            type: 'GET',
+            data: ModelCompany, traditional: true,
+            url: '@Url.Action("GetCompanyById", "Empresa")',
+            contentType: 'application/json; charset=utf-8',
+            complete: function (Response) {
+
+                if (Response.responseJSON != "error") {
+
+                    $('#modalEdit').css('display', 'block');
+                    $('input.NombreEmpresaUpdate').val(Response.responseJSON.CompanyName);
+                    $('#DDLUNegocioUpdate').val(Response.responseJSON.CompanyCategoria.IdCompanyCategoria);
+                    $('#DDLEstatusUpdate').val(Response.responseJSON.TipoEstatus.IdEstatus);
+                    $('#CompanyId').val(Response.responseJSON.CompanyId);
+
+                }
+                else {
+                    swal({
+                        title: "Ocurrio un error en la peticion Ajax",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+
+            }
+        });
+
+        //Fill controlls with data received
+    }
+
+    function PostUpdateEmpresa() {
+        var companyIdForUpadate = $('#CompanyId').val();
+
+        var newNombre = $('.NombreEmpresaUpdate').val();
+        var newCategoria = $('#DDLUNegocioUpdate').val();
+        var newEstatus = $('#DDLEstatusUpdate').val();
+
+        if (newNombre == "" || newCategoria == 0 || newEstatus == 0) {
+            swal({
+                title: "Debes llenar todos los campos para poder registrar",
+                text: "",
+                type: "error",
+                icon: "error",
+            });
+        }
+        else {
+            //Ajax function pasando un modelo
+
+            let ModelCompany = {
+                companyId: companyIdForUpadate,
+                companyName: newNombre,
+                companyCategoria: { idCompanyCategoria: newCategoria },
+                tipoEstatus: { idEstatus: newEstatus }
+            }
+
+            var data = JSON.stringify(ModelCompany);
+
+            $.ajax({
+
+                type: 'POST',
+                data: data, traditional: true,
+                url: '@Url.Action("Update", "Empresa")',
+                contentType: 'application/json; charset=utf-8',
+                complete: function (Response) {
+
+                    if (Response.responseJSON == "success") {
+                        swal({
+                            title: "La empresa se actualizó correctamente",
+                            text: "",
+                            type: "success",
+                            icon: "success",
+                        }).then(function () {
+                            window.location = "GetAllEliminadas";
+                        });
+                    }
+                    else {
+                        swal({
+                            title: "Ocurrio un error al intentar actualizar",
+                            text: "",
+                            type: "error",
+                            icon: "error",
+                        });
+                    }
+                }
+            });
+
+
+        }
+    }
+    //tableEmpresa_wrapper
+
+    $(document).ready(function () {
+
+        $('#tableEmpresa').DataTable();
+        $('#tableArea').DataTable();
+        $('#tableDepartamento').DataTable();
+
+        $('#tableEmpresa_wrapper').css('display', 'none');
+        $('#tableArea_wrapper').css('display', 'none');
+        $('#tableDepartamento_wrapper').css('display', 'none');
+
+        $('#option').change(function () {
+            var value = $('#option').val();
+
+            if (value == 0) {
+                $('#tableEmpresa_wrapper').css('display', 'none');
+                $('#tableArea_wrapper').css('display', 'none');
+                $('#tableDepartamento_wrapper').css('display', 'none');
+
+                $('#tableEmpresa').css('display', 'none');
+                $('#tableArea').css('display', 'none');
+                $('#tableDepartamento').css('display', 'none');
+            }
+            if (value == 1) {
+                $('#tableEmpresa_wrapper').css('display', 'block');
+                $('#tableArea_wrapper').css('display', 'none');
+                $('#tableDepartamento_wrapper').css('display', 'none');
+
+                $('#tableEmpresa').css('display', 'block');
+                $('#tableArea').css('display', 'none');
+                $('#tableDepartamento').css('display', 'none');
+            }
+            if (value == 2) {
+                $('#tableEmpresa_wrapper').css('display', 'none');
+                $('#tableArea_wrapper').css('display', 'block');
+                $('#tableDepartamento_wrapper').css('display', 'none');
+
+                $('#tableEmpresa').css('display', 'none');
+                $('#tableArea').css('display', 'block');
+                $('#tableDepartamento').css('display', 'none');
+            }
+            if (value == 3) {
+                $('#tableEmpresa_wrapper').css('display', 'none');
+                $('#tableArea_wrapper').css('display', 'none');
+                $('#tableDepartamento_wrapper').css('display', 'block');
+
+                $('#tableEmpresa').css('display', 'none');
+                $('#tableArea').css('display', 'none');
+                $('#tableDepartamento').css('display', 'block');
+            }
+        })
+    });
+
+    function GetUpdateArea(IdArea) {
+
+        //ajax request for fill DDL Company
+
+
+
+        $('#modalEdit').css('display', 'block');
+
+        var ID_AREA = IdArea;
+
+        let ModelArea = {
+            idArea: ID_AREA
+        }
+        $.ajax({
+
+            type: 'GET',
+            data: ModelArea, traditional: true,
+            url: '@Url.Action("GetAreaById", "Empresa")',
+            contentType: 'application/json; charset=utf-8',
+            complete: function (Response) {
+
+                if (Response.responseJSON != "error") {
+
+                    $('#modalEdit').css('display', 'block');
+                    $('#TxtIdArea').val(Response.responseJSON.IdArea);
+                    $('#CompanyForArea').val(Response.responseJSON.Company.CompanyId)
+                    $('input.NombreAreaUpdate').val(Response.responseJSON.Nombre);
+                    $('#DDLUNegocioUpdateForArea').val(Response.responseJSON.Company.CompanyCategoria.IdCompanyCategoria);
+                    $('#DDLEstatusUpdateForArea').val(Response.responseJSON.TipoEstatus.IdEstatus);
+
+                    //alert($("#DDLUNegocioUpdate").val());
+                    //$('#Company').empty();
+                    $('#CompanyForArea').empty();
+
+                    $("#CompanyForArea").append('<option value="'
+
+                                                               + 0 + '">'
+
+                                                               + 'Selecciona una respuesta' + '</option>');
+
+                    $.ajax({
+
+                        type: 'POST',
+
+                        url: '@Url.Action("GetCompanyAjax", "Empresa")',
+
+                        dataType: 'json',
+
+                        data: { id: $("#DDLUNegocioUpdateForArea").val() },
+
+                        success: function (city) {
+
+                            if (city != null) {
+
+
+                                $.each(city, function (i, city) {
+
+                                    $("#CompanyForArea").append('<option value="'
+
+                                                               + city.Value + '">'
+
+                                                               + city.Text + '</option>');
+
+
+                                });
+                            }
+                            $('#CompanyForArea').val(Response.responseJSON.Company.CompanyId)
+                        }
+
+                    });
+
+                }
+                else {
+                    swal({
+                        title: "Ocurrio un error en la peticion Ajax",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+
+            }
+        });
+
+    }
+    function PostUpdateArea() {
+
+
+        var ID_AREA = $('#TxtIdArea').val();
+        var NOMBRE_AREA = $('.NombreAreaUpdate').val();
+        var COMPANY_ID = $('#CompanyForArea').val();
+        var ID_ESTATUS = $('#DDLEstatusUpdateForArea').val();
+
+
+
+        if (NOMBRE_AREA == null || NOMBRE_AREA == "" || COMPANY_ID == 0 || ID_ESTATUS == 0) {
+
+            swal({
+                title: "Debes llenar todos los campos para poder registrar",
+                text: "",
+                type: "error",
+                icon: "error",
+            });
+
+        }
+
+        else{
+
+            //Create Model AREA
+            let MOdelArea = {
+                idArea: ID_AREA,
+                nombre: NOMBRE_AREA,
+                company: { companyId: COMPANY_ID },
+                tipoEstatus: { idEstatus: ID_ESTATUS }
+            }
+
+            var data  = JSON.stringify(MOdelArea);
+
+            $.ajax({
+
+                type: 'POST',
+                data: data, traditional: true,
+                url: '@Url.Action("UpdateAreaD4U", "Empresa")',
+                contentType: 'application/json; charset=utf-8',
+                complete: function (Response) {
+
+                    if (Response.responseJSON = "success") {
+
+                        swal({
+                            title: "El Área ha sido actualizada con éxito",
+                            text: "",
+                            type: "success",
+                            icon: "success",
+                        }).then(function () {
+                            location.reload();
+                        });
+
+                    }
+                    else{
+                        swal({
+                            title: "Ocurrió un error al intentar actualizar el Área",
+                            text: "",
+                            type: "error",
+                            icon: "error",
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    function GetUpdateDepartamento(IdDepartamentoFromView) {
+
+        var ID_Depto = IdDepartamentoFromView
+        //Call get departamento by id and fill tags
+        let ModelDepartamento = {
+            IdDepartamento: ID_Depto
+        }
+
+        var data = JSON.stringify(ModelDepartamento);
+
+        $.ajax({
+
+            type: 'GET',
+            data: ModelDepartamento, traditional: true,
+            url: '@Url.Action("GetDepartamentoById", "Empresa")',
+            contentType: 'application/json; charset=utf-8',
+            complete: function (Response) {
+
+                if (Response.responseJSON != "error") {
+
+                    $('#modalEditDepartamento').css('display', 'block');
+                    $('#TxtIdDepartamento').val(Response.responseJSON.IdDepartamento);
+                    $('#Company2').val(Response.responseJSON.Area.Company.CompanyId)
+                    $('input.NombreDepartamentoUpdate').val(Response.responseJSON.Nombre);
+                    $('#DDLUNegocioUpdate2').val(Response.responseJSON.Area.Company.CompanyCategoria.IdCompanyCategoria);
+                    $('#DDLEstatusUpdate2').val(Response.responseJSON.TipoEstatus.IdEstatus);
+
+                    //alert($("#DDLUNegocioUpdate").val());
+                    //$('#Company').empty();
+                    $('#Company2').empty();
+
+                    $("#Company2").append('<option value="'
+
+                                                               + 0 + '">'
+
+                                                               + 'Selecciona una respuesta' + '</option>');
+
+                    $.ajax({
+
+                        type: 'POST',
+
+                        url: '@Url.Action("GetCompanyAjax", "Empresa")',
+
+                        dataType: 'json',
+
+                        data: { id: $("#DDLUNegocioUpdate2").val() },
+
+                        success: function (city) {
+
+                            if (city != null) {
+
+
+                                $.each(city, function (i, city) {
+
+                                    $("#Company2").append('<option value="'
+
+                                                               + city.Value + '">'
+
+                                                               + city.Text + '</option>');
+
+
+                                });
+                            }
+                            $('#Company2').val(Response.responseJSON.Area.Company.CompanyId);
+
+                            $.ajax({
+
+                                type: 'POST',
+
+                                url: '@Url.Action("GetAreaAjax", "Empresa")',
+
+                                dataType: 'json',
+
+                                data: { id: $("#Company2").val() },
+
+                                success: function (city) {
+
+                                    if (city != null) {
+
+
+                                        $.each(city, function (i, city) {
+
+                                            $("#Area").append('<option value="'
+
+                                                                       + city.Value + '">'
+
+                                                                       + city.Text + '</option>');
+
+
+                                        });
+                                    }
+                                    $('#Area').val(Response.responseJSON.Area.IdArea);
+                                }
+                            });
+                            
+                        }
+
+                    });
+
+                    
+
+                }
+                else {
+                    swal({
+                        title: "Ocurrio un error en la peticion Ajax",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+               
+
+
+            }
+        });
+
+    }
+
+</script>
+
+<!--Controlar DDL Dinámico-->
+<script>
+    //For UpdateArea
+    $(document).ready(function () {
+
+
+        //Get value of Categoria
+        $("#DDLUNegocioUpdate").change(function () {
+            //alert($("#DDLUNegocioUpdate").val());
+            $('#Company').empty();
+
+            $("#Company").append('<option value="'
+
+                                                       + 0 + '">'
+
+                                                       + 'Selecciona una respuesta' + '</option>');
+
+
+            $.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("GetCompanyAjax", "Empresa")',
+
+                dataType: 'json',
+
+                data: { id: $("#DDLUNegocioUpdate").val() },
+
+                success: function (city) {
+
+                    if (city != null) {
+                        //alert('city no es nulo');
+
+                        $("#u20208").show();
+                        $("#u20200-4").show();
+                        $("#buttonu20361").show();
+
+                        $.each(city, function (i, city) {
+
+                            $("#Company").append('<option value="'
+
+                                                       + city.Value + '">'
+
+                                                       + city.Text + '</option>');
+
+
+                        });
+                    }
+                }
+            });
+        });
+    });
+
+    function PostUpdateDepartamento() {
+
+        var IdDepartamento = $('#TxtIdDepartamento').val();
+        var NombreDepartamento = $('.NombreDepartamentoUpdate').val();
+        var IdEstatus = $('#DDLEstatusUpdate2').val();
+        var IdArea = $('#Area').val();
+
+        let ModelDepartamento = {
+            idDepartamento: IdDepartamento,
+            nombre: NombreDepartamento,
+            tipoEstatus: { idEstatus: IdEstatus },
+            area: { idArea: IdArea }
+        }
+
+        var data = JSON.stringify(ModelDepartamento);
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("UpdateDepartamento", "Empresa")',
+            dataType: 'json',
+            data: data,
+            contentType: 'application/json; charset=utf-8',
+            complete: function (Response) {
+
+                if (Response.responseJSON == "success") {
+                    swal({
+                        title: "El Departamento ha sido actualizado con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function myfunction() {
+                        location.reload();
+                    });
+                }
+                else {
+                    swal({
+                        title: "Ocurrio un error al intentar actualizar",
+                        text: "",
+                        type: "error",
+                        icon: "error",
+                    });
+                }
+
+            }
+        });
+
+    }
+
+</script>
+<script>
+    //For updateDepartamento
+    $(document).ready(function () {
+
+
+        //Get value of Categoria
+        $("#DDLUNegocioUpdate2").change(function () {
+            //alert($("#DDLUNegocioUpdate").val());
+            $('#Company2').empty();
+
+            $("#Company2").append('<option value="'
+
+                                                       + 0 + '">'
+
+                                                       + 'Selecciona una respuesta' + '</option>');
+
+
+            $.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("GetCompanyAjax", "Empresa")',
+
+                dataType: 'json',
+
+                data: { id: $("#DDLUNegocioUpdate2").val() },
+
+                success: function (city) {
+
+                    if (city != null) {
+
+
+                        $.each(city, function (i, city) {
+
+                            $("#Company2").append('<option value="'
+
+                                                       + city.Value + '">'
+
+                                                       + city.Text + '</option>');
+
+
+                        });
+                    }
+                }
+            });
+        });
+
+
+
+        //Get value of Area
+        $("#Company2").change(function () {
+            //alert($("#DDLUNegocioUpdate").val());
+            $('#Area').empty();
+
+            $("#Area").append('<option value="'
+
+                                                       + 0 + '">'
+
+                                                       + 'Selecciona una respuesta' + '</option>');
+
+
+            $.ajax({
+
+                type: 'POST',
+
+                url: '@Url.Action("GetAreaAjax", "Empresa")',
+
+                dataType: 'json',
+
+                data: { id: $("#Company2").val() },
+
+                success: function (city) {
+
+                    if (city != null) {
+
+
+                        $.each(city, function (i, city) {
+
+                            $("#Area").append('<option value="'
+
+                                                       + city.Value + '">'
+
+                                                       + city.Text + '</option>');
+
+
+                        });
+                    }
+                }
+            });
+        });
+    });
+    function eliminarDef(entidad, id) {
+        let model = {
+            companyName: entidad,
+            companyId: id
+        };
+        $.ajax({
+            url: '@Url.Action("ModEmpresasEliminarDefEmpresaAreaDepto")',
+            data: model,
+            complete: function () {
+                swal("La entidad se eliminó con exito", "", "info");
+                window.location.reload(true);
+            }
+        });
+    }
+</script>

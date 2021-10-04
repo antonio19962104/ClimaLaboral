@@ -1,0 +1,95 @@
+﻿
+input[type='radio'], [id=RBSI]:after {
+        /*-moz-appearance:none;*/
+        width: 23px;
+        height: 23px;
+        border-radius: 15px;
+        top: 0px;
+        left: -1px;
+        position: relative;
+        background-color: #ffffff;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 6px solid #000080;
+    }
+
+
+    input[type='radio'], [id=RBSI]:checked:after {
+        /*-moz-appearance:none;*/
+        width: 23px;
+        height: 23px;
+        border-radius: 15px;
+        top: 0px;
+        left: -1px;
+        position: relative;
+        background-color: #000080;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 5px solid #000080;
+        /*z-index:2000;*/
+    }
+
+    input[type='radio'], [id=RBNO]:after {
+        /*-moz-appearance:none;*/
+        width: 23px;
+        height: 23px;
+        border-radius: 15px;
+        top: 0px;
+        left: -1px;
+        position: relative;
+        background-color: #ffffff;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 6px solid #000080;
+    }
+
+    input[type='radio'], [id=RBNO]:checked:after {
+        /*-moz-appearance:none;*/
+        width: 23px;
+        height: 23px;
+        border-radius: 15px;
+        top: 0px;
+        left: -1px;
+        position: relative;
+        background-color: #000080;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 5px solid #000080;
+    }
+
+
+    /*Aqua*/
+
+
+    /*Aqua*/
+input[type='radio'], [id=DEMO]:after {
+    -moz-appearance:none;
+    width:23px;
+    height:23px;
+    border-radius:15px;
+    top:0px;
+    left:-1px;
+    position:relative;
+    background-color: #ffffff;
+    content:'';
+    display:inline-block;
+    visibility:hidden;
+    border:5px solid aqua;
+}
+input[type='radio'], [id=DEMO]:checked:after {
+    width:23px;
+    height:23px;
+    border-radius:15px;
+    top:0px;
+    left:-1px;
+    position:relative;
+    background-color:aqua;
+    content:'';
+    display:inline-block;
+    visibility:hidden;
+    border:5px solid aqua;
+}

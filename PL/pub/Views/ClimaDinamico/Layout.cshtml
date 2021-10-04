@@ -1,0 +1,257 @@
+﻿@{ 
+    Layout = null;
+    ViewBag.Title = "Encuesta";
+}
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Grupo Autofin México" />
+    <meta name="description" content="Encuesta Clima Laboral" />
+    <meta name="keywords" content="Encuesta, Empresa, Area, Clima laboral, Grupo Autofin México, Autofinanciamiento México" />
+    <link href="~/css/Clima Dinamico/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link href="~/css/Clima Dinamico/styles-likert.css" rel="stylesheet" />
+    <script src="~/scripts/AngularJS.js"></script>
+    <script src="~/scripts/Clima Dinamico/climaLaboral.js"></script>
+    <script src="~/scripts/linq.js"></script>
+    <title>@ViewBag.Title - Clima Laboral</title>
+</head>
+<body ng-controller="climaController as vm">
+    <div class="container-fluid">
+        <div id="header" class="row row-header-clima">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 header" style="opacity: 1 !important;">
+                <div class="center-vertically">
+                    <img src="~/img/ClimaDinamico/LogoHeader.png" class="img-logo-header img-responsive" />
+                </div>
+            </div>
+        </div>
+
+        @RenderBody()
+
+        <div class="busy">
+        </div>
+        <style>
+            .loadVisible {
+                display: block;
+            }
+
+            .loadInvisible {
+                display: none;
+            }
+
+            .busy {
+                /*background: url(../../img/ReporteoClima/loading.gif) no-repeat center center;*/
+                background: url(../../images/loadimage.gif) no-repeat center center; /*loadimage.gif*/
+                width: 100%;
+                height: 100%;
+                background-color: #000;
+                opacity: 0.9;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 2147483601;
+            }
+
+            .loader-ring {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -100px 0 0 -100px;
+                width: 200px;
+                height: 200px;
+            }
+
+            .loader-ring-light {
+                width: 200px;
+                height: 200px;
+                -moz-border-radius: 240px;
+                -webkit-border-radius: 240px;
+                border-radius: 240px;
+                -moz-box-shadow: 0 4px 0 #10d0ff inset;
+                -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+                box-shadow: 0 4px 0 #10d0ff inset;
+                animation: rotate-360 2s linear infinite;
+                -moz-animation: rotate-360 2s linear infinite;
+            }
+
+            .loader-ring-track {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 200px;
+                height: 200px;
+                -moz-border-radius: 240px;
+                -webkit-border-radius: 240px;
+                border-radius: 240px;
+                -moz-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                -webkit-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+            }
+        </style>
+
+        <div id="footer" class="row row-footer-clima">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 footer" style="opacity: 1 !important;">
+                <div class="center-vertically">
+                    <img src="~/img/ClimaDinamico/LogoFooter.png" class="img-logo-footer img-responsive" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function sizeMetrica() {
+            /*obtener ancho de col metrica, repartir entre 5 ese ancho*/
+            try {
+                var metrica = document.getElementsByClassName("metrica")[0];
+                var col = (metrica.offsetWidth - 15) / 5;
+                var itemsMetrica = document.getElementsByClassName("likert-values");
+                for (var i = 0; i < itemsMetrica.length; i++) {
+                    itemsMetrica[i].style.width = col + "px";
+                    itemsMetrica[i].style.minWidth = col + "px";
+                    itemsMetrica[i].style.maxWidth = col + "px";
+                }
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+        function myFunction(x) {
+            if (x.matches) {
+                sizeMetrica();
+            } else {
+                var itemsMetrica = document.getElementsByClassName("likert-values");
+                for (var i = 0; i < itemsMetrica.length; i++) {
+                    itemsMetrica[i].style.width = 100 + "%";
+                    itemsMetrica[i].style.minWidth = 100 + "%";
+                    itemsMetrica[i].style.maxWidth = 100 + "%";
+                }
+            }
+        }
+        function resizeContent() {
+            /* size image */
+            try {
+                console.log(window.innerHeight);
+                var footer = document.getElementById("footer");
+                console.log(footer.offsetTop);
+                var header = document.getElementById("header");
+                console.log(header.offsetTop);
+                var img = document.getElementById("img-intro");
+                var height = (window.innerHeight - footer.offsetHeight - header.offsetHeight);/* 966px(alto pantalla) - 916px(donde inicia el footer) */
+                img.style.height = height + "px";
+                /* size values */
+                var value3 = document.getElementById("val3");
+                var elems = document.getElementsByClassName("des-likert");
+                for (var i = 0; i < elems.length; i++) {
+                    if (value3.offsetHeight < 65) { elems[i].style.height = 65 + "px"; }
+                    else { elems[i].style.height = value3.offsetHeight + "px"; }
+                }
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+        function isNullOrEmpty(data) {
+            if (data == undefined || data == null || data == "") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        // media queries
+        var x = window.matchMedia("(min-width: 1200px)")
+        var y = window.matchMedia("(min-width: 992px)")
+        // call functions by match media queries
+        myFunction(x);
+        x.addListener(myFunction)
+        myFunction(y);
+        y.addListener(myFunction)
+        // resize functions
+        $(window).resize(function () {
+            var x = window.matchMedia("(min-width: 1200px)")
+            var y = window.matchMedia("(min-width: 992px)")
+            myFunction(x) // Call listener function at run time
+            x.addListener(myFunction) // Attach listener function on state changes
+            myFunction(y) // Call listener function at run time
+            y.addListener(myFunction) // Attach listener function on state changes
+            resizeContent();
+        });
+        //
+        resizeContent();
+        $(document).ready(function () {
+
+            if (window.location.href.split("/")[4] == "Login") {
+                localStorage.clear();
+            }
+        });
+        try {
+
+            var esPV = window.location.href.indexOf("IntroduccionPV");
+            if (esPV > 0) {
+                var strIdEncuesta = window.location.href.split("/")[4].split("=")[1];
+                document.getElementsByClassName('btn-continuar')[0]
+                        .addEventListener('click', function (event) {
+                            var redirectEncuesta = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/EncuestaPV/?aIdEncuesta=" + strIdEncuesta;
+                            window.location.href = redirectEncuesta;
+                        });
+            }
+            else { 
+                document.getElementsByClassName('btn-continuar')[0]
+                        .addEventListener('click', function (event) {
+                            var redirectEncuesta = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Encuesta/?aIdusuario=" + localStorage.getItem("idEmpleado") + "&aIdEncuesta=" + localStorage.getItem("idEncuesta");
+                            window.location.href = redirectEncuesta;
+                        });
+            }
+            
+
+
+        } catch (aE) {
+            console.log(aE);
+        }
+
+
+        $(document).ready(function () {
+            if (window.location.href.split('/')[4].toUpperCase() == "THANKS") {
+                document.getElementsByClassName("busy")[0].style.display = "none";
+            }
+            try {
+                document.getElementsByClassName('btn-final')[0]
+                    .addEventListener('click', function (event) {
+                        var redirectEncuesta = window.location.href = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/?uid=" + localStorage.getItem("uid");
+                        window.location.href = redirectEncuesta;
+                    });
+            } catch (aE) {
+                console.log(aE);
+            }
+        })
+        function resizeContentFinal() {
+            try {
+                /* size image */
+                console.log(window.innerHeight);
+                var footer = document.getElementById("footer");
+                console.log(footer.offsetTop);
+                var header = document.getElementById("header");
+                console.log(header.offsetTop);
+                var img = document.getElementById("img-final");
+                var height = (window.innerHeight - footer.offsetHeight - header.offsetHeight);/* 966px(alto pantalla) - 916px(donde inicia el footer) */
+                img.style.height = height + "px";
+                /* size values */
+                var value3 = document.getElementById("val3");
+                var elems = document.getElementsByClassName("des-likert");
+                for (var i = 0; i < elems.length; i++) {
+                    if (value3.offsetHeight < 65) { elems[i].style.height = 65 + "px"; }
+                    else { elems[i].style.height = value3.offsetHeight + "px"; }
+                }
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+        resizeContentFinal();
+        $(window).resize(function () {
+            resizeContentFinal();
+        });
+
+    </script>
+</body>
+</html>

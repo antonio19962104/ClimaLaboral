@@ -1,0 +1,212 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Inicio CMS - Encuestas";
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="~/css/bootstrap.min.css">    
+    <link rel="stylesheet" type="text/css" href="~/css/custom-administrator.css">
+    <!-- Animate CSS -->  
+    <link rel="stylesheet" type="text/css" href="~/css/animate.min.css">
+    <!--Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="~/css/all.min.css">    
+    <!-- include summernote css/js -->
+    <link href="~/css/summernote.min.css" rel="stylesheet">
+
+    <!-- Title -->
+    <title>Diagnostic 4U</title>
+</head>
+<body>
+
+    <ul id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn d-none" onclick="closeNav()"><i class="fas fa-arrow-left fa-lg color"></i></a>
+        <span class="openbtn animated pulse slow" onclick="openNav()"><i class="fas fa-arrow-right fa-lg color"></i></span>
+        <li>
+            <div class="item-menu-icon" onclick="openNav()">
+                <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                <span class="tooltiptext">Encuestas</span>
+            </div>
+            <span class="item-menu d-none">
+                <a data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                    <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Encuestas
+                </a>
+            </span>
+            <div class="collapse" id="collapseSurvey">
+                <div class="card card-body py-2">
+                    <ul class="fa-ul pl-lg-4">
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Encuesta")">Crear</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Importar encuesta</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Listado</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item-menu-icon" onclick="openNav()">
+                <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
+                <span class="tooltiptext">Plantillas</span>
+            </div>
+            <span class="item-menu d-none">
+                <a onclick="openNav()" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
+                    <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
+                </a>
+            </span>
+            <div class="collapse" id="collapseTemplates">
+                <div class="card card-body py-2">
+                    <ul class="fa-ul pl-lg-4">
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Crear</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="./plantillas.php">Listado</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item-menu-icon" onclick="openNav()">
+                <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
+                <span class="tooltiptext">Reportes</span>
+            </div>
+            <span class="item-menu d-none">
+                <a onclick="openNav()" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
+                    <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
+                </a>
+            </span>
+            <div class="collapse" id="collapseReports">
+                <div class="card card-body py-2">
+                    <ul class="fa-ul pl-lg-4">
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Crear</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="./dashboard.php">Listado</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item-menu-icon" onclick="openNav()">
+                <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
+                <span class="tooltiptext">Bases de datos</span>
+            </div>
+            <span class="item-menu d-none">
+                <a onclick="openNav()" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
+                    <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
+                </a>
+            </span>
+            <div class="collapse" id="collapseDatabase">
+                <div class="card card-body py-2">
+                    <ul class="fa-ul pl-lg-4">
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Crear</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Listado</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Administrar bases de datos eliminadas</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item-menu-icon" onclick="openNav()">
+                <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
+                <span class="tooltiptext">Usuarios</span>
+            </div>
+            <span class="item-menu d-none">
+                <a onclick="openNav()" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
+                    <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
+                </a>
+            </span>
+            <div class="collapse" id="collapseUsers">
+                <div class="card card-body py-2">
+                    <ul class="fa-ul pl-lg-4">
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Crear</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Listado</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Administrar usuarios eliminadas</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="item-menu-icon" onclick="openNav()">
+                <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
+                <span class="tooltiptext">Empresas</span>
+            </div>
+            <span class="item-menu d-none">
+                <a onclick="openNav()" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
+                    <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
+                </a>
+            </span>
+            <div class="collapse" id="collapseEnterprises">
+                <div class="card card-body py-2">
+                    <ul class="fa-ul pl-lg-4">
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Crear</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Listado</a></li>
+                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Administrar empresas eliminadas</a></li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!--Fin menú-->
+
+    <div id="main" style="margin-left: 50px;">
+
+        <main id="wrapper" class="animated fadeIn">
+
+            <div id="top-bar">
+                <div class="container-fluid px-lg-5">
+                    <div class="row center-vertically">
+                        <div class="col-6 col-sm-4 col-md-5">
+                            <img src="~/img/logo-h.png" class="logo-header" alt="Logo">
+                        </div>
+                        <div class="col-6 col-sm-8 col-md-7">
+                            <div class="user-info">
+                                <span class="color">Hola</span>, Oscar Camacho / <span class="position">Administrador Master</span> <img src="~/img/icon-user-male.jpg" class="avatar-header" alt="Avatar" width="50" height="50">
+                            </div><!--.user-info-->
+                        </div>
+                    </div><!--.row-->
+                </div><!--.container-fluid-->
+            </div>
+            <header id="header">
+                <nav class="navbar py-0 px-lg-5">
+                    <a class="navbar-brand title-section-top" href="#">Escritorio</a>
+                </nav>
+            </header>
+            <section id="page-title">
+                <div class="container-fluid px-lg-5">
+                    <h1 class="title-page-title">Bienvenido <span>Selecciona cualquiera de las herramientas para que comiences:</span></h1>
+                </div><!--.container-fluid-->
+            </section>
+
+            <section id="content">
+
+                @RenderBody()
+
+            </section>
+
+        </main><!--#wrapper-->
+
+    </div><!--#main-->
+
+    <footer id="footer">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6">
+                    <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
+                </div><!--.col-6-->
+                <div class="col-6">
+                    <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                </div><!--.col-6-->
+            </div><!--.row-->
+        </div><!--.container-fluid-->
+    </footer>
+    @Scripts.Render("~/bundles/jqueryAdmin")
+    
+</body>
+</html>
+
+

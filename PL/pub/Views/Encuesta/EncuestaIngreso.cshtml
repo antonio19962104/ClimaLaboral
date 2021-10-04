@@ -1,0 +1,910 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "Encuesta Ingreso";
+    //Layout = "";
+}
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    @{
+        //Session["PerfilAdminLog"]
+        ViewBag.Perfil = Session["PerfilAdminLog"];
+    }
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/cssAdmin")
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js" type="text/javascript"></script>
+    <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.flash.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.0/js/buttons.print.min.js"></script>
+    <link href="https://cdn.datatables.net/buttons/1.4.0/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+    <script type="text/javascript">
+	$(document).ready (function(){
+        $('#myTable_filter').hide();
+        $('#myTable').hide();
+        $('#myTable_wrapper').hide();
+        $('#IdFiltro_4 option').remove();
+        $.ajax({
+            url: '@Url.Action("GetEmpresas")',
+            type: 'GET',
+            data: 1,
+            complete: function (Response) {
+                if (Response.responseJSON.length > 0) {
+                    $('#IdFiltro_4').append(
+                            '<option value="">Selecciona</option>'
+                            );
+                    for (var i = 0; i < Response.responseJSON.length; i++) {
+                        $('#IdFiltro_4').append(
+                            '<option value="' + Response.responseJSON[i].Empresa + '">' + Response.responseJSON[i].Empresa + '</option>'
+                            );
+                    }
+                }
+            }
+        });
+
+	});
+	$("#SearchFecha").on("change", function () {
+	    var date = $('#SearchFecha').val();
+	    //alert(date);
+	    //2020 - 07 - 09
+	    var anio = date.split('-')[0];
+	    var mes = date.split('-')[1];
+	    var dia = date.split('-')[2];
+	    var fecha = dia + '/' + mes + '/' + anio;
+	    $('#SearchFecha').val(fecha);
+	});
+	
+
+	function buscar() {
+	    var date = $('#fecha').val();
+	    //alert(date);
+	    //2020 - 07 - 09
+	    var anio = date.split('-')[0];
+	    var mes = date.split('-')[1];
+	    var dia = date.split('-')[2];
+	    var fecha = dia + '/' + mes + '/' + anio;
+	    $('#SearchFecha').val(fecha);
+	}
+    </script>
+</head>
+<body>
+    <ul id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn d-none" onclick="closeNav()"><i class="fas fa-arrow-left fa-lg color"></i></a>
+        <span class="openbtn animated pulse slow" onclick="openNav()"><i class="fas fa-arrow-right fa-lg color"></i></span>
+
+
+        <!--Seccion Permisos por usuario-->
+        @{
+            //Validar permisos
+            var ActionEncuestasListar = false;
+            var ActionEncuestasCrear = false;
+            var ActionEncuestasOpc = false;
+
+            var ActionPlantillasListar = false;
+            var ActionPlantillasCrear = false;
+            var ActionPlantillasOpc = false;
+
+            var ActionReportesListar = false;
+            var ActionReportesCrear = false;
+            var ActionReportesOpc = false;
+
+            var ActionBDListar = false;
+            var ActionBDCrear = false;
+            var ActionBDOpc = false;
+
+            var ActionUsuariosListar = false;
+            var ActionUsuariosCrear = false;
+            var ActionUsuariosOpc = false;
+
+            var ActionEmpresasListar = false;
+
+            var ActionEmpresasCrear = false;
+            var chkEmpresasOpc = false;
+
+            var session = Session["AdminLog"];
+            var sessionPerfil = Session["PerfilAdminLog"];
+
+
+            ViewBag.Permisos = Session["Permisos"];
+            ViewBag.Modulos = Session["Modulos"];
+            //Model.ObjectsPermisos = new List<object>();
+            //Model.ObjectsPermisos = ViewBag.Permisos;
+
+            foreach (ML.PerfilModulo item in ViewBag.Permisos)
+            {
+                if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "ListarEncuesta")
+                {
+                    ActionEncuestasListar = true;
+                }
+                if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "CrearEncuesta")
+                {
+                    ActionEncuestasCrear = true;
+                }
+                if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "OpcEncuesta")
+                {
+                    ActionEncuestasOpc = true;
+                }
+                /**********************/
+                if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "ListarPlantilla")
+                {
+                    ActionPlantillasListar = true;
+                }
+                if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "CrearPlantilla")
+                {
+                    ActionPlantillasCrear = true;
+                }
+                if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "OpcPlantilla")
+                {
+                    ActionPlantillasOpc = true;
+                }
+                /***********************************/
+                if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "ListarReporte")
+                {
+                    ActionReportesListar = true;
+                }
+                if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "CrearReporte")
+                {
+                    ActionReportesCrear = true;
+                }
+                if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "OpcReporte")
+                {
+                    ActionReportesOpc = true;
+                }
+                /***************************************/
+                if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "ListarBD")
+                {
+                    ActionBDListar = true;
+                }
+                if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "CrearBD")
+                {
+                    ActionBDCrear = true;
+                }
+                if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "OpcBD")
+                {
+                    ActionBDOpc = true;
+                }
+                /*******************************/
+                if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "ListarUsuario")
+                {
+                    ActionUsuariosListar = true;
+                }
+                if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "CrearUsuario")
+                {
+                    ActionUsuariosCrear = true;
+                }
+                if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "OpcUsuario")
+                {
+                    ActionUsuariosOpc = true;
+                }
+                /*********************************/
+                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "ListarEmpresa")
+                {
+                    ActionEmpresasListar = true;
+                }
+                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "CrearEmpresa")
+                {
+                    ActionEmpresasCrear = true;
+                }
+                if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "OpcEmpresa")
+                {
+                    chkEmpresasOpc = true;
+                }
+            }
+
+            foreach (ML.PerfilModulo perf in ViewBag.Modulos)
+            {
+                ML.PerfilModulo perfilModulo = new ML.PerfilModulo();
+                perfilModulo.Modulo = new ML.Modulo();
+
+                perfilModulo.Modulo.Nombre = perf.Modulo.Nombre;
+
+                if (perfilModulo.Modulo.Nombre == "Encuestas")
+                {
+                    <li id="Encuestas">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" aria-controls="collapseSurvey" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                                <span class="tooltiptext">Encuestas</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                                <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Encuestas
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapseSurvey">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (ActionEncuestasCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Encuesta")">Crear</a></li>
+                                        }
+                                        if (ActionEncuestasOpc == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Load", "Encuesta")">Importar encuesta</a></li>
+                                        }
+                                        if (ActionEncuestasListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Encuesta")">Listado</a></li>
+                                        }
+                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("CreateCL", "Encuesta")">Crear Clima Laboral</a></li>
+                                        <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Competencia")">Competencias</a></li>
+                                        <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll_", "Competencia")">Categorias</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (perfilModulo.Modulo.Nombre == "Plantillas")
+                {
+                    <li id="Plantillas">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" aria-controls="collapseTemplates" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
+                                <span class="tooltiptext">Plantillas</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
+                                <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapseTemplates">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (ActionPlantillasCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("creaPlantilla", "Plantillas")">Crear</a></li>
+                                        }
+                                        if (ActionPlantillasListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Plantillas", "Plantillas")">Listado</a></li>
+                                        }
+                                        if (ActionPlantillasOpc == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (perfilModulo.Modulo.Nombre == "Reportes")
+                {
+                    <li id="Reportes">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" aria-controls="collapseReports" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
+                                <span class="tooltiptext">Reportes</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
+                                <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapseReports">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (ActionReportesCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "ReporteD4U")">Crear</a></li>
+                                        }
+                                        if (ActionReportesListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Reporte")">Listado</a></li>
+                                        }
+                                        if (ActionReportesOpc == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (perfilModulo.Modulo.Nombre == "Base de datos")
+                {
+                    <li id="BD">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" aria-controls="collapseDatabase" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
+                                <span class="tooltiptext">Bases de datos</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
+                                <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapseDatabase">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (ActionBDCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "BD")">Crear</a></li>
+                                        }
+                                        if (ActionBDListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllForListado", "BD")">Listado</a></li>
+                                        }
+                                        if (ActionBDOpc == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEliminadas", "BD")">Administrar bases de datos eliminadas</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (perfilModulo.Modulo.Nombre == "Usuarios")
+                {
+                    <li id="Usuarios">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" aria-controls="collapseUsers" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
+                                <span class="tooltiptext">Usuarios</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
+                                <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapseUsers">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (ActionUsuariosCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Administrador")">Crear</a></li>
+                                        }
+                                        if (ActionUsuariosListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Administrador")">Listado</a></li>
+                                        }
+                                        if (ActionUsuariosOpc == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminados", "Administrador")">Administrar usuarios eliminadas</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+                if (perfilModulo.Modulo.Nombre == "Empresas")
+                {
+                    <li id="Empresas">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" aria-controls="collapseEnterprises" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
+                                <span class="tooltiptext">Empresas</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
+                                <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapseEnterprises">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (ActionEmpresasCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Empresa")">Crear</a></li>
+                                        }
+                                        if (ActionEmpresasListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Empresa")">Listado</a></li>
+                                        }
+                                        if (chkEmpresasOpc == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminadas", "Empresa")">Administrar empresas eliminadas</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+            }
+        }
+        <!--Fin seccion permisos por usuario-->
+
+
+
+    </ul>
+
+    <div id="main" style="margin-left: 50px;">
+        <main id="wrapper" class="animate fadeIn">
+            <div id="top-bar">
+                <div class="container-fluid px-lg-5">
+                    <div class="row">
+
+                        <div class="col-6 col-sm-4 col-md-5">
+                            <img src="@Session["logo"]" class="logo-header" alt="Logo" onclick="GetDashBoard()">
+                        </div>
+
+                        <div class="col-6 col-sm-8 col-md-7">
+                            <div class="user-info">
+                                <span class="color">Hola</span>, @Session["AdminLog"]  @{ foreach (var item in ViewBag.Perfil)
+                                { <span class="position"> / @item  </span> } } <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
+                            </div><!--.user-info-->
+                        </div>
+                    </div><!--.row-->
+                </div><!--.container-fluid-->
+            </div>
+
+            @{
+            var fecha = DateTime.Now;
+            var date = DateTime.Now.ToString("MM/dd/yyyy");
+            }
+          
+
+            <section id="page-title">
+                <div class="container-fluid px-lg-5">
+                    <img src="~/img/icon-users.png" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Reporte / <span>Reporte "Encuesta Ingreso"</span>
+                    </h1>
+                </div><!--.container-fluid-->
+            </section>
+            <section id="content">
+                <div class="content-wrap">
+                    <div class="container-fluid px-lg-5">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                                        <div class="form-group">
+                                            <input type="submit" class="btn btn-success" name="name" value="Consultar el reporte de hoy" id="IdFiltro_0" onclick="GetData('', this)" />
+                                        </div>
+                                        <p>Elige el filtro para visualizar el reporte</p>
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="card">
+                                                <div class="card-header" id="headingTwo">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                            Filtra los resultados por fecha <i class="fas fa-angle-double-down"></i>
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                                    <div class="card-body" id="mergePeriodos">
+                                                        <div class="form-group">
+                                                            <input id="IdFiltro_1" type="date" name="name" value="" class="form-control" />
+                                                        </div>
+                                                        <input id="Filter_1" type="submit" name="name" value="Obtener" onclick="GetData($('#IdFiltro_1').val(), this)" />
+                                                    </div>
+                                                </div>
+                                                @*<div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordionExample">
+                                                    <div class="card-body" id="">
+                                                        <div class="form-group">
+                                                            <select class="form-control" id="lugarTrabajo">
+                                                            </select>
+                                                        </div>
+                                                        <input id="Filter_1" type="submit" name="name" value="Obtener" onclick="GetData($('#IdFiltro_1').val(), this)" />
+                                                    </div>
+                                                </div>*@
+                                            </div>
+
+                                           
+
+                                            <div class="card">
+                                                <div class="card-header" id="heading4">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                                                            Filtra los resultados por el rango de temperaturas <i class="fas fa-angle-double-down"></i>
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordionExample">
+                                                    <div class="card-body" id="mergePeriodos">
+                                                        <div class="form-group">
+                                                            <input type="radio" name="IdFiltro_3" value="< 37.5" /> Temperatura < 37.5
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input style="color:red" type="radio" name="IdFiltro_3" value=">= 37.5" /> Temperatura > 37.5
+                                                        </div>
+                                                        <input id="Filter_3" type="submit" name="name" value="Obtener" onclick="GetData($('input[name=IdFiltro_3]:checked').val(), this)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card">
+                                                <div class="card-header" id="heading5">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                                                            Filtra los resultados por Empresa <i class="fas fa-angle-double-down"></i>
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#accordionExample">
+                                                    <div class="card-body" id="mergePeriodos">
+                                                        <div class="form-group">
+                                                            <select class="form-control" id="IdFiltro_4">
+                                                                <option value="0">Selecciona</option>
+                                                            </select>
+                                                        </div>
+                                                        <input id="Filter_4" type="submit" name="name" value="Obtener" onclick="GetData($('#IdFiltro_4').val(), this)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card">
+                                                <div class="card-header" id="headingA">
+                                                    <h2 class="mb-0">
+                                                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseA" aria-expanded="false" aria-controls="collapseA">
+                                                            Filtra los resultados por lugar de trabajo <i class="fas fa-angle-double-down"></i>
+                                                        </button>
+                                                    </h2>
+                                                </div>
+                                                <div id="collapseA" class="collapse" aria-labelledby="headingA" data-parent="#accordionExample">
+                                                    <div class="card-body" id="mergePeriodos">
+                                                        <div class="form-group" id="hola">
+                                                            <select style="display:none;" class="form-control" id="lugarTrabajo">
+                                                            </select>
+                                                        </div>
+                                                        <input id="Filter_4" type="submit" name="name" value="Obtener" onclick="GetData($('#IdFiltro_4').val(), this)" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <table id="myTable" class="table table-hover table-responsive">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" scope="col">IdRH</th>
+                                                <th class="text-center" scope="col">Nombre</th>
+                                                <th class="text-center" scope="col">ApellidoPaterno</th>
+                                                <th class="text-center" scope="col">ApellidoMaterno</th>
+                                                <th class="text-center" scope="col">RFC</th>
+                                                <th class="text-center" scope="col">Correo</th>
+                                                <th class="text-center" scope="col">Empresa</th>
+                                                <th class="text-center" scope="col">Lugar de Trabajo</th>
+                                                <th class="text-center" scope="col">Area</th>
+                                                <th class="text-center" scope="col">Departamento</th>
+                                                <th class="text-center" scope="col">Puesto</th>
+                                                <th class="text-center" scope="col">Contacto</th>
+                                                <th class="text-center" scope="col">FechaContacto</th>
+                                                <th class="text-center" scope="col">Temperatura</th>
+                                                <th class="text-center" scope="col">Tos</th>
+                                                <th class="text-center" scope="col">Malestar</th>
+                                                <th class="text-center" scope="col">MalestarGastrico</th>
+                                                <th class="text-center" scope="col">DificultadRespirar</th>
+                                                <th class="text-center" scope="col">dTemperatura</th>
+                                                <th class="text-center" scope="col">DolorGarganta</th>
+                                                <th class="text-center" scope="col">EscurrimientoNasal</th>
+                                                <th class="text-center" scope="col">DolorCuerpo</th>
+                                                <th class="text-center" scope="col">Conjuntivitis</th>
+                                                <th class="text-center" scope="col">Enfermedades</th>
+                                                <th class="text-center" scope="col">AltGustoOlfato</th>
+                                                <th class="text-center" scope="col">Fecha de ingreso</th>
+                                                <th class="text-center" scope="col">Acceso</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (ML.EncuestaIngreso item in Model.Objects)
+                                            {
+                                            <tr>
+                                                <td class="text-center">@item.IdRH</td>
+                                                <td class="text-center">@item.Nombre</td>
+                                                <td class="text-center">@item.ApellidoPaterno</td>
+                                                <td class="text-center">@item.ApellidoMaterno</td>
+                                                <td class="text-center">@item.RFC.ToUpper()</td>
+                                                <td class="text-center">@item.Correo</td>
+                                                <td class="text-center">@item.Empresa</td>
+                                                <td class="text-center">@item.LugarTrabajo</td>
+                                                <td class="text-center">@item.Area</td>
+                                                <td class="text-center">@item.Departamento</td>
+                                                <td class="text-center">@item.Puesto</td>
+                                                <td class="text-center">@item.Contacto</td>
+                                                @{
+                                                string cadenaFechaContacto = Convert.ToString(item.FechaContacto);
+                                                if (cadenaFechaContacto == "01/01/0001 12:00:00 a. m.")
+                                                {
+                                                <td class="text-center">N/A</td>
+                                                }
+                                                else
+                                                {
+                                                <td class="text-center">@item.FechaContacto</td>
+                                                }
+                                                }
+                                                <td class="text-center">@item.Temperatura</td>
+                                                <td class="text-center">@item.Tos</td>
+                                                <td class="text-center">@item.Malestar</td>
+                                                <td class="text-center">@item.MalestarGastrico</td>
+                                                <td class="text-center">@item.DifRespirar</td>
+
+                                                <td class="text-center">@item.NTemperatura</td>
+                                                <td class="text-center">@item.DolorGarganta</td>
+                                                <td class="text-center">@item.EscurrimientoNasal</td>
+                                                <td class="text-center">@item.DolorCuerpo</td>
+                                                <td class="text-center">@item.Conjuntivitis</td>
+                                                <td class="text-center">@item.Enfermedades</td>
+                                                <td class="text-center">@item.AltGustoOlfato</td>
+
+                                                <td class="text-center">@item.Fecha</td>
+                                                <td class="text-center">@item.resultAcceso</td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>IdRH</th>
+                                                <th>Nombre</th>
+                                                <th>ApellidoPaterno</th>
+                                                <th>ApellidoMaterno</th>
+                                                <th>RFC</th>
+                                                <th>Correo</th>
+                                                <th>Empresa</th>
+                                                <th>Lugar de trabajo</th>
+                                                <th>Area</th>
+                                                <th>Departamento</th>
+                                                <th>Puesto</th>
+                                                <th>Contacto</th>
+                                                <th>FechaContacto</th>
+                                                <th>Temperatura</th>
+                                                <th>Tos</th>
+                                                <th>Malestar</th>
+                                                <th>MalestarGastrico</th>
+                                                <th>DifRespirar</th>
+                                                <th>NTemperatura</th>
+                                                <th>DolorGarganta</th>
+                                                <th>EscurrimientoNasal</th>
+                                                <th>DolorCuerpo</th>
+                                                <th>Conjuntivitis</th>
+                                                <th>Enfermedades</th>
+                                                <th>AltGustoOlfato</th>
+
+                                                <th>Fecha</th>
+                                                <th>Acceso</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main><!--#wrapper-->
+    </div>
+        <footer id="footer">
+            <div class="container-fluid px-lg-5">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script>
+        var listLugarTrabajo = [];
+        function GetDashBoard() {
+            window.location.href = "/DashBoard/DashBoard"
+        }
+        function GetData(valueFilter, e) {
+            $('#myTable').DataTable().destroy();
+            $('tbody tr').remove();
+            var IdFiltro = e.id.split('_')[1];
+            console.log('IdFiltro: ' + e.id);
+            console.log('Valor filtro: ' + valueFilter);
+
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+
+            let model =
+                {
+                    filtro: IdFiltro,
+                    valueFilter: valueFilter
+                };
+
+            $.ajax({
+                url: '@Url.Action("EncuestaIngreso")',
+                type: 'POST',
+                data: model,
+                complete: function (Response) {
+                    if (Response.responseJSON.Data.length > 0) {
+                        console.log(Response);
+
+                        for (var i = 0; i < Response.responseJSON.Data.length; i++) {
+
+                            //var fecha = Response.responseJSON.Data[i].Fecha;
+
+                            $('tbody').append(
+                            '<tr>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].IdRH + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Nombre + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].ApellidoPaterno + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].ApellidoMaterno + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].RFC + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Correo + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Empresa + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].LugarTrabajo + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Area + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Departamento + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Puesto + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Contacto + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].stringFechaContacto + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Temperatura + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Tos + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Malestar + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].MalestarGastrico + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].DifRespirar + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].NTemperatura + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].DolorGarganta + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].EscurrimientoNasal + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].DolorCuerpo + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Conjuntivitis + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].Enfermedades + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].AltGustoOlfato + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].stringFecha + '</td>' +
+                            '<td class="text-center">' + Response.responseJSON.Data[i].resultAcceso + '</td>' +
+                            '</tr>'
+                            );
+                            listLugarTrabajo.push(Response.responseJSON.Data[i].LugarTrabajo);
+                        }
+
+                        
+                        //Remover repetidos
+                        
+                        listLugarTrabajo = listLugarTrabajo.unique();
+                        console.log(listLugarTrabajo);
+                        listLugarTrabajo = listLugarTrabajo.sort();
+                        $('#lugarTrabajo option').remove();
+                        $('#lugarTrabajo').append('<option value=0>Selecciona un lugar de trabajo</option>');
+                        for (var i = 0; i < listLugarTrabajo.length; i++) {
+                            $('#lugarTrabajo').append('<option value=' + listLugarTrabajo[i] + '>' + listLugarTrabajo[i] + '</option>');
+                        }
+
+                        $('#myTable').show();
+                        $('#myTable_wrapper').show();
+                        //Inicialic datatble
+                        $('#myTable tfoot th').each(function () {
+                            var title = $(this).text();
+                            if (title == 'Fecha') {
+                                $(this).html('<input type="date" id="Search' + title + '" placeholder="Search ' + title + '" />');
+                            }
+                            else {
+                                $(this).html('<input type="text" id="Search' + title + '" placeholder="Search ' + title + '" />');
+                            }
+                        });
+                        var i = 0;
+                        // DataTable
+                        var table = $('#myTable').DataTable({
+                            dom: 'Bfrtip',
+                            buttons: ['copy', 'csv', 'excel'],
+                            initComplete: function () {
+                                // Apply the search
+                                this.api().columns().every(function () {
+                                    var that = this;
+
+
+
+                                    $('input', this.footer()).on('keyup change clear', function () {
+                                        if (this.type == 'date' || this.type == "date") {
+                                            var date = $('#SearchFecha').val();
+                                            if (date == null || date == "") {
+                                                if (that.search() !== "") {
+                                                    that
+                                                        .search("")
+                                                        .draw();
+                                                }
+                                            }
+                                            else {
+                                                //alert(date);
+                                                //2020 - 07 - 09
+                                                var anio = date.split('-')[0];
+                                                var mes = date.split('-')[1];
+                                                var dia = date.split('-')[2];
+                                                var fecha = dia + '/' + mes + '/' + anio;
+                                                if (that.search() !== fecha) {
+                                                    that
+                                                        .search(fecha)
+                                                        .draw();
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            //val is continue
+                                            if (that.search() !== this.value) {
+                                                that
+                                                    .search(this.value)
+                                                    .draw();
+                                            }
+                                        }
+                                    });
+                                });
+
+                                this.api().columns().every(function () {
+                                    var column = this;
+                                    if (i == 7) {
+
+
+                                        var select = $('<select class="form-control"><option value="">Selecciona un lugar de trabajo</option></select>')
+                                        .appendTo('#hola')
+                                        .on('change', function () {
+                                            var val = $.fn.dataTable.util.escapeRegex(
+                                                $(this).val()
+                                            );
+
+                                            column
+                                                .search(val ? '^' + val + '$' : '', true, false)
+                                                .draw();
+                                        });
+
+                                        column.data().unique().sort().each(function (d, j) {
+                                            select.append('<option value="' + d + '">' + d + '</option>')
+                                        });
+
+
+                                    }
+                                    i++;
+                                });
+
+
+
+                            }
+                        });
+                        swal.close();
+                    }
+                    else {
+                        swal('No se obtuvieron resultados con el filtro aplicado', '', 'info');
+                    }
+                }
+            });
+        }
+            Array.prototype.unique = function (a) {
+                return function () { return this.filter(a) }
+            }(function (a, b, c) {
+                return c.indexOf(a, b + 1) < 0
+            });
+        </script>
+</body>
+</html>

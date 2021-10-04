@@ -1,0 +1,233 @@
+﻿<!--Si se deben desplegar todas las entidades dependientes se usara <div class="head-impulsores" ng-repeat="item in vm.finalColumnas" >{{item.type}}: {{item.value}}</div>-->
+<!--
+    Now    Last      diff
+    98% => 80%       +18
+    70% => 90%       -20
+-->
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <h2 class="robotothin mb-2 mt-n1">Reactivo <span class="robotobold yellow-clima area-empresa ml-3">{{ vm.modelHistorico.EntidadNombre }}</span></h2>
+        <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
+        <div class="card">
+            <div class="card-block ">
+            <!--Busqueda por indicador-->
+                <div ng-show="vm.opc == 2" class="row px-4 mt-3">
+                    
+                    <div class="col-5">
+                        <div class="row header-impulsores">
+                            <div class="col-10 categoria-bl">CATEGORÍA</div>
+                        </div>
+                        <div class="row mt-3 bg-impulsores">
+                            <div class="col-1 align-middle icono-impulsores ">
+                                <img src="~/img/ReporteoClima/chevron-right.png" class="img-fluid d-none d-sm-block">
+                            </div>
+                            <div class="col-10 tablaimpulsores-izq">
+                                <h3 class="robotoblack">{{ vm.tipoIndicadorSeleccionado.Nombre }}</h3>
+                                <i class="f-13 yellow-clima">{{ vm.tipoIndicadorSeleccionado.Descripcion }}</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7 p-0">
+                        <div id="merge1" class="scrolling-wrapper">
+                            <!--iteracion-->
+                            <div class="reporteIndicador head-impulsores {{ 'pos' + $index }}" ng-repeat="item in vm.auxiliar track by $index">
+                                <div class="header-impulsores row impulsoreshead-izq">
+                                    <div class="col-5 offset-1" style="overflow: hidden;">
+                                        {{ item.entidadNombre }} EE
+                                    </div>
+                                    <div class="col-5 offset-1 border-right-head" style="overflow: hidden;">
+                                        {{ item.entidadNombre }} EA
+                                    </div>
+                                </div>
+                                <div class="mt-3 row tablaimpulsores-der">
+                                    <div class="col-5 p-0 ml-1">
+                                        <div class="{{ vm.setClase(item.dataEE) }}">
+                                            <center><img ng-src="{{ vm.setIcono(item.dataEE) }}" class="m-2 w-icon-impulsores"></center>
+                                            <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                <p class="mb-n2 f-21">{{ item.dataEE }}%</p>
+                                                <!--El historico depende del indicador que haya elegido-->
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 1" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 2" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].Promedio66R) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].Promedio66R) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 3" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].NivelConfianza) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].NivelConfianza) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 4" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].NivelCompromiso) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].NivelCompromiso) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 5" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].NivelColaboracion) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].NivelColaboracion) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 6" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].Creedibilidad) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].Creedibilidad) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 7" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].Imparcialidad) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].Imparcialidad) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 8" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].Orgullo) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].Orgullo) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 9" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].Respeto) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].Respeto) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 10" class="{{ vm.getClassDiff(item.dataEE - vm.listDataHistoricoEE[0].Companierismo) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEE, vm.listDataHistoricoEE[0].Companierismo) }}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 p-0 ml-2 mr-1">
+                                        <div class="{{ vm.setClase(item.dataEA) }}">
+                                            <center><img ng-src="{{ vm.setIcono(item.dataEA) }}" class="m-2 w-icon-impulsores"></center>
+                                            <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                <p class="mb-n2 f-21">{{ item.dataEA }}%</p>
+                                                <!--El historico depende del indicador que haya elegido-->
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 1" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].NivelParticipacion) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 2" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].Promedio66R) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].Promedio66R) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 3" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].NivelConfianza) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].NivelConfianza) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 4" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].NivelCompromiso) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].NivelCompromiso) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 5" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].NivelColaboracion) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].NivelColaboracion) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 6" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].Creedibilidad) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].Creedibilidad) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 7" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].Imparcialidad) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].Imparcialidad) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 8" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].Orgullo) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].Orgullo) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 9" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].Respeto) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].Respeto) }}%</p>
+                                                <p ng-show="vm.hasHistorico && vm.tipoIndicadorSeleccionado.Id == 10" class="{{ vm.getClassDiff(item.dataEA - vm.listDataHistoricoEA[0].Companierismo) }} f-17 mb-1">{{ vm.getPorcentDiff(item.dataEA, vm.listDataHistoricoEA[0].Companierismo) }}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 p-0 borde-impulsores "></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+
+
+
+
+
+
+            <!--Busqueda por reactivo-->
+                <div ng-show="vm.opc == 3" class="row px-4 mt-3">
+                    <div class="col-5">
+                        <div class="row header-impulsores">
+                            <div class="col-10 categoria-bl">CATEGORÍA</div>
+                        </div>
+                        <div class="row mt-3 bg-impulsores">
+                            <div class="col-1 align-middle icono-impulsores ">
+                                <img src="~/img/ReporteoClima/chevron-right.png" class="img-fluid d-none d-sm-block">
+                            </div>
+                            <div class="col-10 tablaimpulsores-izq">
+                                <h3 hidden class="robotoblack">{{ vm.reactivoSeleccionado.IdPregunta }}  {{ vm.reactivoSeleccionado.Pregunta }}</h3>
+                                <p class="mb-n1 grey-color">{{ vm.reactivoSeleccionado.IdPregunta }}  {{ vm.reactivoSeleccionado.Pregunta }}</p>
+                                <i hidden class="f-13 yellow-clima">Texto 2</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7 p-0">
+                        <div id="merge2" class="scrolling-wrapper">
+                            <!--iteracion-->
+                            <div class="reporteReactivo head-impulsores {{ 'pos' + $index }}" ng-repeat="item in vm.auxiliar2 track by $index" onload="view(5)"><!--solo 5-->
+                                <div class="header-impulsores row impulsoreshead-izq">
+                                    <div class="col-5 offset-1" style="overflow: hidden;">
+                                        {{ item.entidadNombre }} EE
+                                    </div>
+                                    <div class="col-5 offset-1 border-right-head" style="overflow: hidden;">
+                                        {{ item.entidadNombre }} EA
+                                    </div>
+                                </div>
+                                <div class="mt-3 row tablaimpulsores-der">
+                                    <div class="col-5 p-0 ml-1">
+                                        <div class="{{ vm.setClase(item.dataEE) }}">
+                                            <center><img ng-src="{{ vm.setIcono(item.dataEE) }}" class="m-2 w-icon-impulsores"></center>
+                                            <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                <p class="mb-n2 f-21">{{ item.dataEE }}%</p>
+                                                <p ng-show="vm.hasHistorico" class="{{ vm.getClassDiffCustomEE(item.dataEE) }} f-17 mb-1">{{ vm.getPorcentDiffCustomEE(item.dataEE) }}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-5 p-0 ml-2 mr-1">
+                                        <div class="{{ vm.setClase(item.dataEA) }}">
+                                            <center><img ng-src="{{ vm.setIcono(item.dataEA) }}" class="m-2 w-icon-impulsores"></center>
+                                            <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                                <p class="mb-n2 f-21">{{ item.dataEA }}%</p>
+                                                <p ng-show="vm.hasHistorico" class="{{ vm.getClassDiffCustomEA(item.dataEA) }} f-17 mb-1">{{ vm.getPorcentDiffCustomEA(item.dataEA) }}%</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-1 p-0 borde-impulsores "></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <div ng-hide="vm.auxiliar2.length <= 5" class="col-xl-8 offset-xl-4" style="">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination mt-5">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li ng-show="vm.auxiliar2.length > 5 || vm.auxiliar.length > 5" class="page-item"><a ng-click="vm.view(5)" class="page-link" href="#">1</a></li>
+                                <li ng-show="vm.auxiliar2.length > 5 || vm.auxiliar.length > 5" class="page-item"><a ng-click="vm.view(10)" class="page-link" href="#">2</a></li>
+                                <li ng-show="vm.auxiliar2.length > 10 || vm.auxiliar.length > 10" class="page-item"><a ng-click="vm.view(15)" class="page-link" href="#">3</a></li>
+                                <li ng-show="vm.auxiliar2.length > 15 || vm.auxiliar.length > 15" class="page-item"><a ng-click="vm.view(20)" class="page-link" href="#">4</a></li>
+                                <li ng-show="vm.auxiliar2.length > 20 || vm.auxiliar.length > 20" class="page-item"><a ng-click="vm.view(25)" class="page-link" href="#">5</a></li>
+                                <li ng-show="vm.auxiliar2.length > 25 || vm.auxiliar.length > 25" class="page-item"><a ng-click="vm.view(30)" class="page-link" href="#">6</a></li>
+                                <li ng-show="vm.auxiliar2.length > 30 || vm.auxiliar.length > 30" class="page-item"><a ng-click="vm.view(35)" class="page-link" href="#">7</a></li>
+                                <li ng-show="vm.auxiliar2.length > 35 || vm.auxiliar.length > 35" class="page-item"><a ng-click="vm.view(40)" class="page-link" href="#">8</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div ng-hide="vm.auxiliar.length <= 5" class="col-xl-8 offset-xl-4" style="">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination mt-5">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li ng-show="vm.auxiliar2.length > 5 || vm.auxiliar.length > 5" class="page-item"><a ng-click="vm.view(5)" class="page-link" href="#">1</a></li>
+                                <li ng-show="vm.auxiliar2.length > 5 || vm.auxiliar.length > 5" class="page-item"><a ng-click="vm.view(10)" class="page-link" href="#">2</a></li>
+                                <li ng-show="vm.auxiliar2.length > 10 || vm.auxiliar.length > 10" class="page-item"><a ng-click="vm.view(15)" class="page-link" href="#">3</a></li>
+                                <li ng-show="vm.auxiliar2.length > 15 || vm.auxiliar.length > 15" class="page-item"><a ng-click="vm.view(20)" class="page-link" href="#">4</a></li>
+                                <li ng-show="vm.auxiliar2.length > 20 || vm.auxiliar.length > 20" class="page-item"><a ng-click="vm.view(25)" class="page-link" href="#">5</a></li>
+                                <li ng-show="vm.auxiliar2.length > 25 || vm.auxiliar.length > 25" class="page-item"><a ng-click="vm.view(30)" class="page-link" href="#">6</a></li>
+                                <li ng-show="vm.auxiliar2.length > 30 || vm.auxiliar.length > 30" class="page-item"><a ng-click="vm.view(35)" class="page-link" href="#">7</a></li>
+                                <li ng-show="vm.auxiliar2.length > 35 || vm.auxiliar.length > 35" class="page-item"><a ng-click="vm.view(40)" class="page-link" href="#">8</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <center>
+                        <img src="~/img/ReporteoClima/indicadores.png" class="img-fluid mt-4 mb-3">
+                    </center>
+                </div>
+            </div><!--.card-block-->
+        </div><!--.card-->
+        <hr class="clearfix my-5">
+
+        <h4 hidden>Listado de columnas</h4>
+        <p hidden ng-repeat="item in vm.finalColumnas">{{item.type}}: {{item.value}}</p>
+
+
+    </div><!--.container-->
+
+</div><!--.content-wrap-->
+<script>
+    /*function view(index) {
+        var items = document.getElementsByClassName("reporteReactivo");
+        for (var i = 0; i < items.length; i++) {
+            items[i].style.display = "none";
+        }
+        for (var i = (index - 5); i < index; i++) {
+            var item = document.getElementsByClassName("pos" + i);
+            item[0].style.display = "inline-block";
+        }
+    }*/
+</script>
+<style>
+    .show{
+        display: block;
+    }
+    .hideA{
+        display: none;
+    }
+</style>

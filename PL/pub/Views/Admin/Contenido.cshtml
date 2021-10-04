@@ -1,0 +1,616 @@
+﻿@using Newtonsoft.Json
+@{  
+    ViewBag.Title = "Inicio CMS - Encuestas";
+}
+<!DOCTYPE html>
+<html  lang="es-es" style="overflow-x:hidden;">
+    <head>
+        <style data-merge-styles="true"></style>
+        <meta charset="utf-8">
+        <meta name="author" content="Grupo Autofin México" />
+        <meta name="description" content="CMS Encuestas, Encuestas" />
+        <meta name="keywords" content="Encuestas, Clima Laboral, CMS, Grupo Autofin México" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+        <title>@ViewBag.Title</title>
+        @Styles.Render("~/bundles/cssAdmin")
+        @RenderSection("Styles", false)   
+        @{
+            ViewBag.Perfil = Session["PerfilAdminLog"];
+        }
+        <script>
+            localStorage["nameAdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
+            localStorage["idAdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["IdAdministradorLogeado"]));
+        </script>
+    </head>
+
+    @{
+        var usr = Convert.ToString(Session["AdminLog"]);
+        if (!String.IsNullOrEmpty(usr))
+        {
+            /* Carga sitio */
+            <body>
+                <ul id="mySidenav" class="sidenav">
+                    <a href="javascript:void(0)" class="closebtn d-none" onclick="closeNav()"><i class="fas fa-arrow-left fa-lg color"></i></a>
+                    <span class="openbtn animated pulse slow" onclick="openNav()"><i class="fas fa-arrow-right fa-lg color"></i></span>
+
+
+                    <!--Seccion Permisos por usuario-->
+                    @{
+                        //Validar permisos
+                        var ActionEncuestasListar = false;
+                        var ActionEncuestasCrear = false;
+                        var ActionEncuestasOpc = false;
+
+                        var ActionPlantillasListar = false;
+                        var ActionPlantillasCrear = false;
+                        var ActionPlantillasOpc = false;
+
+                        var ActionReportesListar = false;
+                        var ActionReportesCrear = false;
+                        var ActionReportesOpc = false;
+
+                        var ActionBDListar = false;
+                        var ActionBDCrear = false;
+                        var ActionBDOpc = false;
+
+                        var ActionUsuariosListar = false;
+                        var ActionUsuariosCrear = false;
+                        var ActionUsuariosOpc = false;
+
+                        var ActionEmpresasListar = false;
+
+                        var ActionEmpresasCrear = false;
+                        var chkEmpresasOpc = false;
+
+                        var session = Session["AdminLog"];
+                        var sessionPerfil = Session["PerfilAdminLog"];
+
+
+                        ViewBag.Permisos = Session["Permisos"];
+                        ViewBag.Modulos = Session["Modulos"];
+                        //Model.ObjectsPermisos = new List<object>();
+                        //Model.ObjectsPermisos = ViewBag.Permisos;
+
+                        foreach (ML.PerfilModulo item in ViewBag.Permisos)
+                        {
+                            if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "ListarEncuesta")
+                            {
+                                ActionEncuestasListar = true;
+                            }
+                            if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "CrearEncuesta")
+                            {
+                                ActionEncuestasCrear = true;
+                            }
+                            if (item.Modulo.Nombre == "Encuestas" && item.PerfilModuloAccion.Accion == "OpcEncuesta")
+                            {
+                                ActionEncuestasOpc = true;
+                            }
+                            /**********************/
+                            if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "ListarPlantilla")
+                            {
+                                ActionPlantillasListar = true;
+                            }
+                            if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "CrearPlantilla")
+                            {
+                                ActionPlantillasCrear = true;
+                            }
+                            if (item.Modulo.Nombre == "Plantillas" && item.PerfilModuloAccion.Accion == "OpcPlantilla")
+                            {
+                                ActionPlantillasOpc = true;
+                            }
+                            /***********************************/
+                            if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "ListarReporte")
+                            {
+                                ActionReportesListar = true;
+                            }
+                            if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "CrearReporte")
+                            {
+                                ActionReportesCrear = true;
+                            }
+                            if (item.Modulo.Nombre == "Reportes" && item.PerfilModuloAccion.Accion == "OpcReporte")
+                            {
+                                ActionReportesOpc = true;
+                            }
+                            /***************************************/
+                            if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "ListarBD")
+                            {
+                                ActionBDListar = true;
+                            }
+                            if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "CrearBD")
+                            {
+                                ActionBDCrear = true;
+                            }
+                            if (item.Modulo.Nombre == "Base de datos" && item.PerfilModuloAccion.Accion == "OpcBD")
+                            {
+                                ActionBDOpc = true;
+                            }
+                            /*******************************/
+                            if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "ListarUsuario")
+                            {
+                                ActionUsuariosListar = true;
+                            }
+                            if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "CrearUsuario")
+                            {
+                                ActionUsuariosCrear = true;
+                            }
+                            if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "OpcUsuario")
+                            {
+                                ActionUsuariosOpc = true;
+                            }
+                            /*********************************/
+                            if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "ListarEmpresa")
+                            {
+                                ActionEmpresasListar = true;
+                            }
+                            if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "CrearEmpresa")
+                            {
+                                ActionEmpresasCrear = true;
+                            }
+                            if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "OpcEmpresa")
+                            {
+                                chkEmpresasOpc = true;
+                            }
+                        }
+
+                        foreach (ML.PerfilModulo perf in ViewBag.Modulos)
+                        {
+                            ML.PerfilModulo perfilModulo = new ML.PerfilModulo();
+                            perfilModulo.Modulo = new ML.Modulo();
+
+                            perfilModulo.Modulo.Nombre = perf.Modulo.Nombre;
+
+                            if (perfilModulo.Modulo.Nombre == "Encuestas")
+                            {
+                                <li id="Encuestas">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" aria-controls="collapseSurvey" style="padding: 0px;">
+                                        <div class="item-menu-icon">
+                                            <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                                            <span class="tooltiptext">Encuestas</span>
+                                        </div>
+                                    </a>
+                                    <span class="item-menu d-none">
+                                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                                            <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Encuestas
+                                        </a>
+                                    </span>
+                                    <div class="collapse" id="collapseSurvey">
+                                        <div class="card card-body py-2">
+                                            <ul class="fa-ul pl-lg-4">
+                                                @{
+                                                    if (ActionEncuestasCrear == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "Encuesta")">Crear</a></li>
+                                                    }
+                                                    if (ActionEncuestasOpc == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Load", "Encuesta")">Importar encuesta</a></li>
+                                                    }
+                                                    if (ActionEncuestasListar == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Encuesta")">Listado</a></li>
+                                                    }
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("CreateCL", "Encuesta")">Crear Clima Laboral</a></li>
+                                                    <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Competencia")">Competencias</a></li>
+                                                    <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll_", "Competencia")">Categorias</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                                    }
+                            if (perfilModulo.Modulo.Nombre == "Plantillas")
+                            {
+                                <li id="Plantillas">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" aria-controls="collapseTemplates" style="padding: 0px;">
+                                        <div class="item-menu-icon">
+                                            <img src="~/img/icon-template.png" alt="Icono Plantillas" class="img-white">
+                                            <span class="tooltiptext">Plantillas</span>
+                                        </div>
+                                    </a>
+                                    <span class="item-menu d-none">
+                                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseTemplates" role="button" aria-expanded="false" aria-controls="collapseTemplates">
+                                            <img src="~/img/icon-template.png" class="img-white pr-3" alt="Icono Plantillas"> Plantillas
+                                        </a>
+                                    </span>
+                                    <div class="collapse" id="collapseTemplates">
+                                        <div class="card card-body py-2">
+                                            <ul class="fa-ul pl-lg-4">
+                                                @{
+                                                    if (ActionPlantillasCrear == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("creaPlantilla", "Plantillas")">Crear</a></li>
+                                                    }
+                                                    if (ActionPlantillasListar == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Plantillas", "Plantillas")">Listado</a></li>
+                                                    }
+                                                    if (ActionPlantillasOpc == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                                    }
+                            if (perfilModulo.Modulo.Nombre == "Reportes")
+                            {
+                                <li id="Reportes">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" aria-controls="collapseReports" style="padding: 0px;">
+                                        <div class="item-menu-icon">
+                                            <img src="~/img/icon-reports.png" alt="Icono Reportes" class="img-white">
+                                            <span class="tooltiptext">Reportes</span>
+                                        </div>
+                                    </a>
+                                    <span class="item-menu d-none">
+                                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseReports" role="button" aria-expanded="false" aria-controls="collapseReports">
+                                            <img src="~/img/icon-reports.png" class="img-white pr-3" alt="Icono Reportes"> Reportes
+                                        </a>
+                                    </span>
+                                    <div class="collapse" id="collapseReports">
+                                        <div class="card card-body py-2">
+                                            <ul class="fa-ul pl-lg-4">
+                                                @{
+                                                    if (ActionReportesCrear == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "ReporteD4U")">Crear</a></li>
+                                                    }
+                                                    if (ActionReportesListar == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Reporte")">Listado</a></li>
+                                                    }
+                                                    if (ActionReportesOpc == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="#">Más opciones</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                                    }
+                            if (perfilModulo.Modulo.Nombre == "Base de datos")
+                            {
+                                <li id="BD">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" aria-controls="collapseDatabase" style="padding: 0px;">
+                                        <div class="item-menu-icon">
+                                            <img src="~/img/icon-database.png" alt="Icono Bases de datos" class="img-white">
+                                            <span class="tooltiptext">Bases de datos</span>
+                                        </div>
+                                    </a>
+                                    <span class="item-menu d-none">
+                                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseDatabase" role="button" aria-expanded="false" aria-controls="collapseDatabase">
+                                            <img src="~/img/icon-database.png" class="img-white pr-3" alt="Icono Bases de datos"> Bases de datos
+                                        </a>
+                                    </span>
+                                    <div class="collapse" id="collapseDatabase">
+                                        <div class="card card-body py-2">
+                                            <ul class="fa-ul pl-lg-4">
+                                                @{
+                                                    if (ActionBDCrear == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "BD")">Crear</a></li>
+                                                    }
+                                                    if (ActionBDListar == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllForListado", "BD")">Listado</a></li>
+                                                    }
+                                                    if (ActionBDOpc == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEliminadas", "BD")">Administrar bases de datos eliminadas</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                                    }
+                            if (perfilModulo.Modulo.Nombre == "Usuarios")
+                            {
+                                <li id="Usuarios">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" aria-controls="collapseUsers" style="padding: 0px;">
+                                        <div class="item-menu-icon">
+                                            <img src="~/img/icon-users.png" alt="Icono Usuarios" class="img-white">
+                                            <span class="tooltiptext">Usuarios</span>
+                                        </div>
+                                    </a>
+                                    <span class="item-menu d-none">
+                                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseUsers" role="button" aria-expanded="false" aria-controls="collapseUsers">
+                                            <img src="~/img/icon-users.png" class="img-white pr-3" alt="Icono Usuarios"> Usuarios
+                                        </a>
+                                    </span>
+                                    <div class="collapse" id="collapseUsers">
+                                        <div class="card card-body py-2">
+                                            <ul class="fa-ul pl-lg-4">
+                                                @{
+                                                    if (ActionUsuariosCrear == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Administrador")">Crear</a></li>
+                                                    }
+                                                    if (ActionUsuariosListar == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Administrador")">Listado</a></li>
+                                                    }
+                                                    if (ActionUsuariosOpc == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminados", "Administrador")">Administrar usuarios eliminadas</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                                    }
+                            if (perfilModulo.Modulo.Nombre == "Empresas")
+                            {
+                                <li id="Empresas">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" aria-controls="collapseEnterprises" style="padding: 0px;">
+                                        <div class="item-menu-icon">
+                                            <img src="~/img/icon-enterprises.png" alt="Icono Empresas" class="img-white">
+                                            <span class="tooltiptext">Empresas</span>
+                                        </div>
+                                    </a>
+                                    <span class="item-menu d-none">
+                                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapseEnterprises" role="button" aria-expanded="false" aria-controls="collapseEnterprises">
+                                            <img src="~/img/icon-enterprises.png" class="img-white pr-3" alt="Icono Empresas"> Empresas
+                                        </a>
+                                    </span>
+                                    <div class="collapse" id="collapseEnterprises">
+                                        <div class="card card-body py-2">
+                                            <ul class="fa-ul pl-lg-4">
+                                                @{
+                                                    if (ActionEmpresasCrear == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Add", "Empresa")">Crear</a></li>
+                                                    }
+                                                    if (ActionEmpresasListar == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Empresa")">Listado</a></li>
+                                                    }
+                                                    if (chkEmpresasOpc == true)
+                                                    {
+                                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAllEliminadas", "Empresa")">Administrar empresas eliminadas</a></li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                                        }
+                        }
+                    }
+                    <!--Fin seccion permisos por usuario-->
+
+
+
+                </ul>
+                <div id="main">
+                    <main id="wrapper" class="animated fadeIn">
+                        <div id="top-bar">
+                            <div class="container-fluid px-lg-5">
+                                <div class="row center-vertically">
+                                    <div class="col-6 col-sm-4 col-md-5">
+                                        <img src="@Session["logo"]" class="logo-header" alt="Logo" onclick="GetDashBoard()">
+                                    </div>
+                                    <div class="col-6 col-sm-8 col-md-7">
+                                        <div class="user-info">
+                                            <!--<span class="color">Hola</span>--><a class="" href="@Url.Action("Login", "LoginAdmin")">Cerrar sesión</a> , @Session["AdminLog"]  @{ foreach (var item in ViewBag.Perfil)
+                                                { <span class="position"> / @item  </span> } } <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
+                                        </div>
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.container-fluid-->
+                        </div>
+                        @RenderSection("Header", false)
+                        @*@Html.Raw(Session["statusReporte"])*@
+                        @*<h1 class="title-page-title">Bienvenido <span>Selecciona cualquiera de las herramientas para que comiences:</span></h1>*@
+                        @RenderSection("H1", false)
+                        <section id="content">
+                            @RenderBody()
+                        </section>
+                    </main><!--#wrapper-->
+                </div>
+                <footer id="footer">
+                    <div class="container-fluid px-lg-5">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                @Scripts.Render("~/bundles/jqueryAdmin")
+                @RenderSection("scripts", required: false)
+                <style>
+                    #load {
+                        -webkit-animation: spinner-border .150s linear infinite;
+                        animation: spinner-border .150s linear infinite;
+                    }
+
+                    #loadReporte {
+                        margin-top: -20px;
+                        margin-bottom: 0px;
+                        align-self: flex-end;
+                    }
+                </style>
+                <script>
+                var hrefToDownload = "";
+                function GetDashBoard() {
+                    window.location.href = "/DashBoard/DashBoard"
+                }
+                //
+                </script>
+                <script src="~/scripts/templates-functions.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        document.getElementsByClassName("busy")[0].classList.add("loadInvisible");
+                        document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
+                        $('#top-bar').css('background-color', '@Session["color"]');
+                        $('#footer').css('background-color', '@Session["color"]');
+                    });
+
+                </script>
+                <script>
+            function ocultar() {
+                //success
+                $('#loadReporte').hide();
+                $.ajax({
+                    url: '@Url.Action("resetLoadNull")',
+                    data: 1,
+                    complete: function (Response) {
+
+                    }
+                });
+            }
+                </script>
+                <style>
+                    .modal-backdrop {
+                        z-index: -5 !important;
+                    }
+                </style>
+                <div id="loading" class="busy">
+                </div>
+                <style>
+                    .sidenav {
+                        list-style-type: none !important;
+                    }
+                    .loadVisible {
+                        display: block;
+                    }
+
+                    .loadInvisible {
+                        display: none;
+                    }
+
+                    .busy {
+                        /*background: url(../../img/ReporteoClima/loading.gif) no-repeat center center;*/
+                        background: url(../../images/loadimage.gif) no-repeat center center; /*loadimage.gif*/
+                        width: 100%;
+                        height: 100%;
+                        background-color: #000;
+                        opacity: 0.95;
+                        position: fixed;
+                        left: 0;
+                        top: 0;
+                        z-index: 2147483601;
+                    }
+
+                    .loader-ring {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        margin: -100px 0 0 -100px;
+                        width: 200px;
+                        height: 200px;
+                    }
+
+                    .loader-ring-light {
+                        width: 200px;
+                        height: 200px;
+                        -moz-border-radius: 240px;
+                        -webkit-border-radius: 240px;
+                        border-radius: 240px;
+                        -moz-box-shadow: 0 4px 0 #10d0ff inset;
+                        -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+                        box-shadow: 0 4px 0 #10d0ff inset;
+                        animation: rotate-360 2s linear infinite;
+                        -moz-animation: rotate-360 2s linear infinite;
+                    }
+
+                    .loader-ring-track {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 200px;
+                        height: 200px;
+                        -moz-border-radius: 240px;
+                        -webkit-border-radius: 240px;
+                        border-radius: 240px;
+                        -moz-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                        -webkit-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                        box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+                    }
+                </style>
+            </body>
+        }
+        else
+        {
+            /* Pagina de error */
+            <body>
+                <main id="wrapper">
+                    <div id="top-bar">
+                        <div class="container-fluid px-lg-5">
+                            <div class="row">
+                                <div class="col-4 col-sm-5 col-md-5">
+                                    <img src="~/img/logo.png" class="logo-header" alt="Logo" onclick="">
+                                </div>
+                                <div style="display: none">
+                                    @RenderSection("H1", false)
+                                    @RenderSection("Header", false)
+                                </div>
+                           
+                                <div class="col-8 col-sm-7 col-md-7">
+                                    <div class="user-info">
+                                        <span class="color">Hola</span>
+                                        <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
+                                    </div><!--.user-info-->
+                                </div>
+                            </div><!--.row-->
+                        </div><!--.container-fluid-->
+                    </div>
+                    <section id="content">
+                        <div class="content-wrap">
+                            <div class="container-fluid px-lg-5">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div hidden class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                            <h2>Ooops ha ocurrido un error</h2>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                            <h2>Ooops ha ocurrido un error :(</h2>
+                                            <p>Accede nuevamente</p>
+                                            <p><a id="urlLogn" href="">Login de usuario</a></p>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 col-xs-6 col-6">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+                <footer id="footer" style="bottom: 0; position: fixed;">
+                    <div class="container-fluid px-lg-5">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="copyrights"><span class="color">DIAGNOSTIC 4U</span> @DateTime.Now.Year</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="text-support"><i class="far fa-life-ring"></i> SOPORTE</p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+                <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+                <script>
+                    var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
+                    try {
+                        var elem = document.getElementById("urlLogn").href = redirect;
+                    } catch (e) {
+    
+                    }
+                    swal("Tu sesión ha expirado, serás redireccionado al Login", "", "info").then(function () {
+                        var elem = document.getElementById("urlLogn").click();
+                    });
+                </script>
+            </body>
+        }
+    }
+
+</html>

@@ -1,0 +1,111 @@
+﻿<div class="content-wrap">
+    <div id="tab-indicadores-permanencia" class="container-fluid px-lg-5">
+        <h2 class="robotothin mb-2 mt-n1">INDICADORES DE PERMANENCIA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="px-4">
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-trabajarEx">
+                                <center>
+                                    <p class="titulo-grafica1 robotobold">Lo que me motiva a trabajar en la empresa<!--Positivo--></p><br><!--vm.indicadoresPermanenciaAFM-->
+                                    <i class="fa fa-caret-down yellow-clima f-40 icono-down-center"></i>
+                                </center>
+                                <div class="row mb-5 mr-1 ml-1 bg-gris" style="min-height: 250px!important;">
+                                    <div ng-repeat="item in vm.indicadoresPermanenciaAFM" class="col px-0" style="max-width: 140px;">
+                                        <center>
+                                            @*<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">*@
+                                            <p class="label-top-graphic">{{ item.Porcentaje }}%</p>
+                                            <div class="bar" style="min-height: {{ item.Porcentaje * 3 }}px; overflow: hidden;">
+                                                <div class="bar-progress" style="height: 0px; padding-bottom:{{ item.Porcentaje * .7 }}px;">
+                                                </div>
+                                                <p class="label-top-graphic2">{{ item.Frecuencia }}</p>
+                                                <div class="bar-progress2" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 1.8 }}px;"></div>
+                                                <div class="bar-progress2" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * 1.9 }}px;"></div>
+                                            </div>
+                                            <p class="text-graph">{{ item.Pregunta }}</p>
+                                        </center>
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+                        </div>
+                    </div><!--.row-->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <center>
+                                <div class="col-12">
+                                    <div class="row justify-content-center">                                        
+                                            <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #6259bf;margin-top: 10px;float: left;"></div>
+                                            <div class="ml-2 mr-3 margin-top-nuevo" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                            <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #49286b;margin-top: 10px;float: left;"></div>
+                                            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 margin-top-nuevo">HC</div>
+                                            @*<div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                            <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>*@
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="row mt-5 nuevomt">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-dejarEx">
+                                <center>
+                                    <p class="robotobold titulo-grafica2">Lo que me haría dejar la empresa<!--Negativo--></p><br><!--vm.indicadoresAbandonoAFM-->
+                                    <i class="fa fa-caret-down text-black f-40 icono-down-center"></i>
+                                </center>
+                                <div class="row mb-5 mr-1 ml-1 bg-gris" style="min-height: 250px!important;">
+                                    <div ng-repeat="item in vm.indicadoresAbandonoAFM" class="col px-0" style="max-width: 140px">
+                                        <center>
+                                            @*<img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">*@
+                                            <p class="label-top-graphic-blue">{{ item.Porcentaje }}%</p>
+                                            <div class="bar2" style="min-height: {{ item.Porcentaje * 3 }}px; overflow: hidden;">
+                                                <div class="bar-progress3" style="height: 0px; padding-bottom:{{ item.Porcentaje * .7 }}px;">
+                                                </div>
+                                                <p class="label-top-graphic-blue2">{{ item.Frecuencia }}</p>
+                                                <div class="bar-progress4" ng-show="item.Porcentaje <= 50" style="height: {{ item.Porcentaje * 1.8 }}px;"></div>
+                                                <div class="bar-progress4" ng-show="item.Porcentaje >= 50" style="height: {{ item.Porcentaje * 1.9 }}px;"></div>
+                                            </div>
+                                            <p class="text-graph">{{ item.Pregunta }}</p>
+                                        </center>
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.graph-wrapper-->
+                        </div>
+                    </div><!--.row-->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <center>
+                                <div class="col-12">
+                                    <div class="row mb-2 justify-content-center">
+                                        <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #87c2ee;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3 margin-top-nuevo" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div class="margin-top-nuevo" style="width: 25px;height: 25px;background: #078dbd;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3 margin-top-nuevo">HC</div>                                     
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    @*<div class="d-flex justify-content-center mt-5">
+                        <div class="col-12 p-0 m-0">
+                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+
+        <hr class="clearfix my-5">
+    </div><!--.container-->
+
+</div><!--.content-wrap-->
+<style>
+    .bar-progress2{
+        margin-right: auto;
+        margin-left:auto;
+    }
+    .pl-sm-1, .px-sm-1{
+        /*max-width: 300px !important;*/
+        min-width: 150px;
+    }
+</style>

@@ -1,0 +1,28 @@
+﻿@media only screen and (max-width: 600px) {
+    .modal #body {
+        width: 60%;
+        height: 30%;
+    }
+
+    .modal #icono {
+        margin-top: 20%;
+        width: 20%;
+        height: 25%;
+    }
+
+    .modal #signo {
+        height: 30%;
+    }
+
+    .modal #titulo {
+        font-size: 50px;
+    }
+
+    .modal #mensaje {
+        font-size: 30px;
+    }
+
+    .modal #link {
+        font-size: 30px;
+    }
+}

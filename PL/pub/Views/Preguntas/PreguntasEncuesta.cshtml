@@ -1,0 +1,37 @@
+﻿@using PL.Extensions
+@model ML.Preguntas
+
+@using (Html.BeginCollectionItem("NewCuestion", ""))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="card mb-4">
+        <div class="row">
+            <div class="col-sm-1 pl-lg-4 pr-lg-0">
+                <div id="square"><span class="number-flag">
+                    @(Model.NumeroPregunta)
+                    </span></div>
+                <div id="triangle-down"></div>
+            </div>
+            <div class="col-sm-11 pr-lg-5">
+                <div class="card-header-question">
+                   @(Model.Pregunta)
+                </div>
+            </div>
+        </div><!--.row-->
+        <div class="card-body">
+            <div class="row">
+                <!--Respuestas-->
+                @foreach (var respuesta in Model.Respuestas)
+                {
+                    respuesta.IdPadreObjeto = Html.ViewData.TemplateInfo.HtmlFieldPrefix;
+                    @Html.Partial("~/Views/Respuestas/RespuestasEncuesta.cshtml", respuesta);
+                }    
+                       
+                <!--Fin Respuestas-->
+            </div><!--.row-->
+        </div>
+    </div>
+
+
+}

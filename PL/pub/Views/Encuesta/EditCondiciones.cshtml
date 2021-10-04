@@ -1,0 +1,665 @@
+﻿@model ML.Encuesta
+@{
+    ViewBag.Title = "EditCondiciones";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+    List<int> array = new List<int>();
+    List<object> relacionSeccion = new List<object>();
+    foreach (var item in Model.NewCuestion)
+    {
+        ML.Preguntas pregunta = new ML.Preguntas();
+        pregunta.IdPregunta = item.IdPregunta;
+        pregunta.Seccion = item.Seccion;
+        pregunta.Encabezado = item.Encabezado;
+        relacionSeccion.Add(pregunta);
+        array.Add(item.Seccion);
+    }
+    var NumSecciones = array.Max();
+}
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Ecuestas / <span>Configurar</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <div class="section-templates">
+                    <div class="icon-header-blue"><i class="far fa-newspaper"></i></div>
+                    <div class="title-header-blue">
+                        <span class="title-header-section">ReConfigurar de Preguntas y Respuestas condicionales</span>
+                    </div><!--.title-header-blue-->
+                    <hr>
+                    <div class="section-survey shadow-sm">
+                        <div class="body-survey">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@Model.IdEncuesta">
+
+                                            <!--mergeSecciones-->
+                                            @{ 
+                                                for (int i = 0; i < NumSecciones; i++)
+                                                {
+                                                    int j = i + 1;
+                                                    string ID = "Seccion" + j;
+                                                    string idEncabezado = "EncabezadoS" + j;
+                                                    <div style="border: solid 1px #000000" id="@ID" class="tab mb-4"><h2 style="border-bottom: solid 1px; background-color:#c1bdbd;" id="@idEncabezado">Seccion @j: </h2>  </div>
+
+                                                }
+                                            }
+                                            @{
+
+                                                if (Model.NewCuestion != null)
+                                                {
+                                                    if (Model.TipoEstatus.IdEstatus > 0)
+                                                    {
+                                                        foreach (var pregunta in Model.NewCuestion)
+                                                        {
+                                                            @Html.Partial("~/Views/Preguntas/GetPreguntas.cshtml", pregunta);
+                                                        }
+                                                    }
+                                                }
+                                                @*
+                                                *@
+
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div><!--.body-survey-->
+                    </div><!--.section-survey-->
+                </div>
+            </div><!--.col-lg-8-->
+        </div><!--.row-->
+        <div class="row">
+            <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                <div class="col-md-5 text-right">
+                    <input type="submit" value="Guardar" @*onclick="window.location.href='/Encuesta/GetAll'"*@ onclick="Redirect()" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+        <div class="modal fade addNewInputs" id="modalAddConfiguracion" tabindex="-1" role="dialog" aria-labelledby="modalAddConfiguracion"
+             aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                @*@using (Html.BeginForm("UpdateUsuarios", "BD", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {*@
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-primary ml-5">Seleccione la pregunta Desencadenadora</h4>
+                        <button type="button" class="close text-primary" data-dismiss="modal" onclick="$('#Preguntas').children().remove();" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5" id="Preguntas">
+                         
+                            
+
+                        </div>
+                        
+                        <div class="form-group">
+                            <button id="termina" onclick="SaveConfigTerminar()" class="btn btn-danger">Terminar encuesta con esta respuesta</button>
+                        </div>
+                        <div class="form-group" style="display:none;">
+                            <button id="hideNextSection" onclick="SaveConfigHideNextSection();" class="btn btn-danger">Ocultar siguientes secciones con esta respuesta</button>
+                        </div>
+                        <div class="form-group">
+                            <button id="hideNextSubSeccion" onclick="SaveConfigHideNextSubSeccion();" class="btn btn-danger">Ocultar las siguientes Sub Secciones con esta respuesta</button>
+                        </div>
+                        
+                    </div>
+                    <span>
+                        @ViewBag.Message
+                    </span>
+                    <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                        <button id="SaveConfi" class="btn btn-outline-primary btn-block buttonAdd">
+                            Guarda Configuración
+                            <i class="fas fa-plus-square ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                @*}*@
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+</style>
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<script src="~/css/sweetalert.min.js"></script>
+<script>
+    //Session["IdEncuestaAlta"]
+    var idEncuesta = @Session["IdEncuestaUpdateBifurcacion"];
+    let model = { idencuesta: idEncuesta };
+    $().ready (function () {
+        $.ajax({
+            url: '@Url.Action("getConfByEncuesta")',
+            data: model,
+            complete: function (Response) {
+                if(Response.responseJSON.length > 0){
+                    for (var i = 0; i < Response.responseJSON.length; i++) {
+                        console.log("IdPreguntaOpen: " + Response.responseJSON[i].IdPreguntaOpen);
+                        if (Response.responseJSON[i].TerminaEncuesta == 0 || Response.responseJSON[i].TerminaEncuesta == null) {
+                            var itemFill = Response.responseJSON[i].itemPreguntaOpen;
+                            console.log(itemFill);
+                            //$('#'+Response.responseJSON[i].IdRespuesta).append('<p style="margin-bottom: 0px;"><label style="text-decoration: underline;" class="control-label">'+itemFill+'</label></p>');
+                            $('#REspuesta_'+Response.responseJSON[i].IdRespuesta).append('<p style="margin-bottom: 0px;"><label style="text-decoration: underline;" class="control-label">'+itemFill+'</label>  <span value="'+Response.responseJSON[i].IdRespuesta+'" onclick="deletePreguntaOpen('+Response.responseJSON[i].IdRespuesta+', '+Response.responseJSON[i].IdPreguntaOpen+')" style="border: 1px solid black; cursor:pointer" title="Eliminar esta configuración">X</span></p>');
+                        }
+                        else if(Response.responseJSON[i].TerminaEncuesta == 1){
+                            $('#REspuesta_'+Response.responseJSON[i].IdRespuesta).append('<p style="margin-bottom: 0px;"><label style="text-decoration: underline; color:red" class="control-label">Cuando el usuario eliga esta respuesta, la encuesta terminará</label>  <span value="'+Response.responseJSON[i].IdRespuesta+'" onclick="deleteTermina('+Response.responseJSON[i].IdRespuesta+')" style="border: 1px solid black; cursor:pointer" title="Eliminar esta configuración">X</span></p>');
+                        }
+                        else if (Response.responseJSON[i].TerminaEncuesta == 2) {
+                            $('#REspuesta_'+Response.responseJSON[i].IdRespuesta).append('<p style="margin-bottom: 0px;"><label style="text-decoration: underline; color:red" class="control-label">Cuando el usuario eliga esta o estas respuestas se terminara la encuesta</label>  <span value="'+Response.responseJSON[i].IdRespuesta+'" onclick="deleteTermina('+Response.responseJSON[i].IdRespuesta+')" style="border: 1px solid black; cursor:pointer" title="Eliminar esta configuración">X</span></p>');
+                        }
+                        else if (Response.responseJSON[i].TerminaEncuesta == 3) {
+                            $('#REspuesta_'+Response.responseJSON[i].IdRespuesta).append('<p style="margin-bottom: 0px;"><label style="text-decoration: underline; color:red" class="control-label">Cuando el usuario eliga esta respuestas se ocultarán las siguientes subsecciones de la encuesta</label>  <span value="'+Response.responseJSON[i].IdRespuesta+'" onclick="deleteTermina('+Response.responseJSON[i].IdRespuesta+')" style="border: 1px solid black; cursor:pointer" title="Eliminar esta configuración">X</span></p>');
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+<script>
+    function deletePreguntaOpen(IdRespuesta, IdPreguntaOpen) {
+        let model = {
+            idrespuesta: IdRespuesta,
+            IdPreguntaOpen: IdPreguntaOpen
+        };
+
+        $.ajax({
+            url: '@Url.Action("deletePreguntaOpen")',
+            type: 'POST',
+            data: model,
+            complete: function (val) {
+                if(val.responseJSON == "success"){
+                    swal({
+                        title: "La configuracion se eliminó con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+            }
+       });
+    }
+    function deleteTermina(IdRespuesta) {
+        let model = {
+            idrespuesta: IdRespuesta
+        };
+
+        $.ajax({
+            url: '@Url.Action("DeleteTermina")',
+            type: 'POST',
+            data: model,
+            complete: function (val) {
+                if(val.responseJSON == "success"){
+                    swal({
+                        title: "La configuracion se eliminó con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+                else{
+                    swal({
+                        title: "La configuracion no pudo eliminarse",
+                        text: "",
+                        type: "info",
+                        icon: "info",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+            }
+        });
+
+    }
+    function SaveConfigTerminar() {
+        var AllIds =  $('#termina').val();//AllId_
+        var listIds = document.getElementById('termina');
+        var IdENCUESTA = listIds.classList[2].split('_')[0];
+        var IdPregunta = listIds.classList[2].split('_')[1];
+        var IdRespuesta = listIds.classList[2].split('_')[2];
+
+        let model = {
+            idEncuesta: IdENCUESTA,
+            idPregunta: IdPregunta,
+            idrespuesta: IdRespuesta
+        }
+        $.ajax({
+            url: '@Url.Action("PreguntaTerminaE")',
+            type: 'POST',
+            data: model,
+            complete: function (val) {
+                if (val.responseJSON == "success") {
+                    swal({
+                        title: "La configuracion se agregó con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+                else{
+                    swal({
+                        title: "La configuracion no pudo ser eliminada",
+                        text: "",
+                        type: "info",
+                        icon: "info",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+            }
+        });
+    }
+    function terminaEncuesta() {
+        //Buscar en este div la otra u otras respuestas
+        //A la otra respuesta asignarle que mostrara todas las preguntas
+        var hijodivDondeBuscar =  $('#termina').val();
+
+        var divBuscar = document.getElementById(hijodivDondeBuscar).parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+
+        //Buscar alguja respuesa con value diferente  a la clase que trae el boton
+        var clase = document.getElementById('termina');
+        var IdENCUESTA = clase.classList[2].split('_')[0];
+        clase = clase.classList[2];
+        var RespuestaTermina = clase.split('_')[2];
+        var lasotrasRespuestas = $('#' + divBuscar.id).find('input[type="radio"], input[type="checkbox"]').toArray();
+
+        var IdRespuestaAMostrarTodas = "";
+
+        for (var i = 0; i < lasotrasRespuestas.length; i++) {
+            if(lasotrasRespuestas[i].value != clase){
+                IdRespuestaAMostrarTodas = lasotrasRespuestas[i].value;
+                //Guarda cuantas encuentre por si hay un check
+                let model = {
+                    IdEncuesta : IdENCUESTA ,
+                    IdRespuesta : IdRespuestaAMostrarTodas.split('_')[2],
+                    CondicionTermina: 1,
+                    idRespuestaTermina: RespuestaTermina
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    data: model,
+                    url: '@Url.Action("EditCondiciones", "Encuesta")',
+                    complete: function (Response) {
+                        //Guarda configuracion por cada respuestas diferente a la que termina todo
+                    }
+                });
+
+            }
+        }
+        swal({
+            title: "La configuración se guardó correctamente",
+            text: "",
+            type: "success",
+            icon: "success",
+        }).then(function () {
+            window.location.reload(true);
+        });
+
+        //Mandar por ajax que en IdRespuestaAMostrarTodas mostrra todas XD
+        //Solo envio el id de respuesta ya que en el back inserte sobre todas las preguntas que siguen
+
+
+
+
+
+    }
+    $('input').click (function (e) {
+        var IdRespuesta = e.target.value.split('_')[2];
+
+        $('#termina').val(e.target.value);
+        $('#termina').addClass(e.target.value);
+
+    });
+</script>
+<script src="~/scripts/linq.min.js"></script>
+<script>
+            $(document).ready(function () {
+                $('input[type="radio"]').click(function (e) {
+                    //$('input[type="radio"]').attr
+                    $('input[type="radio"]').prop('checked', false);
+                    console.log(e);
+                    console.log(e);
+                    e.target.checked = true;
+                    var id = e.target.value;
+                    var idencuesta = id.split('_')[0];
+                    var idpregunta = id.split('_')[1];
+                    var idrespuesta = id.split('_')[2];
+                    //document.getElementById("ListarPreguntas_" + idpregunta + "__Respuestas_" + idrespuesta + "__Selected").value = "true";
+                    let model = {
+                        idEncuesta: idencuesta,
+                        idPregunta: idpregunta
+                    };
+                        
+                    $('#Preguntas').append('<div id="mergeSeccionesModal"></div>');
+
+                    $.ajax({
+                        type: 'POST',
+                        data:model ,
+                        url: '@Url.Action("ObtenPreguntasDesacadenadoForEdit", "Encuesta")',
+                        complete: function (Response) {
+                            if (Response.responseJSON.length > 0) {
+                                var listSecciones = [];
+                                for (i = 0; i < Response.responseJSON.length; i++) {
+                                    if (Response.responseJSON[i].TipoControl.IdTipoControl == 13) {
+                                        $("#Preguntas").append("<div id='IdPreg" + Response.responseJSON[i].IdPregunta + "' class='row'><div class='col-lg-1 col-md-1 col-xs-1'><input type='checkBox' id='idItem"+Response.responseJSON[i].IdPregunta+"' class='Respuesta_Code Respuesta_Code"+Response.responseJSON[i].Seccion+"' name='" + idpregunta + "[]' value ='" + Response.responseJSON[i].IdPregunta + "'></div><div class='col-lg-10 col-md-10 col-xs-10'><label class='control-label' style='font-weight: bold; background-color: burlywood' for='" + idpregunta + "_" + Response.responseJSON[i].IdPregunta + "'>" + Response.responseJSON[i].Pregunta) + "</label></div></div>";
+                                    }
+                                    else{
+                                        $("#Preguntas").append("<div id='IdPreg" + Response.responseJSON[i].IdPregunta + "' class='row'><div class='col-lg-1 col-md-1 col-xs-1'><input type='checkBox' id='idItem"+Response.responseJSON[i].IdPregunta+"' class='Respuesta_Code Respuesta_Code"+Response.responseJSON[i].Seccion+"' name='" + idpregunta + "[]' value ='" + Response.responseJSON[i].IdPregunta + "'></div><div class='col-lg-10 col-md-10 col-xs-10'><label class='control-label' for='" + idpregunta + "_" + Response.responseJSON[i].IdPregunta + "'>" + Response.responseJSON[i].Pregunta) + "</label></div></div>";
+                                    }
+                                    listSecciones.push(Response.responseJSON[i].Seccion);
+                                }
+                                
+                                var totalSecciones = Enumerable.From(listSecciones).Max();
+
+                               
+                                //Crear secciones
+                                for (var i = 0; i < totalSecciones; i++) {
+                                    var num = i + 1;
+                                    $('#mergeSeccionesModal').append('<div style="border: solid 1px #000;" id="divSeccion_'+ num +'"><div style="background-color:#c1bdbd;"><input type="checkbox" id="chkSeccion_'+num+'" value="Seccion'+num+'"> <span style="font-weight: bold">Seccion ' + num + '</span></div></div>');
+                                }
+
+                                
+                                //Cut PastePreguntas
+                                var relacionSeccion = [];
+                                for (var i = 0; i < Response.responseJSON.length; i++) {
+                                    //relacionSeccion.push(Response.responseJSON[i].IdPregunta + '_' +Response.responseJSON[i].Seccion);
+                                    console.log("#IdPreg"+Response.responseJSON[i].IdPregunta + '  =>  ' + "#divSeccion_"+ Response.responseJSON[i].Seccion);
+                                    jQuery(jQuery("#IdPreg"+Response.responseJSON[i].IdPregunta).detach()).appendTo("#divSeccion_"+ Response.responseJSON[i].Seccion);
+                                }
+
+
+                                //Fill
+                                //getConfByRespuesta 
+                                let modelConfigRes = {
+                                    idEncuesta: idencuesta,
+                                    idrespuesta: idrespuesta
+                                };
+                                //FillCampos(modelConfigRes);
+                                $('.Respuesta_Code').prop('checked', false);
+                                $.ajax({
+                                    url: '@Url.Action("getConfByRespuesta")',
+                                    data: modelConfigRes,
+                                    complete: function (Response) {
+                                        if(Response.responseJSON.length > 0){
+                                            for (var i = 0; i < Response.responseJSON.length; i++) {
+                                                console.log("IdPreguntaOpen: " + Response.responseJSON[i].IdPreguntaOpen);
+                                                //Fill la que tiene el id igual al valor que itero
+                                                var id = Response.responseJSON[i].IdPreguntaOpen;
+                                                $('#idItem'+id).prop('checked', true);
+                                            }
+                                        }else{
+                                            //Cuando no hay opciones que pintar
+                                        }
+                                        //Llamar al SaveConfig
+                                        $('#SaveConfi').click(function () {
+                                            if ($('.' + idpregunta + ':checked').val() == 0) {
+                                                swal("Debe elegir una pregunta", "", "error");
+                                                return false;
+                                            }
+                                            else {//Modelo ConfiguraRespuesta
+                                                var yourArray = [];
+                                                //var myVar = $("#start").find('.chkEmail').val();
+                                                $("#Preguntas").find(".Respuesta_Code").each(function () {
+
+                                                    //var myVar = $("#start").find('.chkEmail').val();
+                                                    if ($(this).is(":checked")) {
+                                                        yourArray.push($(this).val());
+                                                    }
+
+
+                                                });
+                                                console.log(yourArray);
+                                                //Get new input select
+                                                var getNewItem = $('input[type="radio"]:checked', 'body').val();
+                                                var GetIdRespuestaNBew = getNewItem.split('_')[2];
+                                                var getIdPreguntaNew = getNewItem.split('_')[1];
+                                                //$('input[type="radio"]').prop('checked', false);
+                                                let model = {
+                                                    IdEncuesta : idencuesta ,
+                                                    IdPregunta  : getIdPreguntaNew,
+                                                    IdRespuesta : GetIdRespuestaNBew,
+                                                    ListPreguntas: yourArray,
+
+                                                }
+
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    data: model,
+                                                    url: '@Url.Action("EditCondiciones", "Encuesta")',
+                                                    complete: function (Response) {
+                                                        if (Response.responseJSON == "success") {
+                                                            idencuesta = "";
+                                                            idpregunta = "";
+                                                            idrespuesta = "";
+                                                            //Cerrar modal
+                                                            $('#Preguntas').children('checkBox').remove();
+                                                            swal({
+                                                                title: "La configuración se guardó correctamente",
+                                                                text: "",
+                                                                type: "success",
+                                                                icon: "success",
+                                                            });
+                                                            $('#modalAddConfiguracion').modal('toggle');
+                                                            location.reload(true);
+                                                        }
+                                                        else {
+                                                            idencuesta = "";
+                                                            idpregunta = "";
+                                                            idrespuesta = "";
+                                                            swal({
+                                                                title: "La configuración se guardó correctamente",
+                                                                text: "",
+                                                                type: "info",
+                                                                icon: "info",
+                                                            }).then(function () {
+                                                                location.reload(true);
+                                                                //window.location.href = "/Encuesta/GetAll/";
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else {
+                                console.log('No se encontraron preguntas apara pintar');
+                            }
+                        }
+                    });
+
+                });//End
+
+            });
+    function FillCampos(modelConfigRes) {
+        $('.Respuesta_Code').prop('checked', false);
+        $.ajax({
+            url: '@Url.Action("getConfByRespuesta")',
+            data: modelConfigRes,
+            complete: function (Response) {
+                if(Response.responseJSON.length > 0){
+                    for (var i = 0; i < Response.responseJSON.length; i++) {
+                        console.log("IdPreguntaOpen: " + Response.responseJSON[i].IdPreguntaOpen);
+                        //Fill la que tiene el id igual al valor que itero
+                        var id = Response.responseJSON[i].IdPreguntaOpen;
+                        $('#idItem'+id).prop('checked', true);
+                    }
+                }else{
+                    //swal("Error al llamar la configuracion", "", "warning");
+                }
+            }
+        });
+    }
+    function Redirect() {
+        window.location.href = '/Encuesta/GetAll/'
+
+
+        @*var configuraSecciones = 0;
+        configuraSecciones = @Session["UpdateSecciones"];
+        
+        
+        if (configuraSecciones == 0) {
+            window.location.href = '/Encuesta/GetAll/'
+        }
+        else if(configuraSecciones == 1) {
+            window.location.href = "/Encuesta/EditSecciones/";
+        }*@
+    }
+    $(document).ready (function () {
+            @{
+            foreach (ML.Preguntas item in relacionSeccion)
+            {
+                var idpregunta = item.IdPregunta;
+                var Seccion = item.Seccion;
+                var Encabezado = item.Encabezado;
+                <text>
+                var bloquePregunta = @idpregunta;
+                var seccionDestino = "Seccion"+@Seccion;
+                var idPregunyaToSend = '@idpregunta';
+
+                console.log('BloquePregunta: ' + bloquePregunta + ' => ' + seccionDestino);
+
+
+                jQuery(jQuery("#"+bloquePregunta).detach()).appendTo("#"+seccionDestino );
+                //$('#'+bloquePregunta).clone().appendTo('#'+seccionDestino);
+                //$('#rowRemoveItems #'+bloquePregunta).remove();
+        </text>
+            }
+        }
+    });
+
+    
+</script>
+<script>
+    $( document ).on( "change", ":checkbox", function (e) {
+        //chkSeccion_ OK
+        var idItem = e.target.id.split('_')[0];
+        var nSeccion = e.target.id.split('_')[1];
+        if (idItem == 'chkSeccion' && e.target.checked == true) {
+            const componentesico12 = document.querySelectorAll('.Respuesta_Code' + nSeccion);
+            componentesico12.forEach(element => {
+                element.checked = true;
+            });
+        }
+        else if(idItem == 'chkSeccion' && e.target.checked == false){
+            const componentesico12 = document.querySelectorAll('.Respuesta_Code' + nSeccion);
+            componentesico12.forEach(element => {
+                element.checked = false;
+            });
+        }
+        else if (idItem != 'chkSeccion') {
+            //
+        }
+    });
+    function SaveConfigHideNextSection() {
+        var AllIds =  $('#termina').val();//AllId_
+        var listIds = document.getElementById('termina');
+        var IdENCUESTA = listIds.classList[2].split('_')[0];
+        var IdPregunta = listIds.classList[2].split('_')[1];
+        var IdRespuesta = listIds.classList[2].split('_')[2];
+
+        let model = {
+            idEncuesta: IdENCUESTA,
+            idPregunta: IdPregunta,
+            idrespuesta: IdRespuesta
+        }
+        $.ajax({
+            url: '@Url.Action("PreguntaHideNextSection")',
+            type: 'POST',
+            data: model,
+            complete: function (val) {
+                if (val.responseJSON == "success") {
+                    swal({
+                        title: "La configuracion se agregó con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+                else{
+                    swal({
+                        title: "La configuracion no pudo ser agregada",
+                        text: "",
+                        type: "info",
+                        icon: "info",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+            }
+        });
+    }
+    function SaveConfigHideNextSubSeccion() {
+        var AllIds =  $('#termina').val();//AllId_
+        var listIds = document.getElementById('termina');
+        var IdENCUESTA = listIds.classList[2].split('_')[0];
+        var IdPregunta = listIds.classList[2].split('_')[1];
+        var IdRespuesta = listIds.classList[2].split('_')[2];
+
+        let model = {
+            idEncuesta: IdENCUESTA,
+            idPregunta: IdPregunta,
+            idrespuesta: IdRespuesta
+        }
+        $.ajax({
+            url: '@Url.Action("PreguntaHideNextSubSeccion")',
+            type: 'POST',
+            data: model,
+            complete: function (val) {
+                if (val.responseJSON == "success") {
+                    swal({
+                        title: "La configuracion se agregó con éxito",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+                else{
+                    swal({
+                        title: "La configuracion no pudo ser agregada",
+                        text: "",
+                        type: "info",
+                        icon: "info",
+                    }).then(function () {
+                        location.reload(true);
+                    });
+                }
+            }
+        });
+    }
+</script>

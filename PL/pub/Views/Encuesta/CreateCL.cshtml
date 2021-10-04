@@ -1,0 +1,3102 @@
+﻿@using Newtonsoft.Json
+@model ML.Encuesta
+@{
+    ViewBag.Title = "CreateCL";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/scripts/Clima Dinamico/jquery.min.js"></script>
+<script src="~/scripts/jquery.unobtrusive-ajax.js"></script>
+@section H1
+{
+       <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6 bottom-align-left center-vertically-xs">
+                    <img src="@(Model.Plantillas.IdPlantilla != null ? "../../img/icon-survey.png":"../img/icon-survey.png")" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Encuestas / <span>Crear</span>
+                    </h1>
+                </div>
+                <div class="col-6 bottom-align-right center-vertically-xs">
+                    <a href="#" onclick="return validateData();" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i> Crear Encuesta</span>
+                    </a>
+                </div>
+            </div>
+
+        </div><!--.container-fluid-->
+    </section>
+}
+@section Styles
+{
+    <link href="~/css/yearpicker.css" rel="stylesheet" />
+    <style type="text/css">
+        .contenedor-text-rich .btn-group {
+            position: unset !important;
+        }
+
+        .swal-title {
+            font-size: 25px !important;
+        }
+
+        .swal-button {
+            font-size: 20px !important;
+        }
+
+        .cc-selector input {
+            margin: 0;
+            padding: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .badface {
+            background-image: url('../img/face-bad.png');
+        }
+
+        .regularface {
+            background-image: url('../img/face-regular.png');
+        }
+
+        .happyface {
+            background-image: url('../img/face-happy.png');
+        }
+
+        .happierface {
+            background-image: url('../img/face-happier.png');
+        }
+
+        input:active + .face-value {
+            opacity: .9;
+        }
+
+        input:checked + .face-value {
+            -webkit-filter: none;
+            -moz-filter: none;
+            filter: none;
+        }
+
+        .face-value {
+            cursor: pointer;
+            background-size: contain;
+            background-repeat: no-repeat;
+            display: inline-block;
+            width: 100px;
+            height: 70px;
+            -webkit-transition: all 100ms ease-in;
+            -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+            -webkit-filter: brightness(1.1) grayscale(1) opacity(.7);
+            -moz-filter: brightness(1.1) grayscale(1) opacity(.7);
+            filter: brightness(1.1) grayscale(1) opacity(.7);
+        }
+
+            .face-value:hover {
+                -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                filter: brightness(1.2) grayscale(.5) opacity(.9);
+            }
+
+        .busy {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            opacity: .9;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 2147483601;
+        }
+
+        .loader-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -100px 0 0 -100px;
+            width: 200px;
+            height: 200px;
+        }
+
+        .loader-ring-light {
+            width: 200px;
+            height: 200px;
+            -moz-border-radius: 240px;
+            -webkit-border-radius: 240px;
+            border-radius: 240px;
+            -moz-box-shadow: 0 4px 0 #10d0ff inset;
+            -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+            box-shadow: 0 4px 0 #10d0ff inset;
+            animation: rotate-360 2s linear infinite;
+            -moz-animation: rotate-360 2s linear infinite;
+        }
+
+        .rotacion {
+            width: 200px;
+            height: 200px;
+            -moz-border-radius: 240px;
+            -webkit-border-radius: 240px;
+            border-radius: 240px;
+            -moz-box-shadow: 0 4px 0 #10d0ff inset;
+            -webkit-box-shadow: 0 4px 0 #10d0ff inset;
+            box-shadow: 0 4px 0 #10d0ff inset;
+            animation: rotate-360 2s linear infinite;
+            -moz-animation: rotate-360 2s linear infinite;
+        }
+
+        .loader-ring-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 200px;
+            -moz-border-radius: 240px;
+            -webkit-border-radius: 240px;
+            border-radius: 240px;
+            -moz-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+            -webkit-box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+            box-shadow: 0 0 10px 4px rgba(0,0,0,.5) inset;
+        }
+
+        .modal-backdrop {
+            z-index: -5 !important;
+        }
+
+        #anchoModal {
+            min-width: 80%;
+        }
+
+        #modalEdit, #modalAdd ,#modalAddSubCat,#modalAddCat{
+            background-color: #000000b8;
+                overflow: auto;
+        }
+
+        legend {
+            font-size: .9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        preguntaActiva {
+            background-color: gainsboro;
+            border: inset;
+        }
+    </style>
+    <link href="~/css/swiper.min.css" rel="stylesheet" />
+    <link href="~/css/summernote.min.css" rel="stylesheet" />
+}
+@using (Html.BeginForm("CreateCL", "Encuesta", FormMethod.Post,@*new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "divEmp" },*@ new { @id = "creaEncuesta" }))
+{
+@*<div id="loading" class="busy loader" style="display:none;">
+        <img class="loader-ring" src="~/images/loadimage.gif" />
+    </div>*@
+    @Html.HiddenFor(m => m.IdEncuesta)
+    @Html.AntiForgeryToken()
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="false">Configuración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="manag-tab" onclick="" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Administración de preguntas y respuestas</a>
+                        </li>
+                        <li class="nav-item" onclick="getDataPrev();">
+                            <a class="nav-link" id="conf-tab" data-toggle="tab" href="#conf" role="tab" aria-controls="conf" aria-selected="false">Previsualización</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tabSurveyContent">
+                        <div class="tab-pane fade active show" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                            <div class="section-survey shadow-sm">
+                                <div class="body-survey">
+                                    <div class="row">                                       
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(m => m.Nombre, new { @Id = "Nombre", @class = "form-control", @placeholder = "Nombre de la Encuestas", @autofocus = "true", })
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div class="form-group">
+                                                @Html.DropDownListFor(model => model.IdEmpresa,
+                                                 new SelectList(Model.ListEmpresas, "CompanyId", "CompanyName"), "Selecciona Empresa",
+                                                 new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6 " id="muestraBDA">
+                                            @Html.DropDownListFor(model => model.BasesDeDatos.IdBaseDeDatos,
+                                                 new SelectList(Model.ListDataBase, "IdBaseDeDatos", "Nombre"), "Selecciona Base de Datos",
+                                                 new { @class = "form-control", @id = "BaseDeDatosAnonima" })
+                                        </div>
+                                        <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            @Html.DropDownListFor(model => model.TipoOrden.IdTipoOrden,
+                                                    new SelectList(Model.ListTipoOrden, "IdTipoOrden", "Descripcion"), "Selecciona Tipo de Orden",
+                                                    new { @class = "form-control", @id = "TipodeOrden" })
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <label>Vigencia</label>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label>Apartir de:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        @Html.TextBoxFor(m => m.FechaInicio, new { @type = "date", @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label>Hasta:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        @Html.TextBoxFor(m => m.FechaFin, new { @type = "date", @class = "form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                                            <label>Periodo</label>
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <label>Año:</label>
+                                                    </div>
+                                                    <div class="col">
+                                                        @Html.TextBoxFor(m => m.Instrucciones1, new { type = "text", @id = "periodo", @class = "yearpicker form-control" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label>Introducción</label>
+                                                <div class="input-group trichzone contenedor-text-rich">
+                                                    @Html.TextAreaFor(m => m.Instruccion, new { @Value = " ", rows = "40", style = "resize:none;width:100%;", placeholder = "Introducción", @class = "form-control input-lg textarea-editor", })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="" class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label>Instrucciones Generales</label>
+                                                <div class="input-group trichzone contenedor-text-rich">
+                                                    @Html.TextAreaFor(m => m.Agradecimiento, new { @Value = " ", rows = "25", style = "resize:none;width:100%;", placeholder = "Instrucciones Generales", @class = "form-control input-lg textarea-editor", })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="manag" role="tabpanel" aria-labelledby="manag-tab">
+                            <div class="section-survey">
+                                <div class="body-survey">
+                                    <div class="row">
+                                        <div class="col-1">
+                                            Base:
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="text" id="valBase" value="100" spellcheck="false" data-ms-editor="true" class="form-group">
+                                        </div>
+                                        <div class="col-9">
+                                            <div class="row">
+                                                <div class="col-4 text-center k-button-group"><span class="btn btn-secondary opcionesP" id="1">Configuración Original</span></div>
+                                                <div class="col-4 text-center k-button-group"><span class="btn btn-primary opcionesP" id="2">Parcial Categoria</span></div>
+                                                <div class="col-4 text-center k-button-group"><span class="btn btn-primary opcionesP" id="3">Personalizado</span></div>
+                                            </div>
+                                            
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="col-12" style="text-align:center;font-size:25px;font-weight:bold;margin-bottom:10px;background-color:#f2f2f2;z-index:1;">Competencias</div>
+                                            <div class="row" style="width: 98%;offset: center;display: contents;" id="newCuestion"></div>
+                                            <div class="row  mt-2">
+                                                <div class="col-12" id="mas">
+                                                    <label>Agrega Competencia</label>
+                                                    <div class="form-group col-7" id="muestraCompetenciadiv" style="float: right;">
+                                                        @Html.DropDownListFor(model => model.Preguntas.Competencia.IdCompetencia,
+                                             new SelectList(Model.ListCompetencias, "IdCompetencia", "Nombre"), "Selecciona Competencia",
+                                             new { @class = "form-control", @id = "muestraCompetencia", @val = "0" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="col-12" name="catCol2" style="text-align:center;font-size:25px;font-weight:bold;margin-bottom:10px;background-color:#f2f2f2;z-index:1;">Categorias</div>
+                                            <div class="row" style="width: 98%; offset: center; display: contents;" id="newSubCategory"></div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="col-12" name="subCatCol3" style="text-align:center;font-size:25px;font-weight:bold;margin-bottom:10px;background-color:#f2f2f2;z-index:1;">Sub Categorias</div>                                            
+                                            <div class="row" style="width: 98%;offset: center;display: contents;" id="newCategory"></div>
+                                        </div>
+                                    </div>
+                                   
+                                   
+                                </div>
+                            </div>
+                        </div><!--.tab-pane-->
+                        <div class="tab-pane fade" id="conf" role="tabpanel" aria-labelledby="conf-tab">
+                            <div class="section-survey shadow-sm animated fadeInUp">
+                                <div class="body-survey">
+                                    <div class="row mb-2">
+                                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+                                            <p class="control-label acote"><rect class="padreComp colorama"></rect>  Competencias</p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+                                            <p class="control-label acote"><rect class="hijoCate colorama"></rect>  Categorías</p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+                                            <p class="control-label acote"><rect class="hijoSub colorama"></rect>  Subcategorías</p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+                                            <p class="control-label acote"><rect class="hijoPreg colorama"></rect>  Preguntas</p>
+                                        </div>
+                                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+                                            <p class="control-label acote error">  Pregunta inactiva</p>
+                                        </div>
+                                    </div>
+
+                                    <div id="accordion">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h5 class="mb-0">
+                                                    <span class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                        Mapeo general
+                                                    </span>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <h3 hidden>Mapeo general</h3>
+                                                    <div id="demoMerge" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <!--merge data preview-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="headingTwo">
+                                                <h5 class="mb-0">
+                                                    <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                        Mapeo competencia-pregunta
+                                                    </span>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <h3 hidden>Mapeo competencia-pregunta</h3>
+                                                    <div id="demoMergeMapeo1" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <!--merge data por rubro-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header" id="headingThree">
+                                                <h5 class="mb-0">
+                                                    <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                        Mapeo categoría-subcategoría
+                                                    </span>
+                                                </h5>
+                                            </div>
+                                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <h3 hidden>Mapeo categoría-subcategoría</h3>
+                                                    <div id="demoMergeMapeo2" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <!--merge data por rubro-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card">
+                                            <div class="card-header" id="heading4">
+                                                <h5 class="mb-0">
+                                                    <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapseThree">
+                                                        Mapeo subcategoría-pregunta
+                                                    </span>
+                                                </h5>
+                                            </div>
+                                            <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordion">
+                                                <div class="card-body">
+                                                    <h3 hidden>Mapeo subcategoría-pregunta</h3>
+                                                    <div id="demoMergeMapeo3" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <!--merge data por rubro-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div><!--.tab-content-->
+                </div><!--.col-lg-8-->
+            </div><!--.row-->
+            <div class="row">
+                <div class="form-group col-lg-10 col-md-10 col-xs-10">
+                    <div class="col-md-8 text-right">
+                        <input type="submit" value="Create" onclick="return validateData();" class="btn btn-success" />
+                        <input hidden type="button" value="Preview" onclick="getDataPrev();" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-editor">
+        <div class="row d-flex justify-content-center modalWrapper">
+            <div class="modal fade modalEditClass" style="overflow:auto;" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                <div id="anchoModal" class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Configurar las preguntas Por Categoria</h4>
+                            <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body col-12" id="listCate">
+
+                            @foreach (var item in Model.ListCategorias)
+                            {
+                                <div class="row">
+                                    <div class="col-1">
+                                        <input type="checkbox" idpadre="@(item.IdPadre)" id="cat_@(item.IdCategoria)" name="cat_@(item.IdCategoria)" value="@(item.IdCategoria)" />
+                                    </div>
+                                    <div class="col-11">
+                                        @(item.Nombre)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="modal-body mx-3 d-flex justify-content-center">
+                            <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper col-4">
+                                <div id="btnGuardaCat" class="btn btn-outline-primary btn-block buttonAdd">
+                                    Guardar Categorización
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-editor">
+        <div class="row d-flex justify-content-center modalWrapper">
+            <div class="modal fade modalEditClass" id="modalAdd" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                <div id="anchoModal" class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Escribe la pregunta que quieras agregar.</h4>
+                            <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body col-12" id="listCate">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" placeholder="Pregunta" class="form-control" id="nomPregunta" />
+                                </div>                               
+                                <div class="col-md-6">
+                                    @Html.DropDownList("TipoControl",
+                                    new SelectList(Model.ListTipoControl, "IdTipoControl", "Nombre"), "Selecciona Tipo de Respuesta",
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        @id = "tipoControl"
+                                    })
+                                </div>
+                            </div>
+                            <div class="row"><hr/></div>
+                            <div class="row">
+                                <div class="col-12" id="newAnswer">
+
+                                </div>
+                                <div class="col-12" id="dAddAnswer" style="display:none;">
+                                    <ul class="list-inline crud-questions">                                                                             
+                                        <li class="list-inline-item" style="cursor:pointer;" id="addAnswere" name="addAnswere">
+                                            <i class="fas fa-plus-square"></i>
+                                            Agregar respuesta
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.DropDownList("Categoria",
+                               new SelectList(Model.ListCatCol2, "IdCategoria", "Nombre"), "Selecciona una Categoría",
+                               new
+                               {
+                                   @class = "form-control",
+                                   @id = "ddlcategoria"
+
+                               })
+                                </div>
+                                <div class="col-md-6" id="idSubCatDDL">
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" id="newAnswer">
+
+                            </div>
+                        </div>
+                        <div class="modal-body mx-3 d-flex justify-content-center">
+                            <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper col-4">
+                                <div id="btnAgregaPregunta" data-dismiss="modal" class="btn btn-outline-primary btn-block buttonAdd">
+                                    Agregar Pregunta
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-editor">
+        <div class="row d-flex justify-content-center modalWrapper">
+            <div class="modal fade modalEditClass" id="modalAddCat" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                <div id="anchoModal" class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Selecciona la categoría que deseas configurar.</h4>
+                            <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body col-12" id="listCateCol2">
+                            @foreach (var item in Model.ListCatCol2)
+                            {
+                                <div class="row">
+                                    <div class="col-1">
+                                        <input type="checkbox" idpadre="@(item.IdPadre)" id="cat_@(item.IdCategoria)" name="cat_@(item.IdCategoria)" value="@(item.IdCategoria)" />
+                                    </div>
+                                    <div class="col-11">
+                                        @(item.Nombre)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="modal-body mx-3 d-flex justify-content-center">
+                            <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper col-4">
+                                <div id="btnAddCat" data-dismiss="modal" class="btn btn-outline-primary btn-block buttonAdd">
+                                    Agregar Categoria
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-editor">
+        <div class="row d-flex justify-content-center modalWrapper">
+            <div class="modal fade modalEditClass" id="modalAddSubCat" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                <div id="anchoModal" class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Selecciona la subcategoria que deseas configurar.</h4>
+                            <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="card-body col-12" id="listCateCol3">
+                            @foreach (var item in Model.ListSubCatCol3)
+                            {
+                                <div class="row">
+                                    <div class="col-1">
+                                        <input type="checkbox" idpadre="@(item.IdPadre)" id="cat_@(item.IdCategoria)" name="cat_@(item.IdCategoria)" value="@(item.IdCategoria)" />
+                                    </div>
+                                    <div class="col-11">
+                                        @(item.Nombre)
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                        <div class="modal-body mx-3 d-flex justify-content-center">
+                            <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper col-4">
+                                <div id="btnAddSubCat" data-dismiss="modal" class="btn btn-outline-primary btn-block buttonAdd">
+                                    Agregar SubCategoria
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="newCuestionTemp" style="display:none;"></div>
+    <div class="row" id="newAnswereTemp" style="display:none;"></div>
+}
+@section Scripts
+{
+    <script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+    <script src="~/css/sweetalert.min.js"></script>
+    <script src="~/scripts/swiper.min.js"></script>
+    <script src="~/scripts/yearpicker.js"></script>
+
+    <script type="text/javascript">
+        var idOpcionActiva = 1;
+        var idPreguntaActive = "";
+        var idCatSele = "";
+        var nomCatSele = "";
+        var listCatSelec = [];
+        var listadoCatSelecc = [];
+        var idPadrePregunta = "";
+        var idPadrePreguntaFS = "";
+        var preguntaSelecc = "";
+        var nombreCompetenciaFs ="";
+        var idCompetenciaFs = "";
+        var nombreBloqueDiv ="";
+        var histoCompetencia = [];// col 1
+        var histoCompetenciaVal = [];//Valores col 1
+        var histoSubCatCat = [];//col 2
+        var histoPregSubCat = [];//col 3
+        var histoSTRId = [];//solo nombres id inputs
+        var histoSTRIdSubCatCat = [];//solo nombres id inputs
+        var histoSTRIdPregSubCat = [];//solo nombres id inputs
+        var idPadreP = ""; //IdPadre de la pregunta para el alta de la relacion Pregunta SubCategoria
+
+        //select Categoria modal agraga pregunta
+        document.getElementById("ddlcategoria").onchange = function(){
+            $("#idSubCatDDL").empty();
+            var idCatSelec =document.getElementById('ddlcategoria').value;
+            var subCategorias = @Html.Raw(JsonConvert.SerializeObject(Model.ListSubCatCol3));
+            var strddlSubCAt ="<select class='form-control' id='ddlsubCategoria' name='SubCategoria'><option value=''>Selecciona una SubCategoría</option>";
+                [].forEach.call(subCategorias,function (isubCategorias) {
+                    if (isubCategorias.IdPadre == idCatSelec) {                    
+                        strddlSubCAt+= "<option value='"+isubCategorias.IdCategoria+"'>"+isubCategorias.Nombre+"</option>";
+                    }
+                });
+            strddlSubCAt +="</select>";
+            //alert(document.getElementById('ddlcategoria').value);
+            $("#idSubCatDDL").append(strddlSubCAt);
+        }
+
+
+
+        $(document).on('click', 'div[name="dcat"]', function (e) {
+            //var array = $(this).parent()[0].offsetParent.id
+            var idBloquePadre = $(this).parent()[0].offsetParent.id;
+            var identificaCuantasPreguntas = $('#' + idBloquePadre).find('div').filter('.form-text');
+            if (identificaCuantasPreguntas.length == 1) {
+                $(this).parent().parent().parent().remove();
+            }
+            else {
+                $(this).parent().parent()[0].remove();
+            }
+
+            //alert("Aqui vamos");
+
+        });
+        //alta de pregunata en categorias
+        $(document).on('click','div[name="addPregunta"]', function (e) {
+            //Se limpia el formulario
+            $("#nomPregunta")[0].value ="";
+            //$('#intValoracion')[0].value ="";
+            $('#tipoControl')[0].value ="";
+            $('#ddlcategoria')[0].value ="";
+            $("#idSubCatDDL").empty();
+            $("#newAnswer").empty();
+            $("#dAddAnswer").hide();
+            //$('#ddlsubCategoria').val() = "";
+
+            nombreCompetenciaFs ="";
+            idCompetenciaFs = "";
+            nombreCompetenciaFs = e.target.offsetParent.offsetParent.children[0].textContent;
+            idCompetenciaFs = e.target.parentElement.attributes[3].value;
+            var convert =0;
+            if (Number(idPadrePreguntaFS) >= 190) {
+                convert = Number(idPadrePreguntaFS);
+                convert = convert + 1;
+                idPadrePreguntaFS = convert.toString() ;
+            }else {
+                idPadrePreguntaFS = "190";
+            }           
+            //alert(e);
+        });
+        $(document).on('click', 'div[name="addCategoria"]', function (e) {
+            idPreguntaActive = "";
+            idPreguntaActive = e.currentTarget.id;//$(this)[0].id
+            idPreguntaActive = idPreguntaActive.replace('addAnswer', 'cat_');
+            idCatSele = idPreguntaActive.slice(4);
+            idPadrePregunta = this.children[0].value;//$(this)[0].offsetParent.offsetParent.offsetParent.children[0].children[0].children[0].children[0].id;//e.target.offsetParent.offsetParent.offsetParent.offsetParent.children[2].id;
+            nomCatSele = $(this)[0].offsetParent.offsetParent.offsetParent.offsetParent.id;
+            nomCatSele = nomCatSele.replace('DIV', '');
+            idPadrePregunta = idPadrePregunta.replace("_", "[").replace("_", "]").replace("_Pregunta", "");
+            preguntaSelecc = this.parentElement.parentElement.parentElement.parentElement.children[10].children[0].children[0].children[0].value;//$(this)[0].offsetParent.offsetParent.offsetParent.children[1].children[0].children[0].children[0].value;
+            idPadreP = e.target.children[0].value;
+            //
+            $('#modalEdit').css('display', 'block');
+            $('#modalEdit').addClass('show');
+            $('#modalEdit').prop('padding-right', '15px');
+            $('#modalEdit').prop('aria-modal', true);
+            //NewCuestion[7fcf6fde-b513-4c4b-92a1-74be74333cda]
+
+
+            //alert("aqui vamos")
+        });
+        //Action Add Categorias Columna 2
+        function addCatCol2() {
+            //alert("aquivamos Columna 2");
+            $('#modalAddCat').css('display', 'block');
+            $('#modalAddCat').addClass('show');
+            $('#modalAddCat').prop('padding-right', '15px');
+            $('#modalAddCat').prop('aria-modal', true);
+        };
+        //Action Add SubCategorias Columna 3
+        function addSubCatCol3() {
+            //alert("aquivamos Columna 3");
+            $('#modalAddSubCat').css('display', 'block');
+            $('#modalAddSubCat').addClass('show');
+            $('#modalAddSubCat').prop('padding-right', '15px');
+            $('#modalAddSubCat').prop('aria-modal', true);
+        };
+        $(document).on('click', '#btnAddCat', function (e) {
+            listCatSelec = [];
+            listadoCatSelecc = [];
+            listadoCatSelecc = e.target.offsetParent.offsetParent.offsetParent.children[1].children;
+            for (var i = 0; i < listadoCatSelecc.length; i++) {
+                if (listadoCatSelecc[i].children[0].children[0].checked) {
+                    listCatSelec.push({ IdCategoria: listadoCatSelecc[i].children[0].children[0].defaultValue, Nombre: listadoCatSelecc[i].children[1].innerText, IdPadre: listadoCatSelecc[i].children[0].children[0].getAttribute('idpadre') });
+                }
+            }
+            if (listCatSelec.length > 0) {
+                [].forEach.call(listCatSelec, function myfunction(itemSelec) {
+                    var nombreCategoria = itemSelec.Nombre;
+                    var fieldListSCat = $('#newSubCategory').find("fieldset[id=col2_" + itemSelec.IdCategoria + "]");
+                    if (fieldListSCat.length > 0) {
+                        //Ya no pasa
+                        swal("Ya existe la Categoria, seleccione otra por favor!", "", "error");
+                    }
+                    else {
+                        //consulta columna 2 con id de categoria
+                        let model = {
+                            idEncuesta: 1,
+                            idCat:itemSelec.IdCategoria
+                        }
+                        $.ajax({
+                            url: '/Encuesta/consultaOpcion2VSCpC',
+                            data: model,
+                            type: 'POST',
+                            async: false,
+                            cache: false,
+                            success: function (result) {
+                                for (var i = 0; i < result.length; i++) {
+                                    $('#newSubCategory').append("<fieldset id='col2_" + result[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + result[i].Nombre + "</legend><div onclick='removeFieldSet(col2_" + result[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='childP_" + result[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                    for (var m = 0; m < result[i].Subcategorias.length; m++) {
+                                        //Se agrega Categorias y SubCategorias en la columna 2 --- Opcion 2
+                                        var idpadreF = result[i].IdCategoria;
+                                        let model = {
+                                            NombreCat: result[i].Subcategorias[m].Nombre,
+                                            Valor: result[i].Subcategorias[m].Valoracion,
+                                            IdSubcategoria: result[i].Subcategorias[m].IdCategoria,
+                                            IdCategoria: result[i].Subcategorias[m].IdPadre
+                                        }
+                                        $.ajax({
+                                            url: '/Encuesta/CreateNewSubCatCat/',
+                                            type: 'POST',
+                                            async: false,
+                                            cache: false,
+                                            data: model,
+                                            success: function (partialView) {
+                                                $('#childP_' + idpadreF).append(partialView);
+                                            }
+                                        });
+                                        //Se agregan Las SubCategorias con sus preguntas y valores en la columna 3 --- Opcion 3
+                                        let model3 = {
+                                            idEncuesta: 1,
+                                            idcat: result[i].Subcategorias[m].IdCategoria
+                                        }
+                                        $.ajax({
+                                            url: '/Encuesta/consultaOpcion2VPregpC',
+                                            data: model3,
+                                            type: 'POST',
+                                            async: false,
+                                            cache: false,
+                                            success: function (resulta) {
+                                                if (resulta.length > 0) {
+                                                    for (var i = 0; i < resulta.length; i++) {
+                                                        $('#newCategory').append("<fieldset id='col3_" + resulta[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + resulta[i].Nombre + "</legend><div onclick='removeFieldSet(col3_" + resulta[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='child_" + resulta[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                                        for (var m = 0; m < resulta[i].Preguntas.length; m++) {
+                                                            let model = {
+                                                                NombrePregunta: resulta[i].Preguntas[m].Nombre,
+                                                                Valor: resulta[i].Preguntas[m].Valoracion,
+                                                                IdSubcategoria: resulta[i].Preguntas[m].IdCategoria,
+                                                                IdPregunta: resulta[i].Preguntas[m].IdPadre
+                                                            }
+                                                            $.ajax({
+                                                                url: '/Encuesta/CreateNewCatVal/',
+                                                                type: 'POST',
+                                                                data: model,
+                                                                async: false,
+                                                                cache: false,
+                                                                success: function (partialView) {
+                                                                    $('#child_' + resulta[i].IdCategoria).append(partialView);
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                }
+
+                                                //alert(resulta);
+                                            }
+                                        });
+
+
+                                    }
+                                }
+                                //alert(result);
+                            }
+                        });
+                    }
+                });
+            }
+            $('#listCateCol2').find('input').prop('checked', false)
+            $('#modalAddCat').css('display', 'none');
+            $('#modalAddCat').removeClass('show');
+            $('#modalAddCat').removeProp('padding-right', '15px');
+            $('#modalAddCat').removeProp('aria-modal', true);
+            document.getElementsByTagName("body")[0].classList.remove("modal-open");
+            document.getElementsByTagName("body")[0].style.removeProperty("padding-right");
+        });
+        $(document).on('click', '#btnAddSubCat', function (e) {
+            listCatSelec3 = [];
+            listadoCatSelecc3 = [];
+            listadoCatSelecc3 = e.target.offsetParent.offsetParent.offsetParent.children[1].children;
+            for (var i = 0; i < listadoCatSelecc3.length; i++) {
+                if (listadoCatSelecc3[i].children[0].children[0].checked) {
+                    listCatSelec3.push({ IdCategoria: listadoCatSelecc3[i].children[0].children[0].defaultValue, Nombre: listadoCatSelecc3[i].children[1].innerText, IdPadre: listadoCatSelecc3[i].children[0].children[0].getAttribute('idpadre') });
+                }
+            }
+            if (listCatSelec3.length > 0) {
+                [].forEach.call(listCatSelec3, function (itemSelec) {//newCategory
+                    ////////////////////////////////////////////
+                    //solo columna 3
+                    var nombreCategoria = itemSelec.Nombre;
+                    let model3 = {
+                        idEncuesta: 1,
+                        idcat: itemSelec.IdCategoria
+                    }
+                    var fieldListSCat = $('#newCategory').find("fieldset[id=col3_" + itemSelec.IdCategoria + "]");
+
+                    if (fieldListSCat.length > 0) {
+                        //llenado pero no crea el fieldset
+                        swal("Ya existe la Subcategoria, seleccione otra por favor!", "", "error");
+                    }
+                    else {
+                        //Consulta y llenado columna 3
+
+                        $.ajax({
+                            url: '/Encuesta/consultaOpcion2VPregpC',
+                            data: model3,
+                            type: 'POST',
+                            async: false,
+                            cache: false,
+                            success: function (resulta) {
+                                if (resulta.length > 0) {
+                                    for (var i = 0; i < resulta.length; i++) {
+                                        $('#newCategory').append("<fieldset id='col3_" + resulta[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + resulta[i].Nombre + "</legend><div onclick='removeFieldSet(col3_" + resulta[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='child_" + resulta[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                        for (var m = 0; m < resulta[i].Preguntas.length; m++) {
+                                                let model = {
+                                                    NombrePregunta: resulta[i].Preguntas[m].Nombre,
+                                                    Valor: resulta[i].Preguntas[m].Valoracion,
+                                                    IdSubcategoria: resulta[i].Preguntas[m].IdCategoria,
+                                                    IdPregunta: resulta[i].Preguntas[m].IdPadre
+                                                }
+                                                $.ajax({
+                                                    url: '/Encuesta/CreateNewCatVal/',
+                                                    type: 'POST',
+                                                    data: model,
+                                                    async: false,
+                                                    cache: false,
+                                                    success: function (partialView) {
+                                                        $('#child_' + resulta[i].IdCategoria).append(partialView);
+                                                    }
+                                                });
+                                        }
+                                    }
+                                }
+
+                                //alert(resulta);
+                            }
+                        });
+                    }
+
+                    //valida existencia en columna 2
+                    var fieldLCatcol2 = $('#newSubCategory').find("fieldset[id=col2_" + itemSelec.IdPadre + "]");
+                    if (fieldLCatcol2.length > 0) {
+                        var existeSubcategoria = $('#childP_' + itemSelec.IdPadre).find("input[type=hidden]");
+                        var exist = false;
+                        for (var i = 0; i < existeSubcategoria.length; i++) {
+                            var partedeId = existeSubcategoria[i].id;
+                            var idExistente = 0;
+                            if (partedeId.indexOf("IdSubcategoria") > 0) {
+                                //alert("si existe__ " + existeSubcategoria[i].id);
+                                idExistente = existeSubcategoria[i].value;
+                                if (itemSelec.IdCategoria == idExistente) {
+                                    exist = true;
+                                    console.log(exist);
+                                }
+                            }
+                        }
+                        if (!exist) {
+                            //se llena columna 2 segun el Id de Categoria
+                            let model = {
+                                idEncuesta: 1,
+                                idCat: itemSelec.IdPadre
+                            }
+                            $.ajax({
+                                url: '/Encuesta/consultaOpcion2VSCpC',
+                                data: model,
+                                type: 'POST',
+                                async: false,
+                                cache: false,
+                                success: function (result) {
+                                    for (var i = 0; i < result.length; i++) {
+                                       // $('#newSubCategory').append("<fieldset id='col2_" + result[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + result[i].Nombre + "</legend><div onclick='removeFieldSet(col2_" + result[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='childP_" + result[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                        for (var m = 0; m < result[i].Subcategorias.length; m++) {
+                                            if (itemSelec.IdCategoria == result[i].Subcategorias[m].IdCategoria) {
+                                                //Se agrega Categorias y SubCategorias en la columna 2 --- Opcion 2
+                                                var idpadreF = result[i].IdCategoria;
+                                                let model = {
+                                                    NombreCat: result[i].Subcategorias[m].Nombre,
+                                                    Valor: result[i].Subcategorias[m].Valoracion,
+                                                    IdSubcategoria: itemSelec.IdCategoria,//idpadreF,
+                                                    IdCategoria: result[i].Subcategorias[m].IdPadre
+                                                }
+                                                $.ajax({
+                                                    url: '/Encuesta/CreateNewSubCatCat/',
+                                                    type: 'POST',
+                                                    async: false,
+                                                    cache: false,
+                                                    data: model,
+                                                    success: function (partialView) {
+                                                        $('#childP_' + idpadreF).append(partialView);
+                                                    }
+                                                });
+                                            }
+
+                                        }
+                                    }
+                                    //alert(result);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        ////////////////////////////////////////////
+                        //se llena columna 2 segun el Id de Categoria
+                        let model = {
+                            idEncuesta: 1,
+                            idCat: itemSelec.IdPadre
+                        }
+                        $.ajax({
+                            url: '/Encuesta/consultaOpcion2VSCpC',
+                            data: model,
+                            type: 'POST',
+                            async: false,
+                            cache: false,
+                            success: function (result) {
+                                for (var i = 0; i < result.length; i++) {
+                                    $('#newSubCategory').append("<fieldset id='col2_" + result[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + result[i].Nombre + "</legend><div onclick='removeFieldSet(col2_" + result[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='childP_" + result[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                    for (var m = 0; m < result[i].Subcategorias.length; m++) {
+                                        if (itemSelec.IdCategoria == result[i].Subcategorias[m].IdCategoria) {
+                                            //Se agrega Categorias y SubCategorias en la columna 2 --- Opcion 2
+                                            var idpadreF = result[i].IdCategoria;
+                                            let model = {
+                                                NombreCat: result[i].Subcategorias[m].Nombre,
+                                                Valor: result[i].Subcategorias[m].Valoracion,
+                                                IdSubcategoria: itemSelec.IdCategoria,//idpadreF,
+                                                IdCategoria: result[i].Subcategorias[m].IdPadre
+                                            }
+                                            $.ajax({
+                                                url: '/Encuesta/CreateNewSubCatCat/',
+                                                type: 'POST',
+                                                async: false,
+                                                cache: false,
+                                                data: model,
+                                                success: function (partialView) {
+                                                    $('#childP_' + idpadreF).append(partialView);
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                }
+                                //alert(result);
+                            }
+                        });
+                        /////////////////////
+                    }
+
+
+                });
+            }
+
+            $('#listCateCol3').find('input').prop('checked', false);
+            $('#modalAddSubCat').css('display', 'none');
+            $('#modalAddSubCat').removeClass('show');
+            $('#modalAddSubCat').removeProp('padding-right', '15px');
+            $('#modalAddSubCat').removeProp('aria-modal', true);
+            document.getElementsByTagName("body")[0].classList.remove("modal-open");
+            document.getElementsByTagName("body")[0].style.removeProperty("padding-right");
+        });
+        $(document).on('click', '#btnGuardaCat', function (e) {
+            listCatSelec = [];
+            listadoCatSelecc = [];
+            const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+            listadoCatSelecc = e.target.offsetParent.offsetParent.offsetParent.children[1].children;
+            for (var i = 0; i < listadoCatSelecc.length; i++) {
+                if (listadoCatSelecc[i].children[0].children[0].checked) {
+                    listCatSelec.push({ IdCategoria: listadoCatSelecc[i].children[0].children[0].defaultValue, Nombre: listadoCatSelecc[i].children[1].innerText, IdPadre: listadoCatSelecc[i].children[0].children[0].getAttribute('idpadre')});
+                }
+            }
+            if (listCatSelec.length > 0) {
+
+                //COLUMNA 2 SUBCATEGORIAS A CATEGORIAS
+                [].forEach.call(listCatSelec, function myfunction(itemSelec) {
+                    var nombreCategoria = itemSelec.Nombre.split(" - ")[0];
+                    nombreCategoria=nombreCategoria.replace(/^\w/, (c) => c.toUpperCase());
+                    var nombreSubCategoria = itemSelec.Nombre.split(" - ")[1];
+                    var idPadreCat = itemSelec.IdPadre;
+                    var fieldListSCat = $('#newSubCategory').find("fieldset[id=col2_" + itemSelec.IdPadre + "]");
+                    if (fieldListSCat.length > 0) {
+                        var existeSubcategoria = $('#childP_' + itemSelec.IdPadre).find("input[type=hidden]");
+                        var exist = false;
+                        for (var i = 0; i < existeSubcategoria.length; i++) {
+                            var partedeId = existeSubcategoria[i].id;
+                            var idExistente = 0;
+                            if (partedeId.indexOf("IdSubcategoria") > 0) {
+                                //alert("si existe__ " + existeSubcategoria[i].id);
+                                idExistente = existeSubcategoria[i].value;
+                                if (itemSelec.IdCategoria == idExistente) {
+                                    exist = true;
+                                }
+                            }
+                        }
+                        if (!exist) {
+                            let model = {
+                                NombreCat: nombreSubCategoria,
+                                Valor: 0,
+                                IdSubcategoria: itemSelec.IdCategoria,
+                                IdCategoria: idPadreCat
+                            }
+                            $.ajax({
+                                url: '/Encuesta/CreateNewSubCatCat/',
+                                type: 'POST',
+                                data: model,
+                                success: function (partialView) {
+                                    $('#childP_' + itemSelec.IdPadre).append(partialView);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        var existeIdPadre = $('#newSubCategory').find("fieldset[id=col2_" + itemSelec.IdPadre+ "]");
+                        if (existeIdPadre.length > 0) {
+                            //add SubCategoria y Categoria Begincollection  ****CreateNewSubCatCat
+
+                            let model = {
+                                NombreCat:nombreSubCategoria,
+                                Valor:0,
+                                IdSubcategoria:itemSelec.IdCategoria,
+                                IdCategoria : idPadreCat
+                            }
+                            $.ajax({
+                                url: '/Encuesta/CreateNewSubCatCat/',
+                                type: 'POST',
+                                data: model,
+                                success: function (partialView) {
+                                    $('#childP_' + itemSelec.IdPadre).append(partialView);
+                                }
+                            });
+
+                        }
+                        else {
+                            $('#newSubCategory').append("<fieldset id='col2_" + itemSelec.IdPadre + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + nombreCategoria + "</legend><div onclick='removeFieldSet(" + itemSelec.IdCategoria + "_col2);' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='childP_" + itemSelec.IdPadre + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                            //add SubCategoria y Categoria Begincollection  ****CreateNewSubCatCat
+                            let model = {
+                                NombreCat: nombreSubCategoria,
+                                Valor: 0,
+                                IdSubcategoria: itemSelec.IdCategoria,
+                                IdCategoria: idPadreCat
+                            }
+                            $.ajax({
+                                url: '/Encuesta/CreateNewSubCatCat/',
+                                type: 'POST',
+                                data: model,
+                                success: function (partialView) {
+                                    $('#childP_' + itemSelec.IdPadre).append(partialView);
+                                }
+                            });
+                        }
+                    }
+                });
+                //acciones al cambio de valores de SubCategorias de Categorias
+
+
+                //COLUMNA 3  PREGUNTAS A SUBCATEGORIAS
+                [].forEach.call(listCatSelec, function myfunction(itemSele) {
+                    var nombreField = itemSele.Nombre.split(" - ")[1];
+                    var fieldList = $('#newCategory').find("fieldset[id=col3_" + itemSele.IdCategoria + "]");
+                    if (fieldList.length > 0) {
+                        //Dentro del FieldSet existente se busca el idPadrePregunta para no duplicarlo
+                        var existePreguntaPadre = $("#newCategory").find("fieldset[id=col3_"+itemSele.IdCategoria+"] input[value="+idPadreP+"]").filter(".idPreguntaPadre");
+                        if (existePreguntaPadre.length == 0) {
+
+                            let model = {
+                                NombrePregunta: preguntaSelecc,
+                                Valor: 0,
+                                IdSubcategoria: itemSele.IdCategoria,
+                                IdPregunta: idPadreP
+                            }
+                            $.ajax({
+                                url: '/Encuesta/CreateNewCatVal/',
+                                type: 'POST',
+                                data: model,
+                                success: function (partialView) {
+                                    $('#child_' + itemSele.IdCategoria).append(partialView);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        $('#newCategory').append("<fieldset id='col3_" + itemSele.IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + nombreField + "</legend><div onclick='removeFieldSet("+ itemSele.IdCategoria +"_col3);' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='child_" + itemSele.IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                        var strIdPAdreItem = idCatSele;
+                        let model = {
+                            NombrePregunta: preguntaSelecc,
+                            Valor :0,
+                            IdSubcategoria: itemSele.IdCategoria,
+                            IdPregunta: idPadreP
+                        }
+                        $.ajax({
+                            url: '/Encuesta/CreateNewCatVal/',
+                            type: 'POST',
+                            data: model,
+                            async: false,
+                            cache: false,
+                            success: function (partialView) {
+                                $('#child_' + itemSele.IdCategoria).append(partialView);
+                            }
+                        });
+                    }
+
+                });
+
+                //acciones al cambio de valores de preguntas de SubCategorias
+
+
+
+            }
+
+
+            $('#listCate').find('input').prop('checked', false)
+            //alert("aqui vamos")
+            $('#modalEdit').css('display', 'none');
+            $('#modalEdit').removeClass('show');
+            $('#modalEdit').removeProp('padding-right', '15px');
+            $('#modalEdit').removeProp('aria-modal', true);
+            document.getElementsByTagName("body")[0].classList.remove("modal-open");
+            document.getElementsByTagName("body")[0].style.removeProperty("padding-right");
+        });
+        //Validar si ya se cargan desde inicio para no volver a llamar la funcion
+        //calvalCol2();
+        //calvalCol3();
+        $(document).on('change', 'select[name="Preguntas.Competencia.IdCompetencia"]', function () {
+            document.getElementById("loading").style.display = "block";
+            let existe = false;
+            var nombreBloqueTitulo = $('select[name="Preguntas.Competencia.IdCompetencia"] option:selected').text();
+            const cols = document.querySelectorAll('.w-auto');
+            cols.forEach(element => {
+                //alert(element.textContent);
+                if (element.textContent == nombreBloqueTitulo) {
+                    //swal("Ya existe la competencia, seleccione otra por favor!", "", "error");
+                    existe = true;
+                }
+            });
+            if (existe) {
+                swal("Ya existe la competencia, seleccione otra por favor!", "", "error");
+                document.getElementById("loading").style.display = "none";
+                $("#muestraCompetencia").val("");
+                return existe;
+            }
+            else {
+                insertaCompetencia();
+                $("#muestraCompetencia").val("");
+                return existe; //insertaCompetencia();
+            }
+
+        });
+
+        //$(document).on('change','select[name="TipoControl"]',function () {
+    
+        //});
+        $(document).on('change', '#tipoControl', function () {
+            $("#dAddAnswer").show();
+            //divForSubSeccion();
+            const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+            var selectedValue = $(this).val();
+            const contenedorAnswere = '@("#newAnswer")';
+            const masAnswere = '@("#agregaAnswere")';
+            switch (selectedValue) {
+                case "1":
+                    $(contenedorAnswere).empty();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereRespuestaCorta/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "2":
+                    $(contenedorAnswere).empty();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereRespuestaLarga/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "3":
+                    $(contenedorAnswere).empty();
+                    $.ajax({
+                        type: "GET",
+                        url: '/Encuesta/CreateNewAnswereOpcionMultiple/',
+                        data: { idpadreItem: padreItem },
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "4":
+                    $(contenedorAnswere).empty();
+                    $.ajax({
+                        type: "GET",
+                        url: '/Encuesta/CreateNewAnswereChkBox/',
+                        data: { idpadreItem: padreItem },
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "5":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        type: "GET",
+                        data: { idpadreItem: padreItem },
+                        url: '/Encuesta/CreateNewAnswereListaDesplegable/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "6":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereSentimiento/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "7":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereRango/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "8":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereLikertAcuerdo/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "9":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereLikertFrecuencia/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+
+                case "10":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereLikertImportacia/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "11":
+                    $(contenedorAnswere).empty();
+                    $(masAnswere).show();
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereLikertProbabilidad/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "12":
+                    $(contenedorAnswere).empty();
+                    $('#newAnswer').append("<div> Respuesta estandar </div>");
+                    break;
+                case "13":
+                    $(contenedorAnswere).empty();
+                    break;
+                default:
+                    swal("Tipo de Respuesta no seleccionada. !", "", "error");
+                    break;
+            }
+        });
+
+        $(document).on('click', '#addAnswere', function () {
+            const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+            const nombreselect = '#tipoControl';
+            const selectedValue = $(nombreselect).val();
+            switch (selectedValue) {
+                case "1":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "2":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "3":
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereOpcionMultiple/',
+                        data: { idpadreItem: padreItem },
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "4":
+                    $.ajax({
+                        url: '/Encuesta/CreateNewAnswereChkBox/',
+                        data: { idpadreItem: padreItem },
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "5":
+                    $.ajax({
+                        type: "GET",
+                        data: { idpadreItem: padreItem },
+                        url: '/Encuesta/CreateNewAnswereListaDesplegable/',
+                        success: function (partialView) {
+                            $('#newAnswer').append(partialView);
+                        }
+                    });
+                    break;
+                case "6":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "7":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "8":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "9":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "10":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "11":
+                    swal("Sólo se acepta una repuesta. !", "", "error");
+                    break;
+                case "12":
+                    //$.ajax({
+                    //    type: "GET",
+                    //    url: '/Encuesta/CreateNewAnswereLikertDoble/',
+                    //    data: { idpadreItem: padreItem, columna: 2 },
+                    //    success: function (partialView) {
+                    //        $('#newAnswer').append(partialView);
+                    //    }
+                    //});
+                    break;
+                case "13":
+                    swal("SubSección no acepta respuestas!", "", "info");
+                    break;
+                default:
+                    swal("Tipo de Respuesta no seleccionada. !", "", "error");
+                    break;
+            }
+        });
+
+        function deleteCuestion(CuestionDiv) {
+            CuestionDiv.remove();
+        };
+
+        function calvalCol1() {
+            $(document.body).delegate('.valComp', 'change', function (e) {
+                var padreCont = $(this)[0].offsetParent.offsetParent.offsetParent.offsetParent;
+                var numElem = $("#" + padreCont.id).find(".valComp");
+                var newval = e.target.value;
+                var prodTotal = 0;
+                var valorHistorico = 0;
+                var indexHCV = 0;
+                var nomBloqueCompetencia = $(this)[0].offsetParent.offsetParent.offsetParent.offsetParent.id;
+                nomBloqueCompetencia = nomBloqueCompetencia.replace("DIV", "");
+
+                var valBase = parseInt($('#valBase').val());
+                if (valBase > 0) {
+                    //valBase = valBase - newval;
+                    var currentId = e.target.id;
+                    var existe = false;
+                    var existeIndex = "";
+                    histoCompetenciaVal.forEach(element => {
+                        //alert(element.textContent);
+                        if (element.id == currentId && element.competencia == nomBloqueCompetencia) {
+                            existe = true;
+                            existeIndex = element.id
+                        }
+                    });
+                    if (existe) {
+                        histoCompetenciaVal.forEach(element => {
+                            if (element.id == existeIndex && element.competencia == nomBloqueCompetencia) {
+                                element.valor = newval;
+                            }
+                        });
+
+                    } else {
+                        histoCompetenciaVal.push({ competencia: nomBloqueCompetencia, valor: newval, id: currentId });
+                        histoSTRId.push(currentId);
+                    }
+
+                    console.log(histoCompetenciaVal);
+
+                    [].forEach.call(histoCompetenciaVal, function myfunction(item) {
+                        if (item.competencia == nomBloqueCompetencia) {
+                            valorHistorico += parseInt(item.valor);
+                        }
+
+                    });
+
+                    var result = numElem.filter((o) => !histoSTRId.includes(numElem[o].id));
+
+                    console.log(result);
+
+                    prodTotal = (valorHistorico > 0 ? valBase - valorHistorico : valBase) / (result.length);
+                    [].forEach.call(result, function myfunction(item) {
+                        item.value = prodTotal;
+                    });
+                }
+            });
+        }
+        function calvalCol2() {
+            $(document.body).delegate('.valSubCatCat', 'change', function (e) {
+                //alert('The option with value ' + e.target.value);
+                var padreCont = $(this)[0].offsetParent.offsetParent;
+                var numElem = $("#" + padreCont.id).find(".valSubCatCat");
+                var newval = e.target.value;
+                var prodTotal = 0;
+                var valorHistorico = 0;
+                var indexHCV = 0;
+                var nomBloqueCategoria = $(this)[0].offsetParent.offsetParent.offsetParent.children[0].innerText;//nomBloqueCompetencia
+                var valBase = parseInt($('#valBase').val());
+                var currentId = e.target.id;
+                var existe = false;
+                var existeIndex = "";
+                histoSubCatCat.forEach(elemt => {
+                    if (elemt.id == currentId && elemt.categoria == nomBloqueCategoria) {
+                        existe = true;
+                        existeIndex = elemt.id
+                    }
+                });
+                //Existe Nodo en el contenedor de Categoria
+                if (existe) {
+                    histoSubCatCat.forEach(element => {
+                        if (element.id == existeIndex && element.categoria == nomBloqueCategoria) {
+                            element.valor = newval;
+                        }
+                    });
+
+                } else {
+                    histoSubCatCat.push({ categoria: nomBloqueCategoria, valor: newval, id: currentId });
+                    histoSTRIdSubCatCat.push(currentId);
+                }
+                console.log(histoSubCatCat);
+                //Se suman los valores del Historico
+                [].forEach.call(histoSubCatCat, function myfunction(item) {
+                    if (item.categoria == nomBloqueCategoria) {
+                        valorHistorico += parseInt(item.valor);
+                    }
+                });
+                //filtrado de todos los nodos por el o los nodos en historico
+                var result = numElem.filter((o) => !histoSTRIdSubCatCat.includes(numElem[o].id));
+                console.log(result);
+                //Se calcula el total sobrante entre los nodos no editados
+                prodTotal = (valorHistorico > 0 ? valBase - valorHistorico : valBase) / (result.length);
+                //se actualiza en nuevo valor calculado
+                [].forEach.call(result, function (item) {
+                    item.value = prodTotal;
+                });
+            });
+        }
+        function calvalCol3() {
+            $(document.body).delegate('.valPregSubCat', 'change', function (e) {
+                //alert('The option with value ' + e.target.value);
+                var padreCont = $(this)[0].offsetParent.offsetParent;
+                var numElem = $("#" + padreCont.id).find(".valPregSubCat");
+                var newval = e.target.value;
+                var prodTotal = 0;
+                var valorHistorico = 0;
+                var indexHCV = 0;
+                var nomBloqueSubCategoria = $(this)[0].offsetParent.offsetParent.offsetParent.children[0].innerText;//nomBloqueCompetencia
+                var valBase = parseInt($('#valBase').val());
+                var currentId = e.target.id;
+                var existe = false;
+                var existeIndex = "";//histoPregSubCat
+                //Valida existencia de preguntas en Subcategoria
+                histoPregSubCat.forEach(element => {
+                    //alert(element.textContent);
+                    if (element.id == currentId && element.subCat == nomBloqueSubCategoria) {
+                        existe = true;
+                        existeIndex = element.id
+                    }
+                });
+                if (existe) {
+                    histoPregSubCat.forEach(element => {
+                        if (element.id == existeIndex && element.subCat == nomBloqueSubCategoria) {
+                            element.valor = newval;
+                        }
+                    });
+
+                } else {
+                    histoPregSubCat.push({ subCat: nomBloqueSubCategoria, valor: newval, id: currentId });
+                    histoSTRIdPregSubCat.push(currentId);
+                }
+
+                console.log(histoPregSubCat);
+                //Se suma los valores del historico
+                [].forEach.call(histoPregSubCat, function myfunction(item) {
+                    if (item.subCat == nomBloqueSubCategoria) {
+                        valorHistorico += parseInt(item.valor);
+                    }
+                });
+                var result = numElem.filter((o) => !histoSTRIdPregSubCat.includes(numElem[o].id));
+
+                console.log(result);
+
+                prodTotal = (valorHistorico > 0 ? valBase - valorHistorico : valBase) / (result.length);
+                [].forEach.call(result, function myfunction(item) {
+                    item.value = prodTotal;
+                });
+
+
+            });
+
+
+        }
+
+        function insertaCompetencia() {
+            //vm.isBusy = true;
+            var itemseleccionado = $('#muestraCompetenciadiv').find('select');
+            if (itemseleccionado.val() >= 1) {
+                var nombreBloqueTitulo = $('select[name="Preguntas.Competencia.IdCompetencia"] option:selected').text();
+                nombreBloque = nombreBloqueTitulo + "DIV";
+                nombreBloque = nombreBloque.replace(" ", "_");
+                //se crea el contenedor de la competencia
+                //document.body.innerHTML += "<fieldset id='" + nombreBloque + "_fs' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet(" + nombreBloque + "_fs);' style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='" + nombreBloque + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>";
+                document.getElementById('newCuestionTemp').innerHTML += "<fieldset id='" + nombreBloque + "_fs' class='form-group border p-3 col-12'>"+
+                            "<legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet(" + nombreBloque + "_fs);' "+
+                            "style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;"+
+                            "font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div data-toggle='modal' data-target='#modalAdd' name='addPregunta' idcompetencia='"+itemseleccionado.val()+"' "+
+                            "style='cursor:pointer;position:absolute;right: 80px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;"+
+                            "font-size:xx-large;border:0px;'><span aria-hidden='true'>+</span></div><div id='" + nombreBloque + "' class='col-12 p-0 "+
+                            "section-survey shadow-sm animated fadeInUp'></div></fieldset>";
+                $('#' + nombreBloque + "_fs").appendTo('#newCuestion');
+                $.ajax({
+                    url: '/Encuesta/CreateListCL?aIdCompetencia=' + itemseleccionado.val(),
+                    complete: function (response) {
+                        for (var i = 0; i < response.responseJSON.length; i++) {
+                            //if (response[i].IdEnfoque == 1) {
+                            var nombrePregunta = response.responseJSON[i].Pregunta;
+                            var idPreguntaPadre = response.responseJSON[i].IdPreguntaPadre;
+                            var idEnfoque = response.responseJSON[i].IdEnfoque;
+                            var valoracion = response.responseJSON[i].Valoracion;
+                            var idCompetencia = response.responseJSON[i].Competencia.IdCompetencia;
+                            nombreCompetencia = response.responseJSON[i].Competencia.Nombre;
+                            var idTipoControl = response.responseJSON[i].TipoControl.IdTipoControl;
+                            let model = {
+                                Pregunta: nombrePregunta,
+                                IdPreguntaPadre: idPreguntaPadre,
+                                IdEnfoque: idEnfoque,
+                                Valoracion: valoracion,
+                                Competencia: {
+                                    IdCompetencia: idCompetencia,
+                                    Nombre: nombreCompetencia
+                                },
+                                TipoControl:{
+                                    IdTipoControl: idTipoControl
+                                }
+                            }
+                            var nombreBloqueDiv = nombreCompetencia + "DIV";
+                            nombreBloqueDiv = nombreBloqueDiv.replace(" ", "_");
+                            $.ajax({
+                                url: '/Encuesta/CreateNewCuestionCL',
+                                data: model,
+                                type: 'POST',
+                                async: false,
+                                cache: false,
+                                success: function (partialView) {
+                                    $('#' + nombreBloqueDiv).append(partialView);
+
+                                }//, async: false
+                            });
+                            // }
+                        }
+                        document.getElementById("loading").style.display = "none";
+                        //$(window).scrollTop($('body').height());
+
+                    }
+                });
+            }
+        };
+        function contenidoColumna1() {
+            document.getElementById("loading").style.display = "block";
+            $.ajax({
+                url: '/Encuesta/ListadoCompetenciasInicio',
+                complete:function (response) {
+                    for (var i = 0; i < response.responseJSON.length; i++) {
+                        var nombreBloqueTitulo = response.responseJSON[i].Nombre;
+                        var idCompetenciaFset = response.responseJSON[i].IdCompetencia;
+                        nombreBloque = nombreBloqueTitulo + "DIV";
+                        nombreBloque = nombreBloque.replace(" ", "_");
+                        document.getElementById('newCuestionTemp').innerHTML += "<fieldset id='"+ nombreBloque +"_fs' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet("+ nombreBloque +"_fs);' style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div data-toggle='modal' data-target='#modalAdd' name='addPregunta' idcompetencia='"+idCompetenciaFset+"' style='cursor:pointer;position:absolute;right: 80px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>+</span></div><div id='"+ nombreBloque +"' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>";
+                        $('#' + nombreBloque + "_fs").appendTo('#newCuestion');
+                        //por cada competencia se recorre el listado de preguntas
+                        for (var m = 0; m < response.responseJSON[i].PreguntasPorCompetencia.length; m++) {
+                            var nombrePregunta = response.responseJSON[i].PreguntasPorCompetencia[m].Pregunta;
+                            var idPreguntaPadre = response.responseJSON[i].PreguntasPorCompetencia[m].IdPreguntaPadre;
+                            var idEnfoque = response.responseJSON[i].PreguntasPorCompetencia[m].IdEnfoque;
+                            var valoracion = response.responseJSON[i].PreguntasPorCompetencia[m].Valoracion;
+                            var idCompetencia = response.responseJSON[i].PreguntasPorCompetencia[m].Competencia.IdCompetencia;
+                            nombreCompetencia = response.responseJSON[i].PreguntasPorCompetencia[m].Competencia.Nombre;
+                            var idTipoControl = response.responseJSON[i].PreguntasPorCompetencia[m].TipoControl.IdTipoControl;
+                            let model = {
+                                Pregunta: nombrePregunta,
+                                IdPreguntaPadre: idPreguntaPadre,
+                                IdEnfoque: idEnfoque,
+                                Valoracion: valoracion,
+                                Competencia: {
+                                    IdCompetencia: idCompetencia,
+                                    Nombre: nombreCompetencia
+                                },
+                                TipoControl:{
+                                    IdTipoControl:idTipoControl
+                                }
+                            }
+                            var nombreBloqueDiv = nombreCompetencia + "DIV";
+                            nombreBloqueDiv = nombreBloqueDiv.replace(" ", "_");
+                            $.ajax({
+                                url: '/Encuesta/CreateNewCuestionCL',
+                                data: model,
+                                type: 'POST',
+                                async: false,
+                                cache: false,
+                                success: function (partialView) {
+                                    $('#'+ nombreBloqueDiv).append(partialView);
+                                }
+                            });
+                        }
+                    }
+
+                    //Consulta y llenado columna 2
+
+                    let model = {
+                        idEncuesta:1
+                    }
+                    $.ajax({
+                        url: '/Encuesta/consultaVSCpC',
+                        data: model,
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        success: function (result) {
+                            for (var i = 0; i < result.length; i++) {
+                                $('#newSubCategory').append("<fieldset id='col2_" + result[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + result[i].Nombre + "</legend><div onclick='removeFieldSet(col2_" + result[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='childP_" + result[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                for (var m = 0; m < result[i].Subcategorias.length; m++) {
+                                    var idpadreF = result[i].IdCategoria;
+                                    let model = {
+                                        NombreCat: result[i].Subcategorias[m].Nombre,
+                                        Valor: result[i].Subcategorias[m].Valoracion,
+                                        IdSubcategoria: result[i].Subcategorias[m].IdCategoria,
+                                        IdCategoria: result[i].Subcategorias[m].IdPadre
+                                    }
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewSubCatCat/',
+                                        type: 'POST',
+                                        async: false,
+                                        cache: false,
+                                        data: model,
+                                        success: function (partialView) {
+                                            $('#childP_'+ idpadreF).append(partialView);
+                                        }
+                                    });
+
+                                }
+                            }
+                            //alert(result);
+                        }
+                    });
+                    // calvalCol2();
+
+                    //Consulta y llenado columna 3
+                    let model1 = {
+                        idEncuesta:1
+                    }
+                    $.ajax({
+                        url: '/Encuesta/consultaVPregpC',
+                        data: model,
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        success: function (resulta) {
+                            if (resulta.length > 0) {
+                                for (var i = 0; i < resulta.length; i++) {
+                                    $('#newCategory').append("<fieldset id='col3_" + resulta[i].IdCategoria + "' class='form-group border p-3 col-12'><legend class='w-auto px-2'>" + resulta[i].Nombre + "</legend><div onclick='removeFieldSet(col3_" + resulta[i].IdCategoria + ");' style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>×</span></div><div id='child_" + resulta[i].IdCategoria + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>");
+                                    for (var m = 0; m < resulta[i].Preguntas.length; m++) {
+                                        let model = {
+                                            NombrePregunta: resulta[i].Preguntas[m].Nombre,
+                                            Valor: resulta[i].Preguntas[m].Valoracion,
+                                            IdSubcategoria: resulta[i].Preguntas[m].IdCategoria,
+                                            IdPregunta: resulta[i].Preguntas[m].IdPadre
+                                        }
+                                        $.ajax({
+                                            url: '/Encuesta/CreateNewCatVal/',
+                                            type: 'POST',
+                                            data: model,
+                                            async: false,
+                                            cache: false,
+                                            success: function (partialView) {
+                                                $('#child_'+ resulta[i].IdCategoria).append(partialView);
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            //alert(resulta);
+                        }
+                    });
+                    document.getElementById("loading").style.display = "none";
+                    calvalCol1();
+                    calvalCol2();
+                    calvalCol3();
+                }
+            });
+
+        }
+        function contenidoColumna2() {
+            document.getElementById("loading").style.display = "block";
+            $.ajax({
+                url: '/Encuesta/ListadoCompetenciasInicio',
+                complete: function (response) {
+                    for (var i = 0; i < response.responseJSON.length; i++) {
+                        var nombreBloqueTitulo = response.responseJSON[i].Nombre;
+                        nombreBloque = nombreBloqueTitulo + "DIV";
+                        nombreBloque = nombreBloque.replace(" ", "_");
+                        document.getElementById('newCuestionTemp').innerHTML += "<fieldset id='" + nombreBloque + "_fs' class='form-group border p-3 col-12'>"+
+                            "<legend class='w-auto px-2'>" + nombreBloqueTitulo + "</legend><div onclick='removeFieldSet(" + nombreBloque + "_fs);' "+
+                            "style='cursor:pointer;position:absolute;right: 20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;"+
+                            "border:0px;'><span aria-hidden='true'>×</span></div><div data-toggle='modal' data-target='#modalAdd' name='addPregunta' idcompetencia='"+response.responseJSON[i].IdCompetencia+"' style='cursor:pointer;position:absolute;"+
+                            "right: 80px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;border:0px;'><span aria-hidden='true'>+</span>"+
+                            "</div><div id='" + nombreBloque + "' class='col-12 p-0 section-survey shadow-sm animated fadeInUp'></div></fieldset>";
+                        $('#' + nombreBloque + "_fs").appendTo('#newCuestion');
+                        //por cada competencia se recorre el listado de preguntas
+                        for (var m = 0; m < response.responseJSON[i].PreguntasPorCompetencia.length; m++) {
+                            var nombrePregunta = response.responseJSON[i].PreguntasPorCompetencia[m].Pregunta;
+                            var idPreguntaPadre = response.responseJSON[i].PreguntasPorCompetencia[m].IdPreguntaPadre;
+                            var idEnfoque = response.responseJSON[i].PreguntasPorCompetencia[m].IdEnfoque;
+                            var valoracion = response.responseJSON[i].PreguntasPorCompetencia[m].Valoracion;
+                            var idCompetencia = response.responseJSON[i].PreguntasPorCompetencia[m].Competencia.IdCompetencia;
+                            nombreCompetencia = response.responseJSON[i].PreguntasPorCompetencia[m].Competencia.Nombre;
+                            var idTipoControl =response.responseJSON[i].PreguntasPorCompetencia[m].TipoControl.IdTipoControl;
+                            let model = {
+                                Pregunta: nombrePregunta,
+                                IdPreguntaPadre: idPreguntaPadre,
+                                IdEnfoque: idEnfoque,
+                                Valoracion: valoracion,
+                                Competencia: {
+                                    IdCompetencia: idCompetencia,
+                                    Nombre: nombreCompetencia
+                                },
+                                TipoControl:{
+                                    IdTipoControl:idTipoControl 
+                                }
+
+                            }
+                            var nombreBloqueDiv = nombreCompetencia + "DIV";
+                            nombreBloqueDiv = nombreBloqueDiv.replace(" ", "_");
+                            $.ajax({
+                                url: '/Encuesta/CreateNewCuestionCL',
+                                data: model,
+                                type: 'POST',
+                                async: false,
+                                cache: false,
+                                success: function (partialView) {
+                                    $('#' + nombreBloqueDiv).append(partialView);
+                                }
+                            });
+                        }
+                    }
+
+                    //Consulta y llenado columna 2
+                    //no se llena
+                    //Consulta y llenado columna 3
+                    //No se llena
+                    document.getElementById("loading").style.display = "none";
+                    calvalCol1();
+                    //calvalCol2();
+                    //calvalCol3();
+                }
+            });
+        }
+        $("#btnAgregaPregunta").on('click', function () {
+
+            var escribioRespuesta= false;
+            var nomPregunta =$("#nomPregunta").val();
+            var valoracionPregunta =0;//$('#intValoracion').val();
+            var tipoRespuestaPregunta = $('#tipoControl').val();
+            var categoriaPregunta =$('#ddlcategoria').val();
+            var subcategoriaPregunta =$('#ddlsubCategoria').val();
+
+            //////--Valida los campos que no esten vacios----------------********------------220621
+            
+            if (nomPregunta == "") {
+                swal("Escriba un nombre de pregunta, Por Favor. !", "", "error");
+                return false;
+            }
+            //if (valoracionPregunta == "") {
+            //    swal("Escriba un valor de pregunta, Por Favor. !", "", "error");
+            //    return false;
+            //}
+            if (tipoRespuestaPregunta == "") {
+                swal("Seleccione un tipo de respuesta, Por Favor. !", "", "error");
+                return false;
+            }
+            if (categoriaPregunta == "") {
+                swal("Seleccione una categoria de pregunta, Por Favor. !", "", "error");
+                return false;
+            }
+            if (subcategoriaPregunta == undefined || subcategoriaPregunta == "") {
+                swal("Seleccione una subcategoria de pregunta, Por Favor. !", "", "error");
+                return false;
+            }
+            if (tipoRespuestaPregunta != "2") {//seleccionaron tipo de respuesta con varias respuestas
+                var respuestas = $("#newAnswer").find("input").filter(".form-control").toArray();
+                [].forEach.call(respuestas,function (frespuestas) {
+                    if (frespuestas.value == "") {
+                        escribioRespuesta = true;
+                    }
+    
+                });
+            }
+
+            if (escribioRespuesta) {
+                swal("Escriba una respuesta, Por Favor. !", "", "error");
+                return false;
+            }
+
+            //Nombre Categoria seleccionada
+            var e = document.getElementById("ddlcategoria");
+            var strNomCat = e.options[e.selectedIndex].text;
+            //Nombre SubCategoria
+            var s = document.getElementById("ddlsubCategoria");
+            var strNomSubCat = s.options[s.selectedIndex].text;
+
+            //Alta en columna 1 ------->>>>>> Pregunta en competencia
+            let model = {
+                Pregunta: nomPregunta,
+                IdPreguntaPadre: idPadrePreguntaFS,
+                IdEnfoque: 1,
+                Valoracion:valoracionPregunta  ,
+                Competencia: {
+                    IdCompetencia: idCompetenciaFs,
+                    Nombre: nombreCompetenciaFs
+                },
+                TipoControl:{
+                    IdTipoControl:tipoRespuestaPregunta
+                }
+            }  
+            $.ajax({
+                url: '/Encuesta/CreateNewCuestionCL',
+                data: model,
+                type: 'POST',
+                async: false,
+                cache: false,
+                success: function (partialView) {
+                    //alert(partialView);
+                    $('#'+nombreCompetenciaFs+"DIV").append(partialView);
+                    //se obtiene el id de la pregunta insertada
+                    var ultimo = $('#'+nombreCompetenciaFs+"DIV:last-child");
+                    var idBC = ultimo[0].lastElementChild.children[0].value;
+                    var idPadreAnswer = "NewCuestion["+idBC+"]";
+                    // se obtienen las respuesta agregadas
+                    var respuestasList = $("#newAnswer").find("input").filter(".form-control").toArray();
+                    
+                    [].forEach.call(respuestasList,function (irespuestasList) {
+                        $.ajax({
+                            type: "GET",
+                            url: '/Encuesta/CreateNewAnswereCL/',
+                            data: { idpadreItem: idPadreAnswer,respuesta:irespuestasList.value ,idtipocontrol:tipoRespuestaPregunta},
+                            success: function (partialViewA) {
+                                $('#newAnswereTemp').append(partialViewA);
+                            }
+                        });
+                    });
+
+
+                    
+                }
+            });
+            //Alta en columna 2 ------------>>>>>>> Subcategoria en Categoria
+            //Valida si existe el FieldSet de Categoria ------//////////------------/////////--------------
+            var objCol2 = $("#newSubCategory").find("fieldset");
+            var existeCategoria = false;
+            var existeSubCategoria = false;
+            [].forEach.call(objCol2, function (iobjCol2s) {
+                var idCatFieldset = iobjCol2s.id;
+                idCatFieldset = idCatFieldset.split('_')[1];                
+                //se valida que no exista el Fieldset de Categoria
+                if (idCatFieldset == categoriaPregunta) {
+                    existeCategoria = true;
+                        //Se valida que no exista la sub categoria
+                        var objCol2SubCat = $("#childP_"+categoriaPregunta).find("input[type='hidden']").filter(".idSubCategoriaC2").toArray();
+                        [].forEach.call(objCol2SubCat,function (iobjCol2SubCats) {
+                            if (iobjCol2SubCats.value = subcategoriaPregunta) {
+                                existeSubCategoria = true;
+                            }
+                        });
+                    }
+            });
+            if (!existeCategoria) {
+                $('#newSubCategory').append("<fieldset id='col2_" + categoriaPregunta + "' class='form-group border p-3 col-12'>"+
+                    "<legend class='w-auto px-2'>" + strNomCat + "</legend><div onclick='removeFieldSet(col2_" + categoriaPregunta + ");' "+
+                    "style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;"+
+                    "border:0px;'><span aria-hidden='true'>×</span></div><div id='childP_" + categoriaPregunta + "' class='col-12 p-0 section-survey "+
+                    "shadow-sm animated fadeInUp'></div></fieldset>");
+            }
+            if (!existeSubCategoria) {
+                let model2={
+                    NombreCat: strNomSubCat,
+                    Valor: 0,
+                    IdSubcategoria: subcategoriaPregunta,
+                    IdCategoria: categoriaPregunta
+                }
+                $.ajax({
+                    url: '/Encuesta/CreateNewSubCatCat/',
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    data: model2,
+                    success: function (partialView) {
+                        $('#childP_'+ categoriaPregunta).append(partialView);
+                    }
+                });
+            }
+            //Alta en columna 3 ------------>>>>>>> Pregunta en Subcategoria
+            //Validamos si existe la subcategoria :::::::::::::-----------:::::::::::::::
+            var fieldList = $('#newCategory').find("fieldset[id=col3_"+subcategoriaPregunta+"]");
+            var existeSubCategoriaCol3 = false;
+            var existePreguntaCol3 = false;
+            if (fieldList.length > 0) {
+                //Inserta el fieldset de categoria
+                existeSubCategoriaCol3 = true;
+            }            
+
+            if (!existeSubCategoriaCol3) {
+                // se crea el fildset de la subcategoria y se inserta la pregunta
+                $('#newCategory').append("<fieldset id='col3_" + subcategoriaPregunta + "' class='form-group border p-3 col-12'>"+
+                               "<legend class='w-auto px-2'>" + strNomSubCat + "</legend><div onclick='removeFieldSet(col3_" + subcategoriaPregunta + ");' "+
+                               "style='cursor:pointer;position:absolute;right:20px;top:-61px;outline:5px solid #fff;background-color:white;padding:10px;font-size:xx-large;"+
+                               "border:0px;'><span aria-hidden='true'>×</span></div><div id='child_" + subcategoriaPregunta + "' class='col-12 p-0 section-survey "+
+                               "shadow-sm animated fadeInUp'></div></fieldset>");
+                //inserta la pregunta
+                let model3={
+                    NombrePregunta: nomPregunta,
+                    Valor: 0,
+                    IdSubcategoria: subcategoriaPregunta,
+                    IdPregunta: idPadrePreguntaFS
+                }
+                $.ajax({
+                    url: '/Encuesta/CreateNewCatVal/',
+                    type: 'POST',
+                    data: model3,
+                    async: false,
+                    cache: false,
+                    success: function (partialView) {
+                        $('#child_'+ subcategoriaPregunta).append(partialView);
+                    }
+                });
+            }
+            else{
+                // solo se inserta la pregunta en la subcategoria
+                let model3={
+                    NombrePregunta: nomPregunta,
+                    Valor: 0,
+                    IdSubcategoria: subcategoriaPregunta,
+                    IdPregunta: idPadrePreguntaFS
+                }
+                $.ajax({
+                    url: '/Encuesta/CreateNewCatVal/',
+                    type: 'POST',
+                    data: model3,
+                    async: false,
+                    cache: false,
+                    success: function (partialView) {
+                        $('#child_'+ subcategoriaPregunta).append(partialView);
+                    }
+                });            
+            }
+        });
+
+        $(document).ready(function () {
+            $("#muestraBD").hide();
+            $('.panel-body').css({ "height": "auto" });
+            $('html, body').animate({ scrollTop: $('#wrapper').offset().top - 100 }, 'fast');
+            var ano = (new Date).getFullYear();
+            $('.yearpicker').yearpicker({
+                // Initial Year
+                year: ano,
+
+                // Start Year
+                startYear: null,
+
+                // End Year
+                endYear: null,
+
+                // Element tag
+                itemTag: 'li',
+
+                // Default CSS classes
+                selectedClass: 'selected',
+                disabledClass: 'disabled',
+                hideClass: 'hide',
+
+                // Custom template
+                template:
+                '<div class="yearpicker-container">' +
+                  '<div class="yearpicker-header">' +
+                      '<div class="yearpicker-prev" data-view="yearpicker-prev">&lsaquo;</div>' +
+                      '<div class="yearpicker-current" data-view="yearpicker-current">SelectedYear</div>' +
+                      '<div class="yearpicker-next" data-view="yearpicker-next">&rsaquo;</div>' +
+                  '</div>' +
+                  '<div class="yearpicker-body">' +
+                      '<ul class="yearpicker-year" data-view="years">' +
+                      '</ul>' +
+                  '</div>' +
+              '</div>',
+            });
+
+            document.getElementsByClassName("busy")[0].classList.add("loadInvisible");
+            document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
+            contenidoColumna1();
+
+        });
+        //elimina filas de bloque columna 1
+        function removeFieldSet(fieldseton) {
+            var idFieldSetClick = fieldseton.id;
+            idFieldSetClick = idFieldSetClick.split('_')[0];
+            switch (idFieldSetClick) {
+                case "col2":
+                    var idCol2=fieldseton.id;
+                    var idEcol2 ="";
+                    var idEcol3 ="";
+                    idCol2 = idCol2.split('_')[1];
+                    var objCol1 = $('#newCuestion').find("input[type='hidden']").filter(".IdPreguntaPadre").toArray();
+                    var objCol2 = $("#childP_"+idCol2).find("input[type='hidden']").filter(".idSubCategoriaC2").toArray();
+                    var objCol3 = $("#newCategory").find("fieldset");
+                    //Se recuperan los ids de SubCategoria para eliminar SubCategioria Columna 3
+                    [].forEach.call(objCol2,function (item) {
+                        //se itera con la columna 3
+                        [].forEach.call(objCol3,function (icol3) {
+                            var idFieldset = icol3.id;
+                            idFieldset = idFieldset.split('_')[1];
+                            if(item.value == idFieldset){
+                                //icol3.children[2].childElementCount  ---------Cuenta cuantas preguntas tiene
+                                //var itemCol3 = $("#child_"+idFieldset).find("input[type='hidden']").filter(".idPreguntaPadre");
+                                var itemTotalCol3 = $("#newCategory").find("input[type='hidden']").filter(".idPreguntaPadre");
+                                [].forEach.call(itemTotalCol3,function (itemCol3) {
+                                    //las preguntas repetidas
+                                    //obtener idPAdrePregunta iterar por todas los inputs .idPreguntaPadre
+                                    if ($("#newCategory").find("input[value="+itemCol3.value+"]").filter(".idPreguntaPadre").length == 1) {
+                                        [].forEach.call(objCol1,function (itemCol1) {
+                                            if (itemCol3.value == itemCol1.value) {
+                                                idEcol2=item.parentElement.children[1].value;
+                                                idEcol3=item.parentElement.children[2].value;
+                                            }
+                                        });
+                                    }
+
+                                });
+                                //Se elimina columna 3 item.parentElement.children[2].value
+                                console.log(icol3);
+                                $("#col3_"+idEcol3).remove();
+                            }
+                        });
+
+                    });
+                    break;
+                case "col3":
+                    var idCol2=fieldseton.id;
+                    idCol2 = idCol2.split('_')[1];
+                    var objCol2 = $("#newSubCategory").find("input[type='hidden']").filter(".idSubCategoriaC2").toArray();
+                    [].forEach.call(objCol2,function (itemCol2R) {
+                        if(itemCol2R.value == idCol2){
+                            var idPadreSubCat= itemCol2R.parentElement.parentElement.id;
+                            idPadreSubCat=idPadreSubCat.split("_")[1];
+                            if (itemCol2R.parentElement.parentElement.childElementCount == 1) {
+                                itemCol2R.parentElement.parentElement.parentElement.remove();
+                            }
+                            else {
+                                itemCol2R.parentElement.remove();
+                            }
+                            console.log(itemCol2R);
+                        }
+                    });
+
+                    break;
+                default://$("#CoachingDIV").value
+                    var objsCol1 = $('#' + fieldseton.id).find("input[type='hidden']").filter(".IdPreguntaPadre").toArray();
+                    var objsCol2 = $("#newSubCategory").find("input[type='hidden']").filter(".idSubCategoriaC2");
+                    var objsCol3 = $("#newCategory").find("input[type='hidden']").filter(".idPreguntaPadre");
+                    var idCategoriaCol2= "";
+                    idpregunta = [];
+                    [].forEach.call(objsCol1,function (item) {
+                        idpregunta.push(item.value);
+                        [].forEach.call(objsCol3, function (sitem) {
+                            if(item.value == sitem.value){
+                                console.log(sitem);
+                                if (sitem.parentElement.parentElement.childElementCount == 1) {
+                                    //sitem.parentNode.remove();//mas su padre
+                                    sitem.parentElement.parentElement.parentElement.remove();
+                                    //colimna 2 Eliminar Subcategoria de la Categoria
+                                    //objsCol2[12].parentElement
+                                    idCategoriaCol2 = sitem.parentElement.children[1].value;
+                                    [].forEach.call(objsCol2,function (citem) {
+                                        if (citem.value == idCategoriaCol2) {
+                                            //para eliminar fila ----  citem.parentElement.remove();
+                                            console.log(citem);
+                                            if (citem.parentElement.parentElement.childElementCount == 1) {
+                                                citem.parentElement.parentElement.parentElement.remove();
+                                            }
+                                            else{
+                                                citem.parentElement.remove();
+                                            }
+                                        }
+                                    });
+                                }
+                                else{
+                                    sitem.parentNode.remove();
+                                }
+                            }
+                        });
+                    });
+
+                    break;
+            }
+
+
+            $("#" + fieldseton.id + "").remove();
+
+
+        };
+        //elimina filas de bloques columna 2
+        $(document.body).delegate('.dvscp', 'click', function (e) {
+            var idBloque = this.id;
+            var idBloqueCol3 ="#col3_"+this.attributes[1].value;//col3_31
+            idBloque = ".bloqueVSCPC" + idBloque;
+            var idCatBloque ="#"+ e.target.parentElement.parentElement.parentElement.id+" .row";
+            var chIdCat =$(idCatBloque).length;
+            var cuantosQuedan =chIdCat;
+            var bloqueParent = e.target.parentElement.parentElement.parentElement.id;
+            bloqueParent=bloqueParent.replace("childP_","col2_");
+            if (cuantosQuedan == 1) {
+                $(idBloque).remove();
+                $(idBloqueCol3).remove();
+                $("#"+bloqueParent).remove();
+            }
+            else{
+                $(idBloque).remove();
+                $(idBloqueCol3).remove();
+            }
+
+            // alert('The option with value ' + $(this).val());
+        });
+        //elimina filas de bloques columna 3
+        $(document.body).delegate('.dvppsc', 'click', function (e) {
+            var idBloque = this.id;
+            var cuantosQuedan = this.offsetParent.offsetParent.childElementCount;
+            if (cuantosQuedan == 1) {
+                var idcategoria = e.target.offsetParent.offsetParent.children[0].children[1].value;
+                //Se buesca en columna 2 y se elimina
+                var objCol2 = $("#newSubCategory").find("input[type='hidden']").filter(".idSubCategoriaC2").toArray();
+                [].forEach.call(objCol2,function (itobjCol2) {
+                    if (itobjCol2.value == idcategoria) {
+                        var cuantosCol2 = itobjCol2.parentElement.offsetParent.childElementCount;
+                        console.log(itobjCol2);
+                        if (cuantosCol2 == 1) {
+                            itobjCol2.parentElement.offsetParent.parentElement.remove();
+                        }
+                        else {
+                            itobjCol2.parentElement.remove();
+                        }
+                    }
+                });
+                this.offsetParent.offsetParent.offsetParent.remove();
+            }else {
+                idBloque = ".bloqueVPPSC" + idBloque;
+                $(idBloque).remove();
+            }
+
+            //alert('The option with value ' + $(this).val());
+        });
+
+        //Click en caja de texto de preguntas columna 1
+        $(document.body).delegate('.pcol1', 'click', function (e) {
+            var objsCol3 = $("#newCategory").find("input[type='hidden']").filter(".idPreguntaPadre");
+            //remueve los estilos de todos
+            [].forEach.call(objsCol3,function (removestyle) {
+                removestyle.parentElement.removeAttribute("style");
+            });
+            var idPregunta = e.target.offsetParent.offsetParent.offsetParent.children[9].children[0].children[0].children[0].children[0].value;
+            // agrega estilos a los IdPadres iguales
+            [].forEach.call(objsCol3,function (itemObjsCol3) {
+                if(itemObjsCol3.value == idPregunta){
+                    itemObjsCol3.parentElement.style.backgroundColor= 'gainsboro';
+                    itemObjsCol3.parentElement.style.border='inset';
+                }
+            });
+            //alert('The option with value ' + $(this).val()+' y el IdPregunta es '+idPregunta);
+        });
+
+        //Opciones de configuracion
+        $(document.body).delegate('.opcionesP', 'click', function () {
+            var idOpcion = this.id;
+            //limpia las columnas
+            $("#newCuestion").empty();
+            $("#newSubCategory").empty();
+            $("#newCategory").empty();
+            //css de botones segun el idOpcionActiva
+            //Regresa a vacio el idPreguntaPadre de nueva Pregunta agregada  ------  25/06/20121
+            idPadrePreguntaFS="";
+
+            switch (idOpcion) {
+                case "1":
+                    contenidoColumna1();
+                    idOpcionActiva = 1;
+                    break;
+                case "2"://columna 2 Solo carga columna 1 y se activan botones de Categoria y SubCategoria
+                    idOpcionActiva = 2;
+                    contenidoColumna2();
+                    break;
+                case "3"://columna 3 limpia todo y deja manual el concepto
+                    idOpcionActiva = 3;
+                    break;
+                default:
+                    break;
+            }
+            const cols = document.querySelectorAll('.opcionesP');
+            cols.forEach(element => {
+                //alert(element.textContent);
+                if (element.id == idOpcionActiva) {
+                    if (idOpcionActiva == 2) {
+                        $('#manag').find('div[name="catCol2"]')[0].classList.add('addCategoria');
+                        $('#manag').find('div[name="catCol2"]')[0].style.cssText += 'cursor:pointer;';
+                        $('#manag').find('div[name="catCol2"]')[0].setAttribute("onclick", "addCatCol2()")
+                        $('#manag').find('div[name="subCatCol3"]')[0].classList.add('addSubCategoria');
+                        $('#manag').find('div[name="subCatCol3"]')[0].style.cssText += 'cursor:pointer;';
+                        $('#manag').find('div[name="subCatCol3"]')[0].setAttribute("onclick", "addSubCatCol3()")
+                    }
+                    else{
+                        $('#manag').find('div[name="catCol2"]')[0].classList.remove('addCategoria');
+                        $('#manag').find('div[name="catCol2"]')[0].style.removeProperty('cursor');
+                        $('#manag').find('div[name="catCol2"]')[0].removeAttribute("onclick");
+                        $('#manag').find('div[name="subCatCol3"]')[0].classList.remove('addSubCategoria');
+                        $('#manag').find('div[name="subCatCol3"]')[0].style.removeProperty('cursor');
+                        $('#manag').find('div[name="subCatCol3"]')[0].removeAttribute("onclick");
+                    }
+                    element.classList.remove('btn-secondary','btn-primary');
+                    element.classList.add('btn-secondary');
+                }
+                else {
+                    if (idOpcionActiva != 2) {
+                        $('#manag').find('div[name="catCol2"]')[0].classList.remove('addCategoria');
+                        $('#manag').find('div[name="catCol2"]')[0].style.removeProperty('cursor');
+                        $('#manag').find('div[name="catCol2"]')[0].removeAttribute("onclick");
+                        $('#manag').find('div[name="subCatCol3"]')[0].classList.remove('addSubCategoria');
+                        $('#manag').find('div[name="subCatCol3"]')[0].style.removeProperty('cursor');
+                        $('#manag').find('div[name="subCatCol3"]')[0].removeAttribute("onclick");
+                    }
+                    element.classList.remove('btn-secondary', 'btn-primary');
+                    element.classList.add('btn-primary');
+                }
+            });
+
+        });
+
+
+
+
+
+        var swiper = new Swiper('.swiper-slides', {
+            slidesPerView: 3,
+            spaceBetween: 25,
+            slidesPerGroup: 1,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
+        function updateTextInput(val) {
+            document.getElementById('textInput').value = val;
+        };
+        function deleteCuestion(CuestionDiv) {
+            CuestionDiv.remove();
+        };
+        function seleccTipoControl(idTipoControl) {
+            alert(idTipoControl);
+        };
+        function validateData() {
+            if ($("#Nombre").val() == "") {
+                swal("Escriba un nombre de encuesta, Por Favor. !", "", "error");
+                return false;
+            }
+
+            if ($("#IdEmpresa").val() == 0) {
+                swal("Seleccione una empresa, Por Favor. !", "", "error");
+                return false;
+            }
+            //if ($("#MLTipoEncuesta_IdTipoEncuesta").val() == "") {
+            //    swal("Seleccione un tipo de encuesta, Por Favor. !", "", "error");
+            //    return false;
+            //}
+            if ($("#BaseDeDatosAnonima").val() == "") {
+                swal("Seleccione una Base de Datos, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#TipodeOrden").val() == "") {
+                swal("Seleccione un Tipo de Orden, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#FechaInicio").val() == "") {
+                swal("Selecciones una fecha de inicio, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#FechaFin").val() == "") {
+                swal("Seleccione una fecha de fin, Por Favor. !", "", "error");
+                return false;
+            }
+            if ($("#periodo").val() == "") {
+                swal("Seleccione un Periodo, Por Favor. !", "", "error");
+                return false;
+            }
+
+            if (document.getElementById("newCuestion").childElementCount == 0) {
+                swal("Debe de agregar por lo menos una pregunta, Por Favor. !", "", "error");
+                return false;
+            }
+
+            document.getElementById("loading").style.display = "block";
+            $('#creaEncuesta').submit();
+            return true;
+
+        };
+
+        function revisaLikert() {
+            var likertDobleCorrect = true;
+            var listSelect = [];
+            var select = $('#newCuestion').find('select');
+            for (var i = 0; i < select.length; i++) {
+                var texto = select[i].value;
+                listSelect.push(texto);
+            }
+
+            for (var i = 0; i < listSelect.length; i++) {
+                if (listSelect[i] == '12') {
+                    var divPadrePregunta = select[i].parentNode.parentNode.parentNode.parentNode;
+                    console.log(divPadrePregunta);
+                    var idPadre = '#' + divPadrePregunta.id;
+                    var listaInputTextEnSeccion = $(idPadre).find('input[type="text"]');
+
+                    if (listaInputTextEnSeccion.length < 4) {
+                        $(idPadre).css('border', 'solid red 1px');
+                        swal('Debes ingresar preguntas aparte de las columnas en el likert doble', '', 'info');
+                        likertDobleCorrect = false;
+                    }
+                    else {
+                        //likertDobleCorrect = true;
+                        $(idPadre).css('border', 'solid red 0px');
+                    }
+                }
+            }
+            return likertDobleCorrect;
+        }
+        function validaPreguntas() {
+            var validaPreguntas = true;
+            //var listInputs = $('#newCuestion').find('input[type="text"]');
+            var listInputs = $('#newCuestion').find('input[type="text"]:not(:disabled)');
+            for (var i = 0; i < listInputs.length; i++) {
+                var IdItemHtml = listInputs[i].id;
+                var value = $('#' + IdItemHtml).val();
+                if (value == null || value == '') {
+                    $('#' + IdItemHtml).css('background-color', '#ffdddd');
+                    swal('No deben haber Preguntas o Respuestas sin texto', '', 'info');
+                    validaPreguntas = false;
+                }
+                else {
+                    $('#' + IdItemHtml).css('background-color', '#fff');
+                }
+            }
+            return validaPreguntas;
+        }
+        function validaTipoControl() {
+            var validaPreguntas = true;
+            var listInputs = $('#newCuestion').find('select');
+            for (var i = 0; i < listInputs.length; i++) {
+                var IdItemHtml = listInputs[i].id;
+                var value = $('#' + IdItemHtml).val();
+                if (value == null || value == '') {
+                    $('#' + IdItemHtml).css('background-color', '#ffdddd');
+                    swal('Debes elegir un tipo de respuesta', '', 'info');
+                    validaPreguntas = false;
+                }
+                else {
+                    $('#' + IdItemHtml).css('background-color', '#fff');
+                }
+            }
+            return validaPreguntas;
+        }
+        function divForSubSeccion() {
+            var itemsSelect = $('#manag').find('select');
+            console.log(itemsSelect);
+            for (var i = 0; i < itemsSelect.length; i++) {
+                var idItem = itemsSelect[i].id;
+                var valor = $('#' + idItem).val();
+                if (valor == '13' || valor == 13) {
+                    //getPadre x5
+                    var parentDiv = $('#' + idItem).parent().parent().parent().parent();
+                    //Buscar check de obligatoria
+                    var checks = $('#' + parentDiv[0].id).find('input[type="checkbox"]');
+                    checks[0].parentNode.style.display = 'none';
+
+                    //hide crud option [1]
+                    var crudOptions = $('#' + parentDiv[0].id).find('.crud-questions').find('li');
+                    console.log(crudOptions);
+                    crudOptions[1].style.display = 'none';
+
+                    //find input text an set placeholder nombresubseccion
+                    var nameSubseccion = $('#' + parentDiv[0].id).find('input[type="text"]');
+                    $('#' + nameSubseccion[0].id).attr("placeholder", "Texto de la subsección");
+                }
+                else {
+                    //getPadre x5
+                    var parentDiv = $('#' + idItem).parent().parent().parent().parent();
+                    //Buscar check de obligatoria
+                    var checks = $('#' + parentDiv[0].id).find('input[type="checkbox"]');
+                    checks[0].parentNode.style.display = 'block';
+
+                    //hide crud option [1]
+                    var crudOptions = $('#' + parentDiv[0].id).find('.crud-questions').find('li');
+                    console.log(crudOptions);
+                    crudOptions[1].style.display = 'block'
+
+                    //find input text an set placeholder Pregunta
+                    var nameSubseccion = $('#' + parentDiv[0].id).find('input[type="text"]');
+                    $('#' + nameSubseccion[0].id).attr("placeholder", "Pregunta");
+                }
+            }
+        }
+
+
+    </script>
+    <script>
+        var listCategorias = [];
+        function getDataPrev() {
+            try {
+                document.getElementById("loading").style.display = "block";
+                $("#demoMerge").empty();
+                var listHistoricoCateg = [];
+                $.ajax({
+                    url: "/Encuesta/getCategorias",
+                    type: "GET",
+                    complete: function (response) {
+                        listCategorias = [];
+                        for (var i = 0; i < response.responseJSON.length; i++) {
+                            listCategorias.push({ IdCategoria: response.responseJSON[i].IdCategoria, Nombre: response.responseJSON[i].Nombre, IdPadre: response.responseJSON[i].IdPadre });
+                        }
+                        $.ajax({
+                            url: "/Encuesta/PreviewData",
+                            type: "POST",
+                            data: $('#creaEncuesta').serialize(),
+                            complete: function (response) {
+                                var dataPrev = response.responseJSON;
+                                /*
+                                 * Mapeo de configuracion por competencia
+                                 * 11/06/2021
+                                 * jamurillo
+                                 * si el campo Obligatoria viene mapeado en true la pregunta esta desactivada
+                                 * por tanto no se agrega en el mapeo de configuración
+                                 * 14/06/2021
+                                 * jamurillo
+                                */
+                                if (dataPrev.NewCuestion != null && dataPrev.NewCuestion.length > 0) {
+                                    var competencias = Enumerable.from(dataPrev.NewCuestion).distinct(o => o.Competencia.Nombre).orderBy(o => o.Competencia.IdCompetencia).toArray();
+                                    [].forEach.call(competencias, function (elem) {
+                                        $("#demoMerge").append("<div id='c_"+ elem.Competencia.IdCompetencia +"' class='padreComp competencia_" + elem.Competencia.IdCompetencia + "'><span>" + elem.Competencia.IdCompetencia + ".- " + elem.Competencia.Nombre + "</span>    <i class='padreItem fas fa-caret-circle-right'></i></div>");
+                                        var preguntasByIdCompetencia = Enumerable.from(dataPrev.NewCuestion).where(o => o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia && o.IdEnfoque == 1).toArray();
+                                        [].forEach.call(preguntasByIdCompetencia, function (pregunta) {
+                                            var subcategoriaByIdPregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdPregunta == pregunta.IdPreguntaPadre).toArray();
+                                            if (subcategoriaByIdPregunta == null || subcategoriaByIdPregunta.length == 0) {
+                                                // son preguntas que no tienen categoria y/o subcategoria asignada
+                                                var isInactive = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPreguntaPadre && o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia).firstOrDefault() == null ? false :  Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPreguntaPadre && o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia).firstOrDefault().Obligatoria;
+                                                    var namePregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdPregunta == pregunta.IdPreguntaPadre).firstOrDefault();
+                                                    if (namePregunta == null)
+                                                        namePregunta = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPreguntaPadre).firstOrDefault().Pregunta;
+                                                    var valorPregunta = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPreguntaPadre).firstOrDefault().Valoracion;
+                                                    if (!isInactive) {
+                                                        $("#demoMerge").append("<div style='margin-left:150px' class='hijoPreg hijosCompetencia_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span>" + pregunta.IdPreguntaPadre + ".- " + namePregunta + " => "+ valorPregunta +" </span></div>");   
+                                                    }
+                                                    else{
+                                                        console.log("La pregunta " + pregunta.IdPregunta + " ha sido desactivada de la encuesta");
+                                                        $("#demoMerge").append("<div style='margin-left:150px' class='hijoPreg hijosCompetencia_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span class='error'>" + pregunta.IdPreguntaPadre + ".- " + namePregunta + " => "+ valorPregunta +" </span></div>");   
+                                                    }
+                                                ocultaNodo("c_" + elem.Competencia.IdCompetencia);
+                                            }
+                                            // subcategorias de la pregunta
+                                            [].forEach.call(subcategoriaByIdPregunta, function (sub) {
+                                                var Categorias = @Html.Raw(JsonConvert.SerializeObject(Model.ListCategorias));
+                                                var categoriaBySubCategoria = Enumerable.from(listCategorias).where(o => o.IdCategoria == sub.IdSubcategoria).orderBy(o => o.Nombre).toArray();
+                                                // del que obtuve buscar su id padre, si no tiene id padre entonces este ya es el padre
+                                                var PadreCategoria = Enumerable.from(listCategorias).where(o => o.IdCategoria == categoriaBySubCategoria[0].IdPadre).toArray();
+                                                // creae listado de padre categoria y pintarlos sin repetirlo
+                                                listHistoricoCateg.push(PadreCategoria[0]);
+                                            });
+                                        });
+                                        listHistoricoCateg = Enumerable.from(listHistoricoCateg).distinct(o => o.Nombre).toArray();
+                                        [].forEach.call(listHistoricoCateg, function (padreCategoriaFinal) {
+                                            $("#demoMerge").append("<div style='margin-left:50px' class='hijoCate hijo hijosCompetencia_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span>" + padreCategoriaFinal.IdCategoria + ".- " + padreCategoriaFinal.Nombre + " </span></div>");
+                                            // ya teniendo la categoria padre buscar las subcategorias
+                                            var dataSub = Enumerable.from(listCategorias).where(o => o.IdPadre == padreCategoriaFinal.IdCategoria).toArray();
+                                            [].forEach.call(dataSub, function (printSub) {
+                                                var conteoDescartadas = 0;
+                                                var uid = getUID();
+                                                var valorSub = Enumerable.from(dataPrev.NewVSCPC).where(o => o.IdSubcategoria == printSub.IdCategoria && o.IdCategoria == padreCategoriaFinal.IdCategoria).firstOrDefault();
+                                                if (valorSub != null) {
+                                                    $("#demoMerge").append("<div style='margin-left:100px' class='hijoSub hijosCompetencia_" + elem.Competencia.IdCompetencia + " animated fadeInUp m1_subC"+printSub.IdCategoria+"_" + uid + "'><span>" + printSub.IdCategoria + ".- " + printSub.Nombre + "  => " + valorSub.Valor + " </span></div>");
+                                                    var dataPregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdSubcategoria == printSub.IdCategoria).orderBy(o => o.IdPregunta).toArray();
+                                                    [].forEach.call(dataPregunta, function (elemPreguntaP) {
+                                                        var isInactive = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == elemPreguntaP.IdPregunta && o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia).firstOrDefault() == null ? false: Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == elemPreguntaP.IdPregunta && o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia).firstOrDefault().Obligatoria;
+                                                        var namePregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdPregunta == elemPreguntaP.IdPregunta && o.IdSubcategoria == printSub.IdCategoria).firstOrDefault().NombrePregunta;
+                                                        if (namePregunta == null)
+                                                            namePregunta = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == elemPreguntaP.IdPregunta).firstOrDefault().Pregunta;
+                                                        var valorPregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdPregunta == elemPreguntaP.IdPregunta && o.IdSubcategoria == printSub.IdCategoria).firstOrDefault().Valor;
+                                                        // verificar si esta dentro de la competencia
+                                                        var existe = Enumerable.from(preguntasByIdCompetencia).where(o => o.IdPreguntaPadre == elemPreguntaP.IdPregunta).toArray();
+                                                        if (existe.length > 0) {
+                                                            if (!isInactive) {
+                                                                $("#demoMerge").append("<div style='margin-left:150px' class='hijoPreg hijosCompetencia_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span>" + elemPreguntaP.IdPregunta + ".- " + namePregunta + " => "+ valorPregunta +" </span></div>");
+                                                            }
+                                                            else{
+                                                                console.log("La pregunta " + elemPreguntaP.IdPregunta + " ha sido desactivada de la encuesta"); 
+                                                                $("#demoMerge").append("<div style='margin-left:150px' class='hijoPreg hijosCompetencia_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span class='error'>" + elemPreguntaP.IdPregunta + ".- " + namePregunta + " => "+ valorPregunta +" </span></div>");
+                                                            }
+                                                        } else {
+                                                            // console.log("La pregunta " + elemPreguntaP.IdPregunta + " no es parte de la competencia: " + elem.Competencia.IdCompetencia + " " + elem.Competencia.Nombre);
+                                                            conteoDescartadas++;
+                                                        }
+                                                        
+                                                        ocultaNodo("c_" + elem.Competencia.IdCompetencia);
+                                                    });
+                                                    if (conteoDescartadas == dataPregunta.length)
+                                                        $(".m1_subC" + printSub.IdCategoria + "_" + uid).remove();
+                                                }
+                                                else{
+                                                    console.log("valor sub es nulo con el parametro: o => o.IdSubcategoria == " + printSub.IdCategoria + " && o.IdCategoria == " + padreCategoriaFinal.IdCategoria);
+                                                }
+                                            });
+                                        });
+                                        listHistoricoCateg = [];
+                                    });
+                                    $(".padreComp").click(function (e) {
+                                        var clasePadre;
+                                        var id;
+                                        if (e.target.tagName == "I" || e.target.tagName == "SPAN")
+                                            clasePadre = e.target.parentNode.classList[1].split("_")[1];
+                                        else
+                                            clasePadre = e.target.classList[1].split("_")[1];
+                                        if (e.target.id == "")
+                                            id = e.target.parentNode.id;
+                                        else
+                                            id = e.target.id;
+                                        if (id != "") {
+                                            if ($(".hijosCompetencia_" + clasePadre).css("display") == "block") {
+                                                $(".hijosCompetencia_" + clasePadre).hide();
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                            else if ($(".hijosCompetencia_" + clasePadre).css("display") == "none") {
+                                                $(".hijosCompetencia_" + clasePadre).show();
+                                                $("#" + id).find("i").css("transform", "rotate(90deg)");
+                                            }
+                                            else {
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                        }
+                                    });
+                                    $("span").click(function (e) {
+                                        try {
+                                            /*var all = $("#conf").find("span");
+                                            [].forEach.call(all, function (item) {
+                                                item.style.backgroundColor = "transparent";
+                                            });
+                                            var spanList = $("span:contains('" + e.target.innerText.split("=>")[0] + "')");
+                                            console.log(spanList);
+                                            if (spanList.length > 1) {
+                                                [].forEach.call(spanList, function (item) {
+                                                    item.style.backgroundColor = "#eeb45c";
+                                                });
+                                            }*/
+                                        } catch (aE) {
+                                            console.log(aE);
+                                        }
+                                    });
+                                }
+                                else{
+                                    $("#demoMerge").append("<span class='error'>No se encontraron configuraciones</span>");
+                                }
+                                /*
+                                 * Mapeo de configuracion por rubro
+                                 * 11/06/2021
+                                 * jamurillo demoMergeMapeo1
+                                */
+                                // Nodo de competencias
+                                $("#demoMergeMapeo1").empty();
+                                if (dataPrev.NewCuestion != null && dataPrev.NewCuestion.length > 0) {
+                                    var competencias = Enumerable.from(dataPrev.NewCuestion).distinct(o => o.Competencia.Nombre).orderBy(o => o.Competencia.IdCompetencia).toArray();
+                                    [].forEach.call(competencias, function (elem) {
+                                        $("#demoMergeMapeo1").append("<div id='compe_"+ elem.Competencia.IdCompetencia +"' class='padreCompe competencia_" + elem.Competencia.IdCompetencia + "'><span>" + elem.Competencia.IdCompetencia + ".- " + elem.Competencia.Nombre + "</span>    <i class='padreItem fas fa-caret-circle-right'></i></div>");
+                                        var preguntasByIdCompetencia = Enumerable.from(dataPrev.NewCuestion).where(o => o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia && o.IdEnfoque == 1).toArray();
+                                        [].forEach.call(preguntasByIdCompetencia, function (item) {
+                                            var isInactive = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == item.IdPreguntaPadre && o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia).firstOrDefault() == null ? false : Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == item.IdPreguntaPadre && o.Competencia.IdCompetencia == elem.Competencia.IdCompetencia).firstOrDefault().Obligatoria;
+                                            if (!isInactive){
+                                                $("#demoMergeMapeo1").append("<div style='margin-left:50px' class='hijoPreg hijosCompetenciaR_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span>" + item.IdPreguntaPadre + ".- " + item.Pregunta + "  => " + item.Valoracion + " </span></div>");
+                                            }
+                                            else{
+                                                console.log("La pregunta " + item.IdPreguntaPadre + " ha sido desactivada de la encuesta"); 
+                                                $("#demoMergeMapeo1").append("<div style='margin-left:50px' class='hijoPreg hijosCompetenciaR_" + elem.Competencia.IdCompetencia + " animated fadeInUp'><span class='error'>" + item.IdPreguntaPadre + ".- " + item.Pregunta + "  => " + item.Valoracion + " </span></div>");
+                                            }
+                                        });
+                                        ocultaNodoM1("compe_" + elem.Competencia.IdCompetencia);
+                                    });
+                                    $(".padreCompe").click(function (e) {
+                                        var clasePadre;
+                                        var id;
+                                        if (e.target.tagName == "I" || e.target.tagName == "SPAN")
+                                            clasePadre = e.target.parentNode.classList[1].split("_")[1];
+                                        else
+                                            clasePadre = e.target.classList[1].split("_")[1];
+                                        if (e.target.id == "")
+                                            id = e.target.parentNode.id;
+                                        else
+                                            id = e.target.id;
+                                        if (id != "") {
+                                            if ($(".hijosCompetenciaR_" + clasePadre).css("display") == "block") {
+                                                $(".hijosCompetenciaR_" + clasePadre).hide();
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                            else if ($(".hijosCompetenciaR_" + clasePadre).css("display") == "none") {
+                                                $(".hijosCompetenciaR_" + clasePadre).show();
+                                                $("#" + id).find("i").css("transform", "rotate(90deg)");
+                                            }
+                                            else {
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                        }
+                                    });
+                                }
+                                else{
+                                    $("#demoMergeMapeo1").append("<span class='error'>No se encontraron configuraciones</span>");
+                                }
+                                // Nodo de categoria-subcategorias
+                                $("#demoMergeMapeo2").empty();
+                                if (dataPrev.NewVSCPC != null && dataPrev.NewVSCPC.length > 0) {
+                                    var dataPrint = Enumerable.from(listCategorias).where(o => o.IdPadre == 0 || o.IdPadre == o.IdCategoria).orderBy(o => o.IdCategoria).toArray();
+                                    [].forEach.call(dataPrint, function (elem) {
+                                        $("#demoMergeMapeo2").append("<div id='categ_"+ elem.IdCategoria +"' class='padreCate cate_" + elem.IdCategoria + " hijoCate categA_"+ elem.IdCategoria + "'><span>" + elem.IdCategoria + ".- " + elem.Nombre + "</span>    <i class='padreItem fas fa-caret-circle-right'></i></div>");
+                                        var subCategoriasByIdCategoria = Enumerable.from(dataPrev.NewVSCPC).where(o => o.IdCategoria == elem.IdCategoria).orderBy(o => o.IdSubcategoria).toArray();
+                                        if (subCategoriasByIdCategoria.length == 0)
+                                            $(".categA_" + elem.IdCategoria).remove();
+                                        [].forEach.call(subCategoriasByIdCategoria, function (item) {
+                                            var nombre = getNombreCategoria(item.IdSubcategoria);
+                                            $("#demoMergeMapeo2").append("<div class='hijosCate_" + elem.IdCategoria + " hijoSub animated fadeInUp' style='margin-left: 50px;'><span>" + item.IdSubcategoria + ".- " + nombre + " => " + item.Valor + " </span></div>");
+                                        });
+                                        ocultaNodoM2("categ_" + elem.IdCategoria);
+                                    });
+                                    $(".padreCate").click(function (e) {
+                                        var clasePadre;
+                                        var id;
+                                        if (e.target.tagName == "I" || e.target.tagName == "SPAN")
+                                            clasePadre = e.target.parentNode.classList[1].split("_")[1];
+                                        else
+                                            clasePadre = e.target.classList[1].split("_")[1];
+                                        if (e.target.id == "")
+                                            id = e.target.parentNode.id;
+                                        else
+                                            id = e.target.id;
+                                        if (id != "") {
+                                            if ($(".hijosCate_" + clasePadre).css("display") == "block") {
+                                                $(".hijosCate_" + clasePadre).hide();
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                            else if ($(".hijosCate_" + clasePadre).css("display") == "none") {
+                                                $(".hijosCate_" + clasePadre).show();
+                                                $("#" + id).find("i").css("transform", "rotate(90deg)");
+                                            }
+                                            else {
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                        }
+                                    });
+                                } else{
+                                    $("#demoMergeMapeo2").append("<span class='error'>No se encontraron configuraciones</span>");
+                                }
+                                // Nodo de subcategoría-pregunta
+                                $("#demoMergeMapeo3").empty();
+                                if (dataPrev.NewVPPSC != null && dataPrev.NewVPPSC.length > 0) {
+                                    var dataSubCategorias = Enumerable.from(listCategorias).where(o =>    (o.IdPadre != 0 && o.IdPadre == o.IdCategoria) || (o.IdPadre != 0 && o.IdPadre != o.IdCategoria)     ).orderBy(o => o.IdCategoria).distinct(o => o.IdCategoria).toArray();
+                                    [].forEach.call(dataSubCategorias, function (elem) {
+                                        $("#demoMergeMapeo3").append("<div id='subCateg_"+ elem.IdCategoria +"' class='padreSubcate subCate_" + elem.IdCategoria + " hijoSub'><span>" + elem.IdCategoria + ".- " + elem.Nombre + "</span>    <i class='padreItem fas fa-caret-circle-right'></i></div>");
+                                        var preguntas = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdSubcategoria == elem.IdCategoria).orderBy(o => o.IdPregunta).toArray();
+                                        if (preguntas.length == 0)
+                                            $("#subCateg_"+ elem.IdCategoria).hide();
+                                        [].forEach.call(preguntas, function (pregunta) {
+                                            var namePregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdPregunta == pregunta.IdPregunta && o.IdSubcategoria == elem.IdCategoria).firstOrDefault().NombrePregunta;
+                                            if (namePregunta == null)
+                                                namePregunta = Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPregunta).firstOrDefault().Pregunta;
+                                            var valorPregunta = Enumerable.from(dataPrev.NewVPPSC).where(o => o.IdPregunta == pregunta.IdPregunta && o.IdSubcategoria == elem.IdCategoria).firstOrDefault().Valor;
+                                            var isInactive =  Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPregunta).firstOrDefault() == null ? false : Enumerable.from(dataPrev.NewCuestion).where(o => o.IdPreguntaPadre == pregunta.IdPregunta).firstOrDefault().Obligatoria;
+                                            if (!isInactive){
+                                                $("#demoMergeMapeo3").append("<div class='padreSubcatea hijoSubcate_" + elem.IdCategoria + " hijoPreg animated fadeInUp' style='margin-left: 50px;'><span>" + pregunta.IdPregunta + ".- " + namePregunta + " => "+ valorPregunta +" </span></div>");
+                                            }
+                                            else{
+                                                console.log("La pregunta " + pregunta.IdPregunta + " ha sido desactivada de la encuesta"); 
+                                                $("#demoMergeMapeo3").append("<div class='padreSubcatea hijoSubcate_" + elem.IdCategoria + " hijoPreg animated fadeInUp' style='margin-left: 50px;'><span class='error'>" + pregunta.IdPregunta + ".- " + namePregunta + " => "+ valorPregunta +" </span></div>");
+                                            }
+                                        });
+                                        ocultaNodoM3("subCateg_"+ elem.IdCategoria);
+                                    });
+                                    $(".padreSubcate").click(function (e) {
+                                        var clasePadre;
+                                        var id;
+                                        if (e.target.tagName == "I" || e.target.tagName == "SPAN")
+                                            clasePadre = e.target.parentNode.classList[1].split("_")[1];
+                                        else
+                                            clasePadre = e.target.classList[1].split("_")[1];
+                                        if (e.target.id == "")
+                                            id = e.target.parentNode.id;
+                                        else
+                                            id = e.target.id;
+                                        if (id != "") {
+                                            if ($(".hijoSubcate_" + clasePadre).css("display") == "block") {
+                                                $(".hijoSubcate_" + clasePadre).hide();
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                            else if ($(".hijoSubcate_" + clasePadre).css("display") == "none") {
+                                                $(".hijoSubcate_" + clasePadre).show();
+                                                $("#" + id).find("i").css("transform", "rotate(90deg)");
+                                            }
+                                            else {
+                                                $("#" + id).find("i").css("transform", "rotate(0deg)");
+                                            }
+                                        }
+                                    });
+                                }
+                                else{
+                                    $("#demoMergeMapeo3").append("<span class='error'>No se encontraron configuraciones</span>");
+                                }
+                                document.getElementById("loading").style.display = "none";
+                            }
+                        });
+                    }
+                });
+            } catch (aE) {
+                document.getElementById("loading").style.display = "none";
+                swal("Ha ocurrido un error al generar la previsualización", aE.message, "error");
+            } finally{
+                // document.getElementById("loading").style.display = "none";
+            }
+        }
+        function getUID () {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        function ocultaNodo (id) {
+            try {
+                var e = document.getElementById(id);
+                if (e != null) {
+                    var clasePadre;
+                    var id;
+                    if (e.tagName == "I" || e.tagName == "SPAN")
+                        clasePadre = e.parentNode.classList[1].split("_")[1];
+                    else
+                        clasePadre = e.classList[1].split("_")[1];
+                    if (e.id == "")
+                        id = e.parentNode.id;
+                    else
+                        id = e.id;
+                    if (id != "") {
+                        if ($(".hijosCompetencia_" + clasePadre).css("display") == "block") {
+                            $(".hijosCompetencia_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                        else {
+                            $(".hijosCompetencia_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                    }
+                }
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+        function ocultaNodoM1 (id) {
+            try {
+                var e = document.getElementById(id);
+                if (e != null) {
+                    var clasePadre;
+                    var id;
+                    if (e.tagName == "I" || e.tagName == "SPAN")
+                        clasePadre = e.parentNode.classList[1].split("_")[1];
+                    else
+                        clasePadre = e.classList[1].split("_")[1];
+                    if (e.id == "")
+                        id = e.parentNode.id;
+                    else
+                        id = e.id;
+                    if (id != "") {
+                        if ($(".hijosCompetenciaR_" + clasePadre).css("display") == "block") {
+                            $(".hijosCompetenciaR_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                        else {
+                            $(".hijosCompetenciaR_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                    }
+                }
+            } catch (aE) {
+                console.log(aE);  
+            }
+        }
+        function ocultaNodoM2 (id) {
+            try {
+                var e = document.getElementById(id);
+                if (e != null) {
+                    var clasePadre;
+                    var id;
+                    if (e.tagName == "I" || e.tagName == "SPAN")
+                        clasePadre = e.parentNode.classList[1].split("_")[1];
+                    else
+                        clasePadre = e.classList[1].split("_")[1];
+                    if (e.id == "")
+                        id = e.parentNode.id;
+                    else
+                        id = e.id;
+                    if (id != "") {
+                        if ($(".hijosCate_" + clasePadre).css("display") == "block") {
+                            $(".hijosCate_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                        else {
+                            $(".hijosCate_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                    }
+                }
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+        function ocultaNodoM3 (id) {
+            try {
+                var e = document.getElementById(id);
+                if (e != null) {
+                    var clasePadre;
+                    var id;
+                    if (e.tagName == "I" || e.tagName == "SPAN")
+                        clasePadre = e.parentNode.classList[1].split("_")[1];
+                    else
+                        clasePadre = e.classList[1].split("_")[1];
+                    if (e.id == "")
+                        id = e.parentNode.id;
+                    else
+                        id = e.id;
+                    if (id != "") {
+                        if ($(".hijoSubcate_" + clasePadre).css("display") == "block") {
+                            $(".hijoSubcate_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                        else {
+                            $(".hijoSubcate_" + clasePadre).hide();
+                            $("#" + id).find("i").css("transform", "rotate(0deg)");
+                        }
+                    }
+                }
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+        function getNombreCategoria(idCategoria) {
+            try {
+                var cate = Enumerable.from(listCategorias).where(o => o.IdCategoria == idCategoria).toArray();
+                return cate[0].Nombre;
+            } catch (aE) {
+                console.log(aE);
+            }
+        }
+    </script>
+    <style>
+        .error{
+            color: red;
+        }
+        .padreComp{
+            cursor: pointer;
+            background-color: #71b7b9;
+        }
+        .padreCompe{
+            cursor: pointer;
+            background-color: #71b7b9;
+        }
+        .hijoCate{
+            cursor: pointer;
+            background-color: #28a7ce;
+        }
+        .hijoSub{
+            cursor: pointer;
+            background-color: #aed1df;
+        }
+        .hijoPreg{
+            cursor: pointer;
+            background-color: aliceblue;
+        }
+        /* Remove default bullets */
+        ul, #myUL {
+            list-style-type: none;
+        }
+
+        /* Remove margins and padding from the parent ul */
+        #myUL {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Style the caret/arrow */
+        .caret {
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+        }
+
+            /* Create the caret/arrow with a unicode, and style it */
+            .caret::before {
+                content: "\25B6";
+                color: black;
+                display: inline-block;
+                margin-right: 6px;
+            }
+        .padreItem::before {
+            content: "\25B6";
+            color: black;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .padreItem {
+            /*display: none;*/
+            transform: rotate(90deg);
+        }
+        /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+        .caret-down::before {
+            transform: rotate(90deg);
+        }
+
+        /* Hide the nested list */
+        .nested {
+            display: none;
+        }
+
+        /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+        .active {
+            display: block;
+        } 
+        #demoMerge{
+            margin-bottom: 1rem;
+        }
+        #demoMergeMapeo1{
+            margin-bottom: 1rem;
+        }
+        #demoMergeMapeo2{
+            margin-bottom: 1rem;
+        }
+        #demoMergeMapeo3{
+            margin-bottom: 1rem;
+        }
+        .acote{
+            margin-bottom: 0px!important;
+        }
+        .colorama{
+            display: inline-grid;
+            width: 20px;
+            height: 20px;
+            border: 1px solid;
+            vertical-align: sub;
+        }
+        .ico{
+            width: 10rem;
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/Clima Dinamico/stylesTextRich.css" />
+}
+
+
+

@@ -1,0 +1,3834 @@
+﻿.question {
+    display: flex;
+    align-items: center;
+}
+
+#buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036 {
+    display: flex;
+    align-items: center;
+}
+
+.viewMobile {
+    margin-right: 0px;
+    margin-left: 15px; 
+    display: flex;
+    align-items: center;
+}
+
+#progreso {
+    width: 90%;
+}
+/*Aumentar tamaño de fuente global*/
+#u6096-4 {
+    /*font-size:20px;*/
+}
+
+#u6096-4, #u4946-4, #u5048-4, #u5054-4, #u5072-4, #u5078-4, #u5102-4, #u5108-4 {
+    width: 97%;
+}
+
+#progreso {
+    letter-spacing: 1px;
+}
+
+#progreso {
+    display: flex;
+    vertical-align: middle;
+}
+
+.gris {
+    background-color: #efefef;
+}
+
+#u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+    background-color: transparent;
+}
+
+#buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+    background-color: transparent;
+}
+
+
+#u6065, #u7182, #u9273 {
+    border: 4px solid #000080;
+    border-radius: 7px;
+}
+
+.imagenFondo {
+    width: 100%;
+    z-index: -1;
+}
+
+.logoCL {
+    height: 75px;
+    width: auto;
+    position: absolute;
+    opacity: 1;
+    margin-top: 10px;
+    margin-left: 0px;
+}
+
+.headerSuperior {
+    color: #000080;
+    opacity: 1;
+    height: 100px;
+    width: 107%;
+    max-width: 110%;
+    position: absolute;
+    background-color: #000080;
+}
+
+.footer {
+    color: #000080;
+    opacity: 1;
+    height: 50px;
+    width: 100%;
+    position: relative;
+    background-color: #000080;
+    margin-top: -50px;
+    bottom: 0;
+}
+
+.imgFotter {
+    opacity: 1;
+    height: 25px;
+    width: auto;
+    position: absolute;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: auto;
+}
+
+
+
+@media only screen and (min-width: 992px) and (max-width: 1050px) { /*Desktop View*/
+    
+    #buttonu5579{
+        width:56%;
+        font-size:15px;
+        margin-left:-10px;
+    }
+    #buttonu5699{
+        width:55%;
+        font-size:15px;
+        margin-left:5px;
+    }
+
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:110%;
+    }
+
+    p, .Instrucciones{
+        font-size:17px;
+    }
+     #pbuttonu6095 {
+        margin-top: 15px;
+    }
+    viewTablet{
+        width:100%;
+        min-width:100%;
+    }
+    .EE, .EA {
+        position: absolute;
+        margin-top: 30%;
+    }
+
+    .EE {
+        margin-left: -5%;
+        margin-top:30%;
+    }
+
+    .EA {
+        margin-left: 45%;
+        margin-top:30%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #u15488 {
+        margin-left: 40px;
+        left: 370px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 40%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 2%;
+        min-width: 4%;
+        width: 4%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 4%;
+        width: 4%;
+        max-width: 4%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -9%;
+        width: 10.5%;
+    }
+
+    #paginacion {
+        margin-left: -30px;
+        left: -50px;
+        padding-left: -15px;
+        min-width: 120px;
+        /*margin-top:50px;*/
+    }
+
+    .pag {
+        margin-left: -30px;
+    }
+
+    #u14547 {
+        left: 100%;
+        margin-top: -30px;
+    }
+
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1051px) and (max-width: 1135px) {
+    p, .Instrucciones{
+        font-size:17px;
+    }
+
+    #buttonu5579{
+        width:53%;
+        margin-left:-8px;
+    }
+    #buttonu5699{
+        width:54%;
+        margin-left:-4px;
+    }
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 30%;
+    }
+
+    .EE {
+        margin-left: 0%;
+    }
+
+    .EA {
+        margin-left: 49%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    div#u15488 {
+        margin-left: 110px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 37%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 3%;
+        min-width: 3.5%;
+        width: 3.5%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: 0%;
+        min-width: 3.5%;
+        width: 3.5%;
+        max-width: 3.5%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -7%;
+        width: 9%;
+    }
+
+    #paginacion {
+        margin-left: -30px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 83%;
+        margin-top: -17px;
+    }
+
+    #u6065, #u7182, u9273 {
+        width: 18.89%;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+    #u6065{
+        margin-left:30px;
+    }
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+
+@media only screen and (min-width: 1136px) and (max-width: 1200px) {
+    /*HAs*/
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:53%;
+        margin-left:-4px;
+    }
+    #buttonu5699{
+        width:54%;
+        margin-left:-4px;
+    }
+    p, .Instrucciones{
+        font-size:17px;
+    }
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 26%;
+    }
+
+    .EE {
+        margin-left: 2.5%;
+    }
+
+    .EA {
+        margin-left: 50%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    div#u15488 {
+        margin-left: 110px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 35%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 2%;
+        min-width: 3.5%;
+        width: 3.5%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 3.5%;
+        width: 3.5%;
+        max-width: 3.5%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -7%;
+        width: 9.5%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+    }
+    div#u6065{
+        margin-left:20px;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1201px) and (max-width: 1250px) {
+    
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:53%;
+        margin-left:-4px;
+    }
+    #buttonu5699{
+        width:54%;
+        margin-left:-4px;
+    }
+    p, .Instrucciones{
+        font-size:17px;
+    }
+
+    .viewMobile_AButtons {
+        margin-left: 45px;
+    }
+    /*HAs*/
+    #indicators {
+        margin-bottom: 50px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+    div#u6065{
+        margin-left:20px;
+    }
+    .EE, .EA {
+        position: absolute;
+        margin-top: 26.5%;
+    }
+
+    .EE {
+        margin-left: -0.2%;
+    }
+
+    .EA {
+        margin-left: 48%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    div#u15488 {
+        margin-left: 100px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 32%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 3%;
+        min-width: 3%;
+        width: 3%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 3%;
+        width: 3%;
+        max-width: 3%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -8%;
+        width: 8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1251px) and (max-width: 1290px) {
+    
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:53%;
+        margin-left:-4px;
+    }
+    #buttonu5699{
+        width:54%;
+        margin-left:-4px;
+    }
+    p, .Instrucciones{
+        font-size:17px;
+    }
+    div#u6065{
+        margin-left:20px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 50px;
+    }
+
+    #progreso {
+        width: 80%;
+    }
+    /*HAs*/
+    #indicators {
+        margin-bottom: 50px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 27%;
+    }
+
+    .EE {
+        margin-left: 1%;
+    }
+
+    .EA {
+        margin-left: 49%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -5px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    div#u15488 {
+        margin-left: 95px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 32%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 3%;
+        min-width: 3%;
+        width: 3%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 3%;
+        width: 3%;
+        max-width: 3%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -8%;
+        width: 8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1291px) and (max-width: 1350px) {
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:53%;
+        margin-left:-4px;
+    }
+    #buttonu5699{
+        width:54%;
+        margin-left:-4px;
+    }
+    p, .Instrucciones{
+        font-size:17px;
+    }
+    /*HAs*/
+    .viewMobile_AButtons {
+        margin-left: 55px;
+    }
+
+    #indicators {
+        margin-bottom: 50px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 27%;
+    }
+
+    .EE {
+        margin-left: 1%;
+    }
+
+    .EA {
+        margin-left: 49%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -3px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    div#u15488 {
+        margin-left: 93px;
+    }
+    div#u6065{
+        margin-left:15px;
+    }
+    #u14547, #u14540 { /*Boto-02*/
+        width: 32%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 3%;
+        min-width: 3%;
+        width: 3%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 3%;
+        width: 3%;
+        max-width: 3%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -8%;
+        width: 8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1351px) and (max-width: 1480px) {
+    div#buttonu12080{
+        height:45px;
+        min-height:45px;
+    }
+    p, .Instrucciones{
+        font-size:15px;
+    }
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:51.3%;
+        margin-left:-2px;
+    }
+    #buttonu5699{
+        width:52.8%;
+        margin-left:-1px;
+    }
+    p, .Instrucciones{
+        font-size:17px;
+    }
+    div.originalEnfoques{
+        margin-bottom:38px;
+    }
+    HAs
+    .viewMobile_AButtons {
+        margin-left: 60px;
+    }
+
+    .footer {
+        width: 100%;
+    }
+
+    #indicators {
+        margin-bottom: 50px;
+    }
+
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 28%;
+        margin-bottom: 50px;
+    }
+
+    .EE {
+        margin-left: 2.3%;
+    }
+
+    .EA {
+        margin-left: 51%;
+    }
+    div#u6065{
+        margin-left:15px;
+    }
+    #buttonu12118 {
+ 
+        margin-left: 0px;
+        margin-bottom: 25px;
+    }
+
+    #buttonu12099 {
+ 
+        margin-left: -2px;
+        margin-bottom: 160px;
+    }
+
+    #buttonu12080 {
+   
+        margin-left: -3px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+     
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #u15488 {
+        margin-left: 100px;
+    }
+
+    #u14547, #u14540 {
+        width: 30%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: 2%;
+        min-width: 3%;
+        width: 3%;
+    }
+
+    #u14554 { 
+        margin-left: -2%;
+        min-width: 3%;
+        width: 3%;
+        max-width: 3%;
+    }
+
+    #u19528 { 
+        margin-left: -9%;
+        width: 8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        margin-top:50px;
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+       
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+     
+        margin-top: 60px;
+    }
+}
+
+
+@media only screen and (min-width: 1481px) and (max-width: 1565px) {
+     #buttonu12080{
+        height:48px;
+    }
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:100%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:50.8%;
+        margin-left:-3.5px;
+    }
+    #buttonu5699{
+        width:51.3%;
+        margin-left:-5px;
+    }
+    p, .Instrucciones{
+        font-size:17px;
+    }
+    /*HAs*/
+    .viewMobile_AButtons {
+        margin-left: 65px;
+    }
+
+    #indicators {
+        margin-bottom: 60px;
+    }
+
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+    .EE, .EA {
+        position: absolute;
+        margin-top: 28%;
+        margin-bottom: 50px;
+    }
+    .originalEnfoques{
+        margin-bottom:40px;
+    }
+    .EE {
+        margin-left: 2.5%;
+    }
+
+    .EA {
+        margin-left: 51%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -2px;
+        margin-bottom: 160px;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -3px;
+        z-index: 250;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -5px;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -8px;
+    }
+
+    #pbuttonu12118 {
+    }
+
+    div#u15488 {
+        margin-left: 110px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 30%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 2.5%;
+        min-width: 3%;
+        width: 3%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -2%;
+        min-width: 3%;
+        width: 3%;
+        max-width: 3%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -9%;
+        width: 8%;
+    }
+
+    #paginacion {
+        margin-left: 0px;
+        padding-left: -15px;
+        /*margin-top:10px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1566px) and (max-width: 1667px) {
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:85%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:48%;
+        margin-left:-2.8px;
+    }
+    #buttonu5699{
+        width:48.8%;
+        margin-left:-4px;
+    }
+    p, .Instrucciones{
+        font-size:18px;
+    }
+    /*HAs*/
+    .viewMobile_AButtons {
+        margin-left: 65px;
+    }
+
+    #indicators {
+        margin-bottom: 68px;
+    }
+
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+    .originalEnfoques{
+        margin-bottom:25px;
+    }
+    .EE, .EA {
+        position: absolute;
+        margin-top: 24%;
+        margin-bottom: 30px;
+    }
+
+    .EE {
+        margin-left: 3%;
+    }
+
+    .EA {
+        margin-left: 52%;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+        height: 45px;
+        /*width: 70%;*/
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -4px;
+        margin-bottom: 160px;
+        height: 45px;
+        /*width: 70%;*/
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -7.5px;
+        z-index: 250;
+        height: 45px;
+        /*width: 70%;*/
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -11px;
+        height: 45px;
+        /*width: 70%;*/
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -17px;
+        height: 45px;
+        /*width: 70%;*/
+    }
+
+    #pbuttonu12118 {
+    }
+
+
+
+    #u15488 {
+        margin-left: 120px;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 30%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 3%;
+        min-width: 3%;
+        width: 3%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 3%;
+        width: 3%;
+        max-width: 3%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -8%;
+        width: 8%;
+    }
+    /*#u14532, #u14532:hover {
+        margin-left: 2%;
+    }
+
+    #u14554 {
+        margin-left: -2%;
+    }
+
+    #u19528 {
+        margin-left: -8%;
+    }*/
+
+    #paginacion {
+        margin-left: 7px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 60%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+@media only screen and (min-width: 1668px) and (max-width: 3000px) {
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+        width:75%;
+        font-weight:normal;
+    }
+    #buttonu5579{
+        width:49%;
+        margin-left:-1.5px;
+    }
+    #buttonu5699{
+        width:48.8%;
+        margin-left:0px;
+    }
+    p, .Instrucciones{
+        font-size:19px;
+    }
+    .originalEnfoques{
+        margin-bottom:20px;
+    }
+    .EE, .EA {
+        position: absolute;
+        margin-top: 20%;
+        margin-bottom: 30px;
+    }
+
+    .EE {
+        margin-left: 4.8%;
+    }
+
+    .EA {
+        margin-left: 54.5%;
+    }
+
+    .footer {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .viewMobile_AButtons {
+        margin-left: 78px;
+    }
+
+    #indicators {
+        margin-bottom: 85px;
+    }
+
+    .logoCL {
+        margin-left: 0px;
+    }
+
+    .preguntas {
+        margin-top: 60px;
+    }
+
+    #pbuttonu6095 {
+        margin-top: 15px;
+    }
+
+
+
+    
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: 0px;
+        margin-bottom: 25px;
+        height: 55px;
+        /*width: 60%;*/
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -5px;
+        margin-bottom: 160px;
+        height: 55px;
+        /*width: 60%;*/
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -14px;
+        z-index: 250;
+        height: 55px;
+        /*width: 60%;*/
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -19px;
+        height: 55px;
+        /*width: 60%;*/
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -23px;
+        height: 55px;
+        /*width: 60%;*/
+    }
+
+    #pbuttonu12118 {
+    }
+
+    #buttonu5633 {
+        margin-left: 1%;
+       
+    }
+
+    #u15488 {
+        margin-left: 155px;
+    }
+    
+    #u14547, #u14540 { /*Boto-02*/
+        width: 25%;
+    }
+
+    #u14532, #u14532:hover { /*Mail*/
+        margin-left: 3%;
+        min-width: 2.5%;
+        width: 2.5%;
+    }
+
+    #u14554 { /*SavePart*/
+        margin-left: -1%;
+        min-width: 2.5%;
+        width: 2.5%;
+        max-width: 2.5%;
+    }
+
+    #u19528 { /*Enviar*/
+        margin-left: -7%;
+        width: 6.5%;
+    }
+
+    #paginacion, .pag {
+        margin-left: 0px;
+        padding-left: -15px;
+        margin-top:10px;
+        /*margin-top:50px;*/
+    }
+
+    #u14547 {
+        left: 45%;
+        margin-top: 0px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 18.89%;
+        height: auto;
+    }
+
+    #u6065 {
+    }
+
+    #buttonu4377 {
+        margin-left: -2%;
+    }
+
+    #buttonu5621 {
+        /*EE => FV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5633 {
+        /*EE => CSV*/
+        margin-top: 60px;
+    }
+
+    #buttonu5609 {
+        /*EE => A veces*/
+        margin-top: 60px;
+    }
+
+    #buttonu4377 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+
+    #buttonu5597 {
+        /*EE => CSF*/
+        margin-top: 60px;
+    }
+}
+
+
+@media only screen and (max-width: 1600px) and (max-height: 900px) {
+    p, .Instrucciones {
+        font-size:15px;
+    }
+    .EE, .EA {
+        margin-top: 22%;
+    }
+    #buttonu5579{
+        width:53%;
+        margin-left:-1px;
+    }
+    #buttonu5699{
+        margin-left:1px;
+    }
+    
+
+    #buttonu6095 {
+        font-size: 17px;
+    }
+
+    .Instrucciones {
+        font-size: 17px;
+    }
+
+    #indicators {
+        margin-top: -10px;
+    }
+
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036 {
+        min-width: 77%;
+    }
+
+    #u15488 {
+        margin-left: 120px;
+    }
+}
+
+@media only screen and (max-width: 1366px) and (min-width:1300px) and (max-height: 768px) and (min-height:700px) {
+    p, .Instrucciones{
+        font-size:17px;
+    }
+    #buttonu5699, #buttonu5579 {
+        width: 52.5%;
+    }
+    #buttonu5579{
+        margin-left:2px;
+    }
+    #buttonu5579 {
+        margin-left: 2px;
+    }
+    #buttonu5699{
+        margin-left:4px;
+    }
+    #u12081-6 {
+        line-height: 15px;
+    }
+
+    .EE, .EA {
+        margin-top:26%;
+    }
+    .originalEnfoques{
+        margin-bottom:0px;
+    }
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036 {
+        min-width: 80%;
+        width:80%;
+    }
+    .EE, .EA{
+        margin-top:18%;
+    }
+    div.originalEnfoques{
+        margin-bottom:5px;
+    }
+    #paginacion {
+        margin-left: 10px;
+    }
+    .p1, .p2, .p3, .p4, .p5, .p6, .p7, .p8{
+        height:35px;
+        display:flex;
+        justify-content:center;
+        align-content:center;
+    }
+    p, .Instrucciones{
+        font-size:15px;
+    }
+}
+
+
+
+@media only screen and (width: 1280px) and (height: 720px) {
+    p{
+        font-size:17px;
+    }
+    #buttonu5699, #buttonu5579 {
+        width: 56%;
+    }
+    div#buttonu5579{
+        margin-left:-5px;
+        width:53%;
+    }
+    div#buttonu5699{
+        margin-left:5px;
+        width:53%;
+    }
+    .EE{
+        margin-left:-1px;
+    }
+    .EA{
+        margin-left:50.5%;
+    }
+    #u15488{
+        margin-left:100px;
+    }
+    .viewMobile_AButtons{
+        margin-bottom:40px;
+    }
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036 {
+        min-width: 86%;
+    }
+}
+
+@media only screen and (width: 1280px) and (height: 800px) {
+    p{
+        font-size:17px;
+    }
+    #buttonu12080{
+        min-height:43px;
+    }
+    #buttonu5699, #buttonu5579 {
+        width: 52%;
+        margin-left:-5px
+    }
+    #buttonu5579{
+        width:53%;
+        margin-left:0.5px;
+    }
+    #buttonu5699{
+        margin-left:-1px;
+        width:53%;
+    }
+    .EE, .EA{
+        margin-top:25%;
+    }
+}
+
+#progreso {
+    margin-top: 2.5%;
+}
+
+#indicadores {
+    display: none;
+}
+
+#progreso {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+#paginacion {
+    font-size: 25px;
+}
+
+#pu6065 {
+    margin-bottom: 50px;
+}
+
+.pregunta1 {
+    margin-top: 100px;
+}
+
+.EEMobile {
+    display: none;
+}
+
+.EAMobile {
+    display: none;
+}
+
+#u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+    margin-top: 1px;
+}
+
+.EE, .EA {
+    /*position: absolute;
+    margin-top: 20%;
+    margin-bottom: 50px;*/
+}
+
+
+#buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036 {
+    /*width: 70%;*/
+}
+
+#u12119-6, #u12100-6, #u12037-6, #u12062-6 {
+    line-height: 18px;
+}
+
+p {
+    /*font-size: 20px;*/
+}
+
+@media only screen and (min-width: 601px) and (max-width: 614px) {
+    p{
+        font-size:20px;
+    }
+    .viewMobile_A {
+        width: 130%;
+        min-width: 130%;
+        margin-left: 10px;
+    }
+
+    .viewMobile_AButtons {
+        margin-left: 17%;
+    }
+
+    .gris {
+        background-color: #ffffff;
+    }
+
+    #u14547 {
+        margin-top: -57px;
+        position: static;
+        margin-left: 30px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u19523 {
+        margin-left: 0px;
+        padding-right: 5px;
+    }
+
+    #u15488 {
+        margin-left: 1.5%;
+    }
+}
+
+@media only screen and (min-width: 300px) and (max-width:458px) {
+    p, .Instrucciones{
+        font-size:20px;
+    }
+    .Instrucciones{
+        margin-top:15px;
+    }
+    div#u12119-6, div#u12100-6, div#u12081-6, div#u12062-6, div#u12037-6{
+        margin-top:-5px;
+    }
+    .viewMobile_A {
+        min-width: 130%;
+        padding-right: 5px;
+        margin-left: 25px;
+        margin-bottom: 10px;
+    }
+    #u12119-6{
+        margin-top:-10px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 27%;
+    }
+
+    .viewMobile {
+        width: 120%;
+        min-width: 120%;
+        margin-left: 15px;
+    }
+
+    .viewMobileButtons {
+        width: 110%;
+        min-width: 110%;
+        margin-left: 80px;
+    }
+
+    .gris {
+        background-color: #ffffff;
+    }
+
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+
+    div#buttonu5579{
+        width:49.5%;
+        margin-left:5px;
+        position:relative;
+    }
+    div#buttonu5699{
+        width:49.5%;
+        margin-left:3px
+    }
+
+    div.EA {
+        margin-left: 58%;
+        margin-top: 23.8%;
+        
+    }
+
+    div.EE {
+        margin-left: 6.5%;
+        margin-top: 23.8%;
+        margin-bottom: -50px;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 5px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+
+
+    #u6065, #u7182, #u9273 {
+        margin-top: 80px;
+        width: 100%;
+    }
+
+    #u6071 {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
+    #pu6065 {
+        margin-bottom: 120px;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 35%;
+        width: 50%;
+    }
+
+    #paginacion {
+        margin-top: 70px;
+        margin-left: 0px;
+        font-size: 25px;
+        position: relative;
+        width: 80px;
+    }
+
+    #u14547 {
+        margin-top: -27px;
+        position: static;
+        margin-left: 60px;
+        width: 105%;
+    }
+
+    #u14540 {
+        width: 105%;
+        margin-left: -130%;
+    }
+
+    .parrafo {
+        font-size: 20px;
+    }
+
+    #pu6065 {
+        margin-bottom: 88px;
+    }
+
+    #u6096-4, #u4946-4, #u5048-4, #u5054-4, #u5072-4, #u5078-4, #u5102-4, #u5108-4 {
+        text-align: justify;
+    }
+
+    #paginacion {
+        margin-top: 10px;
+        margin-left: -20px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u14554 {
+        left: 80%;
+        width: 11%;
+    }
+
+    #u14532, #u14532:hover {
+        left: 98%;
+        width: 11%;
+        min-width: 11%;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u19523 {
+        margin-left: 5px;
+        padding-right: 5px;
+    }
+
+    div#u15488 {
+        margin-left: -1%;
+        left:45%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    #u19528 {
+        width: 30%;
+        left: -16%;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 75%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 105%;
+        max-width: 105%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+@media only screen and (min-width: 459px) and (max-width:600px) {
+    p, .Instrucciones{
+        font-size:20px;
+    }
+    .Instrucciones{
+        margin-top:15px;
+    }
+    .viewMobile_A {
+        min-width: 130%;
+        padding-right: 5px;
+        margin-left: 25px;
+        margin-bottom: 10px;
+    }
+    div#u12119-6, div#u12100-6, div#u12081-6, div#u12062-6, div#u12037-6{
+        margin-top:-5px;
+    }
+    p{
+        font-size:20px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 30%;
+    }
+
+    .viewMobile {
+        width: 120%;
+        min-width: 120%;
+        margin-left: 15px;
+    }
+
+    .viewMobileButtons {
+        width: 110%;
+        min-width: 110%;
+        margin-left: 80px;
+    }
+
+    .gris {
+        background-color: #ffffff;
+    }
+
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 60%;
+        margin-top: 27%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 8.5%;
+        margin-top: 27%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+    div#buttonu5699{
+        margin-left:5px;
+    }
+    div#buttonu5579{
+        margin-left:8px;
+        width:48%;
+    }
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: -8px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+    div#buttonu12036{
+        height:63px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        margin-top: 80px;
+        width: 100%;
+    }
+
+    #u6071 {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
+    #pu6065 {
+        margin-bottom: 120px;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 35%;
+        width: 50%;
+    }
+
+    #paginacion {
+        margin-top: 70px;
+        margin-left: 0px;
+        font-size: 25px;
+        position: relative;
+        width: 80px;
+    }
+
+    #u14547 {
+        margin-top: -31px;
+        position: static;
+        margin-left: 60px;
+        width: 105%;
+    }
+    #buttonu12118, #buttonu12099, #buttonu12080, #buttonu12061, #buttonu12036{
+       height:72px;
+    }
+    .originalEnfoques{
+        margin-bottom:-20px;
+    }
+    #u14540 {
+        width: 105%;
+        margin-left: -130%;
+    }
+
+    .parrafo {
+        font-size: 20px;
+    }
+
+    #pu6065 {
+        margin-bottom: 88px;
+    }
+
+    #u6096-4, #u4946-4, #u5048-4, #u5054-4, #u5072-4, #u5078-4, #u5102-4, #u5108-4 {
+        text-align: justify;
+    }
+
+    #paginacion {
+        margin-top: 15px;
+        margin-left: -20px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u14554 {
+        left: 80%;
+        width: 11%;
+    }
+
+    #u14532, #u14532:hover {
+        left: 98%;
+        width: 11%;
+        min-width: 11%;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u19523 {
+        margin-left: 5px;
+        padding-right: 5px;
+    }
+
+    #u15488 {
+        margin-left: -1%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    #u19528 {
+        width: 30%;
+        left: -16%;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 60%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        min-height:100px;
+        width: 105%;
+        max-width: 105%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        max-width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+@media only screen and (min-width: 601px) and (max-width:614px) {
+    p, .Instrucciones{
+        font-size:20px;
+    }
+    .Instrucciones{
+        margin-top:20px;
+    }
+    .gris {
+        background-color: #ffffff;
+    }
+
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 59.5%;
+        margin-top: 28%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 8%;
+        margin-top: 28%;
+    }
+    div#buttonu12118, div#buttonu12099, div#buttonu12080, div#buttonu12061, div#buttonu12036{
+        height:78px;
+    }
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+    .viewMobile_A{
+        width:140%;
+        min-width:140%;
+    }
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+    .viewMobile_AButtons{
+        margin-left:23%
+    }
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+    
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 40px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 5px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 25%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        margin-top: 80px;
+        width: 100%;
+    }
+
+    #u6071 {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
+    #pu6065 {
+        margin-bottom: 120px;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 40%;
+    }
+
+    #paginacion {
+        margin-top: 48px;
+        margin-left: 0px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u14547 {
+        margin-top: -65px;
+        position: static;
+        margin-left: 50px;
+        width: 73%;
+    }
+
+    #u15540 {
+        width: 73%;
+    }
+
+    #pu6065 {
+        margin-bottom: 88px;
+    }
+
+    #u19523 {
+        margin-left: 5px;
+        padding-right: 5px;
+    }
+
+    #u15488 {
+        margin-left: -0.5%;
+    }
+
+    #u19528 {
+        left: 1%;
+        width: 21.5%;
+    }
+
+    #u14554 {
+        left: 85%;
+        margin-left: -5%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: -3%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 55%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 110%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+
+
+@media only screen and (min-width: 686px) and (max-width:767px) {
+    p{
+        font-size:20px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 35px;
+    }
+
+    #progreso {
+        width: 90%;
+    }
+
+    .gris {
+        background-color: #ffffff;
+    }
+
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+
+
+
+    .EA {
+        margin-left: 59%;
+        margin-top: 26.5%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 7%;
+        margin-top: 26.5%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 65px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 67px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 68px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 67px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 65px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 30%;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 0px;
+        margin-left: -15px;
+        font-size: 25px;
+        position: static;
+        width: 120px;
+    }
+
+    #u19528 {
+        left: 68%;
+        width: 16.5%;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: -1%;
+    }
+
+    #u14547, #u14540 { /*Boto-02*/
+        width: 60%;
+    }
+
+    #u14554 {
+        left: 85%;
+    }
+
+    #u14547 {
+        margin-top: -17px;
+        position: static;
+        margin-left: 65px;
+        width: 65%;
+    }
+
+    #u14540 {
+        width: 65%;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: -1%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 65%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 105%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: relative;
+        margin-top: 0px;
+        margin-left: 25%;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (min-width: 615px) and (max-width:685px) {
+    p, .Instrucciones{
+        font-size:20px;
+    }
+    .Instrucciones{
+        margin-top:20px;
+    }
+    .viewMobile_A {
+        min-width: 125%;
+    }
+
+    .viewMobile_AButtons {
+        margin-left: 15%;
+    }
+
+    .gris {
+        background-color: #ffffff;
+    }
+
+    .EEMobile {
+        display: block;
+    }
+
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+    div#buttonu12118, div#buttonu12099, div#buttonu12080, div#buttonu12061, div#buttonu12036{
+        height:70px;
+        min-width:65%;
+    }
+
+
+    .EA {
+        margin-left: 60%;
+        margin-top: 23%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 8.5%;
+        margin-top: 23%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 60px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        margin-top: 80px;
+        width: 100%;
+    }
+
+    #u6071 {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
+    #pu6065 {
+        margin-bottom: 120px;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: -2px;
+        padding-left: -10px;
+        margin-left: 37%;
+    }
+
+    #paginacion {
+        margin-top: 50px;
+        margin-left: -5px;
+        font-size: 25px;
+        position: static;
+        width: 80px;
+    }
+
+    #u14532, #u14532:hover {
+        margin-left: -3%;
+    }
+
+    #u19528 {
+        left: 1%;
+        width: 19%;
+    }
+
+    #u14554 {
+        left: 80%;
+    }
+
+
+    #u14540 {
+        width: 70%;
+    }
+
+    #u14547 {
+        margin-top: -67px;
+        position: static;
+        margin-left: 55px;
+        width: 70%;
+    }
+
+
+
+    #u15488 {
+        margin-left: 0%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 60%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 105%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}
+
+
+/************Desktop/Tablet View**************/
+
+@media only screen and (min-width: 768px) and (max-width:991px) {
+    p, .Instrucciones{
+        font-size:20px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 50px;
+    }
+
+    .gris {
+        background-color: #ffffff;
+    }
+
+    .EEMobile {
+        display: block;
+    }
+    .Instrucciones{
+        margin-top:20px;
+    }
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+    div#buttonu12118, div#buttonu12099, div#buttonu12080, div#buttonu12061, div#buttonu12036{
+        min-width:45%;
+        height:78px;
+    }
+
+
+    .EA {
+        margin-left: 61%;
+        margin-top: 21%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 9%;
+        margin-top: 21%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+    .originalEnfoques{
+        margin-bottom:-20px;
+    }
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #viewTablet {
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 68px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 30%;
+    }
+
+
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: 0px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 1px;
+        margin-left: 12px;
+        font-size: 25px;
+        position: static;
+        width: 100px;
+    }
+
+    #u19528 {
+        left: 66%;
+        width: 15%;
+    }
+
+    #u14554 {
+        left: 85%;
+    }
+
+    #u14547 {
+        margin-top: -18px;
+        position: static;
+        margin-left: 70px;
+        width: 55%;
+    }
+
+    #u14540 {
+        width: 55%;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: -1%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 50%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 110%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: -5%;
+        margin-right: auto;
+    }
+}
+
+@media only screen and (min-width: 992px) and (max-width:1200px) {
+    p, .Instrucciones{
+        font-size:20px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 50px;
+    }
+    div.originalEnfoques{
+        margin-bottom:250px;
+    }
+    .gris {
+        background-color: #ffffff;
+    }
+    
+    .EEMobile {
+        display: block;
+    }
+    .Instrucciones{
+        margin-top:20px;
+    }
+    .EAMobile {
+        display: block;
+    }
+
+    .pregunta1 {
+        /*130px*/
+        margin-top: -130px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: transparent;
+    }
+
+
+    div#buttonu12118, div#buttonu12099, div#buttonu12080, div#buttonu12061, div#buttonu12036{
+        min-width:50%;
+        width:50%;
+        height:80px;
+    }
+    div#buttonu5699{
+        width:48%;
+        margin-left:21.5px;
+    }
+    div#buttonu5579{
+        width:48%;
+        margin-left:7px
+    }
+    .EA {
+        margin-left: 62%;
+        margin-top: 18%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 10%;
+        margin-top: 18%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+    div.originalEnfoques{
+        margin-bottom:300px;
+    }
+    #buttonu12118 {
+        /*CSF*/
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #viewTablet {
+        max-width: 105%;
+        min-width: 105%;
+    }
+
+    #buttonu12099 {
+        /*FF*/
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        /*AV*/
+        margin-left: -18px;
+        z-index: 250;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        /*FV*/
+        z-index: 251;
+        margin-left: -20px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        /*CSV*/
+        z-index: 252;
+        margin-left: -22px;
+        height: 68px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 13px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 30%;
+    }
+
+
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: 0px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 1px;
+        margin-left: 12px;
+        font-size: 25px;
+        position: static;
+        width: 200px;
+    }
+
+    #u19528 {
+        left: 75%;
+        width: 15%;
+    }
+
+    div#u14554 {
+        left: 90%;
+        width:6%;
+        min-width:6%;
+    }
+
+    #u14547 {
+        margin-top: -18px;
+        position: static;
+        margin-left: 75px;
+        width: 55%;
+    }
+    div#u14532, div#u14532:hover{
+        left:100%;
+        width:6%;
+    }
+    #u14540 {
+        width: 55%;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    div#u15488 {
+        margin-left: 4%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+    .logoCL {
+        height: auto;
+        width: 35%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 110%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: -5%;
+        margin-right: auto;
+    }
+}
+/*Desktop*/
+/*@media only screen and (min-width: 992px) and (max-width:1200px) {
+    p{
+        font-size:17px;
+    }
+    .viewMobile_AButtons {
+        margin-left: 35px;
+    }
+
+    .EEMobile {
+        display: none;
+    }
+
+    .EAMobile {
+        display: none;
+    }
+
+    .pregunta1 {
+        130px
+        margin-top: 10px;
+    }
+
+    #u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+        margin-top: 30px;
+        background-color: #ffffff;
+    }
+
+    #buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+        background-color: #ffffff;
+    }
+
+    #indicators {
+        margin-bottom: 35px;
+    }
+
+
+
+    .EA {
+        margin-left: 50%;
+        margin-top: 20%;
+        margin-bottom: -50px;
+    }
+
+    .EE {
+        margin-left: 0%;
+        margin-top: 20%;
+    }
+
+    #asdf {
+        margin-bottom: -250px;
+    }
+
+    #buttonu12118 {
+        CSF
+        margin-left: -10px;
+        margin-bottom: 25px;
+        height: 70px;
+        width: 60%;
+    }
+
+
+    #buttonu12099 {
+        FF
+        margin-left: -15px;
+        margin-bottom: 160px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12080 {
+        AV
+        margin-left: -18px;
+        z-index: 250;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12061 {
+        FV
+        z-index: 251;
+        margin-left: -20px;
+        height: 70px;
+        width: 60%;
+    }
+
+    #buttonu12036 {
+        CSV
+        z-index: 252;
+        margin-left: -22px;
+        height: 68px;
+        width: 60%;
+    }
+
+    #u12119-6, #u12100-6, #u12081-6, #u12062-6, #u12037-6 {
+        margin-top: 1%;
+    }
+
+    #u6065, #u7182, #u9273 {
+        width: 30%;
+    }
+
+    #progreso {
+        font-size: 20px;
+        letter-spacing: 0px;
+        padding-left: -10px;
+        margin-left: 10px;
+    }
+
+    #paginacion {
+        margin-top: 50px;
+        margin-left: 10%;
+        font-size: 25px;
+        position: static;
+        width: 50px;
+    }
+
+    #u19528 {
+        left: 85%;
+    }
+
+    #u14554 {
+        left: 90%;
+    }
+
+    #u14547 {
+        margin-top: -67px;
+        position: static;
+        margin-left: 55px;
+    }
+
+    #pu6065 {
+        margin-bottom: 80px;
+    }
+
+    #u15488 {
+        margin-left: 55px;
+    }
+
+    #u6065, #u7182, #u9273 {
+        border: 4px solid #000080;
+        border-radius: 7px;
+    }
+
+    .imagenFondo {
+        width: 100%;
+        z-index: -1;
+    }
+
+
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 100%;
+        position: relative;
+        background-color: #000080;
+        margin-top: -50px;
+        bottom: 0;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+}*/
+
+#u4443, #u18561, #u18565, #u18253, #u4600, #u18307, #u18529, #u18489, #u19177, #u19173, #u19074, #u19078, #u19078, #u19038, #u18992, #u19042, #u18959 {
+    /*margin-top: 30px;*/
+    /*background-color: #ffffff;*/
+}
+
+#buttonu6095, #buttonu4945, #buttonu5047, #buttonu5053, #buttonu5071, #buttonu5077, #buttonu5101, #buttonu5107 {
+    /*background-color: #ffffff;*/
+}
+.footer {
+    width: 110%;
+    min-width: 105%;
+}
+@media only screen and (max-width: 800px) and (orientation: landscape) {
+    p{
+        font-size:20px;
+    }
+    .EE, .EA {
+        margin-top: 20%;
+    }
+    .Instrucciones{
+        margin-top:20px;
+    }
+    #viewTablet{
+        width:100%;
+        min-width:100%;
+    }
+    div.EE, div.EA{
+        margin-top:27%;
+    }
+}
+
+@media only screen and (max-width: 1920px) and (max-height: 1080px) {
+
+}
+@media only screen and (width: 1024px) and (height: 768px) {
+    div#u6065{
+        margin-left:15px;
+    }
+    div#u15488{
+        margin-left:110px;
+    }
+    #paginacion{
+        margin-left:-20px;
+    }
+    div#buttonu5579{
+        width:44%;
+        margin-left:5px;
+    }
+    .EE{
+        margin-left:9%;
+    }
+    div#buttonu5699{
+        width:44%;
+        margin-left:20px;
+    }
+    .EA{
+       margin-left:61%;
+    }
+    .EE, .EA{
+        margin-top:17%;
+    }
+    div#buttonu12118, div#buttonu12099, div#buttonu12080, div#buttonu12061, div#buttonu12036{
+
+    }
+    div#buttonu12118{
+
+    }
+    div#buttonu12099{
+        left:-5%;
+    }
+    div#buttonu12080{
+        left:13%;
+    }
+    div#buttonu12061{
+        left:31%;
+    }
+    div#buttonu12036{
+        left:49%;
+    }
+    div#u15488{
+        left:33%
+    }
+    #paginacion{
+        margin-left:-100px;
+        left:10%;
+        
+    }
+    #u14547{
+        margin-top:-35px;
+    }
+}
+
+@media only screen and (max-width: 1680px) and (max-height: 1050px) {
+}

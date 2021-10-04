@@ -1,0 +1,1149 @@
+﻿#continuar {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+html {
+    overflow-x: hidden;
+}
+#u11296{
+    padding-top:10px;
+}
+/*Desktop View*/
+@media only screen and (min-width: 1141px) and (max-width: 1430px) {
+    .lik {
+        font-size: 17px;
+        letter-spacing: -0.5px;
+        display: inline;
+    }
+}
+
+@media only screen and (min-width: 1141px) and (max-width:1669px) {
+    .lik {
+        font-size: 15px;
+    }
+    p{
+        font-size:15px;
+    }
+    html, body{
+
+        overflow-y: hidden !important;
+    }
+    #imagen1, #u3434_img{
+        display:none;
+    }
+    #u3603-4, #u3609-4, #u3567-4, #u3597-4 {
+        margin-top: 0px;
+    }
+
+    .indicaciones, .instruccion {
+        margin-top: 5px;
+        margin-left:20px;
+        width:150%;
+    }
+    .instruccion{
+        margin-left:20px;
+    }
+    div#buttonu3608, div#buttonu3602, div#buttonu3572, div#buttonu3566, div#buttonu3596{
+        height:40px;
+        min-height:40px;
+        max-height:40px;
+    }
+    .anchoMax{
+        margin-left:20px;
+        min-width:152%;
+    }
+    #u3521-3{
+        display:block;
+    }
+    p #msg1{
+        margin-top:-20px;
+        margin-bottom:0px;
+    }
+
+    #buttonu3602 {
+        /*CSF*/
+        min-height: 80px;
+        margin-left: -18px;
+        min-width: 21%;
+        margin-top: 0px;
+    }
+
+    #u3603-4 {
+        margin-top: 20px;
+    }
+
+    #buttonu3608 {
+        /*FF*/
+        margin-top: 0px;
+        margin-left: -1%;
+        min-height: 80px;
+        min-width: 21%;
+    }
+
+    #u3609-4 {
+        margin-top: 20px;
+    }
+
+    #buttonu3572 {
+        /*A veces*/
+        margin-top: 0px;
+        margin-left: -0.3%;
+        min-height: 80px;
+        min-width: 21%;
+    }
+
+    #u3573-6 {
+        margin-top: 20px;
+    }
+
+    #buttonu3566 {
+        /*FV*/
+        margin-top: 0px;
+        margin-left: 0.5%;
+        min-height: 80px;
+        min-width: 20%;
+    }
+
+    #u3597-4 {
+        margin-top: 20px;
+    }
+
+    #u3567-4 {
+        margin-top: 20px;
+    }
+
+    #buttonu3596 {
+        /*CSV*/
+        margin-top: 0px;
+        margin-left: 0%;
+        min-height: 80px;
+        min-width: 22%;
+    }
+
+    #u3434 {
+        width: 113%;
+        min-width: 113%;
+        max-width: 113%;
+    }
+
+    body {
+        font-family: Open Sans;
+    }
+
+    p {
+        /*font-family:Open Sans;*/
+        /*font-weight:bold;*/
+    }
+
+    #u3434 {
+    }
+
+    .logoCL {
+        height: 75px;
+        width: auto;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 107%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    #pu19422 {
+        margin-top: 100px;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 107%;
+        position: relative;
+        background-color: #000080;
+        margin-top: 170px;
+        bottom: 0;
+    }
+
+    #continuar {
+        width: 25%;
+        min-width: 25%;
+        max-width: 25%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #msg1{
+        margin-bottom:15px;
+    }
+    #imagen1 {
+        max-width: 32%;
+        margin-right: 15px;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+
+    body {
+        overflow-x: visible;
+        overflow-y: visible;
+        overflow: visible;
+    }
+
+    #u3521-26 {
+        margin-top: 80px;
+    }
+
+    .parafo {
+        margin-left: -15px;
+    }
+}
+
+
+@media only screen and (min-width: 768px) and (max-width: 1140px) {
+    html {
+        overflow-y: visible;
+    }
+
+    #buttonu3596 {
+    }
+    div.indicaciones{
+        margin-top:120px;
+    }
+    #continuar {
+        width: 40%;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 30px;
+    }
+
+    #imagen1 {
+        display: none;
+    }
+
+    .instruccion {
+        margin-top: 150px;
+        width: 155%;
+    }
+
+    #u3521-26 {
+        margin-top: 140px;
+        width: 180%;
+        max-width: 160%;
+        margin-left: -15px;
+    }
+
+    .anchoMax {
+        width: 150%;
+        min-width: 140%;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 111%;
+        position: relative;
+        background-color: #000080;
+        bottom: 0;
+        z-index: 3000;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+
+    #u3603-4, #u3609-4, #u3567-4, #u3597-4 {
+        margin-top: 5px;
+    }
+}
+
+
+
+/*Dektop View XL*/
+@media only screen and (min-width:1670px) and (max-width:3000px) {
+    div#u3434{
+        height:140%;
+        min-height:140%;
+        max-height:150%;
+    }
+    #u3434_img{
+        width:122%;
+        min-width:106.6%;
+    }
+
+    @-moz-document url-prefix() {
+    html {
+            overflow-y: hidden;
+        }
+    }
+
+    html {
+        overflow-y: hidden;
+    }
+
+    .instruccion {
+        margin-top: 40px;
+    }
+
+    #buttonu3602 {
+        /*CSF*/
+        min-height: 80px;
+        margin-left: -15px;
+        min-width: 22%;
+        margin-top: 0px;
+    }
+
+    #u3603-4 {
+        margin-top: 25px;
+    }
+
+    #buttonu3608 {
+        /*FF*/
+        margin-top: 0px;
+        margin-left: -0%;
+        min-height: 80px;
+        min-width: 22%;
+    }
+
+    #u3609-4 {
+        margin-top: 25px;
+    }
+
+    #buttonu3572 {
+        /*A veces*/
+        margin-top: 0px;
+        margin-left: 0%;
+        min-height: 80px;
+        min-width: 22%;
+    }
+
+    #u3573-6 {
+        margin-top: 6px;
+    }
+
+    #buttonu3566 {
+        /*FV*/
+        margin-top: 0px;
+        margin-left: 0%;
+        min-height: 80px;
+        min-width: 22%;
+    }
+
+    #u3597-4 {
+        margin-top: 25px;
+    }
+
+    #u3567-4 {
+        margin-top: 25px;
+    }
+
+    #buttonu3596 {
+        /*CSV*/
+        margin-top: 0px;
+        margin-left: 0%;
+        min-height: 80px;
+        min-width: 22%;
+    }
+
+    #u3434 {
+        width: 115%;
+        min-width: 115%;
+        max-width: 115%;
+    }
+
+    body {
+        font-family: Open Sans;
+    }
+
+    p {
+        /*font-family:Open Sans;*/
+        /*font-weight:bold;*/
+    }
+
+
+
+    .logoCL {
+        height: 75px;
+        width: auto;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 107%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    #pu19422 {
+        margin-top: 100px;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 107%;
+        position: relative;
+        background-color: #000080;
+        margin-top: 170px;
+        bottom: 0;
+    }
+
+    #continuar {
+        margin-top: 30px;
+        width: 22%;
+        min-width: 20%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #imagen1 {
+        max-width: 32%;
+        margin-right: 15px;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+
+    body {
+        overflow-x: visible;
+        overflow-y: visible;
+        overflow: visible;
+    }
+
+    #u3521-26 {
+        margin-top: 80px;
+    }
+
+    .parafo {
+        margin-left: -15px;
+    }
+}
+
+/*Tablet View*/
+@media only screen and (min-width: 601px) and (max-width:767px) {
+    html {
+        overflow-y: visible;
+    }
+
+    #u3603-4, #u3609-4, #u3567-4, #u3597-4 {
+        margin-top: 10px;
+    }
+    .indicaciones{
+        margin-left:30px;
+    }
+    div.anchoMax {
+        margin-left: 15px;
+    }
+
+    #u11296 {
+        max-width: 96%;
+    }
+
+    #buttonu3602 {
+        /*CSF*/
+        max-height: 50px;
+        margin-left: -15px;
+        min-width: 110%;
+    }
+
+    #imagen1 {
+        display: none;
+    }
+
+    #u3603-4 {
+        margin-top: 5px;
+    }
+
+    #buttonu3608 {
+        /*FF*/
+        margin-top: 55px;
+        margin-left: -22.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3609-4 {
+        margin-top: 5px;
+    }
+
+    #buttonu3572 {
+        /*A veces*/
+        margin-top: 110px;
+        margin-left: -42.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3573-6 {
+        margin-top: 5px;
+    }
+
+    #buttonu3566 {
+        /*FV*/
+        margin-top: 165px;
+        margin-left: -62.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3597-4 {
+        margin-top: 5px;
+    }
+
+    #u3567-4 {
+        margin-top: 5px;
+    }
+
+    #buttonu3596 {
+        /*CSV*/
+        margin-top: 220px;
+        margin-left: -82.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3434 {
+        width: 113%;
+        min-width: 113%;
+        max-width: 113%;
+    }
+
+    body {
+        font-family: Open Sans;
+        margin: 0;
+    }
+
+    p {
+        /*font-family:Open Sans;*/
+        /*font-weight:bold;*/
+    }
+
+    #u3434 {
+    }
+
+    .logoCL {
+        height: 75px;
+        width: auto;
+        position: absolute;
+        opacity: 1;
+        margin-top: 10px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 107%;
+        max-width: 110%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    #pu19422 {
+        margin-top: 100px;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 107%;
+        position: fixed;
+        background-color: #000080;
+        margin-top: 170px;
+        bottom: 0;
+        z-index: 3000;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+
+    #u3521-2 {
+        margin-top: 35px;
+    }
+
+    #u3424 {
+        min-width: 103%;
+        width: 103%;
+    }
+
+    #u3429 {
+        width: 103%;
+        min-width: 103%;
+    }
+
+    #pu19422 {
+        width: 113%;
+    }
+
+    #continuar {
+        height: 50px;
+        width: 200px;
+    }
+
+    #u3434 {
+        width: 113%;
+        min-width: 113%;
+    }
+
+    #u3434_img {
+        width: 110%;
+        min-width: 110%;
+    }
+
+    #u3521-26 {
+        margin-top: 200px;
+        margin-left: -15px;
+        width: 105%;
+    }
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 405px) {
+    .lik {
+        font-size: 14px;
+    }
+}
+/*Mobile View portrait*/
+@media only screen and (max-width:600px) and (orientation : portrait ) {
+    .lik {
+        display: inline;
+    }
+    p{
+        font-size:18px;
+    }
+    #u3573-6 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    /*#-26*/
+    html {
+        overflow-y: visible;
+    }
+
+    #inst {
+        width: 120%;
+    }
+    .anchoMax{
+        
+    }
+    #imagen1 {
+        display: none;
+    }
+
+    .header {
+        padding: 0px;
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+
+        .sticky + .content {
+            padding-top: 102px;
+        }
+
+    .content {
+        padding: 16px;
+    }
+
+    #buttonu3602 {
+        /*CSF*/
+        max-height: 50px;
+        margin-left: -4%;
+        min-width: 110%;
+    }
+
+    #u3603-4 {
+        margin-top: 15px;
+    }
+
+    #buttonu3608 {
+        /*FF*/
+        margin-top: 55px;
+        margin-left: -23.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3609-4 {
+        margin-top: 15px;
+    }
+
+    #buttonu3572 {
+        /*A veces*/
+        margin-top: 110px;
+        margin-left: -43.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3573-6 {
+        margin-top: 5px;
+    }
+
+    #buttonu3566 {
+        /*FV*/
+        margin-top: 165px;
+        margin-left: -63.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #u3597-4 {
+        margin-top: 15px;
+    }
+
+    #u3567-4 {
+        margin-top: 15px;
+    }
+
+    #buttonu3596 {
+        /*CSV*/
+        margin-top: 220px;
+        margin-left: -83.5%;
+        max-height: 50px;
+        min-width: 110%;
+    }
+
+    #page, #pu19422{
+        margin-left:1%;
+    }
+    body {
+        font-family: Open Sans;
+    }
+
+    p {
+        /*font-family:Open Sans;*/
+        /*font-weight:bold;*/
+    }
+
+    #u3434 {
+    }
+
+    .logoCL {
+        /*height: 75px;*/
+        width: 75%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: 0px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 111%;
+        max-width: 115%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    #pu19422 {
+        margin-top: 100px;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 111%;
+        position: relative;
+        background-color: #000080;
+        bottom: 0;
+        z-index: 3000;
+        margin-left: 15px;
+    }
+
+    .instruccion {
+        margin-top: 10px;
+        width: 120%;
+        margin-left: -20px;
+    }
+
+    #inst {
+        margin-left: -15px;
+        width: 120%;
+        min-width: 120%;
+        max-width: 120%;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: auto;
+        width: 65%;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+
+    #u3521-26 {
+        width: 120%;
+        min-width: 120%;
+    }
+
+    #u3434 {
+        width: 113%;
+        min-width: 113%;
+    }
+
+    #u3521-26 {
+        margin-top: 10px;
+        margin-left: -15px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    #u3603-4 {
+        margin-top: 18px;
+    }
+
+    #u3603-4, #u3609-4, #u3567-4, #u3597-4 {
+        margin-top: 5px;
+    }
+
+    .parafo {
+        margin-left: 0px;
+    }
+}
+
+
+/*Mobile View landscape*/
+@media only screen and (max-width:800px) and (orientation : landscape ) {
+    .lik {
+        /*display:inline;*/
+        font-size: 15px;
+    }
+
+    #u3573-6 {
+        /*display:flex;
+        align-items:center;
+        justify-content:center;*/
+    }
+
+    html {
+        overflow-y: visible;
+    }
+
+    #continuar {
+        width: 30%;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 30px;
+    }
+
+    .instruccion {
+        width: 150%;
+        margin-left: -15px;
+    }
+
+    #u11296 {
+        margin-left: 20px;
+    }
+
+    #imagen1 {
+        display: none;
+    }
+
+    .header {
+        padding: 0px;
+    }
+
+    .sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+
+        .sticky + .content {
+            padding-top: 102px;
+        }
+
+    .content {
+        padding: 16px;
+    }
+
+    #buttonu3602 {
+        /*CSF*/
+        max-height: 50px;
+        margin-left: -4%;
+        min-width: 20%;
+        margin-top: -0px;
+        min-height: 80px;
+    }
+
+    #u3603-4 {
+        margin-top: 15px;
+    }
+
+    #buttonu3608 {
+        /*FF*/
+        margin-top: 0px;
+        margin-left: -3%;
+        max-height: 50px;
+        min-height: 80px;
+        min-width: 20%;
+    }
+
+    #u3609-4 {
+        margin-top: 15px;
+    }
+
+    #buttonu3572 {
+        /*A veces*/
+        margin-top: 0px;
+        margin-left: -2%;
+        max-height: 50px;
+        min-height: 80px;
+        min-width: 20%;
+    }
+
+    #u3573-6 {
+        margin-top: 5px;
+    }
+
+    #buttonu3566 {
+        /*FV*/
+        margin-top: 0px;
+        margin-left: -1%;
+        max-height: 50px;
+        min-height: 80px;
+        min-width: 20%;
+    }
+
+    #u3597-4 {
+        margin-top: 15px;
+    }
+
+    #u3567-4 {
+        margin-top: 15px;
+    }
+
+    #buttonu3596 {
+        /*CSV*/
+        margin-top: 0px;
+        margin-left: 0%;
+        max-height: 50px;
+        min-height: 80px;
+        min-width: 20%;
+    }
+
+
+    body {
+        font-family: Open Sans;
+    }
+
+    p {
+        /*font-family:Open Sans;*/
+        /*font-weight:bold;*/
+    }
+
+    #u3434 {
+    }
+
+    .logoCL {
+        /*height: 75px;*/
+        width: 50%;
+        position: absolute;
+        opacity: 1;
+        margin-top: 15px;
+        margin-left: -15px;
+    }
+
+    .headerSuperior {
+        color: #000080;
+        opacity: 1;
+        height: 100px;
+        width: 111%;
+        max-width: 115%;
+        position: absolute;
+        background-color: #000080;
+    }
+
+    #pu19422 {
+        margin-top: 100px;
+    }
+
+    .footer {
+        color: #000080;
+        opacity: 1;
+        height: 50px;
+        width: 111%;
+        position: relative;
+        background-color: #000080;
+        bottom: 0;
+        z-index: 3000;
+    }
+
+    .imgFotter {
+        opacity: 1;
+        height: 25px;
+        width: auto;
+        position: absolute;
+        margin-top: 0px;
+        margin-left: 0px;
+        margin-right: auto;
+    }
+
+    #u3521-26 {
+        margin-top: 10px;
+        width: 152%;
+        min-width: 152%;
+    }
+
+    #u3434 {
+        width: 113%;
+        min-width: 113%;
+    }
+
+    #u3521-26 {
+        margin-top: 10px;
+        margin-left: -15px;
+    }
+
+    #u3603-4 {
+        margin-top: 18px;
+    }
+
+    #u3603-4, #u3609-4, #u3567-4, #u3597-4 {
+        margin-top: 15px;
+    }
+
+    .parafo {
+        margin-left: -15px;
+    }
+}
+
+.indicaciones {
+    padding-left: 25px;
+    padding-right: 35px;
+}
+
+
+@media only screen and (min-width:1020px) and (max-width: 1024px) and (min-height:760px) and (max-height: 768px) {
+    .instruccion{
+        margin-top:120px;
+    }
+    #u11296{
+        padding-top:0px;
+    }
+}
+
+@media only screen and (min-width:1270px) and (max-width: 1280px) and (min-height:750px) and (max-height: 800px) {
+    #imagen1{
+        display:none;
+    }
+    .anchoMax, .instruccion{
+        width:150%;
+        min-width:150%;
+    }
+    .indicaciones{
+        margin-left:20px;
+    }
+}
+
+@media only screen and (width: 1280px) and (height: 720px) {
+    .instruccion{
+        margin-top:-5px;
+    }
+    #u11296{
+        padding-top:0px;
+    }
+    #finalText{
+        margin-top:-10px;
+    }
+
+}
+
+@media only screen and (width: 1366px) and (height: 768px) {
+    #buttonu3602, #buttonu3608, #buttonu3572, #buttonu3566, #buttonu3596{
+        height:50px;
+        min-height:50px;
+        max-height:50px;
+    }
+    body{
+        
+    }
+    p, .parafo{
+        font-size:15px;
+    }
+    body, html{
+        overflow-y:hidden;
+    }
+    .instruccion{
+        margin-top:-15px;
+    }
+    #u11296{
+        padding-top:0px;
+    }
+    p{
+        font-size:10px;
+    }
+    #finalText{
+        margin-top:-15px;
+    }
+    p{
+        font-size:17px;
+    }
+    #imagen1{
+        min-height:120%;
+    }
+    #u3434{
+        width:120%;
+    }
+    #u3434_img{
+       max-height:120%;
+       min-height:120%;
+       
+    }
+}

@@ -1,0 +1,49 @@
+﻿@using Newtonsoft.Json
+@model ML.ClimaDinamico
+@{
+    Layout = "~/Views/ClimaDinamico/Layout.cshtml";
+    ViewBag.Title = "Introducción";
+}
+@{
+    var empleado = Convert.ToString(Session["EmpleadoEncuestado"]);
+    var encuesta = Convert.ToString(Session["EncuestaRealizar"]);
+    var baseDeDatos = Convert.ToString(Session["IdBaseDeDatos"]);
+    <script>
+        localStorage.setItem("idEmpleado", @Html.Raw(JsonConvert.SerializeObject(empleado)));
+        localStorage.setItem("idEncuesta", @Html.Raw(JsonConvert.SerializeObject(encuesta)));
+        localStorage.setItem("idBaseDeDatos", @Html.Raw(JsonConvert.SerializeObject(baseDeDatos)))
+   </script>
+    if (String.IsNullOrEmpty(empleado) || String.IsNullOrEmpty(encuesta))
+    {
+        <script>
+            $(document).ready(function () {
+                try {
+                    document.getElementsByClassName("busy")[0].classList.add("loadInvisible");
+                    document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
+                } catch (e) {
+
+                }
+            })
+            var redirectLogin = "http://" + window.location.href.split('/')[2] + "/ClimaDinamico/Login/?uid=" + localStorage.getItem("uid");
+            swal.fire("Tu sesión ha expirado, serás redireccionado al login", "", "info").then(function () {
+                window.location.href = redirectLogin;
+            });
+        </script>
+    }
+    else
+    {
+        
+        @Html.Raw(Model.htmlCodeIntroduccion)
+
+        <script>
+            $(document).ready(function () {
+                try {
+                    document.getElementsByClassName("busy")[0].classList.add("loadInvisible");
+                    document.getElementsByClassName("busy")[0].classList.remove("loadVisible");
+                } catch (e) {
+
+                }
+            })
+        </script>
+    }
+}

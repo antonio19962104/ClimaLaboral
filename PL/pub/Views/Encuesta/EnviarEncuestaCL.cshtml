@@ -1,0 +1,624 @@
+﻿@model ML.Encuesta
+@{
+    ViewBag.Title = "EnviarEncuestaCL";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<style>
+    #page-title {
+        position: relative !important;
+    }
+</style>
+@section H1
+    {
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Encuesta / <span>Configurar envío Clima Laboral</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        @*tabs*@
+                        <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                            <li id="firstTab" class="nav-item">
+                                <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="true">Configurar periodos</a>
+                            </li>
+                            <li id="secondTab" class="nav-item" @*style="display:none"*@>
+                                <a class="nav-link" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Enviar emails</a>
+                            </li>
+                        </ul>
+
+
+
+                                                
+                        <div class="tab-content" id="tabSurveyContent">
+                            <div class="tab-pane fade show active" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                                <div class="section-survey shadow-sm animated fadeInUp">
+                                    <div class="body-survey">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Elige la base de datos a la cual se hara la aplicación de la encuesta</label>
+                                                    <div class="col-md-6">
+                                                        <select class="form-control" id="listBD">
+                                                            <option value="0">Seleccionar</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Elige la Fecha de inicio para la aplicación</label>
+                                                    <div class="col-md-6">
+                                                        <input class="form-control" type="date" name="name" value="" id="FechaInicio" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Elige la Fecha de termino para la aplicación</label>
+                                                    <div class="col-md-6">
+                                                        <input class="form-control" type="date" name="name" value="" id="FechaFin" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label">Elige el periodo de aplicación al que pertenece</label>
+                                                    <div class="col-md-6">
+                                                        <input type="text" class="yearpicker" value="" id="periodo">
+                                                    </div>
+                                                </div>
+                                                <input type="submit" name="name" value="Guardar configuracion" onclick="SaveConfig()" class="btn btn-success" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="manag" role="tabpanel" aria-labelledby="conf-tab">
+                                <div class="section-survey shadow-sm animated fadeInUp">
+                                    <div class="body-survey">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <table class="table table-hover table-responsive" id="myTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" scope="col">IdEmpleado</th>
+                                                                <th class="text-center" scope="col">Nombre</th>
+                                                                <th class="text-center" scope="col">ApellidoPaterno</th>
+                                                                <th class="text-center" scope="col">ApellidoMaterno</th>
+                                                                <th class="text-center" scope="col">UnidadNegocio</th>
+                                                                <th class="text-center" scope="col">Email</th>
+                                                                @*<th class="text-center" scope="col">Enviar email</th>*@
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                 
+
+                                                @*<a onclick="swal('Los email han comenzado a enviarse', '', 'success');" href="@Url.Action("Send", "Encuesta")">*@
+                                                    <input type="submit" onclick="" data-toggle="modal" data-target="#modalEdit" name="name" value="Enviar Encuesta a todos" class="btn btn-success" />
+                                                @*</a>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+        <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div id="anchoModal" class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Configurar email de invitación</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <input type="hidden" name="name" value="" id="IdEncuestaEnviar" />
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Mensaje predeterminado para el envio de invitaciones</label>
+                            @Html.TextArea("txtDefaultEmail", new { @Value = " ", rows = "10", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor", @editable = "false", @id = "msgDefault" })
+                        </div>
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Personaliza tu email de invitación</label>
+                            <div class="form-group">
+                                <label class="control-label" style="font-weight:bold">El mensaje debe contener las palabras clave con los asteriscos como se muestra en el ejemplo del mensaje predeterminado</label>
+                                <label class="control-label" style="font-weight:bold">
+                                    *NombreUsuario*
+                                    *NombreEncuesta*
+                                    *FechaInicio*
+                                    *FechaFin*
+                                    *LinkEncuesta*
+                                    *ClaveAcceso*
+                                </label>
+                            </div>
+                            @Html.TextArea("txtCustomEmail", new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Instruccion", @class = "form-control input-lg textarea-editor", @id = "customEmail" })
+                        </div>
+                        <div class="md-form mb-5">
+                            <label class="control-label">Que mensaje deseas enviar</label>
+                            <div class="form-group">
+                                <input type="radio" name="opcion" value="default" /> <label>Mensaje por default</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="radio" name="opcion" value="custom" /> <label>Mi mensaje personalizado</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="return onSwal()" id="btnEditEmail" class="btn btn-outline-primary btn-block buttonAdd">
+                                Enviar emails
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+
+    #anchoModal {
+        min-width: 80%;
+    }
+</style>
+
+@*<script src="~/scripts/jquery-3.4.1.min.js"></script>*@
+
+
+
+@section Scripts
+{
+
+    <link href="~/css/summernote.min.css" rel="stylesheet" />
+<script src="~/scripts/summernote/bootstrap.js" type="text/javascript"></script>
+<script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+   
+<script src="~/scripts/jqueryBase642.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="~/scripts/swiper.min.js"></script>
+
+
+
+
+
+<script>
+    var periodoApp = 0;
+    function onSwal() {
+        var mensaje= '';
+        if ($('input:radio[name=opcion]:checked').val() == 'default') {
+            mensaje = '*NombreUsuario* *NombreEncuesta* *FechaInicio* *FechaFin* *LinkEncuesta* *ClaveAcceso*';
+        }
+        else if ($('input:radio[name=opcion]:checked').val() == 'custom') {
+            mensaje = $('#customEmail').val();
+        }
+
+        if ($('input:radio[name=opcion]:checked').val() == '' || $('input:radio[name=opcion]:checked').val() == null) {
+            swal('Debes elegir un mensaje a enviar', '', 'info');
+            return false;
+        }
+        else
+            if ($('input:radio[name=opcion]:checked').val() == 'custom' && mensaje == '') {
+                swal('El mensaje del email no puede estar vacio', '', 'info');
+                return false;
+            }
+
+                //Validar espacios dinamicos
+            else if (mensaje.includes('*NombreUsuario*') == false) {
+                swal('El mensaje del email debe contener el apartado para el nombre del detinatario', '', 'info');
+                return false;
+            }
+            else if (mensaje.includes('*NombreEncuesta*') == false) {
+                swal('El mensaje del email debe contener el apartado para el nombre de la Encuesta', '', 'info');
+                return false;
+            }
+            else if (mensaje.includes('*FechaInicio*') == false) {
+                swal('El mensaje del email debe contener el apartado para la fecha de Inicio', '', 'info');
+                return false;
+            }
+            else if (mensaje.includes('*FechaFin*') == false) {
+                swal('El mensaje del email debe contener el apartado para la fecha de Fin', '', 'info');
+                return false; 
+            }
+            else if (mensaje.includes('*ClaveAcceso*') == false) {
+                swal('El mensaje del email debe contener el apartado para la Clave de Acceso del usuario', '', 'info');
+                return false; 
+            }
+            else if (mensaje.includes('*LinkEncuesta*') == false) {
+                swal('El mensaje del email debe contener el apartado para el link de la Encuesta', '', 'info');
+                return false; 
+            }
+            
+
+            else {
+
+                //Pase Mensaje => base 64
+                var mensajeBase64 = $.base64.encode(reemplazarAcentos(mensaje));
+                
+                var IdBaseDeDatosOpen = $('#listBD').val();
+                var fechaInicio = $('#FechaInicio').val();
+                var fechaFin = $('#FechaFin').val();
+                var nombreBD = $( "#listBD option:selected" ).text();
+
+
+                //Confirm
+                swal({
+                    title: "Estas seguro de que quieres enviar la encuesta",
+                    text: "",
+                    icon: "info",
+                    buttons: [
+                      'No, cancelar!',
+                      'Si, estoy seguro!'
+                    ],
+                    dangerMode: false,
+                }).then(function (isConfirm) {
+                    if (isConfirm) {
+                        let model = {
+                            IdDatabase: IdBaseDeDatosOpen,
+                            fechaInicio: fechaInicio,
+                            fechaFin: fechaFin,
+                            nameBD: nombreBD,
+                            tipoMensaje: $('input:radio[name=opcion]:checked').val(),
+                            mensaje: mensajeBase64
+                        }
+                        $.ajax({
+                            url: '@Url.Action("Send")',
+                            type: 'POST',
+                            data: model,
+                            complete: function (Response) {
+                                if(Response.responseJSON == "success"){
+                                    swal({
+                                        title: "Los email han comenzado a enviarse. Se le notificará cuando este proceso haya terminado",
+                                        text: "",
+                                        type: "success",
+                                        icon: "success",
+                                    }).then(function () {
+                                        window.location.href = "/Encuesta/GetAll/";
+                                    });
+                                }
+                                else{
+                                    swal("Hubo un error al intentar enviar los emails", "", "warning");
+                                }
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+                });
+            }
+    }
+</script>
+
+<script>
+    function SendEmail() {
+        swal ({
+            title: "Procesando...",
+            text: "Espere...",
+            imageUrl: "",
+            icon: "/images/load.gif",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+        $('.swal-icon').addClass('load');
+        $('.load').css('width', '25%');
+        $('.load').css('height', '25%');
+        $('swal-button-container').css('display', 'none');
+
+        var IdBaseDeDatosOpen = $('#listBD').val();
+        var fechaInicio = $('#FechaInicio').val();
+        var fechaFin = $('#FechaFin').val();
+        var nombreBD = $( "#listBD option:selected" ).text();
+
+        let model = {
+            IdDatabase: IdBaseDeDatosOpen,
+            fechaInicio: fechaInicio,
+            fechaFin: fechaFin,
+            nameBD: nombreBD
+        }
+
+        $.ajax({
+            url: '@Url.Action("Send")',
+            type: 'POST',
+            data: model,
+            complete: function (Response) {
+                if(Response.responseJSON == "success"){
+                    swal({
+                        title: "Los email han comenzado a enviarse. Se le notificará cuando este proceso haya terminado",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        window.location.href = "/Encuesta/GetAll/";
+                    });
+                }
+                else{
+                    swal("Hubo un error al intentar enviar los emails", "", "warning");
+                }
+            }
+        });
+    }
+    function SaveConfig() {
+        document.getElementsByClassName("busy")[0].style.display = "block";
+        var IdBD = $('#listBD').val();
+        var fechaInicio = $('#FechaInicio').val();
+        var fechaFin = $('#FechaFin').val();
+        var pA = periodoApp;
+
+        if (IdBD == 0 || IdBD == null || IdBD == "" || fechaInicio == "" || fechaInicio == null ||
+            fechaFin == "" || fechaFin == null) 
+        {
+            swal("Debes llenar todos los campos", "", "warning");
+            return false;
+        }
+
+        if (fechaFin < fechaInicio || fechaInicio == fechaFin) {
+            swal("Comprueba las fechas de inicio y fin", "", "warning");
+            return false;
+        }
+
+        let model =
+            {
+                encuesta: { idEncuesta: 1 },
+                BaseDeDatos: { idBaseDeDatos: IdBD },
+                fechaInicio: fechaInicio,
+                fechaFin: fechaFin,
+                periodoAplicacion: pA
+            }
+        
+
+        $.ajax({
+            url: '@Url.Action("SaveConfifClimaLab")',
+            type: 'POST',
+            data: model,
+            complete: function (Response) {
+                document.getElementsByClassName("busy")[0].style.display = "none";
+                if (Response.responseJSON == "success") {
+                    swal({
+                        title: "La configuración se guardó con éxito, ahora puedes enviar los email a los encuestados",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        //$('#firstTab').css('display', 'none');
+                        $('#secondTab').css('display', 'block');
+                        ////prev manag
+                        //$('#prev').css('display', 'none');
+                        //$('#manag').css('display', 'block');
+                    });
+                }
+                else {
+                    swal("Ocurrió un error al guardar la configuración", "", "error");
+                }
+            }
+        });
+    }
+    function Download() {
+        window.location = "@Url.Action("DownloadLayout", "BD")";
+    }
+
+    /*$('.yearpicker').yearpicker({
+        onShow: null,
+        onHide: null,
+        onChange: function(value){
+            alert(value);
+        }
+    });*/
+
+    $(document).ready(function () {
+        $('.yearpicker').yearpicker();
+        $('.yearpicker').yearpicker({
+
+            // Initial Year
+            year: 2021,
+
+            // Start Year
+            startYear: null,
+
+            // End Year
+            endYear: null,
+
+            // Element tag
+            itemTag: 'li',
+
+            // Default CSS classes
+            selectedClass: 'selected',
+            disabledClass: 'disabled',
+            hideClass: 'hide',
+
+            // Custom template
+            template: 
+            '<div class="yearpicker-container">' +
+              '<div class="yearpicker-header">' +
+                  '<div class="yearpicker-prev" data-view="yearpicker-prev">&lsaquo;</div>' +
+                  '<div class="yearpicker-current" data-view="yearpicker-current">SelectedYear</div>' +
+                  '<div class="yearpicker-next" data-view="yearpicker-next">&rsaquo;</div>' +
+              '</div>' +
+              '<div class="yearpicker-body">' +
+                  '<ul class="yearpicker-year" data-view="years">' +
+                  '</ul>' +
+              '</div>' +
+          '</div>',
+        });
+        
+        $('#msgDefault').summernote('disable');
+        //var mensajeDefault = '<p><b>Que tal *NombreUsuario*<o:p></o:p></b></p><p>Has sido dado de alta dentro del portal de encuestas <b>Diagnostic4U.</b><o:p></o:p></p><p>Has sido elegido para contestar la encuesta: <b>*NombreEncuesta*</b> la cual estará activa desde el <b>*FechaInicio*</b> hasta el <b>*FechaFin*</b><o:p></o:p></p><p>Tu clave de acceso es la siguiente: <b>*ClaveAcceso*</b><o:p></o:p></p><p>Accede entrando a: *startUrl*<a href="http://www.diagnostic4u.com"><b>Diagnostic4U</b></a>*endUrl*<o:p></o:p></p><p></p><p><img border="0" id="_x0000_i1025" src="http://demo.climalaboral.divisionautomotriz.com/img/logo.png"><o:p></o:p></p>';
+        var mensajeDefault = '<p><b>Que tal *NombreUsuario*<o:p></o:p></b></p><p>Has sido dado de alta dentro del portal de encuestas <b>Diagnostic4U.</b><o:p></o:p></p><p>Has sido elegido para contestar la encuesta: <b>*NombreEncuesta*</b> la cual estará activa desde el <b>*FechaInicio*</b> hasta el <b>*FechaFin*</b><o:p></o:p></p><p>Tu clave de acceso es la siguiente: <b>*ClaveAcceso*</b><o:p></o:p></p><p>Accede entrando a: <b>*LinkEncuesta*<a href="http://www.diagnostic4u.com/Encuesta/e/?u=E7832E0B-9995-4B90-AC41-9D06E835F276"></b></a><o:p></o:p></p><p></p><p><img border="0" id="_x0000_i1025" src="http://demo.climalaboral.divisionautomotriz.com/img/logo.png"><o:p></o:p></p>';
+        $("#msgDefault").summernote("code", mensajeDefault);
+    })
+    $(document).ready(function () {
+        $('#secondTab').css('display', 'none');
+        $.ajax({
+            url: '@Url.Action("GetBDCL")',
+            data: 1,
+            complete: function (Response) {
+                if(Response.responseJSON.length > 0){
+                    for (var i = 0; i < Response.responseJSON.length; i++) {
+                        //alert(Response.responseJSON[i].Nombre);
+                        $('#listBD').append(
+                            '<option value="' + Response.responseJSON[i].IdBaseDeDatos + '">' + Response.responseJSON[i].Nombre + '</option>'
+                            );
+                    }
+                }
+                else {
+                    swal("No existen bases de datos para clima laboral", "", "warning");
+                }
+            }
+        });
+        var error = @Session["errorEmail"];
+        if (error == 0) {
+            //Nada
+        }
+        else if (error == 1) {
+            swal("Ocurrió un error al enviar los emails", "", "warning");
+        }
+        else if (error == 2) {
+            swal({
+                title: "Los email se enviaron con éxito",
+                text: "",
+                type: "success",
+                icon: "success",
+            }).then(function () {
+                window.location.href = '/Encuesta/GetAll/';
+            });
+        }
+
+        $('#listBD').change (function () {
+            $('tbody tr').remove();
+            var value = $('#listBD').val();
+            if (value == 0 || value == null || value == "") {
+                //Set not value input date
+                $('#FechaInicio').val('dd-mm-yyyy');
+                $('#FechaFin').val('dd-mm-yyyy');
+                return false;
+            }
+            swal ({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            var IdBaseDeDatosOpen = $('#listBD').val();
+
+            let model = { 
+                IdDatabase: IdBaseDeDatosOpen
+            }
+
+            $.ajax({
+                url: 'GetFechasByBD',
+                type: 'GET',
+                data: model,
+                complete: function (Response) {
+                    swal.close();
+                    if(Response.responseJSON.length > 0){
+                        console.log(Response.responseJSON);
+
+                        var fechaInicio = Response.responseJSON[0].InicioEncuesta;
+                        var fechaFin = Response.responseJSON[0].FinEncuesta;
+                        //** 20/04/2020
+                        var diaI = fechaInicio.substring(0, 2);
+                        var mesI = fechaInicio.substring(3, 5);
+                        var anioI = fechaInicio.substring(6, 10);
+                        var valueInicio = anioI + '-' + mesI + '-' + diaI;
+
+                        var diaF = fechaFin.substring(0, 2);
+                        var mesF = fechaFin.substring(3, 5);
+                        var anioF = fechaFin.substring(6, 10);
+                        var valueFin = anioF + '-' + mesF + '-' + diaF;
+                        
+                        swal('Estos son los periodos asignados para esta base de datos, si deseas puedes actualizarlos o puedes proceder y enviar los email a los encuestados', '', 'info');
+                        $('#FechaInicio').val(valueInicio);
+                        $('#FechaFin').val(valueFin);
+
+                        
+                        //swal.close();
+                        //swal('Si no deseas hacer algun cambio puedes enviar los email a los encuestados', '', 'info');
+                        $('#secondTab').css('display', 'block');
+                    }
+                    else{
+                        swal('Esta base de datos aún no tiene asignado un periodo', 'Si deseas puedes asignarlo en este momento', 'info');
+                    }
+                }
+            });
+
+            $.ajax({
+                url: 'GetEmpleadoByIdDatabase',
+                data: model,
+                complete: function (Response) {
+                    if(Response.responseJSON.length > 0){
+                        //Remove datatable
+                        //$('#myTable').DataTable().destroy();
+                        $('tbody tr').remove();
+                        for (var i = 0; i < Response.responseJSON.length; i++) {
+                            $('tbody').append(
+                                '<tr>' +
+                                '<td class="text-center">' + Response.responseJSON[i].IdEmpleado + '</td>' +
+                                '<td class="text-center">' + Response.responseJSON[i].Nombre + '</td>' +
+                                '<td class="text-center">' + Response.responseJSON[i].ApellidoPaterno + '</td>' +
+                                '<td class="text-center">' + Response.responseJSON[i].ApellidoMaterno + '</td>' +
+                                '<td class="text-center">' + Response.responseJSON[i].UnidadNegocio + '</td>' +
+                                '<td class="text-center">' + Response.responseJSON[i].Correo + '</td>' +
+                                //'<td class="text-center"><input onclick="emailIndiv(this)" type="submit" class="btn btn-success" id="'+ Response.responseJSON[i].Correo +'"></td>' +
+                                '</tr>'
+                                );
+                        }
+                        //$('#myTable').DataTable();
+                    }
+                    else{
+                        console.log('No hay empleados');
+                    }
+                }
+            });
+
+        });
+
+    });
+    function emailIndiv(e) {
+        console.log(e);
+        var emailTo = e.id;
+        alert('Email enviado...');
+    }
+    var reemplazarAcentos = function (cadena) {
+        if (cadena != "" && cadena != null) {
+            var chars = {
+                "á": "&aacute;", "é": "&eacute;", "í": "&iacute;", "ó": "&oacute;", "ú": "&uacute;",
+                "à": "&aacute;", "è": "&eacute;", "ì": "&iacute;", "ò": "&oacute;", "ù": "&uacute;", "ñ": "n",
+                "Á": "&Aacute;", "É": "&Eacute;", "Í": "&Iacute;", "Ó": "&Oacute;", "Ú": "&Uacute;",
+                "À": "&Aacute;", "È": "&Eacute;", "Ì": "&Iacute;", "Ò": "&Oacute;", "Ù": "&Uacute;", "Ñ": "N"
+            }
+            var expr = /[áàéèíìóòúùñ]/ig;
+            var res = cadena.replace(expr, function (e) { return chars[e] });
+        }
+        else {
+            res = "";
+        }
+        return res;
+    }
+</script>
+<link href="~/css/yearpicker.css" rel="stylesheet" />
+<script src="~/scripts/yearpicker.js"></script>
+}

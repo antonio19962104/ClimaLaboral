@@ -1,0 +1,62 @@
+﻿@using Newtonsoft.Json;
+@{
+    ViewBag.Title = "ConfigurarEmails";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script>
+    var modelEmailsEncuesta = @Html.Raw(JsonConvert.SerializeObject(new ML.EmailsEncuesta()));
+</script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/Clima Dinamico/encuesta.js"></script>
+<script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+<link href="~/css/summernote.min.css" rel="stylesheet" />
+<div class="content-wrap" ng-app="app" ng-controller="encuestaController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <label class="control-label">Configura el envío de emails</label>
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Elige la encuesta</label>
+                        <select class="form-control" ng-model="vm.encuesta" required>
+                            <option>-Selecciona-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Elige la base de datos</label>
+                        <select class="form-control" ng-model="vm.baseDeDatos" required>
+                            <option>-Selecciona-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Asunto del email</label>
+                        <input type="text" class="form-control" ng-model="vm.asunto" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Prioridad</label>
+                        <input type="radio" name="prioridad" value="0" id="rp-0" ng-model="vm.prioridad" /><label for="rp-0"> Normal</label>
+                        <input type="radio" name="prioridad" value="1" id="rp-1" ng-model="vm.prioridad" /><label for="rp-1"> Baja</label>
+                        <input type="radio" name="prioridad" value="2" id="rp-2" ng-model="vm.prioridad" /><label for="rp-2"> Alta</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
+                        <label class="control-label">Mensaje</label>
+                        <textarea id="email-message" ng-model="vm.template"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <input type="submit" name="name" value="Enviar" class="btn btn-success" ng-click="vm.sendEmails()" /><i class="fas fa-email"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

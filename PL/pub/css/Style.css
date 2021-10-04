@@ -1,0 +1,328 @@
+﻿@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+html, body {
+    color: white;
+    font-family: 'Opens Sans',helvetica;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+.text {
+    position: relative;
+    top: 67%;
+    /*margin-top:40%;*/
+    padding: 10px;
+    /*background: rgba(0,0,0,0.5);*/
+    display: inline-block;
+}
+
+.logoCL {
+    width: 25%;
+    height: auto;
+    position: relative;
+    opacity: 1;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.headerSuperior {
+    color: #000080;
+    opacity: 0.8;
+    height: 100px;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    position: absolute;
+    background-color: #000080;
+    justify-content: center;
+}
+
+.footer {
+    color: #000080;
+    opacity: 0.8;
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    background-color: #000080;
+    bottom: 0;
+    z-index:2500;
+}
+
+.imgFotter {
+    opacity: 0.5;
+    height: 25px;
+    width: auto;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 0px;
+    margin-right: auto;
+}
+
+.divtxtClave {
+    border-radius: 5px;
+    z-index: 15;
+    background-color: #ffffff;
+    opacity: 1;
+    height: 50px;
+    width: 300px;
+    position: relative;
+    font-family: Open Sans;
+    font-weight: bold;
+    font-size: 30px;
+    margin-top: 0px;
+    margin-left: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+.txtClave {
+    color: #999999; /*colortexto*/
+    text-align: center;
+    border-radius: 5px;
+}
+
+.divBtnIngresar {
+    border-radius: 5px;
+    z-index: 10;
+    background-color: #29A8DF;
+    opacity: 1;
+    height: 50px;
+    width: 300px;
+    position: absolute;
+    font-family: Open Sans;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.btnIngresar {
+    background-color: transparent;
+    border: none;
+    color: #ffffff; /*colortexto*/
+    width: 100%;
+    min-width: 100%;
+}
+
+.divBtnEmail {
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 60px;
+    background-color: #000000;
+    opacity: 0.7;
+    height: 50px;
+    width: 300px;
+    position: absolute;
+    font-family: Open Sans;
+    font-size: 15px;
+}
+
+.btnEmail {
+    border: none;
+    background-color: #000000;
+    opacity: 1;
+    color: #ffffff;
+    margin-top: 12px;
+}
+@media only screen and (min-width: 1501px) and (max-width:2000px) {
+    .portada {
+        background: url('../images/1 Background image.jpg') no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+    .logoCL{
+        width:27%;
+    }
+    #portadaIMG{
+        display:none;
+    }
+}
+@media only screen and (width: 1024px) and (height: 600px) {
+    .text{
+        top:60%;
+    }
+}
+
+@media only screen and (min-width: 1200px) and (max-width:1500px) {
+    .portada {
+        background: url('../images/1 Background image.jpg') no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+    .logoCL{
+        width:35%;
+    }
+    #portadaIMG{
+        display:none;
+    }
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1199px) {
+    .portada {
+        background: url('../images/1 Background image.jpg') no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+    .logoCL{
+        width:40%;
+    }
+    #portadaIMG{
+        display:none;
+    }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    .portada {
+        background: url('../images/1 Background image.jpg') no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+    .logoCL{
+        width:50%;
+    }
+    #portadaIMG{
+        display:none;
+    }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 768px) and (orientation:portrait) {
+    .portada {
+        background: url('../images/1 Background image.jpg') no-repeat fixed center;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+    }
+    #portadaIMG{
+        display:none;
+    }
+    .logoCL{
+        width:65%;
+    }
+}
+
+@media only screen and (max-width: 600px) and (orientation:portrait) {
+    html, body{
+        height:auto;
+    }
+    .portada {
+        background: url(''); 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height:0px;
+        width: 100%;
+        text-align: center;
+    }
+    #portadaIMG{
+        margin-top:-15%;
+        display:block;
+        background-size:cover;
+        text-align:center;
+        -webkit-background-size:cover;
+        -moz-background-size:cover;
+    }
+    .logoCL {
+        width: 75%;
+    }
+    div.text{
+        z-index:5000;
+        position:relative;
+        top:520px;
+    }
+    .headerSuperior{
+        position:fixed;
+    }
+    .footer{
+        position:fixed;
+    }
+    
+}
+
+@media only screen and (max-width: 800px) and (orientation:landscape) {
+    .portada {
+        background: url('../images/1 Background image.jpg'); 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        height:100%;
+        width: 100%;
+        text-align: center;
+    }
+    #portadaIMG{
+        display:none;
+    }
+    .logoCL {
+        width: 45%;
+        margin-top:10px;
+    }
+
+    .divtxtClave{
+        left:-105px;
+        margin-top:-45px;
+    }
+    .divBtnIngresar{
+        margin-left:200px;
+        margin-top:-50px;
+        width:200px;
+    }
+    .divBtnEmail{
+        margin-top:5px;
+    }
+    .headerSuperior{
+        height:100px;
+    }
+    .footer{
+        height:45px;
+    }
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 568px) and (orientation : portrait) {
+    .text{
+        margin-top:100px;
+    }
+}
+
+@media only screen and (max-width: 1366px) and (max-height: 768px) {
+    .text{
+        top:65%;
+    }
+}
+
+
+
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+
+}

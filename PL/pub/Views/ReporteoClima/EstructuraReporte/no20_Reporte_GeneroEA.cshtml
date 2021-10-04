@@ -1,0 +1,194 @@
+﻿<div class="content-wrap">
+    <div ng-if="vm.enfoqueSeleccionado != 0" id="tab-genero-ea" class="container-fluid px-lg-5">
+        <p class="mb-n1">Resultado General</p>
+        <h2 class="robotothin mb-2 mt-n1">Reporte por Género Enfoque Área <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="px-4">
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-trabajar">
+                                <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
+                                    <div class="col px-0 px-sm-1 bar-estandarW" ng-repeat="item in vm.ComparativoGeneroEA">
+                                        <center>
+                                            <p hidden>{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 1) }}%</p>
+                                            <img @*src="~/img/ReporteoClima/sol-icono.svg"*@ ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>
+                                            <div class="bar-clasificacion" style="overflow:hidden;height: {{ item.Porcentaje * 2.7 }}px;">
+                                                <div class="bar-progress-clasificacion" style="height: 0px;">
+                                                </div>
+                                                <p ng-hide="!vm.hasHistorico" class="comparativo" @*style="bottom: 25%;"*@>{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 1) }}%</p>
+                                                <p class="label-top-graphic-blue2" style="margin-top: {{ vm.setMargin(vm.CrearHC(item.HC, vm.ComparativoGeneroEA, 2), 2, item.Porcentaje) }}px;">{{ item.HC }}</p>
+                                                <div class="bar-progress4" style="height: {{ vm.CrearHC(item.HC, vm.ComparativoGeneroEA, 2) }}px;">
+                                                </div>
+                                            </div>
+                                            <p class="text-graph">{{ item.Entidad }}</p>
+                                        </center>
+                                    </div>
+                                    <div class="col px-0 px-sm-1 bar-estandarW bar-hidePdf" style="min-width: 0px !important;max-width: 0px !important;">
+                                        <center>
+                                            <img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
+                                            <p class="label-top-graphic-clasificacion">.</p>
+                                            <div class="bar-clasificacion" style="overflow:hidden;height: {{ 100 * 2.7 }}px;">
+                                                <div class="bar-progress-clasificacion" style="height: 0px;">
+                                                </div>
+                                                <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">.</p>
+                                                <p class="label-top-graphic-blue2" style="margin-top:{{ 100 * 1.7 }}px;">.</p>
+                                                <div class="bar-progress4" style="height: {{ 100 * 2.7 }}px;">
+                                                </div>
+                                            </div>
+                                            <p class="text-graph">.</p>
+                                        </center>
+                                    </div>
+
+                                </div><!--.row-->
+
+                                <div ng-if="vm.enfoqueSeleccionado == 2 && vm.resumenDemo == true" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                    <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;">TOTAL</p>
+                                    <img style="margin-left: -2rem;" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[1]) }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ vm.PorcentajeCalificacionGlobal[1] }}%</span>
+                                    <p style="margin-bottom: -20px;"></p>
+                                    <small style="color: blue;margin-left: 50px;">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
+
+                            </div><!--.graph-wrapper-->
+
+                        </div><!--.row-->
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <center>
+                                <div ng-show="vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                    </div>
+                                </div>
+                                <div ng-show="!vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                        <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="col-12 p-0 m-0">
+                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="clearfix my-5">
+    </div><!--.container-->
+    <!-- Agrupar enfoques -->
+    <div ng-if="vm.enfoqueSeleccionado == 0" id="tab-genero-ea" class="container-fluid px-lg-5">
+        <p class="mb-n1">Resultado General</p>
+        <h2 class="robotothin mb-2 mt-n1">Reporte por Género<span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
+        <div class="card">
+            <div class="card-block">
+                <div class="px-4">
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="graph-wrapper grafica-trabajar">
+                                <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
+                                    <!-- Agrupado -->
+                                    <div agrupado class="col px-2" ng-repeat="item in vm.ComparativoGeneroEA track by $index">
+                                        <center>
+                                            <div class="row px-2 position-relative">
+                                                <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                                    <img ng-src="{{ vm.setIconoSVG(vm.ComparativoGeneroEE[$index].Porcentaje) }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                    <p class="label-top-graphic-clasificacion" style="width: 80%;z-index:1;position:relative;">{{ vm.ComparativoGeneroEE[$index].Porcentaje }}%</p>
+                                                    <div class="bar-clasificacion" style="width:80%;">
+                                                        <div class="bar-progress-clasificacion" style="height: {{ vm.ComparativoGeneroEE[$index].Porcentaje * 2.7 }}px;">
+                                                            <p ng-hide="!vm.hasHistorico" class="comparativo">{{ vm.getDiferenciaGralEE(item.Entidad, vm.ComparativoGeneroEE[$index].Porcentaje, 1) }}%</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                                    <img src="img/sol-icono.svg" ng-src="{{ vm.setIconoSVG(vm.ComparativoGeneroEA[$index].Porcentaje) }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                    <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;z-index:1;position:relative;">{{ vm.ComparativoGeneroEA[$index].Porcentaje }}%</p>
+                                                    <div class="bar-clasificacion" style="width: 80%;">
+                                                        <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ vm.ComparativoGeneroEA[$index].Porcentaje * 2.7 }}px;">
+                                                            <p ng-hide="!vm.hasHistorico" class="comparativo">{{ vm.getDiferenciaGralEA(item.Entidad, vm.ComparativoGeneroEA[$index].Porcentaje, 1) }}%</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="hc" style="margin-top: {{ vm .setMargin(vm.CrearHC(item.HC, vm.ComparativoGeneroEE)) }}px">
+                                                <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px;">{{ item.HC }}</p>
+                                                <div class="bar-progress4 hc-doble" style="height:{{ vm.CrearHC(item.HC, vm.ComparativoGeneroEE) }}px; width: 42px;"></div>
+                                            </div>
+                                            <p class="text-graph  entidad-nombre">{{ item.Entidad }}</p>
+                                        </center>
+                                    </div>
+
+                                </div><!--.row-->
+
+                                <div ng-if="vm.enfoqueSeleccionado == 0 && vm.resumenDemo == true" class="contenedor-resumen">
+                                    <p class="txt-total">TOTAL</p>
+                                    <div class="images-resumen center-vertically">
+                                        <!-- IMG EE -->
+                                        <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[0]) }}" width="60" height="50">
+                                        <!-- IMG EA -->
+                                        <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobal[1]) }}" width="60" height="50">
+                                    </div>
+                                    <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ vm.PorcentajeCalificacionGlobal[0] }}%</span>
+                                    <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ vm.PorcentajeCalificacionGlobal[1] }}%</span>
+                                    <p style="margin-bottom: 0px;"></p>
+                                    <small class="head-count-resumen">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
+
+                            </div><!--.graph-wrapper-->
+
+                        </div><!--.row-->
+
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <center>
+                                <div ng-show="vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px; height: 25px; background: #f0af43; margin-top: 10px; float: left; "></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EE.</div>
+                                        <div style="width: 25px; height: 25px; background: #5dc3ce; margin-top: 10px; float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EA.</div>
+                                        <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                    </div>
+                                </div>
+                                <div ng-show="!vm.hasHistorico" class="col-12">
+                                    <div class="row justify-content-center">
+                                        <div style="width: 25px; height: 25px; background: #f0af43; margin-top: 10px; float: left; "></div>
+                                        <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                        <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EE.</div>
+                                        <div style="width: 25px; height: 25px; background: #5dc3ce; margin-top: 10px; float: left;"></div>
+                                        <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM. GRAL. EA.</div>
+                                    </div>
+                                </div>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="col-12 p-0 m-0">
+                            <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="clearfix my-5">
+    </div><!--.container-->
+
+</div><!--.content-wrap-->

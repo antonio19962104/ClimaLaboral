@@ -1,0 +1,139 @@
+﻿<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js" integrity="sha384-3qaqj0lc6sV/qpzrc1N5DC6i1VRn/HyX4qdPaiEFbn54VjQBEU341pvjz7Dv3n6P" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+<link href="~/css/StyleModal.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+@model ML.Result
+<div class="modal" aria-hidden="true" tabindex="-1" style="display: none;" id="myModal">
+    <div class="modal-dialog" style="width:60%; max-width:60%; height:auto">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>-->
+                <h4 class="modal-title" style="font-weight:bold;">Búsqueda de nuevo administrador</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group note-group-select-from-files">
+                    <label>Realiza la búsqueda tomando alguno de los criterios</label>
+                    <!--Items-->
+                    <form action="/Administrador/SearchOpen" method="post">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(model => model.Empleado.Nombre, new { @class = "control-label" })
+                                    <input type="text" name="Empleado_Nombre" id="Empleado_Nombre" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(model => model.Empleado.ApellidoPaterno, new { @class = "control-label" })
+                                    <input type="text" name="Empleado_ApellidoPaterno" id="Empleado_ApellidoPaterno" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(model => model.Empleado.ApellidoMaterno, new { @class = "control-label" })
+                                    <input type="text" name="Empleado_ApellidoMaterno" id="Empleado_ApellidoMaterno" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <input type="submit" value="Buscar" class="btn btn-success" style="text-decoration:none;" />
+                    </form>
+                    <p style="font-weight:bold; color:red">@ViewBag.Mensaje</p>
+
+                    <!--Table result-->
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        <table id="myTable" class="table table-hover table-responsive">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        Nombre
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        UNegocio
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Division
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Area
+                                    </th>
+                                    <th class="text-center" scope="col" style="display:none;">
+                                        Depto
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Elegir
+                                    </th>
+                                </tr>
+                            </thead>
+                            @*SI NO HAY RESULTADOS VALIDAR ESTO PARA QUE NO HAYA EXCEPCION*@
+                            @foreach (ML.Empleado emp in Model.Objects)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @emp.Nombre @emp.ApellidoPaterno @emp.ApellidoMaterno
+                                    </td>
+                                    <td class="text-center">
+                                        @emp.UnidadNegocio
+                                    </td>
+                                    <td class="text-center">
+                                        @emp.DivisonMarca
+                                    </td>
+                                    <td class="text-center">
+                                        @emp.AreaAgencia
+                                    </td>
+                                    <td class="text-center" style="display:none;">
+                                        @emp.Depto
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("AddWithNameAdmin", "Administrador", new { NombreAdmin = @emp.Nombre + " " + @emp.ApellidoPaterno + " " + @emp.ApellidoMaterno, IdEmpleadoForNewAdmin = @emp.IdEmpleado } )" title="Edit">
+
+                                            <input type="submit" name="name" value="Elegir" class="btn btn-danger" />
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                        </div>
+
+                    </div>
+            </div>
+
+            <div class="modal-footer">
+                <a href="@Url.Action("Add", "Administrador")">
+                    <input type="submit" name="name" value="Cerrar" class="btn btn-danger" />
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+
+    $('#myModal').modal();
+</script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />

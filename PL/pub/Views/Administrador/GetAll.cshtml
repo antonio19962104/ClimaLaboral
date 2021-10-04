@@ -1,0 +1,348 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "GetAll";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+}
+
+
+@*<section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <img class="img-fluid" src="~/img/icon-users.png"  /><h1 class="title-page-survey">Usuarios / <span>Listado</span></h1>
+        </div>
+    </section>*@
+<style>
+    #page-title {
+        position: relative !important;
+    }
+</style>
+@section H1
+    {
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-users.png"> <h1 class="title-page-survey">Usuarios / <span>Listado</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div id="start" class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        <input type="submit" name="name" value="Reenviar" class="email btn btn-danger" onclick="POSTreenviarEmailFromList()" />
+                        <table id="tableAdmin" class="table table-hover table-responsive">
+                            <caption>Lista de usuarios</caption>
+                            <caption><a title="Reenvia email con claves de acceso a los administradores activos" href="" onclick="ReenviarEmailMasivo()" class="btn btn-success"><i class="fas fa-mail-bulk"></i> Reenviar email masivo</a></caption>
+                            <caption><a title="" href="#" onclick="reenviarEmailFromList()" class="btn btn-success"><i class="fas fa-mail-bulk"></i> Elegir usuarios para reenviar email</a></caption>
+
+                            @{
+                                ViewBag.Permisos = Session["Permisos"];
+
+                                foreach (ML.PerfilModulo item in ViewBag.Permisos)
+                                {
+                                    if (item.Modulo.Nombre == "Usuarios" && item.PerfilModuloAccion.Accion == "CrearUsuario")
+                                    {
+                                        <caption><a href="@Url.Action("Add", "Administrador")" class="btn btn-primary btn-add-template"><i class="fas fa-plus"></i> Agregar usuario</a></caption>
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+                            }
+
+
+
+                            <thead>
+                                <tr>
+                                    <th class="email text-center" scope="col">
+                                        <strong>Elegir</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Nombre</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Perfil</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        Email
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Estatus</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Eliminar</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Ver/Editar permisos</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Reenviar correo</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Administrador admin in Model.Objects)
+                                {
+                                    <tr>
+                                        <td class="email text-center">
+                                            <input type="checkbox" name="name" value="@admin.IdAdministrador" class="chkEmail" />
+                                        </td>
+                                        <td class="text-center">
+                                            @admin.Empleado.Nombre @admin.Empleado.ApellidoPaterno @admin.Empleado.ApellidoMaterno
+                                        </td>
+                                        <td class="text-center">
+                                            @admin.PerfilD4U.Descripcion
+                                        </td>
+                                        <td class="text-center">
+                                            <button data-toggle="modal" data-target="#modalEdit" onclick="$('#txtNewEmail').val(''); $('#txtNewEmail').val($(this).text());   $('#txtIdAdmin').val(''); $('#txtIdAdmin').val(@admin.IdAdministrador);" class="btn btn-secondary btn-action"><i class="fas fa-pencil-square-o"></i> @admin.UserName</button>
+                                        </td>
+                                        <td class="text-center">
+                                            @if (admin.TipoEstatus.IdEstatus == 1)
+                                            {
+                                                <a href="@Url.Action("UpdateEstatus", "Administrador", new { IdAdministrador = admin.IdAdministrador, IdentificadorEstatus = admin.TipoEstatus.IdEstatus } )">
+                                                    <button title="Cambia el estatus del administrador a Desactivado" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-check"></i> Activo</button>
+                                                </a>
+                                            }
+                                            else if (admin.TipoEstatus.IdEstatus == 2)
+                                            {
+                                                <a href="@Url.Action("UpdateEstatus", "Administrador", new { IdAdministrador = admin.IdAdministrador, IdentificadorEstatus = admin.TipoEstatus.IdEstatus } )" title="">
+                                                    <button title="Cambia el estatus del administrador a Activo" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-ban"></i> Desactivado</button>
+                                                </a>
+                                            }
+                                        </td>
+                                        <th>
+                                            <a href="@Url.Action("DeleteUsuario", "Administrador", new { IdAdministrador = admin.IdAdministrador } )" title="">
+                                                <button title="Cambia el estatus del administrador a Eliminado" type="button" class="btn btn-secondary btn-action estatus"><i class="fas fa-trash-alt"></i> Eliminar</button>
+                                            </a>
+                                        </th>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("GetPermisosByIdAdmin", "Administrador", new { IdAdministrador = @admin.IdAdministrador, ID_EMPLEADO_FOR_UPDATE_PERMISOS = admin.Empleado.IdEmpleado } )" title="Consulta y edita los permisos asignados al administrador">
+                                                <button type="button" class="btn btn-secondary btn-action"><i class="fas fa-list"></i> Ver/Editar permiso</button>
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="@Url.Action("ReenviarEmail", "Administrador", new { IdAdministrador = admin.IdAdministrador } )" title="Reenvia el email con las claves de acceso del administrador">
+                                                <button type="button" class="btn btn-secondary btn-action"><i class="fas fa-mail-bulk"></i> Reenviar email</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+        <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Actualizar email del usuario</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Ingresa el nuevo email para el usuario</label>
+                            <input hidden type="text" name="name" value="" id="txtIdAdmin" />
+                            <input placeholder="Ingresa el nuevo email para el usuario" type="text" id="txtNewEmail" onkeyup="validarRealTime(this);" class="form-control validate">
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="postEditUsername()" id="btnEditEmail" class="btn btn-outline-primary btn-block buttonAdd">
+                                Guardar cambios
+                                <i class="fas fa-pencil-square-o ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+</style>
+<script>
+    //ValidarNewEmail
+    function validarRealTime(e){
+        var regExpEmail = /^(([^<>()[\]\.,;:\s@@\"]+(\.[^<>()[\]\.,;:\s@@\"]+)*)|(\".+\"))@@(([^<>()[\]\.,;:\s@@\"]+\.)+[^<>()[\]\.,;:\s@@\"]{2,})$/i;
+
+        var idItem = '#' + e.id;
+        var classSpan = e.id;
+        var texto = $(idItem).val();
+        var PadreDiv = e.parentNode;
+
+        if (!regExpEmail.test(texto)) {
+            $('.' + classSpan).remove();
+            $(PadreDiv).append('<span class="'+classSpan+' error" style="color:red">Por favor ingrese un correo válido</span>');
+            $('#btnEditEmail').prop('disabled', true);
+        }else{
+            $('.' + classSpan).remove();
+            $('#btnEditEmail').prop('disabled', false);
+        }
+    }
+    function postEditUsername() {
+        var newUserName = $('#txtNewEmail').val();
+        newUserName = newUserName.trim();
+        var idAdmin = $('#txtIdAdmin').val();
+
+        let model = { 
+            userName: newUserName,
+            idAdministrador: idAdmin
+        }
+        $.ajax({
+            url: '@Url.Action("EditUsername")',
+            type: 'POST',
+            data: model,
+            complete: function (Response) {
+                if(Response.responseJSON == "success"){
+                    swal({
+                        title: "El email del usuario se ha actualizado con éxito, este será su nuevo username para accesar a la plataforma",
+                        text: "",
+                        type: "success",
+                        icon: "success",
+                    }).then(function () {
+                        window.location.reload(true);
+                    });
+                }
+                else{
+                    swal("El Email del usuario no pudo ser actualizado", "", "info");
+                }
+            }
+        });
+
+    }
+</script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+
+        <script src="~/scripts/jquery-1.8.3.min.js"></script>
+        <script>
+            function ReenviarEmailMasivo() {
+
+                swal ({
+                    title: "Los email se estan enviando...",
+                    text: "Espere...",
+                    imageUrl: "",
+                    icon: "/images/load.gif",
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    buttons: false
+                });
+                $('.swal-icon').addClass('load');
+                $('.load').css('width', '25%');
+                $('.load').css('height', '25%');
+                $('swal-button-container').css('display', 'none');
+
+                $.ajax({
+                    url: '@Url.Action("EmailMasivo", "Administrador")',
+                    type: 'POST',
+                    //data: 1, traditional: true,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (Response) {
+                        swal("El envío de email se ha realizado con éxito", "", "success");
+                    },
+                    complete: function (Response) {
+                        swal("El envío de email se ha realizado con éxito", "", "success");
+                    }
+                });
+
+            }
+        </script>
+
+        <script>
+            function reenviarEmailFromList() {
+                $('.email').css('display', 'block');
+                swal("Elige a los usuarios que les deseas reenviar el email y al terminar da click en el botón reenviar", "", "info");
+            }
+
+            function POSTreenviarEmailFromList() {
+                var yourArray = [];
+                //var myVar = $("#start").find('.chkEmail').val();
+                $("#start").find(".chkEmail").each(function(){
+
+                    //var myVar = $("#start").find('.chkEmail').val();
+                    if ($(this). is(":checked")) {
+                        yourArray.push($(this).val());
+                    }
+
+
+                });
+                console.log(yourArray);
+
+                let modelAdmin = { listId: yourArray };
+                var json = JSON.stringify(modelAdmin);
+
+                swal ({
+                    title: "Los email se estan enviando...",
+                    text: "Espere...",
+                    imageUrl: "",
+                    icon: "/images/load.gif",
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    buttons: false
+                });
+                $('.swal-icon').addClass('load');
+                $('.load').css('width', '25%');
+                $('.load').css('height', '25%');
+                $('swal-button-container').css('display', 'none');
+
+                $.ajax({
+                    url: '@Url.Action("EmailMasivoFromList", "Administrador")',
+                    type: 'POST',
+                    data: json,
+                    contentType: 'application/json; charset=utf-8',
+                    complete: function (Response) {
+                        swal("El envío de email se ha realizado con éxito", "", "success");
+                    }
+                });
+
+            }
+
+            $(document).ready (function(){
+                $('.email').css('display', 'none');
+                $('#tableAdmin').DataTable();
+                var errorEmail = @Session["errorEmail"];
+                if (errorEmail != 0) {
+                    swal("Ha ocurrido un error al reenviar el email", "", "error");
+                }
+            });
+
+
+
+
+            $(document).ready(function () {
+
+                var Confirm = @Session["confirm"];
+                if (Confirm == 3) {
+                    swal("El email se ha reenviado", "", "success");
+                    //De aqui redirecciionar al getall normal no al aux
+                }
+
+
+            });
+        </script>

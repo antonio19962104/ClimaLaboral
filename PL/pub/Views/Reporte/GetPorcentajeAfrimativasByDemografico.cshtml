@@ -1,0 +1,539 @@
+﻿@*Consulta*@
+@{
+    ViewBag.Title = "GetPorcentajeAfrimativasByDemografico";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+
+<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img class="img-fluid" src="~/img/icon-reports.png"> <h1 class="title-page-survey">Reporte de porcentaje de respuestas afirmativas por demográfico</h1>
+    </div><!--.container-fluid-->
+</section>
+
+<section id="content">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+
+                        <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
+                            <p>Elige una de las opciones para ver el reporte</p>
+                            <select id="options" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una opcion</option>
+                                <optgroup label="Empleado">
+                                    <option value="1">Antiguedad</option>
+                                    <option value="2">Rango de edad</option>
+                                    <option value="3">Condicion de trabajo</option>
+                                    <option value="4">Sexo</option>
+                                    <option value="5">Grado académico</option>
+                                    <option value="6">Función</option>
+                                </optgroup>
+                                <optgroup label="Estructura">
+                                    <option value="7">Unidad de Negocio</option>
+                                    <option value="8">División Marca</option>
+                                    <option value="9">Área Agencia</option>
+                                    <option value="10">Departamento</option>
+                                </optgroup>
+                            </select>
+
+                            <select id="Antiguedad" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una respuesta  </option>
+                                <option value="Menos de 6 meses">Menos de 6 meses</option>
+                                <option value="6 meses a 1 año">6 meses a 1 año</option>
+                                <option value="1 a 2 años">1 a 2 años</option>
+                                <option value="3 a 5 años">3 a 5 años</option>
+                                <option value="6 a 10 años">6 a 10 años</option>
+                                <option value="Mas de 10 años">Más de 10 años</option>
+                            </select>
+
+                            <select id="RangoEdad" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una respuesta  </option>
+                                <option value="18 a 22 años">18 a 22 años</option>
+                                <option value="23 a 31 años">23 a 31 años</option>
+                                <option value="32 a 39 años">32 a 39 años</option>
+                                <option value="40 a 55 años">40 a 55 años</option>
+                                <option value="56 años o mas">56 años o más</option>
+                            </select>
+
+                            <select id="CondicionTrabajo" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una respuesta  </option>
+                                <option value="Planta">Planta</option>
+                                <option value="Sindicalizado">Sindicalizado</option>
+                                <option value="Honorarios">Honorarios</option>
+                                <option value="Comisionistas">Comisionistas</option>
+                                <option value="Temporal">Temporal</option>
+                            </select>
+
+                            <select id="Sexo" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una respuesta  </option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+
+                            <select id="GradoAcademico" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una respuesta  </option>
+                                <option value="Primaria">Primaria</option>
+                                <option value="Secundaria">Secundaria</option>
+                                <option value="Media Tecnica">Media Técnica</option>
+                                <option value="Media Superior">Media Superior</option>
+                                <option value="Universidad Incompleta">Universidad Incompleta</option>
+                                <option value="Universidad Completa">Universidad Completa</option>
+                                <option value="Posgrado">Posgrado</option>
+                            </select>
+
+                            <select id="funcion" class="form-control" style="margin-bottom:20px;">
+                                <option value="0">Selecciona una respuesta  </option>
+                                <option value="Administrativo">Administrativo</option>
+                                <option value="Comercial">Comercial</option>
+                                <option value="Coordinador - Supervisor - Jefe">Coordinador-Supervisor-Jefe</option>
+                                <option value="Director">Director</option>
+                                <option value="Gerente departamental">Gerente departamental</option>
+                                <option value="Gerente general">Gerente general</option>
+                                <option value="Subgerente">Subgerente</option>
+                                <option value="Tecnico - operativo">Técnico operativo</option>
+                            </select>
+
+                            <!--Drop Down List Jerarquia Empresa-->
+                            <select id="UNegocio" class="form-control">
+                                <option value="0">Selecciona una unidad de negocio</option>
+                                <option value="Autofinanciamiento">Autofinanciamiento</option>
+                                <option value="Automotriz">Automotriz</option>
+                                <option value="Corporativo">Corporativo</option>
+                                <option value="Financiera">Financiera</option>
+                                <option value="Internacional">Internacional</option>
+                                <option value="Manufactura">Manufactura</option>
+                                <option value="Otros negocios">Otros negocios</option>
+                                <option value="Presidencia">Presidencia</option>
+                                <option value="Turismo">Turismo</option>
+                            </select>
+
+                            <figure id="grafico" class="highcharts-figure">
+                                <div id="container"></div>
+                                @*<p class="highcharts-description" style="">
+                                        Porcentaje de respuestas positivas @Session["criterio"]
+                                    </p>*@
+                            </figure>
+
+                        </div>
+
+                    </div>
+                </div><!--.col-lg-8-->
+            </div><!--.row-->
+        </div><!--.container-->
+    </div><!--.content-wrap-->
+</section>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+<script>
+    $(document).ready(function () {
+        // $('#grafico').css('display', 'none');
+        $().css('display', 'none');
+        $('#highcharts-data-table-0').DataTable();
+        $('#Antiguedad').css('display', 'none');
+        $('#RangoEdad').css('display', 'none');
+        $('#CondicionTrabajo').css('display', 'none');
+        $('#Sexo').css('display', 'none');
+        $('#GradoAcademico').css('display', 'none');
+        $('#funcion').css('display', 'none');
+        $('#UNegocio').css('display', 'none');
+
+        $('#options').change(function () {
+
+            var selectedItem = $('#options').val();
+
+            if (selectedItem == 0) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 1) {
+                $('#Antiguedad').css('display', 'block');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 2) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'block');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 3) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'block');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 4) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'block');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 5) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'block');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 6) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'block');
+                $('#UNegocio').css('display', 'none');
+            }
+            if (selectedItem == 7) {
+                $('#Antiguedad').css('display', 'none');
+                $('#RangoEdad').css('display', 'none');
+                $('#CondicionTrabajo').css('display', 'none');
+                $('#Sexo').css('display', 'none');
+                $('#GradoAcademico').css('display', 'none');
+                $('#funcion').css('display', 'none');
+                $('#UNegocio').css('display', 'block');
+            }
+
+        });
+        //Get Data By Antiguedad
+        $('#Antiguedad').change(function () {
+
+            $('#grafico').css('display', 'none');
+
+            var selectValue = $('#Antiguedad').val();
+
+            let empleado = {
+                rangoAntiguedad: selectValue
+            };
+            var data = JSON.stringify(empleado);
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoAntiguedad")',
+                data: empleado,
+                complete: function (Response) {
+                    if (Response.responseJSON == "success") {
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+        //Get Data By RanbgoEdad
+        $('#RangoEdad').change (function () {
+            $('#grafico').css('display', 'none');
+
+            var selectValue = $('#RangoEdad').val();
+
+            let empleado = {
+                rangoEdad: selectValue
+            };
+
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoRangoEdad")',
+                data: empleado,
+                complete: function (Response) {
+                    if(Response.responseJSON == "success"){
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+        //Get Data By CondicionTrabajo
+        $('#CondicionTrabajo').change (function () {
+            $('#grafico').css('display', 'none');
+            var selectValue = $('#CondicionTrabajo').val();
+            let empleado = { condicionTrabajo: selectValue };
+            //swal
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoCondTrab")',
+                data: empleado,
+                complete: function (Response) {
+                    if(Response.responseJSON == "success"){
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+        //Get Data By Sexo
+        $('#Sexo').change (function () {
+            $('#grafico').css('display', 'none');
+            var selectValue = $('#Sexo').val();
+            let empleado = { sexo: selectValue };
+            //swal
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoSexo")',
+                data: empleado,
+                complete: function (Response) {
+                    if(Response.responseJSON == "success"){
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+        //Get Data ByGradoAcademico
+        $('#GradoAcademico').change (function () {
+            $('#grafico').css('display', 'none');
+            var selectValue = $('#GradoAcademico').val();
+            let empleado = { gradoAcademico: selectValue };
+            //Swal
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoGradoAcad")',
+                data: empleado,
+                complete: function (Response) {
+                    if(Response.responseJSON == "success"){
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+        //Get Data By funcion
+        $('#funcion').change (function () {
+            $('#grafico').css('display', 'none');
+            var selectValue = $('#funcion').val();
+            let empleado = { tipoFuncion: selectValue };
+            //Swal
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoFuncion")',
+                data: empleado,
+                complete: function (Response) {
+                    if(Response.responseJSON == "success"){
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+        //Get Data By UNegocio
+        $('#UNegocio').change (function () {
+            $('#grafico').css('display', 'none');
+            var selectValue = $('#UNegocio').val();
+            let empleado = { unidadNegocio: selectValue };
+            //Swal
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+            $.ajax({
+                url: '@Url.Action("GetPorcentajeAfirmativasByDemoUNegocio")',
+                data: empleado,
+                complete: function (Response) {
+                    if(Response.responseJSON == "success"){
+                        $('#grafico').css('display', 'block');
+                        location.reload(true);
+                    }
+                    else{
+                        $('#grafico').css('display', 'none');
+                        swal("No se obtuvieron resultados", "", "warning");
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+
+    // Build the chart
+    //Session["TotalPreguntas"] = repo.TotalPreguntas;
+    //Session["RespuestasFavorables"] = repo.TotalRespuestasFavorables;
+    //Session["RespuestasNegativas"] = repo.TotalPreguntas - repo.TotalRespuestasFavorables;
+    //Session["Porcentaje"] = repo.Porcentaje;
+
+    var porcentajeNegativas = (@Session["RespuestasNegativas"]) / (@Session["TotalPreguntas"]) * 100;
+    var porcentajePositivas = (@Session["RespuestasFavorables"]) / (@Session["TotalPreguntas"]) * 100;
+
+    var criterio = '@Session["criterio"]';
+    criterio = criterio.replace('&#241;', 'ñ');
+    Highcharts.chart('container', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Grafico de respuestas positivas ' + criterio
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: false
+                },
+                showInLegend: true
+            }
+        },
+        series: [{
+            name: 'Brands',
+            colorByPoint: true,
+            data: [{
+                name: 'Respuestas positivas ' + porcentajePositivas.toFixed(2) + '%',
+                y: @Session["RespuestasFavorables"],
+                selected: true
+            }, {
+                name: 'Respuestas negativas ' + porcentajeNegativas.toFixed(2) + '%',
+                y: @Session["RespuestasNegativas"],
+            }]
+        }]
+    });
+</script>

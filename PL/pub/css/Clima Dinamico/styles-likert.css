@@ -1,0 +1,667 @@
+@font-face {
+    font-family: open-Sans-bold;
+    src: url(fonts/OpenSans-Regular.ttf);
+}
+
+.salto-compe {
+    display: block;
+}
+
+#prev {
+    background: url(../../img/ClimaDinamico/prev.png);
+    background-size: cover;
+    width: 2.5rem;
+    height: 38px;
+}
+
+#next {
+    background: url(../../img/ClimaDinamico/next.png);
+    background-size: cover;
+    width: 2.5rem;
+    height: 38px;
+}
+
+#save-avance {
+    background: url(../../img/ClimaDinamico/saveAvance.png);
+    background-size: cover;
+    width: 2.5rem;
+    height: 38px;
+}
+
+#mail {
+    background: url(../../img/ClimaDinamico/mail.png);
+    background-size: cover;
+    width: 2.5rem;
+    height: 38px;
+}
+
+.metrica p {
+    display: block;
+}
+
+input, p, span {
+    font-family: open-Sans-bold;
+}
+/* generales */
+.center-vertically {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-responsive {
+    /* max-width: 50px;   */
+    max-height: 100px;
+}
+/* header */
+.row-header-clima {
+    position: fixed;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    z-index: 2;
+}
+
+.header {
+    background-color: #000080;
+    opacity: 0.8;
+    height: 100px;
+}
+
+.img-logo-header {
+    padding: 1rem;
+    height: 90px;
+}
+
+/* footer */
+.row-footer-clima {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.footer {
+    background-color: #000080;
+    opacity: 0.8;
+    height: 50px;
+}
+
+.img-logo-footer {
+    padding: 0.5rem;
+    height: 40px;
+    margin-top: 0.25rem;
+}
+
+.bg {
+    /* background: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg") no-repeat center center fixed; */
+    background: url("img/backImageDesktop.jpg") no-repeat center center fixed;
+    background-size: cover;
+    /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 1024px;
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.login-controls {
+    border-radius: 5px;
+    font-weight: bold;
+    border: 0px;
+    height: 50px;
+    font-size: 20px;
+}
+
+.row-form {
+    top: 60%;
+    position: fixed;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.txt-clave {
+    color: #999999;
+    text-align: center;
+}
+
+.btn-ingresar {
+    color: #fff;
+    text-align: center;
+    background-color: #29A8DF;
+}
+
+    .btn-ingresar:hover {
+        color: #fff;
+        text-align: center;
+        background-color: #29A8DF;
+    }
+
+[type="submit"]:not(:disabled), button:not(:disabled) {
+    color: #fff;
+    text-align: center;
+    background-color: #29A8DF;
+}
+
+.btn-olvidar {
+    background-color: #000000;
+    color: #fff;
+    opacity: 0.7;
+}
+
+[type="button"]:not(:disabled), button:not(:disabled) {
+    background-color: #000000;
+    color: #fff;
+    opacity: 0.7;
+}
+
+.form-group {
+    margin-bottom: 5px !important;
+}
+
+/* intro */
+.imagen-intro {
+    background-image: url(../../img/ClimaDinamico/portadaIntro.jpg);
+    background-size: cover;
+}
+
+#img-intro {
+    display: none;
+}
+
+.welcome {
+    font-weight: bold;
+    color: #040482;
+}
+
+.des-likert {
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    min-height: 65px;
+    border: 3px solid #fff;
+}
+
+.val {
+    margin: 8px;
+    padding-top: 0.6rem;
+}
+
+.btn-continuar {
+    background-color: #34ace1;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    height: 50px;
+    cursor: pointer;
+}
+
+.main-content {
+    padding-bottom: 70px;
+}
+
+.main-content-likert {
+    padding-top: 150px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.instrucciones-likert {
+    color: #4d4d4d;
+    font-weight: bold;
+    font-size: 19px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header-enfoque {
+    background-color: #000080;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px;
+    border: 1px solid #fff;
+}
+
+.txt-ee {
+    margin-bottom: 0px;
+}
+
+.txt-ea {
+    margin-bottom: 0px;
+}
+
+.header-1 .txt-ea {
+    display: none;
+}
+
+.header-1 .txt-ee {
+    display: block;
+}
+
+.header-2 .txt-ea {
+    display: block;
+}
+
+.header-2 .txt-ee {
+    display: none;
+}
+
+.likert-values {
+    /* transform: rotate(268deg); */
+    padding-left: 0px;
+    padding-right: 0px;
+    float: left;
+    overflow: hidden;
+    writing-mode: inherit;
+    height: 36px;
+    border: 1px solid #fff;
+}
+
+.metrica {
+    margin-top: 0px;
+}
+
+    .metrica p {
+        margin-bottom: 0px;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+        padding: 5px;
+    }
+
+.metricaEA {
+    display: none;
+    margin-left: -15px;
+}
+
+.section-preguntas {
+    margin-top: 50px;
+}
+
+.bg-color {
+    background-color: #efefef;
+}
+
+.item-pregunta {
+    height: auto;
+    border-radius: 2px;
+    padding-left: 20px;
+    margin-bottom: 8px;
+}
+
+    .item-pregunta p {
+        padding-top: 0.3rem;
+    }
+
+.center-buttons {
+    justify-content: end;
+}
+
+.mergePreguntas {
+    display: block;
+}
+
+.btn-enviar {
+    width: 50%;
+}
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .btn-enviar {
+        width: 50%;
+    }
+
+    .salto-compe {
+        display: block;
+    }
+
+    .mergePreguntas {
+        display: block;
+    }
+
+    .center-buttons {
+        justify-content: end;
+    }
+
+    .row-form {
+        top: 60%;
+    }
+
+    .img-logo-header {
+        padding: 1rem;
+        height: 100px;
+    }
+
+    #img-intro {
+        display: none;
+    }
+
+    .val {
+        padding-top: 0px;
+    }
+
+    .header-1 .txt-ea {
+        display: none;
+    }
+
+    .header-1 .txt-ee {
+        display: block;
+    }
+
+    .header-2 .txt-ea {
+        display: block;
+    }
+
+    .header-2 .txt-ee {
+        display: none;
+    }
+
+    .metrica {
+        margin-top: 0px;
+    }
+
+    .likert-values {
+        writing-mode: inherit;
+        height: 36px;
+    }
+
+    .metrica p {
+        padding-top: 0.25rem;
+    }
+
+    .metricaEA {
+        display: none;
+    }
+
+    #EE {
+        padding-right: 15px;
+    }
+
+    #EA {
+        padding-left: 15px;
+    }
+
+    #mail {
+        left: 32rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .btn-enviar {
+        width: 50%;
+    }
+
+    .salto-compe {
+        display: block;
+    }
+
+    .mergePreguntas {
+        display: block;
+    }
+
+    .center-buttons {
+        justify-content: center;
+    }
+
+    .row-form {
+        top: 62%;
+    }
+
+    .img-logo-header {
+        padding: 0.6rem;
+        height: 100px;
+    }
+
+    #img-intro {
+        display: none;
+    }
+
+    .val {
+        padding-top: 0px;
+    }
+
+    .header-enfoque {
+        float: right;
+    }
+
+    .header-1 .txt-ea {
+        display: block;
+    }
+
+    .header-1 .txt-ee {
+        display: none;
+    }
+
+    .header-2 .txt-ea {
+        display: none;
+    }
+
+    .header-2 .txt-ee {
+        display: block;
+    }
+
+    .metrica {
+        margin-top: 0px;
+    }
+
+    .likert-values {
+        writing-mode: inherit;
+        height: 36px;
+    }
+
+    .metrica p {
+        padding: 0px;
+        padding-top: 0.25rem;
+    }
+
+    .metricaEA {
+        display: none;
+    }
+
+    #EE {
+        padding-right: 0px;
+    }
+
+    #EA {
+        padding-left: 0px;
+    }
+
+    #mail {
+        left: 2rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .btn-enviar {
+        width: 50%;
+    }
+
+    .salto-compe {
+        display: none;
+    }
+
+    .mini-header {
+        display: none;
+    }
+
+    .mergePreguntas {
+        display: inline-flex;
+    }
+
+    .center-buttons {
+        justify-content: center;
+    }
+
+    .row-form {
+        top: 60%;
+    }
+
+    .img-logo-header {
+        padding: 0.6rem;
+        height: 100px;
+    }
+
+    #img-intro {
+        display: block;
+    }
+
+    .main-content {
+        padding-bottom: 0px;
+    }
+
+    .val {
+        padding-top: 0px;
+    }
+
+    .header-enfoque {
+        float: right;
+    }
+
+    .header-1 .txt-ea {
+        display: block;
+    }
+
+    .header-1 .txt-ee {
+        display: none;
+    }
+
+    .header-2 .txt-ea {
+        display: none;
+    }
+
+    .header-2 .txt-ee {
+        display: block;
+    }
+
+    .metrica {
+        margin-top: -8.7rem;
+        padding-right: 0px;
+        padding-left: 0px;
+        left: 15px;
+    }
+
+    .likert-values {
+        writing-mode: sideways-lr;
+        height: 150px;
+    }
+
+    .metrica p {
+        padding: 0px;
+        margin-left: -0.1rem;
+    }
+
+    .metricaEA {
+        display: block;
+    }
+
+    .main-content-likert {
+        padding-top: 150px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    #mail {
+        left: 5rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .btn-enviar {
+        width: 40%;
+    }
+
+    .salto-compe {
+        display: none;
+    }
+
+    .mini-header {
+        display: none;
+    }
+
+    .mergePreguntas {
+        display: inline-flex;
+    }
+
+    .center-buttons {
+        justify-content: center;
+    }
+
+    .row-form {
+        top: 68%;
+    }
+
+    .img-logo-header {
+        padding: 0.6rem;
+        height: 100px;
+    }
+
+    #img-intro {
+        display: block;
+    }
+
+    .main-content {
+        padding-bottom: 0px;
+    }
+
+    .val {
+        padding-top: 0px;
+    }
+
+    .header-enfoque {
+        float: right;
+    }
+
+    .header-1 .txt-ea {
+        display: block;
+    }
+
+    .header-1 .txt-ee {
+        display: none;
+    }
+
+    .header-2 .txt-ea {
+        display: none;
+    }
+
+    .header-2 .txt-ee {
+        display: block;
+    }
+
+    .metrica {
+        margin-top: -8.7rem;
+        padding-right: 0px;
+        padding-left: 0px;
+        left: 15px;
+    }
+
+    .likert-values {
+        writing-mode: sideways-lr;
+        height: 150px;
+    }
+
+    .metrica p {
+        padding: 0px;
+        margin-left: -0.1rem;
+    }
+
+    .metricaEA {
+        display: block;
+    }
+
+    .main-content-likert {
+        padding-top: 150px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    #mail {
+        left: 14rem;
+    }
+}

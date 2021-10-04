@@ -1,0 +1,267 @@
+﻿@model ML.Preguntas
+
+@*@using (Html.BeginCollectionItem("NewCuestion",""))
+{*@
+    @Html.AntiForgeryToken()   
+    <div class="section-survey col-lg-12 col-md-12 col-sm-12 col-xs-12" id="@Model.IdPregunta" style="@(Model.TipoControl.IdTipoControl == 13 ? " margin-bottom:0px !important" : "" )">
+        <div class="body-survey" style="@(Model.TipoControl.IdTipoControl == 13 ? " padding-bottom:0px !important" : "" )">
+        
+                <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-1" >
+                    <div class="col-md-12">@*burlywood*@
+                        <div class="form-group" style="background-color:#e9ecef; border-radius:2px; border: 1px solid #ced4da; @(Model.TipoControl.IdTipoControl == 13 ? " margin-bottom:0px !important; background-color: burlywood !important; font-weight: bold" : "" )">
+                            @*@Html.TextBoxFor(m => m.Pregunta, new { @class = "form-control", @id = Model.IdPregunta, @autofocus = "true", })*@
+                            <label class="control-label" id="@Model.IdPregunta">@Model.Pregunta</label>
+                        </div><!--.form-group-->
+                    </div><!--.col-md-7-->
+                </div>
+          
+            
+        @{
+            if (Model.TipoControl.IdTipoControl != 13)
+            {
+                <hr class="clearfix" />
+                <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    @*<div class="col-md-12" id="@("newAnswer" + Model.UniqueId)">*@
+                    <div class="col-md-12" id="@(Model.IdPregunta)">
+                        @{
+                            if (Model.NewAnswer != null)
+                            {
+                                if (Model.TipoEstatus.IdEstatus > 0)
+                                {
+                                    foreach (var respuesta in Model.NewAnswer)
+                                    {
+                                        respuesta.Pregunta.IdPregunta = Model.IdPregunta;
+                                        respuesta.Pregunta.IdEncuesta = Model.IdEncuesta;
+                                        @Html.Partial("~/Views/Respuestas/GetRespuestas.cshtml", respuesta);
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < @Model.NewAnswer.Count(); i++)
+                                    {
+                                        @Html.EditorFor(model => @Model.NewAnswer[i], new { @id = Model.IdPregunta })
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        <hr class="clearfix" />
+
+                        <script src="~/scripts/jquery-3.4.1.min.js"></script>
+                        <script type="text/javascript">
+                        $(document).on('click', '@("#addAnswere" + Model.IdPregunta)', function () {
+                             const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+                            const nombreselect = '@("#tipoControl" + Model.IdPregunta)';
+                            const selectedValue = $(nombreselect).val();
+                            switch (selectedValue) {
+                                case "1":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "2":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "3":
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereOpcionMultiple/',
+                                        data: { idpadreItem: padreItem },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "4":
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereChkBox/',
+                                        data: { idpadreItem: padreItem },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "5":
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereListaDesplegable/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "6":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "7":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "8":
+                                    swal("Sólo se acepta una repuesta. !", "", "error");
+                                    break;
+                                case "9":
+                                        swal("Sólo se acepta una repuesta. !", "", "error");
+                                        break;
+                                    case "10":
+                                            swal("Sólo se acepta una repuesta. !", "", "error");
+                                            break;
+                                        case "11":
+                                                swal("Sólo se acepta una repuesta. !", "", "error");
+                                                break;
+
+                                default:
+                                    swal("Tipo de Respuesta no seleccionada. !", "", "error");
+                                    break;
+                            }
+                        });
+                        $(document).on('change', '@("#tipoControl" + Model.IdPregunta)', function () {
+                            const padreItem = '@(Html.ViewData.TemplateInfo.HtmlFieldPrefix)';
+                            var selectedValue = $(this).val();
+                            const contenedorAnswere = '@("#newAnswer" +Model.IdPregunta)';
+                            const masAnswere = '@("#agregaAnswere" + Model.IdPregunta)';
+                            switch (selectedValue) {
+                                case "1":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereRespuestaCorta/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "2":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereRespuestaLarga/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "3":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        type:"GET",
+                                        url: '/Encuesta/CreateNewAnswereOpcionMultiple/',
+                                        data: { idpadreItem:padreItem},
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "4":
+                                    $(contenedorAnswere).empty();
+                                    $.ajax({
+                                        type:"GET",
+                                        url: '/Encuesta/CreateNewAnswereChkBox/',
+                                        data: { idpadreItem: padreItem },
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "5":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereListaDesplegable/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "6":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereSentimiento/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "7":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereRango/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.IdPregunta)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "8":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertAcuerdo/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "9":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertFrecuencia/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+
+                                case "10":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertImportacia/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                case "11":
+                                    $(contenedorAnswere).empty();
+                                    $(masAnswere).show();
+                                    $.ajax({
+                                        url: '/Encuesta/CreateNewAnswereLikertProbabilidad/',
+                                        success: function (partialView) {
+                                            $('@("#newAnswer"+Model.UniqueId)').append(partialView);
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    swal("Tipo de Respuesta no seleccionada. !", "", "error");
+                                    break;
+                            }
+                        });
+                        </script>
+                    </div><!--.col-md-12-->
+                </div><!--.row-->
+                            }
+        }
+          
+        </div><!--.body-survey-->
+       
+    </div>
+
+
+@*}*@
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input').prop("readonly", true);
+    });
+</script>
+<script>
+    $(document).ready(function () {
+       $(document).on('change', '@("#isCondicional" + Model.IdPregunta)', function () {
+
+
+
+    });
+    });
+
+
+
+
+</script>

@@ -1,0 +1,38 @@
+﻿<!--content wrap-->
+<div @*ng-controller="reporteController as vm"*@ class="content-wrap">
+    <div class="container-fluid px-lg-5" ng-init="vm.cargarHistoricoView = false">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+                        <label class="control-label">Elige el tipo de filtrado</label>
+                        <div class="form-group frm-opciones">
+                            <p hidden class="opc"><input ng-model="vm.opc" value="0" type="radio" id="lbl0" name="opc" /><label for="lbl0">Default</label></p>
+                            <p class="opc"><input ng-model="vm.opc" value="1" type="radio" id="lbl1" name="opc" /><label for="lbl1">Reporte general</label></p>
+                            <p class="opc"><input ng-model="vm.opc" value="2" type="radio" id="lbl2" name="opc" /><label for="lbl2">Reporte por tipo de indicador</label></p>
+                            <p class="opc"><input ng-model="vm.opc" value="3" type="radio" id="lbl3" name="opc" /><label for="lbl3">Reporte por reactivo</label></p>
+                            <p class="opc"><input ng-model="vm.opc" value="4" type="radio" id="lbl4" name="opc" /><label for="lbl4">Reporte general GAFM</label></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12" ng-show="vm.opc == 2">@Html.Partial("~/views/ReporteoClima/Busqueda/BusquedaPorTipoDeIndicador.cshtml")</div>
+            <div class="col-lg-12" ng-show="vm.opc == 3">@Html.Partial("~/views/ReporteoClima/Busqueda/BusquedaPorReactivoSeleccionado.cshtml")</div>
+            <div class="col-lg-12" ng-show="vm.opc > 0  || vm.opc == 4">@Html.Partial("~/views/ReporteoClima/Busqueda/BusquedaPorEstructuraGAFM.cshtml")</div>
+        </div>
+    </div>
+</div>
+<style>
+    .opc{
+        margin-bottom: 0px;
+    }
+    input[type="radio"]{
+        margin-right: 5px;
+    }
+    .frm-opciones{
+        padding-left: 5px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border: 1px solid #b0aaaa;
+    }
+</style>

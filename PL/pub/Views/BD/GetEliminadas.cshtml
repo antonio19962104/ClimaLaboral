@@ -1,0 +1,94 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "GetEliminadas";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+@*<section id="page-title">
+    <div class="container-fluid px-lg-5">
+        <img class="img-fluid" src="~/img/icon-database.png" /><h1 class="title-page-survey">Base de datos / <span>Listado</span></h1>
+    </div>
+</section>*@
+
+@section H1
+    {
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-database.png"> <h1 class="title-page-survey">Base de datos eliminadas / <span>Listado</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+@*<section id="content">*@
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+
+                       
+
+                        <table id="tableAdmin" class="table table-hover">
+                            <caption>Lista de bases de datos</caption>
+                          
+
+                            <thead>
+                                <tr>
+                                    <th class="text-center" scope="col">
+                                        <strong>Nombre</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Estatus</strong>
+                                    </th>
+                                    <th class="text-center" scope="col">
+                                        <strong>Restaurar</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.BasesDeDatos bd in Model.ListadoDeBaseDeDatos)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @bd.Nombre
+                                        </td>
+                                        <td class="text-center">
+                                            Eliminada
+                                        </td>
+                                        
+                                        <td class="text-center">
+                                            <a href="@Url.Action("Restaurar", "BD", new { IdBaseDeDatos = bd.IdBaseDeDatos } )" title="">
+                                                <button title="Restaura la base de datos" type="button" class="btn btn-secondary btn-action"><i class="fas fa-trash-restore"></i> Restaurar base de datos</button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="button" class="btn btn-success" onclick="window.location.href = '/BD/GetAllForListado/'" name="name" value="Regresar al listado" />
+                </div>
+            </div>
+        </div>
+    </div>
+@*</section>*@
+
+@section Scripts
+{
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+<script>
+    $(document).ready(function () {
+        $('#tableAdmin').DataTable();
+    });
+</script>
+}

@@ -1,0 +1,122 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "SeccionLikert";
+    Layout = "~/Views/Clim/LayoutPage.cshtml";
+}
+
+@section BodyEncuesta{
+@{
+    int num = 1;
+    string style = "margin-bottom:130px";
+    int nRadio = 0;
+    foreach (ML.Preguntas item in Model.Objects)
+    {
+        if (num == 86)
+        {
+            style = "margin-bottom:130px";
+        }
+        nRadio = num + 1;
+        if (num < 87)
+        {
+            <div class="clearfix colelem pregunta1 questions" id="pbuttonu6095" style="@style">
+                <div class="row p1">
+                    <!-- group -->
+                    <div class="col-md-8 viewMobile_A question" id="viewTablet">
+                        <div class="Button clearfix grpelem preg1" id="buttonu6095" data-visibility="changed" style="visibility:visible; margin-bottom:-1px;">
+                            <!-- container box -->
+                            <div class="clearfix grpelem" id="u6096-4" style="font-size:16px;">
+                                <!-- content -->
+                                <p>@num @item.Pregunta</p>
+                                @*@Html.RadioButton("wer", "Casi siempre es falso", false, htmlAttributes: new { @onclick = "validar()", @class = "asd AS CSF", @name = "Opc1", @value = "ASDSAD", @id = "DEMO", @type = "radio" })*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 viewSafariCol3 before viewMobile_A RB1" id="viewTablet" style="margin-bottom:3px;">
+                        <div class="Button clearfix grpelem EEMobile" id="buttonu5579" data-visibility="changed" style="background-color:#000080;z-index:2500;visibility:visible; position:relative;">
+                            <!-- container box -->
+                            <div class="clearfix grpelem" id="u5580-4">
+                                <!-- content -->
+                                <p onclick="" style="font-weight:bold;">Empresa y jefes</p>
+                            </div>
+                        </div>
+                        <div class="clearfix grpelem 1 RB1EE" id="u4443">
+                            @*Apartado Empresa => todos los radiobutton deben tener el mismo Nombre*@
+                            <!-- group -->
+                            <div class="grpelem" id="u12910">
+                                @Html.RadioButton("Opc" + num, "Casi siempre es falso", false, htmlAttributes: new { @onclick = "validar()", @class = "asd AS CSF", @name = "Opc1", @value = "Casi siempre es falso", @id = "CSF", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u17121">
+                                @Html.RadioButton("Opc" + num, "Frecuentemente es falso", false, htmlAttributes: new { @onclick = "validar()", @class = "AS FF", @value = "Frecuentemente es falso", @id = "FF", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u17129">
+                                @Html.RadioButton("Opc" + num, "A veces es falso / A veces es verdad", false, htmlAttributes: new { @onclick = "validar()", @class = "AS AV", @id = "AV", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u17145">
+                                @Html.RadioButton("Opc" + num, "Frecuentemente es verdad", false, htmlAttributes: new { @onclick = "validar()", @class = "AS FV", @id = "FV", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u17161">
+                                @Html.RadioButton("Opc" + num, "Casi siempre es verdad", false, htmlAttributes: new { @onclick = "validar()", @class = "AS CSV", @id = "CSV", @type = "radio" })
+                            </div>
+                        </div>
+
+                        <div class="Button clearfix grpelem EAMobile" id="buttonu5699" data-visibility="changed" style="background-color:#000080;z-index:2500;visibility:visible; position:relative;">
+                            <!-- container box -->
+                            <div class="clearfix grpelem" id="u5700-4">
+                                <!-- content -->
+                                <p style="font-weight:bold;">Área y jefe directo</p>
+                            </div>
+                        </div>
+                        <div class="clearfix grpelem 2 RB1EA" id="u18307">
+                            @*Apartado Area => Todos los radiobutton dbeen tener el mismo Nombre*@
+                            <!-- group -->
+                            <div class="grpelem" id="u18318">
+                                @Html.RadioButton("Opc" + nRadio, "Casi siempre es falso", false, htmlAttributes: new { @onclick = "validar()", @class = "AS CSF", @id = "CSF", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u18286">
+                                @Html.RadioButton("Opc" + nRadio, "Frecuentemente es falso", false, htmlAttributes: new { @onclick = "validar()", @class = "AS FF", @id = "FF", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u18293">
+                                @Html.RadioButton("Opc" + nRadio, "A veces es falso / A veces es verdad", false, htmlAttributes: new { @onclick = "validar()", @class = "AS AV", @id = "AV", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u18300">
+                                @Html.RadioButton("Opc" + nRadio, "Frecuentemente es verdad", false, htmlAttributes: new { @onclick = "validar()", @class = "AS FV", @id = "FV", @type = "radio" })
+                            </div>
+                            <div class="grpelem" id="u18272">
+                                @Html.RadioButton("Opc" + nRadio, "Casi siempre es verdad", false, htmlAttributes: new { @onclick = "validar()", @class = "AS CSV", @id = "CSV", @type = "radio" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        if (num == 87)
+        {
+            //Abiertas
+            style = "margin-bottom:80px";
+            <div class="clearfix colelem pregunta1 questions" id="pbuttonu6095" style="">
+                <div class="row p1">
+                    <!-- group -->
+                    <div class="col-md-8 viewMobile_A question" id="viewTablet">
+                        <div class="Button clearfix grpelem preg1" id="buttonu6095" data-visibility="changed" style="visibility:visible; margin-bottom:-1px;">
+                            <!-- container box -->
+                            <div class="clearfix grpelem" id="u6096-4" style="font-size:16px;">
+                                <!-- content -->
+                                <p>@num @item.Pregunta</p>
+                                @*@Html.RadioButton("wer", "Casi siempre es falso", false, htmlAttributes: new { @onclick = "validar()", @class = "asd AS CSF", @name = "Opc1", @value = "ASDSAD", @id = "DEMO", @type = "radio" })*@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 viewSafariCol3 before viewMobile_A RB1" id="viewTablet" style="margin-bottom:3px;">
+                        <div class="clearfix grpelem 1 RB1EE" id="u4443">
+                            <textarea class="form-control">Hola</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        num = num + 1;
+    }
+}
+}

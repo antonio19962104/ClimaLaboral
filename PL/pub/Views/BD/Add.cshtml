@@ -1,0 +1,579 @@
+﻿@using Newtonsoft.Json
+@model ML.BasesDeDatos
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" />
+<script src="~/scripts/jquery-3.4.1.min.js"></script>
+<script>
+    var usr = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]))
+</script>
+
+
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-6 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-database.png"> <h1 class="title-page-survey">Base de datos / <span>Agregar</span></h1>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+
+<p id="" style="color:red; padding-left:30px;"><strong> </strong></p>
+<div class="content-wrap" id="">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            @*//*@
+            <div class="col-lg-8 offset-lg-2">
+            @*@using (Html.BeginForm("Add", "BD", FormMethod.Post))
+            {*@
+                <ul class="nav nav-tabs mb-4" id="tabSurvey" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="prev-tab" data-toggle="tab" href="#prev" role="tab" aria-controls="prev" aria-selected="true">Base de datos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="manag-tab" data-toggle="tab" href="#manag" role="tab" aria-controls="manag" aria-selected="false">Cargar Layout</a>
+                    </li>
+                </ul>
+                <p id="ErrorMessage"></p>
+
+                <div class="tab-content" id="tabSurveyContent">
+                    <div class="tab-pane fade show active" id="prev" role="tabpanel" aria-labelledby="prev-tab">
+                        <div class="section-survey shadow-sm animated fadeInUp">
+                            <div class="body-survey">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Nombre, new { @class = "control-label" })
+                                                <div class="col-md-4 col-sm-6">
+                                                    <input autocomplete="off" id="TxtNombre" type="text" name="EmpleadoAdmin" value="" class="form-control" placeholder="Nombre de la base de datos" style="background-color:#ffffff;" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*@Html.DropDownListFor(model => model.TipoEncuesta, new SelectList(Model.listTipoEncuesta, "IdTipoEncuesta", "NombreTipoDeEncuesta"), "Selecciona una tipo de Base de Datos", new { @id = "DDLTipoEncuesta", @class = "form-control" })*@
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                @Html.Label("Tipo de Base de Datos", new { @class = "control-label" })
+                                                <div class="col-md-4 col-sm-6">
+                                                    @Html.DropDownListFor(model => model.TipoEncuesta, new SelectList(Model.listTipoEncuesta, "IdTipoEncuesta", "NombreTipoDeEncuesta"), "Selecciona una tipo de Base de Datos", new { @id = "DDLTipoEncuesta", @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                @Html.Label("Estatus", new { @class = "control-label" })
+                                                <div class="col-md-4 col-sm-6">
+                                                    <select name="Estatus" id="Estatus" class="form-control">
+                                                        <option value="0">Selecciona una respuesta</option>
+                                                        <option value="1">Activo</option>
+                                                        <option value="2">Inactivo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="manag" role="tabpanel" aria-labelledby="conf-tab">
+                        <div class="section-survey shadow-sm animated fadeInUp">
+                            <div class="body-survey">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="form-horizontal">
+                                            <p id="lastInsert"></p>
+                                            <div class="form-group">
+                                                <label class="control-label">Elige para que encuesta se usará la base de datos</label>
+                                                <div class="col-md-4 col-sm-6">
+                                                    <div class="form-group">
+                                                        <input type="radio" name="tipo" value="1" onclick="getLastId()" id="opc1"/> <label style="margin-bottom: 0px" for="opc1"> Clima Laboral</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="radio" onclick="ocultarMSG()" name="tipo" value="2" id="opc2" /> <label style="margin-bottom: 0px" for="opc2"> Encuestas genericas</label>
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <a href="#" onclick="Download()" class="btn btn-secondary btn-action btn-md" data-toggle="modal" data-target="">
+                                                    Descargar layout<i class="fas fa-file-excel ml-1"></i>
+                                                </a>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">Subir layout</label>
+                                                <div class="col-md-4 col-sm-6">
+                                                    <input onchange="ExportToTable()" type="file" id="postedFile" name="postedFile" class="form-control validate">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                    
+
+                    
+
+                    
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="submit" style="margin-top:20px;" class="btn btn-success" value="Guardar" onclick="return Create();" />
+                        </div>
+                    </div>
+                    @*}*@
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                    <table id="exceltable" class="table table-hover table-responsive" style="display:none;">
+                        <thead id="filaHead">
+                            
+                        </thead>
+                        <tbody id="cuerpoTabla"></tbody>
+                    </table>
+                </div>
+                </div>
+            
+        </div>
+        
+    </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js" defer></script>
+<script>
+    function Download() {
+        var tipo = ($('input:radio[name=tipo]:checked').val());
+        if (tipo == "" || tipo == null) {
+            swal('Debes elegir primero el tipo de encuesta para el que se usará el Layout', '', 'info');
+        }
+        if (tipo == 1) {
+            window.location = "@Url.Action("DownloadLayoutClimaLaboral", "BD")";
+        }
+        else if (tipo == 2) {
+            window.location = "@Url.Action("DownloadLayout", "BD")";
+        }
+    }
+    function Create() {
+        var tipo = ($('input:radio[name=tipo]:checked').val());
+        //1 CL
+        //2 Genrica
+        if (tipo == "" || tipo == null) {
+            swal('Debes llenar todos los campos', '', 'info');
+        }
+        if (tipo == 1) {
+            SaveBDClimaLaboral();
+        }
+        else if (tipo == 2) {
+            SaveBDGenerica();
+        }
+    }
+    //****************************************************
+    function SaveBDClimaLaboral() {
+        var IdEmpleadoAInsertar = IdEmpleadoForNewInsert;//El que debe iniciar en el layout
+        var Nombre = $('#TxtNombre').val();
+        var excel = $('#postedFile').val();
+        var estatus = $('#Estatus').val();
+        var tipoBD = $('#DDLTipoEncuesta').val();
+
+        var TableTipoBase = ($('input:radio[name=tipo]:checked').val());
+
+        if(Nombre == "" || Nombre == null || excel == "" || excel == null || estatus == 0 || tipoBD == "" || tipoBD == null || TableTipoBase == "" || TableTipoBase == null){
+            //alert('Debe rellenar los campos');
+            return false;
+        } else {
+
+            swal ({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+
+            var faltaidEmple = false;
+            var duplicaIdEmpleado = false;
+
+            //Detecta si no especifica IdEmpleado
+            for (var i = 0; i < excelData.length; i++) {
+                if(excelData[i].IdEmpleado == "" || excelData[i].IdEmpleado == null){
+                    var nameEmple = excelData[i].Nombre + ' ' + excelData[i].ApellidoPaterno + ' ' + excelData[i].ApellidoMaterno;
+                    swal('No ha especificado un Id de empleado para: ' + nameEmple, '', 'info');
+                    excelValido = false;
+                    faltaidEmple = true;
+                    event.preventDefault();
+                }
+            }
+            //Detecta si algun Id en en excel ya esta en BD
+            for (var i = 0; i < excelData.length; i++) {
+                if (excelData[i].IdEmpleado < IdEmpleadoAInsertar) {
+                    swal('Su layout contiene un Id de Empleado no valido', 'info');
+                    excelValido = false;
+                    duplicaIdEmpleado = true;
+                    event.preventDefault();
+                }
+            }
+
+
+
+            if (excelValido == false) {
+                if (faltaidEmple == true) {
+                    swal('No se han especificado los id de empleado en el layout', '', 'info');
+                }
+                else if (duplicaIdEmpleado == true) {
+                    swal('Su layout contiene un id de empleado no valido, verificalo.', '', 'info');
+                }
+                else if (faltaidEmple == false && duplicaIdEmpleado == false) {
+                    swal('El archivo cargado no es valido', '', 'info');
+                    event.preventDefault();
+                }
+            }
+            else{
+                let model = {
+                    nombre: Nombre,
+                    tipoEstatus: { idEstatus: estatus },
+                    tipoEncuesta: { idTipoEncuesta: tipoBD },
+                    tipoBD: { idTipoBD: TableTipoBase }
+                };
+                $.ajax({
+                    type: 'POST',
+                    data: model,
+                    url: '@Url.Action("Add", "BD")',
+                    complete: function (Response) {
+                        if (Response.responseJSON = 'success') {
+
+                            var formData = new FormData();
+                            var totalFiles = document.getElementById("postedFile").files.length;
+
+                            var file = document.getElementById("postedFile").files[0];
+                            formData.append("postedFile", file);
+
+                            $.ajax({
+                                type: 'POST',
+                                data: formData,
+                                url: '@Url.Action("AddUsuariosClimaLaboral", "BD")',
+                                contentType: false,
+                                processData: false,
+                                complete: function (Response) {
+                                    if (Response.responseJSON = 'success') {
+                                        swal({
+                                            title: "Los datos se registraron exitosamente",
+                                            text: "",
+                                            type: "success",
+                                            icon: "success",
+                                        }).then(function () {
+                                            window.location.href = "/BD/GetAllForListado/";
+                                        });
+                                    }
+                                    else {
+                                        location.reload(true);
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            swal("Ocurrió un error al registrar la Base de datos");
+                            //location.reload(true);
+                        }
+                    }
+                });
+            }
+        }
+    }
+    //****************************************************
+    function SaveBDGenerica() {
+        var Nombre = $('#TxtNombre').val();
+        var excel = $('#postedFile').val();
+        var estatus = $('#Estatus').val();
+        var tipoBD = $('#DDLTipoEncuesta').val();
+
+        var TableTipoBase = ($('input:radio[name=tipo]:checked').val());
+        if(Nombre == "" || Nombre == null || excel == "" || excel == null || estatus == 0 || tipoBD == "" || tipoBD == null || TableTipoBase == null || TableTipoBase == ""){
+            swal('Debes llenar todos los campos', '', 'info');
+            event.preventDefault();
+        }
+        else
+        {
+            swal ({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+
+
+            var excelValid = false;
+
+            var archivo = $('#postedFile').val();
+            var extension = archivo.split('.')[1];
+
+            if (excelValido == false) {
+                swal('El archivo cargado no es valido', '', 'info');
+                event.preventDefault();
+            }
+            else{
+                let model = {
+                    nombre: Nombre,
+                    tipoEstatus: { idEstatus: estatus },
+                    tipoEncuesta: { idTipoEncuesta: tipoBD },
+                    tipoBD: { idTipoBD: TableTipoBase }
+                };
+                $.ajax({
+                    type: 'POST',
+                    data: model,
+                    url: '@Url.Action("Add", "BD")',
+                    complete: function (Response) {
+                        if (Response.responseJSON = 'success') {
+
+                            var formData = new FormData();
+                            var totalFiles = document.getElementById("postedFile").files.length;
+
+                            var file = document.getElementById("postedFile").files[0];
+                            formData.append("postedFile", file);
+
+                            $.ajax({
+                                type: 'POST',
+                                data: formData,
+                                url: '@Url.Action("AddUsuarios", "BD")',
+                                contentType: false,
+                                processData: false,
+                                complete: function (Response) {
+                                    if (Response.responseJSON = 'success') {
+                                        swal({
+                                            title: "Los datos se registraron exitosamente",
+                                            text: "",
+                                            type: "success",
+                                            icon: "success",
+                                        }).then(function () {
+                                            window.location.href = "/BD/GetAllForListado/";
+                                        });
+                                    }
+                                    else {
+                                        location.reload(true);
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            swal("Ocurrió un error al registrar la Base de datos");
+                            //location.reload(true);
+                        }
+                    }
+                });
+            }
+        }
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xls/0.7.4-a/xls.core.min.js"></script>
+<script>
+    var excelValido = false;
+    var propiertiesExcel = null;
+    var excelData = null;
+
+    var arrayForExcelClima = ["IdEmpleado", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "Puesto", "FechaNacimiento", "FechaAntiguedad", "Sexo", "Email", "TipoFuncion", "CondicionTrabajo", "GradoAcademico", "UnidadNegocio", "DivisionMarca", "AreaAgencia", "Departamento", "Subdepartamento", "EmpresaContratante", "IdResponsableRH", "NombreResponsableRH", "IdJefe", "NombreJefe", "PuestoJefe", "IdResponsableEstructura", "NombreResponsableEstructura", "RangoAntiguedad", "RangoEdad", "ESTATUS_USUARIO", "CampoNumerico_1", "CampoDeTexto_1", "CampoNumerico_2", "CampoNumerico_3", "CampoDeTexto_2", "CampoDeTexto_3"];
+    var arrayForExcelGenerico = ["IdEmpleado", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "Puesto", "FechaNacimiento", "FechaAntiguedad", "Sexo", "Email", "TipoFuncion", "CondicionTrabajo", "GradoAcademico", "UnidadNegocio", "DivisionMarca", "AreaAgencia", "Departamento", "Subdepartamento", "EmpresaContratante", "IdResponsableRH", "NombreResponsableRH", "IdJefe", "NombreJefe", "PuestoJefe", "IdResponsableEstructura", "NombreResponsableEstructura", "RangoAntiguedad", "RangoEdad", "ESTATUS_USUARIO", "CampoNumerico_1", "CampoDeTexto_1", "CampoNumerico_2", "CampoNumerico_3", "CampoDeTexto_2", "CampoDeTexto_3", "PassPredefinido"];
+    //arrayForExcel = ["IdEncuestado", "IdEmpleadoRH", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "Puesto", "FechaNacimiento", "FechaAntiguedad", "Sexo", "Email", "TipoFuncion", "CondicionTrabajo", "GradoAcademico", "UnidadNegocio", "DivisionMarca", "AreaAgencia", "Departamento", "Subdepartamento", "EmpresaContratante", "IdResponsableRH", "NombreResponsableRH", "IdJefe", "NombreJefe", "PuestoJefe", "IdResponsableEstructura", "NombreResponsableEstructura", "RangoAntiguedad", "RangoEdad", "ESTATUS_USUARIO", "CampoNumerico_1", "CampoDeTexto_1", "CampoNumerico_2", "CampoNumerico_3", "CampoDeTexto_2", "CampoDeTexto_3"];
+    function ExportToTable() {
+
+        //var TableTipoBase = ($('input:radio[name=tipo]:checked').val());
+        //if (TableTipoBase == 2) {
+        //    arrayForExcel = ["IdEmpleado", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "Puesto", "FechaNacimiento", "FechaAntiguedad", "Sexo", "Email", "TipoFuncion", "CondicionTrabajo", "GradoAcademico", "UnidadNegocio", "DivisionMarca", "AreaAgencia", "Departamento", "Subdepartamento", "EmpresaContratante", "IdResponsableRH", "NombreResponsableRH", "IdJefe", "NombreJefe", "PuestoJefe", "IdResponsableEstructura", "NombreResponsableEstructura", "RangoAntiguedad", "RangoEdad", "ESTATUS_USUARIO", "CampoNumerico_1", "CampoDeTexto_1", "CampoNumerico_2", "CampoNumerico_3", "CampoDeTexto_2", "CampoDeTexto_3"];
+        //}
+        //if (TableTipoBase == 1) {
+        //    arrayForExcel = ["IdEncuestado", "IdEmpleadoRH", "Nombre", "ApellidoPaterno", "ApellidoMaterno", "Puesto", "FechaNacimiento", "FechaAntiguedad", "Sexo", "Email", "TipoFuncion", "CondicionTrabajo", "GradoAcademico", "UnidadNegocio", "DivisionMarca", "AreaAgencia", "Departamento", "Subdepartamento", "EmpresaContratante", "IdResponsableRH", "NombreResponsableRH", "IdJefe", "NombreJefe", "PuestoJefe", "IdResponsableEstructura", "NombreResponsableEstructura", "RangoAntiguedad", "RangoEdad", "ESTATUS_USUARIO", "CampoNumerico_1", "CampoDeTexto_1", "CampoNumerico_2", "CampoNumerico_3", "CampoDeTexto_2", "CampoDeTexto_3"];
+        //}
+
+        $('#exceltable tr').remove();
+        var archivo = $('#postedFile').val();
+        var extension = archivo.split('.')[1];
+        if (extension == 'xlsx') {  
+            var xlsxflag = false; /*Flag for checking whether excel is .xls format or .xlsx format*/  
+            if ($("#postedFile").val().toLowerCase().indexOf(".xlsx") > 0) {  
+                xlsxflag = true;  
+            }  
+            /*Checks whether the browser supports HTML5*/  
+            if (typeof (FileReader) != "undefined") {  
+                var reader = new FileReader();  
+                reader.onload = function (e) {  
+                    var data = e.target.result;  
+                    /*Converts the excel data in to object*/  
+                    if (xlsxflag) {  
+                        var workbook = XLSX.read(data, { type: 'binary' });  
+                        propiertiesExcel = workbook;
+                    }  
+                    else {  
+                        var workbook = XLS.read(data, { type: 'binary' });  
+                        propiertiesExcel = workbook;
+                    }  
+                    /*Gets all the sheetnames of excel in to a variable*/  
+                    var sheet_name_list = workbook.SheetNames;  
+  
+                    var cnt = 0; /*This is used for restricting the script to consider only first sheet of excel*/  
+                    sheet_name_list.forEach(function (y) { /*Iterate through all sheets*/  
+                        /*Convert the cell value to Json*/  
+                        if (xlsxflag) {  
+                            var exceljson = XLSX.utils.sheet_to_json(workbook.Sheets['Hoja1']);  
+                            excelData = exceljson;
+                        }  
+                        else {  
+                            var exceljson = XLS.utils.sheet_to_row_object_array(workbook.Sheets['Hoja1']); 
+                            excelData = excelData;
+                            if (exceljson == null) {
+                                excelValido = false;
+                                swal('El archivo no contiene informacion para guardar', '', 'info');
+                            }
+                        }  
+                        if (exceljson.length > 0 && cnt == 0) {  
+                            BindTable(exceljson, '#exceltable');  
+                            cnt++;  
+                        }  
+                    });  
+                    var rows = $('#exceltable tr').length;
+                    var cols = [];
+                        
+                    if ($("input[name=tipo]:checked").val() == "1") {
+                        for (var i = 0; i < 34; i++) {
+                            cols.push(propiertiesExcel.Strings[i].h);
+                        }
+                    }
+                    if ($("input[name=tipo]:checked").val() == "2") {
+                        for (var i = 0; i < 35; i++) {
+                            cols.push(propiertiesExcel.Strings[i].h);
+                        }
+                    }
+
+                    
+                    var jsonArrayCorrect = Object;
+                    if ($("input[name=tipo]:checked").val() == "1") {
+                        jsonArrayCorrect = JSON.stringify(arrayForExcelClima);
+                    }
+                    if ($("input[name=tipo]:checked").val() == "2") {
+                        jsonArrayCorrect = JSON.stringify(arrayForExcelGenerico);
+                    }
+                    var jsonArrayInput = JSON.stringify(cols);
+                    //Validacion
+                    if (rows == 0) {
+                        excelValido = false;
+                        swal('El archivo que ha elegido no contiene informacion para importar', '', 'info');
+                    }
+                    else{
+                        excelValido = true;
+                        //$('#exceltable').DataTable();
+                        $('#exceltable').hide(); 
+                    }
+                    
+                    if (jsonArrayCorrect != jsonArrayInput) {
+                        excelValido = false;
+                        swal('El archivo no coincide con la estrucura del layout especificada.', '', 'info');
+                    }
+                    else if (rows > 0 && jsonArrayCorrect == jsonArrayInput && extension == 'xlsx') {
+                        excelValido = true;
+                        //$('#exceltable').DataTable();
+                        $('#exceltable').hide(); 
+                    }
+                }  
+                if (xlsxflag) {/*If excel file is .xlsx extension than creates a Array Buffer from excel*/  
+                    reader.readAsArrayBuffer($("#postedFile")[0].files[0]);  
+                }  
+                else {  
+                    reader.readAsBinaryString($("#postedFile")[0].files[0]);  
+                }  
+            }  
+            else {  
+                swal("Your browser does not support HTML5!", "", "info");  
+            }  
+        }  
+        else {  
+            swal("Formato de archivo no admitido", "", "info");  
+        }
+        swal.close();
+        //swal('fin');
+    }  
+    function BindTable(jsondata, tableid) {/*Function used to convert the JSON array to Html Table*/  
+        tableid = '#cuerpoTabla';
+        var columns = BindTableHeader(jsondata, tableid); /*Gets all the column headings of Excel*/  
+        for (var i = 0; i < jsondata.length; i++) {  
+            var row$ = $('<tr/>');  
+            for (var colIndex = 0; colIndex < columns.length; colIndex++) {  
+                var cellValue = jsondata[i][columns[colIndex]];  
+                if (cellValue == null)  
+                    cellValue = "";  
+                row$.append($('<td/>').html(cellValue));  
+            }  
+            $(tableid).append(row$);  
+        }  
+    }  
+    function BindTableHeader(jsondata, tableid) {/*Function used to get all column names from JSON and bind the html table header*/  
+        tableid = "#filaHead";
+        var columnSet = [];  
+        var headerTr$ = $('<tr/>');  
+        for (var i = 0; i < jsondata.length; i++) {  
+            var rowHash = jsondata[i];  
+            for (var key in rowHash) {  
+                if (rowHash.hasOwnProperty(key)) {  
+                    if ($.inArray(key, columnSet) == -1) {/*Adding each unique column names to a variable array*/  
+                        columnSet.push(key);  
+                        headerTr$.append($('<th/>').html(key));  
+                    }  
+                }  
+            }  
+        }  
+        $(tableid).append(headerTr$);  
+        return columnSet;  
+    } 
+</script>
+<script>
+    var IdEmpleadoForNewInsert = 0;
+
+    function getLastId() {
+        //$('#msg').remove();
+        //$('#lastInsert').append('<strong id="msg">El Id de empleado con que debe iniciar su layout es el: ' +IdEmpleadoForNewInsert+'</strong>');
+        //$('#lastInsert').show();
+    }
+
+    function ocultarMSG() {
+        //$('#lastInsert').hide();
+    }
+
+    $(document).ready(function () {
+        @*$("#DDLTipoEncuesta option[value='1']").remove();
+        $('#exceltable').hide();
+        $('#lastInsert').hide();
+        $.ajax({
+            url: '@Url.Action("GetLastEmapleado")',
+            data: 1,
+            complete: function (Response) {
+                var IdForNewInsert = Response.responseJSON + 1;
+                IdEmpleadoForNewInsert = IdForNewInsert;
+            }
+        });*@
+    });
+</script>
