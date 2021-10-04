@@ -37,7 +37,7 @@ function init() {
     //controls();
     //$jit.id('max-levels').style.display = 'none';
     // init data
-    var json = cargaJson;
+   // var json = cargaJson;
     var json = {
         "name": "<div class='d_flex justify-content-center'><div class='d_flex justify-content-center mt-3 mb-5 pb-5'><center>TURISMO</center></div><div class='row d_flex justify-content-center'><div class='col-5'><center><div class='nublado'><center><img class='m-2 w-icon-impulsores' ng-src='/img/ReporteoClima/nublado.svg' src='/img/ReporteoClima/nublado.svg'></center><div class='clima-porcentaje robotoblack porcentaje-clima'><p class='mb-n2 f-21 ng-binding'>76.46</p><p class='yellow-clima f-17 mb-1 ng-binding'>HC:2012</p></div></div></center></div></div></div>",
         "id": "78048931-3550-405d-8b60-73564d152511",

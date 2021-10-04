@@ -115,20 +115,29 @@ namespace PL.Controllers
         {
             if (name == "Reporte")
                 name += "_" + DateTime.Now;
-            var usr = Session["AdminLog"].ToString();
+            string usr;
+            if (Session["AdminLog"] != null)
+                usr = Session["AdminLog"].ToString();
+            else
+                usr = "Invitado";
             var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\Reportes\\" + usr + "\\";
-            HttpPostedFileBase file = Request.Files["mypdf"];
-            string fileName = file.FileName;
-            string fileExtension = Path.GetExtension(file.FileName);
-            string fileContentType = file.ContentType;
-            byte[] fileBytes = new byte[file.ContentLength];
-            var base64 = Convert.ToBase64String(fileBytes);
-            var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-            if (!Directory.Exists(ruta))
-                Directory.CreateDirectory(ruta);
-            file.SaveAs(Path.Combine(ruta, name + ".pdf"));
-            return Json(result);
+            try
+            {
+                HttpPostedFileBase file = Request.Files["mypdf"];
+                if (!Directory.Exists(ruta))
+                    Directory.CreateDirectory(ruta);
+                file.SaveAs(Path.Combine(ruta, name + ".pdf"));
+                BL.NLogGeneratorFile.logSaveReporte(true, (ruta + name + ".pdf"), new Exception());
+                return Json(true);
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logSaveReporte(false, (ruta + name + ".pdf"), aE);
+                return Json(aE.Message);
+            }
         }
+
+        
 
         [HttpGet]
         public JsonResult GetReportesPDF()
@@ -145,7 +154,7 @@ namespace PL.Controllers
                 for (var i = 0; i < files.Count; i++)
                 {
                     files[i] = files[i].Remove(0, 30);
-                    files[i] += "http://diagnostic4u.com" + files[i];
+                    files[i] = "http://diagnostic4u.com" + files[i];
                 }
                 return Json(files, JsonRequestBehavior.AllowGet);
             }

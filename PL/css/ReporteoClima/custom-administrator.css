@@ -1794,7 +1794,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', end
 .table-contr {
     color: #ffffff;
     background-color: #f0af42;
-    padding: 10px 30px;
+    /*padding: 10px 30px;*/
 }
 
 .table-bienestar {
@@ -2414,11 +2414,14 @@ width: 0px !important;
 -----------------------------------------------------------------*/
 /*xl*/
 @media screen and (min-width: 1610px) {
+    .bg-gris {
+        margin-bottom: 0rem!important;
+    }
     .grafica-trabajarEx {
-        min-height: 450px;
+        min-height: 380px !important;
     }
     .grafica-dejarEx {
-        min-height: 450px;
+        min-height: 380px !important;
     }
     .bg-impulsores {
         min-height: 175px;
@@ -2489,6 +2492,8 @@ width: 0px !important;
 
     .graph-wrapper > .row {
         min-height: 420px;
+        /*min-height: 183px!important;*/
+        margin-bottom: 0px !important;
     }
 
     .grafica-trabajar {

@@ -26,7 +26,7 @@
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="borde-table-headerwhite padre" ng-class="{{ vm.CompanyCategoria.Id }}" scope="col"><div class="contr-head">{{ vm.CompanyCategoria.Descripcion }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" ng-class="{{ vm.Company.CompanyId }}" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" ng-class="{{ vm.Area.IdArea }}" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
-                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" ng-class="{{ vm.Departamento.IdDepartamento }}" scope="col"><div class="contr-head">{{ vm.Departamento.Descripcion }}</div></th>
+                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" ng-class="{{ vm.Departamento.IdDepartamento }}" scope="col"><div class="contr-head">{{ vm.Departamento.Nombre }}</div></th>
                                             <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                         </tr>
                                     </thead>
@@ -193,7 +193,7 @@
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.CompanyCategoria.Descripcion }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
-                                        <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Departamento.Descripcion }}</div></th>
+                                        <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Departamento.Nombre }}</div></th>
                                         <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                     </tr>
                                 </thead>
@@ -339,13 +339,24 @@
 </div><!--.container EA-->
 </div><!--.content-wrap-->
 <style>
-    .contr-head{
-        font-size: 0.7rem;
+    .contr-head {
+        font-size: 75%;
+        padding-left: 1px;
+        text-align: center;
+        word-break: break-all;
+        word-wrap: break-word;
+        display: flex;
+        justify-content: center;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        hyphens: auto;
+        padding-right: 1px;
+        overflow: hidden;
     }
     .table thead th {
-        width: 110px;
-        min-width: 110px;
-        max-width: 110px;
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
     }
 
     .bienestarHistorico {

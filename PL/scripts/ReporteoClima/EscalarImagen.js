@@ -408,7 +408,7 @@ var pruebaExp = function () {
         histo.push(paginaActiva);
         html2canvas(document.getElementById(paginaActiva), {
             image: { type: 'jpeg', quality: 1 },
-            html2canvas: { scale: 1 }
+            html2canvas: { scale: 2,logging: true }
         }).then(function (canvas) {
             var imgData = canvas.toDataURL("image/jpeg", 1.0);           
             var pdf = new jsPDF('l', 'px');
@@ -440,7 +440,7 @@ var otraopcion = function () {
         margin: 1,
         filename: 'myfile.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2,logging: true },
         jsPDF: { unit: 'mm', format: 'letter', orientation: 'landscape' }
 
     };

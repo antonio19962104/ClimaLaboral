@@ -16,6 +16,7 @@ namespace BL
         public static NLog.Logger nlogClimaDinamicoSMTP = NLog.LogManager.GetLogger(ML.LogTypes.nlogClimaDinamicoSMTP);
         public static NLog.Logger nlogClimaDinamicoFrontEnd = NLog.LogManager.GetLogger(ML.LogTypes.LogClimaDinamicoFrontEnd);
         public static NLog.Logger nlogModuloEncuestas = NLog.LogManager.GetLogger(ML.LogTypes.LogModuloEncuestas);
+        public static NLog.Logger nlogJobReportes = NLog.LogManager.GetLogger("LogJobReportes");
         public static void logBackGroundJobReporte(string data, StackTrace st, string a, int b, string c)
         {
             nlogClimaDinamicoBackGroundJobReporte.Error("/---------------------------------------------------------------------------------/");
@@ -119,6 +120,30 @@ namespace BL
             catch (Exception e)
             {
                 Console.Write(e);
+            }
+        }
+        public static void logJobDeleteReporte(bool status, string reporte, Exception e)
+        {
+            if (status)
+            {
+                nlogJobReportes.Info("El reporte " + reporte + " ha sido eliminado con exito");
+            }
+            else
+            {
+                nlogJobReportes.Error("El reporte " + reporte + " no pudo ser eliminado");
+                nlogJobReportes.Error(e.Message);
+            }
+        }
+        public static void logSaveReporte(bool status, string reporte, Exception e)
+        {
+            if (status)
+            {
+                nlogJobReportes.Info("El reporte ha sido guardado con exito en la ruta " + reporte);
+            }
+            else
+            {
+                nlogJobReportes.Error("El reporte " + reporte + " no pudo ser guardado");
+                nlogJobReportes.Error(e.Message);
             }
         }
     }

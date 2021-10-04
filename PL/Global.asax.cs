@@ -31,6 +31,7 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
+            RecurringJob.AddOrUpdate("BorradoReportesPDFByFecha", () => BL.LogReporteoClima.DeleteReportes(), "0 0 * * *");
             //RecurringJob.AddOrUpdate("RecurringJob", () => BL.LogReporteoClima.sendMail("demoEntidad", 2021, "jamurillo@grupoautofin.com", "demo.clima.com", "Pass@word01"), Cron.Minutely);
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere

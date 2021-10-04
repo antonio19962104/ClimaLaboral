@@ -463,12 +463,65 @@ namespace BL
                 return false;
             }
         }
-        /*
-                   public int opc { get; set; } = 0;
-                    public int tipoEntidad { get; set; } = 0;
-                    public string EntidadName { get; set; } = "";
-                    public int anio { get; set; } = 0;
-                 */
+        /// <summary>
+        /// Job que elimina los reportes con fecha de creacion mayor a 30 dias
+        /// </summary>
+        public static void DeleteReportes()
+        {
+            try
+            {
+                var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\Reportes\\";
+                var folders = Directory.GetDirectories(ruta).ToList();
+                foreach (var folder in folders)
+                {
+                    var files = Directory.GetFiles(folder).ToList();
+                    foreach (var reporte in files)
+                    {
+                        DateTime fechaCreacion = File.GetCreationTime(reporte);
+                        if (DateTime.Now <= fechaCreacion.AddDays(30))
+                            BL.NLogGeneratorFile.nlogJobReportes.Info("El reporte " + reporte + " aun tiene una vigencia hasta el dia " + fechaCreacion.AddDays(30));
+                        if (DateTime.Now > fechaCreacion.AddDays(30))
+                        {
+                            try
+                            {
+                                File.Delete(reporte);
+                                BL.NLogGeneratorFile.logJobDeleteReporte(true, reporte, new Exception());
+                            }
+                            catch (Exception e)
+                            {
+                                BL.NLogGeneratorFile.logJobDeleteReporte(false, reporte, e);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.nlogJobReportes.Error("Excepcion en el Job");
+                BL.NLogGeneratorFile.nlogJobReportes.Error(aE);
+            }
+        }
+
+        public static void GetJobs()
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var jobList = context.Job.ToList();
+                    foreach (var Jobitem in jobList)
+                    {
+                        var status = context.State.Select(o => o).Where(o => o.Id == Jobitem.StateId && o.JobId == Jobitem.Id).FirstOrDefault();
+                        Jobitem.State.Add(status);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+
+            }
+        }
+
         public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url, string ps, string nivelDetalle, int opc, string criterioBusquedaSeleccionado, int enfoqueSeleccionado, string lvlDetalle)
         {
             string token = string.Empty;
