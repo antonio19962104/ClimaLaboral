@@ -3569,6 +3569,8 @@ function GetDashBoard() {
                                 }
                             }
                             if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
+                                // Estoy en el ee
+                                var mitad = $(".divExportacionBienestarClass").length / 2;//Si ya mostro la mitad debe pasarse a la siguiente
                                 document.getElementsByClassName("busy")[1].style.display = "block";
                                 var indiceVisible = "";
                                 [].forEach.call($(".divExportacionBienestarClass"), function (item, index) {
@@ -3583,9 +3585,11 @@ function GetDashBoard() {
                                 }, function () {
 
                                 });
-                                if (indiceVisible == ($(".divExportacionBienestarClass").length - 1)) {
+                                if (indiceVisible == (mitad - 1)) {
                                     // ya el visible es el ultimo avanzar a lo que sigue
                                     vm.SeccionesReporte.Id++;
+                                    document.getElementById("tab-17").classList.add("ng-hide");
+                                    document.getElementById("tab-18").classList.remove("ng-hide");
                                     document.getElementsByClassName("busy")[1].style.display = "none";
                                     return vm.peticiones();
                                 }
@@ -3611,6 +3615,9 @@ function GetDashBoard() {
                             }
                             if (vm.SeccionesReporte.Id >= 17 && vm.SeccionesReporte.Id <= 20) {
                                 vm.SeccionesReporte.Id++;
+                                if (vm.SeccionesReporte.Id != 18) {
+                                    document.getElementById("tab-18").classList.add("ng-hide");
+                                }
                                 return vm.peticiones();
                             }
                             if (vm.SeccionesReporte.Id >= 21 && vm.SeccionesReporte.Id <= 35) {
@@ -5326,7 +5333,7 @@ function GetDashBoard() {
                                     // mostrar el ultimo indice
                                     $(".divExportacionBienestarClass")[($(".divExportacionBienestarClass").length - 1)].style.display = "";
                                 }//fin
-                                if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
+                                if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {                                   
                                     // navegar subsecciones bienestar
                                     var indiceVisible = "";
                                     [].forEach.call($(".divExportacionBienestarClass"), function (item, index) {
@@ -5334,13 +5341,21 @@ function GetDashBoard() {
                                             indiceVisible = index;
                                         }
                                     });
+                                    if (vm.enfoqueSeleccionado == 2) {
+                                        // EA solo la ultima mitad ya debo retroceder de seccion para no ver el EA
+                                        var mitad = $(".divExportacionBienestarClass").length / 2;
+                                        if (indiceVisible == (mitad)) {
+                                            vm.SeccionesReporte.Id = 14;
+                                            return;
+                                        }
+                                    }
                                     if (indiceVisible == 0 || indiceVisible == "") {
                                         // ya el visible es el primero, debo retrocedr de seccion
                                         vm.SeccionesReporte.Id = 14;
                                         return;
                                     }
                                     else {
-                                        //mostrar el siguiente
+                                        //mostrar el anterior
                                         $(".divExportacionBienestarClass")[(indiceVisible)].style.display = "none";
                                         $(".divExportacionBienestarClass")[(indiceVisible - 1)].style.display = "";
                                         document.getElementsByClassName("busy")[1].style.display = "none";
@@ -5638,8 +5653,9 @@ function GetDashBoard() {
                                 }
 
                                 if (vm.SeccionesReporte.Id == 18 && $(".divExportacionBienestarClass").length > 0) {
-                                    // mostrar el ultimo indice
-                                    $(".divExportacionBienestarClass")[($(".divExportacionBienestarClass").length - 1)].style.display = "";
+                                    // EE mostrar el ultimo indice de la primera mitad
+                                    var mitad = $(".divExportacionBienestarClass").length / 2;
+                                    $(".divExportacionBienestarClass")[(mitad - 1)].style.display = "";
                                 }//fin
                                 if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
                                     // navegar subsecciones bienestar
@@ -5651,7 +5667,7 @@ function GetDashBoard() {
                                     });
                                     if (indiceVisible == 0 || indiceVisible == "") {
                                         // ya el visible es el primero, debo retrocedr de seccion
-                                        vm.SeccionesReporte.Id = 14;
+                                        vm.SeccionesReporte.Id = 13;
                                         return;
                                     }
                                     else {
@@ -6802,8 +6818,17 @@ function GetDashBoard() {
                                             document.getElementById("tab-bienestar-ee").style.display = "none";
                                             document.getElementById("tab-bienestar-ea").style.display = "none";
                                             //mostrar la primera
-                                            $(".divExportacionBienestarClass").css("display", "none");
-                                            $(".divExportacionBienestarClass")[0].style.display = "";
+                                            var mitad = $(".divExportacionBienestarClass").length / 2;
+                                            if (vm.enfoqueSeleccionado == 2) {
+                                                //EA (segunda mitad)
+                                                $(".divExportacionBienestarClass").css("display", "none");
+                                                $(".divExportacionBienestarClass")[(mitad)].style.display = "";
+                                            }
+                                            if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 1) {
+                                                //EE (primera mitad)
+                                                $(".divExportacionBienestarClass").css("display", "none");
+                                                $(".divExportacionBienestarClass")[0].style.display = "";
+                                            }
                                             vm.isBusy = false;
                                         }, 3000);
                                     }
