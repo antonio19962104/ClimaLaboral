@@ -31,6 +31,8 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
+            //BL.Categoria.GetCategoriasByIdEncuesta(new Categoria.CategoriasPlanAccion() { AnioAplicacion = 2021, Area = "", IdBaseDeDatos = 2114, IdEncuesta = 1, IdPregunta = 0 });
+
             RecurringJob.AddOrUpdate("BorradoReportesPDFByFecha", () => BL.LogReporteoClima.DeleteReportes(), "0 0 * * *");
             //RecurringJob.AddOrUpdate("RecurringJob", () => BL.LogReporteoClima.sendMail("demoEntidad", 2021, "jamurillo@grupoautofin.com", "demo.clima.com", "Pass@word01"), Cron.Minutely);
             /*

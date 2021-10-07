@@ -1,5 +1,5 @@
 ﻿/*
- * Script principal del reporte gráfico de Clima Laboral v1
+ * Script principal del reporte gráfico de Clima Laboral 
  */
 var dataComparativoPermanencia = [];
 var urlApisjs = "http://localhost:11124/";
@@ -21,6 +21,50 @@ function GetDashBoard() {
             vm.lvl3 = false;
             vm.lvl4 = false;
             vm.lvl5 = false;
+            //Aux
+            //Pantalla 1
+            vm.PorcentajeCalificacionGlobalEE = [];
+            vm.PorcentajeNivelConfianzaEE = [];
+            vm.PorcentajeNivelDeCompromisoEE = [];
+            vm.PorcentajeNivelDeColaboracionEE = [];
+
+            //Pantalla 2
+            vm.PorcentajeCredibilidadEE = [];
+            vm.PorcentajeImparcialidadEE = [];
+            vm.PorcentajeOrgulloEE = [];
+            vm.PorcentajeRespetoEE = [];
+            vm.PorcentajeCompanierismoEE = [];
+
+            //Pantalla 3
+            vm.PorcentajeCoachingEE = [];
+            vm.PorcentajeHabilidadesGerencialesEE = [];
+            vm.PorcentajeAlineacionEstrategicaEE = [];
+            vm.PorcentajePracticasCulturalesEE = [];
+            vm.PorcentajeCambioEE = [];
+            vm.PorcentajeProcesosOrganizacionalesEE = [];
+
+            //Pantalla 1
+            vm.PorcentajeCalificacionGlobalEA = [];
+            vm.PorcentajeNivelConfianzaEA = [];
+            vm.PorcentajeNivelDeCompromisoEA = [];
+            vm.PorcentajeNivelDeColaboracionEA = [];
+
+            //Pantalla 2
+            vm.PorcentajeCredibilidadEA = [];
+            vm.PorcentajeImparcialidadEA = [];
+            vm.PorcentajeOrgulloEA = [];
+            vm.PorcentajeRespetoEA = [];
+            vm.PorcentajeCompanierismoEA = [];
+
+            //Pantalla 3
+            vm.PorcentajeCoachingEA = [];
+            vm.PorcentajeHabilidadesGerencialesEA = [];
+            vm.PorcentajeAlineacionEstrategicaEA = [];
+            vm.PorcentajePracticasCulturalesEA = [];
+            vm.PorcentajeCambioEA = [];
+            vm.PorcentajeProcesosOrganizacionalesEA = [];
+
+            var cadenaDesenc = "";
             var banderapag18 = false;
             var partiendoTablas = 0;
             var contadorTablasBienestar = 0;
@@ -393,7 +437,44 @@ function GetDashBoard() {
             if (resolucion <= 1369) {
                 factMt= 7;
             }
+            vm.listTipoIndicador1 = [                
+                { Id: 1, Nombre: "Nivel de Participación", Descripcion: "" },
+                { Id: 2, Nombre: "Calificacion Global", Descripcion: "" },
+                { Id: 3, Nombre: "Nivel de Confianza", Descripcion: "" },
+                { Id: 4, Nombre: "Nivel de Compromiso", Descripcion: "" },
+                { Id: 5, Nombre: "Nivel de Colaboración", Descripcion: "" }                
+            ];
+            vm.listTipoIndicador2 = [                
+                { Id: 1, Nombre: "Credibilidad", Descripcion: "Como se percibe a los lideres y a la empresa" },
+                { Id: 2, Nombre: "Imparcialidad", Descripcion: "Sentir respecto de la justicia, no discriminación y claridad en las reglas" },
+                { Id: 3, Nombre: "Orgullo", Descripcion: "Percepción acerca del valor del trabajo e imagen de la compañia" },
+                { Id: 4, Nombre: "Respeto", Descripcion: "Como se piensa que se es visto y tratado por los superiores" },
+                { Id: 5, Nombre: "Compañerismo", Descripcion: "Sentir acerca del equipo de trabajo" },
+            ];
+            vm.listTipoImpulsorClave= [                
+                { Id: 1, Nombre: "Coaching(Liderazgo)", Descripcion: "Efectividad en la gestión del desempeño", Descripcion2: "Predice posibilidades de desarrollo y mejora continua" },
+                { Id: 2, Nombre: "Habilidades Gerenciales", Descripcion: "Efectividad en la asignación y coordinación de equipos", Descripcion2: "Predice la posibilidad de lograr resultados" },
+                { Id: 3, Nombre: "Alineación estratégica", Descripcion: "Capacidad para producir inspiración y propósito", Descripcion2: "Impacta en el sentido de pertenencia del colaborador" },
+                { Id: 4, Nombre: "Prácticas culturales", Descripcion: "Prácticas culturales favorables(trato humano, cercania y reconocimiento)", Descripcion2: "Impacta en la motivacion y compromiso" },
+                { Id: 5, Nombre: "Manejo del cambio", Descripcion: "Efectividad en el manjejo del cambio(grado de certidumbre y seguridad)", Descripcion2: "Impacta en la productividad" },
+                { Id: 6, Nombre: "Procesos organizacionales", Descripcion: "Efectividad en la gestión de personal", Descripcion2: "Impacta en el sentido de justicia, equidad e imparcialidad" },
+            ];
+
+
             /*#endregion variables*/
+
+            vm.SetArrayData = function (data, enfoque) {
+                var cadenaArreglo = "";
+                if (enfoque == 1) {
+                    cadenaArreglo = data[0].replace("[", "").replace("]", "");//Elimina los corchetes
+                    return cadenaArreglo.split(","); //Retorna el enfoque empresa en un array de decimales
+                    
+                }
+                if (enfoque == 2) {
+                    cadenaArreglo = data[1].replace("[", "").replace("]", "");//Elimina los corchetes
+                    return cadenaArreglo.split(","); //Retorna el enfoque area en un array de decimales
+                }
+            }
 
             var getParamByUrl = function (key) {
                 try {
@@ -422,8 +503,9 @@ function GetDashBoard() {
                             url: "/ReporteoClima/GetFiltrosR/?cadena=" + token,
                             type: "GET",
                             success: function (respose) {
-                                //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque   |lvlDetalle
+                                //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque|lvlDetalle|BD
                                 var cadenaFiltros = respose;
+                                cadenaDesenc = cadenaFiltros;
                                 //Otro camino en llenar directo los vm
                                 vm.opc = cadenaFiltros.split("|")[2];
                                 vm.tipoEntidad = cadenaFiltros.split("|")[3];
@@ -442,22 +524,22 @@ function GetDashBoard() {
                                         vm.CompanyCategoria.Descripcion = vm.entidadNombre;
                                         break;
                                     case 2:
-                                        vm.Company.CompanyIda = vm.entidadNombre;
-                                        vm.Company.CompanyNamea = vm.entidadNombre;
+                                        vm.Company.CompanyId = vm.entidadNombre;
+                                        vm.Company.CompanyName = vm.entidadNombre;
                                         break;
                                     case 3:
-                                        vm.Area.IdAreaa = vm.entidadNombre;
-                                        vm.Area.Nombrea = vm.entidadNombre;
+                                        vm.Area.IdArea = vm.entidadNombre;
+                                        vm.Area.Nombre = vm.entidadNombre;
                                         break;
                                     case 4:
-                                        vm.Departamento.IdDepartamentoa = vm.entidadNombre;
-                                        vm.Departamento.Nombrea = vm.entidadNombre;
+                                        vm.Departamento.IdDepartamento = vm.entidadNombre;
+                                        vm.Departamento.Nombre = vm.entidadNombre;
                                         break;
                                     default:
                                 }
                                 //segun el criterio
                                 vm.anioSeleccionado = Object;
-                                vm.anioSeleccionado.value = 2021;
+                                vm.anioSeleccionado.value = parseInt(cadenaFiltros.split("|")[5]);
                                 vm.changedValueAnio(vm.anioSeleccionado.value);
 
                             },
@@ -546,17 +628,71 @@ function GetDashBoard() {
                 }
 				if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
                    if (vm.SeccionesReporte.Id == 24) {
-                       if ($(".contenedor-resumen:visible").length > 0) {
-                           $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
-                           $(".contenedor-resumen:visible")[0].style.setProperty("margin-top", "-550px", "important");
-                       }
+                       //if ($(".contenedor-resumen:visible").length > 0) {
+                       //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
+                       //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-top", "-550px", "important");
+                       //}
+                        var resumen24 = $(".contenedor-resumen:visible")
+                        switch (vm.enfoqueSeleccionado) {
+                            case 0:
+                                if (resumen24.length > 0) {
+                                    [].forEach.call(resumen24, function (item) {
+                                        item.style.marginTop = "-32rem";
+                                    });
+                                }
+                                break;
+                            case 1: case 2:
+                                if (resumen24.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(resumen24, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(resumen24, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(resumen24, function (item) {
+                                            item.style.marginTop = "-28rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    
+                                }
+                                break;        
+                        } 
                     }
                     else {
                         var multi26  = $(".contenedor-resumen:visible");
-                        [].forEach.call(multi26,function (elem) {
-                            elem.style.marginRight ="25px";
-                            elem.style.marginTop="-550px";                            
-                        });
+                        //[].forEach.call(multi26,function (elem) {
+                        //    elem.style.marginRight ="25px";
+                        //    elem.style.marginTop="-550px";                            
+                       //});
+                        if (multi26.length > 0) {
+                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                [].forEach.call(multi26, function (item) {
+                                    item.style.marginTop = "-32rem";
+                                    item.style.marginRight ="25px";
+                                });
+                            }
+                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                [].forEach.call(multi26, function (item) {
+                                    item.style.marginTop = "-32rem";
+                                    item.style.marginRight ="25px";
+                                });
+                            }
+                            if (resolucion <= 1369) {
+                                [].forEach.call(multi26, function (item) {
+                                    item.style.marginTop = "-28rem";
+                                    item.style.marginRight ="25px";
+                                });
+                            }
+                                    
+                        }
                     }
                 }
             }
@@ -611,7 +747,7 @@ function GetDashBoard() {
             /*#region llenar catalogos*/
             vm.get = function (url, functionOK, mostrarAnimacion) {
                 url = vm.urlApis + url;
-                if (vm.listPeticiones.includes(url) && vm.SeccionesReporte.Id > 0) {
+                if (vm.listPeticiones.includes(url) && vm.SeccionesReporte.Id > 2) {
                     return false;
                 }
                 else {
@@ -1482,6 +1618,41 @@ function GetDashBoard() {
 
             /*#region onChange*/
             vm.changedValueCriterioBusqueda = function (criterioSeleccionado) {
+                // limpiar las elecciones
+                try {
+                    vm.CompanyCategoria.IdCompanyCategoria = "";
+                    vm.CompanyCategoria.Descripcion = "";
+                    vm.CompanyCategoriaForEmpresa.IdCompanyCategoria = "";
+                    vm.CompanyCategoriaForEmpresa.Descripcion = "";
+                    vm.CompanyCategoriaForArea.IdCompanyCategoria = "";
+                    vm.CompanyCategoriaForArea.Descripcion = "";
+                    vm.CompanyCategoriaForDepartamento.IdCompanyCategoria = "";
+                    vm.CompanyCategoriaForDepartamento.Descripcion = "";
+
+                    vm.Company.CompanyId = "";
+                    vm.Company.CompanyName = "";
+                    vm.CompanyForArea.CompanyId = "";
+                    vm.CompanyForArea.CompanyName = "";
+                    vm.CompanyForDepartamento.CompanyId = "";
+                    vm.CompanyForDepartamento.CompanyName = "";
+
+                    vm.Area.IdArea = "";
+                    vm.Area.Nombre = "";
+                    vm.AreaForDepartamento.IdArea = "";
+                    vm.AreaForDepartamento.Nombre = "";
+
+                    vm.Departamento.IdDepartamento = "";
+                    vm.Departamento.Nombre = "";
+
+                 
+                } catch (e) {
+                    console.log(e);
+                }
+                $(".select-estr").empty();
+                document.getElementById("DDLBD").value = "0";
+                vm.Anio.value = "-Selecciona-";
+                vm.ddlEnfoques.Id = 0;
+
                 // limpiar los filtros de nivel de detalle
                 var lvl = document.getElementById("tab-1").getElementsByClassName("lvlDetalle");
                 for (var i = criterioSeleccionado; i < lvl.length; i++)
@@ -1569,7 +1740,34 @@ function GetDashBoard() {
                     vm.modelHistorico = vm.model;
                     vm.model.CurrentUsr = localStorage["usuario"];
 
-                    vm.model.Anio = anioSeleccionado.value - 1;
+
+                    if (getParamByUrl("token") != null) {
+                        vm.model.CurrentUsr = cadenaDesenc.split("|")[0];
+                        localStorage["usuario"] = vm.model.CurrentUsr;
+                        vm.model.nivelDetalle = cadenaDesenc.split("|")[7];
+                        // si el token tiene un nivel de detalle arriba de criterioseleccionado.Id este se va
+                        [].forEach.call(vm.model.nivelDetalle, function (item) {
+                            if (parseInt(item) < vm.criterioBusquedaSeleccionado.Id) {
+                                vm.model.nivelDetalle = vm.model.nivelDetalle.replace(item, "");
+                            }
+                        });
+                        console.log(vm.model.nivelDetalle);
+                        vm.UNSeleccionada = vm.model.EntidadNombre;
+                        vm.storeName = "_" + vm.model.EntidadNombre + "_" + vm.modelHistorico.EntidadNombre + "_" + (vm.modelHistorico.Anio);
+                        vm.model.IdBaseDeDatos = parseInt(cadenaDesenc.split("|")[8]);
+                        if (vm.model.nivelDetalle.includes("1")) 
+                            vm.lvl1 = true;
+                        if (vm.model.nivelDetalle.includes("2"))
+                            vm.lvl2 = true;
+                        if (vm.model.nivelDetalle.includes("3"))
+                            vm.lvl3 = true;
+                        if (vm.model.nivelDetalle.includes("4"))
+                            vm.lvl4 = true;
+                        if (vm.model.nivelDetalle.includes("5"))
+                            vm.lvl5 = true;
+                    }
+
+                    vm.model.Anio = anioSeleccionado - 1;
                     if (vm.model.EntidadNombre != "" && vm.model.EntidadId != null && vm.model.EntidadId != "") {
                         if (validFind) {
                             fillArrayCustomHisto("apisHistorico/existeHistorico_2", vm.model, vm.ExisteH, function () {
@@ -1587,6 +1785,7 @@ function GetDashBoard() {
                                         title: "No se cuenta con un registro histórico acorde a los criterios de búsqueda proporcionados, desea continuar?",
                                         text: "",
                                         icon: "info",
+                                        allowOutsideClick: false,
                                         buttons: [
                                             'No, cancelar!',
                                             'Si, estoy seguro!'
@@ -1600,6 +1799,7 @@ function GetDashBoard() {
                                                     /*vm.writteLogData(vm.listDataHistorico, "vm.onchangeValueAnio()");vm.getPromediosGeneralesHistoricos();*/
                                                     if (!vm.isNullOrEmpty(getParamByUrl("token"))) {
                                                         vm.SeccionesReporte.Id++;
+                                                        vm.getReporteDataPantalla_6();
                                                     }
                                                 });
                                             });
@@ -2227,11 +2427,39 @@ function GetDashBoard() {
                 if (vm.enfoqueSeleccionado != undefined) {
                     try {
                         var resumen = $(".contenedor-resumen:visible")
-                        if (resumen.length > 0) {
-                            [].forEach.call(resumen, function (item) {
-                                item.style.marginTop = "-42rem";
-                            });
-                        }
+                        switch (vm.enfoqueSeleccionado) {
+                            case 0:
+                                if (resumen.length > 0) {
+                                    [].forEach.call(resumen, function (item) {
+                                        item.style.marginTop = "-32rem";//-32rem
+                                        item.style.marginRight ="25px";
+                                    });
+                                }
+                                break;
+                            case 1: case 2:
+                                if (resumen.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    
+                                }
+                                break;        
+                        }                        
 
                         /* Se obtiene la seccion del reporte activa */
                         for (var i = 0; i < divs.length; i++) {
@@ -2528,21 +2756,23 @@ function GetDashBoard() {
                                 if (paginaActiva == "tab-indicadores-permanencia") {
                                     if ($(window).width() > 1610) {
                                         finalPaddingTop = 160;
-                                        var indicador = document.getElementsByClassName("margin-top-nuevo");
-                                        [].forEach.call(indicador, function (itemD) {
-                                            var mt = parseInt(itemD.style.marginTop);
-                                            var newmt = mt / 2;
-                                            itemD.style.marginTop = newmt + "px";
-                                        });
-                                        var elem = document.getElementById(paginaActiva);
-                                        elem.getElementsByClassName("card-block")[0].style.padding = "0px";
-                                        var mb = elem.getElementsByClassName("bg-gris");
-                                        [].forEach.call(mb, function (elemMB) {
-                                            elemMB.classList.remove("mb-5");
-                                            elemMB.classList.add("mb-2");
-                                        });
-                                        elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-5");
-                                        elem.getElementsByClassName("nuevomt")[0].classList.add("mt-2");
+                                        /***********Se comenta para resolucion grande********************/
+                                        //var indicador = document.getElementsByClassName("margin-top-nuevo");
+                                        //[].forEach.call(indicador, function (itemD) {
+                                        //    var mt = parseInt(itemD.style.marginTop);
+                                        //    var newmt = mt / 2;
+                                        //    itemD.style.marginTop = newmt + "px";
+                                        //});
+                                        //var elem = document.getElementById(paginaActiva);
+                                        //elem.getElementsByClassName("card-block")[0].style.padding = "0px";
+                                        //var mb = elem.getElementsByClassName("bg-gris");
+                                        //[].forEach.call(mb, function (elemMB) {
+                                        //    elemMB.classList.remove("mb-5");
+                                        //    elemMB.classList.add("mb-2");
+                                        //});
+                                        //elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-5");
+                                        //elem.getElementsByClassName("nuevomt")[0].classList.add("mt-2");
+                                        /***********Se comenta para resolucion grande********************/
 										
                                     //se aumenta el tamaño minimo de los bg-gris 20/09/2021
                                     // Lo que me Motiva
@@ -2553,6 +2783,7 @@ function GetDashBoard() {
                                     var sepasa = false;
                                     var valbarra = 0; 
                                     var valpadding = 0;
+									 var valpaddingM = 0;
                                     [].forEach.call(barrasB1,function (elem) {
                                         separanum = elem.innerText; 
                                         separanum = separanum.replace("%","");
@@ -2562,13 +2793,39 @@ function GetDashBoard() {
                                             return;
                                         }
                                     });
-                                    if (sepasa) {
-                                        valbarra = 1.5;
-                                        valpadding = 1.7;//-.15
+                                     if (sepasa) {
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra = 1.5;
+                                            valpaddingM=1.6;
+                                            valpadding = 1.7;//-.15
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra = 1.5;
+                                            valpaddingM=1.6;
+                                            valpadding = 1.7;//-.15
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra = 1.5;
+                                            valpaddingM=1.6;
+                                            valpadding = 1.7;//-.15
+                                        }
                                     }
                                     else {
-                                        valbarra = 2;
-                                        valpadding = 2.2;
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra = 3;
+                                            valpadding = 3.2;
+                                            valpaddingM = 3.3;
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra = 3;
+                                            valpaddingM = 3.2;
+                                            valpadding = 3.3;
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra = 3;
+                                            valpaddingM = 3.2;
+                                            valpadding = 3.3;
+                                        }                                        
                                     }
                                     var elementBAzul= $(".grafica-trabajarEx .bar");
                                     [].forEach.call(elementBAzul,function (elem) {
@@ -2579,7 +2836,7 @@ function GetDashBoard() {
                                     var elementBMorado= $(".grafica-trabajarEx .bar-progress2:visible");
                                     [].forEach.call(elementBMorado,function (elem) {
                                         var mt = parseInt(elem.style.height);
-                                        var newmt = mt * valbarra;
+                                        var newmt = mt * valpaddingM;
                                         elem.style.height = newmt + "px";
                                     });
                                     var paddingelemento = $(".grafica-trabajarEx .bar-progress");
@@ -2598,6 +2855,7 @@ function GetDashBoard() {
                                     var sepasa2 = false;
                                     var valbarra2 = 0;
                                     var valpadding2 = 0;
+									  var valpadding2M = 0;
                                     [].forEach.call(barrasB2,function (elem) {
                                         separanum2 = elem.innerText; 
                                         separanum2 = separanum2.replace("%","");
@@ -2607,13 +2865,39 @@ function GetDashBoard() {
                                             return;
                                         }
                                     });                                   
-                                    if (sepasa2) {
-                                        valbarra2 = 1.5;
-                                        valpadding2 = 1.7;
+                                     if (sepasa2) {
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra2 = 1.5;
+                                            valpadding2M=1.6;
+                                            valpadding2 = 1.7;
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra2 = 1.5;
+                                            valpadding2M=1.6;
+                                            valpadding2 = 1.7;
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra2 = 1.5;
+                                            valpadding2M=1.6;
+                                            valpadding2 = 1.7;
+                                        }                                       
                                     }
                                     else {
-                                        valbarra2 = 2;
-                                        valpadding2 = 2.2;
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra2 = 3;
+                                            valpadding2M = 3.2;
+                                            valpadding2 = 3.3;
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra2 = 3;
+                                            valpadding2M = 3.2;
+                                            valpadding2 = 3.3;
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra2 = 3;
+                                            valpadding2M = 3.2;
+                                            valpadding2 = 3.3;
+                                        } 
                                     }
                                     var elementBAzul2= $(".grafica-dejarEx .bar2");
                                     [].forEach.call(elementBAzul2,function (elem) {
@@ -2624,7 +2908,7 @@ function GetDashBoard() {
                                     var elementBMorado2= $(".grafica-dejarEx .bar-progress4:visible");
                                     [].forEach.call(elementBMorado2,function (elem) {
                                         var mt = parseInt(elem.style.height);
-                                        var newmt = mt * valbarra2;
+                                        var newmt = mt * valpadding2M;
                                         elem.style.height = newmt + "px";
                                     });
                                     var paddingelemento2 = $(".grafica-dejarEx .bar-progress3");
@@ -2638,10 +2922,11 @@ function GetDashBoard() {
                                     elemtH1[0].style.minHeight = "550px";//450
                                     var elemtH2 = $("#tab-indicadores-permanencia .grafica-dejarEx")
                                     elemtH2[0].style.minHeight = "550px";//450
-                                    var elembg1 = $(".grafica-trabajarEx .bg-gris");
-                                    elembg1[0].style.minHeight ="445px";//'346px';
-                                    var elembg2 = $(".grafica-dejarEx .bg-gris");
-                                    elembg2[0].style.minHeight ="445px";//'346px';
+                                     /**********Se quitan por alto de caja gris*****************/
+                                    //var elembg1 = $(".grafica-trabajarEx .bg-gris");
+                                    //elembg1[0].style.minHeight ="445px";//'346px';
+                                    //var elembg2 = $(".grafica-dejarEx .bg-gris");
+                                    //elembg2[0].style.minHeight ="445px";//'346px';
 
 
                                     }
@@ -3088,6 +3373,7 @@ function GetDashBoard() {
                                         'No mostrar de nuevo'
                                     ],
                                     dangerMode: false,
+                                    allowOutsideClick: false,
                                 }).then(function (isConfirm) {
                                     if (isConfirm)
                                         vm.mostrarMensaje = false;
@@ -3104,6 +3390,7 @@ function GetDashBoard() {
                                         'No mostrar de nuevo'
                                     ],
                                     dangerMode: false,
+                                    allowOutsideClick: false,
                                 }).then(function (isConfirm) {
                                     if (isConfirm)
                                         vm.mostrarMensaje = false;
@@ -4384,6 +4671,9 @@ function GetDashBoard() {
 
             vm.peticiones = function () {
                 if (true) {
+                    if (vm.SeccionesReporte.Id == 4 && getParamByUrl("token") != null) {
+                        //vm.getReporteDataPantalla_6();
+                    }
                     if (vm.SeccionesReporte.Id == 7 && vm.PorcentajeCompanierismo.length == 0) {
                         vm.getReporteDataPantalla_7();
                     }
@@ -4886,6 +5176,11 @@ function GetDashBoard() {
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                     });
+                                    //bajar margin top
+                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    [].forEach.call(hc, function (item) {
+                                        item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
+                                    });
                                 }
                                 if (vm.enfoqueSeleccionado == 0 && vm.SeccionesReporte.Id != 24) {
                                     var graficaBarras = $(".bar-progress-clasificacion:visible");
@@ -4906,6 +5201,11 @@ function GetDashBoard() {
                                     var graficaHC = $(".row .bg-gris:visible");
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                    });
+                                    //bajar margin top
+                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    [].forEach.call(hc, function (item) {
+                                        item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
                                     });
                                 }
 
@@ -4972,6 +5272,11 @@ function GetDashBoard() {
                                     var graficaHC = $(".row .bg-gris:visible");
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                    });
+                                    //bajar margin top
+                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    [].forEach.call(hc, function (item) {
+                                        item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
                                     });
                                 }
                             }
@@ -5958,6 +6263,66 @@ function GetDashBoard() {
 
 
             vm.existeEnDemo = function () {
+                var message = "Elige";
+                var formValid = true;
+                // validar filtros
+                switch (vm.criterioBusquedaSeleccionado.Id) {
+                    case 1:
+                        if (vm.CompanyCategoria == null)
+                            formValid = false;
+                        if (vm.CompanyCategoria.IdCompanyCategoria == "")
+                            formValid = false;
+                        if (vm.CompanyCategoria.IdCompanyCategoria == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.CompanyCategoria.IdCompanyCategoria;
+                        break;
+                    case 2:
+                        if (vm.Company == null)
+                            formValid = false;
+                        if (vm.Company.CompanyId == "") 
+                            formValid = false;
+                        if (vm.Company.CompanyId == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.Company.CompanyId;
+                        break;
+                    case 3:
+                        if (vm.Area == null) 
+                            formValid = false;
+                        if (vm.Area.IdArea == "") 
+                            formValid = false;
+                        if (vm.Area.IdArea == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.Area.IdArea;
+                        break;
+                    case 4:
+                        if (vm.Departamento == null) 
+                            formValid = false;
+                        if (vm.Departamento.IdDepartamento == "") 
+                            formValid = false;
+                        if (vm.Departamento.IdDepartamento == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.Departamento.IdDepartamento;
+                        break;
+                    default:
+                        alert("no tengo criterio");
+                }
+                if (vm.Anio == null) 
+                    formValid = false;
+                if (vm.Anio.value == "-Selecciona-")
+                    formValid = false;
+                if (vm.Anio.value > 1000)
+                    vm.modelHistorico.Anio = vm.Anio.value - 1;
+              
+                if (formValid == false) {
+                    swal("Debes llenar todos los campos del filtrado del reporte", "", "info").then(function () {
+                        return false;
+                    });
+                    return false;
+                }
+
+                vm.model.EntidadNombre = vm.modelHistorico.EntidadNombre;
+                vm.model.Anio = vm.modelHistorico.Anio;
+
                 vm.existeReporte = Object;
                 vm.modelHistorico.nivelDetalle =
                     (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
@@ -5965,6 +6330,11 @@ function GetDashBoard() {
                     (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
                     (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
                     (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (getParamByUrl("token") == null) {
+                    vm.modelHistorico.Anio = vm.anioSeleccionado.value - 1;
+                    vm.modelHistorico.IdBaseDeDatos = parseInt(document.getElementById("DDLBD").value);
+                    vm.modelHistorico.enfoqueSeleccionado = vm.ddlEnfoques.Id;
+                }
                 fillArrayCustomHisto("BackGroundJob/existeReporte/", vm.modelHistorico, vm.existeReporte, function () {
                     if (localStorage["tieneReporte"] == "true") {
                         /*Si ya existe preguntar si se quiere consultar el existente o actualizarlo sobreescribiendo*/
@@ -5972,6 +6342,7 @@ function GetDashBoard() {
                             title: "Este reporte ya se creó anteriormente. Deseas consultar el existente o quieres actualizarlo",
                             text: "",
                             icon: "info",
+                            allowOutsideClick: false,
                             buttons: [
                                 'Consultar el reporte existente!',
                                 'Actualizar el reporte!'
@@ -5989,12 +6360,36 @@ function GetDashBoard() {
                             }
                             else {
                                 /*Consultar existente*/
+                                vm.SeccionesReporte.Id++;
+                                vm.getEstructura();
                                 vm.getReporteDataPantalla_6();
                             }
                         });
                         return true;
                     }
-                    else {
+                    if (localStorage["tieneReporte"] == "Excede") {
+                        swal({
+                            title: "El reporte solicitado excede la cantidad de información que puede mostrarse",
+                            text: "",
+                            icon: "info",
+                            allowOutsideClick: false,
+                            buttons: [
+                                'Configurar nuevos filtros',
+                                'Ir al reporte de indicadores'
+                            ],
+                            dangerMode: false,
+                        }).then(function (isConfirm) {
+                            vm.hasHistorico = false;
+                            if (isConfirm) {
+                                window.location.href = "/Reporte/ReporteFinalByUNegocio/";
+                            }
+                            else {
+                                window.location.reload();
+                            }
+                        });
+                        return false;
+                    }
+                    else if (localStorage["tieneReporte"] == "false") {
                         swal("El reporte aún no se encuentra generado, este será generado y se le notificará por correo electrónico cuando este proceso haya terminado", "", "info").then(function () {
                             vm.generarJob();
                             window.location.href = "/Dashboard/Dashboard/";
@@ -6078,20 +6473,20 @@ function GetDashBoard() {
             /*Indicadores Generales*/
             vm.getReporteDataPantalla_6 = function () {
                 /*Validar si este reporte tiene su registro en la tabla Demo*/
-                if (localStorage["tieneReporte"] == "") {
+                if (localStorage["tieneReporte"] == "" && getParamByUrl("token") == null) {
                     vm.existeEnDemo();
                 }
-                if (localStorage["tieneReporte"] == "false" && localStorage["tieneReporte"] != "") {
+                if (localStorage["tieneReporte"] == "false" && localStorage["tieneReporte"] != "" && getParamByUrl("token") == null) {
 
                 }
-                else if (localStorage["tieneReporte"] != "" && localStorage["tieneReporte"] == "true") {
+                else if ((localStorage["tieneReporte"] != "" && localStorage["tieneReporte"] == "true") || getParamByUrl("token") != null) {
                     vm.flagLoading = true;
                     try {
                         vm.isBusy = true;
                         if (vm.criterioBusquedaSeleccionado.Id > 0) {
                             vm.UNSeleccionada = vm.modelHistorico.EntidadNombre;
                             vm.storeName = "_" + vm.modelHistorico.EntidadId + "_" + vm.modelHistorico.EntidadNombre + "_" + (vm.modelHistorico.Anio + 1);
-                            if (localStorage["esperadas" + vm.storeName] != null && localStorage["participacion" + vm.storeName] != null && localStorage["califGlobal" + vm.storeName] != null && localStorage["confianza" + vm.storeName] != null && localStorage["compromiso" + vm.storeName] != null && localStorage["colaboracion" + vm.storeName] != null) {
+                            /*if (localStorage["esperadas" + vm.storeName] != null && localStorage["participacion" + vm.storeName] != null && localStorage["califGlobal" + vm.storeName] != null && localStorage["confianza" + vm.storeName] != null && localStorage["compromiso" + vm.storeName] != null && localStorage["colaboracion" + vm.storeName] != null) {
                                 var retObj1 = localStorage.getItem("esperadas" + vm.storeName);
                                 var retObj2 = localStorage.getItem("participacion" + vm.storeName);
                                 var retObj3 = localStorage.getItem("califGlobal" + vm.storeName);
@@ -6110,7 +6505,7 @@ function GetDashBoard() {
                                     return vm.SeccionesReporte.Id;
                                 }
                             }
-                            else {
+                            else {*/
                                 if (true && vm.PorcentajeNivelDeColaboracion.length == 0) {
                                     vm.limpiarArraysReporte_Pantalla_6();
                                     fillArrayCustomHisto("BackGroundJob/getEsperadas/", vm.modelHistorico, vm.Esperadas, function () {
@@ -6122,21 +6517,29 @@ function GetDashBoard() {
                                             localStorage.setItem("participacion" + vm.storeName, JSON.stringify(vm.PorcentajeParticipacion));
                                             fillArrayCustomHisto("BackGroundJob/getCalificacionGlobal/", vm.modelHistorico, vm.PorcentajeCalificacionGlobal, function () {
                                                 vm.PorcentajeCalificacionGlobal = vm.PorcentajeCalificacionGlobal.Data == undefined ? vm.PorcentajeCalificacionGlobal : vm.PorcentajeCalificacionGlobal.Data;
-                                                vm.PorcentajeCalificacionGlobal = vm.rounderPorcent(vm.PorcentajeCalificacionGlobal);
+                                                //vm.PorcentajeCalificacionGlobal = vm.rounderPorcent(vm.PorcentajeCalificacionGlobal);
+                                                vm.PorcentajeCalificacionGlobalEE = vm.SetArrayData(vm.PorcentajeCalificacionGlobal, 1);
+                                                vm.PorcentajeCalificacionGlobalEA = vm.SetArrayData(vm.PorcentajeCalificacionGlobal, 2);
                                                 localStorage.setItem("califGlobal" + vm.storeName, JSON.stringify(vm.PorcentajeCalificacionGlobal));
                                                 fillArrayCustomHisto("BackGroundJob/getConfianza/", vm.modelHistorico, vm.PorcentajeNivelConfianza, function () {
                                                     vm.PorcentajeNivelConfianza = vm.PorcentajeNivelConfianza.Data == undefined ? vm.PorcentajeNivelConfianza : vm.PorcentajeNivelConfianza.Data;
-                                                    vm.PorcentajeNivelConfianza = vm.rounderPorcent(vm.PorcentajeNivelConfianza);
+                                                    //vm.PorcentajeNivelConfianza = vm.rounderPorcent(vm.PorcentajeNivelConfianza);
+                                                    vm.PorcentajeNivelConfianzaEE = vm.SetArrayData(vm.PorcentajeNivelConfianza, 1);
+                                                    vm.PorcentajeNivelConfianzaEA = vm.SetArrayData(vm.PorcentajeNivelConfianza, 2);
                                                     localStorage.setItem("confianza" + vm.storeName, JSON.stringify(vm.PorcentajeNivelConfianza));
                                                     fillArrayCustomHisto("BackGroundJob/getNivelCompromiso/", vm.modelHistorico, vm.PorcentajeNivelDeCompromiso, function () {
                                                         vm.PorcentajeNivelDeCompromiso = vm.PorcentajeNivelDeCompromiso.Data == undefined ? vm.PorcentajeNivelDeCompromiso : vm.PorcentajeNivelDeCompromiso.Data;
-                                                        vm.PorcentajeNivelDeCompromiso = vm.rounderPorcent(vm.PorcentajeNivelDeCompromiso);
+                                                        //vm.PorcentajeNivelDeCompromiso = vm.rounderPorcent(vm.PorcentajeNivelDeCompromiso);
+                                                        vm.PorcentajeNivelDeCompromisoEE = vm.SetArrayData(vm.PorcentajeNivelDeCompromiso, 1);
+                                                        vm.PorcentajeNivelDeCompromisoEA = vm.SetArrayData(vm.PorcentajeNivelDeCompromiso, 2);
                                                         localStorage.setItem("compromiso" + vm.storeName, JSON.stringify(vm.PorcentajeNivelDeCompromiso));
                                                         fillArrayCustomHisto("BackGroundJob/getNivelColaboracion/", vm.modelHistorico, vm.PorcentajeNivelDeColaboracion, function () {
                                                             vm.PorcentajeNivelDeColaboracion = vm.PorcentajeNivelDeColaboracion.Data == undefined ? vm.PorcentajeNivelDeColaboracion : vm.PorcentajeNivelDeColaboracion.Data;
-                                                            vm.PorcentajeNivelDeColaboracion = vm.rounderPorcent(vm.PorcentajeNivelDeColaboracion);
+                                                            //vm.PorcentajeNivelDeColaboracion = vm.rounderPorcent(vm.PorcentajeNivelDeColaboracion);
+                                                            vm.PorcentajeNivelDeColaboracionEE = vm.SetArrayData(vm.PorcentajeNivelDeColaboracion, 1);
+                                                            vm.PorcentajeNivelDeColaboracionEA = vm.SetArrayData(vm.PorcentajeNivelDeColaboracion, 2);
                                                             localStorage.setItem("colaboracion" + vm.storeName, JSON.stringify(vm.PorcentajeNivelDeColaboracion));
-                                                            vm.getEstructura();
+                                                            //vm.getEstructura();
                                                             /*vm.isBusy = false;*/
                                                             if (vm.SeccionesReporte.Id == 1) {
                                                                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 1;
@@ -6148,7 +6551,7 @@ function GetDashBoard() {
                                         });
                                     });
                                 }
-                            }
+                            //}
                             if (vm.validaObtenerEstructura) {
 
                             }
@@ -6437,7 +6840,7 @@ function GetDashBoard() {
                     vm.isBusy = true;
                     if (true) {
                         vm.limpiarArraysReporte_Pantalla_7();
-                        if (localStorage["credibilidad" + vm.storeName] != null && localStorage["imparcialidad" + vm.storeName] != null && localStorage["orgullo" + vm.storeName] && localStorage["respeto" + vm.storeName] != null && localStorage["companierismo" + vm.storeName] != null) {
+                        /*if (localStorage["credibilidad" + vm.storeName] != null && localStorage["imparcialidad" + vm.storeName] != null && localStorage["orgullo" + vm.storeName] && localStorage["respeto" + vm.storeName] != null && localStorage["companierismo" + vm.storeName] != null) {
                             var retObj1 = localStorage.getItem("credibilidad" + vm.storeName);
                             var retObj2 = localStorage.getItem("imparcialidad" + vm.storeName);
                             var retObj3 = localStorage.getItem("orgullo" + vm.storeName);
@@ -6450,26 +6853,36 @@ function GetDashBoard() {
                             vm.PorcentajeCompanierismo = JSON.parse(retObj5);
                             vm.isBusy = false;
                         }
-                        else {
+                        else {*/
                             fillArrayCustomHisto("BackGroundJob/getCredibilidad/", vm.modelHistorico, vm.PorcentajeCredibilidad, function () {
                                 vm.PorcentajeCredibilidad = vm.PorcentajeCredibilidad.Data == undefined ? vm.PorcentajeCredibilidad : vm.PorcentajeCredibilidad.Data;
-                                vm.PorcentajeCredibilidad = vm.rounderPorcent(vm.PorcentajeCredibilidad);
+                                //vm.PorcentajeCredibilidad = vm.rounderPorcent(vm.PorcentajeCredibilidad);
+                                vm.PorcentajeCredibilidadEE = vm.SetArrayData(vm.PorcentajeCredibilidad, 1);
+                                vm.PorcentajeCredibilidadEA = vm.SetArrayData(vm.PorcentajeCredibilidad, 2);
                                 localStorage.setItem("credibilidad" + vm.storeName, JSON.stringify(vm.PorcentajeCredibilidad));
                                 fillArrayCustomHisto("BackGroundJob/getImparcialidad/", vm.modelHistorico, vm.PorcentajeImparcialidad, function () {
                                     vm.PorcentajeImparcialidad = vm.PorcentajeImparcialidad.Data == undefined ? vm.PorcentajeImparcialidad : vm.PorcentajeImparcialidad.Data;
-                                    vm.PorcentajeImparcialidad = vm.rounderPorcent(vm.PorcentajeImparcialidad);
+                                    //vm.PorcentajeImparcialidad = vm.rounderPorcent(vm.PorcentajeImparcialidad);
+                                    vm.PorcentajeImparcialidadEE = vm.SetArrayData(vm.PorcentajeImparcialidad, 1);
+                                    vm.PorcentajeImparcialidadEA = vm.SetArrayData(vm.PorcentajeImparcialidad, 2);
                                     localStorage.setItem("imparcialidad" + vm.storeName, JSON.stringify(vm.PorcentajeImparcialidad));
                                     fillArrayCustomHisto("BackGroundJob/getOrgullo/", vm.modelHistorico, vm.PorcentajeOrgullo, function () {
                                         vm.PorcentajeOrgullo = vm.PorcentajeOrgullo.Data == undefined ? vm.PorcentajeOrgullo : vm.PorcentajeOrgullo.Data;
-                                        vm.PorcentajeOrgullo = vm.rounderPorcent(vm.PorcentajeOrgullo);
+                                        //vm.PorcentajeOrgullo = vm.rounderPorcent(vm.PorcentajeOrgullo);
+                                        vm.PorcentajeOrgulloEE = vm.SetArrayData(vm.PorcentajeOrgullo, 1);
+                                        vm.PorcentajeOrgulloEA = vm.SetArrayData(vm.PorcentajeOrgullo, 2);
                                         localStorage.setItem("orgullo" + vm.storeName, JSON.stringify(vm.PorcentajeOrgullo));
                                         fillArrayCustomHisto("BackGroundJob/getRespeto/", vm.modelHistorico, vm.PorcentajeRespeto, function () {
                                             vm.PorcentajeRespeto = vm.PorcentajeRespeto.Data == undefined ? vm.PorcentajeRespeto : vm.PorcentajeRespeto.Data;
-                                            vm.PorcentajeRespeto = vm.rounderPorcent(vm.PorcentajeRespeto);
+                                            //vm.PorcentajeRespeto = vm.rounderPorcent(vm.PorcentajeRespeto);
+                                            vm.PorcentajeRespetoEE = vm.SetArrayData(vm.PorcentajeRespeto, 1);
+                                            vm.PorcentajeRespetoEA = vm.SetArrayData(vm.PorcentajeRespeto, 2);
                                             localStorage.setItem("respeto" + vm.storeName, JSON.stringify(vm.PorcentajeRespeto));
                                             fillArrayCustomHisto("BackGroundJob/getCompanierismo/", vm.modelHistorico, vm.PorcentajeCompanierismo, function () {
                                                 vm.PorcentajeCompanierismo = vm.PorcentajeCompanierismo.Data == undefined ? vm.PorcentajeCompanierismo : vm.PorcentajeCompanierismo.Data;
-                                                vm.PorcentajeCompanierismo = vm.rounderPorcent(vm.PorcentajeCompanierismo);
+                                                //vm.PorcentajeCompanierismo = vm.rounderPorcent(vm.PorcentajeCompanierismo);
+                                                vm.PorcentajeCompanierismoEE = vm.SetArrayData(vm.PorcentajeCompanierismo, 1);
+                                                vm.PorcentajeCompanierismoEA = vm.SetArrayData(vm.PorcentajeCompanierismo, 2);
                                                 localStorage.setItem("companierismo" + vm.storeName, JSON.stringify(vm.PorcentajeCompanierismo));
                                                 vm.isBusy = false;
                                             });
@@ -6477,7 +6890,7 @@ function GetDashBoard() {
                                     });
                                 });
                             });
-                        }
+                        //}
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_7");
@@ -6508,27 +6921,39 @@ function GetDashBoard() {
                         else {
                             fillArrayCustomHisto("BackGroundJob/getCoaching/", vm.modelHistorico, vm.PorcentajeCoaching, function () {
                                 vm.PorcentajeCoaching = vm.PorcentajeCoaching.Data == undefined ? vm.PorcentajeCoaching : vm.PorcentajeCoaching.Data;
-                                vm.PorcentajeCoaching = vm.rounderPorcent(vm.PorcentajeCoaching);
+                                //vm.PorcentajeCoaching = vm.rounderPorcent(vm.PorcentajeCoaching);
+                                vm.PorcentajeCoachingEE = vm.SetArrayData(vm.PorcentajeCoaching, 1);
+                                vm.PorcentajeCoachingEA = vm.SetArrayData(vm.PorcentajeCoaching, 2);
                                 localStorage.setItem("coaching" + vm.storeName, JSON.stringify(vm.PorcentajeCoaching));
                                 fillArrayCustomHisto("BackGroundJob/getHabGerenciales/", vm.modelHistorico, vm.PorcentajeHabilidadesGerenciales, function () {
                                     vm.PorcentajeHabilidadesGerenciales = vm.PorcentajeHabilidadesGerenciales.Data == undefined ? vm.PorcentajeHabilidadesGerenciales : vm.PorcentajeHabilidadesGerenciales.Data;
-                                    vm.PorcentajeHabilidadesGerenciales = vm.rounderPorcent(vm.PorcentajeHabilidadesGerenciales);
+                                    //vm.PorcentajeHabilidadesGerenciales = vm.rounderPorcent(vm.PorcentajeHabilidadesGerenciales);
+                                    vm.PorcentajeHabilidadesGerencialesEE = vm.SetArrayData(vm.PorcentajeHabilidadesGerenciales, 1);
+                                    vm.PorcentajeHabilidadesGerencialesEA = vm.SetArrayData(vm.PorcentajeHabilidadesGerenciales, 2);
                                     localStorage.setItem("habGerenciales" + vm.storeName, JSON.stringify(vm.PorcentajeHabilidadesGerenciales));
                                     fillArrayCustomHisto("BackGroundJob/getAlineacionEstrategica/", vm.modelHistorico, vm.PorcentajeAlineacionEstrategica, function () {
                                         vm.PorcentajeAlineacionEstrategica = vm.PorcentajeAlineacionEstrategica.Data == undefined ? vm.PorcentajeAlineacionEstrategica : vm.PorcentajeAlineacionEstrategica.Data;
-                                        vm.PorcentajeAlineacionEstrategica = vm.rounderPorcent(vm.PorcentajeAlineacionEstrategica);
+                                        //vm.PorcentajeAlineacionEstrategica = vm.rounderPorcent(vm.PorcentajeAlineacionEstrategica);
+                                        vm.PorcentajeAlineacionEstrategicaEE = vm.SetArrayData(vm.PorcentajeAlineacionEstrategica, 1);
+                                        vm.PorcentajeAlineacionEstrategicaEA = vm.SetArrayData(vm.PorcentajeAlineacionEstrategica, 2);
                                         localStorage.setItem("alinEstrategica" + vm.storeName, JSON.stringify(vm.PorcentajeAlineacionEstrategica));
                                         fillArrayCustomHisto("BackGroundJob/getPracticasCulturales/", vm.modelHistorico, vm.PorcentajePracticasCulturales, function () {
                                             vm.PorcentajePracticasCulturales = vm.PorcentajePracticasCulturales.Data == undefined ? vm.PorcentajePracticasCulturales : vm.PorcentajePracticasCulturales.Data;
-                                            vm.PorcentajePracticasCulturales = vm.rounderPorcent(vm.PorcentajePracticasCulturales);
+                                            //vm.PorcentajePracticasCulturales = vm.rounderPorcent(vm.PorcentajePracticasCulturales);
+                                            vm.PorcentajePracticasCulturalesEE = vm.SetArrayData(vm.PorcentajePracticasCulturales, 1);
+                                            vm.PorcentajePracticasCulturalesEA = vm.SetArrayData(vm.PorcentajePracticasCulturales, 2);
                                             localStorage.setItem("practCulturales" + vm.storeName, JSON.stringify(vm.PorcentajePracticasCulturales));
                                             fillArrayCustomHisto("BackGroundJob/getCambio/", vm.modelHistorico, vm.PorcentajeCambio, function () {
                                                 vm.PorcentajeCambio = vm.PorcentajeCambio.Data == undefined ? vm.PorcentajeCambio : vm.PorcentajeCambio.Data;
-                                                vm.PorcentajeCambio = vm.rounderPorcent(vm.PorcentajeCambio);
+                                                //vm.PorcentajeCambio = vm.rounderPorcent(vm.PorcentajeCambio);
+                                                vm.PorcentajeCambioEE = vm.SetArrayData(vm.PorcentajeCambio, 1);
+                                                vm.PorcentajeCambioEA = vm.SetArrayData(vm.PorcentajeCambio, 2);
                                                 localStorage.setItem("cambio" + vm.storeName, JSON.stringify(vm.PorcentajeCambio));
                                                 fillArrayCustomHisto("BackGroundJob/getProcesosOrga/", vm.modelHistorico, vm.PorcentajeProcesosOrganizacionales, function () {
                                                     vm.PorcentajeProcesosOrganizacionales = vm.PorcentajeProcesosOrganizacionales.Data == undefined ? vm.PorcentajeProcesosOrganizacionales : vm.PorcentajeProcesosOrganizacionales.Data;
-                                                    vm.PorcentajeProcesosOrganizacionales = vm.rounderPorcent(vm.PorcentajeProcesosOrganizacionales);
+                                                    //vm.PorcentajeProcesosOrganizacionales = vm.rounderPorcent(vm.PorcentajeProcesosOrganizacionales);
+                                                    vm.PorcentajeProcesosOrganizacionalesEE = vm.SetArrayData(vm.PorcentajeProcesosOrganizacionales, 1);
+                                                    vm.PorcentajeProcesosOrganizacionalesEA = vm.SetArrayData(vm.PorcentajeProcesosOrganizacionales, 2);
                                                     localStorage.setItem("procOrgan" + vm.storeName, JSON.stringify(vm.PorcentajeProcesosOrganizacionales));
                                                     vm.isBusy = false;
                                                 });
@@ -6799,12 +7224,12 @@ function GetDashBoard() {
                                 vm.PorcentajePsicoSocialEE = vm.PorcentajePsicoSocialEE.Data == undefined ? vm.PorcentajePsicoSocialEE : vm.PorcentajePsicoSocialEE.Data;
                                 vm.PorcentajePsicoSocialEE = vm.roundArray(vm.PorcentajePsicoSocialEE);
                                 localStorage.setItem("bienestarEE" + vm.storeName, JSON.stringify(vm.PorcentajePsicoSocialEE));
-                                vm.numColumnasEE = vm.arrayStringFiltrosBienestar.length;
+                                vm.numColumnasEE = vm.PorcentajePsicoSocialEE.length / 12;// vm.arrayStringFiltrosBienestar.length;
                                 fillArrayCustomHisto("BackGroundJob/getPorcentajePsicoSocialEA/", vm.modelHistorico, vm.PorcentajePsicoSocialEA, function () {
                                     vm.PorcentajePsicoSocialEA = vm.PorcentajePsicoSocialEA.Data == undefined ? vm.PorcentajePsicoSocialEA : vm.PorcentajePsicoSocialEA.Data;
                                     vm.PorcentajePsicoSocialEA = vm.roundArray(vm.PorcentajePsicoSocialEA);
                                     localStorage.setItem("bienestarEA" + vm.storeName, JSON.stringify(vm.PorcentajePsicoSocialEA));
-                                    vm.numColumnasEE = vm.arrayStringFiltrosBienestar.length;
+                                    vm.numColumnasEE = vm.PorcentajePsicoSocialEA.length / 12; //vm.arrayStringFiltrosBienestar.length;
                                     vm.setDataHistoricoBienestarEE();
                                     vm.setDataHistoricoBienestarEA();
 
@@ -12938,10 +13363,18 @@ function GetDashBoard() {
                                     vm.contadorEstructura = 1;
                                     // getEstructuraFromExcel/ int IdTipoEntidad, int IdBD, string entidadNombre
                                     // fillArray("apis/getEstructuraDescByUnidadNegocio/?aUnidadNegocio=" + vm.CompanyCategoria.IdCompanyCategoria, vm.EstructuraColumnas, function () {
-                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
-                                        vm.fillColumnas(vm.EstructuraColumnas);
-                                        vm.isBusy = false;
-                                    });
+                                    if (getParamByUrl("token") == null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
+                                    if (getParamByUrl("token") != null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + vm.model.IdBaseDeDatos + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
                                 }
                                 break;
                             case 2:
@@ -13026,6 +13459,7 @@ function GetDashBoard() {
 
                     // Filtrar columnas bienestar elimiando subdepartamentos redundantes cuyo nombre termina es - -
                     vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where(o => o.value.includes(" - -") == false).toList();//AUT - ELE - AEP - ADM
+                    vm.ColumnasBienestar.unshift(vm.finalColumnas[0]);
                     
                     //vm.ColumnasBienestar.shift();//Eliminar duplicado inicial
                     /*Configuracion para factor psicosocial*/
@@ -13073,6 +13507,9 @@ function GetDashBoard() {
                     vm.ColumnasBienestar.forEach(function (value, index, array) {
                         vm.arrayStringFiltrosBienestar.push(vm.ColumnasBienestar[index].value);
                     });
+                    if (vm.arrayStringFiltrosBienestar.length == 0 && getParamByUrl("token") != null) {
+                        vm.arrayStringFiltrosBienestar.push("Valor default para cuando tengo token");
+                    }
                     vm.ColumnasBienestar.shift();
                     /*vm.getArrayFiltros();*/
                 } catch (aE) {
@@ -15115,8 +15552,6 @@ var quitarPaginaVacia = function () {
 
 
 var crearTablasNuevas = async function (tipoEntidad = 1, iteracion = 0, tabla, padding) {
-    //Agregar clase especial para las columnas que se deben de mostrar
-    //U ocultar las columnas segun una tabla especial
     var idTabla;
     var auxDivTabla;
     if (tabla == "tab-bienestar-ee" || tabla == "myTableEE") {
@@ -15232,35 +15667,21 @@ var crearTablasNuevas = async function (tipoEntidad = 1, iteracion = 0, tabla, p
         document.getElementById(idTabla).rows[4].cells[i - 3].classList.add("jamg-mostrar");
     }
     try {
-        var contenidoNuevo = document.getElementById(idTabla).parentNode.parentNode.parentNode.parentNode.parentElement.parentNode.parentNode.parentNode.innerHTML;//document.getElementById(idTabla).parentNode.innerHTML;
-        // nuevos id
+        var contenidoNuevo = document.getElementById(idTabla).parentNode.parentNode.parentNode.parentNode.parentElement.parentNode.parentNode.parentNode.innerHTML;
         var id = idTabla + "_" + iteracion;
         var idDivExportacion = "divExportacionBienestar_" + getUid();
-        // Agregar nuevos id al content
         contenidoNuevo = contenidoNuevo.replace('id="' + idTabla+'"', 'id="' + id + '"');
         contenidoNuevo = contenidoNuevo.replace('id="' + auxDivTabla + '"', 'id="' + idDivExportacion + '"');
         document.getElementById("tab-17").innerHTML += (contenidoNuevo);
         document.getElementById(id).classList.add("tablaBienestarCustom");
         document.getElementById(idDivExportacion).classList.add("divExportacionBienestarClass");
         $(".jamg-mostrar").css("display",  "");
-        //quitar de las tablas originales la clase de visualizacion jamg-mostrar
-        //alert("quitar clase");
         [].forEach.call($("#myTableEE .jamg-mostrar"), function (item) {
             item.classList.remove("jamg-mostrar");
         });
         [].forEach.call($("#myTableEA .jamg-mostrar"), function (item) {
             item.classList.remove("jamg-mostrar");
         });
-        // Si el numero de columnas visibles en la tabla ya seccionada excede a 9 esta se seccionara en bloques de 9
-        var contadorColumnas = 0;
-        [].forEach.call(document.getElementById(id).rows[0].cells, function (item) {
-            if (item.style.display != "none")
-                contadorColumnas++;
-        });
-        if (contadorColumnas > 9) {
-            //alert("La tabla " + id + " debe ser seccionada");
-            //seccionarTablaGrande(id, idDivExportacion, contadorColumnas);
-        }
         switch (tipoEntidad) {
             case 1:
                 document.getElementById(idTabla).rows[0].cells[1].style.display = "";//name col

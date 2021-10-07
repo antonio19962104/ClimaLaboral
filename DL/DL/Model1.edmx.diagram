@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2ed16cda63f34f4f8b1931b501810f01" Name="Diagram1">
+      <Diagram DiagramId="1ca60eb56f80462aa42d4a41542af74a" Name="Diagram1" ZoomLevel="121">
         <EntityTypeShape EntityType="RH_DesModel.Administrador" Width="1.5" PointX="6" PointY="67.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.AdministradorCompany" Width="1.5" PointX="16.5" PointY="68.5" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Aling" Width="1.5" PointX="3" PointY="68" IsExpanded="true" />
@@ -84,10 +84,6 @@
         <EntityTypeShape EntityType="RH_DesModel.EncuestaIngreso" Width="1.5" PointX="15.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.PreguntaCategorias" Width="1.5" PointX="8.75" PointY="15.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Counter" Width="1.5" PointX="15.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.View_1" Width="1.5" PointX="13.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.View_2" Width="1.5" PointX="15.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.VistaDemo1" Width="1.5" PointX="0.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.VistaDemo2" Width="1.5" PointX="2.75" PointY="16.75" IsExpanded="true" />
         <AssociationConnector Association="RH_DesModel.FK__Administr__IdEst__789EE131" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_ADMIN_COMPANY" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_ADMINISTRADOR_ADMINISTRADOR" ManuallyRouted="false" />

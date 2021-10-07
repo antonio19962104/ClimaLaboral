@@ -409,6 +409,7 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var demo = new DL.Demo { EntidadId = entidadId, EntidadNombre = entidadNombre, jsonString = jsonEE, Anio = AnioActual, objName = jsonData.ContentType, status = 0, usuario = usuario, NivelDetalle = nivelDetalle };
+                    demo.FechaHoraCreacion = DateTime.Now; demo.UsuarioCreacion = usuario; demo.ProgramaCreacion = "JobCreacionReporte";
                     var query = context.Demo.Add(demo);
                     context.SaveChanges();
                     BL.LogReporteoClima.writteLogJobReporte(jsonEE, new StackTrace(), usuario, 0, entidadNombre);
@@ -522,13 +523,14 @@ namespace BL
             }
         }
 
-        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url, string ps, string nivelDetalle, int opc, string criterioBusquedaSeleccionado, int enfoqueSeleccionado, string lvlDetalle)
+        public static string sendMail(string entidadName, int Anio, string UsuarioSolicita, string url, string ps, string nivelDetalle, int opc, string criterioBusquedaSeleccionado, int enfoqueSeleccionado, string lvlDetalle, int IdBD = 0)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
             string token = string.Empty;
             BL.Seguridad seguridad = new Seguridad();
             ps = seguridad.DesencriptarCadena(ps);
-            //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque|lvlDetalle
-            token = UsuarioSolicita + "|" + ps + "|"+opc+"|"+criterioBusquedaSeleccionado+"|"+entidadName+"|"+Anio+"|"+ enfoqueSeleccionado + "|" + lvlDetalle;
+            //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque|lvlDetalle|IdBD
+            token = UsuarioSolicita + "|" + ps + "|"+opc+"|"+criterioBusquedaSeleccionado+"|"+entidadName+"|"+Anio+"|"+ enfoqueSeleccionado + "|" + lvlDetalle + "|" + IdBD;
             token = seguridad.EncriptarCadena(token);
             if (string.IsNullOrEmpty(UsuarioSolicita))
             {

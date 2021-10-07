@@ -26,5 +26,6 @@ namespace ML
         public string IdPadreObjeto { get; set; }
         public string ProgramaEliminacion { get; set; }
         public List<Categoria> Preguntas { get; set; }
+        public object Promedio { get; set; }
     }
 }

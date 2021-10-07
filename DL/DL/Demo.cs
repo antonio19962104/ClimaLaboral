@@ -25,12 +25,6 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
-        public Nullable<System.DateTime> FechaHoraModificacion { get; set; }
-        public string UsuarioModificacion { get; set; }
-        public string ProgramaModificacion { get; set; }
-        public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
-        public string UsuarioEliminacion { get; set; }
-        public string ProgramaEliminacion { get; set; }
         public string NivelDetalle { get; set; }
     }
 }

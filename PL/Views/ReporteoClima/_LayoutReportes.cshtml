@@ -58,6 +58,9 @@
     <script>
         localStorage["AdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
         localStorage["ps"] = @Html.Raw(JsonConvert.SerializeObject(Session["ps"]));
+        //nuevos
+        localStorage["nameAdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
+        localStorage["idAdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["IdAdministradorLogeado"]));
     </script>
     <style>
         canvas {
