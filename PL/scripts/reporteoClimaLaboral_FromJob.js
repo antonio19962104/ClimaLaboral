@@ -3051,25 +3051,25 @@ function GetDashBoard() {
                                             $('#' + key)[0].style.backgroundColor = "#fff";
                                             document.getElementById(key).parentNode.style.backgroundColor = "#fff";
                                             document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
-                                            var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
-                                            var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
-                                                if (!historicoCorte.includes(llave)) {
-                                                    //historicoCorte.push(llave);
-                                                    document.getElementById("tab-17").classList.remove("ng-hide");
-                                                    document.getElementById("tab-17").classList.remove("ng-hide");
-                                                    var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
-                                                    //docReporte.addImage(data);
-                                                    console.log(data);
-                                                }
-                                            });
-                                            var resumen = $(".contenedor-resumen")
-                                            if (resumen.length > 0) {
-                                                [].forEach.call(resumen, function (item) {
-                                                    item.style.removeProperty = "margin-top";
-                                                    item.style.marginTop = "-25rem";
-                                                });
-                                            }
-                                        if (cortes.length == 0) {
+                                            //var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
+                                            //var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
+                                            //    if (!historicoCorte.includes(llave)) {
+                                            //        //historicoCorte.push(llave);
+                                            //        document.getElementById("tab-17").classList.remove("ng-hide");
+                                            //        document.getElementById("tab-17").classList.remove("ng-hide");
+                                            //        var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
+                                            //        //docReporte.addImage(data);
+                                            //        console.log(data);
+                                            //    }
+                                            //});
+                                            //var resumen = $(".contenedor-resumen")
+                                            //if (resumen.length > 0) {
+                                            //    [].forEach.call(resumen, function (item) {
+                                            //        item.style.removeProperty = "margin-top";
+                                            //        item.style.marginTop = "-25rem";
+                                            //    });
+                                            //}
+                                        //if (cortes.length == 0) {
                                             var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 1 }
@@ -3079,7 +3079,7 @@ function GetDashBoard() {
                                             docReporte.addPage();
                                             docReporte.addImage(data, 1200, 400);
                                             return data;
-                                        }
+                                        //}
                                     });
                                     setTimeout(function () {
                                         document.getElementsByClassName("busy")[1].style.display = "none";
@@ -3091,9 +3091,10 @@ function GetDashBoard() {
                                     var histo = [];
                                     if (padrePaginaActiva == "tab-17") {
                                         var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
+                                        var divExportacion = vm.enfoqueSeleccionado == 1 ? "tab-bienestar-ee" : "tab-bienestar-ea";
                                         var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
                                         var itemsMapeo = $("#" + idTabla + " ." + hijo);
-                                        var cortesS = itemsMapeo.map(async (llave, indice) => {
+                                        /*var cortesS = itemsMapeo.map(async (llave, indice) => {
                                             //historicoCorte.push(llave);
                                             document.getElementById("tab-17").classList.remove("ng-hide");
                                             document.getElementById("tab-17").classList.remove("ng-hide");
@@ -3106,9 +3107,9 @@ function GetDashBoard() {
                                                 var last = docReporte.internal.getCurrentPageInfo().pageNumber;
                                                 docReporte.deletePage(last);
                                             }
-                                        });
-                                        if (cortes.length == 0) {
-                                            var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
+                                        });*/
+                                        //if (cortes.length == 0) {
+                                            var data = await docReporte.addHTML($('#' + divExportacion)[0], 0, ptDefault, {
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 2,logging: true  }
                                             }, function () {
@@ -3116,8 +3117,10 @@ function GetDashBoard() {
                                             });
                                             docReporte.addPage();
                                             docReporte.addImage(data, 1200, 400);
-                                            return data;
-                                        }
+                                            vm.isBusy = false;
+                                            document.getElementsByClassName("busy")[1].style.display = "none";
+                                            //return data;
+                                        //}
                                     }
 
                                     if (padrePaginaActiva != "tab-17") {
@@ -7233,66 +7236,68 @@ function GetDashBoard() {
                                     vm.setDataHistoricoBienestarEE();
                                     vm.setDataHistoricoBienestarEA();
 
-                                    if ((partiendoTablas == 0 && vm.model.nivelDetalle.includes("2")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("3")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("4")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("5"))) {//Si solo tiene nivel detalle 1 no hace el cortado
-                                        partiendoTablas++;
-                                        setTimeout(function () {
-                                            var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
-                                            childs = Enumerable.from(childs).toList();
-                                            childs = childs.map(async (key, index) => {
-                                                document.getElementById("tab-17").classList.remove("ng-hide");
-                                                //Se forza el backgroud en Blanco
-                                                $('#' + key)[0].style.backgroundColor = "#fff";
-                                                document.getElementById(key).parentNode.style.backgroundColor = "#fff";
-                                                document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
-                                                var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
-                                                var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
-                                                    //historicoCorte.push(llave);
-                                                    //var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
-                                                    crearTablasNuevas(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, 0);
-                                                });
-                                                var resumen = $(".contenedor-resumen")
-                                                if (resumen.length > 0) {
-                                                    [].forEach.call(resumen, function (item) {
-                                                        item.style.removeProperty = "margin-top";
-                                                        item.style.marginTop = "-25rem";
+                                    if (true == false) {// Se invalida el seccionamiento de la grafica de excel
+                                        if ((partiendoTablas == 0 && vm.model.nivelDetalle.includes("2")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("3")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("4")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("5"))) {//Si solo tiene nivel detalle 1 no hace el cortado
+                                            partiendoTablas++;
+                                            setTimeout(function () {
+                                                var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
+                                                childs = Enumerable.from(childs).toList();
+                                                childs = childs.map(async (key, index) => {
+                                                    document.getElementById("tab-17").classList.remove("ng-hide");
+                                                    //Se forza el backgroud en Blanco
+                                                    $('#' + key)[0].style.backgroundColor = "#fff";
+                                                    document.getElementById(key).parentNode.style.backgroundColor = "#fff";
+                                                    document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
+                                                    var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
+                                                    var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
+                                                        //historicoCorte.push(llave);
+                                                        //var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
+                                                        crearTablasNuevas(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, 0);
                                                     });
+                                                    var resumen = $(".contenedor-resumen")
+                                                    if (resumen.length > 0) {
+                                                        [].forEach.call(resumen, function (item) {
+                                                            item.style.removeProperty = "margin-top";
+                                                            item.style.marginTop = "-25rem";
+                                                        });
+                                                    }
+                                                });
+                                                document.getElementById("tab-17").getElementsByClassName("content-wrap")[0].style.display = "none";
+                                                document.getElementById("tab-17").getElementsByClassName("content-wrap")[1].style.display = "none";
+                                                $(".divExportacionBienestarClass").css("margin-top", "50px");
+                                                $("hr:visible").hide()
+                                                document.getElementById("tab-bienestar-ee").style.display = "none";
+                                                document.getElementById("tab-bienestar-ea").style.display = "none";
+                                                //mostrar la primera
+                                                var mitad = $(".divExportacionBienestarClass").length / 2;
+                                                if (vm.enfoqueSeleccionado == 2) {
+                                                    //EA (segunda mitad)
+                                                    $(".divExportacionBienestarClass").css("display", "none");
+                                                    $(".divExportacionBienestarClass")[(mitad)].style.display = "";
                                                 }
-                                            });
-                                            document.getElementById("tab-17").getElementsByClassName("content-wrap")[0].style.display = "none";
-                                            document.getElementById("tab-17").getElementsByClassName("content-wrap")[1].style.display = "none";
-                                            $(".divExportacionBienestarClass").css("margin-top", "50px");
-                                            $("hr:visible").hide()
-                                            document.getElementById("tab-bienestar-ee").style.display = "none";
-                                            document.getElementById("tab-bienestar-ea").style.display = "none";
-                                            //mostrar la primera
-                                            var mitad = $(".divExportacionBienestarClass").length / 2;
-                                            if (vm.enfoqueSeleccionado == 2) {
-                                                //EA (segunda mitad)
-                                                $(".divExportacionBienestarClass").css("display", "none");
-                                                $(".divExportacionBienestarClass")[(mitad)].style.display = "";
-                                            }
-                                            if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 1) {
-                                                //EE (primera mitad)
-                                                $(".divExportacionBienestarClass").css("display", "none");
-                                                $(".divExportacionBienestarClass")[0].style.display = "";
-                                            }
-                                            switch (vm.criterioBusquedaSeleccionado.Id) {
-                                                case 1:
-                                                    $(".borde-table-headerwhite")[0].style.display = "";
-                                                    break;
-                                                case 2:
-                                                    $(".borde-table-headerwhite")[1].style.display = "";
-                                                    break;
-                                                case 3:
-                                                    $(".borde-table-headerwhite")[2].style.display = "";
-                                                    break;
-                                                case 4:
-                                                    $(".borde-table-headerwhite")[3].style.display = "";
-                                                    break;
-                                                default:
-                                            }
-                                            vm.isBusy = false;
-                                        }, 3000);
+                                                if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 1) {
+                                                    //EE (primera mitad)
+                                                    $(".divExportacionBienestarClass").css("display", "none");
+                                                    $(".divExportacionBienestarClass")[0].style.display = "";
+                                                }
+                                                switch (vm.criterioBusquedaSeleccionado.Id) {
+                                                    case 1:
+                                                        $(".borde-table-headerwhite")[0].style.display = "";
+                                                        break;
+                                                    case 2:
+                                                        $(".borde-table-headerwhite")[1].style.display = "";
+                                                        break;
+                                                    case 3:
+                                                        $(".borde-table-headerwhite")[2].style.display = "";
+                                                        break;
+                                                    case 4:
+                                                        $(".borde-table-headerwhite")[3].style.display = "";
+                                                        break;
+                                                    default:
+                                                }
+                                                vm.isBusy = false;
+                                            }, 3000);
+                                        }
                                     }
                                    /* vm.isBusy = false;*/
                                 });
