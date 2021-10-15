@@ -3768,7 +3768,27 @@ function GetDashBoard() {
                                 if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
                                     ptDefault = 0;
                                     if (resolucion >= 1900) {
+									  
+                                        $(".categoria-bl:visible .col").css("font-size","12px");
+                                        if (vm.SeccionesReporte.Id == 8) {
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("padding-left","10px");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("line-height","1.2");
+                                            document.getElementById(paginaActiva).style.marginTop = "0px";
+
+                                        }
+                                        else {
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
                                         document.getElementById(paginaActiva).style.marginTop = "95px";
+										ptDefault = 30;
+                                        }
+                                        
+                                        $(".bg-impulsores:visible").css("min-height","0px");
+                                        $(".margin-reporte:visible")[0].style.setProperty("margin-top","15px","important");
+                                        
+                                        /*document.getElementById(paginaActiva).style.marginTop = "95px";*/
                                         ptDefault = 0;
                                     }
                                     else if (resolucion >= 1550 && resolucion <= 1899) {
@@ -3850,7 +3870,7 @@ function GetDashBoard() {
                                     var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
                                     childs = Enumerable.from(childs).toList();
                                     childs = childs.map(async (key, index) => {
-                                        docReporte.addPage();
+                                        //docReporte.addPage();
                                         document.getElementById("tab-17").classList.remove("ng-hide");
                                             //Se forza el backgroud en Blanco
                                             $('#' + key)[0].style.backgroundColor = "#fff";
@@ -4245,8 +4265,9 @@ function GetDashBoard() {
                     if (vm.SeccionesReporte.Id == 17/* && vm.enfoqueSeleccionado == 0*/) {
                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                     }
-                    if (vm.SeccionesReporte.Id == 16) {
+                    if (vm.SeccionesReporte.Id == 16 && vm.enfoqueSeleccionado == 0) {
                         //docReporte.addPage();
+                        docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                     }
                     if (vm.SeccionesReporte.Id == 17 && vm.enfoqueSeleccionado == 0) {
                         //docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
@@ -14555,8 +14576,8 @@ function GetDashBoard() {
                         break;
                     default:
                         
-                            vm.ColIzq = "col-10";
-                            vm.ColDer = "col-2";
+                            vm.ColIzq = "col-3";
+                            vm.ColDer = "col";
                                                
                         break;
         
