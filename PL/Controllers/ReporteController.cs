@@ -3116,10 +3116,16 @@ namespace PL.Controllers
                 List<int> resultados = new List<int>();
                 foreach (string item in model.ListFiltros)
                 {
-                    string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                    string aux = item;if (aux.Contains("_")){
+                        aux = aux.Split('_')[1];
+                        model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                    }
+                    char[] arreglo = new char[50];
                     arreglo = aux.ToCharArray();
                     string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                    string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                    string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) {
+                        model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                    }
 
                     if (prefijo == "UNeg=>")
                         model.UnidadNegocioFilter = DataForFilter;
@@ -3474,10 +3480,18 @@ namespace PL.Controllers
                 List<double> resultados = new List<double>();
                 foreach (string item in model.ListFiltros)
                 {
-                    string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                    string aux = item; 
+                    if (aux.Contains("_")) { 
+                        aux = aux.Split('_')[1]; 
+                        model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter; 
+                    }
+                    char[] arreglo = new char[50];
                     arreglo = aux.ToCharArray();
                     string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                    string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                    string DataForFilter = aux.Remove(0, 6); 
+                    if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                        model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                    }
 
                     //Set Data for filter
 
@@ -3624,10 +3638,14 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                } char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -3757,10 +3775,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -3890,10 +3908,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -4023,10 +4041,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -4156,10 +4174,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -4289,10 +4307,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -4422,10 +4440,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -4954,10 +4972,14 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                } char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -5091,10 +5113,15 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                } 
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) {
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -5355,10 +5382,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -6663,10 +6690,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -6794,10 +6821,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -7843,10 +7870,15 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                } 
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -7974,10 +8006,15 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                }
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -9803,10 +9840,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -9933,10 +9970,13 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                }
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -10063,10 +10103,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -10193,10 +10233,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -10323,10 +10363,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -10453,10 +10493,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -10583,10 +10623,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -11097,10 +11137,15 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                }
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -11232,10 +11277,15 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                }
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -11492,10 +11542,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -12794,10 +12844,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -12925,10 +12975,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ?  DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -13709,10 +13759,14 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                } char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
+                }
 
                 //Set Data for filter
 
@@ -13840,10 +13894,15 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;
+                }
+                char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { 
+                    model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter;
+                }
 
                 //Set Data for filter
 
@@ -15660,10 +15719,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 
@@ -15791,10 +15850,10 @@ namespace PL.Controllers
             List<double> resultados = new List<double>();
             foreach (string item in model.ListFiltros)
             {
-                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
+                string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
-                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
+                string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
 

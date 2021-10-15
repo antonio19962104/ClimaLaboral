@@ -26,7 +26,9 @@ namespace DL
             this.EncuestaUnidadNegocio = new HashSet<EncuestaUnidadNegocio>();
             this.EstatusEncuesta = new HashSet<EstatusEncuesta>();
             this.EstatusEmail = new HashSet<EstatusEmail>();
+            this.PlanDeAccion = new HashSet<PlanDeAccion>();
             this.Preguntas = new HashSet<Preguntas>();
+            this.PromedioSubCategorias = new HashSet<PromedioSubCategorias>();
             this.ValoracionSubcategoriaPorCategoria = new HashSet<ValoracionSubcategoriaPorCategoria>();
             this.ValoracionPreguntaPorSubcategoria = new HashSet<ValoracionPreguntaPorSubcategoria>();
             this.UsuarioEstatusEncuesta = new HashSet<UsuarioEstatusEncuesta>();
@@ -89,7 +91,11 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstatusEmail> EstatusEmail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanDeAccion> PlanDeAccion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Preguntas> Preguntas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PromedioSubCategorias> PromedioSubCategorias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValoracionSubcategoriaPorCategoria> ValoracionSubcategoriaPorCategoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

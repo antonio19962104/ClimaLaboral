@@ -8,6 +8,7 @@ namespace ML
 {
     public class Result
     {
+        public int NewId { get; set; }
         public double AvanceDouble { get; set; }
         public int IdusuarioForAnonima { get; set; }
         public int IsSuperAdmin { get; set; }
@@ -36,7 +37,7 @@ namespace ML
         public List<Object> ObjectsPermisos { get; set; }
         public Exception ex { get; set; }
         public string DefUsername { get; set; }
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
         public List<EmpleadoRespuesta> answer { get; set; }
         public ML.Plantillas EditaPlantillas { get; set; }
         public Encuesta EditaEncuesta { get; set;}

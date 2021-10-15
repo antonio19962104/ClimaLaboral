@@ -27,7 +27,7 @@
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Departamento.Nombre }}</div></th>
-                                            <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
+                                            <th ng-repeat="item in vm.ColumnasBienestar track by $index" ng-if="$index > 0"  class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                         </tr>
                                     </thead>
                                     <thead class="mt-5 table-bienestar">
@@ -194,7 +194,7 @@
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 4" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Departamento.Nombre }}</div></th>
-                                        <th ng-repeat="item in vm.ColumnasBienestar" class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
+                                        <th ng-repeat="item in vm.ColumnasBienestar track by $index" ng-if="$index > 0" class="borde-table-headerwhite {{ item.type.substr(0, 4) }}" scope="col"><div class="contr-head">{{ item.value }}</div></th>
                                     </tr>
                                 </thead>
                                 <thead class="mt-5 table-bienestar">
@@ -448,6 +448,12 @@
         .table-reporte {
             font-size: 12px;
         }
+    }
+    @@media(max-width: 2609px) {
+        .table th {
+            padding: .55rem!important;
+
+        }        
     }
 
 </style>

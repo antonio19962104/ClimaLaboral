@@ -21,7 +21,7 @@
     <div class="content-wrap" id="">
         <div class="container-fluid px-lg-5">
             <div class="row">
-                <div class="col-lg-10 offset-lg-1">
+                <div class="col-lg-12">
                     <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                         <table id="myTable" class="table table-hover table-responsive-sm">
                             <thead>
@@ -41,12 +41,20 @@
                                 }
                                 @foreach (ML.Encuesta item in Model.Objects)
                                 {
+                                    if (item.ListReportes == null)
+                                    {
+                                        <tr>
+                                            <td>No existen reportes disponibles para tu usuario</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
                                     <tr>
                                         <td class="text-center">
                                             @item.Nombre
                                         </td>
                                         <td>
-                                            @if (item.ListReportes.Count == 0)
+                                            @if (item.ListReportes == null)
                                             {
                                                 @Html.Raw("<a href='/ReporteD4U/Add/' target='_top' class='btn btn-primary mr-3'>Genera reporte</a>");
                                             }
@@ -62,9 +70,11 @@
                                                     if (itemR.ReporteD4U.location.Contains("ReporteComentarios3d/")) { cssbtn = "btn-warning"; }
                                                     if (itemR.ReporteD4U.location.Contains("/reporteoClima/ReporteDinamico/")) { cssbtn = "btn-info"; }
                                                     if (itemR.ReporteD4U.location.Contains("/reporteoClima/Index/")) { cssbtn = "btn-danger"; }
-                                                    if (itemR.ReporteD4U.location.Contains("/Add/")) {
-                                                        cssbtn = "btn-light"; }
-                                                    @Html.Raw("<a href=" + itemR.ReporteD4U.location + " target='_top' data-mdb-toggle='tooltip'  data-mdb-html='true' title='"+ itemR.ReporteD4U.Nombre + "' class='btn " + cssbtn + " mr-3'>Ver reporte</a>");
+                                                    if (itemR.ReporteD4U.location.Contains("/Add/"))
+                                                    {
+                                                        cssbtn = "btn-light";
+                                                    }
+                                                    @Html.Raw("<a href=" + itemR.ReporteD4U.location + " target='_top' data-mdb-toggle='tooltip'  data-mdb-html='true' title='" + itemR.ReporteD4U.Nombre + "' class='btn " + cssbtn + " mr-3'>Ver reporte</a>");
                                                 }
 
                                             }
@@ -73,6 +83,7 @@
                                             <button value="@item.IdEncuesta" onclick="GetReports($(this).val())" type="button" class="btn btn-secondary btn-action" data-toggle="modal" data-target="#modalViewReports"><i class="fas fa-list"></i> Ver reportes</button>
                                         </td>*@
                                     </tr>
+                                    }
                                 }
                             </tbody>
                         </table>

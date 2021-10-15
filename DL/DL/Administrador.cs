@@ -22,6 +22,7 @@ namespace DL
             this.Company1 = new HashSet<Company>();
             this.Competencia = new HashSet<Competencia>();
             this.PerfilModulo = new HashSet<PerfilModulo>();
+            this.PlanDeAccion = new HashSet<PlanDeAccion>();
             this.AdministradorCompany = new HashSet<AdministradorCompany>();
         }
     
@@ -59,6 +60,8 @@ namespace DL
         public virtual ICollection<Competencia> Competencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PerfilModulo> PerfilModulo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanDeAccion> PlanDeAccion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AdministradorCompany> AdministradorCompany { get; set; }
     }

@@ -28,7 +28,7 @@ namespace ML
         public int noColumnas { get; set; }
         public string tableHTML { get; set; }
         public int IdPregunta { get; set; }
-        public string UnidadNegocioFilter { get; set; }
+        public string UnidadNegocioFilter { get; set; } = "";
         public string Filtrosss { get; set; }
         public int IdReporte { get; set; }
         public string Nombre { get; set; }

@@ -1,5 +1,5 @@
 ﻿/*
- * Script principal del reporte gráfico de Clima Laboral v1
+ * Script principal del reporte gráfico de Clima Laboral 
  */
 var dataComparativoPermanencia = [];
 var urlApisjs = "http://localhost:11124/";
@@ -21,12 +21,56 @@ function GetDashBoard() {
             vm.lvl3 = false;
             vm.lvl4 = false;
             vm.lvl5 = false;
+            //Aux
+            //Pantalla 1
+            vm.PorcentajeCalificacionGlobalEE = [];
+            vm.PorcentajeNivelConfianzaEE = [];
+            vm.PorcentajeNivelDeCompromisoEE = [];
+            vm.PorcentajeNivelDeColaboracionEE = [];
+
+            //Pantalla 2
+            vm.PorcentajeCredibilidadEE = [];
+            vm.PorcentajeImparcialidadEE = [];
+            vm.PorcentajeOrgulloEE = [];
+            vm.PorcentajeRespetoEE = [];
+            vm.PorcentajeCompanierismoEE = [];
+
+            //Pantalla 3
+            vm.PorcentajeCoachingEE = [];
+            vm.PorcentajeHabilidadesGerencialesEE = [];
+            vm.PorcentajeAlineacionEstrategicaEE = [];
+            vm.PorcentajePracticasCulturalesEE = [];
+            vm.PorcentajeCambioEE = [];
+            vm.PorcentajeProcesosOrganizacionalesEE = [];
+
+            //Pantalla 1
+            vm.PorcentajeCalificacionGlobalEA = [];
+            vm.PorcentajeNivelConfianzaEA = [];
+            vm.PorcentajeNivelDeCompromisoEA = [];
+            vm.PorcentajeNivelDeColaboracionEA = [];
+
+            //Pantalla 2
+            vm.PorcentajeCredibilidadEA = [];
+            vm.PorcentajeImparcialidadEA = [];
+            vm.PorcentajeOrgulloEA = [];
+            vm.PorcentajeRespetoEA = [];
+            vm.PorcentajeCompanierismoEA = [];
+
+            //Pantalla 3
+            vm.PorcentajeCoachingEA = [];
+            vm.PorcentajeHabilidadesGerencialesEA = [];
+            vm.PorcentajeAlineacionEstrategicaEA = [];
+            vm.PorcentajePracticasCulturalesEA = [];
+            vm.PorcentajeCambioEA = [];
+            vm.PorcentajeProcesosOrganizacionalesEA = [];
+
+            var cadenaDesenc = "";
             var banderapag18 = false;
             var partiendoTablas = 0;
             var contadorTablasBienestar = 0;
     		var contadorResumen = 1;
             var flagDecremento = 0;
-            vm.resumenDemo = true;
+            vm.resumenDemo = false;
             var countAgrandar = 0;
             var countAgrandar2 = 0;
             vm.hasHistorico = true;
@@ -48,7 +92,13 @@ function GetDashBoard() {
             vm.reactivoSeleccionado = Object;
             vm.dataReporteCorpo = [];
             vm.contadorNextButton = 0;
-
+			   /*Numero de columnas a llenar*/
+            vm.NumColumnasBienestar = 0;
+            /*Css segun el numero de columnas ColIzquierda y ColDerecha*/
+            vm.ColIzq = "";
+            vm.ColDer = "";   
+			vm.ColIzqA = "";
+            vm.ColDerA = "";
             localStorage["tieneReporte"] = "";
             vm.tableBienestarEE = "";
             vm.tableBienestarEA = "";
@@ -393,7 +443,44 @@ function GetDashBoard() {
             if (resolucion <= 1369) {
                 factMt= 7;
             }
+            vm.listTipoIndicador1 = [                
+                { Id: 1, Nombre: "Nivel de Participación", Descripcion: "" },
+                { Id: 2, Nombre: "Calificacion Global", Descripcion: "" },
+                { Id: 3, Nombre: "Nivel de Confianza", Descripcion: "" },
+                { Id: 4, Nombre: "Nivel de Compromiso", Descripcion: "" },
+                { Id: 5, Nombre: "Nivel de Colaboración", Descripcion: "" }                
+            ];
+            vm.listTipoIndicador2 = [                
+                { Id: 1, Nombre: "Credibilidad", Descripcion: "Como se percibe a los lideres y a la empresa" },
+                { Id: 2, Nombre: "Imparcialidad", Descripcion: "Sentir respecto de la justicia, no discriminación y claridad en las reglas" },
+                { Id: 3, Nombre: "Orgullo", Descripcion: "Percepción acerca del valor del trabajo e imagen de la compañia" },
+                { Id: 4, Nombre: "Respeto", Descripcion: "Como se piensa que se es visto y tratado por los superiores" },
+                { Id: 5, Nombre: "Compañerismo", Descripcion: "Sentir acerca del equipo de trabajo" },
+            ];
+            vm.listTipoImpulsorClave= [                
+                { Id: 1, Nombre: "Coaching(Liderazgo)", Descripcion: "Efectividad en la gestión del desempeño", Descripcion2: "Predice posibilidades de desarrollo y mejora continua" },
+                { Id: 2, Nombre: "Habilidades Gerenciales", Descripcion: "Efectividad en la asignación y coordinación de equipos", Descripcion2: "Predice la posibilidad de lograr resultados" },
+                { Id: 3, Nombre: "Alineación estratégica", Descripcion: "Capacidad para producir inspiración y propósito", Descripcion2: "Impacta en el sentido de pertenencia del colaborador" },
+                { Id: 4, Nombre: "Prácticas culturales", Descripcion: "Prácticas culturales favorables(trato humano, cercania y reconocimiento)", Descripcion2: "Impacta en la motivacion y compromiso" },
+                { Id: 5, Nombre: "Manejo del cambio", Descripcion: "Efectividad en el manjejo del cambio(grado de certidumbre y seguridad)", Descripcion2: "Impacta en la productividad" },
+                { Id: 6, Nombre: "Procesos organizacionales", Descripcion: "Efectividad en la gestión de personal", Descripcion2: "Impacta en el sentido de justicia, equidad e imparcialidad" },
+            ];
+
+
             /*#endregion variables*/
+
+            vm.SetArrayData = function (data, enfoque) {
+                var cadenaArreglo = "";
+                if (enfoque == 1) {
+                    cadenaArreglo = data[0].replace("[", "").replace("]", "");//Elimina los corchetes
+                    return cadenaArreglo.split(","); //Retorna el enfoque empresa en un array de decimales
+                    
+                }
+                if (enfoque == 2) {
+                    cadenaArreglo = data[1].replace("[", "").replace("]", "");//Elimina los corchetes
+                    return cadenaArreglo.split(","); //Retorna el enfoque area en un array de decimales
+                }
+            }
 
             var getParamByUrl = function (key) {
                 try {
@@ -422,8 +509,9 @@ function GetDashBoard() {
                             url: "/ReporteoClima/GetFiltrosR/?cadena=" + token,
                             type: "GET",
                             success: function (respose) {
-                                //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque   |lvlDetalle
+                                //usuario|password|opc|tipoEntidad|entidadNombre|anio|enfoque|lvlDetalle|BD
                                 var cadenaFiltros = respose;
+                                cadenaDesenc = cadenaFiltros;
                                 //Otro camino en llenar directo los vm
                                 vm.opc = cadenaFiltros.split("|")[2];
                                 vm.tipoEntidad = cadenaFiltros.split("|")[3];
@@ -442,22 +530,22 @@ function GetDashBoard() {
                                         vm.CompanyCategoria.Descripcion = vm.entidadNombre;
                                         break;
                                     case 2:
-                                        vm.Company.CompanyIda = vm.entidadNombre;
-                                        vm.Company.CompanyNamea = vm.entidadNombre;
+                                        vm.Company.CompanyId = vm.entidadNombre;
+                                        vm.Company.CompanyName = vm.entidadNombre;
                                         break;
                                     case 3:
-                                        vm.Area.IdAreaa = vm.entidadNombre;
-                                        vm.Area.Nombrea = vm.entidadNombre;
+                                        vm.Area.IdArea = vm.entidadNombre;
+                                        vm.Area.Nombre = vm.entidadNombre;
                                         break;
                                     case 4:
-                                        vm.Departamento.IdDepartamentoa = vm.entidadNombre;
-                                        vm.Departamento.Nombrea = vm.entidadNombre;
+                                        vm.Departamento.IdDepartamento = vm.entidadNombre;
+                                        vm.Departamento.Nombre = vm.entidadNombre;
                                         break;
                                     default:
                                 }
                                 //segun el criterio
                                 vm.anioSeleccionado = Object;
-                                vm.anioSeleccionado.value = 2021;
+                                vm.anioSeleccionado.value = parseInt(cadenaFiltros.split("|")[5]);
                                 vm.changedValueAnio(vm.anioSeleccionado.value);
 
                             },
@@ -490,73 +578,137 @@ function GetDashBoard() {
             });
 
             vm.agrandarGraficas = function () {
-                if (resolucion <= 2500 && resolucion >= 1901) {
-                    factMt = 20;
-                }
-                if (resolucion <= 1900 && resolucion >= 1370) {
-                    factMt = 12;
-                }
-                if (resolucion <= 1369) {
-                    factMt = 7;
-                }
-                if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado != 0) {
-                    var graficaBarras = $(".bar-clasificacion:visible");
-                    [].forEach.call(graficaBarras, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHCN = $(".hc:visible");
-                    [].forEach.call(graficaHCN, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                        graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
-                        graf.children[1].style.height = parseFloat(graf.children[1].style.height) * factConver + "px";
-                    });
-                    var grafHC = $(".hc-doble:visible");
-                    [].forEach.call(grafHC, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHC = $(".bar-progress4:visible");
-                    [].forEach.call(graficaHC, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var parrafoHC = $(".label-top-graphic-blue2:visible");
-                    [].forEach.call(parrafoHC, function (graf) {
-                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
-                    });
-                }
-                if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
-                    var graficaBarras = $(".bar-progress-clasificacion:visible");
-                    [].forEach.call(graficaBarras, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHCN = $(".hc:visible");
-                    [].forEach.call(graficaHCN, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                        graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
-                        //aumentar mt
-                        graf.style.marginTop = (parseFloat(graf.style.marginTop) + factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
-                    });
-                    var grafHC = $(".hc-doble:visible");
-                    [].forEach.call(grafHC, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHC = $(".row .bg-gris:visible");
-                    [].forEach.call(graficaHC, function (graf) {
-                        graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
-                    });
-                }
-				if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
-                   if (vm.SeccionesReporte.Id == 24) {
-                       if ($(".contenedor-resumen:visible").length > 0) {
-                           $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
-                           $(".contenedor-resumen:visible")[0].style.setProperty("margin-top", "-550px", "important");
-                       }
+                var paginaActiva = "";
+                if (paginaActiva.includes("pegarReseccionado")) {
+                    if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                        var elemActivo = Enumerable.from(document.getElementById(paginaActiva).children).where(o => o.style.display == "block").toList();
+                        var numElemActivo = elemActivo[0].classList[2].split('-')[2]
+                        paginaActiva = paginaActiva + "_" + numElemActivo;
                     }
-                    else {
-                        var multi26  = $(".contenedor-resumen:visible");
-                        [].forEach.call(multi26,function (elem) {
-                            elem.style.marginRight ="25px";
-                            elem.style.marginTop="-550px";                            
+                }
+                if (!vm.historicoPaginaActiva.includes(paginaActiva)) {
+                    if (resolucion <= 2500 && resolucion >= 1901) {
+                        factMt = 20;
+                    }
+                    if (resolucion <= 1900 && resolucion >= 1370) {
+                        factMt = 12;
+                    }
+                    if (resolucion <= 1369) {
+                        factMt = 7;
+                    }
+                    if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado != 0) {
+                        var graficaBarras = $(".bar-clasificacion:visible");
+                        [].forEach.call(graficaBarras, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
                         });
+                        var graficaHCN = $(".hc:visible");
+                        [].forEach.call(graficaHCN, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                            graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
+                            graf.children[1].style.height = parseFloat(graf.children[1].style.height) * factConver + "px";
+                        });
+                        var grafHC = $(".hc-doble:visible");
+                        [].forEach.call(grafHC, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHC = $(".bar-progress4:visible");
+                        [].forEach.call(graficaHC, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var parrafoHC = $(".label-top-graphic-blue2:visible");
+                        [].forEach.call(parrafoHC, function (graf) {
+                            graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
+                        });
+                    }
+                    if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
+                        var graficaBarras = $(".bar-progress-clasificacion:visible");
+                        [].forEach.call(graficaBarras, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHCN = $(".hc:visible");
+                        [].forEach.call(graficaHCN, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                            graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
+                            //aumentar mt
+                            graf.style.marginTop = (parseFloat(graf.style.marginTop) + factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                        });
+                        var grafHC = $(".hc-doble:visible");
+                        [].forEach.call(grafHC, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHC = $(".row .bg-gris:visible");
+                        [].forEach.call(graficaHC, function (graf) {
+                            graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
+                        });
+                    }
+                    if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
+                        if (vm.SeccionesReporte.Id == 24) {
+                            //if ($(".contenedor-resumen:visible").length > 0) {
+                            //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
+                            //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-top", "-550px", "important");
+                            //}
+                            var resumen24 = $(".contenedor-resumen:visible")
+                            switch (vm.enfoqueSeleccionado) {
+                                case 0:
+                                    if (resumen24.length > 0) {
+                                        [].forEach.call(resumen24, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                        });
+                                    }
+                                    break;
+                                case 1: case 2:
+                                    if (resumen24.length > 0) {
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            [].forEach.call(resumen24, function (item) {
+                                                item.style.marginTop = "-32rem";
+                                                item.style.marginRight = "25px";
+                                            });
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            [].forEach.call(resumen24, function (item) {
+                                                item.style.marginTop = "-32rem";
+                                                item.style.marginRight = "25px";
+                                            });
+                                        }
+                                        if (resolucion <= 1369) {
+                                            [].forEach.call(resumen24, function (item) {
+                                                item.style.marginTop = "-28rem";
+                                                item.style.marginRight = "25px";
+                                            });
+                                        }
+
+                                    }
+                                    break;
+                            }
+                        }
+                        else {
+                            var multi26 = $(".contenedor-resumen:visible");
+                            //[].forEach.call(multi26,function (elem) {
+                            //    elem.style.marginRight ="25px";
+                            //    elem.style.marginTop="-550px";                            
+                            //});
+                            if (multi26.length > 0) {
+                                if (resolucion <= 2500 && resolucion >= 1901) {
+                                    [].forEach.call(multi26, function (item) {
+                                        item.style.marginTop = "-32rem";
+                                        item.style.marginRight = "25px";
+                                    });
+                                }
+                                if (resolucion <= 1900 && resolucion >= 1370) {
+                                    [].forEach.call(multi26, function (item) {
+                                        item.style.marginTop = "-32rem";
+                                        item.style.marginRight = "25px";
+                                    });
+                                }
+                                if (resolucion <= 1369) {
+                                    [].forEach.call(multi26, function (item) {
+                                        item.style.marginTop = "-28rem";
+                                        item.style.marginRight = "25px";
+                                    });
+                                }
+
+                            }
+                        }
                     }
                 }
             }
@@ -611,7 +763,7 @@ function GetDashBoard() {
             /*#region llenar catalogos*/
             vm.get = function (url, functionOK, mostrarAnimacion) {
                 url = vm.urlApis + url;
-                if (vm.listPeticiones.includes(url) && vm.SeccionesReporte.Id > 0) {
+                if (vm.listPeticiones.includes(url) && vm.SeccionesReporte.Id > 2) {
                     return false;
                 }
                 else {
@@ -1482,10 +1634,46 @@ function GetDashBoard() {
 
             /*#region onChange*/
             vm.changedValueCriterioBusqueda = function (criterioSeleccionado) {
+                // limpiar las elecciones
+                try {
+                    vm.CompanyCategoria.IdCompanyCategoria = "";
+                    vm.CompanyCategoria.Descripcion = "";
+                    vm.CompanyCategoriaForEmpresa.IdCompanyCategoria = "";
+                    vm.CompanyCategoriaForEmpresa.Descripcion = "";
+                    vm.CompanyCategoriaForArea.IdCompanyCategoria = "";
+                    vm.CompanyCategoriaForArea.Descripcion = "";
+                    vm.CompanyCategoriaForDepartamento.IdCompanyCategoria = "";
+                    vm.CompanyCategoriaForDepartamento.Descripcion = "";
+
+                    vm.Company.CompanyId = "";
+                    vm.Company.CompanyName = "";
+                    vm.CompanyForArea.CompanyId = "";
+                    vm.CompanyForArea.CompanyName = "";
+                    vm.CompanyForDepartamento.CompanyId = "";
+                    vm.CompanyForDepartamento.CompanyName = "";
+
+                    vm.Area.IdArea = "";
+                    vm.Area.Nombre = "";
+                    vm.AreaForDepartamento.IdArea = "";
+                    vm.AreaForDepartamento.Nombre = "";
+
+                    vm.Departamento.IdDepartamento = "";
+                    vm.Departamento.Nombre = "";
+
+                 
+                } catch (e) {
+                    console.log(e);
+                }
+                $(".select-estr").empty();
+                document.getElementById("DDLBD").value = "0";
+                vm.Anio.value = "-Selecciona-";
+                vm.ddlEnfoques.Id = 0;
+
                 // limpiar los filtros de nivel de detalle
                 var lvl = document.getElementById("tab-1").getElementsByClassName("lvlDetalle");
-                for (var i = criterioSeleccionado; i < lvl.length; i++)
+                for (var i = criterioSeleccionado; i < lvl.length; i++){
                     lvl[i].checked = false;
+                }
 
                 vm.listCompany = [];
                 vm.listArea = [];
@@ -1560,16 +1748,43 @@ function GetDashBoard() {
                     vm.model.Anio = anioSeleccionado;
                     vm.model.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
                     vm.model.nivelDetalle =
-                        (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                        (vm.lvl2 == true || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                        (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                        (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                        (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
 
                     vm.modelHistorico = vm.model;
                     vm.model.CurrentUsr = localStorage["usuario"];
 
-                    vm.model.Anio = anioSeleccionado.value - 1;
+
+                    if (getParamByUrl("token") != null) {
+                        vm.model.CurrentUsr = cadenaDesenc.split("|")[0];
+                        localStorage["usuario"] = vm.model.CurrentUsr;
+                        vm.model.nivelDetalle = cadenaDesenc.split("|")[7];
+                        // si el token tiene un nivel de detalle arriba de criterioseleccionado.Id este se va
+                        [].forEach.call(vm.model.nivelDetalle, function (item) {
+                            if (parseInt(item) < vm.criterioBusquedaSeleccionado.Id) {
+                                vm.model.nivelDetalle = vm.model.nivelDetalle.replace(item, "");
+                            }
+                        });
+                        console.log(vm.model.nivelDetalle);
+                        vm.UNSeleccionada = vm.model.EntidadNombre;
+                        vm.storeName = "_" + vm.model.EntidadNombre + "_" + vm.modelHistorico.EntidadNombre + "_" + (vm.modelHistorico.Anio);
+                        vm.model.IdBaseDeDatos = parseInt(cadenaDesenc.split("|")[8]);
+                        if (vm.model.nivelDetalle.includes("1")) 
+                            vm.lvl1 = true;
+                        if (vm.model.nivelDetalle.includes("2"))
+                            vm.lvl2 = true;
+                        if (vm.model.nivelDetalle.includes("3"))
+                            vm.lvl3 = true;
+                        if (vm.model.nivelDetalle.includes("4"))
+                            vm.lvl4 = true;
+                        if (vm.model.nivelDetalle.includes("5"))
+                            vm.lvl5 = true;
+                    }
+
+                    vm.model.Anio = anioSeleccionado - 1;
                     if (vm.model.EntidadNombre != "" && vm.model.EntidadId != null && vm.model.EntidadId != "") {
                         if (validFind) {
                             fillArrayCustomHisto("apisHistorico/existeHistorico_2", vm.model, vm.ExisteH, function () {
@@ -1587,6 +1802,7 @@ function GetDashBoard() {
                                         title: "No se cuenta con un registro histórico acorde a los criterios de búsqueda proporcionados, desea continuar?",
                                         text: "",
                                         icon: "info",
+                                        allowOutsideClick: false, closeOnClickOutside: false,
                                         buttons: [
                                             'No, cancelar!',
                                             'Si, estoy seguro!'
@@ -1600,6 +1816,7 @@ function GetDashBoard() {
                                                     /*vm.writteLogData(vm.listDataHistorico, "vm.onchangeValueAnio()");vm.getPromediosGeneralesHistoricos();*/
                                                     if (!vm.isNullOrEmpty(getParamByUrl("token"))) {
                                                         vm.SeccionesReporte.Id++;
+                                                        vm.getReporteDataPantalla_6();
                                                     }
                                                 });
                                             });
@@ -2227,11 +2444,39 @@ function GetDashBoard() {
                 if (vm.enfoqueSeleccionado != undefined) {
                     try {
                         var resumen = $(".contenedor-resumen:visible")
-                        if (resumen.length > 0) {
-                            [].forEach.call(resumen, function (item) {
-                                item.style.marginTop = "-42rem";
-                            });
-                        }
+                        switch (vm.enfoqueSeleccionado) {
+                            case 0:
+                                if (resumen.length > 0) {
+                                    [].forEach.call(resumen, function (item) {
+                                        item.style.marginTop = "-32rem";//-32rem
+                                        item.style.marginRight ="25px";
+                                    });
+                                }
+                                break;
+                            case 1: case 2:
+                                if (resumen.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(resumen, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight ="25px";
+                                        });
+                                    }
+                                    
+                                }
+                                break;        
+                        }                        
 
                         /* Se obtiene la seccion del reporte activa */
                         for (var i = 0; i < divs.length; i++) {
@@ -2528,21 +2773,23 @@ function GetDashBoard() {
                                 if (paginaActiva == "tab-indicadores-permanencia") {
                                     if ($(window).width() > 1610) {
                                         finalPaddingTop = 160;
-                                        var indicador = document.getElementsByClassName("margin-top-nuevo");
-                                        [].forEach.call(indicador, function (itemD) {
-                                            var mt = parseInt(itemD.style.marginTop);
-                                            var newmt = mt / 2;
-                                            itemD.style.marginTop = newmt + "px";
-                                        });
-                                        var elem = document.getElementById(paginaActiva);
-                                        elem.getElementsByClassName("card-block")[0].style.padding = "0px";
-                                        var mb = elem.getElementsByClassName("bg-gris");
-                                        [].forEach.call(mb, function (elemMB) {
-                                            elemMB.classList.remove("mb-5");
-                                            elemMB.classList.add("mb-2");
-                                        });
-                                        elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-5");
-                                        elem.getElementsByClassName("nuevomt")[0].classList.add("mt-2");
+                                        /***********Se comenta para resolucion grande********************/
+                                        //var indicador = document.getElementsByClassName("margin-top-nuevo");
+                                        //[].forEach.call(indicador, function (itemD) {
+                                        //    var mt = parseInt(itemD.style.marginTop);
+                                        //    var newmt = mt / 2;
+                                        //    itemD.style.marginTop = newmt + "px";
+                                        //});
+                                        //var elem = document.getElementById(paginaActiva);
+                                        //elem.getElementsByClassName("card-block")[0].style.padding = "0px";
+                                        //var mb = elem.getElementsByClassName("bg-gris");
+                                        //[].forEach.call(mb, function (elemMB) {
+                                        //    elemMB.classList.remove("mb-5");
+                                        //    elemMB.classList.add("mb-2");
+                                        //});
+                                        //elem.getElementsByClassName("nuevomt")[0].classList.remove("mt-5");
+                                        //elem.getElementsByClassName("nuevomt")[0].classList.add("mt-2");
+                                        /***********Se comenta para resolucion grande********************/
 										
                                     //se aumenta el tamaño minimo de los bg-gris 20/09/2021
                                     // Lo que me Motiva
@@ -2553,6 +2800,7 @@ function GetDashBoard() {
                                     var sepasa = false;
                                     var valbarra = 0; 
                                     var valpadding = 0;
+									 var valpaddingM = 0;
                                     [].forEach.call(barrasB1,function (elem) {
                                         separanum = elem.innerText; 
                                         separanum = separanum.replace("%","");
@@ -2562,13 +2810,39 @@ function GetDashBoard() {
                                             return;
                                         }
                                     });
-                                    if (sepasa) {
-                                        valbarra = 1.5;
-                                        valpadding = 1.7;//-.15
+                                     if (sepasa) {
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra = 1.5;
+                                            valpaddingM=1.6;
+                                            valpadding = 1.7;//-.15
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra = 1.5;
+                                            valpaddingM=1.6;
+                                            valpadding = 1.7;//-.15
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra = 1.5;
+                                            valpaddingM=1.6;
+                                            valpadding = 1.7;//-.15
+                                        }
                                     }
                                     else {
-                                        valbarra = 2;
-                                        valpadding = 2.2;
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra = 3;
+                                            valpadding = 3.2;
+                                            valpaddingM = 3.3;
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra = 3;
+                                            valpaddingM = 3.2;
+                                            valpadding = 3.3;
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra = 3;
+                                            valpaddingM = 3.2;
+                                            valpadding = 3.3;
+                                        }                                        
                                     }
                                     var elementBAzul= $(".grafica-trabajarEx .bar");
                                     [].forEach.call(elementBAzul,function (elem) {
@@ -2579,7 +2853,7 @@ function GetDashBoard() {
                                     var elementBMorado= $(".grafica-trabajarEx .bar-progress2:visible");
                                     [].forEach.call(elementBMorado,function (elem) {
                                         var mt = parseInt(elem.style.height);
-                                        var newmt = mt * valbarra;
+                                        var newmt = mt * valpaddingM;
                                         elem.style.height = newmt + "px";
                                     });
                                     var paddingelemento = $(".grafica-trabajarEx .bar-progress");
@@ -2598,6 +2872,7 @@ function GetDashBoard() {
                                     var sepasa2 = false;
                                     var valbarra2 = 0;
                                     var valpadding2 = 0;
+									  var valpadding2M = 0;
                                     [].forEach.call(barrasB2,function (elem) {
                                         separanum2 = elem.innerText; 
                                         separanum2 = separanum2.replace("%","");
@@ -2607,13 +2882,39 @@ function GetDashBoard() {
                                             return;
                                         }
                                     });                                   
-                                    if (sepasa2) {
-                                        valbarra2 = 1.5;
-                                        valpadding2 = 1.7;
+                                     if (sepasa2) {
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra2 = 1.5;
+                                            valpadding2M=1.6;
+                                            valpadding2 = 1.7;
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra2 = 1.5;
+                                            valpadding2M=1.6;
+                                            valpadding2 = 1.7;
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra2 = 1.5;
+                                            valpadding2M=1.6;
+                                            valpadding2 = 1.7;
+                                        }                                       
                                     }
                                     else {
-                                        valbarra2 = 2;
-                                        valpadding2 = 2.2;
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            valbarra2 = 3;
+                                            valpadding2M = 3.2;
+                                            valpadding2 = 3.3;
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            valbarra2 = 3;
+                                            valpadding2M = 3.2;
+                                            valpadding2 = 3.3;
+                                        }
+                                        if (resolucion <= 1369) {
+                                            valbarra2 = 3;
+                                            valpadding2M = 3.2;
+                                            valpadding2 = 3.3;
+                                        } 
                                     }
                                     var elementBAzul2= $(".grafica-dejarEx .bar2");
                                     [].forEach.call(elementBAzul2,function (elem) {
@@ -2624,7 +2925,7 @@ function GetDashBoard() {
                                     var elementBMorado2= $(".grafica-dejarEx .bar-progress4:visible");
                                     [].forEach.call(elementBMorado2,function (elem) {
                                         var mt = parseInt(elem.style.height);
-                                        var newmt = mt * valbarra2;
+                                        var newmt = mt * valpadding2M;
                                         elem.style.height = newmt + "px";
                                     });
                                     var paddingelemento2 = $(".grafica-dejarEx .bar-progress3");
@@ -2638,10 +2939,11 @@ function GetDashBoard() {
                                     elemtH1[0].style.minHeight = "550px";//450
                                     var elemtH2 = $("#tab-indicadores-permanencia .grafica-dejarEx")
                                     elemtH2[0].style.minHeight = "550px";//450
-                                    var elembg1 = $(".grafica-trabajarEx .bg-gris");
-                                    elembg1[0].style.minHeight ="445px";//'346px';
-                                    var elembg2 = $(".grafica-dejarEx .bg-gris");
-                                    elembg2[0].style.minHeight ="445px";//'346px';
+                                     /**********Se quitan por alto de caja gris*****************/
+                                    //var elembg1 = $(".grafica-trabajarEx .bg-gris");
+                                    //elembg1[0].style.minHeight ="445px";//'346px';
+                                    //var elembg2 = $(".grafica-dejarEx .bg-gris");
+                                    //elembg2[0].style.minHeight ="445px";//'346px';
 
 
                                     }
@@ -2766,25 +3068,25 @@ function GetDashBoard() {
                                             $('#' + key)[0].style.backgroundColor = "#fff";
                                             document.getElementById(key).parentNode.style.backgroundColor = "#fff";
                                             document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
-                                            var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
-                                            var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
-                                                if (!historicoCorte.includes(llave)) {
-                                                    //historicoCorte.push(llave);
-                                                    document.getElementById("tab-17").classList.remove("ng-hide");
-                                                    document.getElementById("tab-17").classList.remove("ng-hide");
-                                                    var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
-                                                    //docReporte.addImage(data);
-                                                    console.log(data);
-                                                }
-                                            });
-                                            var resumen = $(".contenedor-resumen")
-                                            if (resumen.length > 0) {
-                                                [].forEach.call(resumen, function (item) {
-                                                    item.style.removeProperty = "margin-top";
-                                                    item.style.marginTop = "-25rem";
-                                                });
-                                            }
-                                        if (cortes.length == 0) {
+                                            //var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
+                                            //var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
+                                            //    if (!historicoCorte.includes(llave)) {
+                                            //        //historicoCorte.push(llave);
+                                            //        document.getElementById("tab-17").classList.remove("ng-hide");
+                                            //        document.getElementById("tab-17").classList.remove("ng-hide");
+                                            //        var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
+                                            //        //docReporte.addImage(data);
+                                            //        console.log(data);
+                                            //    }
+                                            //});
+                                            //var resumen = $(".contenedor-resumen")
+                                            //if (resumen.length > 0) {
+                                            //    [].forEach.call(resumen, function (item) {
+                                            //        item.style.removeProperty = "margin-top";
+                                            //        item.style.marginTop = "-25rem";
+                                            //    });
+                                            //}
+                                        //if (cortes.length == 0) {
                                             var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 1 }
@@ -2794,7 +3096,7 @@ function GetDashBoard() {
                                             docReporte.addPage();
                                             docReporte.addImage(data, 1200, 400);
                                             return data;
-                                        }
+                                        //}
                                     });
                                     setTimeout(function () {
                                         document.getElementsByClassName("busy")[1].style.display = "none";
@@ -2806,9 +3108,10 @@ function GetDashBoard() {
                                     var histo = [];
                                     if (padrePaginaActiva == "tab-17") {
                                         var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
+                                        var divExportacion = vm.enfoqueSeleccionado == 1 ? "tab-bienestar-ee" : "tab-bienestar-ea";
                                         var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
                                         var itemsMapeo = $("#" + idTabla + " ." + hijo);
-                                        var cortesS = itemsMapeo.map(async (llave, indice) => {
+                                        /*var cortesS = itemsMapeo.map(async (llave, indice) => {
                                             //historicoCorte.push(llave);
                                             document.getElementById("tab-17").classList.remove("ng-hide");
                                             document.getElementById("tab-17").classList.remove("ng-hide");
@@ -2821,9 +3124,9 @@ function GetDashBoard() {
                                                 var last = docReporte.internal.getCurrentPageInfo().pageNumber;
                                                 docReporte.deletePage(last);
                                             }
-                                        });
-                                        if (cortes.length == 0) {
-                                            var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
+                                        });*/
+                                        //if (cortes.length == 0) {
+                                            var data = await docReporte.addHTML($('#' + divExportacion)[0], 0, ptDefault, {
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 2,logging: true  }
                                             }, function () {
@@ -2831,8 +3134,10 @@ function GetDashBoard() {
                                             });
                                             docReporte.addPage();
                                             docReporte.addImage(data, 1200, 400);
-                                            return data;
-                                        }
+                                            vm.isBusy = false;
+                                            document.getElementsByClassName("busy")[1].style.display = "none";
+                                            //return data;
+                                        //}
                                     }
 
                                     if (padrePaginaActiva != "tab-17") {
@@ -3088,6 +3393,7 @@ function GetDashBoard() {
                                         'No mostrar de nuevo'
                                     ],
                                     dangerMode: false,
+                                    allowOutsideClick: false, closeOnClickOutside: false,
                                 }).then(function (isConfirm) {
                                     if (isConfirm)
                                         vm.mostrarMensaje = false;
@@ -3104,6 +3410,7 @@ function GetDashBoard() {
                                         'No mostrar de nuevo'
                                     ],
                                     dangerMode: false,
+                                    allowOutsideClick: false, closeOnClickOutside: false,
                                 }).then(function (isConfirm) {
                                     if (isConfirm)
                                         vm.mostrarMensaje = false;
@@ -3144,9 +3451,18 @@ function GetDashBoard() {
                         vm.SeccionesReporte.Id = 41;
                         return;
                     }
+                    if (vm.SeccionesReporte.Id == 17) {
+                        docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                    }
                     // Enfoque Doble y Enfoque Área
                     if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                         if (vm.hasHistorico) {
+                            if (vm.SeccionesReporte.Id == 22) {
+                                vm.SeccionesReporte.Id = 27;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id = 28;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id < 20) {
                                 if (vm.enfoqueSeleccionado == 2) {//Validacion EA
                                     if (vm.SeccionesReporte.Id == 8 || vm.SeccionesReporte.Id == 10 || vm.SeccionesReporte.Id == 12 || vm.SeccionesReporte.Id == 14) {
@@ -3164,8 +3480,25 @@ function GetDashBoard() {
                                 return vm.peticiones();
                             }
                         }
-                        if (!vm.hasHistorico) {
-                            //Validar subsecciones
+                        if (vm.hasHistorico == false) {
+                            /*Solo tiene 2 niveles de detalle por tanto se omite el grafico de barras*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length < 3) {
+                                vm.SeccionesReporte.Id = 27;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id = 28;
+                                return vm.peticiones();
+                            }
+                            /*Tiene 3 o más niveles de detalle por tanto se muestra el grafico de barras seccionado*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length >= 3) {
+                                vm.SeccionesReporte.Id = 22;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id == 22) {
+                                vm.SeccionesReporte.Id = 27;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id = 28;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id == 23) {
                                 if (vm.criterioBusquedaSeleccionado.Id == 1) {
                                     var childs = document.getElementById("pegarReseccionado").childNodes;
@@ -3304,7 +3637,7 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
-                            // fin validar subsecciones
+                            // En desuso porque se eliminó el seccionado de las columnas de bienestar
                             if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
                                 document.getElementsByClassName("busy")[1].style.display = "block";
                                 var indiceVisible = "";
@@ -3337,7 +3670,6 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
-
                             if (vm.SeccionesReporte.Id < 10 || vm.SeccionesReporte.Id == 13) {
                                 if (vm.enfoqueSeleccionado == 2) {
                                     if (vm.SeccionesReporte.Id == 8) {
@@ -3445,6 +3777,11 @@ function GetDashBoard() {
                     // Enfoque Empresa
                     if (vm.enfoqueSeleccionado == 1) {
                         if (vm.hasHistorico) {
+                            // Validar eliminacion de las barras seccionadas
+                            if (vm.SeccionesReporte.Id == 21) {
+                                vm.SeccionesReporte.Id = 27;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id <= 8) {
                                 vm.SeccionesReporte.Id++;
                                 return vm.peticiones();
@@ -3465,6 +3802,20 @@ function GetDashBoard() {
                             }
                         }
                         if (vm.hasHistorico == false) {
+                            /*Solo tiene 2 niveles de detalle por tanto se omite el grafico de barras*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length < 3) {
+                                vm.SeccionesReporte.Id = 27;
+                                return vm.peticiones();
+                            }
+                            /*Tiene 3 o más niveles de detalle por tanto se muestra el grafico de barras seccionado*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length >= 3) {
+                                vm.SeccionesReporte.Id = 21;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id == 21) {
+                                vm.SeccionesReporte.Id = 27;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id == 23) {
                                 try {
                                     if (vm.criterioBusquedaSeleccionado.Id == 1) {
@@ -3568,6 +3919,7 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
+                            // En desuso porque se eliminó el seccionado de las columnas de bienestar
                             if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
                                 // Estoy en el ee
                                 var mitad = $(".divExportacionBienestarClass").length / 2;//Si ya mostro la mitad debe pasarse a la siguiente
@@ -4384,6 +4736,9 @@ function GetDashBoard() {
 
             vm.peticiones = function () {
                 if (true) {
+                    if (vm.SeccionesReporte.Id == 4 && getParamByUrl("token") != null) {
+                        //vm.getReporteDataPantalla_6();
+                    }
                     if (vm.SeccionesReporte.Id == 7 && vm.PorcentajeCompanierismo.length == 0) {
                         vm.getReporteDataPantalla_7();
                     }
@@ -4430,10 +4785,10 @@ function GetDashBoard() {
                         vm.getReporteDataPantalla_20();
                     }
                     if (vm.SeccionesReporte.Id == 21 && vm.ComparativosGeneralesEE.length == 0) {
-                        vm.getReporteDataPantalla_21();
+                        vm.getReporteDataPantalla_21();/*Seccionar*/
                     }
                     if (vm.SeccionesReporte.Id == 22 && vm.ComparativosGeneralesEA.length == 0) {
-                        vm.getReporteDataPantalla_22();
+                        vm.getReporteDataPantalla_22();/*Seccionar*/
                     }
                     if (vm.SeccionesReporte.Id == 23 && vm.ComparativoGeneralPorNivelesEE.Data == undefined) {
                         vm.getReporteDataPantalla_23();
@@ -4450,39 +4805,91 @@ function GetDashBoard() {
                     if (vm.SeccionesReporte.Id == 27 && vm.ComparativoAntiguedadEE.length == 0) {
                         vm.getReporteDataPantalla_27();
                     }
+                    else if (vm.SeccionesReporte.Id == 27) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 28 && vm.ComparativoAntiguedadEA.length == 0) {
                         vm.getReporteDataPantalla_28();
+                    }
+                    else if (vm.SeccionesReporte.Id == 28) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 29 && vm.ComparativoGeneroEE.length == 0) {
                         vm.getReporteDataPantalla_29();
                     }
+                    else if (vm.SeccionesReporte.Id == 29) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 30 && vm.ComparativoGeneroEA.length == 0) {
                         vm.getReporteDataPantalla_30();
+                    }
+                    else if (vm.SeccionesReporte.Id == 30) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 31 && vm.ComparativoGradoAcademicoEE.length == 0) {
                         vm.getReporteDataPantalla_31();
                     }
+                    else if (vm.SeccionesReporte.Id == 31) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 32 && vm.ComparativoGradoAcademicoEA.length == 0) {
                         vm.getReporteDataPantalla_32();
+                    }
+                    else if (vm.SeccionesReporte.Id == 32) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 33 && vm.ComparativoCondicionTrabajoEE.length == 0) {
                         vm.getReporteDataPantalla_33();
                     }
+                    else if (vm.SeccionesReporte.Id == 33) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 34 && vm.ComparativoCondicionTrabajoEA.length == 0) {
                         vm.getReporteDataPantalla_34();
+                    }
+                    else if (vm.SeccionesReporte.Id == 34) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 35 && vm.ComparativoFuncionEE.length == 0) {
                         vm.getReporteDataPantalla_35();
                     }
+                    else if (vm.SeccionesReporte.Id == 35) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 36 && vm.ComparativoFuncionEA.length == 0) {
                         vm.getReporteDataPantalla_36();
+                    }
+                    else if (vm.SeccionesReporte.Id == 36) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 37 && vm.ComparativoRangoEdadEE.length == 0) {
                         vm.getReporteDataPantalla_37();
                     }
+                    else if (vm.SeccionesReporte.Id == 37) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 38 && vm.ComparativoRangoEdadEA.length == 0) {
                         vm.getReporteDataPantalla_38();
                     }
+                    else if (vm.SeccionesReporte.Id == 39) {
+                        vm.doblarMargen();
+                    }
+
+                    
+
+                }
+            }
+
+            vm.doblarMargen = function () {
+                //Validar a partir de antiguedad en enfoques individuales para que haga al doble el margin top de label-top-graphic-blue2
+                if (vm.enfoqueSeleccionado != 0) {
+                    var tab = "#tab-" + vm.SeccionesReporte.Id;
+                    [].forEach.call($(tab + " .label-top-graphic-blue2"), function (item) {
+                        item.style.marginTop = (parseFloat(item.style.marginTop) * factConver) + "px";
+                        if (parseFloat(item.style.marginTop) > 248) {
+                            item.style.marginTop = "248px";
+                        }
+                    });
                 }
             }
 
@@ -4828,15 +5235,31 @@ function GetDashBoard() {
                     //    return;
                     //}
                     if (vm.SeccionesReporte.Id >= 20) {
+                        //if (vm.SeccionesReporte.Id == 41 && vm.enfoqueSeleccionado == 1) {
+                        //    anterior = 37;
+                        //}
                         if (vm.SeccionesReporte.Id == 41) {
                             anterior = 38;
                         }
-                        else {
+                        else if (vm.SeccionesReporte.Id != 41) {
                             if (vm.enfoqueSeleccionado != 0) {
-                                anterior = vm.SeccionesReporte.Id - 2;
+                                if (vm.SeccionesReporte.Id == 27 && vm.enfoqueSeleccionado == 1) {
+                                    anterior = 21;
+                                }
+                                if (vm.SeccionesReporte.Id == 28) {
+                                    anterior = 22;
+                                }
+                                if (vm.SeccionesReporte.Id != 27 && vm.SeccionesReporte.Id != 28) {
+                                    anterior = vm.SeccionesReporte.Id - 2;
+                                }
                             }
                             if (vm.enfoqueSeleccionado == 0) {
-                                anterior = vm.SeccionesReporte.Id - 2;
+                                if (vm.SeccionesReporte.Id == 28) {
+                                    anterior = 22;
+                                }
+                                if (vm.SeccionesReporte.Id != 28) {
+                                    anterior = vm.SeccionesReporte.Id - 2;
+                                }
                             }
                         }
                         var tab = document.getElementById("tab-" + anterior);
@@ -4886,6 +5309,11 @@ function GetDashBoard() {
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                     });
+                                    //bajar margin top
+                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    [].forEach.call(hc, function (item) {
+                                        item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
+                                    });
                                 }
                                 if (vm.enfoqueSeleccionado == 0 && vm.SeccionesReporte.Id != 24) {
                                     var graficaBarras = $(".bar-progress-clasificacion:visible");
@@ -4906,6 +5334,11 @@ function GetDashBoard() {
                                     var graficaHC = $(".row .bg-gris:visible");
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                    });
+                                    //bajar margin top
+                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    [].forEach.call(hc, function (item) {
+                                        item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
                                     });
                                 }
 
@@ -4972,6 +5405,11 @@ function GetDashBoard() {
                                     var graficaHC = $(".row .bg-gris:visible");
                                     [].forEach.call(graficaHC, function (graf) {
                                         graf.style.minHeight = parseFloat(graf.offsetHeight) / factConver + "px";
+                                    });
+                                    //bajar margin top
+                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    [].forEach.call(hc, function (item) {
+                                        item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
                                     });
                                 }
                             }
@@ -5155,7 +5593,7 @@ function GetDashBoard() {
                         if (vm.enfoqueSeleccionado == 1 && vm.SeccionesReporte.Id == 41) {
                             vm.SeccionesReporte.Id = 37;
                             //reducir
-                            eeReduce(vm.SeccionesReporte.Id);
+                            //eeReduce(vm.SeccionesReporte.Id);
                             return;
                         }
                         if (vm.SeccionesReporte.Id == 41) {
@@ -5165,6 +5603,11 @@ function GetDashBoard() {
                         // Enfoque combinado y Enfoque Área
                         if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                             if (vm.hasHistorico) {
+                                if (vm.SeccionesReporte.Id == 28) {
+                                    vm.SeccionesReporte.Id = 22;
+                                    document.getElementById("tab-26").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5183,6 +5626,16 @@ function GetDashBoard() {
                                 }
                             }
                             if (vm.hasHistorico == false) {
+                                // Se omite el grafico de barras
+                                if (vm.SeccionesReporte.Id == 28 && vm.model.nivelDetalle.length < 3) {
+                                    vm.SeccionesReporte.Id = 20;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 28 && vm.model.nivelDetalle.length >= 3) {
+                                    vm.SeccionesReporte.Id = 22;
+                                    document.getElementById("tab-26").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id == 24) {
                                     try {
                                         if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0)
@@ -5328,7 +5781,6 @@ function GetDashBoard() {
 
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id == 18 && $(".divExportacionBienestarClass").length > 0) {
                                     // mostrar el ultimo indice
                                     $(".divExportacionBienestarClass")[($(".divExportacionBienestarClass").length - 1)].style.display = "";
@@ -5362,7 +5814,6 @@ function GetDashBoard() {
                                         return;
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5537,10 +5988,14 @@ function GetDashBoard() {
                                 }
                             }
                         }
-
                         // ENfoque Empresa
                         if (vm.enfoqueSeleccionado == 1) {
                             if (vm.hasHistorico) {
+                                if (vm.SeccionesReporte.Id == 27) {
+                                    vm.SeccionesReporte.Id = 21;
+                                    document.getElementById("tab-25").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id <= 37 && vm.SeccionesReporte.Id >= 23) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5561,7 +6016,16 @@ function GetDashBoard() {
                                 }
                             }
                             if (vm.hasHistorico == false) {
-                                // meter 23
+                                // Se omite el grafico de barras
+                                if (vm.SeccionesReporte.Id == 27 && vm.model.nivelDetalle.length < 3) {
+                                    vm.SeccionesReporte.Id = 20;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 27 && vm.model.nivelDetalle.length >= 3) {
+                                    vm.SeccionesReporte.Id = 21;
+                                    document.getElementById("tab-25").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id == 23) {
                                     try {
                                         /* ir a la sub del 23 */
@@ -5651,7 +6115,6 @@ function GetDashBoard() {
 
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id == 18 && $(".divExportacionBienestarClass").length > 0) {
                                     // EE mostrar el ultimo indice de la primera mitad
                                     var mitad = $(".divExportacionBienestarClass").length / 2;
@@ -5678,7 +6141,6 @@ function GetDashBoard() {
                                         return;
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id <= 37 && vm.SeccionesReporte.Id >= 23) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5958,13 +6420,78 @@ function GetDashBoard() {
 
 
             vm.existeEnDemo = function () {
+                var message = "Elige";
+                var formValid = true;
+                // validar filtros
+                switch (vm.criterioBusquedaSeleccionado.Id) {
+                    case 1:
+                        if (vm.CompanyCategoria == null)
+                            formValid = false;
+                        if (vm.CompanyCategoria.IdCompanyCategoria == "")
+                            formValid = false;
+                        if (vm.CompanyCategoria.IdCompanyCategoria == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.CompanyCategoria.IdCompanyCategoria;
+                        break;
+                    case 2:
+                        if (vm.Company == null)
+                            formValid = false;
+                        if (vm.Company.CompanyId == "") 
+                            formValid = false;
+                        if (vm.Company.CompanyId == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.Company.CompanyId;
+                        break;
+                    case 3:
+                        if (vm.Area == null) 
+                            formValid = false;
+                        if (vm.Area.IdArea == "") 
+                            formValid = false;
+                        if (vm.Area.IdArea == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.Area.IdArea;
+                        break;
+                    case 4:
+                        if (vm.Departamento == null) 
+                            formValid = false;
+                        if (vm.Departamento.IdDepartamento == "") 
+                            formValid = false;
+                        if (vm.Departamento.IdDepartamento == 0)
+                            formValid = false;
+                        vm.modelHistorico.EntidadNombre = vm.Departamento.IdDepartamento;
+                        break;
+                    default:
+                        alert("no tengo criterio");
+                }
+                if (vm.Anio == null) 
+                    formValid = false;
+                if (vm.Anio.value == "-Selecciona-")
+                    formValid = false;
+                if (vm.Anio.value > 1000)
+                    vm.modelHistorico.Anio = vm.Anio.value - 1;
+              
+                if (formValid == false) {
+                    swal("Debes llenar todos los campos del filtrado del reporte", "", "info").then(function () {
+                        return false;
+                    });
+                    return false;
+                }
+
+                vm.model.EntidadNombre = vm.modelHistorico.EntidadNombre;
+                vm.model.Anio = vm.modelHistorico.Anio;
+
                 vm.existeReporte = Object;
                 vm.modelHistorico.nivelDetalle =
-                    (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (getParamByUrl("token") == null) {
+                    vm.modelHistorico.Anio = vm.anioSeleccionado.value - 1;
+                    vm.modelHistorico.IdBaseDeDatos = parseInt(document.getElementById("DDLBD").value);
+                    vm.modelHistorico.enfoqueSeleccionado = vm.ddlEnfoques.Id;
+                }
                 fillArrayCustomHisto("BackGroundJob/existeReporte/", vm.modelHistorico, vm.existeReporte, function () {
                     if (localStorage["tieneReporte"] == "true") {
                         /*Si ya existe preguntar si se quiere consultar el existente o actualizarlo sobreescribiendo*/
@@ -5972,6 +6499,7 @@ function GetDashBoard() {
                             title: "Este reporte ya se creó anteriormente. Deseas consultar el existente o quieres actualizarlo",
                             text: "",
                             icon: "info",
+                            allowOutsideClick: false, closeOnClickOutside: false,
                             buttons: [
                                 'Consultar el reporte existente!',
                                 'Actualizar el reporte!'
@@ -5989,12 +6517,38 @@ function GetDashBoard() {
                             }
                             else {
                                 /*Consultar existente*/
+                                vm.SeccionesReporte.Id++;
+                                vm.getEstructura();
                                 vm.getReporteDataPantalla_6();
                             }
                         });
                         return true;
                     }
-                    else {
+                    if (localStorage["tieneReporte"] == "Excede") {
+                        swal({
+                            title: "El reporte solicitado excede la cantidad de información que puede mostrarse",
+                            text: "",
+                            icon: "info",
+                            allowOutsideClick: false, closeOnClickOutside: false,
+                            buttons: [
+                                'Configurar nuevos filtros',
+                                'Ir al reporte de indicadores'
+                            ],
+                            dangerMode: false,
+                        }).then(function (isConfirm) {
+                            vm.hasHistorico = false;
+                            if (isConfirm) {
+                                window.location.href = "/Reporte/ReporteFinalByUNegocio/";
+                            }
+                            else {
+                                vm.listPeticiones = [];
+                                localStorage["tieneReporte"] = "";
+                                //window.location.reload();
+                            }
+                        });
+                        return false;
+                    }
+                    else if (localStorage["tieneReporte"] == "false") {
                         swal("El reporte aún no se encuentra generado, este será generado y se le notificará por correo electrónico cuando este proceso haya terminado", "", "info").then(function () {
                             vm.generarJob();
                             window.location.href = "/Dashboard/Dashboard/";
@@ -6078,20 +6632,20 @@ function GetDashBoard() {
             /*Indicadores Generales*/
             vm.getReporteDataPantalla_6 = function () {
                 /*Validar si este reporte tiene su registro en la tabla Demo*/
-                if (localStorage["tieneReporte"] == "") {
+                if (localStorage["tieneReporte"] == "" && getParamByUrl("token") == null) {
                     vm.existeEnDemo();
                 }
-                if (localStorage["tieneReporte"] == "false" && localStorage["tieneReporte"] != "") {
+                if (localStorage["tieneReporte"] == "false" && localStorage["tieneReporte"] != "" && getParamByUrl("token") == null) {
 
                 }
-                else if (localStorage["tieneReporte"] != "" && localStorage["tieneReporte"] == "true") {
+                else if ((localStorage["tieneReporte"] != "" && localStorage["tieneReporte"] == "true") || getParamByUrl("token") != null) {
                     vm.flagLoading = true;
                     try {
                         vm.isBusy = true;
                         if (vm.criterioBusquedaSeleccionado.Id > 0) {
                             vm.UNSeleccionada = vm.modelHistorico.EntidadNombre;
                             vm.storeName = "_" + vm.modelHistorico.EntidadId + "_" + vm.modelHistorico.EntidadNombre + "_" + (vm.modelHistorico.Anio + 1);
-                            if (localStorage["esperadas" + vm.storeName] != null && localStorage["participacion" + vm.storeName] != null && localStorage["califGlobal" + vm.storeName] != null && localStorage["confianza" + vm.storeName] != null && localStorage["compromiso" + vm.storeName] != null && localStorage["colaboracion" + vm.storeName] != null) {
+                            /*if (localStorage["esperadas" + vm.storeName] != null && localStorage["participacion" + vm.storeName] != null && localStorage["califGlobal" + vm.storeName] != null && localStorage["confianza" + vm.storeName] != null && localStorage["compromiso" + vm.storeName] != null && localStorage["colaboracion" + vm.storeName] != null) {
                                 var retObj1 = localStorage.getItem("esperadas" + vm.storeName);
                                 var retObj2 = localStorage.getItem("participacion" + vm.storeName);
                                 var retObj3 = localStorage.getItem("califGlobal" + vm.storeName);
@@ -6110,7 +6664,7 @@ function GetDashBoard() {
                                     return vm.SeccionesReporte.Id;
                                 }
                             }
-                            else {
+                            else {*/
                                 if (true && vm.PorcentajeNivelDeColaboracion.length == 0) {
                                     vm.limpiarArraysReporte_Pantalla_6();
                                     fillArrayCustomHisto("BackGroundJob/getEsperadas/", vm.modelHistorico, vm.Esperadas, function () {
@@ -6122,21 +6676,29 @@ function GetDashBoard() {
                                             localStorage.setItem("participacion" + vm.storeName, JSON.stringify(vm.PorcentajeParticipacion));
                                             fillArrayCustomHisto("BackGroundJob/getCalificacionGlobal/", vm.modelHistorico, vm.PorcentajeCalificacionGlobal, function () {
                                                 vm.PorcentajeCalificacionGlobal = vm.PorcentajeCalificacionGlobal.Data == undefined ? vm.PorcentajeCalificacionGlobal : vm.PorcentajeCalificacionGlobal.Data;
-                                                vm.PorcentajeCalificacionGlobal = vm.rounderPorcent(vm.PorcentajeCalificacionGlobal);
+                                                //vm.PorcentajeCalificacionGlobal = vm.rounderPorcent(vm.PorcentajeCalificacionGlobal);
+                                                vm.PorcentajeCalificacionGlobalEE = vm.SetArrayData(vm.PorcentajeCalificacionGlobal, 1);
+                                                vm.PorcentajeCalificacionGlobalEA = vm.SetArrayData(vm.PorcentajeCalificacionGlobal, 2);
                                                 localStorage.setItem("califGlobal" + vm.storeName, JSON.stringify(vm.PorcentajeCalificacionGlobal));
                                                 fillArrayCustomHisto("BackGroundJob/getConfianza/", vm.modelHistorico, vm.PorcentajeNivelConfianza, function () {
                                                     vm.PorcentajeNivelConfianza = vm.PorcentajeNivelConfianza.Data == undefined ? vm.PorcentajeNivelConfianza : vm.PorcentajeNivelConfianza.Data;
-                                                    vm.PorcentajeNivelConfianza = vm.rounderPorcent(vm.PorcentajeNivelConfianza);
+                                                    //vm.PorcentajeNivelConfianza = vm.rounderPorcent(vm.PorcentajeNivelConfianza);
+                                                    vm.PorcentajeNivelConfianzaEE = vm.SetArrayData(vm.PorcentajeNivelConfianza, 1);
+                                                    vm.PorcentajeNivelConfianzaEA = vm.SetArrayData(vm.PorcentajeNivelConfianza, 2);
                                                     localStorage.setItem("confianza" + vm.storeName, JSON.stringify(vm.PorcentajeNivelConfianza));
                                                     fillArrayCustomHisto("BackGroundJob/getNivelCompromiso/", vm.modelHistorico, vm.PorcentajeNivelDeCompromiso, function () {
                                                         vm.PorcentajeNivelDeCompromiso = vm.PorcentajeNivelDeCompromiso.Data == undefined ? vm.PorcentajeNivelDeCompromiso : vm.PorcentajeNivelDeCompromiso.Data;
-                                                        vm.PorcentajeNivelDeCompromiso = vm.rounderPorcent(vm.PorcentajeNivelDeCompromiso);
+                                                        //vm.PorcentajeNivelDeCompromiso = vm.rounderPorcent(vm.PorcentajeNivelDeCompromiso);
+                                                        vm.PorcentajeNivelDeCompromisoEE = vm.SetArrayData(vm.PorcentajeNivelDeCompromiso, 1);
+                                                        vm.PorcentajeNivelDeCompromisoEA = vm.SetArrayData(vm.PorcentajeNivelDeCompromiso, 2);
                                                         localStorage.setItem("compromiso" + vm.storeName, JSON.stringify(vm.PorcentajeNivelDeCompromiso));
                                                         fillArrayCustomHisto("BackGroundJob/getNivelColaboracion/", vm.modelHistorico, vm.PorcentajeNivelDeColaboracion, function () {
                                                             vm.PorcentajeNivelDeColaboracion = vm.PorcentajeNivelDeColaboracion.Data == undefined ? vm.PorcentajeNivelDeColaboracion : vm.PorcentajeNivelDeColaboracion.Data;
-                                                            vm.PorcentajeNivelDeColaboracion = vm.rounderPorcent(vm.PorcentajeNivelDeColaboracion);
+                                                            //vm.PorcentajeNivelDeColaboracion = vm.rounderPorcent(vm.PorcentajeNivelDeColaboracion);
+                                                            vm.PorcentajeNivelDeColaboracionEE = vm.SetArrayData(vm.PorcentajeNivelDeColaboracion, 1);
+                                                            vm.PorcentajeNivelDeColaboracionEA = vm.SetArrayData(vm.PorcentajeNivelDeColaboracion, 2);
                                                             localStorage.setItem("colaboracion" + vm.storeName, JSON.stringify(vm.PorcentajeNivelDeColaboracion));
-                                                            vm.getEstructura();
+                                                            //vm.getEstructura();
                                                             /*vm.isBusy = false;*/
                                                             if (vm.SeccionesReporte.Id == 1) {
                                                                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 1;
@@ -6148,7 +6710,7 @@ function GetDashBoard() {
                                         });
                                     });
                                 }
-                            }
+                            //}
                             if (vm.validaObtenerEstructura) {
 
                             }
@@ -6437,7 +6999,7 @@ function GetDashBoard() {
                     vm.isBusy = true;
                     if (true) {
                         vm.limpiarArraysReporte_Pantalla_7();
-                        if (localStorage["credibilidad" + vm.storeName] != null && localStorage["imparcialidad" + vm.storeName] != null && localStorage["orgullo" + vm.storeName] && localStorage["respeto" + vm.storeName] != null && localStorage["companierismo" + vm.storeName] != null) {
+                        /*if (localStorage["credibilidad" + vm.storeName] != null && localStorage["imparcialidad" + vm.storeName] != null && localStorage["orgullo" + vm.storeName] && localStorage["respeto" + vm.storeName] != null && localStorage["companierismo" + vm.storeName] != null) {
                             var retObj1 = localStorage.getItem("credibilidad" + vm.storeName);
                             var retObj2 = localStorage.getItem("imparcialidad" + vm.storeName);
                             var retObj3 = localStorage.getItem("orgullo" + vm.storeName);
@@ -6450,26 +7012,36 @@ function GetDashBoard() {
                             vm.PorcentajeCompanierismo = JSON.parse(retObj5);
                             vm.isBusy = false;
                         }
-                        else {
+                        else {*/
                             fillArrayCustomHisto("BackGroundJob/getCredibilidad/", vm.modelHistorico, vm.PorcentajeCredibilidad, function () {
                                 vm.PorcentajeCredibilidad = vm.PorcentajeCredibilidad.Data == undefined ? vm.PorcentajeCredibilidad : vm.PorcentajeCredibilidad.Data;
-                                vm.PorcentajeCredibilidad = vm.rounderPorcent(vm.PorcentajeCredibilidad);
+                                //vm.PorcentajeCredibilidad = vm.rounderPorcent(vm.PorcentajeCredibilidad);
+                                vm.PorcentajeCredibilidadEE = vm.SetArrayData(vm.PorcentajeCredibilidad, 1);
+                                vm.PorcentajeCredibilidadEA = vm.SetArrayData(vm.PorcentajeCredibilidad, 2);
                                 localStorage.setItem("credibilidad" + vm.storeName, JSON.stringify(vm.PorcentajeCredibilidad));
                                 fillArrayCustomHisto("BackGroundJob/getImparcialidad/", vm.modelHistorico, vm.PorcentajeImparcialidad, function () {
                                     vm.PorcentajeImparcialidad = vm.PorcentajeImparcialidad.Data == undefined ? vm.PorcentajeImparcialidad : vm.PorcentajeImparcialidad.Data;
-                                    vm.PorcentajeImparcialidad = vm.rounderPorcent(vm.PorcentajeImparcialidad);
+                                    //vm.PorcentajeImparcialidad = vm.rounderPorcent(vm.PorcentajeImparcialidad);
+                                    vm.PorcentajeImparcialidadEE = vm.SetArrayData(vm.PorcentajeImparcialidad, 1);
+                                    vm.PorcentajeImparcialidadEA = vm.SetArrayData(vm.PorcentajeImparcialidad, 2);
                                     localStorage.setItem("imparcialidad" + vm.storeName, JSON.stringify(vm.PorcentajeImparcialidad));
                                     fillArrayCustomHisto("BackGroundJob/getOrgullo/", vm.modelHistorico, vm.PorcentajeOrgullo, function () {
                                         vm.PorcentajeOrgullo = vm.PorcentajeOrgullo.Data == undefined ? vm.PorcentajeOrgullo : vm.PorcentajeOrgullo.Data;
-                                        vm.PorcentajeOrgullo = vm.rounderPorcent(vm.PorcentajeOrgullo);
+                                        //vm.PorcentajeOrgullo = vm.rounderPorcent(vm.PorcentajeOrgullo);
+                                        vm.PorcentajeOrgulloEE = vm.SetArrayData(vm.PorcentajeOrgullo, 1);
+                                        vm.PorcentajeOrgulloEA = vm.SetArrayData(vm.PorcentajeOrgullo, 2);
                                         localStorage.setItem("orgullo" + vm.storeName, JSON.stringify(vm.PorcentajeOrgullo));
                                         fillArrayCustomHisto("BackGroundJob/getRespeto/", vm.modelHistorico, vm.PorcentajeRespeto, function () {
                                             vm.PorcentajeRespeto = vm.PorcentajeRespeto.Data == undefined ? vm.PorcentajeRespeto : vm.PorcentajeRespeto.Data;
-                                            vm.PorcentajeRespeto = vm.rounderPorcent(vm.PorcentajeRespeto);
+                                            //vm.PorcentajeRespeto = vm.rounderPorcent(vm.PorcentajeRespeto);
+                                            vm.PorcentajeRespetoEE = vm.SetArrayData(vm.PorcentajeRespeto, 1);
+                                            vm.PorcentajeRespetoEA = vm.SetArrayData(vm.PorcentajeRespeto, 2);
                                             localStorage.setItem("respeto" + vm.storeName, JSON.stringify(vm.PorcentajeRespeto));
                                             fillArrayCustomHisto("BackGroundJob/getCompanierismo/", vm.modelHistorico, vm.PorcentajeCompanierismo, function () {
                                                 vm.PorcentajeCompanierismo = vm.PorcentajeCompanierismo.Data == undefined ? vm.PorcentajeCompanierismo : vm.PorcentajeCompanierismo.Data;
-                                                vm.PorcentajeCompanierismo = vm.rounderPorcent(vm.PorcentajeCompanierismo);
+                                                //vm.PorcentajeCompanierismo = vm.rounderPorcent(vm.PorcentajeCompanierismo);
+                                                vm.PorcentajeCompanierismoEE = vm.SetArrayData(vm.PorcentajeCompanierismo, 1);
+                                                vm.PorcentajeCompanierismoEA = vm.SetArrayData(vm.PorcentajeCompanierismo, 2);
                                                 localStorage.setItem("companierismo" + vm.storeName, JSON.stringify(vm.PorcentajeCompanierismo));
                                                 vm.isBusy = false;
                                             });
@@ -6477,7 +7049,7 @@ function GetDashBoard() {
                                     });
                                 });
                             });
-                        }
+                        //}
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_7");
@@ -6490,7 +7062,7 @@ function GetDashBoard() {
                     vm.isBusy = true;
                     if (true) {
                         vm.limpiarArraysReporte_Pantalla_8();
-                        if (localStorage["coaching" + vm.storeName] != null && localStorage["habGerenciales" + vm.storeName] != null && localStorage["alinEstrategica" + vm.storeName] != null && localStorage["practCulturales" + vm.storeName] != null && localStorage["cambio" + vm.storeName] != null && localStorage["procOrgan" + vm.storeName] != null) {
+                        /*if (localStorage["coaching" + vm.storeName] != null && localStorage["habGerenciales" + vm.storeName] != null && localStorage["alinEstrategica" + vm.storeName] != null && localStorage["practCulturales" + vm.storeName] != null && localStorage["cambio" + vm.storeName] != null && localStorage["procOrgan" + vm.storeName] != null) {
                             var retObj1 = localStorage.getItem("coaching" + vm.storeName);
                             var retObj2 = localStorage.getItem("habGerenciales" + vm.storeName);
                             var retObj3 = localStorage.getItem("alinEstrategica" + vm.storeName);
@@ -6505,30 +7077,42 @@ function GetDashBoard() {
                             vm.PorcentajeProcesosOrganizacionales = JSON.parse(retObj6);
                             vm.isBusy = false;
                         }
-                        else {
+                        else {*/
                             fillArrayCustomHisto("BackGroundJob/getCoaching/", vm.modelHistorico, vm.PorcentajeCoaching, function () {
                                 vm.PorcentajeCoaching = vm.PorcentajeCoaching.Data == undefined ? vm.PorcentajeCoaching : vm.PorcentajeCoaching.Data;
-                                vm.PorcentajeCoaching = vm.rounderPorcent(vm.PorcentajeCoaching);
+                                //vm.PorcentajeCoaching = vm.rounderPorcent(vm.PorcentajeCoaching);
+                                vm.PorcentajeCoachingEE = vm.SetArrayData(vm.PorcentajeCoaching, 1);
+                                vm.PorcentajeCoachingEA = vm.SetArrayData(vm.PorcentajeCoaching, 2);
                                 localStorage.setItem("coaching" + vm.storeName, JSON.stringify(vm.PorcentajeCoaching));
                                 fillArrayCustomHisto("BackGroundJob/getHabGerenciales/", vm.modelHistorico, vm.PorcentajeHabilidadesGerenciales, function () {
                                     vm.PorcentajeHabilidadesGerenciales = vm.PorcentajeHabilidadesGerenciales.Data == undefined ? vm.PorcentajeHabilidadesGerenciales : vm.PorcentajeHabilidadesGerenciales.Data;
-                                    vm.PorcentajeHabilidadesGerenciales = vm.rounderPorcent(vm.PorcentajeHabilidadesGerenciales);
+                                    //vm.PorcentajeHabilidadesGerenciales = vm.rounderPorcent(vm.PorcentajeHabilidadesGerenciales);
+                                    vm.PorcentajeHabilidadesGerencialesEE = vm.SetArrayData(vm.PorcentajeHabilidadesGerenciales, 1);
+                                    vm.PorcentajeHabilidadesGerencialesEA = vm.SetArrayData(vm.PorcentajeHabilidadesGerenciales, 2);
                                     localStorage.setItem("habGerenciales" + vm.storeName, JSON.stringify(vm.PorcentajeHabilidadesGerenciales));
                                     fillArrayCustomHisto("BackGroundJob/getAlineacionEstrategica/", vm.modelHistorico, vm.PorcentajeAlineacionEstrategica, function () {
                                         vm.PorcentajeAlineacionEstrategica = vm.PorcentajeAlineacionEstrategica.Data == undefined ? vm.PorcentajeAlineacionEstrategica : vm.PorcentajeAlineacionEstrategica.Data;
-                                        vm.PorcentajeAlineacionEstrategica = vm.rounderPorcent(vm.PorcentajeAlineacionEstrategica);
+                                        //vm.PorcentajeAlineacionEstrategica = vm.rounderPorcent(vm.PorcentajeAlineacionEstrategica);
+                                        vm.PorcentajeAlineacionEstrategicaEE = vm.SetArrayData(vm.PorcentajeAlineacionEstrategica, 1);
+                                        vm.PorcentajeAlineacionEstrategicaEA = vm.SetArrayData(vm.PorcentajeAlineacionEstrategica, 2);
                                         localStorage.setItem("alinEstrategica" + vm.storeName, JSON.stringify(vm.PorcentajeAlineacionEstrategica));
                                         fillArrayCustomHisto("BackGroundJob/getPracticasCulturales/", vm.modelHistorico, vm.PorcentajePracticasCulturales, function () {
                                             vm.PorcentajePracticasCulturales = vm.PorcentajePracticasCulturales.Data == undefined ? vm.PorcentajePracticasCulturales : vm.PorcentajePracticasCulturales.Data;
-                                            vm.PorcentajePracticasCulturales = vm.rounderPorcent(vm.PorcentajePracticasCulturales);
+                                            //vm.PorcentajePracticasCulturales = vm.rounderPorcent(vm.PorcentajePracticasCulturales);
+                                            vm.PorcentajePracticasCulturalesEE = vm.SetArrayData(vm.PorcentajePracticasCulturales, 1);
+                                            vm.PorcentajePracticasCulturalesEA = vm.SetArrayData(vm.PorcentajePracticasCulturales, 2);
                                             localStorage.setItem("practCulturales" + vm.storeName, JSON.stringify(vm.PorcentajePracticasCulturales));
                                             fillArrayCustomHisto("BackGroundJob/getCambio/", vm.modelHistorico, vm.PorcentajeCambio, function () {
                                                 vm.PorcentajeCambio = vm.PorcentajeCambio.Data == undefined ? vm.PorcentajeCambio : vm.PorcentajeCambio.Data;
-                                                vm.PorcentajeCambio = vm.rounderPorcent(vm.PorcentajeCambio);
+                                                //vm.PorcentajeCambio = vm.rounderPorcent(vm.PorcentajeCambio);
+                                                vm.PorcentajeCambioEE = vm.SetArrayData(vm.PorcentajeCambio, 1);
+                                                vm.PorcentajeCambioEA = vm.SetArrayData(vm.PorcentajeCambio, 2);
                                                 localStorage.setItem("cambio" + vm.storeName, JSON.stringify(vm.PorcentajeCambio));
                                                 fillArrayCustomHisto("BackGroundJob/getProcesosOrga/", vm.modelHistorico, vm.PorcentajeProcesosOrganizacionales, function () {
                                                     vm.PorcentajeProcesosOrganizacionales = vm.PorcentajeProcesosOrganizacionales.Data == undefined ? vm.PorcentajeProcesosOrganizacionales : vm.PorcentajeProcesosOrganizacionales.Data;
-                                                    vm.PorcentajeProcesosOrganizacionales = vm.rounderPorcent(vm.PorcentajeProcesosOrganizacionales);
+                                                    //vm.PorcentajeProcesosOrganizacionales = vm.rounderPorcent(vm.PorcentajeProcesosOrganizacionales);
+                                                    vm.PorcentajeProcesosOrganizacionalesEE = vm.SetArrayData(vm.PorcentajeProcesosOrganizacionales, 1);
+                                                    vm.PorcentajeProcesosOrganizacionalesEA = vm.SetArrayData(vm.PorcentajeProcesosOrganizacionales, 2);
                                                     localStorage.setItem("procOrgan" + vm.storeName, JSON.stringify(vm.PorcentajeProcesosOrganizacionales));
                                                     vm.isBusy = false;
                                                 });
@@ -6537,7 +7121,7 @@ function GetDashBoard() {
                                     });
                                 });
                             });
-                        }
+                        //}
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_8");
@@ -6799,75 +7383,77 @@ function GetDashBoard() {
                                 vm.PorcentajePsicoSocialEE = vm.PorcentajePsicoSocialEE.Data == undefined ? vm.PorcentajePsicoSocialEE : vm.PorcentajePsicoSocialEE.Data;
                                 vm.PorcentajePsicoSocialEE = vm.roundArray(vm.PorcentajePsicoSocialEE);
                                 localStorage.setItem("bienestarEE" + vm.storeName, JSON.stringify(vm.PorcentajePsicoSocialEE));
-                                vm.numColumnasEE = vm.arrayStringFiltrosBienestar.length;
+                                vm.numColumnasEE = vm.PorcentajePsicoSocialEE.length / 12;// vm.arrayStringFiltrosBienestar.length;
                                 fillArrayCustomHisto("BackGroundJob/getPorcentajePsicoSocialEA/", vm.modelHistorico, vm.PorcentajePsicoSocialEA, function () {
                                     vm.PorcentajePsicoSocialEA = vm.PorcentajePsicoSocialEA.Data == undefined ? vm.PorcentajePsicoSocialEA : vm.PorcentajePsicoSocialEA.Data;
                                     vm.PorcentajePsicoSocialEA = vm.roundArray(vm.PorcentajePsicoSocialEA);
                                     localStorage.setItem("bienestarEA" + vm.storeName, JSON.stringify(vm.PorcentajePsicoSocialEA));
-                                    vm.numColumnasEE = vm.arrayStringFiltrosBienestar.length;
+                                    vm.numColumnasEE = vm.PorcentajePsicoSocialEA.length / 12; //vm.arrayStringFiltrosBienestar.length;
                                     vm.setDataHistoricoBienestarEE();
                                     vm.setDataHistoricoBienestarEA();
 
-                                    if ((partiendoTablas == 0 && vm.model.nivelDetalle.includes("2")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("3")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("4")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("5"))) {//Si solo tiene nivel detalle 1 no hace el cortado
-                                        partiendoTablas++;
-                                        setTimeout(function () {
-                                            var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
-                                            childs = Enumerable.from(childs).toList();
-                                            childs = childs.map(async (key, index) => {
-                                                document.getElementById("tab-17").classList.remove("ng-hide");
-                                                //Se forza el backgroud en Blanco
-                                                $('#' + key)[0].style.backgroundColor = "#fff";
-                                                document.getElementById(key).parentNode.style.backgroundColor = "#fff";
-                                                document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
-                                                var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
-                                                var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
-                                                    //historicoCorte.push(llave);
-                                                    //var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
-                                                    crearTablasNuevas(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, 0);
-                                                });
-                                                var resumen = $(".contenedor-resumen")
-                                                if (resumen.length > 0) {
-                                                    [].forEach.call(resumen, function (item) {
-                                                        item.style.removeProperty = "margin-top";
-                                                        item.style.marginTop = "-25rem";
+                                    if (true == false) {// Se invalida el seccionamiento de la grafica de excel
+                                        if ((partiendoTablas == 0 && vm.model.nivelDetalle.includes("2")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("3")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("4")) || (partiendoTablas == 0 && vm.model.nivelDetalle.includes("5"))) {//Si solo tiene nivel detalle 1 no hace el cortado
+                                            partiendoTablas++;
+                                            setTimeout(function () {
+                                                var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
+                                                childs = Enumerable.from(childs).toList();
+                                                childs = childs.map(async (key, index) => {
+                                                    document.getElementById("tab-17").classList.remove("ng-hide");
+                                                    //Se forza el backgroud en Blanco
+                                                    $('#' + key)[0].style.backgroundColor = "#fff";
+                                                    document.getElementById(key).parentNode.style.backgroundColor = "#fff";
+                                                    document.getElementById(key).parentNode.parentNode.backgroundColor = "#fff";
+                                                    var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
+                                                    var cortesS = $("#myTableEE ." + hijo).map(async (llave, indice) => {
+                                                        //historicoCorte.push(llave);
+                                                        //var data = await cortes(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, ptDefault);
+                                                        crearTablasNuevas(vm.criterioBusquedaSeleccionado.Id, (llave + 1), key, 0);
                                                     });
+                                                    var resumen = $(".contenedor-resumen")
+                                                    if (resumen.length > 0) {
+                                                        [].forEach.call(resumen, function (item) {
+                                                            item.style.removeProperty = "margin-top";
+                                                            item.style.marginTop = "-25rem";
+                                                        });
+                                                    }
+                                                });
+                                                document.getElementById("tab-17").getElementsByClassName("content-wrap")[0].style.display = "none";
+                                                document.getElementById("tab-17").getElementsByClassName("content-wrap")[1].style.display = "none";
+                                                $(".divExportacionBienestarClass").css("margin-top", "50px");
+                                                $("hr:visible").hide()
+                                                document.getElementById("tab-bienestar-ee").style.display = "none";
+                                                document.getElementById("tab-bienestar-ea").style.display = "none";
+                                                //mostrar la primera
+                                                var mitad = $(".divExportacionBienestarClass").length / 2;
+                                                if (vm.enfoqueSeleccionado == 2) {
+                                                    //EA (segunda mitad)
+                                                    $(".divExportacionBienestarClass").css("display", "none");
+                                                    $(".divExportacionBienestarClass")[(mitad)].style.display = "";
                                                 }
-                                            });
-                                            document.getElementById("tab-17").getElementsByClassName("content-wrap")[0].style.display = "none";
-                                            document.getElementById("tab-17").getElementsByClassName("content-wrap")[1].style.display = "none";
-                                            $(".divExportacionBienestarClass").css("margin-top", "50px");
-                                            $("hr:visible").hide()
-                                            document.getElementById("tab-bienestar-ee").style.display = "none";
-                                            document.getElementById("tab-bienestar-ea").style.display = "none";
-                                            //mostrar la primera
-                                            var mitad = $(".divExportacionBienestarClass").length / 2;
-                                            if (vm.enfoqueSeleccionado == 2) {
-                                                //EA (segunda mitad)
-                                                $(".divExportacionBienestarClass").css("display", "none");
-                                                $(".divExportacionBienestarClass")[(mitad)].style.display = "";
-                                            }
-                                            if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 1) {
-                                                //EE (primera mitad)
-                                                $(".divExportacionBienestarClass").css("display", "none");
-                                                $(".divExportacionBienestarClass")[0].style.display = "";
-                                            }
-                                            switch (vm.criterioBusquedaSeleccionado.Id) {
-                                                case 1:
-                                                    $(".borde-table-headerwhite")[0].style.display = "";
-                                                    break;
-                                                case 2:
-                                                    $(".borde-table-headerwhite")[1].style.display = "";
-                                                    break;
-                                                case 3:
-                                                    $(".borde-table-headerwhite")[2].style.display = "";
-                                                    break;
-                                                case 4:
-                                                    $(".borde-table-headerwhite")[3].style.display = "";
-                                                    break;
-                                                default:
-                                            }
-                                            vm.isBusy = false;
-                                        }, 3000);
+                                                if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 1) {
+                                                    //EE (primera mitad)
+                                                    $(".divExportacionBienestarClass").css("display", "none");
+                                                    $(".divExportacionBienestarClass")[0].style.display = "";
+                                                }
+                                                switch (vm.criterioBusquedaSeleccionado.Id) {
+                                                    case 1:
+                                                        $(".borde-table-headerwhite")[0].style.display = "";
+                                                        break;
+                                                    case 2:
+                                                        $(".borde-table-headerwhite")[1].style.display = "";
+                                                        break;
+                                                    case 3:
+                                                        $(".borde-table-headerwhite")[2].style.display = "";
+                                                        break;
+                                                    case 4:
+                                                        $(".borde-table-headerwhite")[3].style.display = "";
+                                                        break;
+                                                    default:
+                                                }
+                                                vm.isBusy = false;
+                                            }, 3000);
+                                        }
                                     }
                                    /* vm.isBusy = false;*/
                                 });
@@ -12938,10 +13524,18 @@ function GetDashBoard() {
                                     vm.contadorEstructura = 1;
                                     // getEstructuraFromExcel/ int IdTipoEntidad, int IdBD, string entidadNombre
                                     // fillArray("apis/getEstructuraDescByUnidadNegocio/?aUnidadNegocio=" + vm.CompanyCategoria.IdCompanyCategoria, vm.EstructuraColumnas, function () {
-                                    fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
-                                        vm.fillColumnas(vm.EstructuraColumnas);
-                                        vm.isBusy = false;
-                                    });
+                                    if (getParamByUrl("token") == null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
+                                    if (getParamByUrl("token") != null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 1 + "&IdBD=" + vm.model.IdBaseDeDatos + "&entidadNombre=" + vm.CompanyCategoria.Descripcion, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
                                 }
                                 break;
                             case 2:
@@ -13008,24 +13602,25 @@ function GetDashBoard() {
                      */
                     vm.ColumnasBienestar = Enumerable.from(vm.finalColumnas).toArray();
                     //Eliminar los niveles no autorizados
-                    if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1) {
+                    if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1 && document.getElementsByClassName("lvlUNeg")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
                     }
-                    if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2) {
+                    if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2 && document.getElementsByClassName("lvlComp")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
                     }
-                    if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3) {
+                    if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3 && document.getElementsByClassName("lvlArea")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
                     }
-                    if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4) {
+                    if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4 && document.getElementsByClassName("lvlDpto")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
                     }
-                    if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5) {
+                    if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5 && document.getElementsByClassName("lvlSubD")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
                     }
 
                     // Filtrar columnas bienestar elimiando subdepartamentos redundantes cuyo nombre termina es - -
                     vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where(o => o.value.includes(" - -") == false).toList();//AUT - ELE - AEP - ADM
+                    vm.ColumnasBienestar.unshift(vm.finalColumnas[0]);
                     
                     //vm.ColumnasBienestar.shift();//Eliminar duplicado inicial
                     /*Configuracion para factor psicosocial*/
@@ -13073,14 +13668,101 @@ function GetDashBoard() {
                     vm.ColumnasBienestar.forEach(function (value, index, array) {
                         vm.arrayStringFiltrosBienestar.push(vm.ColumnasBienestar[index].value);
                     });
+                    if (vm.arrayStringFiltrosBienestar.length == 0 && getParamByUrl("token") != null) {
+                        vm.arrayStringFiltrosBienestar.push("Valor default para cuando tengo token");
+                    }
                     vm.ColumnasBienestar.shift();
+					 /****Se llena el numero de columnas para paginas de Indicadores 07/10/2021 Camos****/
+                    vm.NumColumnasBienestar = vm.ColumnasBienestar.length;
+                    /****Se calcula el CSS segun el numero de columnas 07/10/2021 Camos*****************/
+                    vm.getCssColumnas();
                     /*vm.getArrayFiltros();*/
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.fillColumnas");
                     //swal(aE.message, "", "warning");
                 }
-            }
+				}
+				vm.getCssColumnas= function () {
+                switch (vm.NumColumnasBienestar) {
+                    case 1:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-10";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-10";
+                            vm.ColDerA = "col-1";
 
+                        }else {
+                            vm.ColIzq = "col-10";
+                            vm.ColDer = "col-2";
+                        }                        
+                        break;
+                    case 2:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-8";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-8";
+                            vm.ColDerA = "col-1";
+                        }else {
+                            vm.ColIzq = "col-8";
+                            vm.ColDer = "col-2";
+                        }                       
+                        break;
+                    case 3:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-6";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-6";
+                            vm.ColDerA = "col-1";
+                        }else {
+                            vm.ColIzq = "col-6";
+                            vm.ColDer = "col-2";
+                        }                        
+                        break;
+                    case 4:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-4";
+                            vm.ColDerA = "col-1";
+                        }else {
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col-2";
+                        }                        
+                        break;
+                    case 5:                        
+                            vm.ColIzq = "col-7";
+                            vm.ColDer = "col-1";
+                                                
+                        break;
+                    case 6:
+                        
+                            vm.ColIzq = "col-6";
+                            vm.ColDer = "col-1";
+                                                
+                        break;
+                    case 7:
+                        
+                            vm.ColIzq = "col-5";
+                            vm.ColDer = "col-1";
+                                               
+                        break;
+                    case 8:
+
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col-1";
+                                                
+                        break;
+                    default:
+                        
+                            vm.ColIzq = "col-10";
+                            vm.ColDer = "col-2";
+                                               
+                        break;
+        
+                }
+    
+            }
+			
             vm.getArrayFiltros = function () {
                 /*filtros = vm.finalColumnas;
                 Peticion GET
@@ -14019,11 +14701,11 @@ function GetDashBoard() {
                 vm.model.IdBaseDeDatos = document.getElementById("DDLBD").value;
                 vm.model.ps = localStorage["ps"];
                 vm.model.nivelDetalle = 
-                    (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") + 
-                    (vm.lvl2 == true || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
                         /*public int opc { get; set; } = 0;
                         public int tipoEntidad { get; set; } = 0;
                         public string EntidadName { get; set; } = "";
@@ -15115,8 +15797,6 @@ var quitarPaginaVacia = function () {
 
 
 var crearTablasNuevas = async function (tipoEntidad = 1, iteracion = 0, tabla, padding) {
-    //Agregar clase especial para las columnas que se deben de mostrar
-    //U ocultar las columnas segun una tabla especial
     var idTabla;
     var auxDivTabla;
     if (tabla == "tab-bienestar-ee" || tabla == "myTableEE") {
@@ -15232,35 +15912,21 @@ var crearTablasNuevas = async function (tipoEntidad = 1, iteracion = 0, tabla, p
         document.getElementById(idTabla).rows[4].cells[i - 3].classList.add("jamg-mostrar");
     }
     try {
-        var contenidoNuevo = document.getElementById(idTabla).parentNode.parentNode.parentNode.parentNode.parentElement.parentNode.parentNode.parentNode.innerHTML;//document.getElementById(idTabla).parentNode.innerHTML;
-        // nuevos id
+        var contenidoNuevo = document.getElementById(idTabla).parentNode.parentNode.parentNode.parentNode.parentElement.parentNode.parentNode.parentNode.innerHTML;
         var id = idTabla + "_" + iteracion;
         var idDivExportacion = "divExportacionBienestar_" + getUid();
-        // Agregar nuevos id al content
         contenidoNuevo = contenidoNuevo.replace('id="' + idTabla+'"', 'id="' + id + '"');
         contenidoNuevo = contenidoNuevo.replace('id="' + auxDivTabla + '"', 'id="' + idDivExportacion + '"');
         document.getElementById("tab-17").innerHTML += (contenidoNuevo);
         document.getElementById(id).classList.add("tablaBienestarCustom");
         document.getElementById(idDivExportacion).classList.add("divExportacionBienestarClass");
         $(".jamg-mostrar").css("display",  "");
-        //quitar de las tablas originales la clase de visualizacion jamg-mostrar
-        //alert("quitar clase");
         [].forEach.call($("#myTableEE .jamg-mostrar"), function (item) {
             item.classList.remove("jamg-mostrar");
         });
         [].forEach.call($("#myTableEA .jamg-mostrar"), function (item) {
             item.classList.remove("jamg-mostrar");
         });
-        // Si el numero de columnas visibles en la tabla ya seccionada excede a 9 esta se seccionara en bloques de 9
-        var contadorColumnas = 0;
-        [].forEach.call(document.getElementById(id).rows[0].cells, function (item) {
-            if (item.style.display != "none")
-                contadorColumnas++;
-        });
-        if (contadorColumnas > 9) {
-            //alert("La tabla " + id + " debe ser seccionada");
-            //seccionarTablaGrande(id, idDivExportacion, contadorColumnas);
-        }
         switch (tipoEntidad) {
             case 1:
                 document.getElementById(idTabla).rows[0].cells[1].style.display = "";//name col

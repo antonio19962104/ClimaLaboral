@@ -1,0 +1,73 @@
+[
+  {
+    "HC": 3,
+    "Entidad": "CORPORATIVO",
+    "Frecuencia": 179,
+    "Porcentaje": 90.4,
+    "Porcentaje86React": 0,
+    "tipoEntidad": 1,
+    "IdUnidadNegocio": "UNEG_CORPORATIVO5e1f969e-5db5-4804-a816-61a9d2c4936a",
+    "children": [
+      {
+        "HC": 2,
+        "Entidad": "COR - RECURSOS HUMANOS",
+        "Frecuencia": 113,
+        "Porcentaje": 85.61,
+        "Porcentaje86React": 0,
+        "tipoEntidad": 2,
+        "IdUnidadNegocio": "UNEG_CORPORATIVO5e1f969e-5db5-4804-a816-61a9d2c4936a",
+        "CompanyId": "Comp_COR - RECURSOS HUMANOS1cc0ad80-8368-4724-9f16-fc60cedd4e5d",
+        "children": [
+          {
+            "HC": 1,
+            "Entidad": "COR - REC - DIR",
+            "Frecuencia": 66,
+            "Porcentaje": 100,
+            "Porcentaje86React": 0,
+            "tipoEntidad": 3,
+            "IdUnidadNegocio": "UNEG_CORPORATIVO5e1f969e-5db5-4804-a816-61a9d2c4936a",
+            "CompanyId": "Comp_COR - RECURSOS HUMANOS1cc0ad80-8368-4724-9f16-fc60cedd4e5d",
+            "IdArea": "Area_COR - REC - DIR47bdddcf-2a8d-4b6e-9b56-3389de2f0242",
+            "children": []
+          },
+          {
+            "HC": 1,
+            "Entidad": "COR - REC - DO",
+            "Frecuencia": 47,
+            "Porcentaje": 71.21,
+            "Porcentaje86React": 0,
+            "tipoEntidad": 3,
+            "IdUnidadNegocio": "UNEG_CORPORATIVO5e1f969e-5db5-4804-a816-61a9d2c4936a",
+            "CompanyId": "Comp_COR - RECURSOS HUMANOS1cc0ad80-8368-4724-9f16-fc60cedd4e5d",
+            "IdArea": "Area_COR - REC - DOe66e9c5a-78da-4a7f-93aa-83358813873e",
+            "children": []
+          }
+        ]
+      },
+      {
+        "HC": 1,
+        "Entidad": "COR - SISTEMAS",
+        "Frecuencia": 66,
+        "Porcentaje": 100,
+        "Porcentaje86React": 0,
+        "tipoEntidad": 2,
+        "IdUnidadNegocio": "UNEG_CORPORATIVO5e1f969e-5db5-4804-a816-61a9d2c4936a",
+        "CompanyId": "Comp_COR - SISTEMASc8427dc4-1106-4548-b350-5ab8137338b0",
+        "children": [
+          {
+            "HC": 1,
+            "Entidad": "COR - SIS - DES",
+            "Frecuencia": 66,
+            "Porcentaje": 100,
+            "Porcentaje86React": 0,
+            "tipoEntidad": 3,
+            "IdUnidadNegocio": "UNEG_CORPORATIVO5e1f969e-5db5-4804-a816-61a9d2c4936a",
+            "CompanyId": "Comp_COR - SISTEMASc8427dc4-1106-4548-b350-5ab8137338b0",
+            "IdArea": "Area_COR - SIS - DESade89c78-bcdd-443d-a2d6-c57b2afd27c6",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+]

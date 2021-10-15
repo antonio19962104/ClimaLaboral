@@ -45,6 +45,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxMin, Version=5.14.5506.26196, Culture=neutral, PublicKeyToken=21ef50ce11b5d80f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.0.2\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -141,6 +144,7 @@
     <Compile Include="PerfilD4U.cs" />
     <Compile Include="PerfilModulo.cs" />
     <Compile Include="PerfilModuloAccion.cs" />
+    <Compile Include="PlanesDeAccion.cs" />
     <Compile Include="Plantillas.cs" />
     <Compile Include="Preguntas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
 using System.ComponentModel;
-
+using Newtonsoft.Json;
 
 namespace BL
 {
@@ -433,81 +433,38 @@ namespace BL
                 return new List<ML.Categoria>();
             }
         }
-
-        /// <summary>
-        /// Obtiene las categorias en orden por promedio obtenido
-        /// </summary>
-        /// <param name="IdEncuesta"></param>
-        /// <returns></returns>
-        public static ML.Result GetCategoriasByIdEncuesta(CategoriasPlanAccion categoriasPlanAccion)
+        public static string getNombreSubCategoria(int IdSubCategoria)
         {
-            ML.Result result = new ML.Result();
-            result.Objects = new List<object>();
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    // obtiene las categorias presentes en una encuesta
-                    var categoriasByEncuesta = context.PreguntaCategorias.Where(o => o.IdEncuesta == categoriasPlanAccion.IdEncuesta).OrderBy(o => o.IdCategoria).Distinct().ToList();
-                    foreach (var categoria in categoriasByEncuesta)
-                    {
-                        // se obtienen las preguntas que pertenecen a una de las categorias
-                        var preguntasByCategoria = categoriasByEncuesta.Where(o => o.IdCategoria == categoria.IdCategoria);
-                        decimal sumaPromedios = 0;
-                        foreach (var pregunta in preguntasByCategoria)
-                        {
-                            sumaPromedios += GetPromedioByIdPregunta(categoriasPlanAccion);
-                        }
-                        ML.Categoria categoriaModel = new ML.Categoria();
-                        categoriaModel.Descripcion = getNombreCatByIdCat((int)categoria.IdCategoria);
-                        categoriaModel.Promedio = Math.Round(sumaPromedios / preguntasByCategoria.Count(), 2);
-                        result.Objects.Add(categoriaModel);
-                    }
+                    var query = context.Categoria.Where(o => o.IdCategoria == IdSubCategoria).FirstOrDefault();
+                    return query.Nombre;
                 }
             }
             catch (Exception aE)
             {
-                result.Correct = false;
-                result.ErrorMessage = aE.Message;
-                result.ex = aE;
+
+                BL.NLogGeneratorFile.logError(aE, new System.Diagnostics.StackTrace());
+                return string.Empty;
             }
-            return result;
         }
-
-        public static decimal GetPromedioByIdPregunta(CategoriasPlanAccion categoriasPlanAccion)
+        public static int getIdPadreSubCategoria(int IdSubCategoria)
         {
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    int noEmpleados = 0;
-                    var empleadosByEncuesta = context.Empleado.Where(o => o.IdBaseDeDatos == categoriasPlanAccion.IdBaseDeDatos && o.AreaAgencia == categoriasPlanAccion.Area && o.EstatusEmpleado == "Activo").ToList();
-                    foreach (var empleado in empleadosByEncuesta)
-                    {
-                        var estatusEncuesta = context.EstatusEncuesta.Where(o => o.IdEmpleado == empleado.IdEmpleado && o.Anio == categoriasPlanAccion.AnioAplicacion).FirstOrDefault();
-                        if (estatusEncuesta != null)
-                        {
-                            if (estatusEncuesta.Estatus == "Terminada")
-                                noEmpleados++;
-                        }
-                    }
-                    var noAfirmativas = context.EmpleadoRespuestas.Where(o => o.Empleado.IdBaseDeDatos == categoriasPlanAccion.IdBaseDeDatos && o.Empleado.EstatusEmpleado == "Activo" && o.RespuestaEmpleado.Contains("e es verdad") && o.Empleado.AreaAgencia == categoriasPlanAccion.Area && o.Anio == categoriasPlanAccion.AnioAplicacion).ToList();
-                    return Math.Round((decimal)noEmpleados / noAfirmativas.Count(), 2);
+                    var query = context.Categoria.Where(o => o.IdCategoria == IdSubCategoria).FirstOrDefault();
+                    return (int)query.IdPadre;
                 }
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logError(aE, new System.Diagnostics.StackTrace());
                 return 0;
             }
         }
-        public class CategoriasPlanAccion
-        {
-            public int IdPregunta { get; set; }
-            public int IdEncuesta { get; set; }
-            public int IdBaseDeDatos { get; set; }
-            public string Area { get; set; }
-            public int AnioAplicacion { get; set; }
-        }
-
     }
 }

@@ -21,6 +21,7 @@ namespace DL
             this.Empleado = new HashSet<Empleado>();
             this.Encuesta = new HashSet<Encuesta>();
             this.EstatusEmail = new HashSet<EstatusEmail>();
+            this.PromedioSubCategorias = new HashSet<PromedioSubCategorias>();
             this.Usuario = new HashSet<Usuario>();
         }
     
@@ -52,6 +53,8 @@ namespace DL
         public virtual ICollection<Encuesta> Encuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstatusEmail> EstatusEmail { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PromedioSubCategorias> PromedioSubCategorias { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Usuario> Usuario { get; set; }
     }

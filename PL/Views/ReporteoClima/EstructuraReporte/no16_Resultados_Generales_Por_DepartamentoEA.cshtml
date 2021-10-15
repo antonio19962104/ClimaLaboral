@@ -4,7 +4,7 @@
         <h2 class="robotothin mb-2 mt-n1">
             TABLA DE CLASIFICACIÓN Enfoque Área<br />(14. Resultados generales por departamento) <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span>
         </h2>
-        <div class="card">
+        <div ng-if="true == false" class="card">
             <div class="card-block">
                 <div class="px-4">
                     <div class="row mt-4">
@@ -12,7 +12,7 @@
                             <div class="graph-wrapper grafica-trabajar">
                                 <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
 
-                                    <div class="col px-0 px-sm-1 bar-estandarW" ng-repeat="item in vm.ComparativosGeneralesEA.Data">
+                                    <div class="col px-0 px-sm-1 bar-estandarW" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index" ng-if="$index > 0">
                                         <center>
                                             <p hidden>{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 2) }}%</p>
                                             <img @*src="~/img/ReporteoClima/sol-icono.svg"*@ ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
@@ -45,6 +45,12 @@
                                     </div>
 
                                 </div><!--.row-->
+                                <div ng-if="vm.enfoqueSeleccionado == 2" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                    <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;">TOTAL</p>
+                                    <img style="margin-left: -2rem;" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEA[0]) }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ vm.PorcentajeCalificacionGlobalEA[0] }}%</span>
+                                    <p style="margin-bottom: -20px;"></p>
+                                    <small style="color: blue;margin-left: 50px;">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
                             </div><!--.graph-wrapper-->
                         </div>
                     </div><!--.row-->
@@ -92,14 +98,14 @@
         <h2 class="robotothin mb-2 mt-n1">
             TABLA DE CLASIFICACIÓN<br />(14. Resultados generales por departamento) <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span>
         </h2>
-        <div class="card">
+        <div ng-if="true == false" class="card">
             <div class="card-block">
                 <div class="px-4">
                     <div class="row mt-4">
                         <div class="col-sm-12">
                             <div class="graph-wrapper grafica-trabajar">
                                 <div class="row bg-gris mr-2 ml-2 mb-4 mt-4">
-                                    <div agrupado class="col px-2" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index">
+                                    <div agrupado class="col px-2" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index" ng-if="$index > 0">
                                         <center>
                                             <div class="row px-2 position-relative">
                                                 <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
@@ -155,6 +161,19 @@
                                         </center>
                                     </div>
                                 </div><!--.row-->
+                                <div ng-if="vm.enfoqueSeleccionado == 0" class="contenedor-resumen">
+                                    <p class="txt-total">TOTAL</p>
+                                    <div class="images-resumen center-vertically">
+                                        <!-- IMG EE -->
+                                        <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEE[0]) }}" width="60" height="50">
+                                        <!-- IMG EA -->
+                                        <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEA[0]) }}" width="60" height="50">
+                                    </div>
+                                    <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ vm.PorcentajeCalificacionGlobalEE[0] }}%</span>
+                                    <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ vm.PorcentajeCalificacionGlobalEA[0] }}%</span>
+                                    <p style="margin-bottom: 0px;"></p>
+                                    <small class="head-count-resumen">HC: {{ vm.Esperadas[0] }}</small>
+                                </div>
                             </div><!--.graph-wrapper-->
                         </div>
                     </div><!--.row-->

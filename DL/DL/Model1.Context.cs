@@ -27,6 +27,7 @@ namespace DL
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Acciones> Acciones { get; set; }
         public virtual DbSet<Administrador> Administrador { get; set; }
         public virtual DbSet<AdministradorCompany> AdministradorCompany { get; set; }
         public virtual DbSet<Aling> Aling { get; set; }
@@ -71,10 +72,13 @@ namespace DL
         public virtual DbSet<PerfilD4U> PerfilD4U { get; set; }
         public virtual DbSet<PerfilModulo> PerfilModulo { get; set; }
         public virtual DbSet<PerfilModuloAccion> PerfilModuloAccion { get; set; }
+        public virtual DbSet<PlanDeAccion> PlanDeAccion { get; set; }
         public virtual DbSet<Plantillas> Plantillas { get; set; }
         public virtual DbSet<Preguntas> Preguntas { get; set; }
         public virtual DbSet<PreguntasLikert> PreguntasLikert { get; set; }
+        public virtual DbSet<PromedioSubCategorias> PromedioSubCategorias { get; set; }
         public virtual DbSet<PuntuacionCompetencia> PuntuacionCompetencia { get; set; }
+        public virtual DbSet<Rango> Rango { get; set; }
         public virtual DbSet<RangoEdad> RangoEdad { get; set; }
         public virtual DbSet<REPORTCL> REPORTCL { get; set; }
         public virtual DbSet<Reporte> Reporte { get; set; }
@@ -107,24 +111,24 @@ namespace DL
         public virtual DbSet<PreguntaCategorias> PreguntaCategorias { get; set; }
         public virtual DbSet<Counter> Counter { get; set; }
     
-        [DbFunction("RH_DesEntities", "splitstring_COMA")]
+        [DbFunction("RH_DesEntities1", "splitstring_COMA")]
         public virtual IQueryable<splitstring_COMA_Result> splitstring_COMA(string stringToSplit)
         {
             var stringToSplitParameter = stringToSplit != null ?
                 new ObjectParameter("stringToSplit", stringToSplit) :
                 new ObjectParameter("stringToSplit", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<splitstring_COMA_Result>("[RH_DesEntities].[splitstring_COMA](@stringToSplit)", stringToSplitParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<splitstring_COMA_Result>("[RH_DesEntities1].[splitstring_COMA](@stringToSplit)", stringToSplitParameter);
         }
     
-        [DbFunction("RH_DesEntities", "splitstring_SPACES")]
+        [DbFunction("RH_DesEntities1", "splitstring_SPACES")]
         public virtual IQueryable<splitstring_SPACES_Result> splitstring_SPACES(string stringToSplit)
         {
             var stringToSplitParameter = stringToSplit != null ?
                 new ObjectParameter("stringToSplit", stringToSplit) :
                 new ObjectParameter("stringToSplit", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<splitstring_SPACES_Result>("[RH_DesEntities].[splitstring_SPACES](@stringToSplit)", stringToSplitParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<splitstring_SPACES_Result>("[RH_DesEntities1].[splitstring_SPACES](@stringToSplit)", stringToSplitParameter);
         }
     
         public virtual ObjectResult<f_getEstructuraDescByCompanyId_Result> f_getEstructuraDescByCompanyId(Nullable<int> aCompanyId)

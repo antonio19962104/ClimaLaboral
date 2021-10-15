@@ -1,5 +1,6 @@
 ﻿<!--#region Reporteo por Estructura de la Empresa-->
 <div class="col-lg-12" style="" ng-class="{ CH : vm.CargaHistoricoView }">
+    <!--Elegir padre-->
     <div class="form-group">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label ng-show="vm.CargaHistoricoView == false" class="control-label">Criterio para el reporte por estructura del Grupo</label>
@@ -8,6 +9,7 @@
                     ng-options="criterioReporte.Nombre for criterioReporte in vm.criteriosReporte track by criterioReporte.Id"></select>
         </div>
     </div>
+    <!--Select Base De Datos-->
     <div class="form-group">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label class="control-label">Base de Datos</label>
@@ -106,13 +108,13 @@
                     </li>
                     <ul style="margin-left: 15px; list-style-type: none;">
                         <!--vm.criterioBusquedaSeleccionado.Id = 2-->
-                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 2"><input ng-model="vm.lvl2" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 2" ng-checked="vm.criterioBusquedaSeleccionado.Id == 2" class="selector lvlDetalle lvlComp" value="company" type="checkbox" name="company" id="company" /><label for="company">Dirección</label></li>
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 2"><input ng-model="vm.lvl2" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 1 || vm.criterioBusquedaSeleccionado.Id == 2" ng-checked="vm.criterioBusquedaSeleccionado.Id == 1 || vm.criterioBusquedaSeleccionado.Id == 2" class="selector lvlDetalle lvlComp" value="company" type="checkbox" name="company" id="company" /><label for="company">Dirección</label></li>
                         <!--vm.criterioBusquedaSeleccionado.Id = 3-->
-                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 3"><input ng-model="vm.lvl3" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 3" ng-checked="vm.criterioBusquedaSeleccionado.Id == 3" class="selector lvlDetalle lvlArea" value="area" type="checkbox" name="area" id="area" /><label for="area">Area agencia</label></li>
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 3"><input ng-model="vm.lvl3" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 2 || vm.criterioBusquedaSeleccionado.Id == 3" ng-checked="vm.criterioBusquedaSeleccionado.Id == 2 || vm.criterioBusquedaSeleccionado.Id == 3" class="selector lvlDetalle lvlArea" value="area" type="checkbox" name="area" id="area" /><label for="area">Area agencia</label></li>
                         <!--vm.criterioBusquedaSeleccionado.Id = 4-->
-                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 4"><input ng-model="vm.lvl4" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 4" ng-checked="vm.criterioBusquedaSeleccionado.Id == 4" class="selected lvlDetalle lvlDpto" value="departamento" type="checkbox" name="departamento" id="departamento" /><label for="departamento">Departamento</label></li>
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 4"><input ng-model="vm.lvl4" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 3 || vm.criterioBusquedaSeleccionado.Id == 4" ng-checked="vm.criterioBusquedaSeleccionado.Id == 3 || vm.criterioBusquedaSeleccionado.Id == 4" class="selected lvlDetalle lvlDpto" value="departamento" type="checkbox" name="departamento" id="departamento" /><label for="departamento">Departamento</label></li>
                         <!--vm.criterioBusquedaSeleccionado.Id = 5-->
-                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 5"><input ng-model="vm.lvl5" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 5" ng-checked="vm.criterioBusquedaSeleccionado.Id == 5" class="selector lvlDetalle lvlSubD" value="subdepartamento" type="checkbox" name="subdepartamento" id="subdepartamento" /><label for="subdepartamento">Subdepartamento</label></li>
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 5"><input ng-model="vm.lvl5" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 4 || vm.criterioBusquedaSeleccionado.Id == 5" ng-checked="vm.criterioBusquedaSeleccionado.Id == 4 || vm.criterioBusquedaSeleccionado.Id == 5" class="selector lvlDetalle lvlSubD" value="subdepartamento" type="checkbox" name="subdepartamento" id="subdepartamento" /><label for="subdepartamento">Subdepartamento</label></li>
                     </ul>
                 </ul>
             </div>

@@ -1,0 +1,111 @@
+﻿@model ML.PlanDeAccion
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/swal.min.js"></script>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default-main.min.css" />
+<script>
+    var IdEncuesta = @Html.Raw(JsonConvert.SerializeObject(Model.IdEncuesta))
+    var IdBaseDeDatos = @Html.Raw(JsonConvert.SerializeObject(Model.IdBaseDeDatos))
+    var AnioAplicacion = @Html.Raw(JsonConvert.SerializeObject(Model.AnioAplicacion))
+</script>
+@section H1{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6 bottom-align-left center-vertically-xs">
+                    <img src="../../img/icon-survey.png" )" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Plan de Acción / <span>Crear</span>
+                    </h1>
+                </div>
+                <div class="col-6 bottom-align-right center-vertically-xs">
+                    <a href="#" onclick="return alert('Se ha guardado');" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
+                    </a>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+<div class="content-wrap" ng-app="app" ng-controller="planAccionController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-10">
+                <h2>{{ vm.Modulo }}</h2>
+                <div class="form-group">
+                    <div style="display: none;" class="form-group">
+                        <div class="form-inline">
+                            <div class="col-6">
+                                <input style="width: 100%;" type="text" id="NombrePlanAccion" placeholder="Nombre del nuevo plan de acción" class="form-control" />
+                            </div>
+                            <div class="col-4">
+                                <input ng-click="vm.GuardarPlanDeAccion()" type="button" value="Agregar Plan de Acción" class="btn btn-danger" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-inline">
+                        <div class="col-6">
+                            <h4>Categorias</h4>
+                        </div>
+                        <div class="col-6" style="text-align: end;">
+                            <input type="text" style="width: 100%;" class="form-control" placeholder="Buscar acciones por palabra clave" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tree-view">
+
+                </div>
+
+
+
+                <div id="accordion">
+                    <div id="custom-categoria-{{ item.IdCategoria }}" class="card" style="border-radius: 10px;" ng-repeat="item in vm.Categorias track by $index">
+                        <div class="card-header row col-12" style="left: 15px;" id="headingOne{{ $index }}">
+                            <div class="col-10">
+                                <btn class="btn" data-toggle="collapse" data-target="#collapseOne{{ $index }}" aria-expanded="true" aria-controls="collapseOne{{ $index }}">
+                                    {{ item.Categoria }} ({{ item.IdCategoria }})
+                                </btn>
+                            </div>
+                            <div class="col-2">
+                                <h5 class="mb-0" style="text-align: end;">
+                                    <button title="Agregar nueva acción de mejora" ng-click="vm.AgregarNuevaAccion(item.IdCategoria)" class="btn btn-link" style="border: 1px solid; border-radius: 50%;">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </h5>
+                            </div>
+                        </div>
+                        <div id="collapseOne{{ $index }}" class="collapse" aria-labelledby="headingOne{{ $index }}" data-parent="#accordion">
+                            <div idCategoria="{{ item.IdCategoria }}" id="merge-new-acciones-idcat-{{ item.IdCategoria }}" class="card-body">
+                                <div class="form-group" ng-repeat="item in vm.ListRangos track by $index" ng-if="$index > 0">
+                                    <div class="form-inline">
+                                        <div class="col-8">
+                                            <input type="text" class="form-control" style="width: 100%;" placeholder="Acción de mejora" />
+                                        </div>
+                                        <div class="col-3">
+                                            <select class="form-control select-rango" style="width: 100%;"></select>
+                                        </div>
+                                        <div class="col-1">
+                                            <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+                                            <button class="btn save-action" ng-click="vm.GuardarAccion($event)"><i class="fas fa-save"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end accordion-->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/scripts/PlanesDeAccion/PlanesDeAccion.js"></script>
+<!--Tree view-->
+<link href="~/scripts/PlanesDeAccion/css/jquery.treeview.css" rel="stylesheet" />
+<script src="~/scripts/PlanesDeAccion/js/jquery.treeview.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">

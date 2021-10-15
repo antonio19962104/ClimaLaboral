@@ -341,6 +341,7 @@
     <Compile Include="Controllers\LoginAdminController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlanesDeAccionController.cs" />
     <Compile Include="Controllers\PlantillasController.cs" />
     <Compile Include="Controllers\ReporteClimaDinamicoController.cs" />
     <Compile Include="Controllers\ReporteController.cs" />
@@ -1354,6 +1355,11 @@
     <Content Include="scripts\linq.js" />
     <Content Include="scripts\linq.min.js" />
     <Content Include="scripts\lz-string.min.js" />
+    <Content Include="scripts\PlanesDeAccion\css\jquery.treeview.css" />
+    <Content Include="scripts\PlanesDeAccion\js\jquery-3.4.1.min.js" />
+    <Content Include="scripts\PlanesDeAccion\js\jquery.treeview.js" />
+    <Content Include="scripts\PlanesDeAccion\PlanesDeAccion.js" />
+    <Content Include="scripts\PlanesDeAccion\PlanesDeAccion.min.js" />
     <Content Include="scripts\Reporte.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <Content Include="scripts\jquery-1.8.3.min.js" />
@@ -1688,6 +1694,8 @@
     <Content Include="Views\ReporteoClima\ReporteComentarios3d.cshtml" />
     <Content Include="Views\ReporteoClima\_LayoutReportes_2.cshtml" />
     <Content Include="Views\ReporteoClima\EstructuraReporte\barras_resumen.cshtml" />
+    <Content Include="Views\PlanesDeAccion\Index.cshtml" />
+    <Content Include="Views\PlanesDeAccion\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

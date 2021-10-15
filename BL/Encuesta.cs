@@ -48,6 +48,30 @@ namespace BL
             }
             return result;
         }
+
+        public static int GetAnioAplicacionConfigByEncuesta(int IdEncuesta, int IdBaseDeDatos)
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var query = context.ConfigClimaLab.Where(o => o.IdEncuesta == IdEncuesta && o.IdBaseDeDatos == IdBaseDeDatos).FirstOrDefault();
+                    if (query != null)
+                    {
+                        return (int)query.PeriodoAplicacion;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+
+                throw;
+            }
+        }
         public static ML.Result getEncuestas()
         {
             ML.Result result = new ML.Result();
@@ -75,6 +99,8 @@ namespace BL
                             else
                             { encuestas.Enviada = 0; }
 
+
+                            
                             encuestas.UID = obj.UID;
                             encuestas.Nombre = obj.Nombre;
                             //Se agrega informacion para la consulta de la nueva lista de Encuesta -------  CAMOS 20072021
@@ -97,7 +123,10 @@ namespace BL
                             if (obj.FechaHoraModificacion != null)
                             {
                                 encuestas.FechaHoraModificacion = (DateTime)obj.FechaHoraModificacion;
-                            }                            
+                            }
+
+                            
+
                             result.ListadoDeEncuestas.Add(encuestas);
                             result.Correct = true;
                         }
@@ -120,6 +149,7 @@ namespace BL
 
                         //encuestas.UID = obj.UID;                        
                         //Se agrega informacion para la consulta de la nueva lista de Encuesta -------  CAMOS 20072021
+                        encuestas.UID = query.ElementAt(0).UID;
                         encuestas.BasesDeDatos = new ML.BasesDeDatos();
                         encuestas.Company = new ML.Company();
                         encuestas.TipoOrden = new ML.TipoOrden();
@@ -1233,6 +1263,7 @@ namespace BL
             }
             return result;
         }
+
 
         public static ML.Result getPreviewEncuesta(int idEncuesta)
         {

@@ -31,16 +31,13 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
-            //BL.Categoria.GetCategoriasByIdEncuesta(new Categoria.CategoriasPlanAccion() { AnioAplicacion = 2021, Area = "", IdBaseDeDatos = 2114, IdEncuesta = 1, IdPregunta = 0 });
 
-            RecurringJob.AddOrUpdate("BorradoReportesPDFByFecha", () => BL.LogReporteoClima.DeleteReportes(), "0 0 * * *");
-            //RecurringJob.AddOrUpdate("RecurringJob", () => BL.LogReporteoClima.sendMail("demoEntidad", 2021, "jamurillo@grupoautofin.com", "demo.clima.com", "Pass@word01"), Cron.Minutely);
+
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere
             */
-            // BL.ClimaDinamico.UpdateGeneracionEmpleado();
-            //RecurringJob.AddOrUpdate("MyJobGeneraciones", () => BL.ClimaDinamico.UpdateGeneracionEmpleado(), Cron.Daily);
-            // RecurringJob.AddOrUpdate("MyJob", () => BL.Encuesta.CronReenvioEmail(), Cron.Daily);
+            RecurringJob.AddOrUpdate("BorradoReportesPDFByFecha", () => BL.LogReporteoClima.DeleteReportes(), "0 0 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("GeneraCategoriasForPlanes", () => BL.PlanesDeAccion.EjecutaJob(), "0 0 * * *", TimeZoneInfo.Local);
         }
         public void ResetRecurringJobs()
         {

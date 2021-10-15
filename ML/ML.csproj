@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccionDeMejora.cs" />
     <Compile Include="Administrador.cs" />
     <Compile Include="AdministradorCompany.cs" />
     <Compile Include="Aling.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Area.cs" />
     <Compile Include="AuxReporte.cs" />
     <Compile Include="BasesDeDatos.cs" />
+    <Compile Include="Bitacora.cs" />
     <Compile Include="BodyPlantilla.cs" />
     <Compile Include="Categoria.cs" />
     <Compile Include="ClavesAcceso.cs" />
@@ -87,6 +89,9 @@
     <Compile Include="Departamento.cs" />
     <Compile Include="DetallePlantilla.cs" />
     <Compile Include="EmailsEncuesta.cs" />
+    <Compile Include="PlanDeAccion.cs" />
+    <Compile Include="PromedioSubCategorias.cs" />
+    <Compile Include="Rango.cs" />
     <Compile Include="Usuario1.cs" />
     <Compile Include="Encuesta.cs" />
     <Compile Include="EncuestaArea.cs" />

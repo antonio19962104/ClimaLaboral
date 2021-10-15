@@ -558,6 +558,34 @@ namespace PL.Controllers
         }
 
 
+
+        public JsonResult getComparativoEntidadesResultadoGeneralEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody] List<myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
+        {
+            aFiltros = aFiltros == null ? new List<myCustomArray>() : aFiltros;
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
+            model.ListFiltros.RemoveAt(0);
+            foreach (var item in aFiltros)
+            {
+                model.ListFiltros.Add(item.type + item.value);
+            }
+            var data = dataLayer.getComparativoEntidadesResultadoGeneralEE(model, anioActual);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult getComparativoEntidadesResultadoGeneralEA(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody] List<myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
+        {
+            aFiltros = aFiltros == null ? new List<myCustomArray>() : aFiltros;
+            var model = getObjReporte(aCriterioBusquedaSeleccionado, aFiltro, aUnidadDeNegocio, IdBaseDeDatos);
+            model.ListFiltros.RemoveAt(0);
+            foreach (var item in aFiltros)
+            {
+                model.ListFiltros.Add(item.type + item.value);
+            }
+            var data = dataLayer.getComparativoEntidadesResultadoGeneralEA(model, anioActual);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+
         //Punto Numero 15
         public JsonResult getComparativoResultadoGeneralPorNivelesEE(string aCriterioBusquedaSeleccionado, string aFiltro, string aUnidadDeNegocio, [FromBody]List<ApisController.myCustomArray> aFiltros, int anioActual, int IdBaseDeDatos)
         {
@@ -1217,16 +1245,19 @@ namespace PL.Controllers
         public JsonResult getParticipacion_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             return Json(dataLayer.GetPorcentajeParticipacionEnfoqueEmpresa(model, anioActual), JsonRequestBehavior.AllowGet);
         }
         public JsonResult getEncuestasEsperadas_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             return Json(dataLayer.GetEsperadas(model, anioActual), JsonRequestBehavior.AllowGet);
         }
         public JsonResult getCalificacionGlobal_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromedios66ReactivosEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromedios66ReactivosEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1234,6 +1265,7 @@ namespace PL.Controllers
         public JsonResult getConfianza_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosConfianzaEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosConfianzaEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1241,6 +1273,7 @@ namespace PL.Controllers
         public JsonResult getNivelCompromiso_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosNivelCompromisoEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosNivelCompromisoEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1248,6 +1281,7 @@ namespace PL.Controllers
         public JsonResult getNivelColaboracion_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosNivelCoolaboracionEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosNivelCoolaboracionEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1255,6 +1289,7 @@ namespace PL.Controllers
         public JsonResult getCredibilidad_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosCreedibilidadEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCreedibilidadEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1263,6 +1298,7 @@ namespace PL.Controllers
         public JsonResult getImparcialidad_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosImparcialidadEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosImparcialidadEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1271,6 +1307,7 @@ namespace PL.Controllers
         public JsonResult getOrgullo_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosOrgulloEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosOrgulloEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1279,6 +1316,7 @@ namespace PL.Controllers
         public JsonResult getRespeto_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosRespetoEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosRespetoEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1286,6 +1324,7 @@ namespace PL.Controllers
         public JsonResult getCompanierismo_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosCompañerismoEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCompañerismoEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1293,6 +1332,7 @@ namespace PL.Controllers
         public JsonResult getCoaching_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosCoachingEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCoachingEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1301,6 +1341,7 @@ namespace PL.Controllers
         public JsonResult getHabGerenciales_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosHabilidadesGerencialesEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosHabilidadesGerencialesEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1309,6 +1350,7 @@ namespace PL.Controllers
         public JsonResult getAlineacionEstrategica_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosAlineacionEstrategicaEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosAlineacionEstrategicaEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1316,6 +1358,7 @@ namespace PL.Controllers
         public JsonResult getPracticasCulturales_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosPracticasCulturealesEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosPracticasCulturealesEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1324,6 +1367,7 @@ namespace PL.Controllers
         public JsonResult getCambio_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosCambioEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosCambioEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);
@@ -1332,6 +1376,7 @@ namespace PL.Controllers
         public JsonResult getProcesosOrga_(string aCriterioBusquedaSeleccionado, List<myCustomArray> hijos, string aUnidadDeNegocio, int anioActual, int IdBaseDeDatos)
         {
             var model = getAuxObjReporte(hijos, IdBaseDeDatos, anioActual);
+            model.UnidadNegocioFilter = aUnidadDeNegocio;
             var EE = dataLayer.GetPromediosProcesosOrganizacionalesEnfoqueEmpresa(model, anioActual);
             var EA = dataLayer.GetPromediosProcesosOrganizacionalesEnfoqueArea(model, anioActual);
             return Json(dataReportAux(EE, EA), JsonRequestBehavior.AllowGet);

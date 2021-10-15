@@ -27,6 +27,7 @@ function GetDashBoard() {
             vm.PorcentajeNivelConfianzaEE = [];
             vm.PorcentajeNivelDeCompromisoEE = [];
             vm.PorcentajeNivelDeColaboracionEE = [];
+            vm.seccionaGraph = 0;
 
             //Pantalla 2
             vm.PorcentajeCredibilidadEE = [];
@@ -70,7 +71,7 @@ function GetDashBoard() {
             var contadorTablasBienestar = 0;
     		var contadorResumen = 1;
             var flagDecremento = 0;
-            vm.resumenDemo = true;
+            vm.resumenDemo = false;
             var countAgrandar = 0;
             var countAgrandar2 = 0;
             vm.hasHistorico = true;
@@ -92,7 +93,13 @@ function GetDashBoard() {
             vm.reactivoSeleccionado = Object;
             vm.dataReporteCorpo = [];
             vm.contadorNextButton = 0;
-
+			   /*Numero de columnas a llenar*/
+            vm.NumColumnasBienestar = 0;
+            /*Css segun el numero de columnas ColIzquierda y ColDerecha*/
+            vm.ColIzq = "";
+            vm.ColDer = "";   
+			vm.ColIzqA = "";
+            vm.ColDerA = "";
             localStorage["tieneReporte"] = "";
             vm.tableBienestarEE = "";
             vm.tableBienestarEA = "";
@@ -572,132 +579,142 @@ function GetDashBoard() {
             });
 
             vm.agrandarGraficas = function () {
-                if (resolucion <= 2500 && resolucion >= 1901) {
-                    factMt = 20;
+                var paginaActiva = "";
+                if (paginaActiva.includes("pegarReseccionado")) {
+                    if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                        var elemActivo = Enumerable.from(document.getElementById(paginaActiva).children).where(o => o.style.display == "block").toList();
+                        var numElemActivo = elemActivo[0].classList[2].split('-')[2]
+                        paginaActiva = paginaActiva + "_" + numElemActivo;
+                    }
                 }
-                if (resolucion <= 1900 && resolucion >= 1370) {
-                    factMt = 12;
-                }
-                if (resolucion <= 1369) {
-                    factMt = 7;
-                }
-                if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado != 0) {
-                    var graficaBarras = $(".bar-clasificacion:visible");
-                    [].forEach.call(graficaBarras, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHCN = $(".hc:visible");
-                    [].forEach.call(graficaHCN, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                        graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
-                        graf.children[1].style.height = parseFloat(graf.children[1].style.height) * factConver + "px";
-                    });
-                    var grafHC = $(".hc-doble:visible");
-                    [].forEach.call(grafHC, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHC = $(".bar-progress4:visible");
-                    [].forEach.call(graficaHC, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var parrafoHC = $(".label-top-graphic-blue2:visible");
-                    [].forEach.call(parrafoHC, function (graf) {
-                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
-                    });
-                }
-                if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
-                    var graficaBarras = $(".bar-progress-clasificacion:visible");
-                    [].forEach.call(graficaBarras, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHCN = $(".hc:visible");
-                    [].forEach.call(graficaHCN, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                        graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
-                        //aumentar mt
-                        graf.style.marginTop = (parseFloat(graf.style.marginTop) + factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
-                    });
-                    var grafHC = $(".hc-doble:visible");
-                    [].forEach.call(grafHC, function (graf) {
-                        graf.style.height = parseFloat(graf.style.height) * factConver + "px";
-                    });
-                    var graficaHC = $(".row .bg-gris:visible");
-                    [].forEach.call(graficaHC, function (graf) {
-                        graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
-                    });
-                }
-				if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
-                   if (vm.SeccionesReporte.Id == 24) {
-                       //if ($(".contenedor-resumen:visible").length > 0) {
-                       //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
-                       //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-top", "-550px", "important");
-                       //}
-                        var resumen24 = $(".contenedor-resumen:visible")
-                        switch (vm.enfoqueSeleccionado) {
-                            case 0:
-                                if (resumen24.length > 0) {
-                                    [].forEach.call(resumen24, function (item) {
+                if (!vm.historicoPaginaActiva.includes(paginaActiva)) {
+                    if (resolucion <= 2500 && resolucion >= 1901) {
+                        factMt = 20;
+                    }
+                    if (resolucion <= 1900 && resolucion >= 1370) {
+                        factMt = 12;
+                    }
+                    if (resolucion <= 1369) {
+                        factMt = 7;
+                    }
+                    if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado != 0) {
+                        var graficaBarras = $(".bar-clasificacion:visible");
+                        [].forEach.call(graficaBarras, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHCN = $(".hc:visible");
+                        [].forEach.call(graficaHCN, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                            graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
+                            graf.children[1].style.height = parseFloat(graf.children[1].style.height) * factConver + "px";
+                        });
+                        var grafHC = $(".hc-doble:visible");
+                        [].forEach.call(grafHC, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHC = $(".bar-progress4:visible");
+                        [].forEach.call(graficaHC, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var parrafoHC = $(".label-top-graphic-blue2:visible");
+                        [].forEach.call(parrafoHC, function (graf) {
+                            graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
+                        });
+                    }
+                    if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
+                        var graficaBarras = $(".bar-progress-clasificacion:visible");
+                        [].forEach.call(graficaBarras, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHCN = $(".hc:visible");
+                        [].forEach.call(graficaHCN, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                            graf.style.marginTop = parseFloat(graf.style.marginTop) * factConver + "px";
+                            //aumentar mt
+                            graf.style.marginTop = (parseFloat(graf.style.marginTop) + factMt) + "px";// se baja de 20 a 12 porque se sale  09/09/2021 camos
+                        });
+                        var grafHC = $(".hc-doble:visible");
+                        [].forEach.call(grafHC, function (graf) {
+                            graf.style.height = parseFloat(graf.style.height) * factConver + "px";
+                        });
+                        var graficaHC = $(".row .bg-gris:visible");
+                        [].forEach.call(graficaHC, function (graf) {
+                            graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
+                        });
+                    }
+                    if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
+                        if (vm.SeccionesReporte.Id == 24) {
+                            //if ($(".contenedor-resumen:visible").length > 0) {
+                            //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
+                            //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-top", "-550px", "important");
+                            //}
+                            var resumen24 = $(".contenedor-resumen:visible")
+                            switch (vm.enfoqueSeleccionado) {
+                                case 0:
+                                    if (resumen24.length > 0) {
+                                        [].forEach.call(resumen24, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                        });
+                                    }
+                                    break;
+                                case 1: case 2:
+                                    if (resumen24.length > 0) {
+                                        if (resolucion <= 2500 && resolucion >= 1901) {
+                                            [].forEach.call(resumen24, function (item) {
+                                                item.style.marginTop = "-32rem";
+                                                item.style.marginRight = "25px";
+                                            });
+                                        }
+                                        if (resolucion <= 1900 && resolucion >= 1370) {
+                                            [].forEach.call(resumen24, function (item) {
+                                                item.style.marginTop = "-32rem";
+                                                item.style.marginRight = "25px";
+                                            });
+                                        }
+                                        if (resolucion <= 1369) {
+                                            [].forEach.call(resumen24, function (item) {
+                                                item.style.marginTop = "-28rem";
+                                                item.style.marginRight = "25px";
+                                            });
+                                        }
+
+                                    }
+                                    break;
+                            }
+                        }
+                        else {
+                            var multi26 = $(".contenedor-resumen:visible");
+                            //[].forEach.call(multi26,function (elem) {
+                            //    elem.style.marginRight ="25px";
+                            //    elem.style.marginTop="-550px";                            
+                            //});
+                            if (multi26.length > 0) {
+                                if (resolucion <= 2500 && resolucion >= 1901) {
+                                    [].forEach.call(multi26, function (item) {
                                         item.style.marginTop = "-32rem";
+                                        item.style.marginRight = "25px";
                                     });
                                 }
-                                break;
-                            case 1: case 2:
-                                if (resumen24.length > 0) {
-                                    if (resolucion <= 2500 && resolucion >= 1901) {
-                                        [].forEach.call(resumen24, function (item) {
-                                            item.style.marginTop = "-32rem";
-                                            item.style.marginRight ="25px";
-                                        });
-                                    }
-                                    if (resolucion <= 1900 && resolucion >= 1370) {
-                                        [].forEach.call(resumen24, function (item) {
-                                            item.style.marginTop = "-32rem";
-                                            item.style.marginRight ="25px";
-                                        });
-                                    }
-                                    if (resolucion <= 1369) {
-                                        [].forEach.call(resumen24, function (item) {
-                                            item.style.marginTop = "-28rem";
-                                            item.style.marginRight ="25px";
-                                        });
-                                    }
-                                    
+                                if (resolucion <= 1900 && resolucion >= 1370) {
+                                    [].forEach.call(multi26, function (item) {
+                                        item.style.marginTop = "-32rem";
+                                        item.style.marginRight = "25px";
+                                    });
                                 }
-                                break;        
-                        } 
-                    }
-                    else {
-                        var multi26  = $(".contenedor-resumen:visible");
-                        //[].forEach.call(multi26,function (elem) {
-                        //    elem.style.marginRight ="25px";
-                        //    elem.style.marginTop="-550px";                            
-                       //});
-                        if (multi26.length > 0) {
-                            if (resolucion <= 2500 && resolucion >= 1901) {
-                                [].forEach.call(multi26, function (item) {
-                                    item.style.marginTop = "-32rem";
-                                    item.style.marginRight ="25px";
-                                });
+                                if (resolucion <= 1369) {
+                                    [].forEach.call(multi26, function (item) {
+                                        item.style.marginTop = "-28rem";
+                                        item.style.marginRight = "25px";
+                                    });
+                                }
+
                             }
-                            if (resolucion <= 1900 && resolucion >= 1370) {
-                                [].forEach.call(multi26, function (item) {
-                                    item.style.marginTop = "-32rem";
-                                    item.style.marginRight ="25px";
-                                });
-                            }
-                            if (resolucion <= 1369) {
-                                [].forEach.call(multi26, function (item) {
-                                    item.style.marginTop = "-28rem";
-                                    item.style.marginRight ="25px";
-                                });
-                            }
-                                    
                         }
                     }
                 }
             }
 
-            vm.CrearHC = function (currentHC, arr, enfoque) {
+              vm.CrearHC = function (currentHC, arr, enfoque) {
                 try {
                     if (enfoque == 0 || enfoque == undefined) {
                         /*Crear HC*/
@@ -708,14 +725,16 @@ function GetDashBoard() {
                         //Como el HC solo llegara a la mitad mi 100% de personas equivale a 150px
                         //Calcular a que porcentaje equivale la cantidad de HC
                         var maxHC = Enumerable.from(arr).max(o => o.HC);
-                        var px = (currentHC * 165) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
+                        //se cambia de 165 a la mitad, lo quieren más chico 12/10/2021
+                        var px = (currentHC * 82.5) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
                         return px;
                     }
                     if (enfoque != 0) {
                         /*Crear HC*/
                         $(".bar-clasificacion"); // la altura maxima de un 100% en la encuesta es 270px
                         var maxHC = Enumerable.from(arr).max(o => o.HC);
-                        var px = (currentHC * 135) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
+                        //se cambia de 135 a la mitad, lo quieren más chico 12/10/2021
+                        var px = (currentHC * 67.5) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
                         if (px > 135) {
                             alert();
                         }
@@ -730,8 +749,9 @@ function GetDashBoard() {
             vm.setMargin = function (currentHeight, enfoque, porcentajeE) {//55
                 if (currentHeight != undefined) {
                     if (enfoque == 0 || enfoque == undefined) {
-                        var marginTop = -190;//quiere pedir -191
-                        var dif = 165 - currentHeight;
+                        var marginTop = -107;//+27 quiere pedir -191
+                        //se cambia de 165 a la mitad, lo quieren más chico 12/10/2021
+                        var dif = 82.5 - currentHeight;
                         return marginTop + dif;
                     }
                     if (enfoque != 0) {
@@ -1655,8 +1675,9 @@ function GetDashBoard() {
 
                 // limpiar los filtros de nivel de detalle
                 var lvl = document.getElementById("tab-1").getElementsByClassName("lvlDetalle");
-                for (var i = criterioSeleccionado; i < lvl.length; i++)
+                for (var i = criterioSeleccionado; i < lvl.length; i++){
                     lvl[i].checked = false;
+                }
 
                 vm.listCompany = [];
                 vm.listArea = [];
@@ -1731,11 +1752,11 @@ function GetDashBoard() {
                     vm.model.Anio = anioSeleccionado;
                     vm.model.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
                     vm.model.nivelDetalle =
-                        (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                        (vm.lvl2 == true || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                        (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                        (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                        (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
 
                     vm.modelHistorico = vm.model;
                     vm.model.CurrentUsr = localStorage["usuario"];
@@ -1785,7 +1806,7 @@ function GetDashBoard() {
                                         title: "No se cuenta con un registro histórico acorde a los criterios de búsqueda proporcionados, desea continuar?",
                                         text: "",
                                         icon: "info",
-                                        allowOutsideClick: false,
+                                        allowOutsideClick: false, closeOnClickOutside: false,
                                         buttons: [
                                             'No, cancelar!',
                                             'Si, estoy seguro!'
@@ -2156,6 +2177,8 @@ function GetDashBoard() {
             vm.run = function () {
                 try {
                     /****Se guarda el tipo de enfoque seleccionado*****/
+                    localStorage.tieneReporte = "";
+                    vm.listPeticiones = [];
                     vm.enfoqueSeleccionado = vm.ddlEnfoques.Id;
                     switch (vm.opc) {
                         case "1":
@@ -2420,6 +2443,782 @@ function GetDashBoard() {
                 });
             }
 
+            vm.ReglasSeccionarGraficoBarras = function () {
+                if (vm.seccionaGraph == 0) {
+                    vm.seccionaGraph++;
+                    var data = [];
+                    var dataEE = [];
+                    var dataEA = [];
+                    vm.GraficoBarrasEE = [];
+                    vm.GraficoBarrasEA = [];
+                    if (vm.enfoqueSeleccionado == 1)
+                        data = vm.ComparativosGeneralesEE.Data;
+                    if (vm.enfoqueSeleccionado == 2)
+                        data = vm.ComparativosGeneralesEA.Data;
+                    if (vm.enfoqueSeleccionado == 0) {
+                        dataEE = vm.ComparativosGeneralesEE.Data;
+                        dataEA = vm.ComparativosGeneralesEA.Data;
+                    }
+
+                    if (vm.enfoqueSeleccionado != 0) {
+                        if (data == undefined) {
+                            vm.seccionaGraph = 0;
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
+                    }
+                    if (vm.enfoqueSeleccionado == 0) {
+                        if (dataEE == undefined) {
+                            vm.seccionaGraph = 0;
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
+                        if (dataEA == undefined) {
+                            vm.seccionaGraph = 0;
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
+                    }
+
+                    if (vm.model.nivelDetalle.length > 0 && vm.enfoqueSeleccionado != 0) {
+                        if (true/*Agrupar un solo enfoque*/) {
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            /*Relacionar por key cada item*/
+                            [].forEach.call(data, function (item) {
+                                if (item.tipoEntidad == 1) {
+                                    uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 2) {
+                                    uidCompany = "Comp_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 3) {
+                                    uidArea = "Area_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 4) {
+                                    uidDepto = "Depto_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 5) {
+                                    uidSubd = "Subd_" + item.Entidad + vm.getUid();
+                                }
+
+                                switch (item.tipoEntidad) {
+                                    case 1:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        break;
+                                    case 2:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        break;
+                                    case 3:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        break;
+                                    case 4:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        break;
+                                    case 5:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        item.IdSubdepartamento = uidSubd;
+                                        break;
+                                    default:
+                                }
+                            });
+                            console.log(data);
+                            vm.GraficoBarras = [];
+                            var padre = Enumerable.from(data).where(o => o.tipoEntidad == nivel_1).toList()[0];
+                            padre.children = [];
+                            vm.GraficoBarras.push(padre);//Padre para resumen
+                            var listHijos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_2).toList();
+                            [].forEach.call(listHijos, function (hijo, index) {
+                                hijo.children = [];
+                                vm.GraficoBarras[0].children.push(hijo);
+                                var listNietos = [];
+                                if (nivel_3 == "3")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "4")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.IdArea == hijo.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "5")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.IdDepartamento == hijo.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                [].forEach.call(listNietos, function (nieto, index2) {
+                                    nieto.children = [];
+                                    vm.GraficoBarras[0].children[index].children.push(nieto);
+                                    var listBisNietos = [];
+                                    if (nivel_4 == "3")
+                                        listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "4")
+                                        listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.IdArea == nieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "5")
+                                        listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.IdDepartamento == nieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                    [].forEach.call(listBisNietos, function (bisnieto, index3) {
+                                        bisnieto.children = [];
+                                        vm.GraficoBarras[0].children[index].children[index2].children.push(bisnieto);
+                                    });
+                                });
+                            });
+                            console.log(vm.GraficoBarras);
+                        }
+                    }
+                    if (vm.model.nivelDetalle.length > 0 && vm.enfoqueSeleccionado == 0) {
+
+                        if (true/*Agrupar EE*/) {
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            /*Relacionar por key cada item*/
+                            [].forEach.call(dataEE, function (item) {
+                                if (item.tipoEntidad == 1) {
+                                    uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 2) {
+                                    uidCompany = "Comp_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 3) {
+                                    uidArea = "Area_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 4) {
+                                    uidDepto = "Depto_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 5) {
+                                    uidSubd = "Subd_" + item.Entidad + vm.getUid();
+                                }
+
+                                switch (item.tipoEntidad) {
+                                    case 1:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        break;
+                                    case 2:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        break;
+                                    case 3:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        break;
+                                    case 4:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        break;
+                                    case 5:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        item.IdSubdepartamento = uidSubd;
+                                        break;
+                                    default:
+                                }
+                            });
+                            console.log(dataEE);
+                            vm.GraficoBarrasEE = [];
+                            var padre = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_1).toList()[0];
+                            padre.children = [];
+                            vm.GraficoBarrasEE.push(padre);//Padre para resumen
+                            var listHijos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_2).toList();
+                            [].forEach.call(listHijos, function (hijo, index) {
+                                hijo.children = [];
+                                vm.GraficoBarrasEE[0].children.push(hijo);
+                                var listNietos = [];
+                                if (nivel_3 == "3")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "4")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.IdArea == hijo.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "5")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.IdDepartamento == hijo.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                [].forEach.call(listNietos, function (nieto, index2) {
+                                    nieto.children = [];
+                                    vm.GraficoBarrasEE[0].children[index].children.push(nieto);
+                                    var listBisNietos = [];
+                                    if (nivel_4 == "3")
+                                        listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "4")
+                                        listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.IdArea == nieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "5")
+                                        listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.IdDepartamento == nieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                    [].forEach.call(listBisNietos, function (bisnieto, index3) {
+                                        bisnieto.children = [];
+                                        vm.GraficoBarrasEE[0].children[index].children[index2].children.push(bisnieto);
+                                    });
+                                });
+                            });
+                            console.log(vm.GraficoBarrasEE);
+                        }
+                        if (true/*Agrupar EA*/) {
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            /*Relacionar por key cada item*/
+                            [].forEach.call(dataEA, function (item) {
+                                if (item.tipoEntidad == 1) {
+                                    uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 2) {
+                                    uidCompany = "Comp_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 3) {
+                                    uidArea = "Area_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 4) {
+                                    uidDepto = "Depto_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 5) {
+                                    uidSubd = "Subd_" + item.Entidad + vm.getUid();
+                                }
+
+                                switch (item.tipoEntidad) {
+                                    case 1:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        break;
+                                    case 2:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        break;
+                                    case 3:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        break;
+                                    case 4:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        break;
+                                    case 5:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        item.IdSubdepartamento = uidSubd;
+                                        break;
+                                    default:
+                                }
+                            });
+                            console.log(dataEA);
+                            vm.GraficoBarrasEA = [];
+                            var padre = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_1).toList()[0];
+                            padre.children = [];
+                            vm.GraficoBarrasEA.push(padre);//Padre para resumen
+                            var listHijos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_2).toList();
+                            [].forEach.call(listHijos, function (hijo, index) {
+                                hijo.children = [];
+                                vm.GraficoBarrasEA[0].children.push(hijo);
+                                var listNietos = [];
+                                if (nivel_3 == "3")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "4")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.IdArea == hijo.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "5")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.IdDepartamento == hijo.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                [].forEach.call(listNietos, function (nieto, index2) {
+                                    nieto.children = [];
+                                    vm.GraficoBarrasEA[0].children[index].children.push(nieto);
+                                    var listBisNietos = [];
+                                    if (nivel_4 == "3")
+                                        listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "4")
+                                        listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.IdArea == nieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "5")
+                                        listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.IdDepartamento == nieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                    [].forEach.call(listBisNietos, function (bisnieto, index3) {
+                                        bisnieto.children = [];
+                                        vm.GraficoBarrasEA[0].children[index].children[index2].children.push(bisnieto);
+                                    });
+                                });
+                            });
+                            console.log(vm.GraficoBarrasEA);
+                        }
+                    }
+
+
+                    // Mostrar secciones en el dom
+                    if (vm.enfoqueSeleccionado == 0) {
+                        if (vm.model.nivelDetalle.length == 3) {
+                            // Mostrar graficos
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarrasEE[0];
+                            [].forEach.call(vm.GraficoBarrasEE[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, hijo, dataEA, vm.GraficoBarrasEE[0]);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                [].forEach.call(hijo.children, function (nieto) {
+                                    var htmlCode = GetContenidoHTMLBarrasHijo();
+                                    htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, nieto, dataEA, hijo);
+                                    $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);
+                                });
+                            });
+                        }
+                        if (vm.model.nivelDetalle.length == 4) {
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarrasEA[0];
+                            [].forEach.call(vm.GraficoBarrasEA[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, hijo, dataEA, vm.GraficoBarrasEA[0]);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);// Inserta hijo en nuevo bg-gris
+                                [].forEach.call(hijo.children, function (nieto) {
+                                    var htmlCode = GetContenidoHTMLBarrasHijo();
+                                    htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, nieto, dataEA, hijo);
+                                    $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);// Inserta nieto
+                                    // Insertar nieto como padre
+                                    [].forEach.call(nieto.children, function (bisnieto) {
+                                        var uidBisnieto = vm.getUid();
+                                        var htmlCode = GetContenidoHTMLBarrasPadre(uidBisnieto);
+                                        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, bisnieto, dataEA, nieto);//El resumen es el dato del nieto
+                                        $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);// Inserta bisnieto en un nuevo bg-gris
+                                    });
+                                });
+                            });
+                        }
+                    }
+
+
+                    if (vm.enfoqueSeleccionado != 0) {
+                        if (vm.model.nivelDetalle.length == 3) {
+                            // Mostrar graficos
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarras[0];
+                            [].forEach.call(vm.GraficoBarras[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContent(htmlCode, hijo.Entidad, hijo.Porcentaje, hijo.HC, vm.GraficoBarras[0]);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                [].forEach.call(hijo.children, function (nieto) {
+                                    var htmlCode = GetContenidoHTMLBarrasHijo();
+                                    htmlCode = ReplaceContent(htmlCode, nieto.Entidad, nieto.Porcentaje, nieto.HC, hijo);
+                                    $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);
+                                });
+                            });
+                        }
+                        if (vm.model.nivelDetalle.length == 4) {
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarras[0];
+                            [].forEach.call(vm.GraficoBarras[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContent(htmlCode, hijo.Entidad, hijo.Porcentaje, hijo.HC, vm.GraficoBarras[0]);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);// Inserta hijo en nuevo bg-gris
+                                [].forEach.call(hijo.children, function (nieto) {
+                                    var htmlCode = GetContenidoHTMLBarrasHijo();
+                                    htmlCode = ReplaceContent(htmlCode, nieto.Entidad, nieto.Porcentaje, nieto.HC, hijo);
+                                    $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);// Inserta nieto
+                                    // Insertar nieto como padre
+                                    [].forEach.call(nieto.children, function (bisnieto) {
+                                        var uidBisnieto = vm.getUid();
+                                        var htmlCode = GetContenidoHTMLBarrasPadre(uidBisnieto);
+                                        htmlCode = ReplaceContent(htmlCode, bisnieto.Entidad, bisnieto.Porcentaje, bisnieto.HC, nieto);//El resumen es el dato del nieto
+                                        $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);// Inserta bisnieto en un nuevo bg-gris
+                                    });
+                                });
+                            });
+                        }
+                    }
+
+                    var secciones = $("#tab-" + vm.SeccionesReporte.Id + " .card");
+                   // alert(secciones.length);
+                    if (secciones.length == 0) {
+                        alert();
+                        vm.seccionaGraph = 0;
+                        vm.ReglasSeccionarGraficoBarras();
+                    }
+
+                }
+            }
+
+            var GetContenidoHTMLBarrasPadre = function (uidPadre) {
+                var code = "";
+                if (vm.enfoqueSeleccionado == 0) {
+                    code = 
+                    `
+                    <div class="card">
+                        <div class="card-block">
+                            <div class="px-4">
+                                <div class="row mt-4">
+                                    <div class="col-sm-12">
+                                        <div class="graph-wrapper grafica-trabajar">
+                                            <div id="`+ uidPadre + `" class="row bg-gris mr-2 ml-2 mb-4 mt-4">` +
+                                                `<div agrupado class="col px-2" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index" ng-if="$index > 0">
+                                                <center>
+                                                <div class="row px-2 position-relative">
+
+                                                    
+                                                    <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                                        <img src="{{ setIconoEE }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                        <p class="label-top-graphic-clasificacion" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEE }}%</p>
+                                                        <div class="bar-clasificacion" style="width:80%;">
+                                                            <div class="bar-progress-clasificacion" style="height: {{ setAltoEE }}px;">
+                                                                <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEE }}%</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                                        <img src="{{ setIconoEA }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                        <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEA }}%</p>
+                                                        <div class="bar-clasificacion" style="width: 80%;">
+                                                            <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ setAltoEA }}px;">
+                                                                <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEA }}%</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    </div>
+                                                    <div class="hc" style="margin-top: {{ itemMTHC }}px">
+                                                        <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px; /*width: 42px; margin-top:{{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 80 ? 0 : vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 50 ?  25 : 0 }}px;*/">{{ headCount }}</p>
+                                                        <div class="bar-progress4 hc-doble" style="height:{{ altoHC }}px; width: 42px;"></div>
+                                                    </div>
+                                                    <p class="text-graph entidad-nombre">{{ nombreEntidad }}</p>
+                                                </center>
+                                                </div>
+
+
+
+          <div fantasma class="col px-2" style="width: 0px !important; min-width: 0px !important; max-width: 0px !important; display: none;">
+            <center>
+                <div class="row px-2 position-relative">
+                    <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa" style="width: 1px;">
+                        <img ng-src="` + vm.setIconoSVG(100) + `" class="img-fluid svg-clasificacion">
+                        <p class="label-top-graphic-clasificacion" style="width: 80%; background-color: #eee; color: #eee;">.</p>
+                        <div class="bar-clasificacion" style="width:80%;">
+                            <div class="bar-progress-clasificacion" style="height: 270px; background-color: #eee;"></div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 m-0 barras-dobler enfoque-area" style="width: 0px;">
+                        <img src="img/sol-icono.svg" class="img-fluid svg-clasificacion">
+                        <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">.</p>
+                        <div class="bar-clasificacion" style="width: 80%;">
+                            <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: 270px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hc">
+                    <p class="label-top-graphic-blue2 hc-head-doble" style="width: 0px; color: #eee;">.</p>
+                    <div class="bar-progress4 hc-doble" style="height: 27px; width: 0px;"></div>
+                </div>
+                <p class="text-graph" style="color: #eee;">.</p>
+            </center>
+        </div>
+
+
+
+
+                                            </div>`+
+
+                                            (vm.enfoqueSeleccionado != 0 ?
+                                            ``
+                                            ://Resumen Combinado
+                                            `<div ng-if="vm.enfoqueSeleccionado == 0" class="contenedor-resumen">
+                                                <p class="txt-total">TOTAL</p>
+                                                <div class="images-resumen center-vertically mt-2">
+                                                    <!-- IMG EE -->
+                                                    <img class="img-resumen" src="{{ IconoPromedioPadreEE }}" width="60" height="50">
+                                                    <!-- IMG EA -->
+                                                    <img class="img-resumen" src="{{ IconoPromedioPadreEA }}" width="60" height="50">
+                                                </div>
+                                                <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ resumenPromedioEE }}%</span>
+                                                <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ resumenPromedioEA }}%</span>
+                                                <p style="margin-bottom: 0px;"></p>
+                                                <small class="head-count-resumen">HC: {{ resumenHC }}</small>
+                                            </div>`) +
+
+                                        `</div>
+                                    </div>
+                                </div>
+                                <div title="VALIDAR" class="row mt-2">
+                                    <div class="col-12">
+                                        <center>` +
+                                        (vm.hasHistorico == true ?
+                                            `<div ng-show="vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                    <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                                </div>
+                                            </div>`
+                                            :
+                                            `<div ng-show="!vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                </div>
+                                            </div>`) +
+                                        `</center>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center mt-5">
+                                    <div class="col-12 p-0 m-0">
+                                        <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                else {
+                    code =
+                    `<div class="card">
+                        <div class="card-block">
+                            <div class="px-4">
+                                <div class="row mt-4">
+                                    <div class="col-sm-12">
+                                        <div class="graph-wrapper grafica-trabajar">
+                                            <div id="`+ uidPadre +`" class="row bg-gris mr-2 ml-2 mb-4 mt-4">` +
+                                                `<div class="col px-0 px-sm-1 bar-estandarW">
+                                                    <center>
+                                                        <img class="img-fluid svg-clasificacion" src="{{ icono }}">
+                                                        <p class="label-top-graphic-clasificacion ng-binding">{{ Promedio }}%</p>
+                                                        <div class="bar-clasificacion" style="overflow:hidden;height: {{ altoGrafica }}px;">
+                                                            <div class="bar-progress-clasificacion" style="height: 0px;">
+                                                            </div>` + 
+                                                            (vm.hasHistorico == true ? `<p class="comparativo">{{ historico }}%</p>` : `` ) + 
+                                                            `<p class="label-top-graphic-blue2 ng-binding" style="margin-top:{{ marginTop }}px;">{{ HC }}</p>
+                                                            <div class="bar-progress4" style="height: {{ alto }}px;">
+                                                            </div>
+                                                        </div>
+                                                        <p class="text-graph ng-binding">{{ EntidadNombre }}</p>
+                                                    </center>
+                                                </div>
+
+
+<div fantasma class="col px-0 px-sm-1 bar-estandarW bar-hidePdf" style="min-width: 0px !important;max-width: 0px !important;">
+    <center>
+        <img ng-src="` + vm.setIconoSVG(100) + `" class="img-fluid svg-clasificacion">
+        <p class="label-top-graphic-clasificacion">.</p>
+        <div class="bar-clasificacion" style="overflow:hidden;height: 270px;">
+            <div class="bar-progress-clasificacion" style="height: 0px;">
+            </div>
+            <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">.</p>
+            <p class="label-top-graphic-blue2" style="margin-top: 170px;">.</p>
+            <div class="bar-progress4" style="height: 270px;">
+            </div>
+        </div>
+        <p class="text-graph">.</p>
+    </center>
+</div>
+
+
+                                            </div>`+
+
+                                            (vm.enfoqueSeleccionado != 0 ? 
+                                            `<div title="VALIDAR" ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 2" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                                <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;">TOTAL</p>
+                                                <img style="margin-left: -2rem;" src="{{ setIconoResumen }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ setPromedioResumen }}%</span>
+                                                <p style="margin-bottom: -20px;"></p>
+                                                <small style="color: blue;margin-left: 50px;">HC: {{ setEsperadasResumen }}</small>
+                                            </div>`
+                                            :
+                                            `<div ng-if="vm.enfoqueSeleccionado == 0" class="contenedor-resumen">
+                                                <p class="txt-total">TOTAL</p>
+                                                <div class="images-resumen center-vertically mt-2">
+                                                    <!-- IMG EE -->
+                                                    <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEE[0]) }}" width="60" height="50">
+                                                    <!-- IMG EA -->
+                                                    <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEA[0]) }}" width="60" height="50">
+                                                </div>
+                                                <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ vm.PorcentajeCalificacionGlobalEE[0] }}%</span>
+                                                <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ vm.PorcentajeCalificacionGlobalEA[0] }}%</span>
+                                                <p style="margin-bottom: 0px;"></p>
+                                                <small class="head-count-resumen">HC: {{ vm.Esperadas[0] }}</small>
+                                            </div>`) +
+
+                                        `</div>
+                                    </div>
+                                </div>
+                                <div title="VALIDAR" class="row mt-2">
+                                    <div class="col-12">
+                                        <center>` + 
+                                            (vm.hasHistorico == true ? 
+                                            `<div ng-show="vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                    <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                                </div>
+                                            </div>` 
+                                            :
+                                            `<div ng-show="!vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                </div>
+                                            </div>`) + 
+                                        `</center>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center mt-5">
+                                    <div class="col-12 p-0 m-0">
+                                        <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+                return code;
+            }
+
+            var GetContenidoHTMLBarrasHijo = function () {
+                var code = "";
+                if (vm.enfoqueSeleccionado == 0) {
+                    code = 
+                    `<div agrupado class="col px-2" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index" ng-if="$index > 0">
+                        <center>
+                        <div class="row px-2 position-relative">   
+                        
+                            <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                <img src="{{ setIconoEE }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                <p class="label-top-graphic-clasificacion" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEE }}%</p>
+                                <div class="bar-clasificacion" style="width:80%;">
+                                    <div class="bar-progress-clasificacion" style="height: {{ setAltoEE }}px;">
+                                        <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEE }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                <img src="{{ setIconoEA }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEA }}%</p>
+                                <div class="bar-clasificacion" style="width: 80%;">
+                                    <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ setAltoEA }}px;">
+                                        <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEA }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="hc" style="margin-top: {{ itemMTHC }}px">
+                            <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px; /*width: 42px; margin-top:{{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 80 ? 0 : vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 50 ?  25 : 0 }}px;*/">{{ headCount }}</p>
+                            <div class="bar-progress4 hc-doble" style="height:{{ altoHC }}px; width: 42px;"></div>
+                        </div>
+                        <p class="text-graph entidad-nombre">{{ nombreEntidad }}</p>
+                    </center>
+                </div>
+                `;
+                }
+                else {
+                    code =
+                        `<div class="col px-0 px-sm-1 bar-estandarW">
+                            <center>
+                                <img class="img-fluid svg-clasificacion" src="{{ icono }}">
+                                <p class="label-top-graphic-clasificacion ng-binding">{{ Promedio }}%</p>
+                                <div class="bar-clasificacion" style="overflow:hidden;height: {{ altoGrafica }}px;">
+                                    <div class="bar-progress-clasificacion" style="height: 0px;">
+                                    </div>` +
+                                        (vm.hasHistorico == true ? `<p class="comparativo">{{ historico }}%</p>` : ``) +
+                                        `<p class="label-top-graphic-blue2 ng-binding" style="margin-top:{{ marginTop }}px;">{{ HC }}</p>
+                                    <div class="bar-progress4" style="height: {{ alto }}px;">
+                                    </div>
+                                </div>
+                                <p class="text-graph ng-binding">{{ EntidadNombre }}</p>
+                            </center>
+                        </div>`;
+                }
+                return code;
+            }
+
+            var ReplaceContent = function (htmlCode, EntidadNombre, Promedio, HC, padreResumen) {
+                htmlCode = htmlCode.replace("{{ EntidadNombre }}", EntidadNombre);
+                htmlCode = htmlCode.replace("{{ Promedio }}", Promedio);
+                htmlCode = htmlCode.replace("{{ HC }}", HC);
+                htmlCode = htmlCode.replace("{{ icono }}", vm.setIconoSVG(Promedio));
+                htmlCode = htmlCode.replace("{{ altoGrafica }}", (Promedio * 2.7));
+                htmlCode = htmlCode.replace("{{ historico }}", (vm.getDiferenciaGralEA(EntidadNombre, Promedio, 2)));
+                if (vm.enfoqueSeleccionado != 1) {
+                    htmlCode = htmlCode.replace("{{ marginTop }}", (vm.setMargin(vm.CrearHC(HC, vm.ComparativosGeneralesEA.Data, 2), 2, Promedio)));
+                    htmlCode = htmlCode.replace("{{ alto }}", (vm.CrearHC(HC, vm.ComparativosGeneralesEA.Data, 2)));
+                }
+                if (vm.enfoqueSeleccionado == 1) {
+                    htmlCode = htmlCode.replace("{{ marginTop }}", (vm.setMargin(vm.CrearHC(HC, vm.ComparativosGeneralesEE.Data, 2), 2, Promedio)));
+                    htmlCode = htmlCode.replace("{{ alto }}", (vm.CrearHC(HC, vm.ComparativosGeneralesEE.Data, 2)));
+                    htmlCode = htmlCode.replace("{{ setIconoResumen }}", vm.setIconoSVG(padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEE[0]*/));
+                    htmlCode = htmlCode.replace("{{ setPromedioResumen }}", padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEE[0]*/);
+                }
+                if (vm.enfoqueSeleccionado == 2) {
+                    htmlCode = htmlCode.replace("{{ setIconoResumen }}", vm.setIconoSVG(padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEA[0]*/));
+                    htmlCode = htmlCode.replace("{{ setPromedioResumen }}", padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEA[0]*/);
+                }
+                htmlCode = htmlCode.replace("{{ setEsperadasResumen }}", padreResumen.HC/*vm.Esperadas[0]*/);
+                htmlCode = htmlCode.replace("VALIDAR", padreResumen.Entidad);
+                htmlCode = htmlCode.replace("TOTAL", padreResumen.Entidad);
+
+                return htmlCode;
+            }
+
+            var ReplaceContentEnfoqueCombinado = function (htmlCode, itemEE, objetoEA, padreResumenEE) {
+                var itemEA = Enumerable.from(objetoEA).where(o => o.Entidad == itemEE.Entidad).firstOrDefault();
+                var padreResumenEA = Enumerable.from(objetoEA).where(o => o.Entidad == padreResumenEE.Entidad).firstOrDefault();
+
+                htmlCode = htmlCode.replace("{{ setIconoEE }}", vm.setIconoSVG(itemEE.Porcentaje));
+                htmlCode = htmlCode.replace("{{ setPorcentajeEE }}", itemEE.Porcentaje);
+                htmlCode = htmlCode.replace("{{ setAltoEE }}", itemEE.Porcentaje * 2.7);
+                htmlCode = htmlCode.replace("{{ setHistoricoEE }}", vm.getDiferenciaGralEE(itemEE.Entidad, itemEE.Porcentaje, 2));
+
+                htmlCode = htmlCode.replace("{{ setIconoEA }}", vm.setIconoSVG(itemEA.Porcentaje));
+                htmlCode = htmlCode.replace("{{ setPorcentajeEA }}", itemEA.Porcentaje);
+                htmlCode = htmlCode.replace("{{ setAltoEA }}", itemEA.Porcentaje * 2.7);
+                htmlCode = htmlCode.replace("{{ setHistoricoEA }}", vm.getDiferenciaGralEE(itemEA.Entidad, itemEA.Porcentaje, 2));
+                
+                htmlCode = htmlCode.replace("{{ nombreEntidad }}", itemEE.Entidad);
+
+                htmlCode = htmlCode.replace("{{ itemMTHC }}", vm.setMargin(vm.CrearHC(itemEE.HC, vm.ComparativosGeneralesEE.Data)));
+                htmlCode = htmlCode.replace("{{ altoHC }}", vm.CrearHC(itemEE.HC, vm.ComparativosGeneralesEE.Data));
+                htmlCode = htmlCode.replace("{{ headCount }}", itemEE.HC);
+                if (vm.hasHistorico) {
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "");
+                }
+                else {
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "none");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "none");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "none");
+                }
+                //Reemplazar datos del resumen combinado
+                htmlCode = htmlCode.replace("{{ IconoPromedioPadreEE }}", vm.setIconoSVG(padreResumenEE.Porcentaje));
+                htmlCode = htmlCode.replace("{{ IconoPromedioPadreEA }}", vm.setIconoSVG(padreResumenEA.Porcentaje));
+                htmlCode = htmlCode.replace("{{ resumenHC }}", padreResumenEE.HC);
+                htmlCode = htmlCode.replace("{{ resumenPromedioEE }}", padreResumenEE.Porcentaje);
+                htmlCode = htmlCode.replace("{{ resumenPromedioEA }}", padreResumenEA.Porcentaje);
+                htmlCode = htmlCode.replace("TOTAL", padreResumenEA.Entidad)
+
+
+                return htmlCode;
+            }
+
             /*#region Secciones*/
             vm.next = async function () {
                 var topMarging = 0; $('html,body').scrollTop(0); var paginaActiva;
@@ -2533,11 +3332,11 @@ function GetDashBoard() {
                             document.getElementById(paginaActiva).style.backgroundColor = "#fff";
                             /* Meter el contenido html dentro de la pagina */
                             /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
-                            if (vm.SeccionesReporte.Id == 25) {
+                            if (vm.SeccionesReporte.Id == 21) {
                                 // Agrandar al vuelo las graficas de barras en resolucion > 1367
                                 vm.agrandarGraficas();
 
-                                var childs = document.getElementById("divPantalla25").childNodes;
+                                var childs = $("#tab-generales-departamento-ee .card");//document.getElementById("divPantalla21").childNodes;
                                 var canvas = [];
                                 [].forEach.call(childs, function (item) { item.style.display = "none"; });
                                 childs = Enumerable.from(childs).toList();
@@ -2580,10 +3379,10 @@ function GetDashBoard() {
                                             vm.getReporteDataPantalla_27();
                                         }
                                         else {
-                                            vm.SeccionesReporte.Id++;
-                                            vm.getReporteDataPantalla_26();
-                                            document.getElementById("tab-25").classList.add("ng-hide");
-                                            document.getElementById("tab-26").classList.remove("ng-hide");
+                                            //vm.SeccionesReporte.Id++;
+                                            //vm.getReporteDataPantalla_26();
+                                            //document.getElementById("tab-25").classList.add("ng-hide");
+                                            //document.getElementById("tab-26").classList.remove("ng-hide");
                                         }
                                         termine = true;
                                         document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
@@ -2604,10 +3403,10 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
-                            if (vm.SeccionesReporte.Id == 26) {
+                            if (vm.SeccionesReporte.Id == 22) {
                                 // Agrandar al vuelo las graficas de barras en resolucion > 1367
                                 vm.agrandarGraficas();
-                                var childs = document.getElementById("divPantalla26").childNodes;
+                                var childs = $("#tab-generales-departamento-ea .card");//document.getElementById("divPantalla26").childNodes;
                                 var canvas = [];
                                 [].forEach.call(childs, function (item) { item.style.display = "none"; });
                                 childs = Enumerable.from(childs).toList();
@@ -2642,17 +3441,22 @@ function GetDashBoard() {
                                     if (canvas.length == childs.length) {
                                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                                         clearInterval(refreshIntervalId);
-                                        if (vm.enfoqueSeleccionado == 2) {
+                                        if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0) {
+                                            vm.SeccionesReporte.Id = 27;
+                                            vm.peticiones();
                                             vm.SeccionesReporte.Id = 28;
                                             document.getElementById("tab-26").classList.add("ng-hide");
                                             document.getElementById("tab-28").classList.remove("ng-hide");
-                                            vm.getReporteDataPantalla_28();
+                                            /*vm.getReporteDataPantalla_28();*/
+                                            vm.isBusy = false;
+                                            document.getElementsByClassName("busy")[1].style.display = "none";
+                                            return vm.peticiones();
                                         }
                                         else {
-                                            vm.SeccionesReporte.Id++;
-                                            vm.getReporteDataPantalla_27();
-                                            document.getElementById("tab-26").classList.add("ng-hide");
-                                            document.getElementById("tab-27").classList.remove("ng-hide");
+                                            //vm.SeccionesReporte.Id++;
+                                            //vm.getReporteDataPantalla_27();
+                                            //document.getElementById("tab-26").classList.add("ng-hide");
+                                            //document.getElementById("tab-27").classList.remove("ng-hide");
                                         }
                                         termine = true;
                                         document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
@@ -2813,18 +3617,18 @@ function GetDashBoard() {
                                     else {
                                         if (resolucion <= 2500 && resolucion >= 1901) {
                                             valbarra = 3;
-                                            valpadding = 3.2;
-                                            valpaddingM = 3.3;
+                                            valpadding = 9 ;
+                                            valpaddingM =1.5;
                                         }
                                         if (resolucion <= 1900 && resolucion >= 1370) {
                                             valbarra = 3;
-                                            valpaddingM = 3.2;
-                                            valpadding = 3.3;
+                                            valpaddingM = 1.5;
+                                            valpadding = 9;
                                         }
                                         if (resolucion <= 1369) {
                                             valbarra = 3;
-                                            valpaddingM = 3.2;
-                                            valpadding = 3.3;
+                                            valpaddingM = 1.5;
+                                            valpadding = 9;
                                         }                                        
                                     }
                                     var elementBAzul= $(".grafica-trabajarEx .bar");
@@ -2885,18 +3689,18 @@ function GetDashBoard() {
                                     else {
                                         if (resolucion <= 2500 && resolucion >= 1901) {
                                             valbarra2 = 3;
-                                            valpadding2M = 3.2;
-                                            valpadding2 = 3.3;
+                                            valpadding2M = 1.5;
+                                            valpadding2 = 9;
                                         }
                                         if (resolucion <= 1900 && resolucion >= 1370) {
                                             valbarra2 = 3;
-                                            valpadding2M = 3.2;
-                                            valpadding2 = 3.3;
+                                            valpadding2M = 1.5;
+                                            valpadding2 = 9;
                                         }
                                         if (resolucion <= 1369) {
                                             valbarra2 = 3;
-                                            valpadding2M = 3.2;
-                                            valpadding2 = 3.3;
+                                            valpadding2M = 1.5;
+                                            valpadding2 = 9;
                                         } 
                                     }
                                     var elementBAzul2= $(".grafica-dejarEx .bar2");
@@ -3041,11 +3845,12 @@ function GetDashBoard() {
 
                                 if (padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado == 0 && $(".divExportacionBienestarClass").length == 0) {
                                     // Seccionado de bienestar
-                                    docReporte.addPage();
+                                    //docReporte.addPage();
                                     var historicoCorte = [];
                                     var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
                                     childs = Enumerable.from(childs).toList();
                                     childs = childs.map(async (key, index) => {
+                                        docReporte.addPage();
                                         document.getElementById("tab-17").classList.remove("ng-hide");
                                             //Se forza el backgroud en Blanco
                                             $('#' + key)[0].style.backgroundColor = "#fff";
@@ -3070,6 +3875,7 @@ function GetDashBoard() {
                                             //    });
                                             //}
                                         //if (cortes.length == 0) {
+                                        docReporte.addPage();
                                             var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 1 }
@@ -3084,12 +3890,14 @@ function GetDashBoard() {
                                     setTimeout(function () {
                                         document.getElementsByClassName("busy")[1].style.display = "none";
                                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                                        //docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                                     }, 2000);
                                 }
 
                                 else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0 && $(".divExportacionBienestarClass").length == 0) || (padrePaginaActiva != "tab-17")) {
                                     var histo = [];
                                     if (padrePaginaActiva == "tab-17") {
+                                        docReporte.addPage();
                                         var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
                                         var divExportacion = vm.enfoqueSeleccionado == 1 ? "tab-bienestar-ee" : "tab-bienestar-ea";
                                         var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
@@ -3376,7 +4184,7 @@ function GetDashBoard() {
                                         'No mostrar de nuevo'
                                     ],
                                     dangerMode: false,
-                                    allowOutsideClick: false,
+                                    allowOutsideClick: false, closeOnClickOutside: false,
                                 }).then(function (isConfirm) {
                                     if (isConfirm)
                                         vm.mostrarMensaje = false;
@@ -3393,7 +4201,7 @@ function GetDashBoard() {
                                         'No mostrar de nuevo'
                                     ],
                                     dangerMode: false,
-                                    allowOutsideClick: false,
+                                    allowOutsideClick: false, closeOnClickOutside: false,
                                 }).then(function (isConfirm) {
                                     if (isConfirm)
                                         vm.mostrarMensaje = false;
@@ -3434,9 +4242,24 @@ function GetDashBoard() {
                         vm.SeccionesReporte.Id = 41;
                         return;
                     }
+                    if (vm.SeccionesReporte.Id == 17/* && vm.enfoqueSeleccionado == 0*/) {
+                        docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                    }
+                    if (vm.SeccionesReporte.Id == 16) {
+                        //docReporte.addPage();
+                    }
+                    if (vm.SeccionesReporte.Id == 17 && vm.enfoqueSeleccionado == 0) {
+                        //docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                    }
                     // Enfoque Doble y Enfoque Área
                     if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                         if (vm.hasHistorico) {
+                            if (vm.SeccionesReporte.Id == 22) {
+                                vm.SeccionesReporte.Id = 27;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id = 28;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id < 20) {
                                 if (vm.enfoqueSeleccionado == 2) {//Validacion EA
                                     if (vm.SeccionesReporte.Id == 8 || vm.SeccionesReporte.Id == 10 || vm.SeccionesReporte.Id == 12 || vm.SeccionesReporte.Id == 14) {
@@ -3454,8 +4277,27 @@ function GetDashBoard() {
                                 return vm.peticiones();
                             }
                         }
-                        if (!vm.hasHistorico) {
-                            //Validar subsecciones
+                        if (vm.hasHistorico == false) {
+                            /*Solo tiene 2 niveles de detalle por tanto se omite el grafico de barras*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length < 3) {
+                                vm.SeccionesReporte.Id = 27;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id = 28;
+                                return vm.peticiones();
+                            }
+                            /*Tiene 3 o más niveles de detalle por tanto se muestra el grafico de barras seccionado*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length >= 3) {
+                                vm.SeccionesReporte.Id++;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id++;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id == 22) {
+                                vm.SeccionesReporte.Id = 27;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id = 28;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id == 23) {
                                 if (vm.criterioBusquedaSeleccionado.Id == 1) {
                                     var childs = document.getElementById("pegarReseccionado").childNodes;
@@ -3594,7 +4436,7 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
-                            // fin validar subsecciones
+                            // En desuso porque se eliminó el seccionado de las columnas de bienestar
                             if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
                                 document.getElementsByClassName("busy")[1].style.display = "block";
                                 var indiceVisible = "";
@@ -3627,7 +4469,6 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
-
                             if (vm.SeccionesReporte.Id < 10 || vm.SeccionesReporte.Id == 13) {
                                 if (vm.enfoqueSeleccionado == 2) {
                                     if (vm.SeccionesReporte.Id == 8) {
@@ -3735,6 +4576,11 @@ function GetDashBoard() {
                     // Enfoque Empresa
                     if (vm.enfoqueSeleccionado == 1) {
                         if (vm.hasHistorico) {
+                            // Validar eliminacion de las barras seccionadas
+                            if (vm.SeccionesReporte.Id == 21) {
+                                vm.SeccionesReporte.Id = 27;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id <= 8) {
                                 vm.SeccionesReporte.Id++;
                                 return vm.peticiones();
@@ -3755,6 +4601,20 @@ function GetDashBoard() {
                             }
                         }
                         if (vm.hasHistorico == false) {
+                            /*Solo tiene 2 niveles de detalle por tanto se omite el grafico de barras*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length < 3) {
+                                vm.SeccionesReporte.Id = 27;
+                                return vm.peticiones();
+                            }
+                            /*Tiene 3 o más niveles de detalle por tanto se muestra el grafico de barras seccionado*/
+                            if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length >= 3) {
+                                vm.SeccionesReporte.Id = 21;
+                                return vm.peticiones();
+                            }
+                            if (vm.SeccionesReporte.Id == 21) {
+                                vm.SeccionesReporte.Id = 27;
+                                return vm.peticiones();
+                            }
                             if (vm.SeccionesReporte.Id == 23) {
                                 try {
                                     if (vm.criterioBusquedaSeleccionado.Id == 1) {
@@ -3858,6 +4718,7 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
+                            // En desuso porque se eliminó el seccionado de las columnas de bienestar
                             if (vm.SeccionesReporte.Id == 17 && $(".divExportacionBienestarClass").length > 0) {
                                 // Estoy en el ee
                                 var mitad = $(".divExportacionBienestarClass").length / 2;//Si ya mostro la mitad debe pasarse a la siguiente
@@ -4723,10 +5584,10 @@ function GetDashBoard() {
                         vm.getReporteDataPantalla_20();
                     }
                     if (vm.SeccionesReporte.Id == 21 && vm.ComparativosGeneralesEE.length == 0) {
-                        vm.getReporteDataPantalla_21();
+                        vm.getReporteDataPantalla_21();/*Seccionar*/
                     }
                     if (vm.SeccionesReporte.Id == 22 && vm.ComparativosGeneralesEA.length == 0) {
-                        vm.getReporteDataPantalla_22();
+                        vm.getReporteDataPantalla_22();/*Seccionar*/
                     }
                     if (vm.SeccionesReporte.Id == 23 && vm.ComparativoGeneralPorNivelesEE.Data == undefined) {
                         vm.getReporteDataPantalla_23();
@@ -4743,39 +5604,91 @@ function GetDashBoard() {
                     if (vm.SeccionesReporte.Id == 27 && vm.ComparativoAntiguedadEE.length == 0) {
                         vm.getReporteDataPantalla_27();
                     }
+                    else if (vm.SeccionesReporte.Id == 27) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 28 && vm.ComparativoAntiguedadEA.length == 0) {
                         vm.getReporteDataPantalla_28();
+                    }
+                    else if (vm.SeccionesReporte.Id == 28) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 29 && vm.ComparativoGeneroEE.length == 0) {
                         vm.getReporteDataPantalla_29();
                     }
+                    else if (vm.SeccionesReporte.Id == 29) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 30 && vm.ComparativoGeneroEA.length == 0) {
                         vm.getReporteDataPantalla_30();
+                    }
+                    else if (vm.SeccionesReporte.Id == 30) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 31 && vm.ComparativoGradoAcademicoEE.length == 0) {
                         vm.getReporteDataPantalla_31();
                     }
+                    else if (vm.SeccionesReporte.Id == 31) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 32 && vm.ComparativoGradoAcademicoEA.length == 0) {
                         vm.getReporteDataPantalla_32();
+                    }
+                    else if (vm.SeccionesReporte.Id == 32) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 33 && vm.ComparativoCondicionTrabajoEE.length == 0) {
                         vm.getReporteDataPantalla_33();
                     }
+                    else if (vm.SeccionesReporte.Id == 33) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 34 && vm.ComparativoCondicionTrabajoEA.length == 0) {
                         vm.getReporteDataPantalla_34();
+                    }
+                    else if (vm.SeccionesReporte.Id == 34) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 35 && vm.ComparativoFuncionEE.length == 0) {
                         vm.getReporteDataPantalla_35();
                     }
+                    else if (vm.SeccionesReporte.Id == 35) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 36 && vm.ComparativoFuncionEA.length == 0) {
                         vm.getReporteDataPantalla_36();
+                    }
+                    else if (vm.SeccionesReporte.Id == 36) {
+                        vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 37 && vm.ComparativoRangoEdadEE.length == 0) {
                         vm.getReporteDataPantalla_37();
                     }
+                    else if (vm.SeccionesReporte.Id == 37) {
+                        vm.doblarMargen();
+                    }
                     if (vm.SeccionesReporte.Id == 38 && vm.ComparativoRangoEdadEA.length == 0) {
                         vm.getReporteDataPantalla_38();
                     }
+                    else if (vm.SeccionesReporte.Id == 39) {
+                        vm.doblarMargen();
+                    }
+
+                    
+
+                }
+            }
+
+            vm.doblarMargen = function () {
+                //Validar a partir de antiguedad en enfoques individuales para que haga al doble el margin top de label-top-graphic-blue2
+                if (vm.enfoqueSeleccionado != 0) {
+                    var tab = "#tab-" + vm.SeccionesReporte.Id;
+                    [].forEach.call($(tab + " .label-top-graphic-blue2"), function (item) {
+                        item.style.marginTop = (parseFloat(item.style.marginTop) * factConver) + "px";
+                        if (parseFloat(item.style.marginTop) > 248) {
+                            item.style.marginTop = "248px";
+                        }
+                    });
                 }
             }
 
@@ -5121,15 +6034,31 @@ function GetDashBoard() {
                     //    return;
                     //}
                     if (vm.SeccionesReporte.Id >= 20) {
+                        //if (vm.SeccionesReporte.Id == 41 && vm.enfoqueSeleccionado == 1) {
+                        //    anterior = 37;
+                        //}
                         if (vm.SeccionesReporte.Id == 41) {
                             anterior = 38;
                         }
-                        else {
+                        else if (vm.SeccionesReporte.Id != 41) {
                             if (vm.enfoqueSeleccionado != 0) {
-                                anterior = vm.SeccionesReporte.Id - 2;
+                                if (vm.SeccionesReporte.Id == 27 && vm.enfoqueSeleccionado == 1) {
+                                    anterior = 21;
+                                }
+                                if (vm.SeccionesReporte.Id == 28) {
+                                    anterior = 22;
+                                }
+                                if (vm.SeccionesReporte.Id != 27 && vm.SeccionesReporte.Id != 28) {
+                                    anterior = vm.SeccionesReporte.Id - 2;
+                                }
                             }
                             if (vm.enfoqueSeleccionado == 0) {
-                                anterior = vm.SeccionesReporte.Id - 2;
+                                if (vm.SeccionesReporte.Id == 28) {
+                                    anterior = 22;
+                                }
+                                if (vm.SeccionesReporte.Id != 28) {
+                                    anterior = vm.SeccionesReporte.Id - 2;
+                                }
                             }
                         }
                         var tab = document.getElementById("tab-" + anterior);
@@ -5180,7 +6109,7 @@ function GetDashBoard() {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                     });
                                     //bajar margin top
-                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    var hc = $("#tab-"+anterior+" .label-top-graphic-blue2:visible");
                                     [].forEach.call(hc, function (item) {
                                         item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
                                     });
@@ -5463,7 +6392,7 @@ function GetDashBoard() {
                         if (vm.enfoqueSeleccionado == 1 && vm.SeccionesReporte.Id == 41) {
                             vm.SeccionesReporte.Id = 37;
                             //reducir
-                            eeReduce(vm.SeccionesReporte.Id);
+                            //eeReduce(vm.SeccionesReporte.Id);
                             return;
                         }
                         if (vm.SeccionesReporte.Id == 41) {
@@ -5473,6 +6402,11 @@ function GetDashBoard() {
                         // Enfoque combinado y Enfoque Área
                         if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                             if (vm.hasHistorico) {
+                                if (vm.SeccionesReporte.Id == 28) {
+                                    vm.SeccionesReporte.Id = 22;
+                                    document.getElementById("tab-26").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5491,6 +6425,16 @@ function GetDashBoard() {
                                 }
                             }
                             if (vm.hasHistorico == false) {
+                                // Se omite el grafico de barras
+                                if (vm.SeccionesReporte.Id == 28 && vm.model.nivelDetalle.length < 3) {
+                                    vm.SeccionesReporte.Id = 20;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 28 && vm.model.nivelDetalle.length >= 3) {
+                                    vm.SeccionesReporte.Id = 22;
+                                    document.getElementById("tab-26").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id == 24) {
                                     try {
                                         if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0)
@@ -5636,7 +6580,6 @@ function GetDashBoard() {
 
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id == 18 && $(".divExportacionBienestarClass").length > 0) {
                                     // mostrar el ultimo indice
                                     $(".divExportacionBienestarClass")[($(".divExportacionBienestarClass").length - 1)].style.display = "";
@@ -5670,7 +6613,6 @@ function GetDashBoard() {
                                         return;
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id <= 38 && vm.SeccionesReporte.Id >= 22) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5845,10 +6787,14 @@ function GetDashBoard() {
                                 }
                             }
                         }
-
                         // ENfoque Empresa
                         if (vm.enfoqueSeleccionado == 1) {
                             if (vm.hasHistorico) {
+                                if (vm.SeccionesReporte.Id == 27) {
+                                    vm.SeccionesReporte.Id = 21;
+                                    document.getElementById("tab-25").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id <= 37 && vm.SeccionesReporte.Id >= 23) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -5869,7 +6815,16 @@ function GetDashBoard() {
                                 }
                             }
                             if (vm.hasHistorico == false) {
-                                // meter 23
+                                // Se omite el grafico de barras
+                                if (vm.SeccionesReporte.Id == 27 && vm.model.nivelDetalle.length < 3) {
+                                    vm.SeccionesReporte.Id = 20;
+                                    return;
+                                }
+                                if (vm.SeccionesReporte.Id == 27 && vm.model.nivelDetalle.length >= 3) {
+                                    vm.SeccionesReporte.Id = 21;
+                                    document.getElementById("tab-25").classList.add("ng-hide");
+                                    return;
+                                }
                                 if (vm.SeccionesReporte.Id == 23) {
                                     try {
                                         /* ir a la sub del 23 */
@@ -5959,7 +6914,6 @@ function GetDashBoard() {
 
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id == 18 && $(".divExportacionBienestarClass").length > 0) {
                                     // EE mostrar el ultimo indice de la primera mitad
                                     var mitad = $(".divExportacionBienestarClass").length / 2;
@@ -5986,7 +6940,6 @@ function GetDashBoard() {
                                         return;
                                     }
                                 }
-
                                 if (vm.SeccionesReporte.Id <= 37 && vm.SeccionesReporte.Id >= 23) {
                                     vm.SeccionesReporte.Id--;
                                     vm.SeccionesReporte.Id--;
@@ -6328,11 +7281,11 @@ function GetDashBoard() {
 
                 vm.existeReporte = Object;
                 vm.modelHistorico.nivelDetalle =
-                    (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
                 if (getParamByUrl("token") == null) {
                     vm.modelHistorico.Anio = vm.anioSeleccionado.value - 1;
                     vm.modelHistorico.IdBaseDeDatos = parseInt(document.getElementById("DDLBD").value);
@@ -6345,7 +7298,7 @@ function GetDashBoard() {
                             title: "Este reporte ya se creó anteriormente. Deseas consultar el existente o quieres actualizarlo",
                             text: "",
                             icon: "info",
-                            allowOutsideClick: false,
+                            allowOutsideClick: false, closeOnClickOutside: false,
                             buttons: [
                                 'Consultar el reporte existente!',
                                 'Actualizar el reporte!'
@@ -6375,7 +7328,7 @@ function GetDashBoard() {
                             title: "El reporte solicitado excede la cantidad de información que puede mostrarse",
                             text: "",
                             icon: "info",
-                            allowOutsideClick: false,
+                            allowOutsideClick: false, closeOnClickOutside: false,
                             buttons: [
                                 'Configurar nuevos filtros',
                                 'Ir al reporte de indicadores'
@@ -6387,7 +7340,9 @@ function GetDashBoard() {
                                 window.location.href = "/Reporte/ReporteFinalByUNegocio/";
                             }
                             else {
-                                window.location.reload();
+                                vm.listPeticiones = [];
+                                localStorage["tieneReporte"] = "";
+                                //window.location.reload();
                             }
                         });
                         return false;
@@ -6906,7 +7861,7 @@ function GetDashBoard() {
                     vm.isBusy = true;
                     if (true) {
                         vm.limpiarArraysReporte_Pantalla_8();
-                        if (localStorage["coaching" + vm.storeName] != null && localStorage["habGerenciales" + vm.storeName] != null && localStorage["alinEstrategica" + vm.storeName] != null && localStorage["practCulturales" + vm.storeName] != null && localStorage["cambio" + vm.storeName] != null && localStorage["procOrgan" + vm.storeName] != null) {
+                        /*if (localStorage["coaching" + vm.storeName] != null && localStorage["habGerenciales" + vm.storeName] != null && localStorage["alinEstrategica" + vm.storeName] != null && localStorage["practCulturales" + vm.storeName] != null && localStorage["cambio" + vm.storeName] != null && localStorage["procOrgan" + vm.storeName] != null) {
                             var retObj1 = localStorage.getItem("coaching" + vm.storeName);
                             var retObj2 = localStorage.getItem("habGerenciales" + vm.storeName);
                             var retObj3 = localStorage.getItem("alinEstrategica" + vm.storeName);
@@ -6921,7 +7876,7 @@ function GetDashBoard() {
                             vm.PorcentajeProcesosOrganizacionales = JSON.parse(retObj6);
                             vm.isBusy = false;
                         }
-                        else {
+                        else {*/
                             fillArrayCustomHisto("BackGroundJob/getCoaching/", vm.modelHistorico, vm.PorcentajeCoaching, function () {
                                 vm.PorcentajeCoaching = vm.PorcentajeCoaching.Data == undefined ? vm.PorcentajeCoaching : vm.PorcentajeCoaching.Data;
                                 //vm.PorcentajeCoaching = vm.rounderPorcent(vm.PorcentajeCoaching);
@@ -6965,7 +7920,7 @@ function GetDashBoard() {
                                     });
                                 });
                             });
-                        }
+                        //}
                     }
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.getReporteDataPantalla_8");
@@ -7457,6 +8412,7 @@ function GetDashBoard() {
                             vm.getReporteDataPantalla_22();
                             return;
                         }
+                        vm.ReglasSeccionarGraficoBarras();
                         document.getElementsByClassName("busy")[1].style.display = "none";
                         vm.isBusy = false;
                     });
@@ -7473,6 +8429,7 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoEntidadesResultadoGeneralEA/", vm.modelHistorico, vm.ComparativosGeneralesEA, function () {
                         vm.ComparativosGeneralesEA.Data = vm.ComparativosGeneralesEA.Data.Data == undefined ? vm.ComparativosGeneralesEA.Data : vm.ComparativosGeneralesEA.Data.Data;
                         document.getElementsByClassName("busy")[1].style.display = "none";
+                        vm.ReglasSeccionarGraficoBarras();
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -13446,19 +14403,19 @@ function GetDashBoard() {
                      */
                     vm.ColumnasBienestar = Enumerable.from(vm.finalColumnas).toArray();
                     //Eliminar los niveles no autorizados
-                    if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1) {
+                    if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1 && document.getElementsByClassName("lvlUNeg")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
                     }
-                    if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2) {
+                    if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2 && document.getElementsByClassName("lvlComp")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
                     }
-                    if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3) {
+                    if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3 && document.getElementsByClassName("lvlArea")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
                     }
-                    if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4) {
+                    if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4 && document.getElementsByClassName("lvlDpto")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
                     }
-                    if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5) {
+                    if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5 && document.getElementsByClassName("lvlSubD")[0].checked == false) {
                         vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
                     }
 
@@ -13516,13 +14473,97 @@ function GetDashBoard() {
                         vm.arrayStringFiltrosBienestar.push("Valor default para cuando tengo token");
                     }
                     vm.ColumnasBienestar.shift();
+					 /****Se llena el numero de columnas para paginas de Indicadores 07/10/2021 Camos****/
+                    vm.NumColumnasBienestar = vm.ColumnasBienestar.length;
+                    /****Se calcula el CSS segun el numero de columnas 07/10/2021 Camos*****************/
+                    vm.getCssColumnas();
                     /*vm.getArrayFiltros();*/
                 } catch (aE) {
                     vm.writteLog(aE.message, "vm.fillColumnas");
                     //swal(aE.message, "", "warning");
                 }
-            }
+				}
+				vm.getCssColumnas= function () {
+                switch (vm.NumColumnasBienestar) {
+                    case 1:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-10";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-10";
+                            vm.ColDerA = "col-1";
 
+                        }else {
+                            vm.ColIzq = "col-10";
+                            vm.ColDer = "col-2";
+                        }                        
+                        break;
+                    case 2:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-8";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-8";
+                            vm.ColDerA = "col-1";
+                        }else {
+                            vm.ColIzq = "col-8";
+                            vm.ColDer = "col-2";
+                        }                       
+                        break;
+                    case 3:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-6";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-6";
+                            vm.ColDerA = "col-1";
+                        }else {
+                            vm.ColIzq = "col-6";
+                            vm.ColDer = "col-2";
+                        }                        
+                        break;
+                    case 4:
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col-2";
+                            vm.ColIzqA = "col-4";
+                            vm.ColDerA = "col-1";
+                        }else {
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col-2";
+                        }                        
+                        break;
+                    case 5:                        
+                            vm.ColIzq = "col-7";
+                            vm.ColDer = "col-1";
+                                                
+                        break;
+                    case 6:
+                        
+                            vm.ColIzq = "col-6";
+                            vm.ColDer = "col-1";
+                                                
+                        break;
+                    case 7:
+                        
+                            vm.ColIzq = "col-5";
+                            vm.ColDer = "col-1";
+                                               
+                        break;
+                    case 8:
+
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col-1";
+                                                
+                        break;
+                    default:
+                        
+                            vm.ColIzq = "col-10";
+                            vm.ColDer = "col-2";
+                                               
+                        break;
+        
+                }
+    
+            }
+			
             vm.getArrayFiltros = function () {
                 /*filtros = vm.finalColumnas;
                 Peticion GET
@@ -14461,11 +15502,11 @@ function GetDashBoard() {
                 vm.model.IdBaseDeDatos = document.getElementById("DDLBD").value;
                 vm.model.ps = localStorage["ps"];
                 vm.model.nivelDetalle = 
-                    (vm.lvl1 == true || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") + 
-                    (vm.lvl2 == true || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
                         /*public int opc { get; set; } = 0;
                         public int tipoEntidad { get; set; } = 0;
                         public string EntidadName { get; set; } = "";

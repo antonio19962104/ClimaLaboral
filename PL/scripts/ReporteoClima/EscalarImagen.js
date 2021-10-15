@@ -256,50 +256,35 @@ var pruebaExp = function () {
         //entidad.style.setProperty("margin-bottom", "35px", "important");
         entidad.style.setProperty("padding", "9px 9px", "important");
         if (resolucion >= 1701) {
-            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "70px", "important");
+            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "40px", "important");
             entidad.style.setProperty("font-size", "1.2rem", "important");
         }else if ( resolucion >= 1367 && resolucion <= 1700) {
-            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "70px", "important");
+            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "40px", "important");
             entidad.style.setProperty("font-size", "1.2rem", "important");
         }else {
-            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "70px", "important");
+            divPrint.getElementsByClassName("clima-laboral")[0].style.setProperty("padding-top", "40px", "important");
             entidad.style.setProperty("font-size", "1.2rem", "important");
         }   
+        var col1lineas = $(".clima-laboral .bt-clima");
+        col1lineas.css("max-width","20%");
+        col1lineas.css("padding-right","0px");
         var entidad2 = $(".yellow-clima.mt-n3:visible");
         entidad2.css("font-size", "20px");
-        entidad2.css("padding-left", "10px");
+        //entidad2.css("padding-left", "10px");
         var entidad3 = $("#tab-introduccion-amarillo p:visible");
         entidad3.css("font-size", "12px");
-        entidad3.css("padding-left", "10px");
-        entidad3.css("padding-right", "14px");
-        //var entidad4 = $("#tab-introduccion-amarillo .row .mt-5:visible");
-        //entidad4.removeClass("mt-5");
-        //entidad4.addClass("mt-2");
-        //var entidad5 = $(".clima-laboral2 > .row > .col-2")[0];
-        //entidad5.style.setProperty("margin-left", "0px", "important");
-        //entidad5.style.setProperty("margin-right", "0px", "important");
-        //var entidad6 = $(".clima-laboral2:visible")[0];
-        //entidad6.style.setProperty("padding", "0px", "important");
-        //entidad6.style.setProperty("margin-left", "0px", "important");
-        //entidad6.style.setProperty("margin-right", "0px", "important");
-        //if (resolucion >= 1701) {
-        //    entidad6.style.setProperty("padding-top","5.3rem", "important");
-        //}else if ( resolucion >= 1367 && resolucion <= 1700) {
-        //    entidad6.style.setProperty("padding-top","5.3rem", "important");
-        //}else {
-        //    entidad6.style.setProperty("padding-top","5.3rem", "important");
-        //}        
+        //entidad3.css("padding-left", "10px");
+        //entidad3.css("padding-right", "14px");        
         var entidad7 = $(".clima-laboral2 .row:visible")[0];
         entidad7.style.setProperty("margin-left", "0px", "important");
         entidad7.style.setProperty("margin-right", "0px", "important");
         document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("margin-left", "0px", "important");
         document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("margin-right", "0px", "important");
         document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-right", "0px");
-        document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-left", " 0px");
-        //document.getElementsByClassName("p-clima2")[0].style.setProperty("padding", "0px", "important");
-        $(".p-clima2 .btn")[0].style.setProperty("margin-left", "20px", "important");
+        document.getElementsByClassName("clima-laboral2-2")[0].style.setProperty("padding-left", " 0px");        
+        //$(".p-clima2 .btn")[0].style.setProperty("margin-left", "20px", "important");
         $(".p-clima2 .btn")[0].style.setProperty("margin-top", "14px", "important");
-        $(".p-clima2 .btn")[0].style.setProperty("margin-bottom", "30px", "important");
+        $(".p-clima2 .btn")[0].style.setProperty("margin-bottom", "65px", "important");
         $(".p-clima2 > .row")[0].children[0].style.setProperty("padding-left", "0px", "important");
         $(".p-clima2 > .row")[0].children[0].style.setProperty("padding-right", "0px", "important");
         $(".p-clima2 > .row")[0].children[1].style.setProperty("padding-left", "25px", "important");
@@ -311,64 +296,30 @@ var pruebaExp = function () {
         $(".p-clima2 > .row")[2].children[0].style.setProperty("padding-left", "0px", "important");
         $(".p-clima2 > .row")[2].children[0].style.setProperty("padding-right", "0px", "important");
         $(".p-clima2 > .row")[2].children[1].style.setProperty("padding-left", "25px", "important");
-        $(".p-clima2 > .row")[2].children[1].style.setProperty("padding-right", "0px", "important");
-        ////solo se quedaron 3 filas
-        ////$(".p-clima2 > .row")[3].children[0].style.setProperty("padding-left", "0px", "important");
-        ////$(".p-clima2 > .row")[3].children[0].style.setProperty("padding-right", "0px", "important");
-        ////$(".p-clima2 > .row")[3].children[1].style.setProperty("padding-left", "10px", "important");
-        ////$(".p-clima2 > .row")[3].children[1].style.setProperty("padding-right", "0px", "important");
+        $(".p-clima2 > .row")[2].children[1].style.setProperty("padding-right", "0px", "important");      
         $(".clima-laboral2 .yellow-clima").css("font-size", "15px");
+        $(".p-clima2 h3").removeClass("mb-5");
+        $(".p-clima2 h3").css("min-height","63px");
+        $(".p-clima2 h3").css("margin-bottom","40px");
         $(".arrow-clima2").css("margin-left", "1px");
         $(".p-clima2 .col-xl-9 .yellow-clima").removeClass("ml-n5");
         $(".p-clima2 .col-xl-9 .yellow-clima").addClass("ml-n4");
-        $(".clima-laboral2 .row .col-10")[0].style.setProperty("padding","80px 0 95px","important");
+        $(".clima-laboral2 .row .col-10")[0].style.setProperty("padding","50px 0px 128px","important");
+        $(".clima-laboral2 .row .col-10")[0].style.setProperty("min-height","594px;","important");
         $(".clima-laboral2-2 span")[0].style.setProperty("margin-left","33px","important");
-
-        ////document.getElementsByClassName("p-clima2")[0].children[0].outerHTML = "<center>" + document.getElementsByClassName("p-clima2")[0].children[0].outerHTML + "</center>";
-        ////se comenta porque se estadariza con el de diseño  22/09/2021
-        ////var img1 = $(".bg-clima3 img");
-        ////img1[0].style.display = "none";
-        ////img1[2].style.display = "none"; 
-           
-        //$(".bg-circulo button")[0].style.setProperty("padding","5px 6px","important");    
-        //$(".bg-circulo button")[0].style.setProperty("margin-top","21px","important");
-        //$(".bg-circulo i")[0].style.setProperty("margin-top","79px","important");
-        //if (resolucion >= 1701) {
-        ////    $(".bg-clima3 span")[0].style.setProperty("margin", "114px 0 0 0", "important");
-        ////    $(".bg-clima3 span")[0].style.setProperty("font-size", "1.2rem", "important");
-        ////    $(".bg-clima3 h3")[0].style.setProperty("font-size", "22px");
-        ////    $(".bg-clima3 img")[1].style.setProperty("max-width", "100%", "important");
-        //    $(".p-clima2 .btn")[0].style.setProperty("font-size", "1.2rem", "important");
-        //    $(".bg-circulo")[0].style.setProperty("padding","75px 0px","important"); 
-        //}else if ( resolucion >= 1367 && resolucion <= 1700) {
-        ////    $(".bg-clima3 span")[0].style.setProperty("margin", "114px 0 0 0", "important");
-        ////    $(".bg-clima3 span")[0].style.setProperty("font-size", "1.2rem", "important");
-        ////    $(".bg-clima3 h3")[0].style.setProperty("font-size", "22px");
-        ////    $(".bg-clima3 img")[1].style.setProperty("max-width", "100%", "important");
-        //    $(".p-clima2 .btn")[0].style.setProperty("font-size", "1.2rem", "important");
-        //    $(".bg-circulo")[0].style.setProperty("padding","75px 0px","important");
-        //}else {
-        ////    $(".bg-clima3 span")[0].style.setProperty("margin", "114px 0 0 0", "important");
-        ////    $(".bg-clima3 span")[0].style.setProperty("font-size", "1.2rem", "important");
-        ////    $(".bg-clima3 h3")[0].style.setProperty("font-size", "22px");
-        ////    $(".bg-clima3 img")[1].style.setProperty("max-width", "100%", "important");
-        //    $(".p-clima2 .btn")[0].style.setProperty("font-size", "1.2rem", "important");
-        //    $(".bg-circulo")[0].style.setProperty("padding","75px 0px","important");
-        //}                     
-        //$(".bg-clima3 span")[0].style.removeProperty("font-family");        
-        //$(".bg-clima3 i")[0].style.setProperty("margin-top", "110px", "important");        
-        //$(".bg-clima3 img")[1].classList.remove("mt-3");
-        //$(".bg-clima3 img")[1].classList.add("mt-5");
-        //$(".bg-clima3 img")[1].classList.add("mb-3");
-        //se amplia el padding de la copa 23/09/2021
+        $(".clima-laboral2-2 i")[0].style.setProperty("margin-top","-79px");
+        $(".bg-circulo")[0].style.setProperty("padding","35px 0 ","important");
+        $(".bg-circulo")[0].style.setProperty("min-height","600px","important");
+        $(".bg-circulo")[0].style.setProperty("background-position","50% -41%","important");
+        $(".bg-circulo")[0].style.setProperty("background-size","auto","important");
         var padcopa = $(".bg-circulo .mt-4");       
         padcopa.removeClass("mt-4");
-        padcopa.addClass("mt-5");
-        $(".bg-circulo h3").removeClass("f20");
-        $(".bg-circulo h3").addClass("fs15");
-       
+        padcopa.addClass("mt-5");       
         // se desplaza la flecha negra un poco hacia abajo 23/09/2021
-        $(".bg-circulo .fa-caret-right")[0].style.setProperty("margin-top", "84px", "important");
+        $(".bg-circulo .fa-caret-right")[0].style.setProperty("margin-top", "80px", "important");
+        $(".bg-circulo i")[0].style.setProperty("margin-top","111px","important");
+        $(".bg-circulo img")[0].classList.remove("mt-3");
+        $(".bg-circulo img")[0].classList.add("mt-5");
         if (resolucion >= 1701) {
             $("#tab-introduccion-amarillo .row")[0].style.width = "100%";
             $("#tab-introduccion-amarillo .row")[0].style.height = "595px";
@@ -559,7 +510,9 @@ var returnEstilosWeb = function (paginaActiva) {
             //$(".p-clima2 > .row")[3].children[1].removeAttribute("style");
             $(".clima-laboral2 .yellow-clima")[0].removeAttribute("style");
             $(".arrow-clima2")[0].removeAttribute("style");
-            document.getElementsByClassName("p-clima2")[0].children[0].outerHTML = document.getElementsByClassName("p-clima2")[0].children[0].outerHTML.replace("<center>", "")
+            $(".arrow-clima2")[1].removeAttribute("style");
+            $(".arrow-clima2")[2].removeAttribute("style");
+            //document.getElementsByClassName("p-clima2")[0].children[0].outerHTML = document.getElementsByClassName("p-clima2")[0].children[0].outerHTML.replace("<center>", "")
             // se quita por estandarizar el diseño  22/09/2021
             //var img1 = $(".bg-clima3 img");
             //img1[0].removeAttribute("style");
@@ -588,7 +541,7 @@ var returnEstilosWeb = function (paginaActiva) {
                 item.classList.remove("mt-2");
                 item.classList.add("mt-5");
             });
-            document.getElementsByClassName("arrow-clima2")[3].removeAttribute("style");
+            //document.getElementsByClassName("arrow-clima2")[3].removeAttribute("style");
             document.getElementsByClassName("arrow-clima2")[2].removeAttribute("style");
             document.getElementsByClassName("arrow-clima2")[1].removeAttribute("style");
             document.getElementsByClassName("arrow-clima2")[0].removeAttribute("style");
@@ -597,11 +550,15 @@ var returnEstilosWeb = function (paginaActiva) {
             document.getElementById("tab-introduccion-amarillo").getElementsByClassName("btn-outline-dark")[0].classList.add("mt-5");
             document.getElementById("tab-introduccion-amarillo").getElementsByClassName("btn-outline-light")[0].classList.remove("mt-2");
             document.getElementById("tab-introduccion-amarillo").getElementsByClassName("btn-outline-light")[0].classList.add("mt-5");
-            document.getElementById("tab-introduccion-amarillo").getElementsByClassName("row mt-2")[0].classList.replace("mt-2", "mt-5");
+            //document.getElementById("tab-introduccion-amarillo").getElementsByClassName("row mt-2")[0].classList.replace("mt-2", "mt-5");
             document.getElementById("tab-4").getElementsByClassName("container-fluid px-lg-5")[0].removeAttribute("style");
             // se quita por estandarizar el diseño  22/09/2021
             //document.getElementsByClassName("bg-clima3")[0].getElementsByTagName("span")[0].setAttribute("style", "padding: 0;border-style: none;border-radius: 0px !important;font-family: 'robotobold';padding: .5rem 1rem;font-size: 1.25rem !important;line-height: 1.5 !important;color: #f8f9fa !important;border-color: #f8f9fa !important;display: inline-block;font-weight: 400 !important; color: #212529;text-align: center;vertical-align: middle !important;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-color: transparent;border: 1px solid #f8f9fa !important;padding: .375rem .75rem;font-size: 1rem;line-height: 1.5;text-transform: none;margin: 0;")
             divPrint.removeAttribute("style");
+            divPrint.removeAttribute("style");
+            document.getElementById("tab-introduccion-amarillo").removeAttribute("style");
+            $("#tab-introduccion-amarillo").css("width","");
+            $("#tab-introduccion-amarillo").css("height","");
         } catch (e) {
 
         }

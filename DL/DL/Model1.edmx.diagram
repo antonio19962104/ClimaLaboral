@@ -4,73 +4,77 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1ca60eb56f80462aa42d4a41542af74a" Name="Diagram1" ZoomLevel="121">
-        <EntityTypeShape EntityType="RH_DesModel.Administrador" Width="1.5" PointX="6" PointY="67.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.AdministradorCompany" Width="1.5" PointX="16.5" PointY="68.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Aling" Width="1.5" PointX="3" PointY="68" IsExpanded="true" />
+      <Diagram DiagramId="1382654ccefb458bac0b708f14c742b9" Name="Diagram1">
+        <EntityTypeShape EntityType="RH_DesModel.Acciones" Width="1.5" PointX="3" PointY="73.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Administrador" Width="1.5" PointX="6" PointY="73.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.AdministradorCompany" Width="1.5" PointX="13.5" PointY="69.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Aling" Width="1.5" PointX="3" PointY="77.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Antiguedad" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Area" Width="1.5" PointX="19.5" PointY="68.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.BasesDeDatos" Width="1.5" PointX="8.25" PointY="75.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.BodyPlantilla" Width="1.5" PointX="3" PointY="73.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Categoria" Width="1.5" PointX="32" PointY="88" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.ClavesAcceso" Width="1.5" PointX="14.25" PointY="79.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Area" Width="1.5" PointX="16.5" PointY="69.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.BasesDeDatos" Width="1.5" PointX="8.25" PointY="83" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.BodyPlantilla" Width="1.5" PointX="3" PointY="83" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Categoria" Width="1.5" PointX="0.75" PointY="57.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.ClavesAcceso" Width="1.5" PointX="14.25" PointY="87.5" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.ColorPlantilla" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Company" Width="1.5" PointX="14.25" PointY="66.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.CompanyCategoria" Width="1.5" PointX="12" PointY="56.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Competencia" Width="1.5" PointX="8.25" PointY="62.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Company" Width="1.5" PointX="8.25" PointY="68.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.CompanyCategoria" Width="1.5" PointX="6" PointY="69.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Competencia" Width="1.5" PointX="11.25" PointY="69.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.CondicionTrabajo" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.ConfigClimaLab" Width="1.5" PointX="10.5" PointY="76" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.ConfiguraRespuesta" Width="1.5" PointX="24" PointY="81.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.ConfigClimaLab" Width="1.5" PointX="10.5" PointY="83.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.ConfiguraRespuesta" Width="1.5" PointX="24" PointY="88.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.DATAREPORTCL" Width="1.5" PointX="8" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Demo" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.DemoReporteClimaDinamico" Width="1.5" PointX="4.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Departamento" Width="1.5" PointX="21.75" PointY="68.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.DetallePlantilla" Width="1.5" PointX="3" PointY="79.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Empleado" Width="1.5" PointX="16.5" PointY="73.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EmpleadoRespuestas" Width="1.5" PointX="21" PointY="76.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Encuesta" Width="1.5" PointX="18.75" PointY="73.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EncuestaArea" Width="1.5" PointX="26.75" PointY="77.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EncuestaPregunta" Width="1.5" PointX="21" PointY="82.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EncuestaReporte" Width="1.5" PointX="21" PointY="74.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EncuestaUnidadNegocio" Width="1.5" PointX="27" PointY="72.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Enfoque" Width="1.5" PointX="24.75" PointY="59.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EstatusEmail" Width="1.5" PointX="27" PointY="82.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EstatusEncuesta" Width="1.5" PointX="24" PointY="77.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EstatusEncuestaD4U" Width="1.5" PointX="29.75" PointY="73.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EstatusMail" Width="1.5" PointX="24.75" PointY="87.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.FooterPlantilla" Width="1.5" PointX="8.25" PointY="68.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Departamento" Width="1.5" PointX="18.75" PointY="72.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.DetallePlantilla" Width="1.5" PointX="3" PointY="88.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Empleado" Width="1.5" PointX="16.5" PointY="80.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EmpleadoRespuestas" Width="1.5" PointX="21" PointY="83.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Encuesta" Width="1.5" PointX="18.75" PointY="80.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EncuestaArea" Width="1.5" PointX="21" PointY="78.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EncuestaPregunta" Width="1.5" PointX="21" PointY="89.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EncuestaReporte" Width="1.5" PointX="26" PointY="81" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EncuestaUnidadNegocio" Width="1.5" PointX="27" PointY="84.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Enfoque" Width="1.5" PointX="18.75" PointY="67.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EstatusEmail" Width="1.5" PointX="27" PointY="89.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EstatusEncuesta" Width="1.5" PointX="24" PointY="84.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EstatusEncuestaD4U" Width="1.5" PointX="29.75" PointY="89.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EstatusMail" Width="1.5" PointX="24.75" PointY="99.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.FooterPlantilla" Width="1.5" PointX="8.25" PointY="75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Generaciones" Width="1.5" PointX="9.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.GradoAcademico" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.HeaderPlantilla" Width="1.5" PointX="11.25" PointY="68.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Historico" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.HistoricoClima" Width="1.5" PointX="6.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Modulo" Width="1.5" PointX="9" PointY="58.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Perfil" Width="1.5" PointX="14.25" PointY="83" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.PerfilD4U" Width="1.5" PointX="3.75" PointY="61.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.PerfilModulo" Width="1.5" PointX="11.25" PointY="62.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.PerfilModuloAccion" Width="1.5" PointX="13.5" PointY="61.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Plantillas" Width="1.5" PointX="13.5" PointY="72.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Preguntas" Width="1.5" PointX="27" PointY="62.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.PreguntasLikert" Width="1.5" PointX="8.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.PuntuacionCompetencia" Width="1.5" PointX="30" PointY="64.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.RangoEdad" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.GradoAcademico" Width="1.5" PointX="6.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.HeaderPlantilla" Width="1.5" PointX="11.25" PointY="75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Historico" Width="1.5" PointX="9.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.HistoricoClima" Width="1.5" PointX="11.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Modulo" Width="1.5" PointX="12" PointY="65.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Perfil" Width="1.5" PointX="14.25" PointY="90.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PerfilD4U" Width="1.5" PointX="3.75" PointY="67.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PerfilModulo" Width="1.5" PointX="14.25" PointY="74.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PerfilModuloAccion" Width="1.5" PointX="16.5" PointY="75.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PlanDeAccion" Width="1.5" PointX="26" PointY="77.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Plantillas" Width="1.5" PointX="13.5" PointY="80.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Preguntas" Width="1.5" PointX="21" PointY="68.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PreguntasLikert" Width="1.5" PointX="0.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PromedioSubCategorias" Width="1.5" PointX="29" PointY="79.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PuntuacionCompetencia" Width="1.5" PointX="29" PointY="73.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Rango" Width="1.5" PointX="0.75" PointY="63.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.RangoEdad" Width="1.5" PointX="6.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.REPORTCL" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Reporte" Width="1.5" PointX="18.75" PointY="63.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Respuestas" Width="1.5" PointX="32.25" PointY="61" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.SubDepartamento" Width="1.5" PointX="30" PointY="69.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Reporte" Width="1.5" PointX="23.75" PointY="94.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Respuestas" Width="1.5" PointX="28.25" PointY="67" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.SubDepartamento" Width="1.5" PointX="24" PointY="68.25" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.sysdiagrams" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.TipoBD" Width="1.5" PointX="6" PointY="76.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.TipoControl" Width="1.5" PointX="24.75" PointY="54.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.TipoEncuesta" Width="1.5" PointX="3" PointY="84.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.TipoEstatus" Width="1.5" PointX="0.75" PointY="67.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.TipoOrden" Width="1.5" PointX="16.5" PointY="86.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.TipoPlantilla" Width="1.5" PointX="11.25" PointY="82" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Usuario" Width="1.5" PointX="24.75" PointY="64.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.UsuarioEstatusEncuesta" Width="1.5" PointX="32" PointY="73.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.UsuarioRespuestas" Width="1.5" PointX="32.25" PointY="66.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.ValoracionCategoria" Width="1.5" PointX="29" PointY="76.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.ValoracionPreguntaPorSubcategoria" Width="1.5" PointX="34.25" PointY="73.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.ValoracionSubcategoriaPorCategoria" Width="1.5" PointX="30" PointY="81.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.TipoBD" Width="1.5" PointX="6" PointY="84.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.TipoControl" Width="1.5" PointX="18.75" PointY="62.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.TipoEncuesta" Width="1.5" PointX="3" PointY="94.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.TipoEstatus" Width="1.5" PointX="0.75" PointY="73.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.TipoOrden" Width="1.5" PointX="16.5" PointY="93" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.TipoPlantilla" Width="1.5" PointX="11.25" PointY="89.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Usuario" Width="1.5" PointX="23.75" PointY="71.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.UsuarioEstatusEncuesta" Width="1.5" PointX="32" PointY="76.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.UsuarioRespuestas" Width="1.5" PointX="32" PointY="70.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.ValoracionCategoria" Width="1.5" PointX="26" PointY="72.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.ValoracionPreguntaPorSubcategoria" Width="1.5" PointX="32.25" PointY="83.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.ValoracionSubcategoriaPorCategoria" Width="1.5" PointX="30" PointY="83.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.AggregatedCounter" Width="1.5" PointX="13.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Hash" Width="1.5" PointX="13.75" PointY="6.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Job" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
@@ -81,9 +85,13 @@
         <EntityTypeShape EntityType="RH_DesModel.Server" Width="1.5" PointX="15.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Set" Width="1.5" PointX="15.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.State" Width="1.5" PointX="3" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.EncuestaIngreso" Width="1.5" PointX="15.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.PreguntaCategorias" Width="1.5" PointX="8.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RH_DesModel.Counter" Width="1.5" PointX="15.75" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.EncuestaIngreso" Width="1.5" PointX="4.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.PreguntaCategorias" Width="1.5" PointX="15.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RH_DesModel.Counter" Width="1.5" PointX="6.75" PointY="15.75" IsExpanded="true" />
+        <AssociationConnector Association="RH_DesModel.fk_Accion_Categoria" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.fk_Accion_Estatus" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.fk_Accion_PlanDeAccion" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.fk_Accion_Rango" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK__Administr__IdEst__789EE131" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_ADMIN_COMPANY" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_ADMINISTRADOR_ADMINISTRADOR" ManuallyRouted="false" />
@@ -93,6 +101,7 @@
         <AssociationConnector Association="RH_DesModel.FK_COMPANYADMINISTRADOR" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.fk_competencia_Administrador" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_PerfilModulo_Administrador" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.fk_PlanDeAccion_Admin" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_USUARIOCOMPANY_ADMIN" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_USUARIOCOMPANY_COMPANY" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_Aling_TipoEstatus" ManuallyRouted="false" />
@@ -111,6 +120,7 @@
         <AssociationConnector Association="RH_DesModel.fk_empleado_basededatos" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_Encuesta_BasesDeDatos" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_ESTATUSEMAIL_BD" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.FK_PromedioSubCategorias_BaseDeDatos" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_Usuario_BasesDeDatos" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_BodyPlantilla_TipoEstatus" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_Plantillas_BodyPlantilla" ManuallyRouted="false" />
@@ -155,7 +165,9 @@
         <AssociationConnector Association="RH_DesModel.FK_EncuestaUnidadNegocio_Encuesta" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_Estatus_Encuesta" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_ESTATUSEMAIL_ENCUESTA" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.fk_PlanDeAccion_Encuesta" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_Preguntas_Encuesta" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.FK_PromedioSubCategorias_Encuesta" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.fk_tbl_Encuesta" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.fk_tblpSub_Encuesta" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_USUARIOESTATUSENC_ENCUESTA" ManuallyRouted="false" />

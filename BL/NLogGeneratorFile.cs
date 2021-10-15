@@ -146,5 +146,12 @@ namespace BL
                 nlogJobReportes.Error(e.Message);
             }
         }
+        public static void MinificadorJS()
+        {
+            var minifier = new Microsoft.Ajax.Utilities.Minifier();
+            string jsCode = "vm.EliminarAccion = function (e) {                var parent = e.target.closest('.form-group');                if (parent.attributes.IdAccion == null) {                    /*Solo se elimina del dom*/                    swal({                        title: '¿Estás seguro de que deseas eliminar la acción de mejora?',                        text: '',                        icon: 'info',                        buttons: [                            'No',                            'Si'                        ],                        dangerMode: false,                        allowOutsideClick: false,                        closeOnClickOutside: false,                    }).then(function (isConfirm) {                        if (isConfirm)                            e.target.closest('.form-group').remove();                    });                }                else {                    if (parent.attributes.IdAccion.value > 0) {                        /*Se elimina del dom pero tambien de la base de datos (Baja lógica)*/                        vm.get('/PlanesDeAccion/DeleteAccion/?IdAccion=' + parent.attributes.IdAccion.value, function (response) {                        });                    }                }            }";
+            var minifiedString = minifier.MinifyJavaScript(jsCode);
+            Console.WriteLine(minifiedString);
+        }
     }
 }
