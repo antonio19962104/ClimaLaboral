@@ -27,8 +27,42 @@
                 </div>
             </div>
             <!--#endregion Imagen Portada-->
-            <hr />            
+            <hr />
 
+
+            <!--#region Orden reporte demografico-->
+            @*<div class="col-12" ng-init="">
+                <div class="form-group">
+                    <div id="mergeDrag" class="col-lg-3 col-md-4 col-xs-4 col-sm-12">
+
+                    </div>
+                </div>
+            </div>*@
+
+
+
+            <div id="accordion" class="col-6">
+                <div id="acordeon-drag-drop" class="card" style="border-radius: 10px;">
+                    
+                    
+                    <!--<div class="card-header row col-12" style="left: 15px;" id="headingOne{{ $index }}">
+                        <div class="col-10">
+                            <btn class="btn" data-toggle="collapse" data-target="#collapseOne{{ $index }}" aria-expanded="true" aria-controls="collapseOne{{ $index }}">
+                                Texto de que voy a ordenar
+                            </btn>
+                        </div>
+                    </div>
+                    <div id="collapseOne{{ $index }}" class="collapse" aria-labelledby="headingOne{{ $index }}" data-parent="#accordion">-->
+                        <!--Merge drag and drop-->
+                    <!--</div>-->
+
+
+                </div>
+            </div><!--end accordion-->
+
+
+
+            <!--#endregion Orden reporte demografico-->
             <!--#region Visualizar Histórico-->
             <div hidden class="col-lg-12">
                 <div class="form-group">
@@ -53,7 +87,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
                         <label class="control-label">Enfoques Empresa</label>
-                        <input type="checkbox" class="" ng-model="vm.verEnfoqueEmpresa"/>
+                        <input type="checkbox" class="" ng-model="vm.verEnfoqueEmpresa" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
                         <label class="control-label">Enfoques Área</label>
@@ -69,6 +103,30 @@
 </div>
 <!--end Section Render Body-->
 <style>
+    #acordeon-drag-drop #container {
+        width: 300px;
+        display: block;
+        /*margin: auto;*/
+        padding: 15px;
+    }
+
+    #acordeon-drag-drop p {
+        float: right;
+    }
+
+    #acordeon-drag-drop #list {
+        list-style: none;
+    }
+
+        #acordeon-drag-drop #list li {
+            margin: 10px;
+            cursor: pointer;
+            list-style-type: none;
+        }
+    #acordeon-drag-drop li {
+        list-style-type: none;
+        cursor: pointer;
+    }
     .validFile {
         border: solid 0.5px green !important;
     }
@@ -85,5 +143,36 @@
 
     .imagenShowInventario {
         cursor: pointer;
+    }
+</style>
+<style>
+    .move {
+        cursor: move;
+    }
+
+    .itempanel {
+        width: 300px;
+        height: 400px;
+        border: 1px solid black;
+        border-radius: 3px;
+    }
+
+    .tags {
+        margin: 5px;
+        padding: 5px;
+        color: black;
+    }
+
+    .tagitemcls {
+        width: 24px;
+        margin-left: 0px;
+        margin-top: 5px;
+        padding-top: 6px;
+        padding-bottom: 8px;
+        padding-left: 2px;
+    }
+
+    table > div {
+        border: 1px solid grey;
     }
 </style>

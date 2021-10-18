@@ -1,4 +1,51 @@
-﻿/*
+﻿var randomized;
+const compare = (e) => {
+    var array = e.target.parentNode.children;
+    var text = [];
+    [].forEach.call(array, function (item) {
+        console.log(item.innerHTML)
+        text.push(item.innerHTML)
+    });
+    randomized = text;
+    var index1 = randomized.indexOf(dragging);
+    var index2 = randomized.indexOf(draggedOver);
+    randomized.splice(index1, 1)
+    randomized.splice(index2, 0, dragging)
+
+    //isRight = randomized.join("") === base.join("")
+    //    ? 'In Order!' : 'Not In Order!'
+
+    renderItems(randomized, e)
+};
+
+const renderItems = (data, e) => {
+    document.getElementById('isRight').innerText = isRight;
+    var list = e.target.parentNode;
+    list.innerText = ''
+    data.forEach(item => {
+        var node = document.createElement("li");
+        node.draggable = true
+        node.style.backgroundColor = item
+        node.style.backgroundColor = node.style.backgroundColor.length > 0
+            ? item : ''
+        node.addEventListener('drag', setDragging)
+        node.addEventListener('dragover', setDraggedOver)
+        node.addEventListener('drop', compare)
+        node.innerText = item
+        list.appendChild(node)
+    })
+}
+
+const setDraggedOver = (e) => {
+    e.preventDefault();
+    draggedOver = e.target.innerText//; Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+}
+
+const setDragging = (e) => {
+    dragging = e.target.innerText// Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+}
+
+/*
  * Script principal del reporte gráfico de Clima Laboral 
  */
 var dataComparativoPermanencia = [];
@@ -21,6 +68,207 @@ function GetDashBoard() {
             vm.lvl3 = false;
             vm.lvl4 = false;
             vm.lvl5 = false;
+            vm.listAntiguedad = [];
+            vm.listGenero = [];
+            vm.listGradoAcademico = [];
+            vm.listCondicionTrabajo = [];
+            vm.listFuncion = [];
+            vm.listRangoEdad = [];
+
+            vm.listAntiguedad2 = [];
+            vm.listGenero2 = [];
+            vm.listGradoAcademico2 = [];
+            vm.listCondicionTrabajo2 = [];
+            vm.listFuncion2 = [];
+            vm.listRangoEdad2 = [];
+            
+            vm.OrdenarArreglo = function (data, arrayOrden) {
+                return data.sort(function (a, b) {
+                    return arrayOrden.indexOf(a.Entidad) - arrayOrden.indexOf(b.Entidad);
+                });
+            }
+
+            var getFiltros = function () {
+                vm.modelHistorico.Anio = (vm.Anio.value - 1);
+                vm.modelHistorico.IdBaseDeDatos = document.getElementById("DDLBD").value;
+                vm.modelHistorico.idEncuesta = 1;
+                vm.modelHistorico.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
+                vm.modelHistorico.Entidad = vm.model.EntidadNombre;
+
+                vm.modelHistorico.nivelDetalle = (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+
+                vm.listAntiguedad = [];
+                vm.listGenero = [];
+                vm.listGradoAcademico = [];
+                vm.listCondicionTrabajo = [];
+                vm.listFuncion = [];
+                vm.listRangoEdad = [];
+                switch (vm.criterioBusquedaSeleccionado.Id) {
+                    case 1:
+                        vm.modelHistorico.EntidadNombre = vm.CompanyCategoria.Descripcion;
+                        break;
+                    case 2:
+                        vm.modelHistorico.EntidadNombre = vm.Company.CompanyName;
+                        break;
+                    case 3:
+                        vm.modelHistorico.EntidadNombre = vm.Area.Nombre;
+                        break;
+                    case 4:
+                        vm.modelHistorico.EntidadNombre = vm.Departamento.Nombre
+                        break;
+                    default:
+                }
+                $.ajax({
+                    url: "/apis/GetRangosAntiguedad/?IdBaseDeDatos=" + document.getElementById("DDLBD").value,
+                    type: "POST",
+                    data: vm.modelHistorico,
+                    success: function (response) {
+                        if (response != null) {
+                            $("#acordeon-drag-drop").empty();
+                            console.log(response);
+                            if (response.Correct) {
+                                vm.listAntiguedad = response.ListAntiguedad;
+                                vm.listGenero = response.ListGenero;
+                                vm.listGradoAcademico = response.ListGradoAcademico;
+                                vm.listCondicionTrabajo = response.ListCondicionTrabajo;
+                                vm.listFuncion = response.ListFuncion;
+                                vm.listRangoEdad = response.ListEdad;
+                                //Agrupar tabla
+                                var allitems_list = [];
+                                var listData = [];
+                                listData.push(vm.listAntiguedad);
+                                listData.push(vm.listGenero);
+                                listData.push(vm.listGradoAcademico); 
+                                listData.push(vm.listCondicionTrabajo);
+                                listData.push(vm.listFuncion);
+                                listData.push(vm.listRangoEdad);
+                                [].forEach.call(listData, function (item, index) {
+                                    var encabezado = "";
+                                    switch (index) {
+                                        case 0:
+                                            encabezado = "Rangos de Antiguedad"
+                                            break;
+                                        case 1:
+                                            encabezado = "Género"
+                                            break;
+                                        case 2:
+                                            encabezado = "Grado Académico"
+                                            break;
+                                        case 3:
+                                            encabezado = "Condición de trabajo"
+                                            break;
+                                        case 4:
+                                            encabezado = "Función"
+                                            break;
+                                        case 5:
+                                            encabezado = "Rangos de Edad"
+                                            break;
+                                        default:
+                                    }
+                                    allitems_list = item;
+                                    var uid = vm.getUid();
+                                    document.getElementById("acordeon-drag-drop").innerHTML +=
+                                    (`
+                                    <div class="card-header row col-12" style="left: 15px;" id="headingOne`+ uid +`">
+                                        <div class="col-10">
+                                            <btn class="btn" data-toggle="collapse" data-target="#collapseOne`+ uid +`" aria-expanded="true" aria-controls="collapseOne`+uid+`">
+                                                Elige el orden para `+ encabezado +`
+                                            </btn>
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne`+ uid +`" class="collapse" aria-labelledby="headingOne`+ uid +`" data-parent="#accordion">
+                                        <!--Merge drag and drop-->
+                                        <div class="demo-drag" id='container'` + index + `>
+                                            <h1 id='isRight' hidden></h1>
+                                            <ul id='list_` + uid + `' style="">
+                                            </ul>
+                                        </div>
+                                        <!--fin merge drag and drop-->
+                                    </div>    
+                                    `);
+                                    CrearDrag(allitems_list, uid);
+                                });
+                                [].forEach.call(document.getElementById("accordion").getElementsByTagName("li"), function (item) {
+                                    item.addEventListener('drag', setDragging)
+                                    item.addEventListener('dragover', setDraggedOver)
+                                    item.addEventListener('drop', compare)
+                                });
+                            }
+                            else {
+                                alert(response.ErrorMessage);
+                            }
+                        }
+                    }
+                });
+            }
+
+            var CrearDrag = function (allitems_list, listId) {
+                var list = document.getElementById('list_' + listId)
+                var base, randomized, dragging, draggedOver;
+                var isRight = 'Not In Order!';
+
+                const genRandom = (array) => {
+                    if (array != null) {
+                        base = array.slice()
+                        randomized = array;//array.sort(() => Math.random() - 0.5)
+                        if (true/*randomized.join("") !== base.join("")*/) {
+                            renderItems(randomized)
+                        } else {
+                            //recursion to account if the randomization returns the original array
+                            genRandom()
+                        }
+                    }
+                }
+
+                const renderItems = (data) => {
+                    document.getElementById('isRight').innerText = isRight
+                    list.innerText = ''
+                    data.forEach(item => {
+                        var node = document.createElement("li");
+                        node.draggable = true
+                        node.style.backgroundColor = item
+                        node.style.backgroundColor = node.style.backgroundColor.length > 0
+                            ? item : ''
+                        node.addEventListener('drag', setDragging)
+                        node.addEventListener('dragover', setDraggedOver)
+                        node.addEventListener('drop', compare)
+                        node.innerText = item
+                        list.appendChild(node)
+                    })
+                }
+
+                const compare = (e) => {
+                    var index1 = randomized.indexOf(dragging);
+                    var index2 = randomized.indexOf(draggedOver);
+                    randomized.splice(index1, 1)
+                    randomized.splice(index2, 0, dragging)
+
+                    isRight = randomized.join("") === base.join("")
+                        ? 'In Order!' : 'Not In Order!'
+
+                    renderItems(randomized)
+                };
+
+
+                const setDraggedOver = (e) => {
+                    e.preventDefault();
+                    draggedOver = e.target.innerText//; Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+                }
+
+                const setDragging = (e) => {
+                    dragging = e.target.innerText// Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+                }
+
+                // genRandom([0, 1, 2, 3, 4, 5, 6])
+                genRandom(allitems_list)
+            }
+
+            
+
             //Aux
             //Pantalla 1
             vm.PorcentajeCalificacionGlobalEE = [];
@@ -577,6 +825,50 @@ function GetDashBoard() {
 
                 }
             });
+
+            vm.get = function (url, functionOK, mostrarAnimacion) {
+                $http.get(url, { headers: { 'Cache-Control': 'no-cache' } })
+                    .then(function (response) {
+                        try {
+                            if (messageBoxError(response))
+                                return;
+                            functionOK(response.data);
+                        }
+                        catch (aE) {
+                            messageBoxError(aE);
+                        }
+                    },
+                        function (error) {
+                            /*error*/
+                            messageBoxError(error);
+                        })
+                    .finally(function () {
+                    });
+            }/*fin get()*/
+            vm.post = function (url, objeto, functionOK, mostrarAnimacion) {
+                $http.post(url, objeto)
+                    .then(function (response) {
+                        try {
+                            if (messageBoxError(response))
+                                return;
+                            functionOK(response.data);
+                        }
+                        catch (aE) {
+                            messageBoxError(aE);
+                        }
+                    },
+                        function (error) {
+                            /*error*/
+                            messageBoxError(error);
+                        })
+                    .finally(function () {
+                    });
+            }/*fin post()*/
+           
+            var messageBoxError = function () {
+                return false;
+            }
+
 
             vm.agrandarGraficas = function () {
                 var paginaActiva = "";
@@ -2183,6 +2475,7 @@ function GetDashBoard() {
                     switch (vm.opc) {
                         case "1":
                             /*Reporte general*/
+                            getFiltros();
                             vm.getReporteDataPantalla_6();
                             break;
                         case "2":
@@ -3768,7 +4061,7 @@ function GetDashBoard() {
                                 if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
                                     ptDefault = 0;
                                     if (resolucion >= 1900) {
-									  
+                                        
                                         $(".categoria-bl:visible .col").css("font-size","12px");
                                         if (vm.SeccionesReporte.Id == 8) {
                                             $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
@@ -3777,19 +4070,20 @@ function GetDashBoard() {
                                             $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("padding-left","10px");
                                             $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("line-height","1.2");
                                             document.getElementById(paginaActiva).style.marginTop = "0px";
+                                             ptDefault = 0;
 
                                         }
                                         else {
                                             $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
-                                        document.getElementById(paginaActiva).style.marginTop = "95px";
-										ptDefault = 30;
+                                            document.getElementById(paginaActiva).style.marginTop = "95px";
+                                            ptDefault = 30;
                                         }
                                         
                                         $(".bg-impulsores:visible").css("min-height","0px");
                                         $(".margin-reporte:visible")[0].style.setProperty("margin-top","15px","important");
                                         
                                         /*document.getElementById(paginaActiva).style.marginTop = "95px";*/
-                                        ptDefault = 0;
+                                       
                                     }
                                     else if (resolucion >= 1550 && resolucion <= 1899) {
                                         document.getElementById(paginaActiva).style.marginTop = "95px";
@@ -3870,7 +4164,7 @@ function GetDashBoard() {
                                     var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
                                     childs = Enumerable.from(childs).toList();
                                     childs = childs.map(async (key, index) => {
-                                        //docReporte.addPage();
+                                        docReporte.addPage();
                                         document.getElementById("tab-17").classList.remove("ng-hide");
                                             //Se forza el backgroud en Blanco
                                             $('#' + key)[0].style.backgroundColor = "#fff";
@@ -4238,6 +4532,88 @@ function GetDashBoard() {
                 // Validar avance
                 if (vm.opc == "1" || vm.opc == "4") {
                     if (vm.SeccionesReporte.Id == 2) {
+                        //Guardar orden de datos demograficos
+                        $("#acordeon-drag-drop .collapse")[0].getElementsByTagName("li");
+                        vm.listAntiguedad2 = [];
+                        vm.listGenero2 = [];
+                        vm.listGradoAcademico2 = [];
+                        vm.listCondicionTrabajo2 = [];
+                        vm.listFuncion2 = [];
+                        vm.listRangoEdad2 = [];
+                        [].forEach.call($("#acordeon-drag-drop .collapse"), function (item, index) {
+                            [].forEach.call(item.getElementsByTagName("li"), function (li, indexli) {
+                                console.log(li.innerText);
+                                if (index == 0) {
+                                    // Antiguedad
+                                    vm.listAntiguedad2.push(li.innerText);
+                                }
+                                if (index == 1) {
+                                    // Genero
+                                    vm.listGenero2.push(li.innerText)
+                                }
+                                if (index == 2) {
+                                    // Grado Academico
+                                    vm.listGradoAcademico2.push(li.innerText)
+                                }
+                                if (index == 3) {
+                                    // Condicion de trabajo
+                                    vm.listCondicionTrabajo2.push(li.innerText)
+                                }
+                                if (index == 4) {
+                                    // Funcion
+                                    vm.listFuncion2.push(li.innerText)
+                                }
+                                if (index == 5) {
+                                    // Rangos de Edad
+                                    vm.listRangoEdad2.push(li.innerText)
+                                }
+                            });
+                        });
+
+                        var model = {
+                            Correct: true,
+                            ListAntiguedad: vm.listAntiguedad2,
+                            ListGenero: vm.listGenero2,
+                            ListGradoAcademico: vm.listGradoAcademico2,
+                            ListCondicionTrabajo: vm.listCondicionTrabajo2,
+                            ListFuncion: vm.listFuncion2,
+                            ListEdad: vm.listRangoEdad2
+                        }
+                        let modelPeticion = {
+                            Result: model,
+                            Historico: vm.modelHistorico
+                        };
+                        vm.post("/BackGroundJob/GuardarOrdenReporte/", modelPeticion, function (response) {
+                            console.log(response);
+                            if (response.Correct) {
+                                console.log("se giardo la configuracion de orden");
+                                docReporte = new jsPDF('landscape', 'pt', 'letter');
+                                vm.historicoPaginaActiva = [];
+                                histo = [];
+                                // Volver a mapear los resultados
+                                response.ListAntiguedad.shift();
+                                response.ListGenero.shift();
+                                response.ListEdad.shift();
+                                response.ListGradoAcademico.shift();
+                                response.ListCondicionTrabajo.shift();
+                                response.ListFuncion.shift();
+
+                                vm.listAntiguedad = response.ListAntiguedad;
+                                vm.listGenero = response.ListGenero;
+                                vm.listGradoAcademico = response.ListGradoAcademico;
+                                vm.listCondicionTrabajo = response.ListCondicionTrabajo;
+                                vm.listFuncion = response.ListFuncion;
+                                vm.listRangoEdad = response.ListEdad;
+                            }
+                            else {
+                                swal("Error", response.ErrorMessage, "error");
+                            }
+                        });
+
+                        console.log(model);
+
+
+
                         if (!vm.ValidarSeccion_1()) {
                             ////swal("Al no elegir una imagen el reporte se creará con la imagen por default", "", "info"); 
                             vm.ImagenPortada = vm.ImagenPortadaDefault;
@@ -4265,9 +4641,8 @@ function GetDashBoard() {
                     if (vm.SeccionesReporte.Id == 17/* && vm.enfoqueSeleccionado == 0*/) {
                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                     }
-                    if (vm.SeccionesReporte.Id == 16 && vm.enfoqueSeleccionado == 0) {
+                    if (vm.SeccionesReporte.Id == 16) {
                         //docReporte.addPage();
-                        docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                     }
                     if (vm.SeccionesReporte.Id == 17 && vm.enfoqueSeleccionado == 0) {
                         //docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
@@ -8825,10 +9200,12 @@ function GetDashBoard() {
                         vm.ComparativoAntiguedadEE = vm.ComparativoAntiguedadEE.Data == null ? vm.ComparativoAntiguedadEE : vm.ComparativoAntiguedadEE.Data;
                         vm.flagDemografico = 1;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoAntiguedadEE = vm.OrdenarArreglo(vm.ComparativoAntiguedadEE, vm.listAntiguedad);
                             vm.SeccionesReporte.Id = 28;
                             vm.getReporteDataPantalla_28();
                             return;
                         }
+                        vm.ComparativoAntiguedadEE = vm.OrdenarArreglo(vm.ComparativoAntiguedadEE, vm.listAntiguedad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8843,6 +9220,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_28();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorAntiguedadEA/", vm.modelHistorico, vm.ComparativoAntiguedadEA, function () {
                         vm.ComparativoAntiguedadEA = vm.ComparativoAntiguedadEA.Data == null ? vm.ComparativoAntiguedadEA : vm.ComparativoAntiguedadEA.Data;
+                        vm.ComparativoAntiguedadEA = vm.OrdenarArreglo(vm.ComparativoAntiguedadEA, vm.listAntiguedad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8858,10 +9236,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGeneroEE/", vm.modelHistorico, vm.ComparativoGeneroEE, function () {
                         vm.ComparativoGeneroEE = vm.ComparativoGeneroEE.Data == undefined ? vm.ComparativoGeneroEE : vm.ComparativoGeneroEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoGeneroEE = vm.OrdenarArreglo(vm.ComparativoGeneroEE, vm.listGenero);
                             vm.SeccionesReporte.Id = 30;
                             vm.getReporteDataPantalla_30();
                             return;
                         }
+                        vm.ComparativoGeneroEE = vm.OrdenarArreglo(vm.ComparativoGeneroEE, vm.listGenero);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8876,6 +9256,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_30();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGeneroEA/", vm.modelHistorico, vm.ComparativoGeneroEA, function () {
                         vm.ComparativoGeneroEA = vm.ComparativoGeneroEA.Data == undefined ? vm.ComparativoGeneroEA : vm.ComparativoGeneroEA.Data;
+                        vm.ComparativoGeneroEA = vm.OrdenarArreglo(vm.ComparativoGeneroEA, vm.listGenero);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8891,10 +9272,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGradoAcademicoEE/", vm.modelHistorico, vm.ComparativoGradoAcademicoEE, function () {
                         vm.ComparativoGradoAcademicoEE = vm.ComparativoGradoAcademicoEE.Data == undefined ? vm.ComparativoGradoAcademicoEE : vm.ComparativoGradoAcademicoEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoGradoAcademicoEE = vm.OrdenarArreglo(vm.ComparativoGradoAcademicoEE, vm.listGradoAcademico);
                             vm.SeccionesReporte.Id = 32;
                             vm.getReporteDataPantalla_32();
                             return;
                         }
+                        vm.ComparativoGradoAcademicoEE = vm.OrdenarArreglo(vm.ComparativoGradoAcademicoEE, vm.listGradoAcademico);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8909,6 +9292,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_32();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGradoAcademicoEA/", vm.modelHistorico, vm.ComparativoGradoAcademicoEA, function () {
                         vm.ComparativoGradoAcademicoEA = vm.ComparativoGradoAcademicoEA.Data == undefined ? vm.ComparativoGradoAcademicoEA : vm.ComparativoGradoAcademicoEA.Data;
+                        vm.ComparativoGradoAcademicoEA = vm.OrdenarArreglo(vm.ComparativoGradoAcademicoEA, vm.listGradoAcademico);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8924,10 +9308,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorCondicionTrabajoEE/", vm.modelHistorico, vm.ComparativoCondicionTrabajoEE, function () {
                         vm.ComparativoCondicionTrabajoEE = vm.ComparativoCondicionTrabajoEE.Data == undefined ? vm.ComparativoCondicionTrabajoEE : vm.ComparativoCondicionTrabajoEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoCondicionTrabajoEE = vm.OrdenarArreglo(vm.ComparativoCondicionTrabajoEE, vm.listCondicionTrabajo);
                             vm.SeccionesReporte.Id = 34;
                             vm.getReporteDataPantalla_34();
                             return;
                         }
+                        vm.ComparativoCondicionTrabajoEE = vm.OrdenarArreglo(vm.ComparativoCondicionTrabajoEE, vm.listCondicionTrabajo);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8942,6 +9328,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_34();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorCondicionTrabajoEA/", vm.modelHistorico, vm.ComparativoCondicionTrabajoEA, function () {
                         vm.ComparativoCondicionTrabajoEA = vm.ComparativoCondicionTrabajoEA.Data == undefined ? vm.ComparativoCondicionTrabajoEA : vm.ComparativoCondicionTrabajoEA.Data;
+                        vm.ComparativoCondicionTrabajoEA = vm.OrdenarArreglo(vm.ComparativoCondicionTrabajoEA, vm.listCondicionTrabajo);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8957,10 +9344,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorFuncionEE/", vm.modelHistorico, vm.ComparativoFuncionEE, function () {
                         vm.ComparativoFuncionEE = vm.ComparativoFuncionEE.Data == undefined ? vm.ComparativoFuncionEE : vm.ComparativoFuncionEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoFuncionEE = vm.OrdenarArreglo(vm.ComparativoFuncionEE, vm.listFuncion);
                             vm.SeccionesReporte.Id = 36;
                             vm.getReporteDataPantalla_36();
                             return;
                         }
+                        vm.ComparativoFuncionEE = vm.OrdenarArreglo(vm.ComparativoFuncionEE, vm.listFuncion);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8975,6 +9364,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_36();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorFuncionEA/", vm.modelHistorico, vm.ComparativoFuncionEA, function () {
                         vm.ComparativoFuncionEA = vm.ComparativoFuncionEA.Data == undefined ? vm.ComparativoFuncionEA : vm.ComparativoFuncionEA.Data;
+                        vm.ComparativoFuncionEA = vm.OrdenarArreglo(vm.ComparativoFuncionEA, vm.listFuncion);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8991,10 +9381,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorRangoEdadEE/", vm.modelHistorico, vm.ComparativoRangoEdadEE, function () {
                         vm.ComparativoRangoEdadEE = vm.ComparativoRangoEdadEE.Data == undefined ? vm.ComparativoRangoEdadEE : vm.ComparativoRangoEdadEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoRangoEdadEE = vm.OrdenarArreglo(vm.ComparativoRangoEdadEE, vm.listRangoEdad);
                             vm.SeccionesReporte.Id = 38;
                             vm.getReporteDataPantalla_38();
                             return;
                         }
+                        vm.ComparativoRangoEdadEE = vm.OrdenarArreglo(vm.ComparativoRangoEdadEE, vm.listRangoEdad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -9009,6 +9401,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_38();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorRangoEdadEA/", vm.modelHistorico, vm.ComparativoRangoEdadEA, function () {
                         vm.ComparativoRangoEdadEA = vm.ComparativoRangoEdadEA.Data == undefined ? vm.ComparativoRangoEdadEA : vm.ComparativoRangoEdadEA.Data;
+                        vm.ComparativoRangoEdadEA = vm.OrdenarArreglo(vm.ComparativoRangoEdadEA, vm.listRangoEdad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {

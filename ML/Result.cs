@@ -81,5 +81,11 @@ namespace ML
         public int idTipoEncuesta { get; set; }
         public int idEncuestaAlta { get; set; }
         public List<TipoOrden> ListTipoOrden { get; set; }
+        public List<string> ListAntiguedad { get; set; } = new List<string>();
+        public List<string> ListGenero { get; set; } = new List<string>();
+        public List<string> ListGradoAcademico { get; set; } = new List<string>();
+        public List<string> ListCondicionTrabajo { get; set; } = new List<string>();
+        public List<string> ListFuncion { get; set; } = new List<string>();
+        public List<string> ListEdad { get; set; } = new List<string>();
     }
 }

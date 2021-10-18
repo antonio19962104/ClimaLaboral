@@ -1400,5 +1400,14 @@ namespace PL.Controllers
             }
             return model;
         }
+        public JsonResult GetRangosAntiguedad([FromUri] string IdBaseDeDatos, ML.Historico historico)
+        {
+            if (IdBaseDeDatos == "" || IdBaseDeDatos == "0")
+            {
+                IdBaseDeDatos = Convert.ToString(historico.IdBaseDeDatos);
+            }
+            var result = BL.ReporteD4U.GetRangosAntiguedad(historico, Convert.ToInt32(IdBaseDeDatos));
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
     }
 }

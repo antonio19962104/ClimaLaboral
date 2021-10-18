@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="RH_DesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="RH_DesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Acciones">
           <Key>
             <PropertyRef Name="IdAccion" />
@@ -100,14 +100,6 @@
           <Property Name="Tipo" Type="int" />
           <Property Name="IdEstatus" Type="int" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6013: La tabla o vista 'RH_Des.dbo.BAM' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
-        <EntityType Name="BAM">
-          <Property Name="noEmp" Type="varchar" MaxLength="50" />
-          <Property Name="Nombre" Type="varchar" MaxLength="100" />
-          <Property Name="RFC" Type="varchar" MaxLength="20" />
-          <Property Name="CURP" Type="varchar" MaxLength="25" />
-        </EntityType>-->
         <EntityType Name="BasesDeDatos">
           <Key>
             <PropertyRef Name="IdBasesDeDatos" />
@@ -339,6 +331,7 @@ advertencia 6013: La tabla o vista 'RH_Des.dbo.BAM' no tiene definida una clave 
           <Property Name="UsuarioCreacion" Type="varchar" MaxLength="200" />
           <Property Name="ProgramaCreacion" Type="varchar" MaxLength="200" />
           <Property Name="NivelDetalle" Type="varchar" MaxLength="50" />
+          <Property Name="Orden" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="DemoReporteClimaDinamico">
           <Key>
@@ -4944,8 +4937,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="ValoracionCategoria" EntitySet="ValoracionCategoria" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RH_DesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -5344,6 +5336,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="UsuarioCreacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="ProgramaCreacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="NivelDetalle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Orden" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DemoReporteClimaDinamico">
           <Key>
@@ -8988,19 +8981,19 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="State" EntitySet="State" />
           </AssociationSet>
           <FunctionImport Name="splitstring_COMA" IsComposable="true" ReturnType="Collection(RH_DesModel.splitstring_COMA_Result)">
-            <Parameter Name="stringToSplit" Mode="In" Type="String" />
+          <Parameter Name="stringToSplit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="splitstring_SPACES" IsComposable="true" ReturnType="Collection(RH_DesModel.splitstring_SPACES_Result)">
-            <Parameter Name="stringToSplit" Mode="In" Type="String" />
+          <Parameter Name="stringToSplit" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="f_getEstructuraDescByCompanyId" ReturnType="Collection(RH_DesModel.f_getEstructuraDescByCompanyId_Result)">
-            <Parameter Name="aCompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="aCompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="f_getEstructuraDescByIdArea" ReturnType="Collection(RH_DesModel.f_getEstructuraDescByIdArea_Result)">
-            <Parameter Name="aIdArea" Mode="In" Type="Int32" />
+          <Parameter Name="aIdArea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="f_getEstructuraDescByIdDepartamento" ReturnType="Collection(RH_DesModel.f_getEstructuraDescByIdDepartamento_Result)">
-            <Parameter Name="aIdDepartamento" Mode="In" Type="Int32" />
+          <Parameter Name="aIdDepartamento" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddDepartamentoDemo">
             <Parameter Name="NOMBRE_NEW_DEPARTAMENTO" Mode="In" Type="String" />
@@ -9032,31 +9025,31 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyId" ReturnType="Collection(RH_DesModel.AreaGetByCompanyId_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdDemo" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdDemo_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdDemoOK" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdDemoOK_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdDemoReporteOKOK" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdDemoReporteOKOK_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="String" />
+          <Parameter Name="CompanyId" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdEmp" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdEmp_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdEmpresa" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdEmpresa_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdEmpresaOK" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdEmpresaOK_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdEmpresaOK_" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdEmpresaOK__Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AreaGetByCompanyIdEmpresaOKOK" ReturnType="Collection(RH_DesModel.AreaGetByCompanyIdEmpresaOKOK_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Aut" ReturnType="Collection(RH_DesModel.Aut_Result)">
             <Parameter Name="UserName" Mode="In" Type="String" />
@@ -9079,49 +9072,49 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="Password" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Autentication" ReturnType="Collection(RH_DesModel.Autentication_Result)">
-            <Parameter Name="ClaveAcceso" Mode="In" Type="String" />
+          <Parameter Name="ClaveAcceso" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="AutenticationOK" ReturnType="Collection(RH_DesModel.AutenticationOK_Result)">
-            <Parameter Name="ClaveAcceso" Mode="In" Type="String" />
+          <Parameter Name="ClaveAcceso" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CleanP1">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP10">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP11">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP2">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP3">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP4">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP5">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP6">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP7">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP8">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP9">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP9A">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanP9B">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CleanRespuestas">
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
@@ -9134,13 +9127,13 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyCategoriaAdd">
-            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          <Parameter Name="Descripcion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CompanyCategoriaById" ReturnType="Collection(RH_DesModel.CompanyCategoriaById_Result)">
-            <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyCategoriaDelete">
-            <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyCategoriaGetAll" ReturnType="Collection(RH_DesModel.CompanyCategoriaGetAll_Result)" />
           <FunctionImport Name="CompanyCategoriaUpdate">
@@ -9148,20 +9141,20 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="Descripcion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CompanyDelete">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyGetAll" ReturnType="Collection(RH_DesModel.CompanyGetAll_Result)" />
           <FunctionImport Name="CompanyGetById" ReturnType="Collection(RH_DesModel.CompanyGetById_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyGetByIdCategoria" ReturnType="Collection(RH_DesModel.CompanyGetByIdCategoria_Result)">
-            <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyGetByIdCategoriaDemoOK" ReturnType="Collection(RH_DesModel.CompanyGetByIdCategoriaDemoOK_Result)">
-            <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompanyGetByIdCategoriaTipo2OKOK" ReturnType="Collection(RH_DesModel.CompanyGetByIdCategoriaTipo2OKOK_Result)">
-            <Parameter Name="IdCompanyCategoria" Mode="In" Type="String" />
+          <Parameter Name="IdCompanyCategoria" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CompanyUpdate">
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
@@ -9169,36 +9162,36 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompetenciaAdd">
-            <Parameter Name="Descripcion" Mode="In" Type="String" />
+          <Parameter Name="Descripcion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="CompetenciaDelete">
-            <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompetenciaGetAll" />
           <FunctionImport Name="CompetenciaGetById">
-            <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="CompetenciaUpdate">
             <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
             <Parameter Name="Descripcion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ConsultarAvance" ReturnType="Collection(Int32)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ConsultarAvanceE" ReturnType="Collection(Int32)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ConsultarAvanceOk" ReturnType="Collection(Int32)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ContinuarEncuesta">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteArea">
-            <Parameter Name="IdArea" Mode="In" Type="Int32" />
+          <Parameter Name="IdArea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteDepartamento">
-            <Parameter Name="idDepartamento" Mode="In" Type="Int32" />
+          <Parameter Name="idDepartamento" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DeleteEmpresa">
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
@@ -9213,13 +9206,13 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="sqlQuery" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DepartamentoGetByArea" ReturnType="Collection(RH_DesModel.DepartamentoGetByArea_Result)">
-            <Parameter Name="IdArea" Mode="In" Type="Int32" />
+          <Parameter Name="IdArea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DepartamentoGetByAreaTipo1" ReturnType="Collection(RH_DesModel.DepartamentoGetByAreaTipo1_Result)">
-            <Parameter Name="IdArea" Mode="In" Type="Int32" />
+          <Parameter Name="IdArea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DepartamentoGetByAreaTipo2" ReturnType="Collection(RH_DesModel.DepartamentoGetByAreaTipo2_Result)">
-            <Parameter Name="IdArea" Mode="In" Type="String" />
+          <Parameter Name="IdArea" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DetallePlantillaAdd">
             <Parameter Name="IdPlantilla" Mode="In" Type="Int32" />
@@ -9228,11 +9221,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="ImagenIco" Mode="In" Type="Binary" />
           </FunctionImport>
           <FunctionImport Name="DetallePlantillaDelete">
-            <Parameter Name="IdDetallePlantilla" Mode="In" Type="Int32" />
+          <Parameter Name="IdDetallePlantilla" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DetallePlantillaGetAll" />
           <FunctionImport Name="DetallePlantillaGetById">
-            <Parameter Name="IdDetallePlantilla" Mode="In" Type="Int32" />
+          <Parameter Name="IdDetallePlantilla" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DetallePlantillaUpdate">
             <Parameter Name="IdDetallePlantilla" Mode="In" Type="Int32" />
@@ -9252,11 +9245,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EmpleadoDelete">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EmpleadoGetAll" />
           <FunctionImport Name="EmpleadoGetById">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EmpleadoUpdate">
             <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
@@ -9268,18 +9261,18 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaAdd">
-            <Parameter Name="Nombre" Mode="In" Type="String" />
+          <Parameter Name="Nombre" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="EncuestaCompetenciaAdd">
             <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
             <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaCompetenciaDelete">
-            <Parameter Name="IdEncuestaCompetencia" Mode="In" Type="Int32" />
+          <Parameter Name="IdEncuestaCompetencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaCompetenciaGetAll" />
           <FunctionImport Name="EncuestaCompetenciaGetById">
-            <Parameter Name="IdEncuestaCompetencia" Mode="In" Type="Int32" />
+          <Parameter Name="IdEncuestaCompetencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaCompetenciaUpdate">
             <Parameter Name="IdEncuestaCompetencia" Mode="In" Type="Int32" />
@@ -9287,7 +9280,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdCompetencia" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaDelete">
-            <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
+          <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaEmpleadoAdd">
             <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
@@ -9295,11 +9288,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaEmpleadoDelete">
-            <Parameter Name="IdEncuestaEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEncuestaEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaEmpleadoGetAll" />
           <FunctionImport Name="EncuestaEmpleadoGetById">
-            <Parameter Name="IdEncuestaEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEncuestaEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaEmpleadoUpdate">
             <Parameter Name="IdEncuestaEmpleado" Mode="In" Type="Int32" />
@@ -9309,7 +9302,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           </FunctionImport>
           <FunctionImport Name="EncuestaGetAll" ReturnType="Collection(RH_DesModel.EncuestaGetAll_Result)" />
           <FunctionImport Name="EncuestaGetById" ReturnType="Collection(RH_DesModel.EncuestaGetById_Result)">
-            <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
+          <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="EncuestaUpdate">
             <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
@@ -9368,7 +9361,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           </FunctionImport>
           <FunctionImport Name="FooterPlantillaGetAll" ReturnType="Collection(RH_DesModel.FooterPlantillaGetAll_Result)" />
           <FunctionImport Name="FooterPlantillaGetById" ReturnType="Collection(RH_DesModel.FooterPlantillaGetById_Result)">
-            <Parameter Name="IdFooterPlantilla" Mode="In" Type="Int32" />
+          <Parameter Name="IdFooterPlantilla" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="FooterPlantillaUpdate">
             <Parameter Name="IdFooterPlantilla" Mode="In" Type="Int32" />
@@ -9381,28 +9374,28 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="Usuario" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAdminEliminadosForMasterOK_" ReturnType="Collection(RH_DesModel.GetAdminEliminadosForMasterOK__Result)">
-            <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminEliminadosForMasterOK__" ReturnType="Collection(RH_DesModel.GetAdminEliminadosForMasterOK___Result)">
             <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
             <Parameter Name="IdAdminLog" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminEliminadosForNotMasterOK_" ReturnType="Collection(RH_DesModel.GetAdminEliminadosForNotMasterOK__Result)">
-            <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminEliminadosForNotMasterOK__" ReturnType="Collection(RH_DesModel.GetAdminEliminadosForNotMasterOK___Result)">
             <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
             <Parameter Name="IdAdminLog" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminForMasterOK_" ReturnType="Collection(RH_DesModel.GetAdminForMasterOK__Result)">
-            <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminForMasterOK__" ReturnType="Collection(RH_DesModel.GetAdminForMasterOK___Result)">
             <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
             <Parameter Name="IdAdminLog" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminForNotMasterOK_" ReturnType="Collection(RH_DesModel.GetAdminForNotMasterOK__Result)">
-            <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAdminForNotMasterOK__" ReturnType="Collection(RH_DesModel.GetAdminForNotMasterOK___Result)">
             <Parameter Name="IdEmpleadoLogeado" Mode="In" Type="Int32" />
@@ -9412,50 +9405,50 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <FunctionImport Name="GetAllAdmin" ReturnType="Collection(RH_DesModel.GetAllAdmin_Result)" />
           <FunctionImport Name="GetAllAdminOK" ReturnType="Collection(RH_DesModel.GetAllAdminOK_Result)" />
           <FunctionImport Name="GetAllPermisos" ReturnType="Collection(RH_DesModel.GetAllPermisos_Result)">
-            <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
+          <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllPermisosFull" ReturnType="Collection(RH_DesModel.GetAllPermisosFull_Result)">
-            <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
+          <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllPermisosFullOK" ReturnType="Collection(RH_DesModel.GetAllPermisosFullOK_Result)">
-            <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
+          <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllPermisosOk" ReturnType="Collection(RH_DesModel.GetAllPermisosOk_Result)">
-            <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
+          <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllPermisosOkoK" ReturnType="Collection(RH_DesModel.GetAllPermisosOkoK_Result)">
-            <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
+          <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllPermisosOkoKOk" ReturnType="Collection(RH_DesModel.GetAllPermisosOkoKOk_Result)">
-            <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
+          <Parameter Name="IdAdministrador" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllRespuestas" ReturnType="Collection(RH_DesModel.GetAllRespuestas_Result)" />
           <FunctionImport Name="GetAllResulReport" ReturnType="Collection(RH_DesModel.GetAllResulReport_Result)" />
           <FunctionImport Name="GetAllResult" ReturnType="Collection(RH_DesModel.GetAllResult_Result)" />
           <FunctionImport Name="GetAllResultOK" ReturnType="Collection(RH_DesModel.GetAllResultOK_Result)" />
           <FunctionImport Name="GetByArea">
-            <Parameter Name="Area" Mode="In" Type="String" />
+          <Parameter Name="Area" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetByAreaOK" ReturnType="Collection(RH_DesModel.GetByAreaOK_Result)">
-            <Parameter Name="Area" Mode="In" Type="String" />
+          <Parameter Name="Area" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetByCompanyOK" ReturnType="Collection(RH_DesModel.GetByCompanyOK_Result)">
-            <Parameter Name="Company" Mode="In" Type="String" />
+          <Parameter Name="Company" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetByDepartamentoOK" ReturnType="Collection(RH_DesModel.GetByDepartamentoOK_Result)">
-            <Parameter Name="Departamento" Mode="In" Type="String" />
+          <Parameter Name="Departamento" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetByDireccion">
-            <Parameter Name="Divis" Mode="In" Type="String" />
+          <Parameter Name="Divis" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetByIdEmpleado">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetByIdEmpleadoResult" ReturnType="Collection(RH_DesModel.GetByIdEmpleadoResult_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetByIdEmpleadoResultOK" ReturnType="Collection(RH_DesModel.GetByIdEmpleadoResultOK_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetByMultiUnidad" ReturnType="Collection(RH_DesModel.GetByMultiUnidad_Result)">
             <Parameter Name="unidad1" Mode="In" Type="String" />
@@ -9484,7 +9477,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetByUnidadNula" ReturnType="Collection(RH_DesModel.GetByUnidadNula_Result)">
-            <Parameter Name="IdBD" Mode="In" Type="Int32" />
+          <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="getComentarios" ReturnType="Collection(RH_DesModel.getComentarios_Result)">
             <Parameter Name="Unegocio" Mode="In" Type="String" />
@@ -9534,23 +9527,23 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="UNegocio" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetEsperadasByUNegocio" ReturnType="Collection(Int32)">
-            <Parameter Name="UNegocio" Mode="In" Type="String" />
+          <Parameter Name="UNegocio" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetEstatusAvance" ReturnType="Collection(RH_DesModel.GetEstatusAvance_Result)" />
           <FunctionImport Name="GetEstatusAvanceByUnegocio" ReturnType="Collection(RH_DesModel.GetEstatusAvanceByUnegocio_Result)">
-            <Parameter Name="CompanyCategoria" Mode="In" Type="String" />
+          <Parameter Name="CompanyCategoria" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetEstructuraByUNegocio" ReturnType="Collection(RH_DesModel.GetEstructuraByUNegocio_Result)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetEstructuraByUNegocioD4U" ReturnType="Collection(RH_DesModel.GetEstructuraByUNegocioD4U_Result)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetEstructuraByUNegocioD4UOK" ReturnType="Collection(RH_DesModel.GetEstructuraByUNegocioD4UOK_Result)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetEstructuraByUNegocioD4USucces" ReturnType="Collection(RH_DesModel.GetEstructuraByUNegocioD4USucces_Result)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetIdEmpleadoForAddAdmin" />
           <FunctionImport Name="GetIdEmpleadoForAddAdmin_1" />
@@ -9558,81 +9551,81 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <FunctionImport Name="GetLastIndex" ReturnType="Collection(Decimal)" />
           <FunctionImport Name="GetLastIndexEncuesta" ReturnType="Collection(Decimal)" />
           <FunctionImport Name="GETMODULO" ReturnType="Collection(RH_DesModel.GETMODULO_Result)">
-            <Parameter Name="IDEMPLEADO" Mode="In" Type="Int32" />
+          <Parameter Name="IDEMPLEADO" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPerfilesForAdminDashBoard" ReturnType="Collection(RH_DesModel.GetPerfilesForAdminDashBoard_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="getPerfilFiltrado" ReturnType="Collection(RH_DesModel.getPerfilFiltrado_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPermisosForDashBoard" ReturnType="Collection(RH_DesModel.GetPermisosForDashBoard_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPermisosForDashBoardOK" ReturnType="Collection(RH_DesModel.GetPermisosForDashBoardOK_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPermisosForDashBoardSuccess" ReturnType="Collection(RH_DesModel.GetPermisosForDashBoardSuccess_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPermisosList" ReturnType="Collection(RH_DesModel.GetPermisosList_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPermisosList_" ReturnType="Collection(RH_DesModel.GetPermisosList__Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativas" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativas_Result)">
-            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativas_4" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativas_4_Result)">
-            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByAntiguedad" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByAntiguedad_Result)">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="Antiguedad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByAntiguedad_2" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByAntiguedad_2_Result)">
-            <Parameter Name="Antiguedad" Mode="In" Type="String" />
+          <Parameter Name="Antiguedad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByArea_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByArea_3_Result)">
-            <Parameter Name="Area" Mode="In" Type="String" />
+          <Parameter Name="Area" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByCondicionTrabajo_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByCondicionTrabajo_3_Result)">
-            <Parameter Name="CondicionTrabajo" Mode="In" Type="String" />
+          <Parameter Name="CondicionTrabajo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByDepartamento_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByDepartamento_3_Result)">
-            <Parameter Name="Depto" Mode="In" Type="String" />
+          <Parameter Name="Depto" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByDepto_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByDepto_3_Result)">
-            <Parameter Name="Depto" Mode="In" Type="String" />
+          <Parameter Name="Depto" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasBydEPTO_4" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasBydEPTO_4_Result)">
-            <Parameter Name="Depto" Mode="In" Type="String" />
+          <Parameter Name="Depto" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByDivisionMarca_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByDivisionMarca_3_Result)">
-            <Parameter Name="Company" Mode="In" Type="String" />
+          <Parameter Name="Company" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByFuncion_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByFuncion_3_Result)">
-            <Parameter Name="Funcion" Mode="In" Type="String" />
+          <Parameter Name="Funcion" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByGradoAcademico_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByGradoAcademico_3_Result)">
-            <Parameter Name="GradoAcademico" Mode="In" Type="String" />
+          <Parameter Name="GradoAcademico" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByRangoEdad_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByRangoEdad_3_Result)">
-            <Parameter Name="RangoEdad" Mode="In" Type="String" />
+          <Parameter Name="RangoEdad" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasBySexo_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasBySexo_3_Result)">
-            <Parameter Name="Sexo" Mode="In" Type="String" />
+          <Parameter Name="Sexo" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByUNegocio" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByUNegocio_Result)">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
             <Parameter Name="UnidadNegocio" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasByUNegocio_3" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasByUNegocio_3_Result)">
-            <Parameter Name="UNegocio" Mode="In" Type="String" />
+          <Parameter Name="UNegocio" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentAfirmativasOK" ReturnType="Collection(RH_DesModel.GetPorcentAfirmativasOK_Result)">
-            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetPorcentajeAfirmativasByAreaEnfEmpresaOK" ReturnType="Collection(Double)">
             <Parameter Name="UNegocio" Mode="In" Type="String" />
@@ -9745,61 +9738,61 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdBD" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP1" ReturnType="Collection(RH_DesModel.GetResP1_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP10" ReturnType="Collection(RH_DesModel.GetResP10_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP2" ReturnType="Collection(RH_DesModel.GetResP2_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP3" ReturnType="Collection(RH_DesModel.GetResP3_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP4" ReturnType="Collection(RH_DesModel.GetResP4_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP5" ReturnType="Collection(RH_DesModel.GetResP5_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP6" ReturnType="Collection(RH_DesModel.GetResP6_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP7" ReturnType="Collection(RH_DesModel.GetResP7_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP8" ReturnType="Collection(RH_DesModel.GetResP8_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP9" ReturnType="Collection(RH_DesModel.GetResP9_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP9A" ReturnType="Collection(RH_DesModel.GetResP9A_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResP9B" ReturnType="Collection(RH_DesModel.GetResP9B_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetRespuestasBD1" ReturnType="Collection(RH_DesModel.GetRespuestasBD1_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetRespuestasUsuario" ReturnType="Collection(RH_DesModel.GetRespuestasUsuario_Result)">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetRespuestasUsuarioP1" ReturnType="Collection(RH_DesModel.GetRespuestasUsuarioP1_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResultadosByArea" ReturnType="Collection(RH_DesModel.GetResultadosByArea_Result)">
-            <Parameter Name="IdArea" Mode="In" Type="Int32" />
+          <Parameter Name="IdArea" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResultadosByDireccion" ReturnType="Collection(RH_DesModel.GetResultadosByDireccion_Result)">
-            <Parameter Name="CompanyId" Mode="In" Type="Int32" />
+          <Parameter Name="CompanyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResultadosByIdEmpleado" ReturnType="Collection(RH_DesModel.GetResultadosByIdEmpleado_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetResultadosByUnidadNegocio" ReturnType="Collection(RH_DesModel.GetResultadosByUnidadNegocio_Result)">
-            <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
+          <Parameter Name="IdCompanyCategoria" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="HeaderPlantillaAdd">
             <Parameter Name="Nombre" Mode="In" Type="String" />
@@ -9810,11 +9803,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="ImagenFondoAlinea" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="HeaderPlantillaDelete">
-            <Parameter Name="IdHeaderPlantilla" Mode="In" Type="Int32" />
+          <Parameter Name="IdHeaderPlantilla" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="HeaderPlantillaGetAll" ReturnType="Collection(RH_DesModel.HeaderPlantillaGetAll_Result)" />
           <FunctionImport Name="HeaderPlantillaGetById" ReturnType="Collection(RH_DesModel.HeaderPlantillaGetById_Result)">
-            <Parameter Name="IdHeaderPlantilla" Mode="In" Type="Int32" />
+          <Parameter Name="IdHeaderPlantilla" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="HeaderPlantillaUpdate">
             <Parameter Name="IdHeaderPlantilla" Mode="In" Type="Int32" />
@@ -9826,7 +9819,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="ImagenFondoAlinea" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="Insert_HTML_Content">
-            <Parameter Name="html_content" Mode="In" Type="String" />
+          <Parameter Name="html_content" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="LoginEstatus" ReturnType="Collection(RH_DesModel.LoginEstatus_Result)">
             <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
@@ -9841,7 +9834,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdEncuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ObtenerPermisos" ReturnType="Collection(RH_DesModel.ObtenerPermisos_Result)">
-            <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
+          <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OpenSearch" ReturnType="Collection(RH_DesModel.OpenSearch_Result)">
             <Parameter Name="Nombre" Mode="In" Type="String" />
@@ -9862,11 +9855,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="TipoControl" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PreguntaDelete">
-            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PreguntaGetAll" />
           <FunctionImport Name="PreguntaGetById">
-            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PreguntaUpdate">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
@@ -9882,11 +9875,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="Puntuacion" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PuntuacionEncuestaDelete">
-            <Parameter Name="IdPuntuacionEncuesta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPuntuacionEncuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PuntuacionEncuestaGetAll" />
           <FunctionImport Name="PuntuacionEncuestaGetById">
-            <Parameter Name="IdPuntuacionEncuesta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPuntuacionEncuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PuntuacionEncuestaUpdate">
             <Parameter Name="IdPuntuacionEncuesta" Mode="In" Type="Int32" />
@@ -9899,11 +9892,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="RespuestaDelete">
-            <Parameter Name="IdRespuesta" Mode="In" Type="Int32" />
+          <Parameter Name="IdRespuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="RespuestaGetAll" />
           <FunctionImport Name="RespuestaGetById">
-            <Parameter Name="IdRespuesta" Mode="In" Type="Int32" />
+          <Parameter Name="IdRespuesta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="RespuestasAdd">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
@@ -9960,16 +9953,16 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <FunctionImport Name="SP1" ReturnType="Collection(RH_DesModel.SP1_Result)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP2" ReturnType="Collection(Double)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP3" ReturnType="Collection(Double)">
-            <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
+          <Parameter Name="UnidadNegocio" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP4" ReturnType="Collection(RH_DesModel.SP4_Result)">
-            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+          <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP5" ReturnType="Collection(RH_DesModel.SP5_Result)" />
           <FunctionImport Name="UpdateEstatusFromArea">
@@ -9999,11 +9992,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UsuarioDelete">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UsuarioGetAll" />
           <FunctionImport Name="UsuarioGetById">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UsuarioRespuestasAdd">
             <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
@@ -10012,10 +10005,10 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UsuarioRespuestasDelete">
-            <Parameter Name="IdUsuarioRespuestas" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuarioRespuestas" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UsuarioRespuestasGetByIdUsuario">
-            <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
+          <Parameter Name="IdUsuario" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="UsuarioRespuestasUpdate">
             <Parameter Name="IdusuarioRespuestas" Mode="In" Type="Int32" />
@@ -10032,22 +10025,22 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <Parameter Name="IdEmpleado" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ValidateCompanyName" ReturnType="Collection(Boolean)">
-            <Parameter Name="CompanyName" Mode="In" Type="String" />
+          <Parameter Name="CompanyName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ValidateCompanyNameOK" ReturnType="Collection(Int32)">
-            <Parameter Name="CompanyName" Mode="In" Type="String" />
+          <Parameter Name="CompanyName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ValidateCompanyNameOK_" ReturnType="Collection(Int32)">
-            <Parameter Name="CompanyName" Mode="In" Type="String" />
+          <Parameter Name="CompanyName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ValidateNombreArea" ReturnType="Collection(Boolean)">
-            <Parameter Name="NombreArea" Mode="In" Type="String" />
+          <Parameter Name="NombreArea" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ValidateNombreAreaOK" ReturnType="Collection(Int32)">
-            <Parameter Name="NombreArea" Mode="In" Type="String" />
+          <Parameter Name="NombreArea" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ValidateNombreAreaOK_" ReturnType="Collection(Int32)">
-            <Parameter Name="NombreArea" Mode="In" Type="String" />
+          <Parameter Name="NombreArea" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="f_getEstructuraDescByCompanyId_Result">
@@ -15280,6 +15273,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="Demo">
             <EntityTypeMapping TypeName="RH_DesModel.Demo">
               <MappingFragment StoreEntitySet="Demo">
+                <ScalarProperty Name="Orden" ColumnName="Orden" />
                 <ScalarProperty Name="IdDemo" ColumnName="IdDemo" />
                 <ScalarProperty Name="EntidadId" ColumnName="EntidadId" />
                 <ScalarProperty Name="EntidadNombre" ColumnName="EntidadNombre" />

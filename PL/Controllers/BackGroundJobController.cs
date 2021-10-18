@@ -15,6 +15,12 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+//Nuevas
+using DVAInterfaces.SmartITWeb;
+/*using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Hosting;
+using Microsoft.AspNet.Mvc;
+using Microsoft.Extensions.PlatformAbstractions;*/
 
 namespace PL.Controllers
 {
@@ -385,6 +391,23 @@ namespace PL.Controllers
                 return Json(aE.Message);
             }
         }
+
+        public class Model
+        {
+            public ML.Result Result { get; set; } = new ML.Result();
+            public ML.Historico Historico { get; set; } = new ML.Historico();
+        }
+
+        [System.Web.Http.HttpPost]
+        [System.Web.Http.Route("api/GuardarOrdenReporte")]
+        public JsonResult GuardarOrdenReporte([FromBody] Model model)
+        {
+            var modelResult = model.Result;//model["Result"].ToObject<ML.Result>();
+            var modelHistorico = model.Historico;//model["Historico"].ToObject<ML.Historico>();
+            var result2 = BL.ReporteD4U.GuardarOrdenReporte(modelResult, modelHistorico);
+            return Json(result2, JsonRequestBehavior.AllowGet);
+        }
+
         class finalCols
         {
             public string type { get; set; }

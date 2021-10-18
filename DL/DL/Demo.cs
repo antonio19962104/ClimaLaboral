@@ -26,5 +26,6 @@ namespace DL
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
         public string NivelDetalle { get; set; }
+        public string Orden { get; set; }
     }
 }
