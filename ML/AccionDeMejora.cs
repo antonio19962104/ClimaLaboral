@@ -14,5 +14,8 @@ namespace ML
         public ML.Rango Rango { get; set; } = new Rango();
         public ML.TipoEstatus Estatus { get; set; } = new TipoEstatus();
         public ML.Categoria Categoria { get; set; } = new Categoria();
+        public ML.Encuesta Encuesta { get; set; } = new Encuesta();
+        public ML.BasesDeDatos BasesDeDatos { get; set; } = new BasesDeDatos();
+        public int AnioAplicacion { get; set; } = 0;
     }
 }

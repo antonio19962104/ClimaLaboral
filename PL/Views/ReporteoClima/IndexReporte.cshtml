@@ -140,10 +140,10 @@
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no15_Comparativo_Indicadores_De_Abandono.cshtml")
         </div>
         <!-------------------------------------Reporte de Resultados Generales por Departamento----------------------------------------->
-        <div ng-show="vm.SeccionesReporte.Id == 21" id="tab-21" title="Resultados Generales por Departamento Enfoque Empresa">
+        <div ng-show="vm.SeccionesReporte.Id == 21" id="tab-21" ng-hide="vm.SeccionesReporte.Id != 21"  title="Resultados Generales por Departamento Enfoque Empresa">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEE.cshtml")
         </div>
-        <div ng-show="vm.SeccionesReporte.Id == 22" id="tab-22" title="Resultados Generales por Departamento Enfoque Área">
+        <div ng-show="vm.SeccionesReporte.Id == 22" id="tab-22" ng-hide="vm.SeccionesReporte.Id != 22" title="Resultados Generales por Departamento Enfoque Área">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEA.cshtml")
         </div>
 

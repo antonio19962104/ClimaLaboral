@@ -16,7 +16,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 //Nuevas
-using DVAInterfaces.SmartITWeb;
+//using DVAInterfaces.SmartITWeb;
 /*using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
@@ -181,24 +181,42 @@ namespace PL.Controllers
                 if (!aHistorico.nivelDetalle.Contains("5"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "SubD=>").ToList();
 
+
+                var estructuraReporteNivelDetalleBasico = aFiltrosHijosEstructura;
+                var auxNivelDetalle = aHistorico.nivelDetalle.ElementAt(0).ToString() + aHistorico.nivelDetalle.ElementAt(1).ToString();
+                if (!auxNivelDetalle.Contains("1"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "UNeg=>").ToList();
+                if (!auxNivelDetalle.Contains("2"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "Comp=>").ToList();
+                if (!auxNivelDetalle.Contains("3"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "Area=>").ToList();
+                if (!auxNivelDetalle.Contains("4"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "Dpto=>").ToList();
+                if (!auxNivelDetalle.Contains("5"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "SubD=>").ToList();
+
+
+                //descendientesForBienestar Son los hijos segun todo el nivel de detalle que se elige y se usa para las graficas de barras
+                //estructuraReporteNivelDetalleBasico Son unicamente los hijos al nivel de detalle por default y se usa para grafico de bienestar y indicadores generales y los otros 2
+
                 // descendientesForBienestar en base a este array de estructura obtener los datos de las primeras 3 pantallas
-                objParticipacion = apis.getParticipacion_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objEsperadas = apis.getEncuestasEsperadas_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objCalificacionGlobal = apis.getCalificacionGlobal_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objConfianza = apis.getConfianza_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objNivelCompromiso = apis.getNivelCompromiso_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objNivelColaboracion = apis.getNivelColaboracion_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objCredibilidad = apis.getCredibilidad_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objImparcialidad = apis.getImparcialidad_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objOrgullo = apis.getOrgullo_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objRespeto = apis.getRespeto_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objCompanierismo = apis.getCompanierismo_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objCoaching = apis.getCoaching_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objHabgerenciales = apis.getHabGerenciales_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objAlineacionEstrategica = apis.getAlineacionEstrategica_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objPracticasCulturales = apis.getPracticasCulturales_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objCambio = apis.getCambio_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objProcesosOrg = apis.getProcesosOrga_(criterioBusquedaSeleccionado, descendientesForBienestar, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objParticipacion = apis.getParticipacion_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objEsperadas = apis.getEncuestasEsperadas_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCalificacionGlobal = apis.getCalificacionGlobal_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objConfianza = apis.getConfianza_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objNivelCompromiso = apis.getNivelCompromiso_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objNivelColaboracion = apis.getNivelColaboracion_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCredibilidad = apis.getCredibilidad_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objImparcialidad = apis.getImparcialidad_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objOrgullo = apis.getOrgullo_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objRespeto = apis.getRespeto_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCompanierismo = apis.getCompanierismo_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCoaching = apis.getCoaching_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objHabgerenciales = apis.getHabGerenciales_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objAlineacionEstrategica = apis.getAlineacionEstrategica_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objPracticasCulturales = apis.getPracticasCulturales_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCambio = apis.getCambio_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objProcesosOrg = apis.getProcesosOrga_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
 
 
 
@@ -232,8 +250,8 @@ namespace PL.Controllers
 
                 
 
-                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
 
                 objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
@@ -398,8 +416,7 @@ namespace PL.Controllers
             public ML.Historico Historico { get; set; } = new ML.Historico();
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("api/GuardarOrdenReporte")]
+        [System.Web.Http.HttpPost]        
         public JsonResult GuardarOrdenReporte([FromBody] Model model)
         {
             var modelResult = model.Result;//model["Result"].ToObject<ML.Result>();
@@ -1783,17 +1800,18 @@ namespace PL.Controllers
         {
             try
             {
+                string auxNivelDetalle = historico.nivelDetalle.ElementAt(0).ToString() + historico.nivelDetalle.ElementAt(1).ToString();
                 var descendientesForBienestar = getEstructuraFromExcel((int)historico.IdTipoEntidad, historico.IdBaseDeDatos, historico.EntidadNombre);
                 //Ajustar array de entidades segun el nivel de detalle
-                if (!historico.nivelDetalle.Contains("1"))
+                if (!auxNivelDetalle.Contains("1"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "UNeg=>").ToList();
-                if (!historico.nivelDetalle.Contains("2"))
+                if (!auxNivelDetalle.Contains("2"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Comp=>").ToList();
-                if (!historico.nivelDetalle.Contains("3"))
+                if (!auxNivelDetalle.Contains("3"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Area=>").ToList();
-                if (!historico.nivelDetalle.Contains("4"))
+                if (!auxNivelDetalle.Contains("4"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Dpto=>").ToList();
-                if (!historico.nivelDetalle.Contains("5"))
+                if (!auxNivelDetalle.Contains("5"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "SubD=>").ToList();
                 switch (historico.enfoqueSeleccionado)
                 {

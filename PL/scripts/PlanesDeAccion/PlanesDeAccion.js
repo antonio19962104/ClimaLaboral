@@ -2,6 +2,8 @@
  * Script del Modulo de Planes de Accion
  * 07/10/2021
  */
+var AccionesPreGuardadas = [];
+var IdAccion_ReAsignar = 0;
 var model = {
     "AnioAplicacion": AnioAplicacion,
     "AreaAgencia": "AUT - ELE - AEP",
@@ -9,20 +11,14 @@ var model = {
     "IdEncuesta": IdEncuesta,
     "IdPregunta": 0
 };
-/*
-public int IdAccionDeMejora { get; set; } = 0;
-public string Descripcion { get; set; } = string.Empty;
-public ML.PlanDeAccion PlanDeAccion { get; set; } = new PlanDeAccion();
-public ML.Rango Rango { get; set; } = new Rango();
-public ML.TipoEstatus Estatus { get; set; } = new TipoEstatus();
-public ML.Categoria Categoria { get; set; } = new Categoria();
-*/
 var modelNuevaAccion = {
     Descripcion: "",
-    PlanDeAccion: { IdPlanDeAccion: 0 },
     Rango: { IdRango: 0 },
     Estatus: { IdEstatus: 1 },
-    Categoria: { IdCategoria: 0 }
+    Categoria: { IdCategoria: 0 },
+    Encuesta: { IdEncuesta: IdEncuesta },
+    BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
+    AnioAplicacion: AnioAplicacion
 };
 
 (function () {
@@ -41,9 +37,31 @@ var modelNuevaAccion = {
             vm.CategoriasAgrupadas = [];
             vm.Categorias = [];
             vm.ListRangos = [];
+            vm.BusquedaAcciones = [];
            
-
             $(document).ready(function () {
+                $(".filter").on("keyup", function (text) {
+                    document.getElementById("mergeBusqueda").innerHTML = "";
+                    var texto = text.target.value;
+                    var input = texto.toUpperCase();
+                    var todosCard = $("#accordion input[type=text]");
+                    [].forEach.call(todosCard, function (elem) {
+                        var dataString = elem.value;
+                        dataString = dataString.toUpperCase();
+                        var existe = false;
+                        existe = dataString.includes(input);
+                        if (input != "") {
+                            if (existe == true) {
+                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + "</div>";
+                            }
+                        }
+                    });
+                });
+                //vm.ConsultaAreas();// Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta
+                vm.ConsultaAccionesGuardadas();
+            });
+
+            vm.ConsultaAreas = function () {
                 vm.get("/PlanesDeAccion/GetAreasForPlanAccion/?IdBaseDeDatos=" + IdBaseDeDatos, function (response) {
                     if (response.Correct) {
                         [].forEach.call(response.Objects[0], function (item) {
@@ -62,7 +80,135 @@ var modelNuevaAccion = {
                     }
                 });
                 document.getElementById("accordion").classList.add("ng-hide");
-            });
+            }
+
+            vm.ConsultaAccionesGuardadas = function () {
+                vm.post("/PlanesDeAccion/GetAcciones/?", modelNuevaAccion, function (response) {
+                    if (response.Correct) {
+                        $("#accordion .card-body").empty();
+                        console.log(response.Objects);
+                        AccionesPreGuardadas = response.Objects;
+                        [].forEach.call(response.Objects, function (accion) {
+                            $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria).append(
+                                `
+                                <div class="form-group ng-scope" idAccion="` + accion.IdAccionDeMejora + `">
+                                    <div class="form-inline">
+                                        <div class="col-8">
+                                            <button class="btn btn-sm re-asignar-accion"><i class="fas fa-sync-alt"></i></button>
+                                            <input value="` + accion.Descripcion + `" type="text" class="form-control is-valid" style="width: 95%;" placeholder="Acción de mejora">
+                                        </div>
+                                        <div class="col-3">
+                                            <select class="form-control select-rango is-valid" style="width: 100%;"></select>
+                                        </div>
+                                        <div class="col-1">
+                                            <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+                                            <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save" style="color: #28a745;"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                `
+                            );
+                            $(".delete-accion").unbind();
+                            $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria + " .delete-accion").click(function (e) {
+                                vm.EliminarAccion(e);
+                            });
+                        });
+                        setTimeout(function () {
+                            var AuxIdCategoria;
+                            var AuxIndex;
+                            [].forEach.call(response.Objects, function (accion, index) {
+                                if (AuxIdCategoria != accion.Categoria.IdCategoria) {
+                                    AuxIndex = 0;
+                                }
+                                AuxIdCategoria = accion.Categoria.IdCategoria;
+                                var itemPadre = document.getElementById("merge-new-acciones-idcat-" + accion.Categoria.IdCategoria);
+                                var select = itemPadre.getElementsByTagName("select")[AuxIndex];
+                                [].forEach.call(vm.ListRangos, function (item) {
+                                    select.options.add(new Option(item.Descripcion, item.Id, false, false));
+                                });
+                                select.value = accion.Rango.IdRango;
+                                AuxIndex++;
+                            });
+                            vm.AgregarAccionesDefault();
+                            $(".re-asignar-accion").click(function (e) {
+                                IdAccion_ReAsignar = e.target.closest(".form-group").attributes.IdAccion.value;
+                                $('#re-asignar-accion').modal('toggle');
+                            });
+                        }, 500);
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar consultar las acciones guardadas", response.ErrorMessage, "error");
+                    }
+                });
+            }
+
+            vm.ReAsignarAccion = function () {
+                if (IdAccion_ReAsignar == 0) {
+                    swal("Debes elegir la acción a re asignar", "", "info").then(function () {
+                        return;
+                    });
+                    return;
+                }
+                if (document.getElementById("nueva-categoria").value == "0" || document.getElementById("nuevo-rango").value == "0") {
+                    swal("Debes elegir la nueva categoria y el nuevo rango", "", "info").then(function () {
+                        return;
+                    });
+                    return;
+                }
+                vm.get("/PlanesDeAccion/ReAsignar/?IdAccion=" + IdAccion_ReAsignar + "&IdCategoria=" + document.getElementById("nueva-categoria").value + "&IdRango=" + document.getElementById("nuevo-rango").value, function (response) {
+                    if (response.Correct) {
+                        swal("La acción de mejora ha sido re asignada exitosamente", "", "success").then(function () {
+                            LimpiarModal();
+                            vm.ConsultaAccionesGuardadas();
+                        });
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar re asignar la acción", "", "error").then(function () {
+                            LimpiarModal();
+                        });
+                    }
+                });
+            }
+
+            vm.AgregarAccionesDefault = function () {
+                var content =
+                    `<div class="form-group">
+                        <div class="form-inline">
+                            <div class="col-8">
+                                <input type="text" class="form-control" style="width: 95%;" placeholder="Acción de mejora">
+                            </div>
+                            <div class="col-3">
+                                <select class="form-control select-rango" style="width: 100%;"></select>
+                            </div>
+                            <div class="col-1">
+                                <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+                                <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save"></i></button>
+                            </div>
+                        </div>
+                    </div>`;
+                [].forEach.call(document.getElementById("accordion").children, function (item) {
+                    var agregarOpciones = false;
+                    if (item.getElementsByClassName("form-group").length == 0) {
+                        agregarOpciones = true;
+                        for (var i = 0; i < 1; i++) {
+                            item.getElementsByClassName("card-body")[0].innerHTML += content;
+                        }
+                        if (agregarOpciones == true) {
+                            [].forEach.call(item.getElementsByTagName("select"), function (select) {
+                                if (select.options.length == 0) {
+                                    [].forEach.call(vm.ListRangos, function (item) {
+                                        select.options.add(new Option(item.Descripcion, item.Id, false, false));
+                                    });
+                                }
+                            });
+                            $(".delete-accion").unbind();
+                            $(".delete-accion").click(function (e) {
+                                vm.EliminarAccion(e);
+                            });
+                        }
+                    }
+                });
+            }
 
             vm.GenerarArbol = function () {
                 var uidUnidad, uidCompany, uidArea, uidDepto, uidSubd;
@@ -178,6 +324,7 @@ var modelNuevaAccion = {
                     .finally(function () {
                     });
             }/*fin get()*/
+
             vm.post = function (url, objeto, functionOK, mostrarAnimacion) {
                 $http.post(url, objeto)
                     .then(function (response) {
@@ -197,6 +344,7 @@ var modelNuevaAccion = {
                     .finally(function () {
                     });
             }/*fin post()*/
+
             function fillArray(url, arreglo, funcion) {
                 vm.get(url, function (response) {
                     angular.copy(response, arreglo);
@@ -211,6 +359,9 @@ var modelNuevaAccion = {
                     vm.PromedioSubCategorias = JSON.parse(response.Objects[0].JsonData);
                     vm.CategoriasAgrupadas = vm.AgruparCategorias(vm.PromedioSubCategorias);
                     vm.Categorias = vm.Execute(vm.CategoriasAgrupadas);
+                    [].forEach.call(vm.Categorias, function (categ) {
+                        $("#nueva-categoria").append("<option value='" + categ.IdCategoria + "'>" + categ.Categoria + "</option>");
+                    });
                     vm.ObtenerRangos();
                 }
                 else {
@@ -221,6 +372,7 @@ var modelNuevaAccion = {
             vm.ObtenerRangos = function () {
                 vm.get("/PlanesDeAccion/GetRangos/", function (response) {
                     if (response.Correct) {
+                        vm.ListRangos = [];
                         [].forEach.call(response.Objects, function (item) {
                             vm.ListRangos.push({ Id: item.IdRango, Descripcion: item.Descripcion });
                         });
@@ -228,10 +380,11 @@ var modelNuevaAccion = {
                         /* 
                          * Esperar a que el front se pinte con el repeat
                          */
-                        setTimeout(function () { 
+                        setTimeout(function () {
                             [].forEach.call(vm.ListRangos, function (item) {
                                 $(".select-rango").append("<option value='" + item.Id + "'>" + item.Descripcion + "</option>")
                             });
+                            $(".delete-accion").unbind();
                             $(".delete-accion").click(function (e) {
                                 vm.EliminarAccion(e);
                             });
@@ -338,6 +491,7 @@ var modelNuevaAccion = {
                         });
                     }
                 });
+                $(".delete-accion").unbind();
                 $(".delete-accion").click(function (e) {
                     vm.EliminarAccion(e);
                 });
@@ -346,7 +500,7 @@ var modelNuevaAccion = {
             vm.GuardarAccion = function (event) {
                 var Accion = event.target.closest(".form-group").getElementsByTagName("input")[0].value;
                 var Rango = event.target.closest(".form-group").getElementsByTagName("select")[0].value;
-                var IdCategoria = event.target.closest(".card").id.split("-")[2];
+                var IdCategoria = event.target.closest(".card-body").attributes.idCategoria.value;
                 if (IsNullOrEmpty(Accion) || Rango == "0") {
                     swal("Debes describir la acción de mejora y asignarle un rango", "", "info").then(function () {
                         return false;
@@ -357,20 +511,32 @@ var modelNuevaAccion = {
                 }
                 SetCampoValido(event.target.closest(".form-group").getElementsByTagName("input")[0]);
                 SetCampoValido(event.target.closest(".form-group").getElementsByTagName("select")[0]);
-                model.IdCategoria = event.target.closest(".card-body").attributes.idCategoria.value;
-                /*model.PlanDeAccion.Id = vm.PlanDeAccion.Id;*/
-                model.NuevaAccion = Accion;
-                model.RangoAsignado = Rango;
-                model.IdCategoria = IdCategoria;
-                vm.post("/PlanesDeAccion/AddAccion/", model, function (response) {
+                var IdAccion = event.target.closest(".form-group").attributes.IdAccion == null ? 0 : event.target.closest(".form-group").attributes.IdAccion.value;
+                modelNuevaAccion = {
+                    Descripcion: Accion,
+                    Rango: { IdRango: Rango },
+                    Estatus: { IdEstatus: 1 },
+                    Categoria: { IdCategoria: IdCategoria },
+                    Encuesta: { IdEncuesta: IdEncuesta },
+                    BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
+                    AnioAplicacion: AnioAplicacion,
+                    IdAccionDeMejora: IdAccion
+                }
+                vm.post("/PlanesDeAccion/AddAccion/", modelNuevaAccion, function (response) {
                     if (response.Correct) {
                         event.target.closest(".form-group").getElementsByClassName("fas fa-save")[0].style.color = "#28a745";
                         /*Asignar a la accion de mejora Su Id de Accion que debe retornarse en la peticion*/
                         event.target.closest(".form-group").setAttribute("IdAccion", response.NewId);
-                        swal("La acción ha sido agregada con exito", "", "success");/*Cambiar icono de save a verde*/
+                        if (IdAccion == 0)
+                            swal("La acción ha sido agregada con éxito", "", "success");
+                        if (IdAccion > 0)
+                            swal("La acción ha sido actualizada con éxito", "", "success");
                     }
                     else {
-                        swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
+                        if (IdAccion == 0)
+                            swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
+                        if (IdAccion > 0)
+                            swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
                     }
                 });
             }
@@ -399,18 +565,25 @@ var modelNuevaAccion = {
                     if (parent.attributes.IdAccion.value > 0) {
                         /*Se elimina del dom pero tambien de la base de datos (Baja lógica)*/
                         vm.get("/PlanesDeAccion/DeleteAccion/?IdAccion=" + parent.attributes.IdAccion.value, function (response) {
-
+                            if (response.Correct) {
+                                swal("La acción ha sido eliminada con éxito", "", "success").then(function () {
+                                    e.target.closest(".form-group").remove();
+                                });
+                            }
+                            else {
+                                swal("Ocurrió un error al intentar eliminar la acción", response.ErrorMessage, "error");
+                            }
                         });
                     }
                 }
             }
 
+            
+
         } catch (aE) {
             alert(aE.message);
         }
     }
-
-
 })();
 
 var NuevaAccionHtmlContent =
@@ -432,6 +605,7 @@ var NuevaAccionHtmlContent =
 var GuardarAccion = function (event) {
     var Accion = event.closest(".form-group").getElementsByTagName("input")[0].value;
     var Rango = event.closest(".form-group").getElementsByTagName("select")[0].value;
+    var IdCategoria = event.closest(".card-body").attributes.idCategoria.value;
     if (IsNullOrEmpty(Accion) || Rango == "0") {
         swal("Debes describir la acción de mejora y asignarle un rango", "", "info").then(function () {
             return false;
@@ -442,24 +616,37 @@ var GuardarAccion = function (event) {
     }
     SetCampoValido(event.closest(".form-group").getElementsByTagName("input")[0]);
     SetCampoValido(event.closest(".form-group").getElementsByTagName("select")[0]);
-    model.IdCategoria = event.closest(".card-body").attributes.idCategoria.value;
-    /*model.PlanDeAccion.Id = vm.PlanDeAccion.Id;*/
-    model.NuevaAccion = Accion;
-    model.RangoAsignado = Rango;
-    mode.IdCategoria = "";
+    var IdAccion = event.closest(".form-group").attributes.IdAccion == null ? 0 : event.closest(".form-group").attributes.IdAccion.value;
+
+    modelNuevaAccion = {
+        Descripcion: Accion,
+        Rango: { IdRango: Rango },
+        Estatus: { IdEstatus: 1 },
+        Categoria: { IdCategoria: IdCategoria },
+        Encuesta: { IdEncuesta: IdEncuesta },
+        BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
+        AnioAplicacion: AnioAplicacion,
+        IdAccionDeMejora: IdAccion
+    }
     $.ajax({
         url: "/PlanesDeAccion/AddAccion/",
         type: "POST",
-        data: model,
+        data: modelNuevaAccion,
         success: function (response) {
             if (response.Correct) {
                 event.closest(".form-group").getElementsByClassName("fas fa-save")[0].style.color = "#28a745";
                 /*Asignar a la accion de mejora Su Id de Accion que debe retornarse en la peticion*/
                 event.closest(".form-group").setAttribute("IdAccion", response.NewId);
-                swal("La acción ha sido agregada con exito", "", "success");
+                if (IdAccion == 0)
+                    swal("La acción ha sido agregada con éxito", "", "success");
+                if (IdAccion > 0)
+                    swal("La acción ha sido actualizada con éxito", "", "success");
             }
             else {
-                swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
+                if (IdAccion == 0)
+                    swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
+                if (IdAccion > 0)
+                    swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
             }
         },
         error: function (err) {
@@ -570,3 +757,8 @@ var CrearGridSubCategorias = function () {
     });
 }
 
+var LimpiarModal = function () {
+    $('#re-asignar-accion').modal('toggle');
+    $("#nueva-categoria").val("0");
+    $("#nuevo-rango").val("0");
+}

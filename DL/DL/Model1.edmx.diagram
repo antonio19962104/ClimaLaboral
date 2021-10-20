@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1382654ccefb458bac0b708f14c742b9" Name="Diagram1">
+      <Diagram DiagramId="1382654ccefb458bac0b708f14c742b9" Name="Diagram1" ZoomLevel="72">
         <EntityTypeShape EntityType="RH_DesModel.Acciones" Width="1.5" PointX="3" PointY="73.5" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.Administrador" Width="1.5" PointX="6" PointY="73.5" IsExpanded="true" />
         <EntityTypeShape EntityType="RH_DesModel.AdministradorCompany" Width="1.5" PointX="13.5" PointY="69.375" IsExpanded="true" />
@@ -205,6 +205,10 @@
         <AssociationConnector Association="RH_DesModel.FK_UsuarioRespuestas_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_HangFire_JobParameter_Job" ManuallyRouted="false" />
         <AssociationConnector Association="RH_DesModel.FK_HangFire_State_Job" ManuallyRouted="false" />
+        <AssociationConnector Association="RH_DesModel.FK__Acciones__IdEncu__599B3724" />
+        <AssociationConnector Association="RH_DesModel.FK__Acciones__IdEncu__5A8F5B5D" />
+        <AssociationConnector Association="RH_DesModel.FK__Acciones__IdEncu__5B837F96" />
+        <AssociationConnector Association="RH_DesModel.FK__Acciones__IdBase__5C77A3CF" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

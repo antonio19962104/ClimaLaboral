@@ -15,6 +15,18 @@
           <Property Name="IdEstatus" Type="int" />
           <Property Name="IdCategoria" Type="int" />
           <Property Name="IdRango" Type="int" />
+          <Property Name="IdEncuesta" Type="int" />
+          <Property Name="IdBaseDeDatos" Type="int" />
+          <Property Name="AnioAplicacion" Type="int" />
+          <Property Name="FechaHoraCreacion" Type="datetime" />
+          <Property Name="UsuarioCreacion" Type="varchar" MaxLength="200" />
+          <Property Name="ProgramaCreacion" Type="varchar" MaxLength="200" />
+          <Property Name="FechaHoraModificacion" Type="datetime" />
+          <Property Name="UsuarioModificacion" Type="varchar" MaxLength="200" />
+          <Property Name="ProgramaModificacion" Type="varchar" MaxLength="200" />
+          <Property Name="FechaHoraEliminacion" Type="datetime" />
+          <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="200" />
+          <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Administrador">
           <Key>
@@ -1828,6 +1840,54 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="CreatedAt" Type="datetime" Nullable="false" />
           <Property Name="Data" Type="nvarchar(max)" />
         </EntityType>
+        <Association Name="FK__Acciones__IdBase__5C77A3CF">
+          <End Role="BasesDeDatos" Type="Self.BasesDeDatos" Multiplicity="0..1" />
+          <End Role="Acciones" Type="Self.Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasesDeDatos">
+              <PropertyRef Name="IdBasesDeDatos" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdBaseDeDatos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Acciones__IdEncu__599B3724">
+          <End Role="Encuesta" Type="Self.Encuesta" Multiplicity="0..1" />
+          <End Role="Acciones" Type="Self.Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuesta">
+              <PropertyRef Name="IdEncuesta" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Acciones__IdEncu__5A8F5B5D">
+          <End Role="Encuesta" Type="Self.Encuesta" Multiplicity="0..1" />
+          <End Role="Acciones" Type="Self.Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuesta">
+              <PropertyRef Name="IdEncuesta" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Acciones__IdEncu__5B837F96">
+          <End Role="Encuesta" Type="Self.Encuesta" Multiplicity="0..1" />
+          <End Role="Acciones" Type="Self.Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuesta">
+              <PropertyRef Name="IdEncuesta" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Administr__IdEst__789EE131">
           <End Role="TipoEstatus" Type="Self.TipoEstatus" Multiplicity="0..1" />
           <End Role="Administrador" Type="Self.Administrador" Multiplicity="*" />
@@ -4468,6 +4528,22 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
     [Counter].[ExpireAt] AS [ExpireAt]
     FROM [HangFire].[Counter] AS [Counter]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK__Acciones__IdBase__5C77A3CF" Association="Self.FK__Acciones__IdBase__5C77A3CF">
+            <End Role="BasesDeDatos" EntitySet="BasesDeDatos" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Acciones__IdEncu__599B3724" Association="Self.FK__Acciones__IdEncu__599B3724">
+            <End Role="Encuesta" EntitySet="Encuesta" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Acciones__IdEncu__5A8F5B5D" Association="Self.FK__Acciones__IdEncu__5A8F5B5D">
+            <End Role="Encuesta" EntitySet="Encuesta" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Acciones__IdEncu__5B837F96" Association="Self.FK__Acciones__IdEncu__5B837F96">
+            <End Role="Encuesta" EntitySet="Encuesta" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
           <AssociationSet Name="FK__Administr__IdEst__789EE131" Association="Self.FK__Administr__IdEst__789EE131">
             <End Role="TipoEstatus" EntitySet="TipoEstatus" />
             <End Role="Administrador" EntitySet="Administrador" />
@@ -4961,6 +5037,22 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="TipoEstatus" Relationship="Self.fk_Accion_Estatus" FromRole="Acciones" ToRole="TipoEstatus" />
           <NavigationProperty Name="PlanDeAccion" Relationship="Self.fk_Accion_PlanDeAccion" FromRole="Acciones" ToRole="PlanDeAccion" />
           <NavigationProperty Name="Rango" Relationship="Self.fk_Accion_Rango" FromRole="Acciones" ToRole="Rango" />
+          <Property Name="IdEncuesta" Type="Int32" />
+          <NavigationProperty Name="Encuesta" Relationship="RH_DesModel.FK__Acciones__IdEncu__599B3724" FromRole="Acciones" ToRole="Encuesta" />
+          <NavigationProperty Name="Encuesta1" Relationship="RH_DesModel.FK__Acciones__IdEncu__5A8F5B5D" FromRole="Acciones" ToRole="Encuesta" />
+          <NavigationProperty Name="Encuesta2" Relationship="RH_DesModel.FK__Acciones__IdEncu__5B837F96" FromRole="Acciones" ToRole="Encuesta" />
+          <Property Name="IdBaseDeDatos" Type="Int32" />
+          <Property Name="AnioAplicacion" Type="Int32" />
+          <NavigationProperty Name="BasesDeDatos" Relationship="RH_DesModel.FK__Acciones__IdBase__5C77A3CF" FromRole="Acciones" ToRole="BasesDeDatos" />
+          <Property Name="FechaHoraCreacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioCreacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaCreacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraModificacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioModificacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaModificacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraEliminacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Administrador">
           <Key>
@@ -5098,6 +5190,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="EstatusEmail" Relationship="Self.FK_ESTATUSEMAIL_BD" FromRole="BasesDeDatos" ToRole="EstatusEmail" />
           <NavigationProperty Name="PromedioSubCategorias" Relationship="Self.FK_PromedioSubCategorias_BaseDeDatos" FromRole="BasesDeDatos" ToRole="PromedioSubCategorias" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario_BasesDeDatos" FromRole="BasesDeDatos" ToRole="Usuario" />
+          <NavigationProperty Name="Acciones" Relationship="RH_DesModel.FK__Acciones__IdBase__5C77A3CF" FromRole="BasesDeDatos" ToRole="Acciones" />
         </EntityType>
         <EntityType Name="BodyPlantilla">
           <Key>
@@ -5545,6 +5638,9 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="UsuarioEstatusEncuesta" Relationship="Self.FK_USUARIOESTATUSENC_ENCUESTA" FromRole="Encuesta" ToRole="UsuarioEstatusEncuesta" />
           <NavigationProperty Name="UsuarioRespuestas" Relationship="Self.FK_UsuarioRespuestas_Encuesta" FromRole="Encuesta" ToRole="UsuarioRespuestas" />
           <NavigationProperty Name="ValoracionCategoria" Relationship="Self.fk_ValoracionCategoria_Encuesta" FromRole="Encuesta" ToRole="ValoracionCategoria" />
+          <NavigationProperty Name="Acciones" Relationship="RH_DesModel.FK__Acciones__IdEncu__599B3724" FromRole="Encuesta" ToRole="Acciones" />
+          <NavigationProperty Name="Acciones1" Relationship="RH_DesModel.FK__Acciones__IdEncu__5A8F5B5D" FromRole="Encuesta" ToRole="Acciones" />
+          <NavigationProperty Name="Acciones2" Relationship="RH_DesModel.FK__Acciones__IdEncu__5B837F96" FromRole="Encuesta" ToRole="Acciones" />
         </EntityType>
         <EntityType Name="EncuestaArea">
           <Key>
@@ -10042,6 +10138,22 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <FunctionImport Name="ValidateNombreAreaOK_" ReturnType="Collection(Int32)">
           <Parameter Name="NombreArea" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK__Acciones__IdEncu__599B3724" Association="RH_DesModel.FK__Acciones__IdEncu__599B3724">
+            <End Role="Encuesta" EntitySet="Encuesta" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Acciones__IdEncu__5A8F5B5D" Association="RH_DesModel.FK__Acciones__IdEncu__5A8F5B5D">
+            <End Role="Encuesta" EntitySet="Encuesta" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Acciones__IdEncu__5B837F96" Association="RH_DesModel.FK__Acciones__IdEncu__5B837F96">
+            <End Role="Encuesta" EntitySet="Encuesta" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Acciones__IdBase__5C77A3CF" Association="RH_DesModel.FK__Acciones__IdBase__5C77A3CF">
+            <End Role="BasesDeDatos" EntitySet="BasesDeDatos" />
+            <End Role="Acciones" EntitySet="Acciones" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="f_getEstructuraDescByCompanyId_Result">
           <Property Type="Int32" Name="ID_COMPANY" Nullable="false" />
@@ -14936,6 +15048,54 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Type="Double" Name="RespuestasFavorables" Nullable="true" />
           <Property Type="Double" Name="PorcentajeRespuestasFavorables" Nullable="true" />
         </ComplexType>
+        <Association Name="FK__Acciones__IdEncu__599B3724">
+          <End Type="RH_DesModel.Encuesta" Role="Encuesta" Multiplicity="0..1" />
+          <End Type="RH_DesModel.Acciones" Role="Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuesta">
+              <PropertyRef Name="IdEncuesta" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Acciones__IdEncu__5A8F5B5D">
+          <End Type="RH_DesModel.Encuesta" Role="Encuesta" Multiplicity="0..1" />
+          <End Type="RH_DesModel.Acciones" Role="Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuesta">
+              <PropertyRef Name="IdEncuesta" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Acciones__IdEncu__5B837F96">
+          <End Type="RH_DesModel.Encuesta" Role="Encuesta" Multiplicity="0..1" />
+          <End Type="RH_DesModel.Acciones" Role="Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Encuesta">
+              <PropertyRef Name="IdEncuesta" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdEncuesta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Acciones__IdBase__5C77A3CF">
+          <End Type="RH_DesModel.BasesDeDatos" Role="BasesDeDatos" Multiplicity="0..1" />
+          <End Type="RH_DesModel.Acciones" Role="Acciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BasesDeDatos">
+              <PropertyRef Name="IdBasesDeDatos" />
+            </Principal>
+            <Dependent Role="Acciones">
+              <PropertyRef Name="IdBaseDeDatos" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -14945,6 +15105,18 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="Acciones">
             <EntityTypeMapping TypeName="RH_DesModel.Acciones">
               <MappingFragment StoreEntitySet="Acciones">
+                <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
+                <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
+                <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
+                <ScalarProperty Name="ProgramaModificacion" ColumnName="ProgramaModificacion" />
+                <ScalarProperty Name="UsuarioModificacion" ColumnName="UsuarioModificacion" />
+                <ScalarProperty Name="FechaHoraModificacion" ColumnName="FechaHoraModificacion" />
+                <ScalarProperty Name="ProgramaCreacion" ColumnName="ProgramaCreacion" />
+                <ScalarProperty Name="UsuarioCreacion" ColumnName="UsuarioCreacion" />
+                <ScalarProperty Name="FechaHoraCreacion" ColumnName="FechaHoraCreacion" />
+                <ScalarProperty Name="AnioAplicacion" ColumnName="AnioAplicacion" />
+                <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />
+                <ScalarProperty Name="IdEncuesta" ColumnName="IdEncuesta" />
                 <ScalarProperty Name="IdAccion" ColumnName="IdAccion" />
                 <ScalarProperty Name="IdPlanDeAccion" ColumnName="IdPlanDeAccion" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />

@@ -34,6 +34,9 @@ namespace DL
             this.UsuarioEstatusEncuesta = new HashSet<UsuarioEstatusEncuesta>();
             this.UsuarioRespuestas = new HashSet<UsuarioRespuestas>();
             this.ValoracionCategoria = new HashSet<ValoracionCategoria>();
+            this.Acciones = new HashSet<Acciones>();
+            this.Acciones1 = new HashSet<Acciones>();
+            this.Acciones2 = new HashSet<Acciones>();
         }
     
         public int IdEncuesta { get; set; }
@@ -106,5 +109,11 @@ namespace DL
         public virtual ICollection<UsuarioRespuestas> UsuarioRespuestas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValoracionCategoria> ValoracionCategoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Acciones> Acciones { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Acciones> Acciones1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Acciones> Acciones2 { get; set; }
     }
 }
