@@ -410,6 +410,288 @@ namespace PL.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Genera el reporte grafico tomando el nivel grupo autofin como padre
+        /// </summary>
+        /// <param name="aHistorico"></param>
+        /// <param name="IdBD"></param>
+        /// <returns></returns>
+        public ActionResult BackgroundJobCreateReportNivelGAFM(ML.Historico aHistorico)
+        {
+            try
+            {
+                Console.Write(aHistorico.IdBaseDeDatos);
+                #region validar
+                BL.LogReporteoClima.writteLogJobReporte("Entré a generar el reporte", new StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
+                AnioActual = (int)aHistorico.Anio + 1;
+                AnioHistorico = (int)aHistorico.Anio;
+                string criterioBusquedaSeleccionado = Convert.ToString(aHistorico.IdTipoEntidad);
+                string unidadNeg = "";//getUnidadNegocio(aHistorico.EntidadNombre, (int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos);
+                if (boolExisteReporte(aHistorico, AnioActual, aHistorico.nivelDetalle) == true)
+                {
+                    eliminarReporte(aHistorico, AnioActual, aHistorico.nivelDetalle);
+                }
+                #endregion validar
+                #region calcular data
+
+                if (criterioBusquedaSeleccionado == "1")
+                {
+                    /* Se debe generar el reporte a nivel GAFM * El de la Uniad de negocio actual se saca de todos estos calculos * El de las otras unidades de negocio se sacaria de la tabla de historicos tomando el mismo año que se esta consultando en AnioActual*/
+                }
+
+                // obtener los hijos de la estructura GAFM todos los niveles bajo de la entidad seleccionada
+                // var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
+                var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
+                var descendientesForBienestar = aFiltrosHijosEstructura;
+                /*
+                 * Ahora bienestar traerá toda la info de todos los hijos y nietos etc del padre
+                 * jamurillo 23/09/2021
+                 * Adjuntar el campo type para saber su prefijo, sobrecargar el metodo
+                 */
+                //Ajustar array de entidades segun el nivel de detalle
+                if (!aHistorico.nivelDetalle.Contains("1"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "UNeg=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("2"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Comp=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("3"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Area=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("4"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Dpto=>").ToList();
+                if (!aHistorico.nivelDetalle.Contains("5"))
+                    descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "SubD=>").ToList();
+
+
+                var estructuraReporteNivelDetalleBasico = aFiltrosHijosEstructura;
+                var auxNivelDetalle = aHistorico.nivelDetalle.ElementAt(0).ToString() + aHistorico.nivelDetalle.ElementAt(1).ToString();
+                if (!auxNivelDetalle.Contains("1"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "UNeg=>").ToList();
+                if (!auxNivelDetalle.Contains("2"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "Comp=>").ToList();
+                if (!auxNivelDetalle.Contains("3"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "Area=>").ToList();
+                if (!auxNivelDetalle.Contains("4"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "Dpto=>").ToList();
+                if (!auxNivelDetalle.Contains("5"))
+                    estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "SubD=>").ToList();
+
+
+                //descendientesForBienestar Son los hijos segun todo el nivel de detalle que se elige y se usa para las graficas de barras
+                //estructuraReporteNivelDetalleBasico Son unicamente los hijos al nivel de detalle por default y se usa para grafico de bienestar y indicadores generales y los otros 2
+
+                // descendientesForBienestar en base a este array de estructura obtener los datos de las primeras 3 pantallas
+                // La unidad de negocio se manda como vacía, en apisController se calcula la unidad de negocio
+                objParticipacion = apis.getParticipacion_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objEsperadas = apis.getEncuestasEsperadas_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCalificacionGlobal = apis.getCalificacionGlobal_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objConfianza = apis.getConfianza_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objNivelCompromiso = apis.getNivelCompromiso_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objNivelColaboracion = apis.getNivelColaboracion_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCredibilidad = apis.getCredibilidad_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objImparcialidad = apis.getImparcialidad_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objOrgullo = apis.getOrgullo_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objRespeto = apis.getRespeto_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCompanierismo = apis.getCompanierismo_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCoaching = apis.getCoaching_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objHabgerenciales = apis.getHabGerenciales_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objAlineacionEstrategica = apis.getAlineacionEstrategica_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objPracticasCulturales = apis.getPracticasCulturales_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objCambio = apis.getCambio_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objProcesosOrg = apis.getProcesosOrga_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+
+
+
+                objMejoresEE = apis.getReactivosMejorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objMejoresEA = apis.getReactivosMejorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objMayorCrecimientoEE = apis.getReactivosMayorCrecimietoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);
+                objMayorCrecimientoEA = apis.getReactivosMayorCrecimietoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);
+                objpeoresEE = apis.getReactivosPeorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objpeoresEA = apis.getReactivosPeorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                // obtener los hijos de la estructura GAFM un nivel bajo de la entidad seleccionada
+                // var aFiltrosEntUnNivelAbajo = getFiltros(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId, aHistorico.EntidadNombre);
+                var aFiltrosEntUnNivelAbajo = getEstructuraUnNivelFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
+                if (aFiltrosEntUnNivelAbajo.Count > 0)
+                    aFiltrosEntUnNivelAbajo.RemoveAt(0);
+                /*
+                 * Bienestar solamente traia los elementos de un nivel abajo del padre
+                 * jamurillo 23/09/2021
+                 * objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                 * objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+                 */
+                objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+                objComparativoAbandono = apis.getComparativoAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
+
+
+                //Este ya no usa filtros un nivel abajo porque esto puede cambiar a otro tipo de nivel de detalle no consecutivo
+                var hijos = descendientesForBienestar;
+                objComparativoEntidadesResultadoGeneralEE = apis.getComparativoEntidadesResultadoGeneralEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objComparativoEntidadesResultadoGeneralEA = apis.getComparativoEntidadesResultadoGeneralEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+
+
+
+                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
+
+                objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+
+
+                //Recalcular segun los demograficos encontrados en el excel de la Base de datos
+                objComparativoPorAntiguedadEE = apis.getComparativoPorAntiguedadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorAntiguedadEA = apis.getComparativoPorAntiguedadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorGeneroEE = apis.getComparativoPorGeneroEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorGeneroEA = apis.getComparativoPorGeneroEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorGradoAcademicoEE = apis.getComparativoPorGradoAcademicoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorGradoAcademicoEA = apis.getComparativoPorGradoAcademicoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorCondicionTrabajoEE = apis.getComparativoPorCondicionTrabajoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorCondicionTrabajoEA = apis.getComparativoPorCondicionTrabajoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorFuncionEE = apis.getComparativoPorFuncionEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorFuncionEA = apis.getComparativoPorFuncionEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorRangoEdadEE = apis.getComparativoPorRangoEdadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoPorRangoEdadEA = apis.getComparativoPorRangoEdadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
+                objNube1 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "1", AnioActual, aHistorico.IdBaseDeDatos);
+                objNube2 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "2", AnioActual, aHistorico.IdBaseDeDatos);
+                objNube3 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "3", AnioActual, aHistorico.IdBaseDeDatos);
+                objNube4 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "4", AnioActual, aHistorico.IdBaseDeDatos);
+                #endregion #region calcular data
+
+                #region Asignar alias al objeto
+                objCalificacionGlobal.ContentType = "dataCalificacionGlobal";
+                objConfianza.ContentType = "dataConfianza";
+                objNivelCompromiso.ContentType = "dataNivelCompromiso";
+                objNivelColaboracion.ContentType = "dataNivelColaboracion";
+                objCredibilidad.ContentType = "dataCredibilidad";
+                objImparcialidad.ContentType = "dataImparcialidad";
+                objOrgullo.ContentType = "dataOrgullo";
+                objRespeto.ContentType = "dataRespeto";
+                objCompanierismo.ContentType = "dataCompanierismo";
+                objCoaching.ContentType = "dataCoaching";
+                objHabgerenciales.ContentType = "dataHabGerenciales";
+                objAlineacionEstrategica.ContentType = "dataAlineacionEstrategica";
+                objPracticasCulturales.ContentType = "dataPracticasCulturales";
+                objCambio.ContentType = "dataCambio";
+                objProcesosOrg.ContentType = "dataProcesosOrg";
+                objMejoresEE.ContentType = "dataMejoresEE";
+                objMejoresEA.ContentType = "dataMejoresEA";
+                objMayorCrecimientoEE.ContentType = "dataCrecimientoEE";
+                objMayorCrecimientoEA.ContentType = "dataCrecimientoEA";
+                objpeoresEE.ContentType = "dataPeoresEE";
+                objpeoresEA.ContentType = "dataPeoresEA";
+                objBienestarEE.ContentType = "dataBienestarEE";
+                objBienestarEA.ContentType = "dataBienestarEA";
+                objPermanencia.ContentType = "dataPermanencia";
+                objAbandono.ContentType = "dataAbandono";
+                objComparativoPermanencia.ContentType = "dataComparativoPermanencia";
+                objComparativoAbandono.ContentType = "dataComparativoAbandono";
+                objComparativoEntidadesResultadoGeneralEE.ContentType = "dataComparativoEntidadesResultadoGeneralEE";
+                objComparativoEntidadesResultadoGeneralEA.ContentType = "dataComparativoEntidadesResultadoGeneralEA";
+                objComparativoResultadoGeneralPorNivelesEE.ContentType = "dataComparativoNivelesEE";
+                objComparativoResultadoGeneralPorNivelesEA.ContentType = "dataComparativoNivelesEA";
+                objComparativoPorAntiguedadEE.ContentType = "dataComparativoPorAntiguedadEE";
+                objComparativoPorAntiguedadEA.ContentType = "dataComparativoPorAntiguedadEA";
+                objComparativoPorGeneroEE.ContentType = "dataGeneroEE";
+                objComparativoPorGeneroEA.ContentType = "dataGeneroEA";
+                objComparativoPorGradoAcademicoEE.ContentType = "dataAcademicoEE";
+                objComparativoPorGradoAcademicoEA.ContentType = "dataAcademicoEA";
+                objComparativoPorCondicionTrabajoEE.ContentType = "dataCondicionTraEE";
+                objComparativoPorCondicionTrabajoEA.ContentType = "dataCondicionTraEA";
+                objComparativoPorFuncionEE.ContentType = "dataFuncionEE";
+                objComparativoPorFuncionEA.ContentType = "dataFuncionEA";
+                objComparativoPorRangoEdadEE.ContentType = "dataEdadEE";
+                objComparativoPorRangoEdadEA.ContentType = "dataEdadEA";
+                objNube1.ContentType = "dataNube1";
+                objNube2.ContentType = "dataNube2";
+                objNube3.ContentType = "dataNube3";
+                objNube4.ContentType = "dataNube4";
+                #endregion Asignar alias al objeto
+                var list = new List<JsonResult>();
+                #region Guardar resultados
+                //guradar cadena json 1
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objEsperadas.Data, AnioActual, "dataEsperadas", aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objParticipacion.Data, AnioActual, "dataParticipacion", aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCalificacionGlobal, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objConfianza, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNivelCompromiso, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNivelColaboracion, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //guardar cadena json 2
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCredibilidad, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objImparcialidad, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objOrgullo, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objRespeto, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCompanierismo, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //guardar 3
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCoaching, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objHabgerenciales, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objAlineacionEstrategica, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objPracticasCulturales, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objCambio, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objProcesosOrg, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMejoresEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objMayorCrecimientoEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objpeoresEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objpeoresEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objBienestarEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objBienestarEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objPermanencia, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objAbandono, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPermanencia, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoAbandono, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoEntidadesResultadoGeneralEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoEntidadesResultadoGeneralEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoResultadoGeneralPorNivelesEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoResultadoGeneralPorNivelesEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorAntiguedadEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorAntiguedadEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGeneroEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGeneroEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGradoAcademicoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorGradoAcademicoEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorCondicionTrabajoEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorCondicionTrabajoEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorFuncionEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorFuncionEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorRangoEdadEE, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objComparativoPorRangoEdadEA, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                //
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube1, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube2, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube3, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.addJsonReporte(aHistorico.EntidadId, aHistorico.EntidadNombre, objNube4, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+
+                #endregion guardar resultados
+                //Pasar estatus del JobReporte a 1 y notificar
+                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL, aHistorico.ps, aHistorico.nivelDetalle, aHistorico.opc, criterioBusquedaSeleccionado, aHistorico.enfoqueSeleccionado, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
+                BL.LogReporteoClima.writteLogJobReporte("He terminado de generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
+                return Json(true);
+            }
+            catch (Exception aE)
+            {
+                BL.LogReporteoClima.writteLogJobReporte(aE, new System.Diagnostics.StackTrace());
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return Json(aE.Message);
+            }
+        }
+
+
         public class Model
         {
             public ML.Result Result { get; set; } = new ML.Result();
@@ -2178,6 +2460,10 @@ namespace PL.Controllers
             {
                 switch (IdTipoEntidad)
                 {
+                    case 0:
+                        // Nivel GAFM (obtener todas las unidades de negocio mas sus hijos etc)
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl0(IdBD, entidadNombre);
+                        break;
                     case 1:
                         listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl1(IdBD, entidadNombre);
                         break;

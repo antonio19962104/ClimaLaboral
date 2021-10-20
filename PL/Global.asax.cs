@@ -32,6 +32,23 @@ namespace PL
             HangfireAspNet.Use(GetHangfireServers);
 
 
+            PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
+
+            ML.Historico historico = new ML.Historico()
+            {
+                Anio = 2020,
+                enfoqueSeleccionado = 0,
+                currentURL = "localhost:11124",
+                CurrentUsr = "jamurillo@grupoautofin.com",
+                EntidadNombre = "GAFM",
+                IdBaseDeDatos = 2114,
+                idEncuesta = 1,
+                IdTipoEntidad = 0,
+                nivelDetalle = "12345",
+                tipoEntidad = 0
+            };
+            backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
+
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere

@@ -95,13 +95,14 @@ var modelNuevaAccion = {
                                     <div class="form-inline">
                                         <div class="col-8">
                                             <button class="btn btn-sm re-asignar-accion"><i class="fas fa-sync-alt"></i></button>
-                                            <input value="` + accion.Descripcion + `" type="text" class="form-control is-valid" style="width: 95%;" placeholder="Acción de mejora">
+                                            <input disabled value="` + accion.Descripcion + `" type="text" class="form-control is-valid" style="width: 95%;" placeholder="Acción de mejora">
                                         </div>
                                         <div class="col-3">
-                                            <select class="form-control select-rango is-valid" style="width: 100%;"></select>
+                                            <select disabled class="form-control select-rango is-valid" style="width: 100%;"></select>
                                         </div>
-                                        <div class="col-1">
-                                            <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+                                        <div class="col-1" style="display:block ruby;padding: 0;">
+                                            <button class="btn edit-accion" onclick="editAccion(this);"><i class="fas fa-edit"></i></button>
+                                            <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
                                             <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save" style="color: #28a745;"></i></button>
                                         </div>
                                     </div>
@@ -150,6 +151,8 @@ var modelNuevaAccion = {
                     return;
                 }
                 if (document.getElementById("nueva-categoria").value == "0" || document.getElementById("nuevo-rango").value == "0") {
+                    SetCampoInvalido(document.getElementById("nueva-categoria"));
+                    SetCampoInvalido(document.getElementById("nuevo-rango"));
                     swal("Debes elegir la nueva categoria y el nuevo rango", "", "info").then(function () {
                         return;
                     });
@@ -181,7 +184,7 @@ var modelNuevaAccion = {
                                 <select class="form-control select-rango" style="width: 100%;"></select>
                             </div>
                             <div class="col-1">
-                                <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+                                <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
                                 <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save"></i></button>
                             </div>
                         </div>
@@ -365,7 +368,7 @@ var modelNuevaAccion = {
                     vm.ObtenerRangos();
                 }
                 else {
-                    swal(response.ErrorMessage, "", "error");
+                    swal("Ocurrió un error al intentar consultar las subcategorias", response.ErrorMessage, "error");
                 }
             });
 
@@ -477,7 +480,7 @@ var modelNuevaAccion = {
                         });
                     }
                     else {
-                        swal("Ocurrión un error al intentar guardar el plan de acción", response.ErrorMessage, "success");
+                        swal("Ocurrió un error al intentar guardar el plan de acción", response.ErrorMessage, "error");
                     }
                 });
             }
@@ -531,6 +534,8 @@ var modelNuevaAccion = {
                             swal("La acción ha sido agregada con éxito", "", "success");
                         if (IdAccion > 0)
                             swal("La acción ha sido actualizada con éxito", "", "success");
+                        event.target.closest(".form-group").getElementsByTagName("input")[0].setAttribute("disabled", "");
+                        event.target.closest(".form-group").getElementsByTagName("select")[0].setAttribute("disabled", "");
                     }
                     else {
                         if (IdAccion == 0)
@@ -641,6 +646,8 @@ var GuardarAccion = function (event) {
                     swal("La acción ha sido agregada con éxito", "", "success");
                 if (IdAccion > 0)
                     swal("La acción ha sido actualizada con éxito", "", "success");
+                event.closest(".form-group").getElementsByTagName("input")[0].setAttribute("disabled", "");
+                event.closest(".form-group").getElementsByTagName("select")[0].setAttribute("disabled", "");
             }
             else {
                 if (IdAccion == 0)
@@ -761,4 +768,10 @@ var LimpiarModal = function () {
     $('#re-asignar-accion').modal('toggle');
     $("#nueva-categoria").val("0");
     $("#nuevo-rango").val("0");
+}
+
+var editAccion = function (e) {
+    console.log(e);
+    e.closest(".form-group").getElementsByTagName("input")[0].removeAttribute("disabled");
+    e.closest(".form-group").getElementsByTagName("select")[0].removeAttribute("disabled");
 }

@@ -604,5 +604,46 @@ namespace BL
             }
             return String.Empty;
         }
+        public static string GetUnidadNegocioByName(string entidad, int IdBD)
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var data = new List<DL.Empleado>();
+
+                    data = context.Empleado.Where(o => o.UnidadNegocio == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.DivisionMarca == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.AreaAgencia == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.Depto == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.Subdepartamento == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                return string.Empty;
+            }
+            return string.Empty;
+        }
     }
 }

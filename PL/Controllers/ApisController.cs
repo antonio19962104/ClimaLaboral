@@ -1196,6 +1196,9 @@ namespace PL.Controllers
             {
                 switch (IdTipoEntidad)
                 {
+                    case 0:
+                        listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl0(IdBD, entidadNombre);
+                        break;
                     case 1:
                         listS = BL.EstructuraAFMReporte.GetEstructuraGAFMForJob_lvl1(IdBD, entidadNombre);
                         break;

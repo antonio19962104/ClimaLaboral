@@ -316,7 +316,7 @@ namespace BL
                     var dataPlanDeAccion = new DL.PlanDeAccion() {
                         Nombre = planDeAccion.Nombre,
                         IdUsuarioCreacion = planDeAccion.IdAdminCreate,
-                        
+
                     };
                 }
             }
@@ -386,9 +386,9 @@ namespace BL
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var dataAcciones = context.Acciones.
-                        Where(o => 
-                        o.IdEncuesta == accionDeMejora.Encuesta.IdEncuesta && 
-                        o.IdBaseDeDatos == accionDeMejora.BasesDeDatos.IdBaseDeDatos && 
+                        Where(o =>
+                        o.IdEncuesta == accionDeMejora.Encuesta.IdEncuesta &&
+                        o.IdBaseDeDatos == accionDeMejora.BasesDeDatos.IdBaseDeDatos &&
                         o.AnioAplicacion == accionDeMejora.AnioAplicacion &&
                         o.IdEstatus == 1).ToList().OrderBy(o => o.IdCategoria);
                     if (dataAcciones != null)
@@ -467,7 +467,7 @@ namespace BL
                         result.Correct = true;
                         result.NewId = Accion.IdAccion;
                     }
-                    
+
                 }
             }
             catch (Exception aE)
@@ -563,5 +563,6 @@ namespace BL
             }
             return result;
         }
+
     }
 }

@@ -439,6 +439,74 @@ namespace BL
             return list;
         }
 
+        public static List<string> GetEstructuraGAFMForJob_lvl0(int IdBaseDeDatos, string entidadNombre)
+        {
+            var list = new List<string>();
+            string query = string.Empty;
+            SqlDataAdapter data = new SqlDataAdapter();
+            try
+            {
+                DataSet ds_CompanyCategoria = new DataSet();
+                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                {
+                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0}", IdBaseDeDatos);
+                    data = new SqlDataAdapter(query, conn);
+                    data.Fill(ds_CompanyCategoria, "data");
+                    foreach (DataRow row_CompanyCategoria in ds_CompanyCategoria.Tables[0].Rows)
+                    {
+                        if (row_CompanyCategoria.ItemArray[0].ToString() != "-")
+                        {
+                            if (hasEmpleado(row_CompanyCategoria.ItemArray[0].ToString(), 1, IdBaseDeDatos))
+                                list.Add("UNeg=>" + row_CompanyCategoria.ItemArray[0].ToString());
+                        }
+                        DataSet ds_Company = new DataSet();
+                        query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and UnidadNegocio = '{1}'", IdBaseDeDatos, row_CompanyCategoria.ItemArray[0].ToString());
+                        data = new SqlDataAdapter(query, conn);
+                        data.Fill(ds_Company, "data");
+                        foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                        {
+                            if (hasEmpleado(row_Company.ItemArray[0].ToString(), 2, IdBaseDeDatos))
+                                list.Add("Comp=>" + row_Company.ItemArray[0].ToString());
+                            DataSet ds_Area = new DataSet();
+                            query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_Area, "data");
+                            foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                            {
+                                if (hasEmpleado(row_Area.ItemArray[0].ToString(), 3, IdBaseDeDatos))
+                                    list.Add("Area=>" + row_Area.ItemArray[0].ToString());
+                                DataSet ds_Departamento = new DataSet();
+                                query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                                data = new SqlDataAdapter(query, conn);
+                                data.Fill(ds_Departamento, "data");
+                                foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                                {
+                                    if (hasEmpleado(row_Depto.ItemArray[0].ToString(), 4, IdBaseDeDatos))
+                                        list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
+                                    DataSet ds_SubDepartamento = new DataSet();
+                                    query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
+                                    data = new SqlDataAdapter(query, conn);
+                                    data.Fill(ds_SubDepartamento, "data");
+                                    foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                                    {
+                                        if (hasEmpleado(row_Subd.ItemArray[0].ToString(), 5, IdBaseDeDatos))
+                                            list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logError(aE, new StackTrace());
+                return new List<string>();
+            }
+            list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 7).ToList();
+            return list;
+        }
+
         public static List<string> GetEstructuraGAFMForJob_lvl1(int IdBaseDeDatos, string entidadNombre)
         {
             var list = new List<string>();

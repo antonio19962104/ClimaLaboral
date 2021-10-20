@@ -3127,6 +3127,9 @@ namespace PL.Controllers
                         model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; 
                     }
 
+                    if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                        model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
+
                     if (prefijo == "UNeg=>")
                         model.UnidadNegocioFilter = DataForFilter;
 
@@ -3494,6 +3497,9 @@ namespace PL.Controllers
                     }
 
                     //Set Data for filter
+                    if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                        model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
+
 
                     if (prefijo == "UNeg=>")
                     {
@@ -3648,6 +3654,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -3780,7 +3788,9 @@ namespace PL.Controllers
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
-                //Set Data for filter
+                //Set Data for filter+
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -3914,6 +3924,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -4047,6 +4059,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -4180,6 +4194,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -4313,6 +4329,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -4446,6 +4464,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -4982,6 +5002,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -5124,6 +5146,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -5388,6 +5412,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -6696,6 +6722,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -6827,6 +6855,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -7881,6 +7911,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -8017,6 +8049,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -9846,6 +9880,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -9979,6 +10015,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -10109,6 +10147,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -10239,6 +10279,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -10369,6 +10411,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -10499,6 +10543,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -10629,6 +10675,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -11148,6 +11196,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -11288,6 +11338,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -11548,6 +11600,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -12850,6 +12904,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -12981,6 +13037,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ?  DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -13769,6 +13827,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -13905,6 +13965,8 @@ namespace PL.Controllers
                 }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -15725,6 +15787,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -15856,6 +15920,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? DataForFilter : model.UnidadNegocioFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {

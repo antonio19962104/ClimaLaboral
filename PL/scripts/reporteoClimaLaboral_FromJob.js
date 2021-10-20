@@ -912,6 +912,7 @@ function GetDashBoard() {
                         [].forEach.call(parrafoHC, function (graf) {
                             graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
                         });
+
                     }
                     if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
                         var graficaBarras = $(".bar-progress-clasificacion:visible");
@@ -934,7 +935,7 @@ function GetDashBoard() {
                             graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
                         });
                     }
-                    if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
+                    if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26 || vm.SeccionesReporte.Id == 21 || vm.SeccionesReporte.Id == 22) {
                         if (vm.SeccionesReporte.Id == 24) {
                             //if ($(".contenedor-resumen:visible").length > 0) {
                             //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
@@ -983,7 +984,7 @@ function GetDashBoard() {
                             if (multi26.length > 0) {
                                 if (resolucion <= 2500 && resolucion >= 1901) {
                                     [].forEach.call(multi26, function (item) {
-                                        item.style.marginTop = "-32rem";
+                                        item.style.marginTop = vm.enfoqueSeleccionado != 0 ? "-39rem" : "-43rem";
                                         item.style.marginRight = "25px";
                                     });
                                 }
@@ -3060,7 +3061,7 @@ function GetDashBoard() {
                                 }
                             });
                         }
-                        if (vm.model.nivelDetalle.length == 4) {
+                        if (vm.model.nivelDetalle.length >= 4) {
                             $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
                             $("hr:visible:first").css("display", "none");
                             $(".card:visible:first").css("display", "none");
@@ -3124,7 +3125,7 @@ function GetDashBoard() {
                                 }
                             });
                         }
-                        if (vm.model.nivelDetalle.length == 4) {
+                        if (vm.model.nivelDetalle.length >= 4) {
                             $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
                             $("hr:visible:first").css("display", "none");
                             $(".card:visible:first").css("display", "none");
@@ -3195,7 +3196,7 @@ function GetDashBoard() {
                     var secciones = $("#tab-" + vm.SeccionesReporte.Id + " .card");
                     // alert(secciones.length);
                     if (secciones.length == 0) {
-                        alert();
+                        alert("No se pudo seccionar la información");
                         vm.seccionaGraph = 0;
                         vm.ReglasSeccionarGraficoBarras();
                     }
@@ -3724,7 +3725,7 @@ function GetDashBoard() {
                                     if (resumen.length > 0) {
                                         [].forEach.call(resumen, function (item) {
                                             item.style.removeProperty = "margin-top";
-                                            item.style.marginTop = "-25rem";
+                                            item.style.marginTop = "-35rem";
                                         });
                                     }
                                     canvas.push(data);
@@ -4261,7 +4262,8 @@ function GetDashBoard() {
                                             //    });
                                             //}
                                         //if (cortes.length == 0) {
-                                        docReporte.addPage();
+                                        //Se elimina este agregado para evitar pagina en blanco antes de bienestar
+                                        //docReporte.addPage();
                                             var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 1 }
@@ -6878,6 +6880,7 @@ function GetDashBoard() {
                             if (vm.hasHistorico) {
                                 if (vm.SeccionesReporte.Id == 28) {
                                     vm.SeccionesReporte.Id = 22;
+                                    $("#tab-22 .card").css("display", "");
                                     document.getElementById("tab-26").classList.add("ng-hide");
                                     return;
                                 }
@@ -6906,6 +6909,7 @@ function GetDashBoard() {
                                 }
                                 if (vm.SeccionesReporte.Id == 28 && vm.model.nivelDetalle.length >= 3) {
                                     vm.SeccionesReporte.Id = 22;
+                                    $("#tab-22 .card").css("display", "");
                                     document.getElementById("tab-26").classList.add("ng-hide");
                                     return;
                                 }
@@ -7266,6 +7270,7 @@ function GetDashBoard() {
                             if (vm.hasHistorico) {
                                 if (vm.SeccionesReporte.Id == 27) {
                                     vm.SeccionesReporte.Id = 21;
+                                    $("#tab-21 .card").css("display", "");
                                     document.getElementById("tab-25").classList.add("ng-hide");
                                     return;
                                 }
@@ -7296,6 +7301,7 @@ function GetDashBoard() {
                                 }
                                 if (vm.SeccionesReporte.Id == 27 && vm.model.nivelDetalle.length >= 3) {
                                     vm.SeccionesReporte.Id = 21;
+                                    $("#tab-21 .card").css("display", "");
                                     document.getElementById("tab-25").classList.add("ng-hide");
                                     return;
                                 }
