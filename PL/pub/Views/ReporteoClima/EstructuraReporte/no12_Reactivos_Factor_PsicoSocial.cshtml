@@ -23,6 +23,7 @@
                                     <thead class="table-contr">
                                         <tr id="entidadesEmpresa">
                                             <th colspan="10" scope="col" class="td-bgwhite">&nbsp;</th>
+                                            <th ng-show="vm.criterioBusquedaSeleccionado.Id == 0" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.model.EntidadNombre }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.CompanyCategoria.Descripcion }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                             <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>
@@ -190,6 +191,7 @@
                                 <thead class="table-contr">
                                     <tr id="entidadesEmpresa">
                                         <th colspan="10" scope="col" class="td-bgwhite">&nbsp;</th>
+                                        <th ng-show="vm.criterioBusquedaSeleccionado.Id == 0" class="borde-table-headerwhite padre" ng-class="" scope="col"><div class="contr-head">{{ vm.model.EntidadNombre }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 1" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.CompanyCategoria.Descripcion }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 2" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Company.CompanyName }}</div></th>
                                         <th ng-show="vm.criterioBusquedaSeleccionado.Id == 3" class="borde-table-headerwhite padre" scope="col"><div class="contr-head">{{ vm.Area.Nombre }}</div></th>

@@ -133,7 +133,7 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
-                            (EmpleadoRespuestas.IdPregunta = 177 AND Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1})
+                            (EmpleadoRespuestas.IdPregunta = 177 AND Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY EmpleadoRespuestas.RespuestaEmpleado ASC";
 
@@ -145,7 +145,7 @@ namespace ML
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
                             (EmpleadoRespuestas.IdPregunta = 178 AND 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND  Empleado.{0} = {1})
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND  Empleado.{0} = {1} and Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY EmpleadoRespuestas.RespuestaEmpleado ASC";
 
@@ -527,19 +527,21 @@ namespace ML
             return QUERY_INDICADORES_DE_ABANDONO_GAFM;
         }
         /*Seccion queries comparativo*/
-        public static string getQueryComparativoPermanencia(string filtro, string valor)
+        public static string getQueryComparativoPermanencia(string filtro, string valor, int idbd)
         {
             inicializarQueries();
             QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM = QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM.Replace("{0}", filtro);
             QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM = QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM.Replace("{1}", "'" + valor + "'");
+            QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM = QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM.Replace("{2}", "'" + idbd + "'");
             validaQuery(QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM, filtro, valor, new StackTrace());
             return QUERY_COMPARATIVO_DE_PERMANENCIA_GAFM;
         }
-        public static string getQueryComparativoAbandono(string filtro, string valor)
+        public static string getQueryComparativoAbandono(string filtro, string valor, int IdBD)
         {
             inicializarQueries();
             QUERY_COMPARATIVO_DE_ABANDONO_GAFM = QUERY_COMPARATIVO_DE_ABANDONO_GAFM.Replace("{0}", filtro);
             QUERY_COMPARATIVO_DE_ABANDONO_GAFM = QUERY_COMPARATIVO_DE_ABANDONO_GAFM.Replace("{1}", "'" + valor + "'");
+            QUERY_COMPARATIVO_DE_ABANDONO_GAFM = QUERY_COMPARATIVO_DE_ABANDONO_GAFM.Replace("{2}", "'" + IdBD + "'");
             validaQuery(QUERY_COMPARATIVO_DE_ABANDONO_GAFM, filtro, valor, new StackTrace());
             return QUERY_COMPARATIVO_DE_ABANDONO_GAFM;
         }
@@ -926,8 +928,8 @@ namespace ML
             #region queries 
             QUERY_ENCUESTAS_ESPERADAS =
                                 @"SELECT  Empleado.UnidadNegocio FROM Empleado
-                            INNER JOIN EstatusEncuesta on Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
-                            WHERE 
+	                        INNER JOIN EstatusEncuesta on Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
+	                        WHERE 
                             Empleado.{0} = '{1}' and EstatusEmpleado = 'Activo'";
 
             QUERY_ENCUESTAS_TERMINADAS_LVL1Basic =
@@ -1042,7 +1044,7 @@ namespace ML
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
-                            (EmpleadoRespuestas.IdPregunta = 177 AND Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1})
+                            (EmpleadoRespuestas.IdPregunta = 177 AND Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND Empleado.{0} = {1} and Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY EmpleadoRespuestas.RespuestaEmpleado ASC";
 
@@ -1054,7 +1056,7 @@ namespace ML
                             INNER JOIN EstatusEncuesta ON EmpleadoRespuestas.IdEmpleado = EstatusEncuesta.IdEmpleado
                             WHERE 
                             (EmpleadoRespuestas.IdPregunta = 178 AND 
-                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND  Empleado.{0} = {1})
+                            Empleado.EstatusEmpleado = 'Activo' AND EstatusEncuesta.Estatus = 'TERMINADA' AND  Empleado.{0} = {1} and Empleado.IdBaseDeDatos = {2})
                             GROUP BY EmpleadoRespuestas.RespuestaEmpleado
                             ORDER BY EmpleadoRespuestas.RespuestaEmpleado ASC";
 
@@ -1259,7 +1261,7 @@ namespace ML
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             WHERE 
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado  = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad'
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad'
                             and EmpleadoRespuestas.Anio = {2} and Empleado.IdBaseDeDatos = {3})
                             OR
                             (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 1 AND 86 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad'
@@ -1273,7 +1275,7 @@ namespace ML
                             INNER JOIN EstatusEncuesta ON Empleado.IdEmpleado = EstatusEncuesta.IdEmpleado
                             INNER JOIN Preguntas ON EmpleadoRespuestas.IdPregunta = Preguntas.IdPregunta
                             WHERE 
-                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado  = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 87 AND 172 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad')
+                            (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado	 = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 87 AND 172 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Casi siempre es verdad')
                             OR
                             (EstatusEncuesta.Estatus = 'Terminada' AND Empleado.EstatusEmpleado = 'Activo' AND Empleado.{0} = '{1}' AND Preguntas.IdPregunta BETWEEN 87 AND 172 AND EmpleadoRespuestas.RespuestaEmpleado  = 'Frecuentemente es verdad')
                             GROUP BY Preguntas.IdPregunta, Preguntas.Pregunta, Preguntas.Enfoque
@@ -1328,20 +1330,6 @@ namespace ML
                             Anio = {3} order by Enfoque desc";
 
             #endregion queries
-
-
-
-            QUERY_REPORTE_CORPORATIVO =
-                            @"SELECT 
-                            EntidadId, EntidadNombre, Enfoque,
-                            Promedio66R, NivelConfianza, NivelCompromiso, NivelColaboracion,
-                            Creedibilidad, Imparcialidad, Orgullo, Respeto, Companierismo, IdTipoEntidad
-                            FROM HistoricoClima 
-                            WHERE 
-                            EntidadId = {0} AND 
-                            EntidadNombre = '{1}' AND 
-                            --IdTipoEntidad = {2} AND 
-                            Anio = {3} order by Enfoque desc";
         }
     }
 }

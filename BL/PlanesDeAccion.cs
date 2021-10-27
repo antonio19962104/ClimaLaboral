@@ -151,7 +151,46 @@ namespace BL
             return result;
         }
         /// <summary>
-        /// Obtiene los promedios de las subcategorias que previamenrte generó el job
+        /// Obtiene los promedios de las subcategorias que previamenrte generó el job (el promedio no importa solo lo configurado en la encuesta)
+        /// </summary>
+        /// <param name="promedioSubCategorias"></param>
+        /// <returns></returns>
+        public static ML.Result GetSubCategoriasByIdEncuesta(ML.PromedioSubCategorias promedioSubCategorias)
+        {
+            ML.Result result = new ML.Result();
+            result.Objects = new List<Object>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+
+                    var datapromediosSubCategorias = context.PromedioSubCategorias.Where(o => o.AnioAplicacion == promedioSubCategorias.AnioAplicacion && o.AreaAgencia == o.AreaAgencia && o.IdBaseDeDatos == promedioSubCategorias.IdBaseDeDatos && o.IdEncuesta == promedioSubCategorias.IdEncuesta).ToList();
+                    var data = datapromediosSubCategorias.ElementAt(0);
+                    if (data == null)
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "Los datos aún no se encuentran generados";
+                    }
+                    if (data.IdPromedioSubCategorias > 0)
+                    {
+                        ML.PromedioSubCategorias promedioSub = new ML.PromedioSubCategorias();
+                        promedioSub.IdPromedioSubCategorias = data.IdPromedioSubCategorias;
+                        promedioSub.JsonData = data.JsonData;
+                        result.Objects.Add(promedioSub);
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Obtiene los promedios de las subcategorias que previamenrte generó el job (con promedios)
         /// </summary>
         /// <param name="promedioSubCategorias"></param>
         /// <returns></returns>
@@ -163,6 +202,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
+
                     var datapromediosSubCategorias = context.PromedioSubCategorias.Where(o => o.AnioAplicacion == promedioSubCategorias.AnioAplicacion && o.AreaAgencia == promedioSubCategorias.AreaAgencia && o.IdBaseDeDatos == promedioSubCategorias.IdBaseDeDatos && o.IdEncuesta == promedioSubCategorias.IdEncuesta).ToList();
                     var data = datapromediosSubCategorias.ElementAt(0);
                     if (data == null)
@@ -385,12 +425,71 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var dataAcciones = context.Acciones.
+                    if (accionDeMejora.Encuesta.IdEncuesta > 0)// Son las acciones para una encuesta especifica
+                    {
+                        var dataAcciones = context.Acciones.
                         Where(o =>
                         o.IdEncuesta == accionDeMejora.Encuesta.IdEncuesta &&
                         o.IdBaseDeDatos == accionDeMejora.BasesDeDatos.IdBaseDeDatos &&
                         o.AnioAplicacion == accionDeMejora.AnioAplicacion &&
-                        o.IdEstatus == 1).ToList().OrderBy(o => o.IdCategoria);
+                        o.IdEstatus == 1 && o.Tipo == 1).ToList().OrderBy(o => o.IdCategoria);
+                        if (dataAcciones != null)
+                        {
+                            foreach (var item in dataAcciones)
+                            {
+                                ML.AccionDeMejora accion = new ML.AccionDeMejora();
+                                accion.IdAccionDeMejora = item.IdAccion;
+                                accion.Descripcion = item.Descripcion;
+                                accion.Categoria.IdCategoria = item.Categoria.IdCategoria;
+                                accion.Rango.IdRango = item.Rango.IdRango;
+                                result.Objects.Add(accion);
+                            }
+                            result.Correct = true;
+                        }
+                    }
+                    else // Son las acciones de ayuda de Noé, las cuales son genericas sin depender de una encuesta
+                    {
+                        var dataAcciones = context.Acciones.
+                        Where(o =>
+                        o.IdEstatus == 1 && o.Tipo == 2).ToList().OrderBy(o => o.IdCategoria);
+                        if (dataAcciones != null)
+                        {
+                            foreach (var item in dataAcciones)
+                            {
+                                ML.AccionDeMejora accion = new ML.AccionDeMejora();
+                                accion.IdAccionDeMejora = item.IdAccion;
+                                accion.Descripcion = item.Descripcion;
+                                result.Objects.Add(accion);
+                            }
+                            result.Correct = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Obtiene las acciones de ayuda
+        /// </summary>
+        /// <param name="accionDeMejora"></param>
+        /// <returns></returns>
+        public static ML.Result GetAccionesAyuda(ML.AccionDeMejora accionDeMejora)
+        {
+            ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var dataAcciones = context.Acciones.
+                        Where(o =>
+                        o.IdEstatus == 1 && o.Tipo == 2).ToList().OrderBy(o => o.IdCategoria);
                     if (dataAcciones != null)
                     {
                         foreach (var item in dataAcciones)
@@ -398,8 +497,6 @@ namespace BL
                             ML.AccionDeMejora accion = new ML.AccionDeMejora();
                             accion.IdAccionDeMejora = item.IdAccion;
                             accion.Descripcion = item.Descripcion;
-                            accion.Categoria.IdCategoria = item.Categoria.IdCategoria;
-                            accion.Rango.IdRango = item.Rango.IdRango;
                             result.Objects.Add(accion);
                         }
                         result.Correct = true;
@@ -427,6 +524,38 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
+                    if (accionDeMejora.Encuesta.IdEncuesta == 0) {
+                        if (accionDeMejora.IdAccionDeMejora == 0)
+                        {
+                            DL.Acciones accion = new DL.Acciones()
+                            {
+                                Descripcion = accionDeMejora.Descripcion,
+                                IdEstatus = accionDeMejora.Estatus.IdEstatus,
+                                Tipo = 2,
+                                FechaHoraCreacion = DateTime.Now,
+                                UsuarioCreacion = UsuarioActual,
+                                ProgramaCreacion = "Modulo Planes de Acción (Acciones de ayuda)"
+                            };
+                            context.Acciones.Add(accion);
+                            context.SaveChanges();
+                            result.Correct = true;
+                            return result;
+                        }
+                        if (accionDeMejora.IdAccionDeMejora > 0)
+                        {
+                            var Accion = context.Acciones.Where(o => o.IdAccion == accionDeMejora.IdAccionDeMejora).FirstOrDefault();
+                            if (Accion != null)
+                            {
+                                Accion.Descripcion = accionDeMejora.Descripcion;
+                                Accion.FechaHoraModificacion = DateTime.Now;
+                                Accion.UsuarioModificacion = UsuarioActual;
+                                Accion.ProgramaModificacion = "Modulo Planes de Acción (Acciones de ayuda)";
+                            }
+                            context.SaveChanges();
+                            result.Correct = true;
+                            return result;
+                        }                       
+                    }
                     if (accionDeMejora.IdAccionDeMejora == 0)// Insert
                     {
                         DL.Acciones accion = new DL.Acciones()
@@ -438,6 +567,7 @@ namespace BL
                             IdEncuesta = accionDeMejora.Encuesta.IdEncuesta,
                             IdBaseDeDatos = accionDeMejora.BasesDeDatos.IdBaseDeDatos,
                             AnioAplicacion = accionDeMejora.AnioAplicacion,
+                            Tipo = 1,
                             FechaHoraCreacion = DateTime.Now,
                             UsuarioCreacion = UsuarioActual,
                             ProgramaCreacion = "Modulo Planes de Acción"
@@ -459,6 +589,7 @@ namespace BL
                             Accion.IdEncuesta = accionDeMejora.Encuesta.IdEncuesta;
                             Accion.IdBaseDeDatos = accionDeMejora.BasesDeDatos.IdBaseDeDatos;
                             Accion.AnioAplicacion = accionDeMejora.AnioAplicacion;
+                            Accion.Tipo = 1;
                             Accion.FechaHoraModificacion = DateTime.Now;
                             Accion.UsuarioModificacion = UsuarioActual;
                             Accion.ProgramaModificacion = "Modulo Planes de Acción";

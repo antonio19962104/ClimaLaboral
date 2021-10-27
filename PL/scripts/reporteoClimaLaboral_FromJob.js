@@ -89,17 +89,56 @@ function GetDashBoard() {
             }
 
             var getFiltros = function () {
-                vm.modelHistorico.Anio = (vm.Anio.value - 1);
-                vm.modelHistorico.IdBaseDeDatos = document.getElementById("DDLBD").value;
+                vm.modelHistorico.Anio = cadenaDesenc == "" ? (vm.Anio.value - 1) : (vm.anioSeleccionado - 1);
+                vm.modelHistorico.IdBaseDeDatos = cadenaDesenc == "" ? document.getElementById("DDLBD").value : cadenaDesenc.split("|")[8];
                 vm.modelHistorico.idEncuesta = 1;
                 vm.modelHistorico.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
                 vm.modelHistorico.Entidad = vm.model.EntidadNombre;
 
-                vm.modelHistorico.nivelDetalle = (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (cadenaDesenc == "") {
+                    if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                            (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                            (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                            (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                }
+                else {
+                    vm.modelHistorico.nivelDetalle = vm.model.nivelDetalle;
+                }
 
                 vm.listAntiguedad = [];
                 vm.listGenero = [];
@@ -123,7 +162,7 @@ function GetDashBoard() {
                     default:
                 }
                 $.ajax({
-                    url: "/apis/GetRangosAntiguedad/?IdBaseDeDatos=" + document.getElementById("DDLBD").value,
+                    url: "/apis/GetRangosAntiguedad/?IdBaseDeDatos=" + vm.modelHistorico.IdBaseDeDatos,
                     type: "POST",
                     data: vm.modelHistorico,
                     success: function (response) {
@@ -505,7 +544,8 @@ function GetDashBoard() {
             vm.SeccionesReporte.Id = 1;
 
             vm.criteriosReporte = [
-                { Id: 0, Nombre: "-Selecciona-" },
+                { Id: -1, Nombre: "-Selecciona-" },
+                { Id: 0, Nombre: "Grupo Autofin" },
                 { Id: 1, Nombre: "Unidad de Negocio" },
                 { Id: 2, Nombre: "Dirección" },
                 { Id: 3, Nombre: "Área" },
@@ -774,6 +814,9 @@ function GetDashBoard() {
                                 vm.Area = Object;
                                 vm.Departamento = Object;
                                 switch (vm.criterioBusquedaSeleccionado.Id) {
+                                    case 0:
+                                        
+                                        break;
                                     case 1:
                                         vm.CompanyCategoria.IdCompanyCategoria = vm.entidadNombre;
                                         vm.CompanyCategoria.Descripcion = vm.entidadNombre;
@@ -994,12 +1037,21 @@ function GetDashBoard() {
                                         item.style.marginRight = "25px";
                                     });
                                 }
-                                if (resolucion <= 1369) {
-                                    [].forEach.call(multi26, function (item) {
-                                        item.style.marginTop = "-28rem";
-                                        item.style.marginRight = "25px";
-                                    });
+                                if (vm.enfoqueSeleccionado != 0) {
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-31rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
                                 }
+                                /*Ya se acomoda solo en esta resolicion*/
+                                //if (resolucion <= 1369) {
+                                //    [].forEach.call(multi26, function (item) {
+                                //        item.style.marginTop = "-28rem";
+                                //        item.style.marginRight = "25px";
+                                //    });
+                                //}
 
                             }
                         }
@@ -2009,7 +2061,20 @@ function GetDashBoard() {
                     /*Consultar si el anio anterior tiene historicos*/
                     vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
                     var validFind = false;
+                    var IdBdToken = cadenaDesenc.split("|")[8];
                     switch (vm.criterioBusquedaSeleccionado.Id) {
+                        case 0:
+                            if (document.getElementById("DDLBD").value > 0 || IdBdToken != "") {
+                                vm.model.IdBaseDeDatos = cadenaDesenc == "" ? document.getElementById("DDLBD").value : IdBdToken;
+                                vm.model.EntidadNombre = "GAFM";
+                                vm.model.Entidad = "GAFM";
+                                vm.model.EntidadId = "GAFM";
+                                validFind = true;
+                            }
+                            else {
+                                swal("Debes elegir una base de datos", "", "info"); validFind = false;
+                            }
+                            break;
                         case 1:
                             if (vm.CompanyCategoria.IdCompanyCategoria != null/* && vm.CompanyCategoria.IdCompanyCategoria > 0*/) {
                                 vm.model.EntidadNombre = vm.CompanyCategoria.Descripcion;
@@ -2044,12 +2109,47 @@ function GetDashBoard() {
 
                     vm.model.Anio = anioSeleccionado;
                     vm.model.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
-                    vm.model.nivelDetalle =
-                        (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                        (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                        (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                        (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                        (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    if (cadenaDesenc == "") {
+                        if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                                (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                                (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                                (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                    }
 
                     vm.modelHistorico = vm.model;
                     vm.model.CurrentUsr = localStorage["usuario"];
@@ -2082,6 +2182,7 @@ function GetDashBoard() {
                     }
 
                     vm.model.Anio = anioSeleccionado - 1;
+                    //vm.model.Anio = vm.Anio.value - 1;
                     if (vm.model.EntidadNombre != "" && vm.model.EntidadId != null && vm.model.EntidadId != "") {
                         if (validFind) {
                             fillArrayCustomHisto("apisHistorico/existeHistorico_2", vm.model, vm.ExisteH, function () {
@@ -2738,7 +2839,7 @@ function GetDashBoard() {
             }
 
             vm.ReglasSeccionarGraficoBarras = function () {
-                if (vm.seccionaGraph == 0) {
+                if (vm.seccionaGraph == 0 && vm.model.nivelDetalle.length >= 3) {
                     vm.seccionaGraph++;
                     var data = [];
                     var dataEE = [];
@@ -2771,12 +2872,15 @@ function GetDashBoard() {
                         }
                     }
 
+                    // Crear catalogo relacional y armar json tree
                     if (vm.model.nivelDetalle.length > 0 && vm.enfoqueSeleccionado != 0) {
                         if (true/*Agrupar un solo enfoque*/) {
-                            var nivel_1 = vm.model.nivelDetalle.charAt(0);
-                            var nivel_2 = vm.model.nivelDetalle.charAt(1);
-                            var nivel_3 = vm.model.nivelDetalle.charAt(2);
-                            var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);//0
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);//1
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);//2
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);//3
+                            var nivel_5 = vm.model.nivelDetalle.charAt(4);//4
+                            var nivel_6 = vm.model.nivelDetalle.charAt(5);//5
                             /*Relacionar por key cada item*/
                             [].forEach.call(data, function (item) {
                                 if (item.tipoEntidad == 1) {
@@ -2834,6 +2938,8 @@ function GetDashBoard() {
                                 hijo.children = [];
                                 vm.GraficoBarras[0].children.push(hijo);
                                 var listNietos = [];
+                                if (nivel_3 == "2")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
                                 if (nivel_3 == "3")
                                     listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
                                 if (nivel_3 == "4")
@@ -2844,6 +2950,8 @@ function GetDashBoard() {
                                     nieto.children = [];
                                     vm.GraficoBarras[0].children[index].children.push(nieto);
                                     var listBisNietos = [];
+                                    if (nivel_4 == "2")
+                                        listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
                                     if (nivel_4 == "3")
                                         listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
                                     if (nivel_4 == "4")
@@ -2853,20 +2961,54 @@ function GetDashBoard() {
                                     [].forEach.call(listBisNietos, function (bisnieto, index3) {
                                         bisnieto.children = [];
                                         vm.GraficoBarras[0].children[index].children[index2].children.push(bisnieto);
+
+
+                                        var listTataranietos = [];
+                                        if (nivel_5 == "2")
+                                            listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "3")
+                                            listTataranietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.CompanyId == bisnieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "4")
+                                            listTataranietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.IdArea == bisnieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "5")
+                                            listTataranietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.IdDepartamento == bisnieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                        [].forEach.call(listTataranietos, function (tataranieto, index4) {
+                                            tataranieto.children = [];
+                                            vm.GraficoBarras[0].children[index].children[index2].children[index3].children.push(tataranieto);
+                                            var listUltimo = [];
+                                            if (nivel_6 == "2")
+                                                listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "3")
+                                                listUltimo = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.CompanyId == tataranieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "4")
+                                                listUltimo = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.IdArea == tataranieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "5")
+                                                listUltimo = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.IdDepartamento == tataranieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                            [].forEach.call(listUltimo, function (ultimo, index5) {
+                                                vm.GraficoBarras[0].children[index].children[index2].children[index3].children[index4].children.push(ultimo);
+                                            });
+                                        });
                                     });
                                 });
                             });
                             console.log(vm.GraficoBarras);
                         }
                     }
+                    
+                    var uidGAFM;
                     if (vm.model.nivelDetalle.length > 0 && vm.enfoqueSeleccionado == 0) {
                         if (true/*Agrupar EE*/) {
                             var nivel_1 = vm.model.nivelDetalle.charAt(0);
                             var nivel_2 = vm.model.nivelDetalle.charAt(1);
                             var nivel_3 = vm.model.nivelDetalle.charAt(2);
                             var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            var nivel_5 = vm.model.nivelDetalle.charAt(4);//4
+                            var nivel_6 = vm.model.nivelDetalle.charAt(5);//5
                             /*Relacionar por key cada item*/
                             [].forEach.call(dataEE, function (item) {
+                                if (item.tipoEntidad == 0) {
+                                    uidGAFM = "AFM_" + vm.getUid();
+                                }
                                 if (item.tipoEntidad == 1) {
                                     uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
                                 }
@@ -2882,27 +3024,35 @@ function GetDashBoard() {
                                 if (item.tipoEntidad == 5) {
                                     uidSubd = "Subd_" + item.Entidad + vm.getUid();
                                 }
-
+                                item.Enfoque = "Enfoque Empresa";
                                 switch (item.tipoEntidad) {
+                                    case 0:
+                                        item.IdGAFM = uidGAFM;
+                                        break;
                                     case 1:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         break;
                                     case 2:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         break;
                                     case 3:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         item.IdArea = uidArea;
                                         break;
                                     case 4:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         item.IdArea = uidArea;
                                         item.IdDepartamento = uidDepto;
                                         break;
                                     case 5:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         item.IdArea = uidArea;
@@ -2922,6 +3072,8 @@ function GetDashBoard() {
                                 hijo.children = [];
                                 vm.GraficoBarrasEE[0].children.push(hijo);
                                 var listNietos = [];
+                                if (nivel_3 == "2")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
                                 if (nivel_3 == "3")
                                     listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
                                 if (nivel_3 == "4")
@@ -2932,6 +3084,8 @@ function GetDashBoard() {
                                     nieto.children = [];
                                     vm.GraficoBarrasEE[0].children[index].children.push(nieto);
                                     var listBisNietos = [];
+                                    if (nivel_4 == "2")
+                                        listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.IdUnidadNegocio == nieto.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
                                     if (nivel_4 == "3")
                                         listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
                                     if (nivel_4 == "4")
@@ -2941,18 +3095,52 @@ function GetDashBoard() {
                                     [].forEach.call(listBisNietos, function (bisnieto, index3) {
                                         bisnieto.children = [];
                                         vm.GraficoBarrasEE[0].children[index].children[index2].children.push(bisnieto);
+
+
+
+                                        var listTataranietos = [];
+                                        if (nivel_5 == "3")
+                                            listTataranietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_5 && o.CompanyId == bisnieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "4")
+                                            listTataranietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_5 && o.IdArea == bisnieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "5")
+                                            listTataranietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_5 && o.IdDepartamento == bisnieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                        [].forEach.call(listTataranietos, function (tataranieto, index4) {
+                                            tataranieto.children = [];
+                                            vm.GraficoBarrasEE[0].children[index].children[index2].children[index3].children.push(tataranieto);
+                                            var listUltimo = [];
+                                            if (nivel_6 == "3")
+                                                listUltimo = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_6 && o.CompanyId == tataranieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "4")
+                                                listUltimo = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_6 && o.IdArea == tataranieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "5")
+                                                listUltimo = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_6 && o.IdDepartamento == tataranieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                            [].forEach.call(listUltimo, function (ultimo, index5) {
+                                                vm.GraficoBarrasEE[0].children[index].children[index2].children[index3].children[index4].children.push(ultimo);
+                                            });
+                                        });
+
+
+
+
                                     });
                                 });
                             });
                             console.log(vm.GraficoBarrasEE);
                         }
+                        var uidGAFM;
                         if (true/*Agrupar EA*/) {
                             var nivel_1 = vm.model.nivelDetalle.charAt(0);
                             var nivel_2 = vm.model.nivelDetalle.charAt(1);
                             var nivel_3 = vm.model.nivelDetalle.charAt(2);
                             var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            var nivel_5 = vm.model.nivelDetalle.charAt(4);//4
+                            var nivel_6 = vm.model.nivelDetalle.charAt(5);//5
                             /*Relacionar por key cada item*/
                             [].forEach.call(dataEA, function (item) {
+                                if (item.tipoEntidad == 0) {
+                                    uidGAFM = "GAFM_" + vm.getUid();
+                                }
                                 if (item.tipoEntidad == 1) {
                                     uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
                                 }
@@ -2968,27 +3156,35 @@ function GetDashBoard() {
                                 if (item.tipoEntidad == 5) {
                                     uidSubd = "Subd_" + item.Entidad + vm.getUid();
                                 }
-
+                                item.Enfoque = "Enfoque Area";
                                 switch (item.tipoEntidad) {
+                                    case 0:
+                                        item.IdGAFM = uidGAFM;
+                                        break;
                                     case 1:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         break;
                                     case 2:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         break;
                                     case 3:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         item.IdArea = uidArea;
                                         break;
                                     case 4:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         item.IdArea = uidArea;
                                         item.IdDepartamento = uidDepto;
                                         break;
                                     case 5:
+                                        item.IdGAFM = uidGAFM;
                                         item.IdUnidadNegocio = uidUnidad;
                                         item.CompanyId = uidCompany;
                                         item.IdArea = uidArea;
@@ -3008,6 +3204,8 @@ function GetDashBoard() {
                                 hijo.children = [];
                                 vm.GraficoBarrasEA[0].children.push(hijo);
                                 var listNietos = [];
+                                if (nivel_3 == "2")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
                                 if (nivel_3 == "3")
                                     listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
                                 if (nivel_3 == "4")
@@ -3018,6 +3216,8 @@ function GetDashBoard() {
                                     nieto.children = [];
                                     vm.GraficoBarrasEA[0].children[index].children.push(nieto);
                                     var listBisNietos = [];
+                                    if (nivel_4 == "2")
+                                        listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.IdUnidadNegocio == nieto.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
                                     if (nivel_4 == "3")
                                         listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
                                     if (nivel_4 == "4")
@@ -3027,6 +3227,35 @@ function GetDashBoard() {
                                     [].forEach.call(listBisNietos, function (bisnieto, index3) {
                                         bisnieto.children = [];
                                         vm.GraficoBarrasEA[0].children[index].children[index2].children.push(bisnieto);
+
+
+
+                                        var listTataranietos = [];
+                                        if (nivel_5 == "3")
+                                            listTataranietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_5 && o.CompanyId == bisnieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "4")
+                                            listTataranietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_5 && o.IdArea == bisnieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "5")
+                                            listTataranietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_5 && o.IdDepartamento == bisnieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                        [].forEach.call(listTataranietos, function (tataranieto, index4) {
+                                            tataranieto.children = [];
+                                            vm.GraficoBarrasEA[0].children[index].children[index2].children[index3].children.push(tataranieto);
+                                            var listUltimo = [];
+                                            if (nivel_6 == "3")
+                                                listUltimo = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_6 && o.CompanyId == tataranieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "4")
+                                                listUltimo = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_6 && o.IdArea == tataranieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "5")
+                                                listUltimo = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_6 && o.IdDepartamento == tataranieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                            [].forEach.call(listUltimo, function (ultimo, index5) {
+                                                vm.GraficoBarrasEA[0].children[index].children[index2].children[index3].children[index4].children.push(ultimo);
+                                            });
+                                        });
+
+
+
+
+
                                     });
                                 });
                             });
@@ -3065,8 +3294,8 @@ function GetDashBoard() {
                             $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
                             $("hr:visible:first").css("display", "none");
                             $(".card:visible:first").css("display", "none");
-                            var resumen = vm.GraficoBarrasEA[0];
-                            [].forEach.call(vm.GraficoBarrasEA[0].children, function (hijo) {
+                            var resumen = vm.GraficoBarrasEE[0];
+                            [].forEach.call(vm.GraficoBarrasEE[0].children, function (hijo) {
                                 var uidPadre = vm.getUid();
                                 var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
                                 htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, hijo, dataEA, hijo /*vm.GraficoBarrasEA[0]*/);
@@ -3083,7 +3312,6 @@ function GetDashBoard() {
                                         // Insertar nieto como padre
                                         if (nieto.children.length == 0) {
                                             // Se debe rmeover el bloque
-                                            alert("Remover bloque");
                                         }
                                         if (nieto.children.length > 0) {
                                             [].forEach.call(nieto.children, function (bisnieto) {
@@ -3091,6 +3319,29 @@ function GetDashBoard() {
                                                 var htmlCode = GetContenidoHTMLBarrasPadre(uidBisnieto, "NotDeleteDiv");
                                                 htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, bisnieto, dataEA, /*bisnieto*/ nieto);//Aqui si se debe mostrar el papá en el resumen
                                                 $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+
+
+                                                // Agregado JAMG
+                                                if (bisnieto.children.length > 0) {
+                                                    [].forEach.call(bisnieto.children, function (tataranieto) {
+                                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                                        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, tataranieto, dataEA, tataranieto);
+                                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidBisnieto).append(htmlCode);
+
+                                                        // Agregado JAMG opcional ultimo nivel
+                                                        //if (tataranieto.children.length > 0) {
+                                                        //    [].forEach.call(tataranieto.children, function (ultima) {
+                                                        //        var uidUltimo = vm.getUid();
+                                                        //        var htmlCode = GetContenidoHTMLBarrasPadre(uidUltimo, "NotDeleteDiv");
+                                                        //        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, ultimo, dataEA, tataranieto);
+                                                        //        $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                                        //    });
+                                                        //}
+
+                                                    });
+                                                }
+
+
                                             });
                                         }
                                     });
@@ -3099,7 +3350,7 @@ function GetDashBoard() {
                         }
                     }
 
-
+                    // Mostrar secciones en el dom
                     if (vm.enfoqueSeleccionado != 0) {
                         if (vm.model.nivelDetalle.length == 3) {
                             // Mostrar graficos
@@ -3155,6 +3406,31 @@ function GetDashBoard() {
                                                 var htmlCode = GetContenidoHTMLBarrasPadre(uidBisnieto, "NotDeleteDiv");
                                                 htmlCode = ReplaceContent(htmlCode, bisnieto.Entidad, bisnieto.Porcentaje, bisnieto.HC, /*bisnieto*/ nieto);
                                                 $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+
+
+
+                                                // Agregado JAMG
+                                                if (bisnieto.children.length > 0) {
+                                                    [].forEach.call(bisnieto.children, function (tataranieto) {
+                                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                                        htmlCode = ReplaceContent(htmlCode, tataranieto.Entidad, tataranieto.Porcentaje, tataranieto.HC, tataranieto);
+                                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidBisnieto).append(htmlCode);
+
+                                                        // Agregado JAMG opcional ultimo nivel
+                                                        //if (tataranieto.children.length > 0) {
+                                                        //    [].forEach.call(tataranieto.children, function (ultima) {
+                                                        //        var uidUltimo = vm.getUid();
+                                                        //        var htmlCode = GetContenidoHTMLBarrasPadre(uidUltimo, "NotDeleteDiv");
+                                                        //        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, ultimo, dataEA, tataranieto);
+                                                        //        $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                                        //    });
+                                                        //}
+
+                                                    });
+                                                }
+
+
+
                                             });
                                         }
                                     });
@@ -3196,7 +3472,7 @@ function GetDashBoard() {
                     var secciones = $("#tab-" + vm.SeccionesReporte.Id + " .card");
                     // alert(secciones.length);
                     if (secciones.length == 0) {
-                        alert("No se pudo seccionar la información");
+                        console.log("No se pudo seccionar la información");
                         vm.seccionaGraph = 0;
                         vm.ReglasSeccionarGraficoBarras();
                     }
@@ -3545,8 +3821,8 @@ function GetDashBoard() {
             }
 
             var ReplaceContentEnfoqueCombinado = function (htmlCode, itemEE, objetoEA, padreResumenEE) {
-                var itemEA = Enumerable.from(objetoEA).where(o => o.Entidad == itemEE.Entidad).firstOrDefault();
-                var padreResumenEA = Enumerable.from(objetoEA).where(o => o.Entidad == padreResumenEE.Entidad).firstOrDefault();
+                var itemEA = Enumerable.from(objetoEA).where(o => o.Entidad == itemEE.Entidad && o.Enfoque == "Enfoque Area").firstOrDefault();
+                var padreResumenEA = Enumerable.from(objetoEA).where(o => o.Entidad == padreResumenEE.Entidad && o.Enfoque == "Enfoque Area").firstOrDefault();
 
                 htmlCode = htmlCode.replace("{{ setIconoEE }}", vm.setIconoSVG(itemEE.Porcentaje));
                 htmlCode = htmlCode.replace("{{ setPorcentajeEE }}", itemEE.Porcentaje);
@@ -4137,17 +4413,18 @@ function GetDashBoard() {
                                         
                                         $(".categoria-bl:visible .col").css("font-size","12px");
                                         if (vm.SeccionesReporte.Id == 8) {
+                                             $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
                                             $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
-                                            $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
-                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
-                                            $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("padding-left","10px");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","15px");
+                                            //$(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
+                                            //$(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("padding-left","10px");
                                             $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("line-height","1.2");
                                             document.getElementById(paginaActiva).style.marginTop = "0px";
                                              ptDefault = 0;
 
                                         }
                                         else {
-                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","15px");
                                             document.getElementById(paginaActiva).style.marginTop = "95px";
                                             ptDefault = 30;
                                         }
@@ -4288,8 +4565,8 @@ function GetDashBoard() {
                                         docReporte.addPage();
                                         var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
                                         var divExportacion = vm.enfoqueSeleccionado == 1 ? "tab-bienestar-ee" : "tab-bienestar-ea";
-                                        var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
-                                        var itemsMapeo = $("#" + idTabla + " ." + hijo);
+                                        //var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
+                                        //var itemsMapeo = $("#" + idTabla + " ." + hijo);
                                         /*var cortesS = itemsMapeo.map(async (llave, indice) => {
                                             //historicoCorte.push(llave);
                                             document.getElementById("tab-17").classList.remove("ng-hide");
@@ -4517,6 +4794,149 @@ function GetDashBoard() {
                                                 }
                                                 if (paginaActiva == "tab-indicadores-permanencia") {
                                                     if ($(window).width() > 1610) {
+													                                                        /*Regresa estado normal Camos 21102021*/
+                                                        var barrasB1 = $(".label-top-graphic");
+                                                        var numbarrasB1 =  barrasB1.length;
+                                                        var separanum ="";
+                                                        var parnum = 0;                                    
+                                                        var sepasa = false;
+                                                        var valbarra = 0; 
+                                                        var valpadding = 0;
+                                                        var valpaddingM = 0;
+                                                        [].forEach.call(barrasB1,function (elem) {
+                                                            separanum = elem.innerText; 
+                                                            separanum = separanum.replace("%","");
+                                                            parnum =  parseFloat(separanum);                                          
+                                                            if (parnum >= 50) {
+                                                                sepasa= true;
+                                                                return;
+                                                            }
+                                                        });
+                                                        if (sepasa) {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra = 1.5;
+                                                                valpaddingM=1.6;
+                                                                valpadding = 1.7;//-.15
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra = 1.5;
+                                                                valpaddingM=1.6;
+                                                                valpadding = 1.7;//-.15
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra = 1.5;
+                                                                valpaddingM=1.6;
+                                                                valpadding = 1.7;//-.15
+                                                            }
+                                                        }
+                                                        else {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra = 3;
+                                                                valpadding = 9 ;
+                                                                valpaddingM =1.5;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra = 3;
+                                                                valpaddingM = 1.5;
+                                                                valpadding = 9;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra = 3;
+                                                                valpaddingM = 1.5;
+                                                                valpadding = 9;
+                                                            }                                        
+                                                        }
+                                                        var elementBAzul= $(".grafica-trabajarEx .bar");
+                                                        [].forEach.call(elementBAzul,function (elem) {
+                                                            var mt = parseInt(elem.style.minHeight);
+                                                            var newmt = mt / valbarra;
+                                                            elem.style.minHeight = newmt + "px";
+                                                        });
+                                                        var elementBMorado= $(".grafica-trabajarEx .bar-progress2");
+                                                        [].forEach.call(elementBMorado,function (elem) {
+                                                            var mt = parseInt(elem.style.height);
+                                                            var newmt = mt / valpaddingM;
+                                                            elem.style.height = newmt + "px";
+                                                        });
+                                                        var paddingelemento = $(".grafica-trabajarEx .bar-progress");
+                                                        [].forEach.call(paddingelemento,function (elem) {
+                                                            var mtp = parseInt(elem.style.paddingBottom);
+                                                            var newmtp = mtp / valpadding;
+                                                            elem.style.paddingBottom = newmtp + "px";
+    
+                                                        });
+
+                                                        // Lo que haría
+                                                        var barrasB2 = $(".label-top-graphic-blue");
+                                                        var numbarrasB2 =  barrasB2.length;
+                                                        var separanum2 ="";
+                                                        var parnum2 = 0;                                    
+                                                        var sepasa2 = false;
+                                                        var valbarra2 = 0;
+                                                        var valpadding2 = 0;
+                                                        var valpadding2M = 0;
+                                                        [].forEach.call(barrasB2,function (elem) {
+                                                            separanum2 = elem.innerText; 
+                                                            separanum2 = separanum2.replace("%","");
+                                                            parnum2 =  parseFloat(separanum2);
+                                                            if (parnum2 >= 50) {
+                                                                sepasa2= true;
+                                                                return;
+                                                            }
+                                                        });                                   
+                                                        if (sepasa2) {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra2 = 1.5;
+                                                                valpadding2M=1.6;
+                                                                valpadding2 = 1.7;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra2 = 1.5;
+                                                                valpadding2M=1.6;
+                                                                valpadding2 = 1.7;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra2 = 1.5;
+                                                                valpadding2M=1.6;
+                                                                valpadding2 = 1.7;
+                                                            }                                       
+                                                        }
+                                                        else {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra2 = 3;
+                                                                valpadding2M = 1.5;
+                                                                valpadding2 = 9;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra2 = 3;
+                                                                valpadding2M = 1.5;
+                                                                valpadding2 = 9;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra2 = 3;
+                                                                valpadding2M = 1.5;
+                                                                valpadding2 = 9;
+                                                            } 
+                                                        }
+                                                        var elementBAzul2= $(".grafica-dejarEx .bar2");
+                                                        [].forEach.call(elementBAzul2,function (elem) {
+                                                            var mt = parseInt(elem.style.minHeight);
+                                                            var newmt = mt / valbarra2;
+                                                            elem.style.minHeight = newmt + "px";
+                                                        });                                    
+                                                        var elementBMorado2= $(".grafica-dejarEx .bar-progress4");
+                                                        [].forEach.call(elementBMorado2,function (elem) {
+                                                            var mt = parseInt(elem.style.height);
+                                                            var newmt = mt / valpadding2M;
+                                                            elem.style.height = newmt + "px";
+                                                        });
+                                                        var paddingelemento2 = $(".grafica-dejarEx .bar-progress3");
+                                                        [].forEach.call(paddingelemento2,function (elem) {
+                                                            var mtp = parseInt(elem.style.paddingBottom);
+                                                            var newmtp = mtp / valpadding2;
+                                                            elem.style.paddingBottom = newmtp + "px";
+    
+                                                        });
                                                         var indicador = document.getElementsByClassName("margin-top-nuevo");
                                                         [].forEach.call(indicador, function (itemD) {
                                                             var mt = parseInt(itemD.style.marginTop);
@@ -4604,6 +5024,9 @@ function GetDashBoard() {
                 vm.contadorNextButton++;
                 vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
                 // Validar avance
+                if (vm.opc == "0") {
+                    vm.opc = "1";
+                }
                 if (vm.opc == "1" || vm.opc == "4") {
                     if (vm.SeccionesReporte.Id == 2) {
                         //Guardar orden de datos demograficos
@@ -6549,6 +6972,85 @@ function GetDashBoard() {
                                     item.style.display = "";
                                 });
                             }
+							if (anterior == 21 || anterior == 22) {
+                                if (anterior == 21) {
+                                    $("#tab-21 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ee .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    //var graficaHCN = $("#tab-generales-departamento-ee .hc:visible");
+                                    //[].forEach.call(graficaHCN, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //    graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                    //    graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                    //});
+                                    //var grafHC = $("#tab-generales-departamento-ee .hc-doble:visible");
+                                    //[].forEach.call(grafHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    //var graficaHC = $("#tab-generales-departamento-ee .bar-progress4:visible");
+                                    //[].forEach.call(graficaHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    var parrafoHC = $("#tab-generales-departamento-ee .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 27 )  + "px";
+                                    });
+                                }
+                                else {
+                                    $("#tab-22 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ea .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    //var graficaHCN = $("#tab-generales-departamento-ea .hc:visible");
+                                    //[].forEach.call(graficaHCN, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //    graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                    //    graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                    //});
+                                    //var grafHC = $("#tab-generales-departamento-ea .hc-doble:visible");
+                                    //[].forEach.call(grafHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    //var graficaHC = $("#tab-generales-departamento-ea .bar-progress4:visible");
+                                    //[].forEach.call(graficaHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    var parrafoHC = $("#tab-generales-departamento-ea .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 27)  + "px";
+                                    });
+        
+                                }
+                                
+                                
+                                var multi26 = $(".contenedor-resumen:visible");
+                                
+                                if (multi26.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = vm.enfoqueSeleccionado != 0 ? "-26rem" : "-25rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-28rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+
+                                }
+
+                            }
                             if (contenedor.offsetHeight == 0 || contenedor.offsetHeight == undefined) {
                                 var con = tab.getElementsByClassName("grafica-trabajar");
                                 for (var i = 0; i < con.length; i++) {
@@ -6630,6 +7132,59 @@ function GetDashBoard() {
                             }
                             if (anterior == 24) {
                                 document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                            }
+							     if (anterior == 21 || anterior == 22) {
+                                if (anterior == 21) {
+                                    $("#tab-21 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ee .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                   
+                                    var parrafoHC = $("#tab-generales-departamento-ee .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 19 )  + "px";
+                                    });
+                                }
+                                else {
+                                    $("#tab-22 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ea .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                  
+                                    var parrafoHC = $("#tab-generales-departamento-ea .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 19)  + "px";
+                                    });
+        
+                                }
+                                
+                                
+                                var multi26 = $(".contenedor-resumen:visible");
+                                
+                                if (multi26.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = vm.enfoqueSeleccionado != 0 ? "-26rem" : "-25rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-26rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+
+                                }
+
                             }
                             if (contenedor.offsetHeight == 0 || contenedor.offsetHeight == undefined) {
                                 var con = tab.getElementsByClassName("grafica-trabajar");
@@ -7703,6 +8258,9 @@ function GetDashBoard() {
                 var formValid = true;
                 // validar filtros
                 switch (vm.criterioBusquedaSeleccionado.Id) {
+                case 0:
+
+                break;
                     case 1:
                         if (vm.CompanyCategoria == null)
                             formValid = false;
@@ -7760,12 +8318,47 @@ function GetDashBoard() {
                 vm.model.Anio = vm.modelHistorico.Anio;
 
                 vm.existeReporte = Object;
-                vm.modelHistorico.nivelDetalle =
-                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+
+
                 if (getParamByUrl("token") == null) {
                     vm.modelHistorico.Anio = vm.anioSeleccionado.value - 1;
                     vm.modelHistorico.IdBaseDeDatos = parseInt(document.getElementById("DDLBD").value);
@@ -7921,7 +8514,7 @@ function GetDashBoard() {
                     vm.flagLoading = true;
                     try {
                         vm.isBusy = true;
-                        if (vm.criterioBusquedaSeleccionado.Id > 0) {
+                        if (vm.criterioBusquedaSeleccionado.Id >= 0) {
                             vm.UNSeleccionada = vm.modelHistorico.EntidadNombre;
                             vm.storeName = "_" + vm.modelHistorico.EntidadId + "_" + vm.modelHistorico.EntidadNombre + "_" + (vm.modelHistorico.Anio + 1);
                             /*if (localStorage["esperadas" + vm.storeName] != null && localStorage["participacion" + vm.storeName] != null && localStorage["califGlobal" + vm.storeName] != null && localStorage["confianza" + vm.storeName] != null && localStorage["compromiso" + vm.storeName] != null && localStorage["colaboracion" + vm.storeName] != null) {
@@ -7979,6 +8572,10 @@ function GetDashBoard() {
                                                             localStorage.setItem("colaboracion" + vm.storeName, JSON.stringify(vm.PorcentajeNivelDeColaboracion));
                                                             //vm.getEstructura();
                                                             /*vm.isBusy = false;*/
+                                                            if (cadenaDesenc != "") {
+                                                                getFiltros();
+                                                                vm.getEstructura();
+                                                            }
                                                             if (vm.SeccionesReporte.Id == 1) {
                                                                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 1;
                                                             }
@@ -8892,7 +9489,9 @@ function GetDashBoard() {
                             vm.getReporteDataPantalla_22();
                             return;
                         }
-                        vm.ReglasSeccionarGraficoBarras();
+                        if (vm.enfoqueSeleccionado == 1) {
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
                         document.getElementsByClassName("busy")[1].style.display = "none";
                         vm.isBusy = false;
                     });
@@ -14816,6 +15415,24 @@ function GetDashBoard() {
                 try {
                     if (vm.EstructuraColumnas.Data == undefined && vm.contadorEstructura == 0) {
                         switch (vm.criterioBusquedaSeleccionado.Id) {
+                            case 0:
+                                if (vm.model.EntidadNombre != "") {
+                                    vm.EstructuraColumnas = [];
+                                    vm.contadorEstructura = 1;
+                                    if (getParamByUrl("token") == null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 0 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.model.EntidadNombre, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
+                                    if (getParamByUrl("token") != null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 0 + "&IdBD=" + vm.model.IdBaseDeDatos + "&entidadNombre=" + vm.model.EntidadNombre, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
+                                }
+                                break;
                             case 1:
                                 /*Unidad de Negocio*/
                                 if (vm.CompanyCategoria.IdCompanyCategoria != "" && vm.CompanyCategoria.IdCompanyCategoria != 0) {
@@ -14900,22 +15517,39 @@ function GetDashBoard() {
                      * Configurar columnas del grafico de bienestar según el nivel de detalle
                      */
                     vm.ColumnasBienestar = Enumerable.from(vm.finalColumnas).toArray();
+                    document.getElementById("tab-1").classList.remove("ng-hide");
                     //Eliminar los niveles no autorizados
-                    if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1 && document.getElementsByClassName("lvlUNeg")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
+                    //if (vm.lvl0 == false && vm.criterioBusquedaSeleccionado.Id != 0 && $(".lvlAFM_:visible")[0].checked == false) {
+                    //    vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
+                    //}
+                    if ($(".lvlUNeg:visible").length > 0) {
+                        if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1 && $(".lvlUNeg:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
+                        }
                     }
-                    if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2 && document.getElementsByClassName("lvlComp")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                    if ($(".lvlComp:visible").length > 0) {
+                        if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2 && $(".lvlComp:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
                     }
-                    if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3 && document.getElementsByClassName("lvlArea")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                    if ($(".lvlArea:visible").length > 0) {
+                        if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3 && $(".lvlArea:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
                     }
-                    if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4 && document.getElementsByClassName("lvlDpto")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                    if ($(".lvlDpto:visible").length > 0) {
+                        if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4 && $(".lvlDpto:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
                     }
-                    if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5 && document.getElementsByClassName("lvlSubD")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                    if ($(".lvlSubD:visible").length > 0) {
+                        if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5 && $(".lvlSubD:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
                     }
+                    
+                    
+                    
 
                     // Filtrar columnas bienestar elimiando subdepartamentos redundantes cuyo nombre termina es - -
                     vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where(o => o.value.includes(" - -") == false).toList();//AUT - ELE - AEP - ADM
@@ -14925,7 +15559,11 @@ function GetDashBoard() {
                     var nivel3 = vm.model.nivelDetalle.charAt(2);
                     var nivel4 = vm.model.nivelDetalle.charAt(3);
                     var nivel5 = vm.model.nivelDetalle.charAt(4);
+                    var nivel6 = vm.model.nivelDetalle.charAt(5);
                     if (nivel3 != "") {
+                        if (nivel3 == "2") {//quitar direcciones
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
                         if (nivel3 == "3") {//quitar areas
                             vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
                         }
@@ -14937,6 +15575,9 @@ function GetDashBoard() {
                         }
                     }
                     if (nivel4 != "") {
+                        if (nivel4 == "2") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
                         if (nivel4 == "3") {//quitar areas
                             vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
                         }
@@ -14948,6 +15589,9 @@ function GetDashBoard() {
                         }
                     }
                     if (nivel5 != "") {
+                        if (nivel5 == "2") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
                         if (nivel5 == "3") {//quitar areas
                             vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
                         }
@@ -14958,10 +15602,32 @@ function GetDashBoard() {
                             vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
                         }
                     }
+                    if (nivel6 != "") {
+                        if (nivel6 == "2") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
+                        if (nivel6 == "3") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
+                        if (nivel6 == "4") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
+                        if (nivel6 == "5") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
+                    }
+
+                    
                     
                     //vm.ColumnasBienestar.shift();//Eliminar duplicado inicial
                     /*Configuracion para factor psicosocial*/
                     switch (vm.criterioBusquedaSeleccionado.Id) {
+                        case 0:
+                            vm.ColumnasByCompanyCategoria = Enumerable.from(vm.finalColumnas)
+                                .where('$.type.match(/^UNeg/i)')
+                                .orderBy('$.value')
+                                .toArray();
+                            break;
                         case 1:
                             vm.ColumnasByCompanyCategoria = Enumerable.from(vm.finalColumnas)
                                 .where('$.type.match(/^Comp/i)')
@@ -14996,6 +15662,9 @@ function GetDashBoard() {
                             alert("Opcion no válida");
                             break;
                     }
+
+                    document.getElementById("tab-1").classList.add("ng-hide");
+
                     /*Convertir a array de cadena para enviarlo al back*/
                     vm.arrayStringFiltros = [];
                     vm.arrayStringFiltrosBienestar = [];
@@ -15008,7 +15677,13 @@ function GetDashBoard() {
                     if (vm.arrayStringFiltrosBienestar.length == 0 && getParamByUrl("token") != null) {
                         vm.arrayStringFiltrosBienestar.push("Valor default para cuando tengo token");
                     }
-                    vm.ColumnasBienestar.shift();
+                    if (vm.criterioBusquedaSeleccionado.Id != 0) {
+                        vm.ColumnasBienestar.shift();
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                        vm.ColumnasBienestar.unshift({ type: "", value: "Grupo Autofin" });
+                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).distinct().toList()
+                    }
 					 /****Se llena el numero de columnas para paginas de Indicadores 07/10/2021 Camos****/
                     vm.NumColumnasBienestar = vm.ColumnasBienestar.length;
                     /****Se calcula el CSS segun el numero de columnas 07/10/2021 Camos*****************/
@@ -15999,6 +16674,9 @@ function GetDashBoard() {
                 vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
                 var validFind = false;
                 switch (vm.criterioBusquedaSeleccionado.Id) {
+                    case 0:
+
+                        break;
                     case 1:
                         if (vm.CompanyCategoria.IdCompanyCategoria != null && vm.CompanyCategoria.IdCompanyCategoria != "") {
                             vm.model.EntidadNombre = vm.CompanyCategoria.Descripcion;
@@ -16037,12 +16715,45 @@ function GetDashBoard() {
                 vm.model.currentURL = vm.urlApis;
                 vm.model.IdBaseDeDatos = document.getElementById("DDLBD").value;
                 vm.model.ps = localStorage["ps"];
-                vm.model.nivelDetalle = 
-                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
                         /*public int opc { get; set; } = 0;
                         public int tipoEntidad { get; set; } = 0;
                         public string EntidadName { get; set; } = "";
@@ -16053,18 +16764,34 @@ function GetDashBoard() {
                 vm.model.EntidadName = vm.model.EntidadNombre;
                 vm.model.enfoqueSeleccionado = vm.enfoqueSeleccionado;
 
-                fillArrayCustomHisto("BackGroundJob/execute", vm.model, vm.ExisteH, function () {
-                    if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {
-                        swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
-                    }
-                    else {
-                        localStorage["tieneReporte"] = "";
-                        /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
-                            vm.listPeticiones = [];
-                            window.location.href = "/reporteoClima/Index/";
-                        });*/
-                    }
-                });
+                if (vm.criterioBusquedaSeleccionado.Id > 0) {
+                    fillArrayCustomHisto("BackGroundJob/execute", vm.model, vm.ExisteH, function () {
+                        if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {
+                            swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
+                        }
+                        else {
+                            localStorage["tieneReporte"] = "";
+                            /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
+                                vm.listPeticiones = [];
+                                window.location.href = "/reporteoClima/Index/";
+                            });*/
+                        }
+                    });
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                    fillArrayCustomHisto("BackGroundJob/executeGeneral", vm.model, vm.ExisteH, function () {
+                        if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {
+                            swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
+                        }
+                        else {
+                            localStorage["tieneReporte"] = "";
+                            /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
+                                vm.listPeticiones = [];
+                                window.location.href = "/reporteoClima/Index/";
+                            });*/
+                        }
+                    });
+                }
 
                 /*resolucion de todos los data*/
                 var txt = '{"ContentEncoding":null,"ContentType":null,"Data":[2015],"JsonRequestBehavior":0,"MaxJsonLength":null,"RecursionLimit":null}';
@@ -16961,43 +17688,47 @@ var cortes = async function (tipoEntidad = 1, iteracion = 0, tabla, padding) {
 
 
 var getHijo = function (tipoEntidad) {
-    var nivelDetalle = 
-        (document.getElementsByClassName("lvlUNeg")[0].checked == true || tipoEntidad == 1 ? "1" : "") +
-        (document.getElementsByClassName("lvlComp")[0].checked == true || tipoEntidad == 2 ? "2" : "") +
-        (document.getElementsByClassName("lvlArea")[0].checked == true || tipoEntidad == 3 ? "3" : "") +
-        (document.getElementsByClassName("lvlDpto")[0].checked == true || tipoEntidad == 4 ? "4" : "") +
-        (document.getElementsByClassName("lvlSubD")[0].checked == true || tipoEntidad == 5 ? "5" : "");//345
-    var padre = nivelDetalle.charAt(0);
-    var hijo = nivelDetalle.charAt(1);
-    if (hijo == "")
-        hijo = padre;
-    switch (parseInt(hijo)) {
-        case 1: // Unidad de negocio
-            if (nivelDetalle.includes("3"))
+    try {
+        var nivelDetalle =
+            ($(".lvlUNeg:visible")[0].checked == true || tipoEntidad == 1 ? "1" : "") +
+            ($(".lvlComp:visible")[0].checked == true || tipoEntidad == 2 ? "2" : "") +
+            ($(".lvlArea:visible")[0].checked == true || tipoEntidad == 3 ? "3" : "") +
+            ($(".lvlDpto:visible")[0].checked == true || tipoEntidad == 4 ? "4" : "") +
+            ($(".lvlSubD:visible")[0].checked == true || tipoEntidad == 5 ? "5" : "");//345
+        var padre = nivelDetalle.charAt(0);
+        var hijo = nivelDetalle.charAt(1);
+        if (hijo == "")
+            hijo = padre;
+        switch (parseInt(hijo)) {
+            case 1: // Unidad de negocio
+                if (nivelDetalle.includes("3"))
+                    return "Area";
+                if (nivelDetalle.includes("4"))
+                    return "Dpto";
+                if (nivelDetalle.includes("5"))
+                    return "SubD";
+                return "UNeg";
+            case 2: // Direccion
+                if (nivelDetalle.includes("3"))
+                    return "Area";
+                if (nivelDetalle.includes("4"))
+                    return "Dpto";
+                if (nivelDetalle.includes("5"))
+                    return "SubD";
+                return "Comp";
+            case 3: // Area
+                if (nivelDetalle.includes("4"))
+                    return "Dpto";
+                if (nivelDetalle.includes("5"))
+                    return "SubD";
                 return "Area";
-            if (nivelDetalle.includes("4"))
+            case 4: // Depto
+                if (nivelDetalle.includes("5"))
+                    return "Dpto";
                 return "Dpto";
-            if (nivelDetalle.includes("5"))
-                return "SubD";
-            return "UNeg";
-        case 2: // Direccion
-            if (nivelDetalle.includes("3"))
-                return "Area";
-            if (nivelDetalle.includes("4"))
-                return "Dpto";
-            if (nivelDetalle.includes("5"))
-                return "SubD";
-            return "Comp";
-        case 3: // Area
-            if (nivelDetalle.includes("4"))
-                return "Dpto";
-            if (nivelDetalle.includes("5"))
-                return "SubD";
-            return "Area";
-        case 4: // Depto
-            if (nivelDetalle.includes("5"))
-                return "Dpto";
-            return "Dpto";
+        }
+    } catch (e) {
+        alert();
     }
 }
 

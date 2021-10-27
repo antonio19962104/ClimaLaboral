@@ -97,7 +97,7 @@
     </div>
 
     <!--Seleccionar nivel de detalle-->
-    <div class="form-group sectionConf" ng-show="vm.criterioBusquedaSeleccionado.Id">
+    <div class="form-group sectionConf" ng-show="vm.criterioBusquedaSeleccionado.Id > 0">
         <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
             <label style="font-weight: bold;">Elige el nivel de detalle del reporte</label>
             <div id="selector-level">
@@ -115,6 +115,32 @@
                         <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 4"><input ng-model="vm.lvl4" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 3 || vm.criterioBusquedaSeleccionado.Id == 4" ng-checked="vm.criterioBusquedaSeleccionado.Id == 3 || vm.criterioBusquedaSeleccionado.Id == 4" class="selected lvlDetalle lvlDpto" value="departamento" type="checkbox" name="departamento" id="departamento" /><label for="departamento">Departamento</label></li>
                         <!--vm.criterioBusquedaSeleccionado.Id = 5-->
                         <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 5"><input ng-model="vm.lvl5" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 4 || vm.criterioBusquedaSeleccionado.Id == 5" ng-checked="vm.criterioBusquedaSeleccionado.Id == 4 || vm.criterioBusquedaSeleccionado.Id == 5" class="selector lvlDetalle lvlSubD" value="subdepartamento" type="checkbox" name="subdepartamento" id="subdepartamento" /><label for="subdepartamento">Subdepartamento</label></li>
+                    </ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group sectionConf" ng-show="vm.criterioBusquedaSeleccionado.Id == 0">
+        <div class="col-lg-4 col-md-4 col-xs-4 col-sm-12">
+            <label style="font-weight: bold;">Elige el nivel de detalle del reporte</label>
+            <div id="selector-level">
+                <ul style="list-style-type: disclosure-open;">
+                    <li ng-hide="vm.criterioBusquedaSeleccionado.Id >= 1">
+                        <!--vm.criterioBusquedaSeleccionado.Id = 1-->
+                        <input ng-model="vm.lvl0" class="lvlDetalle lvlAFM_" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 0" ng-checked="vm.criterioBusquedaSeleccionado.Id == 0" value="" type="checkbox"> Grupo Autofin
+                    </li>
+                    <ul style="margin-left: 15px; list-style-type: none;">
+                        <!--vm.criterioBusquedaSeleccionado.Id = 2-->
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 1"><input ng-model="vm.lvl1" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 0 || vm.criterioBusquedaSeleccionado.Id == 1" ng-checked="vm.criterioBusquedaSeleccionado.Id == 0 || vm.criterioBusquedaSeleccionado.Id == 1" class="selector lvlDetalle lvlUNeg" value="company" type="checkbox" name="company" id="uneg" /><label for="uneg">Unidad de Negocio</label></li>
+                        <!--vm.criterioBusquedaSeleccionado.Id = 3-->
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 2"><input ng-model="vm.lvl2" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 1 || vm.criterioBusquedaSeleccionado.Id == 2" ng-checked="vm.criterioBusquedaSeleccionado.Id == 1 || vm.criterioBusquedaSeleccionado.Id == 2" class="selector lvlDetalle lvlComp" value="area" type="checkbox" name="area" id="company" /><label for="company">Dirección</label></li>
+                        <!--vm.criterioBusquedaSeleccionado.Id = 4-->
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 3"><input ng-model="vm.lvl3" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 2 || vm.criterioBusquedaSeleccionado.Id == 3" ng-checked="vm.criterioBusquedaSeleccionado.Id == 2 || vm.criterioBusquedaSeleccionado.Id == 3" class="selected lvlDetalle lvlArea" value="departamento" type="checkbox" name="departamento" id="area" /><label for="area">Área agencia</label></li>
+                        <!--vm.criterioBusquedaSeleccionado.Id = 5-->
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 4"><input ng-model="vm.lvl4" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 3 || vm.criterioBusquedaSeleccionado.Id == 4" ng-checked="vm.criterioBusquedaSeleccionado.Id == 3 || vm.criterioBusquedaSeleccionado.Id == 4" class="selector lvlDetalle lvlDpto" value="subdepartamento" type="checkbox" name="subdepartamento" id="departamento" /><label for="departamento">Departamento</label></li>
+                        
+                        <li ng-hide="vm.criterioBusquedaSeleccionado.Id > 5"><input ng-model="vm.lvl5" ng-disabled="vm.criterioBusquedaSeleccionado.Id == 4 || vm.criterioBusquedaSeleccionado.Id == 5" ng-checked="vm.criterioBusquedaSeleccionado.Id == 4 || vm.criterioBusquedaSeleccionado.Id == 5" class="selector lvlDetalle lvlSubD" value="subdepartamento" type="checkbox" name="subdepartamento" id="subdepartamento" /><label for="subdepartamento">SubDepartamento</label></li>
                     </ul>
                 </ul>
             </div>

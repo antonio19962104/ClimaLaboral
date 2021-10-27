@@ -44,11 +44,13 @@ namespace PL
                 IdBaseDeDatos = 2114,
                 idEncuesta = 1,
                 IdTipoEntidad = 0,
-                nivelDetalle = "12345",
-                tipoEntidad = 0
+                nivelDetalle = "012345",
+                tipoEntidad = 0,
+                ps = "52314672366B707931454E796D44553536504E4268773D3D"
             };
-            backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
-
+            //BL.PlanesDeAccion.EjecutaJob();
+            //backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
+            //BL.ReporteD4U.getComparativoPorAntiguedadEE("", "GAFM", 2021, 2114);
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere

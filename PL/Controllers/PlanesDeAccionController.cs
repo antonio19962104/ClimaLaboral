@@ -19,7 +19,7 @@ namespace PL.Controllers
         /// <param name="IdBaseDeDatos"></param>
         /// <param name="AnioAplicacion"></param>
         /// <returns></returns>
-        public ActionResult Index(string key, string IdEncuesta, string IdBaseDeDatos, string AnioAplicacion)
+        public ActionResult Index(string key = "0", string IdEncuesta = "0", string IdBaseDeDatos = "0", string AnioAplicacion = "0")
         {
             ML.PlanDeAccion planDeAccion = new ML.PlanDeAccion();
             planDeAccion.IdEncuesta = Convert.ToInt32(IdEncuesta);
@@ -62,9 +62,9 @@ namespace PL.Controllers
         /// </summary>
         /// <param name="promedioSubCategorias"></param>
         /// <returns></returns>
-        public JsonResult GetPromediosSubCategorias(ML.PromedioSubCategorias promedioSubCategorias)
+        public JsonResult GetSubCategoriasByIdEncuesta(ML.PromedioSubCategorias promedioSubCategorias)
         {
-            var result = BL.PlanesDeAccion.GetPromediosSubCategorias(promedioSubCategorias);
+            var result = BL.PlanesDeAccion.GetSubCategoriasByIdEncuesta(promedioSubCategorias);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         /// <summary>
@@ -75,6 +75,16 @@ namespace PL.Controllers
         public JsonResult GetAcciones(ML.AccionDeMejora accionDeMejora)
         {
             var result = BL.PlanesDeAccion.GetAcciones(accionDeMejora);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Obtiene las acciones de ayuda
+        /// </summary>
+        /// <param name="accionDeMejora"></param>
+        /// <returns></returns>
+        public JsonResult GetAccionesAyuda(ML.AccionDeMejora accionDeMejora)
+        {
+            var result = BL.PlanesDeAccion.GetAccionesAyuda(accionDeMejora);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>

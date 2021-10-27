@@ -27,6 +27,7 @@
           <Property Name="FechaHoraEliminacion" Type="datetime" />
           <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="200" />
           <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="200" />
+          <Property Name="Tipo" Type="int" />
         </EntityType>
         <EntityType Name="Administrador">
           <Key>
@@ -344,6 +345,7 @@
           <Property Name="ProgramaCreacion" Type="varchar" MaxLength="200" />
           <Property Name="NivelDetalle" Type="varchar" MaxLength="50" />
           <Property Name="Orden" Type="varchar(max)" />
+          <Property Name="IdBaseDeDatos" Type="int" />
         </EntityType>
         <EntityType Name="DemoReporteClimaDinamico">
           <Key>
@@ -4070,6 +4072,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Parameter Name="Anio" Type="int" Mode="In" />
           <Parameter Name="IdBD" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetPorcentajeAfirmativasNivelCeroEmpresa" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdPregunta" Type="int" Mode="In" />
+          <Parameter Name="Anio" Type="int" Mode="In" />
+          <Parameter Name="IdBD" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetResP1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdEmpleado" Type="int" Mode="In" />
         </Function>
@@ -5053,6 +5060,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="FechaHoraEliminacion" Type="DateTime" Precision="3" />
           <Property Name="UsuarioEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="ProgramaEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Tipo" Type="Int32" />
         </EntityType>
         <EntityType Name="Administrador">
           <Key>
@@ -5430,6 +5438,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="ProgramaCreacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="NivelDetalle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Orden" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IdBaseDeDatos" Type="Int32" />
         </EntityType>
         <EntityType Name="DemoReporteClimaDinamico">
           <Key>
@@ -10154,6 +10163,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="BasesDeDatos" EntitySet="BasesDeDatos" />
             <End Role="Acciones" EntitySet="Acciones" />
           </AssociationSet>
+          <FunctionImport Name="GetPorcentajeAfirmativasNivelCeroEmpresa" ReturnType="Collection(Double)">
+            <Parameter Name="IdPregunta" Mode="In" Type="Int32" />
+            <Parameter Name="Anio" Mode="In" Type="Int32" />
+            <Parameter Name="IdBD" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="f_getEstructuraDescByCompanyId_Result">
           <Property Type="Int32" Name="ID_COMPANY" Nullable="false" />
@@ -15105,6 +15119,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="Acciones">
             <EntityTypeMapping TypeName="RH_DesModel.Acciones">
               <MappingFragment StoreEntitySet="Acciones">
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
                 <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
                 <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
                 <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
@@ -15445,6 +15460,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="Demo">
             <EntityTypeMapping TypeName="RH_DesModel.Demo">
               <MappingFragment StoreEntitySet="Demo">
+                <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />
                 <ScalarProperty Name="Orden" ColumnName="Orden" />
                 <ScalarProperty Name="IdDemo" ColumnName="IdDemo" />
                 <ScalarProperty Name="EntidadId" ColumnName="EntidadId" />
@@ -22619,6 +22635,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <FunctionImportMapping FunctionImportName="ValidateNombreArea" FunctionName="RH_DesModel.Store.ValidateNombreArea" />
           <FunctionImportMapping FunctionImportName="ValidateNombreAreaOK" FunctionName="RH_DesModel.Store.ValidateNombreAreaOK" />
           <FunctionImportMapping FunctionImportName="ValidateNombreAreaOK_" FunctionName="RH_DesModel.Store.ValidateNombreAreaOK_" />
+          <FunctionImportMapping FunctionImportName="GetPorcentajeAfirmativasNivelCeroEmpresa" FunctionName="RH_DesModel.Store.GetPorcentajeAfirmativasNivelCeroEmpresa" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

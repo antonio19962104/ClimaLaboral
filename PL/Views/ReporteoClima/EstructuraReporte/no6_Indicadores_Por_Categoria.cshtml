@@ -1,7 +1,7 @@
 ﻿
 <div class="content-wrap pb-2" ng-switch="vm.enfoqueSeleccionado">
 <!----Enfoque Ambos------->
-<div id="tab-indicadores-categoria" class="container-fluid px-lg-5" ng-switch-when="0">
+<div id="tab-indicadores-categoria" class="container-fluid px-5 px-lg-1" ng-switch-when="0">
     <h2 class="robotothin mb-2 mt-n1">INDICADORES POR CATEGORÍA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
     <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
     <div class="card">
@@ -152,7 +152,7 @@
     </div>
 </div>
 <!----Enfoque Empresa------->
-<div id="tab-indicadores-categoria" class="container-fluid px-lg-5" ng-switch-when="1">
+<div id="tab-indicadores-categoria" class="container-fluid  px-5 px-lg-1" ng-switch-when="1">
     <h2 class="robotothin mb-2 mt-n1">INDICADORES POR CATEGORÍA EE<span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
     <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
     <div class="card">
@@ -245,7 +245,7 @@
     </div>
 </div>
 <!----Enfoque Area------->
-    <div id="tab-indicadores-categoria" class="container-fluid px-lg-5" ng-switch-when="2">
+    <div id="tab-indicadores-categoria" class="container-fluid  px-5 px-lg-1" ng-switch-when="2">
         <h2 class="robotothin mb-2 mt-n1">INDICADORES POR CATEGORÍA EA<span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
         <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
         <div class="card">
@@ -338,3 +338,20 @@
         </div>
     </div>
 </div>
+<style>
+         @@media (max-width: 1400px) {
+            .categoria-bl {
+            font-size: small;
+        }
+            .tablaimpulsores-izq h3{
+            font-size: x-large !important;
+        }
+            .tablaimpulsores-izq p{
+            font-size: small;
+            line-height: 13px;
+        }
+        .col-10 .tablaimpulsores-izq {
+            padding: 10px 0px 10px 15px;
+        }
+}
+</style>

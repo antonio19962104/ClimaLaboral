@@ -91,6 +91,12 @@ namespace PL.Controllers
             BackgroundJob.Enqueue(() => BackgroundJobCreateReport(aHistorico));
             return Json("success");
         }
+        public ActionResult executeGeneral(ML.Historico aHistorico)
+        {
+            HttpSessionStateBase Session = this.Session;
+            BackgroundJob.Enqueue(() => BackgroundJobCreateReportNivelGAFM(aHistorico));
+            return Json("success");
+        }
         public static string getUnidadNegocio(string entidad, int idTipoEntidad, int IdBD)
         {
             string query = string.Empty;
@@ -148,9 +154,9 @@ namespace PL.Controllers
                 AnioHistorico = (int)aHistorico.Anio;
                 string criterioBusquedaSeleccionado = Convert.ToString(aHistorico.IdTipoEntidad);
                 string unidadNeg = getUnidadNegocio(aHistorico.EntidadNombre, (int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos);
-                if (boolExisteReporte(aHistorico, AnioActual, aHistorico.nivelDetalle) == true)
+                if (boolExisteReporte(aHistorico, AnioActual, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos) == true)
                 {
-                    eliminarReporte(aHistorico, AnioActual, aHistorico.nivelDetalle);
+                    eliminarReporte(aHistorico, AnioActual, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
                 }
                 #endregion validar
                 #region calcular data
@@ -397,7 +403,7 @@ namespace PL.Controllers
 
                 #endregion guardar resultados
                 //Pasar estatus del JobReporte a 1 y notificar
-                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
                 BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL, aHistorico.ps, aHistorico.nivelDetalle, aHistorico.opc, criterioBusquedaSeleccionado, aHistorico.enfoqueSeleccionado, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
                 BL.LogReporteoClima.writteLogJobReporte("He terminado de generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 return Json(true);
@@ -428,28 +434,14 @@ namespace PL.Controllers
                 AnioHistorico = (int)aHistorico.Anio;
                 string criterioBusquedaSeleccionado = Convert.ToString(aHistorico.IdTipoEntidad);
                 string unidadNeg = "";//getUnidadNegocio(aHistorico.EntidadNombre, (int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos);
-                if (boolExisteReporte(aHistorico, AnioActual, aHistorico.nivelDetalle) == true)
+                if (boolExisteReporte(aHistorico, AnioActual, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos) == true)
                 {
-                    eliminarReporte(aHistorico, AnioActual, aHistorico.nivelDetalle);
+                    eliminarReporte(aHistorico, AnioActual, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
                 }
                 #endregion validar
                 #region calcular data
-
-                if (criterioBusquedaSeleccionado == "1")
-                {
-                    /* Se debe generar el reporte a nivel GAFM * El de la Uniad de negocio actual se saca de todos estos calculos * El de las otras unidades de negocio se sacaria de la tabla de historicos tomando el mismo año que se esta consultando en AnioActual*/
-                }
-
-                // obtener los hijos de la estructura GAFM todos los niveles bajo de la entidad seleccionada
-                // var aFiltrosHijosEstructura = getHijosEstructura(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId);
                 var aFiltrosHijosEstructura = getEstructuraFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
                 var descendientesForBienestar = aFiltrosHijosEstructura;
-                /*
-                 * Ahora bienestar traerá toda la info de todos los hijos y nietos etc del padre
-                 * jamurillo 23/09/2021
-                 * Adjuntar el campo type para saber su prefijo, sobrecargar el metodo
-                 */
-                //Ajustar array de entidades segun el nivel de detalle
                 if (!aHistorico.nivelDetalle.Contains("1"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "UNeg=>").ToList();
                 if (!aHistorico.nivelDetalle.Contains("2"))
@@ -460,7 +452,6 @@ namespace PL.Controllers
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "Dpto=>").ToList();
                 if (!aHistorico.nivelDetalle.Contains("5"))
                     descendientesForBienestar = descendientesForBienestar.Where(o => o.type != "SubD=>").ToList();
-
 
                 var estructuraReporteNivelDetalleBasico = aFiltrosHijosEstructura;
                 var auxNivelDetalle = aHistorico.nivelDetalle.ElementAt(0).ToString() + aHistorico.nivelDetalle.ElementAt(1).ToString();
@@ -475,12 +466,9 @@ namespace PL.Controllers
                 if (!auxNivelDetalle.Contains("5"))
                     estructuraReporteNivelDetalleBasico = estructuraReporteNivelDetalleBasico.Where(o => o.type != "SubD=>").ToList();
 
+                var aFiltrosEntUnNivelAbajo = getEstructuraUnNivelFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
 
-                //descendientesForBienestar Son los hijos segun todo el nivel de detalle que se elige y se usa para las graficas de barras
-                //estructuraReporteNivelDetalleBasico Son unicamente los hijos al nivel de detalle por default y se usa para grafico de bienestar y indicadores generales y los otros 2
-
-                // descendientesForBienestar en base a este array de estructura obtener los datos de las primeras 3 pantallas
-                // La unidad de negocio se manda como vacía, en apisController se calcula la unidad de negocio
+                // A este bloqueya se les añadió el dato del papá (Nivel cero)
                 objParticipacion = apis.getParticipacion_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                 objEsperadas = apis.getEncuestasEsperadas_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
                 objCalificacionGlobal = apis.getCalificacionGlobal_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
@@ -500,44 +488,35 @@ namespace PL.Controllers
                 objProcesosOrg = apis.getProcesosOrga_(criterioBusquedaSeleccionado, estructuraReporteNivelDetalleBasico, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
 
 
-
-                objMejoresEE = apis.getReactivosMejorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objMejoresEA = apis.getReactivosMejorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objMayorCrecimientoEE = apis.getReactivosMayorCrecimietoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);
-                objMayorCrecimientoEA = apis.getReactivosMayorCrecimietoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);
-                objpeoresEE = apis.getReactivosPeorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                objpeoresEA = apis.getReactivosPeorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
-                // obtener los hijos de la estructura GAFM un nivel bajo de la entidad seleccionada
-                // var aFiltrosEntUnNivelAbajo = getFiltros(idUneg, aHistorico.IdTipoEntidad, aHistorico.EntidadId, aHistorico.EntidadNombre);
-                var aFiltrosEntUnNivelAbajo = getEstructuraUnNivelFromExcel((int)aHistorico.IdTipoEntidad, aHistorico.IdBaseDeDatos, aHistorico.EntidadNombre);
-                if (aFiltrosEntUnNivelAbajo.Count > 0)
-                    aFiltrosEntUnNivelAbajo.RemoveAt(0);
-                /*
-                 * Bienestar solamente traia los elementos de un nivel abajo del padre
-                 * jamurillo 23/09/2021
-                 * objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                 * objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
-                 */
-                objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-                objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-                objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-                objComparativoAbandono = apis.getComparativoAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//ajustar query
-
-
+                //Faltantes
+                //A este bloque le falta añadir al papa (Nivel cero)
                 //Este ya no usa filtros un nivel abajo porque esto puede cambiar a otro tipo de nivel de detalle no consecutivo
                 var hijos = descendientesForBienestar;
                 objComparativoEntidadesResultadoGeneralEE = apis.getComparativoEntidadesResultadoGeneralEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
                 objComparativoEntidadesResultadoGeneralEA = apis.getComparativoEntidadesResultadoGeneralEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);
+                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);
+                objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, descendientesForBienestar, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                //Hasta aqui son los faltantes de agregar papá nivel cero
 
 
 
-                objBienestarEE = apis.getPorcentajePsicoSocialEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                objBienestarEA = apis.getPorcentajePsicoSocialEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, estructuraReporteNivelDetalleBasico, AnioActual, aHistorico.IdBaseDeDatos);//ok usan el mismo metodo que EE
 
-                objComparativoResultadoGeneralPorNivelesEE = apis.getComparativoResultadoGeneralPorNivelesEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
-                objComparativoResultadoGeneralPorNivelesEA = apis.getComparativoResultadoGeneralPorNivelesEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosHijosEstructura, AnioActual, aHistorico.IdBaseDeDatos);//ok
+                objPermanencia = apis.getIndicadoresPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//Solo padre OK
+                objAbandono = apis.getIndicadoresAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//Solo padre OK
+                objComparativoPermanencia = apis.getComparativoPermanencia(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//Solo hijos OK
+                objComparativoAbandono = apis.getComparativoAbandono(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, aFiltrosEntUnNivelAbajo, AnioActual, aHistorico.IdBaseDeDatos);//Solo hijos OK
+                // Datos que corresponden al nivel cero especificamente, se debe crear un metodo como los de GetByUnidad, GetByGenero
+                // Pero enfocado solo al Id de base de datos para ser totalmente generico
+                objMejoresEE = apis.getReactivosMejorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//OK
+                objMejoresEA = apis.getReactivosMejorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);//OK
+                objMayorCrecimientoEE = apis.getReactivosMayorCrecimietoEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);//OK
+                objMayorCrecimientoEA = apis.getReactivosMayorCrecimietoEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, Convert.ToString(aHistorico.EntidadId), AnioActual, aHistorico.IdBaseDeDatos);//OK
+                objpeoresEE = apis.getReactivosPeorClasificadosEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
+                objpeoresEA = apis.getReactivosPeorClasificadosEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, unidadNeg, AnioActual, aHistorico.IdBaseDeDatos);
 
-
+                //Falta agregar el metodo nivel cero
                 //Recalcular segun los demograficos encontrados en el excel de la Base de datos
                 objComparativoPorAntiguedadEE = apis.getComparativoPorAntiguedadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorAntiguedadEA = apis.getComparativoPorAntiguedadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
@@ -551,10 +530,6 @@ namespace PL.Controllers
                 objComparativoPorFuncionEA = apis.getComparativoPorFuncionEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorRangoEdadEE = apis.getComparativoPorRangoEdadEE(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
                 objComparativoPorRangoEdadEA = apis.getComparativoPorRangoEdadEA(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, AnioActual, aHistorico.IdBaseDeDatos);
-                objNube1 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "1", AnioActual, aHistorico.IdBaseDeDatos);
-                objNube2 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "2", AnioActual, aHistorico.IdBaseDeDatos);
-                objNube3 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "3", AnioActual, aHistorico.IdBaseDeDatos);
-                objNube4 = apis.getDatosNube(criterioBusquedaSeleccionado, aHistorico.EntidadNombre, "4", AnioActual, aHistorico.IdBaseDeDatos);
                 #endregion #region calcular data
 
                 #region Asignar alias al objeto
@@ -678,7 +653,7 @@ namespace PL.Controllers
 
                 #endregion guardar resultados
                 //Pasar estatus del JobReporte a 1 y notificar
-                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle);
+                BL.LogReporteoClima.updateStatusReporte(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
                 BL.LogReporteoClima.sendMail(aHistorico.EntidadNombre, AnioActual, aHistorico.CurrentUsr, aHistorico.currentURL, aHistorico.ps, aHistorico.nivelDetalle, aHistorico.opc, criterioBusquedaSeleccionado, aHistorico.enfoqueSeleccionado, aHistorico.nivelDetalle, aHistorico.IdBaseDeDatos);
                 BL.LogReporteoClima.writteLogJobReporte("He terminado de generar el reporte", new System.Diagnostics.StackTrace(), aHistorico.CurrentUsr, aHistorico.IdTipoEntidad, aHistorico.EntidadNombre);
                 return Json(true);
@@ -2113,11 +2088,11 @@ namespace PL.Controllers
             }
         }
 
-        public bool boolExisteReporte(ML.Historico aHistorico, int anio, string NivelDetalle)
+        public bool boolExisteReporte(ML.Historico aHistorico, int anio, string NivelDetalle, int IdBD)
         {
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == anio && o.NivelDetalle == NivelDetalle/* && o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                var query = context.Demo.Select(o => o).Where(o => o.IdBaseDeDatos == IdBD && o.Anio == anio && o.NivelDetalle == NivelDetalle/* && o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                 if (query.Count > 0)
                 {
                     return true;
@@ -2125,13 +2100,13 @@ namespace PL.Controllers
                 return false;
             }
         }
-        public void eliminarReporte(ML.Historico aHistorico, int anio, string NivelDetalle)
+        public void eliminarReporte(ML.Historico aHistorico, int anio, string NivelDetalle, int idbd)
         {
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var query = context.Demo.Select(o => o).Where(o => o.Anio == anio && o.NivelDetalle == NivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
+                    var query = context.Demo.Select(o => o).Where(o => o.IdBaseDeDatos == idbd && o.Anio == anio && o.NivelDetalle == NivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.status == 1 && o.usuario == aHistorico.CurrentUsr).ToList();
                     if (query.Count > 0)
                     {
                         context.Demo.RemoveRange(query);
@@ -2438,6 +2413,8 @@ namespace PL.Controllers
         {
             switch (idTipoEntidad)
             {
+                case 0:
+                    return BL.EstructuraAFMReporte.GetUnidadesDeNegocioByIdBD(IdBD);
                 case 1:
                     return BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBD, entidadNombre);
                 case 2:

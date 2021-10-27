@@ -21,6 +21,11 @@
             localStorage["nameAdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["AdminLog"]));
             localStorage["idAdminLog"] = @Html.Raw(JsonConvert.SerializeObject(Session["IdAdministradorLogeado"]));
         </script>
+        <style>
+            #formular table{
+                display: none;
+            }
+        </style>
     </head>
 
     @{

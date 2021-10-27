@@ -683,7 +683,6 @@
                                                                             </div><!--.wrapper-tool-->
                                                                         </div><!--.col-md-4-->
 
-
                                                                         <div id="Modulousuarios" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
                                                                             <div class="wrapper-tool" style="background-color:#ffffff;">
                                                                                 <div class="box-tool">
@@ -709,8 +708,6 @@
                                                                             </div><!--.wrapper-tool-->
                                                                         </div><!--.col-md-4-->
 
-
-
                                                                         <div id="ModuloEmpresas" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
                                                                             <div class="wrapper-tool" style="background-color:#ffffff;">
                                                                                 <div class="box-tool">
@@ -735,6 +732,33 @@
                                                                                 </div><!--.box-tool-->
                                                                             </div><!--.wrapper-tool-->
                                                                         </div><!--.col-md-4-->
+
+                                                                        <div id="ModuloPlanes" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
+                                                                            <div class="wrapper-tool" style="background-color:#ffffff;">
+                                                                                <div class="box-tool">
+                                                                                    <div class="header-tool" style="background-color: #00d068; background-image: url('../img/bg-tool-survey.png');">
+                                                                                        <div class="row vertical-align-bottom" align="center">
+                                                                                            <div align="left" class="col-6">
+                                                                                                <i class="fas text-white fa-caret-right"></i>
+                                                                                                <h5 class="title-tool">Planes de Acción</h5>
+                                                                                            </div>
+                                                                                            <div class="col-6">
+                                                                                                <img src="../img/icon-survey.png" class="img-fluid">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div><!--.header-tool-->
+                                                                                    <div class="body-tool">
+                                                                                        <ul class="fa-ul">
+                                                                                            <li><span class="fa-li"><input checked="" value="ListarPlanes" id="chkPlanListar" class="chk" type="checkbox"></span>Listado</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="CrearPlanes" id="chkPlanCrear" class="chk" type="checkbox"></span>Crear Plan</li>
+                                                                                            <li><span class="fa-li"><input checked="" value="AdministrarAcciones" id="chkAdminAcciones" class="chk" type="checkbox"></span>Administrar acciones</li>
+                                                                                        </ul>
+                                                                                    </div><!--.body-tool-->
+                                                                                </div><!--.box-tool-->
+                                                                            </div><!--.wrapper-tool-->
+                                                                        </div><!--.col-md-4-->
+
+
 
                                                                     </div><!--.row-->
                                                                 </div><!--.col-lg-7-->
@@ -953,6 +977,7 @@
                     $('#ModuloBD').css('display', 'none');
                     $('#Modulousuarios').css('display', 'none');
                     $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                 }
                 if (PerfilD4U == 1) {//Master
@@ -962,6 +987,7 @@
                     $('#ModuloBD').css('display', 'block');
                     $('#Modulousuarios').css('display', 'block');
                     $('#ModuloEmpresas').css('display', 'block');
+                    $('#ModuloPlanes').css('display', 'block');
                     //poner checkox selecionados
                     checkAll();
                     $('input[type="checkbox"]').hide();
@@ -975,6 +1001,7 @@
                     $('#ModuloBD').css('display', 'none');
                     $('#Modulousuarios').css('display', 'none');
                     $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
@@ -986,6 +1013,7 @@
                     $('#ModuloBD').css('display', 'none');
                     $('#Modulousuarios').css('display', 'none');
                     $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
@@ -997,6 +1025,7 @@
                     $('#ModuloBD').css('display', 'none');
                     $('#Modulousuarios').css('display', 'none');
                     $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
@@ -1008,6 +1037,7 @@
                     $('#ModuloBD').css('display', 'block');
                     $('#Modulousuarios').css('display', 'none');
                     $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
@@ -1019,6 +1049,7 @@
                     $('#ModuloBD').css('display', 'none');
                     $('#Modulousuarios').css('display', 'block');
                     $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
@@ -1030,6 +1061,7 @@
                     $('#ModuloBD').css('display', 'none');
                     $('#Modulousuarios').css('display', 'none');
                     $('#ModuloEmpresas').css('display', 'block');
+                    $('#ModuloPlanes').css('display', 'none');
                     NotcheckAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
@@ -1041,10 +1073,21 @@
                     $('#ModuloBD').css('display', 'block');
                     $('#Modulousuarios').css('display', 'block');
                     $('#ModuloEmpresas').css('display', 'block');
+                    $('#ModuloPlanes').css('display', 'block');
                     //poner checkox selecionados
                     checkAll();
                     $('input[type="checkbox"]').show();
                     $('.fa-minus').remove();
+                }
+                if (PerfilD4U == 9) {
+                    $('#ModuloEncuestas').css('display', 'none');
+                    $('#ModuloPlantillas').css('display', 'none');
+                    $('#ModuloReportes').css('display', 'none');
+                    $('#ModuloBD').css('display', 'none');
+                    $('#Modulousuarios').css('display', 'none');
+                    $('#ModuloEmpresas').css('display', 'none');
+                    $('#ModuloPlanes').css('display', '');
+                    NotcheckAll();
                 }
             });
 
@@ -1294,6 +1337,21 @@
                         var OpcEmpresa = $('#chkEmpresasOpc').val();
                     }
 
+                    // Modulo de planes de accion
+                    /*
+                        <li><span class="fa-li"><input checked="" value="ListarPlanes" id="chkPlanListar" class="chk" type="checkbox"></span>Listado</li>
+                        <li><span class="fa-li"><input checked="" value="CrearPlanes" id="chkPlanCrear" class="chk" type="checkbox"></span>Crear Plan</li>
+                        <li><span class="fa-li"><input checked="" value="AdministrarAcciones" id="chkAdminAcciones" class="chk" type="checkbox"></span>Administrar acciones</li>
+                     */
+                    if (document.getElementById("chkPlanListar").checked) {
+                        var ListarPlanes = "ListarPlanes";
+                    }
+                    if (document.getElementById("chkPlanCrear").checked) {
+                        var CrearPlanes = "CrearPlanes";
+                    }
+                    if (document.getElementById("chkAdminAcciones").checked) {
+                        var AdminAcciones = "AdministrarAcciones";
+                    }
 
                     var passwordJS = generar_contrasenya();
 
@@ -1374,7 +1432,8 @@
                                     ListarReporte, CrearReporte, OpcReporte,
                                      ListarBD, CrearBD, OpcBD,
                                       ListarUsuario, CrearUsuario, OpcUsuario,
-                                       ListarEmpresa, CrearEmpresa, OpcEmpresa]
+                                        ListarEmpresa, CrearEmpresa, OpcEmpresa,
+                                            ListarPlanes, CrearPlanes, AdminAcciones]
                     };
 
                     //acciones: [ListarEncuesta, CrearEncuesta, OpcEncuesta,

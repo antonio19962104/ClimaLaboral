@@ -33,79 +33,181 @@
     </section>
 }
 <div class="content-wrap" ng-app="app" ng-controller="planAccionController as vm">
-    <div class="container-fluid px-lg-5">
-        <div class="row">
-            <div class="col-lg-10">
-                <h2>{{ vm.Modulo }}</h2>
-                <div class="form-group">
-                    <div style="display: none;" class="form-group">
-                        <div class="form-inline">
-                            <div class="col-6">
-                                <input style="width: 100%;" type="text" id="NombrePlanAccion" placeholder="Nombre del nuevo plan de acción" class="form-control" />
-                            </div>
-                            <div class="col-4">
-                                <input ng-click="vm.GuardarPlanDeAccion()" type="button" value="Agregar Plan de Acción" class="btn btn-danger" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-inline">
-                        <div class="col-6">
-                            <h4>Categorias</h4>
-                        </div>
-                        <div class="col-6" style="text-align: end;">
-                            <input type="text" style="width: 100%;" class="form-control" placeholder="Buscar acciones por palabra clave" />
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tree-view">
-
-                </div>
-
-
-
-                <div id="accordion">
-                    <div id="custom-categoria-{{ item.IdCategoria }}" class="card" style="border-radius: 10px;" ng-repeat="item in vm.Categorias track by $index">
-                        <div class="card-header row col-12" style="left: 15px;" id="headingOne{{ $index }}">
-                            <div class="col-10">
-                                <btn class="btn" data-toggle="collapse" data-target="#collapseOne{{ $index }}" aria-expanded="true" aria-controls="collapseOne{{ $index }}">
-                                    {{ item.Categoria }} ({{ item.IdCategoria }})
-                                </btn>
-                            </div>
-                            <div class="col-2">
-                                <h5 class="mb-0" style="text-align: end;">
-                                    <button title="Agregar nueva acción de mejora" ng-click="vm.AgregarNuevaAccion(item.IdCategoria)" class="btn btn-link" style="border: 1px solid; border-radius: 50%;">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </h5>
-                            </div>
-                        </div>
-                        <div id="collapseOne{{ $index }}" class="collapse" aria-labelledby="headingOne{{ $index }}" data-parent="#accordion">
-                            <div idCategoria="{{ item.IdCategoria }}" id="merge-new-acciones-idcat-{{ item.IdCategoria }}" class="card-body">
-                                <div class="form-group" ng-repeat="item in vm.ListRangos track by $index" ng-if="$index > 0">
-                                    <div class="form-inline">
-                                        <div class="col-8">
-                                            <input type="text" class="form-control" style="width: 100%;" placeholder="Acción de mejora" />
-                                        </div>
-                                        <div class="col-3">
-                                            <select class="form-control select-rango" style="width: 100%;"></select>
-                                        </div>
-                                        <div class="col-1">
-                                            <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
-                                            <button class="btn save-action" ng-click="vm.GuardarAccion($event)"><i class="fas fa-save"></i></button>
-                                        </div>
+    @{
+        // Acciones para un plan
+        if (Model.IdEncuesta > 0)
+        {
+            <div class="container-fluid px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>{{ vm.Modulo }}</h2>
+                        <div class="form-group">
+                            <div style="display: none;" class="form-group">
+                                <div class="form-inline">
+                                    <div class="col-6">
+                                        <input style="width: 100%;" type="text" id="NombrePlanAccion" placeholder="Nombre del nuevo plan de acción" class="form-control" />
+                                    </div>
+                                    <div class="col-4">
+                                        <input ng-click="vm.GuardarPlanDeAccion()" type="button" value="Agregar Plan de Acción" class="btn btn-danger" />
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-inline">
+                                <div class="col-6">
+                                    <h4>Categorias</h4>
+                                </div>
+                                <div class="col-6" style="text-align: end;">
+                                    <i class="fa fa-search icon"></i>
+                                    <input type="text" style="width: 100%;" class="form-control filter input-field" placeholder="Buscar acciones por palabra clave" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Despliega las áreas en un arbol de nodos-->
+                        <div id="tree-view"></div>
+
+                        <div id="accordion">
+                            <div id="custom-categoria-{{ item.IdCategoria }}" class="card" style="border-radius: 10px;" ng-repeat="item in vm.Categorias track by $index">
+                                <div class="card-header row col-12" style="left: 15px;" id="headingOne{{ $index }}">
+                                    <div class="col-10">
+                                        <btn class="btn" data-toggle="collapse" data-target="#collapseOne{{ $index }}" aria-expanded="true" aria-controls="collapseOne{{ $index }}">
+                                            ({{ item.IdCategoria }}) {{ item.Categoria }} - Promedio General: {{ item.PromedioGeneral }}
+                                        </btn>
+                                        <img hidden src="{{ vm.setIconoSVG(item.PromedioGeneral) }}" />
+                                    </div>
+                                    <div class="col-2">
+                                        <h5 class="mb-0" style="text-align: end;">
+                                            <button title="Agregar nueva acción de mejora" ng-click="vm.AgregarNuevaAccion(item.IdCategoria)" class="btn btn-link" style="border: 1px solid; border-radius: 50%;">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div id="collapseOne{{ $index }}" class="collapse" aria-labelledby="headingOne{{ $index }}" data-parent="#accordion">
+                                    <div idCategoria="{{ item.IdCategoria }}" id="merge-new-acciones-idcat-{{ item.IdCategoria }}" class="card-body">
+                                        <!--Ya no hace la precarga de 4 acciones por default porque carga las acciones preguardadas-->
+                                        <!--<div class="form-group" ng-repeat="item in vm.ListRangos track by $index" ng-if="$index < 0">
+                                            <div class="form-inline">
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control" style="width: 100%;" placeholder="Acción de mejora" />
+                                                </div>
+                                                <div class="col-3">
+                                                    <select class="form-control select-rango" style="width: 100%;"></select>
+                                                </div>
+                                                <div class="col-1">
+                                                    <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+                                                    <button class="btn save-action" ng-click="vm.GuardarAccion($event)"><i class="fas fa-save"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!--end accordion-->
+                    </div>
+                    <div class="col-lg-2" id="mergeBusqueda">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="re-asignar-accion">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="alert alert-block">
+                                <h4>Reasignar acción</h4>
+                            </div>
+                            <div class="form-group">
+                                <select id="nueva-categoria" class="form-control">
+                                    <option value="0">-Selecciona una categoria-</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="nuevo-rango" class="form-control select-rango"></select>
+                            </div>
+                            <div style="text-align: end;">
+                                <button class="btn btn-danger" onclick="LimpiarModal()" style="margin-right: 5px;">Cancelar <i class="fas fa-stop-circle"></i></button>
+                                <button class="btn btn-success" ng-click="vm.ReAsignarAccion()">Guardar <i class="fas fa-save"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div><!--end accordion-->
+                </div>
             </div>
-        </div>
-    </div>
+        }
+        // Acciones dadas de alta por Noé
+        if (Model.IdEncuesta == 0)
+        {
+            <div class="container-fluid px-lg-5">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <h2>{{ vm.Modulo }}</h2>
+                        <div class="form-group">
+                            <button id="nueva-accion" onclick="EditAccionAyuda(this, 'agregar')" class="btn btn-success">Agregar nueva acción <i class="fas fa-plus"></i></button>
+                        </div>
+                        <div id="grid-Acciones" class="mt-5"></div>                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="edita-acciones">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="alert alert-block">
+                                <h4 class="header-modal">Editar acción</h4>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <input type="text" placeholder="Descripción de la acción" class="form-control" />
+                            </div>
+                            <div style="display: none;" class="form-group">
+                                <select class="form-control select-rango">
+                                </select>
+                            </div>
+                            <div style="text-align: end;">
+                                <button class="btn btn-danger" onclick="LimpiarModal()" style="margin-right: 5px;">Cancelar <i class="fas fa-stop-circle"></i></button>
+                                <button class="btn btn-success" ng-click="vm.GuardaAccionAyuda($event)">Guardar <i class="fas fa-save"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div style="display: none;" id="merge-acciones-ayuda">
+
 </div>
 <script src="~/scripts/PlanesDeAccion/PlanesDeAccion.js"></script>
 <!--Tree view-->
+<style>
+    .filtera {
+        background: url(../../img/ClimaDinamico/icono-buscar.png) no-repeat scroll 7px 7px;
+        padding-left: 30px;
+    }
+    .input-icons i {
+        position: absolute;
+    }
+
+    .input-icons {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .icon {
+        padding: 10px;
+        min-width: 40px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+    }
+    .re-asignar-accion{
+        cursor: pointer;
+    }
+</style>
 <link href="~/scripts/PlanesDeAccion/css/jquery.treeview.css" rel="stylesheet" />
 <script src="~/scripts/PlanesDeAccion/js/jquery.treeview.js"></script>
 <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">

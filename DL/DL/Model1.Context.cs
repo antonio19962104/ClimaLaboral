@@ -3616,5 +3616,22 @@ namespace DL
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("ValidateNombreAreaOK_", nombreAreaParameter);
         }
+    
+        public virtual ObjectResult<Nullable<double>> GetPorcentajeAfirmativasNivelCeroEmpresa(Nullable<int> idPregunta, Nullable<int> anio, Nullable<int> idBD)
+        {
+            var idPreguntaParameter = idPregunta.HasValue ?
+                new ObjectParameter("IdPregunta", idPregunta) :
+                new ObjectParameter("IdPregunta", typeof(int));
+    
+            var anioParameter = anio.HasValue ?
+                new ObjectParameter("Anio", anio) :
+                new ObjectParameter("Anio", typeof(int));
+    
+            var idBDParameter = idBD.HasValue ?
+                new ObjectParameter("IdBD", idBD) :
+                new ObjectParameter("IdBD", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetPorcentajeAfirmativasNivelCeroEmpresa", idPreguntaParameter, anioParameter, idBDParameter);
+        }
     }
 }

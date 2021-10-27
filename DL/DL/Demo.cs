@@ -27,5 +27,6 @@ namespace DL
         public string ProgramaCreacion { get; set; }
         public string NivelDetalle { get; set; }
         public string Orden { get; set; }
+        public Nullable<int> IdBaseDeDatos { get; set; }
     }
 }

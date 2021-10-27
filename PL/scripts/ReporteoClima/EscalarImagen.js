@@ -29,7 +29,7 @@ async function crearReportePDF() {
     if (contadorD == 0)
         docReporte.deletePage(1);
     contadorD++;
-    quitarPaginaVacia();
+    //quitarPaginaVacia();
     docReporte.save('Reporte_Grafico.pdf');
 }
 

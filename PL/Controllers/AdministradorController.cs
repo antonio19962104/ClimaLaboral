@@ -257,6 +257,7 @@ namespace PL.Controllers
                 BL.PerfilModulo.Add(administrador.PerfilD4U.IdPerfil, 4, result.UltimoAdminInsertado, administrador);
                 BL.PerfilModulo.Add(administrador.PerfilD4U.IdPerfil, 5, result.UltimoAdminInsertado, administrador);
                 BL.PerfilModulo.Add(administrador.PerfilD4U.IdPerfil, 6, result.UltimoAdminInsertado, administrador);
+                BL.PerfilModulo.Add(administrador.PerfilD4U.IdPerfil, 7, result.UltimoAdminInsertado, administrador);
             }
 
 
@@ -290,10 +291,14 @@ namespace PL.Controllers
             {
                 BL.PerfilModulo.Add(administrador.PerfilD4U.IdPerfil, 6, result.UltimoAdminInsertado, administrador);
             }
+            if (administrador.PerfilD4U.IdPerfil == 9)
+            {
+                BL.PerfilModulo.Add(administrador.PerfilD4U.IdPerfil, 7, result.UltimoAdminInsertado, administrador);
+            }
 
             //Hacer envio de email
-           // SendEmail();
-           
+            // SendEmail();
+
             //Fin del envio
             Session["Acciones"] = null;
             ViewBag.Acciones = null;
@@ -337,6 +342,10 @@ namespace PL.Controllers
                 if (administrador.PerfilD4U.IdPerfil == 8)
                 {
                     perfil = "Super Administrador";
+                }
+                if (administrador.PerfilD4U.IdPerfil == 9)
+                {
+                    perfil = "Administrador de Planes de Acción";
                 }
 
                 var getDatosNewAdmin = BL.Empleado.GetById(administrador.Empleado.IdEmpleado);

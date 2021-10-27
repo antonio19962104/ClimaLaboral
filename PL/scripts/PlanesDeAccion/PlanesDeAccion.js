@@ -4,9 +4,10 @@
  */
 var AccionesPreGuardadas = [];
 var IdAccion_ReAsignar = 0;
+var listRangos = [];
 var model = {
     "AnioAplicacion": AnioAplicacion,
-    "AreaAgencia": "AUT - ELE - AEP",
+    "AreaAgencia": "AUT - ELE - AEP", /*Se llena en base al area seleccionada*/
     "IdBaseDeDatos": IdBaseDeDatos,
     "IdEncuesta": IdEncuesta,
     "IdPregunta": 0
@@ -30,6 +31,13 @@ var modelNuevaAccion = {
         try {
             var vm = this;
             vm.Modulo = "Configuración de Acciones de Mejora";
+            if (IdEncuesta == 0) {
+                vm.Modulo = "Configuración de Acciones de ayuda para el usuario";
+            }
+            vm.solIcono = "/img/ReporteoClima/Iconos/sol-icono.png";
+            vm.solNubeIcono = "/img/ReporteoClima/Iconos/solnube-icono.png";
+            vm.nubeIcono = "/img/ReporteoClima/Iconos/nube-icono.png";
+            vm.lluviaIcono = "/img/ReporteoClima/Iconos/lluvia-icono.png";
             vm.PlanDeAccion = Object;
             vm.EstructuraAFM = [];
             vm.PlanDeAccion.Id = 0;
@@ -40,25 +48,27 @@ var modelNuevaAccion = {
             vm.BusquedaAcciones = [];
            
             $(document).ready(function () {
+                CrearScript("http://demo.climalaboral.divisionautomotriz.com/scripts/kendo-all.js");
                 $(".filter").on("keyup", function (text) {
                     document.getElementById("mergeBusqueda").innerHTML = "";
                     var texto = text.target.value;
                     var input = texto.toUpperCase();
-                    var todosCard = $("#accordion input[type=text]");
+                    var todosCard = $("#merge-acciones-ayuda span");
                     [].forEach.call(todosCard, function (elem) {
-                        var dataString = elem.value;
+                        var dataString = elem.innerText;
                         dataString = dataString.toUpperCase();
                         var existe = false;
                         existe = dataString.includes(input);
                         if (input != "") {
                             if (existe == true) {
-                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + "</div>";
+                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + " <small>Categoria 1</small></div>";
                             }
                         }
                     });
                 });
-                //vm.ConsultaAreas();// Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta
+                /*vm.ConsultaAreas();// Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta*/
                 vm.ConsultaAccionesGuardadas();
+                vm.ConsultaAccionesAyuda();
             });
 
             vm.ConsultaAreas = function () {
@@ -82,15 +92,26 @@ var modelNuevaAccion = {
                 document.getElementById("accordion").classList.add("ng-hide");
             }
 
+            vm.ConsultaAccionesAyuda = function () {
+                vm.post("/PlanesDeAccion/GetAccionesAyuda/?", modelNuevaAccion, function (response) {
+                    if (response.Correct) {
+                        [].forEach.call(response.Objects, function (accion) {
+                            $("#merge-acciones-ayuda").append('<span>' + accion.Descripcion + '</span>');
+                        });
+                    }
+                });
+            }
+
             vm.ConsultaAccionesGuardadas = function () {
                 vm.post("/PlanesDeAccion/GetAcciones/?", modelNuevaAccion, function (response) {
                     if (response.Correct) {
                         $("#accordion .card-body").empty();
                         console.log(response.Objects);
                         AccionesPreGuardadas = response.Objects;
-                        [].forEach.call(response.Objects, function (accion) {
-                            $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria).append(
-                                `
+                        if (IdEncuesta > 0) {
+                            [].forEach.call(response.Objects, function (accion) {
+                                $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria).append(
+                                    `
                                 <div class="form-group ng-scope" idAccion="` + accion.IdAccionDeMejora + `">
                                     <div class="form-inline">
                                         <div class="col-8">
@@ -108,34 +129,38 @@ var modelNuevaAccion = {
                                     </div>
                                 </div>
                                 `
-                            );
-                            $(".delete-accion").unbind();
-                            $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria + " .delete-accion").click(function (e) {
-                                vm.EliminarAccion(e);
-                            });
-                        });
-                        setTimeout(function () {
-                            var AuxIdCategoria;
-                            var AuxIndex;
-                            [].forEach.call(response.Objects, function (accion, index) {
-                                if (AuxIdCategoria != accion.Categoria.IdCategoria) {
-                                    AuxIndex = 0;
-                                }
-                                AuxIdCategoria = accion.Categoria.IdCategoria;
-                                var itemPadre = document.getElementById("merge-new-acciones-idcat-" + accion.Categoria.IdCategoria);
-                                var select = itemPadre.getElementsByTagName("select")[AuxIndex];
-                                [].forEach.call(vm.ListRangos, function (item) {
-                                    select.options.add(new Option(item.Descripcion, item.Id, false, false));
+                                );
+                                $(".delete-accion").unbind();
+                                $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria + " .delete-accion").click(function (e) {
+                                    vm.EliminarAccion(e);
                                 });
-                                select.value = accion.Rango.IdRango;
-                                AuxIndex++;
                             });
-                            vm.AgregarAccionesDefault();
-                            $(".re-asignar-accion").click(function (e) {
-                                IdAccion_ReAsignar = e.target.closest(".form-group").attributes.IdAccion.value;
-                                $('#re-asignar-accion').modal('toggle');
-                            });
-                        }, 500);
+                            setTimeout(function () {
+                                var AuxIdCategoria;
+                                var AuxIndex;
+                                [].forEach.call(response.Objects, function (accion, index) {
+                                    if (AuxIdCategoria != accion.Categoria.IdCategoria) {
+                                        AuxIndex = 0;
+                                    }
+                                    AuxIdCategoria = accion.Categoria.IdCategoria;
+                                    var itemPadre = document.getElementById("merge-new-acciones-idcat-" + accion.Categoria.IdCategoria);
+                                    var select = itemPadre.getElementsByTagName("select")[AuxIndex];
+                                    [].forEach.call(vm.ListRangos, function (item) {
+                                        select.options.add(new Option(item.Descripcion, item.Id, false, false));
+                                    });
+                                    select.value = accion.Rango.IdRango;
+                                    AuxIndex++;
+                                });
+                                vm.AgregarAccionesDefault();
+                                $(".re-asignar-accion").click(function (e) {
+                                    IdAccion_ReAsignar = e.target.closest(".form-group").attributes.IdAccion.value;
+                                    $('#re-asignar-accion').modal('toggle');
+                                });
+                            }, 500);
+                        }
+                        else {
+                            CrearGridSubCategorias();
+                        }
                     }
                     else {
                         swal("Ocurrió un error al intentar consultar las acciones guardadas", response.ErrorMessage, "error");
@@ -357,20 +382,46 @@ var modelNuevaAccion = {
                     true);
             }
 
-            vm.post("/PlanesDeAccion/GetPromediosSubCategorias/", model, function (response) {
-                if (response.Correct) {
-                    vm.PromedioSubCategorias = JSON.parse(response.Objects[0].JsonData);
-                    vm.CategoriasAgrupadas = vm.AgruparCategorias(vm.PromedioSubCategorias);
-                    vm.Categorias = vm.Execute(vm.CategoriasAgrupadas);
-                    [].forEach.call(vm.Categorias, function (categ) {
-                        $("#nueva-categoria").append("<option value='" + categ.IdCategoria + "'>" + categ.Categoria + "</option>");
-                    });
-                    vm.ObtenerRangos();
+            if (IdEncuesta > 0) {
+                /*Obtiene las subcategorias configuradas en una encuesta, aqui todavia sin importar los promedios obtenidos*/
+                vm.post("/PlanesDeAccion/GetSubCategoriasByIdEncuesta/", model, function (response) {
+                    if (response.Correct) {
+                        vm.PromedioSubCategorias = JSON.parse(response.Objects[0].JsonData);
+                        vm.CategoriasAgrupadas = vm.AgruparCategorias(vm.PromedioSubCategorias);
+                        vm.Categorias = vm.Execute(vm.CategoriasAgrupadas);
+                        [].forEach.call(vm.Categorias, function (item) {
+                            item.PromedioGeneral = Math.round(item.PromedioGeneral * 100) / 100;
+                        });
+                        [].forEach.call(vm.Categorias, function (categ) {
+                            $("#nueva-categoria").append("<option value='" + categ.IdCategoria + "'>" + categ.Categoria + "</option>");
+                        });
+                        vm.ObtenerRangos();
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar consultar las subcategorias", response.ErrorMessage, "error");
+                    }
+                });
+            }
+
+            vm.setIconoSVG = function (value) {
+                try {
+                    value = parseFloat(value);
+                    if (value < 70) {
+                        return vm.lluviaIcono;
+                    }
+                    if (value >= 70 && value < 80) {
+                        return vm.nubeIcono;
+                    }
+                    if (value >= 80 && value < 90) {
+                        return vm.solNubeIcono;
+                    }
+                    if (value >= 90 && value <= 100) {
+                        return vm.solIcono;
+                    }
+                } catch (aE) {
+                    return "";
                 }
-                else {
-                    swal("Ocurrió un error al intentar consultar las subcategorias", response.ErrorMessage, "error");
-                }
-            });
+            }
 
             vm.ObtenerRangos = function () {
                 vm.get("/PlanesDeAccion/GetRangos/", function (response) {
@@ -459,7 +510,7 @@ var modelNuevaAccion = {
                         error = true;
                         break;
                     default:
-                        alert(data.statusText);
+                        alert(data.message);
                         error = true;
                 }
                 if (error) {
@@ -583,6 +634,45 @@ var modelNuevaAccion = {
                 }
             }
 
+            vm.GuardaAccionAyuda = function (e) {
+                console.log(e);
+                var IdAccion = e.target.closest("#edita-acciones").getElementsByTagName("input")[0].value;
+                var Descripcion = e.target.closest("#edita-acciones").getElementsByTagName("input")[1].value;
+                if (Descripcion == "") {
+                    swal("Debes describir la acción de mejora", "", "info").then(function () {
+                        return false;
+                    });
+                    return false;
+                }
+                /* Peticion para editar la accion */
+                modelNuevaAccion = {
+                    Descripcion: Descripcion,
+                    Estatus: { IdEstatus: 1 },
+                    Encuesta: { IdEncuesta: 0 },
+                    BasesDeDatos: { IdBaseDeDatos: 0 },
+                    AnioAplicacion: 0,
+                    IdAccionDeMejora: IdAccion
+                }
+                vm.post("/PlanesDeAccion/AddAccion/", modelNuevaAccion, function (response) {
+                    if (response.Correct) {
+                        if (IdAccion == 0 || IdAccion == "")
+                            swal("La acción ha sido agregada con éxito", "", "success").then(function () {
+                                vm.ConsultaAccionesGuardadas();
+                            });
+                        if (IdAccion > 0)
+                            swal("La acción ha sido actualizada con éxito", "", "success").then(function () {
+                                vm.ConsultaAccionesGuardadas();
+                            });
+                        LimpiarModal();
+                    }
+                    else {
+                        if (IdAccion == 0)
+                            swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
+                        if (IdAccion > 0)
+                            swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
+                    }
+                });
+            }
             
 
         } catch (aE) {
@@ -710,68 +800,97 @@ var CrearScript = function (src) {
 }
 
 var CrearGridSubCategorias = function () {
-    $("#grid").kendoGrid({
-        dataSource: DataSubCategorias,
-        columnMenu: {
-            filterable: false
-        },
-        height: 680,
-        editable: "incell",
-        pageable: true,
-        sortable: true,
-        navigatable: true,
-        resizable: true,
-        reorderable: true,
-        groupable: true,
-        filterable: true,
-        toolbar: ["excel", "pdf", "search"],
-        columns: [
-            {
-                field: "IdCategoria",
-                title: "IdCategoria",
-                width: 300
-            }, {
-                field: "Nombre",
-                title: "Nombre",
-                width: 130,
-            }, {
-                field: "IdPadre",
-                title: "IdPadre",
-                width: 125
-            }, {
-                field: "NombrePadreCategoria",
-                title: "NombrePadreCategoria",
-                width: 125
-            }, {
-                field: "Promedio",
-                title: "Promedio",
-                width: 140
-            }],
-        batch: true,
-        pageSize: 20,
-        autoSync: true,
-        schema: {
-            model: {
-                id: "IdCategoria",
-                fields: {
-                    IdCategoria: { editable: false, nullable: true },
-                    Nombre: { type: "", editable: false },
-                    IdPadre: { type: "number", editable: false },
-                    Promedio: { type: "" },
-                }
-            }
+    setTimeout(function () {
+        if (AccionesPreGuardadas.length == 0) {
+            swal("No se encontrarón acciones guardadas", "", "info");
         }
-    });
+        else {
+            $("#grid-Acciones").kendoGrid({
+                dataSource: AccionesPreGuardadas,
+                columnMenu: {
+                    filterable: false
+                },
+                height: 500,
+                editable: "",
+                pageable: true,
+                sortable: true,
+                navigatable: true,
+                resizable: true,
+                reorderable: true,
+                columns: [
+                    {
+                        field: "IdAccionDeMejora",
+                        title: "IdAccionDeMejora",
+                        width: 50,
+                        editable: false
+                    }, {
+                        field: "Descripcion",
+                        title: "Descripcion",
+                        width: 150,
+                    }, {
+                        field: "Editar",
+                        title: "Editar",
+                        width: 80,
+                        template: "<button class='btn btn-info' onclick='EditAccionAyuda(this)'>Editar</button>"
+                    }
+                ],
+                batch: true,
+                pageSize: 20,
+                autoSync: true,
+                schema: {
+                    model: {
+                        id: "IdAccionDeMejora",
+                        fields: {
+                            IdAccionDeMejora: { editable: false },
+                            Descripcion: { type: "", editable: true },
+                            IdCategoria: { type: "button", editable: true },
+                        }
+                    }
+                }
+            });
+        }
+    }, 500);
 }
 
 var LimpiarModal = function () {
-    $('#re-asignar-accion').modal('toggle');
-    $("#nueva-categoria").val("0");
-    $("#nuevo-rango").val("0");
+    if (IdEncuesta > 0) {
+        $('#re-asignar-accion').modal('toggle');
+        $("#nueva-categoria").val("0");
+        $("#nuevo-rango").val("0");
+    }
+    if (IdEncuesta == 0) {
+        $('#edita-acciones').modal('toggle');
+        $("#edita-acciones input")[0].value = "";
+        $("#edita-acciones input")[1].value = "";
+    }
 }
 
 var editAccion = function (e) {
     console.log(e);
     e.closest(".form-group").getElementsByTagName("input")[0].removeAttribute("disabled");
     e.closest(".form-group").getElementsByTagName("select")[0].removeAttribute("disabled");
+}
+
+var EditAccionAyuda = function (e, accion) {
+    console.log(e);
+    $("#edita-acciones .select-rango").empty();
+    [].forEach.call(listRangos, function (rango) {
+        $("#edita-acciones .select-rango").append('<option>' + rango.Descripcion + '</option>');
+    });
+    if (e.id == "nueva-accion") {
+        $("#edita-acciones").modal('toggle');
+    }
+    else {
+        var IdAccion = e.closest(".k-master-row").getElementsByTagName("td")[0].innerText;
+        var Descripcion = e.closest(".k-master-row").getElementsByTagName("td")[1].innerText;
+        $("#edita-acciones").modal('toggle');
+        $("#edita-acciones input")[0].value = IdAccion;
+        $("#edita-acciones input")[1].value = Descripcion;
+    }
+    if (accion == "agregar") {
+        $("#edita-acciones .header-modal")[0].innerText = "Agregar nueva acción"
+    }
+    else {
+        $("#edita-acciones .header-modal")[0].innerText = "Editar acción";
+    }
 }

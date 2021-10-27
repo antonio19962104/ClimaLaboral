@@ -446,14 +446,14 @@ namespace BL
                 return aE.Message;
             }
         }
-        public static bool updateStatusReporte(string entidadNombre, int AnioActual, string user, string nivelDetalle)
+        public static bool updateStatusReporte(string entidadNombre, int AnioActual, string user, string nivelDetalle, int IdBD)
         {
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     //ENTIDADID = {0} AND
-                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1 WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3} AND NivelDetalle = {4}", 0, entidadNombre, AnioActual, user, nivelDetalle);
+                    context.Database.ExecuteSqlCommand("UPDATE DEMO SET STATUS = 1, IdBaseDeDatos = {0} WHERE ENTIDADNOMBRE = {1} AND ANIO = {2} AND USUARIO = {3} AND NivelDetalle = {4}", IdBD, entidadNombre, AnioActual, user, nivelDetalle);
                     context.SaveChanges();
                     return true;
                 }
@@ -596,7 +596,7 @@ namespace BL
             aHistorico.Anio = aHistorico.Anio + 1;
             using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                var query = context.Demo.Select(o => o).Where(o => o.Anio == aHistorico.Anio && o.NivelDetalle == aHistorico.nivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.objName == aliasObj && o.usuario == aHistorico.CurrentUsr).FirstOrDefault();
+                var query = context.Demo.Select(o => o).Where(o => o.IdBaseDeDatos == aHistorico.IdBaseDeDatos && o.Anio == aHistorico.Anio && o.NivelDetalle == aHistorico.nivelDetalle /*&& o.EntidadId == aHistorico.EntidadId*/ && o.EntidadNombre == aHistorico.EntidadNombre && o.objName == aliasObj && o.usuario == aHistorico.CurrentUsr).FirstOrDefault();
                 if (query != null)
                 {
                     return (query.jsonString);

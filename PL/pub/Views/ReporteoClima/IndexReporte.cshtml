@@ -140,10 +140,10 @@
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no15_Comparativo_Indicadores_De_Abandono.cshtml")
         </div>
         <!-------------------------------------Reporte de Resultados Generales por Departamento----------------------------------------->
-        <div ng-show="vm.SeccionesReporte.Id == 21" id="tab-21" title="Resultados Generales por Departamento Enfoque Empresa">
+        <div ng-show="vm.SeccionesReporte.Id == 21" id="tab-21" ng-hide="vm.SeccionesReporte.Id != 21"  title="Resultados Generales por Departamento Enfoque Empresa">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEE.cshtml")
         </div>
-        <div ng-show="vm.SeccionesReporte.Id == 22" id="tab-22" title="Resultados Generales por Departamento Enfoque Área">
+        <div ng-show="vm.SeccionesReporte.Id == 22" id="tab-22" ng-hide="vm.SeccionesReporte.Id != 22" title="Resultados Generales por Departamento Enfoque Área">
             @Html.Partial("~/Views/ReporteoClima/EstructuraReporte/no16_Resultados_Generales_Por_DepartamentoEA.cshtml")
         </div>
 
@@ -237,7 +237,7 @@
 </div>
 <script>
     // https://stackoverflow.com/questions/38559604/how-encode-in-base64-a-file-generated-with-jspdf-and-html2canvas
-    
+
     function iframeSet() {
         var blob = docReporte.output('blob');
         /* Write Pdf into #display Iframe */
@@ -248,6 +248,12 @@
 </script>
 <style>
     /* vm.enfoqueSeleccionado == 0 */
+    #tab-21 .card {
+        margin-bottom: 30px
+    }
+    #tab-22 .card {
+        margin-bottom: 30px
+    }
     .contenedor-resumen {
         float: right;
         margin-top: -25rem;

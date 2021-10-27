@@ -3114,6 +3114,11 @@ namespace PL.Controllers
                 if (anioActual == 0)
                     Console.Write("");
                 List<int> resultados = new List<int>();
+                if (model.criterioBusquedaSeleccionado == "0")
+                {
+                    var result = BL.ReporteD4U.GetEsperadasNivelCero(anioActual, model.IdBD);
+                    resultados.Add(result);
+                }
                 foreach (string item in model.ListFiltros)
                 {
                     string aux = item;if (aux.Contains("_")){
@@ -3298,6 +3303,12 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.Correct)
+            {
+                var result = BL.ReporteD4U.GetPorcentajeAfirmativasNivelCeroEnfoqueEmpresa(model.IdPregunta, anioActual, model.IdBD);
+                resultados.Add(result);
+                return resultados;
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
@@ -3306,6 +3317,9 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 // set unidad negocio
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
+
                 if (prefijo == "UNeg=>")
                     model.UnidadNegocioFilter = DataForFilter;
 
@@ -3481,6 +3495,13 @@ namespace PL.Controllers
                 if (anioActual == 0)
                     Console.Write("");
                 List<double> resultados = new List<double>();
+                if (model.criterioBusquedaSeleccionado == "0")
+                {
+                    var result = BL.ReporteD4U.GetParticipacionNivelCero(anioActual, model.IdBD);
+                    if (Double.IsNaN(result) == true)
+                        result = 0;
+                    resultados.Add(result);
+                }
                 foreach (string item in model.ListFiltros)
                 {
                     string aux = item; 
@@ -3642,6 +3663,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCredibilidadNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -3781,6 +3809,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioImparcialidadNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -3916,6 +3951,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioOrgulloNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -4051,6 +4093,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioRespetoNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -4186,6 +4235,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCompañerismoNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -4321,6 +4377,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCoachingNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -4456,6 +4519,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCambioNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -4990,6 +5060,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioConfianzaNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -5133,6 +5210,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioOneTo66NivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -5404,6 +5488,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 Console.Write("");
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioPracticasCulturalesNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -6714,6 +6805,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -6847,6 +6945,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioProcesosOrganNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -7898,6 +8003,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -8036,6 +8148,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioNivelCompromisoNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -9872,6 +9991,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCredibilidadNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -10004,6 +10130,15 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioImparcialidadNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                {
+                    result = 0;
+                }
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -10139,6 +10274,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioOrgulloNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -10271,6 +10413,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioRespetoNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -10403,6 +10552,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCompañerismoNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -10535,6 +10691,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCoachingNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -10667,6 +10830,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioCambioNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -11183,6 +11353,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioConfianzaNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -11325,6 +11502,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioOneTo66NivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -11592,6 +11776,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioPracticasCulturalesNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -12896,6 +13087,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioAlineacionEstrategicaNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -13029,6 +13227,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioProcesosOrganNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -13815,6 +14020,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioNivelCoolaboracionNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -13952,6 +14164,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioNivelCompromisoNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];
@@ -15779,6 +15998,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesNivelCeroEE(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -15912,6 +16138,13 @@ namespace PL.Controllers
             if (anioActual == 0)
                 anioActual = model.Anio;
             List<double> resultados = new List<double>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedioHabilidadesGerencialesNivelCeroEA(anioActual, model.IdBD);
+                if (Double.IsNaN(result) == true)
+                    result = 0;
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = model.UnidadNegocioFilter == "" ? item.Split('_')[0] : model.UnidadNegocioFilter;} char[] arreglo = new char[50];
@@ -16048,12 +16281,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetMejoresNivelCeroEE(anioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16295,12 +16535,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetMayorCrecimientoNivelCeroEE(AnioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16367,12 +16614,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetMayorCrecimientoNivelCeroEA(AnioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16458,12 +16712,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetMejoresNivelCeroEA(anioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16544,12 +16805,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetPeoresNivelCeroEE(anioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16630,12 +16898,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetPeoresNivelCeroEA(anioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16714,12 +16989,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetIndicadoresPermanenciaNivelCero(anioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16798,12 +17080,19 @@ namespace PL.Controllers
             List<ML.Queries> resultados = new List<ML.Queries>();
             foreach (string item in model.ListFiltros)
             {
+                if (string.IsNullOrEmpty(item))
+                {
+                    var result = BL.ReporteD4U.GetIndicadoresAbandonoNivelCero(anioActual, model.IdBD);
+                    return Json(result, JsonRequestBehavior.AllowGet);
+                }
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
                 arreglo = aux.ToCharArray();
                 string prefijo = Convert.ToString(arreglo[0].ToString() + arreglo[1].ToString() + arreglo[2].ToString() + arreglo[3].ToString() + arreglo[4].ToString() + arreglo[5].ToString());
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16894,6 +17183,8 @@ namespace PL.Controllers
                     Console.Write("");
                 }
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
 
                 if (prefijo == "UNeg=>")
                 {
@@ -16978,6 +17269,8 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
@@ -17053,6 +17346,11 @@ namespace PL.Controllers
         public JsonResult getComparativoEntidadesResultadoGeneralEE(ML.ReporteD4U model, int anioActual)
         {
             List<BL.ReporteD4U.comparativoGenerales> resultados = new List<BL.ReporteD4U.comparativoGenerales>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                var result = BL.ReporteD4U.GetPromedio66NivelCeroEE(anioActual, model.IdBD);
+                resultados.Add(result);
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
@@ -17061,6 +17359,9 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
+
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio
@@ -17136,6 +17437,14 @@ namespace PL.Controllers
         public JsonResult getComparativoEntidadesResultadoGeneralEA(ML.ReporteD4U model, int anioActual)
         {
             List<BL.ReporteD4U.comparativoGenerales> resultados = new List<BL.ReporteD4U.comparativoGenerales>();
+            if (model.criterioBusquedaSeleccionado == "0")
+            {
+                if (model.criterioBusquedaSeleccionado == "0")
+                {
+                    var result = BL.ReporteD4U.GetPromedio66NivelCeroEA(anioActual, model.IdBD);
+                    resultados.Add(result);
+                }
+            }
             foreach (string item in model.ListFiltros)
             {
                 string aux = item;if (aux.Contains("_")){aux = aux.Split('_')[1];model.UnidadNegocioFilter = item.Split('_')[0];} char[] arreglo = new char[50];
@@ -17144,6 +17453,9 @@ namespace PL.Controllers
                 string DataForFilter = aux.Remove(0, 6);  if (prefijo == "UNeg=>" && !aux.Contains("_")) { model.UnidadNegocioFilter = DataForFilter; }
 
                 //Set Data for filter
+                if (string.IsNullOrEmpty(model.UnidadNegocioFilter) || true == true)
+                    model.UnidadNegocioFilter = BL.LogReporteoClima.GetUnidadNegocioByName(DataForFilter, model.IdBD);
+
                 if (prefijo == "UNeg=>")
                 {
                     //Metodo por unidad de negocio

@@ -32,6 +32,7 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
+        public Nullable<int> Tipo { get; set; }
     
         public virtual Categoria Categoria { get; set; }
         public virtual TipoEstatus TipoEstatus { get; set; }

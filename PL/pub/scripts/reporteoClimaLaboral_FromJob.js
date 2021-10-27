@@ -1,4 +1,51 @@
-﻿/*
+﻿var randomized;
+const compare = (e) => {
+    var array = e.target.parentNode.children;
+    var text = [];
+    [].forEach.call(array, function (item) {
+        console.log(item.innerHTML)
+        text.push(item.innerHTML)
+    });
+    randomized = text;
+    var index1 = randomized.indexOf(dragging);
+    var index2 = randomized.indexOf(draggedOver);
+    randomized.splice(index1, 1)
+    randomized.splice(index2, 0, dragging)
+
+    //isRight = randomized.join("") === base.join("")
+    //    ? 'In Order!' : 'Not In Order!'
+
+    renderItems(randomized, e)
+};
+
+const renderItems = (data, e) => {
+    document.getElementById('isRight').innerText = isRight;
+    var list = e.target.parentNode;
+    list.innerText = ''
+    data.forEach(item => {
+        var node = document.createElement("li");
+        node.draggable = true
+        node.style.backgroundColor = item
+        node.style.backgroundColor = node.style.backgroundColor.length > 0
+            ? item : ''
+        node.addEventListener('drag', setDragging)
+        node.addEventListener('dragover', setDraggedOver)
+        node.addEventListener('drop', compare)
+        node.innerText = item
+        list.appendChild(node)
+    })
+}
+
+const setDraggedOver = (e) => {
+    e.preventDefault();
+    draggedOver = e.target.innerText//; Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+}
+
+const setDragging = (e) => {
+    dragging = e.target.innerText// Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+}
+
+/*
  * Script principal del reporte gráfico de Clima Laboral 
  */
 var dataComparativoPermanencia = [];
@@ -21,12 +68,253 @@ function GetDashBoard() {
             vm.lvl3 = false;
             vm.lvl4 = false;
             vm.lvl5 = false;
+            vm.listAntiguedad = [];
+            vm.listGenero = [];
+            vm.listGradoAcademico = [];
+            vm.listCondicionTrabajo = [];
+            vm.listFuncion = [];
+            vm.listRangoEdad = [];
+
+            vm.listAntiguedad2 = [];
+            vm.listGenero2 = [];
+            vm.listGradoAcademico2 = [];
+            vm.listCondicionTrabajo2 = [];
+            vm.listFuncion2 = [];
+            vm.listRangoEdad2 = [];
+            
+            vm.OrdenarArreglo = function (data, arrayOrden) {
+                return data.sort(function (a, b) {
+                    return arrayOrden.indexOf(a.Entidad) - arrayOrden.indexOf(b.Entidad);
+                });
+            }
+
+            var getFiltros = function () {
+                vm.modelHistorico.Anio = cadenaDesenc == "" ? (vm.Anio.value - 1) : (vm.anioSeleccionado - 1);
+                vm.modelHistorico.IdBaseDeDatos = cadenaDesenc == "" ? document.getElementById("DDLBD").value : cadenaDesenc.split("|")[8];
+                vm.modelHistorico.idEncuesta = 1;
+                vm.modelHistorico.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
+                vm.modelHistorico.Entidad = vm.model.EntidadNombre;
+
+                if (cadenaDesenc == "") {
+                    if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                            (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                            (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                            (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                        vm.modelHistorico.nivelDetalle =
+                            (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    }
+                }
+                else {
+                    vm.modelHistorico.nivelDetalle = vm.model.nivelDetalle;
+                }
+
+                vm.listAntiguedad = [];
+                vm.listGenero = [];
+                vm.listGradoAcademico = [];
+                vm.listCondicionTrabajo = [];
+                vm.listFuncion = [];
+                vm.listRangoEdad = [];
+                switch (vm.criterioBusquedaSeleccionado.Id) {
+                    case 1:
+                        vm.modelHistorico.EntidadNombre = vm.CompanyCategoria.Descripcion;
+                        break;
+                    case 2:
+                        vm.modelHistorico.EntidadNombre = vm.Company.CompanyName;
+                        break;
+                    case 3:
+                        vm.modelHistorico.EntidadNombre = vm.Area.Nombre;
+                        break;
+                    case 4:
+                        vm.modelHistorico.EntidadNombre = vm.Departamento.Nombre
+                        break;
+                    default:
+                }
+                $.ajax({
+                    url: "/apis/GetRangosAntiguedad/?IdBaseDeDatos=" + vm.modelHistorico.IdBaseDeDatos,
+                    type: "POST",
+                    data: vm.modelHistorico,
+                    success: function (response) {
+                        if (response != null) {
+                            $("#acordeon-drag-drop").empty();
+                            console.log(response);
+                            if (response.Correct) {
+                                vm.listAntiguedad = response.ListAntiguedad;
+                                vm.listGenero = response.ListGenero;
+                                vm.listGradoAcademico = response.ListGradoAcademico;
+                                vm.listCondicionTrabajo = response.ListCondicionTrabajo;
+                                vm.listFuncion = response.ListFuncion;
+                                vm.listRangoEdad = response.ListEdad;
+                                //Agrupar tabla
+                                var allitems_list = [];
+                                var listData = [];
+                                listData.push(vm.listAntiguedad);
+                                listData.push(vm.listGenero);
+                                listData.push(vm.listGradoAcademico); 
+                                listData.push(vm.listCondicionTrabajo);
+                                listData.push(vm.listFuncion);
+                                listData.push(vm.listRangoEdad);
+                                [].forEach.call(listData, function (item, index) {
+                                    var encabezado = "";
+                                    switch (index) {
+                                        case 0:
+                                            encabezado = "Rangos de Antiguedad"
+                                            break;
+                                        case 1:
+                                            encabezado = "Género"
+                                            break;
+                                        case 2:
+                                            encabezado = "Grado Académico"
+                                            break;
+                                        case 3:
+                                            encabezado = "Condición de trabajo"
+                                            break;
+                                        case 4:
+                                            encabezado = "Función"
+                                            break;
+                                        case 5:
+                                            encabezado = "Rangos de Edad"
+                                            break;
+                                        default:
+                                    }
+                                    allitems_list = item;
+                                    var uid = vm.getUid();
+                                    document.getElementById("acordeon-drag-drop").innerHTML +=
+                                    (`
+                                    <div class="card-header row col-12" style="left: 15px;" id="headingOne`+ uid +`">
+                                        <div class="col-10">
+                                            <btn class="btn" data-toggle="collapse" data-target="#collapseOne`+ uid +`" aria-expanded="true" aria-controls="collapseOne`+uid+`">
+                                                Elige el orden para `+ encabezado +`
+                                            </btn>
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne`+ uid +`" class="collapse" aria-labelledby="headingOne`+ uid +`" data-parent="#accordion">
+                                        <!--Merge drag and drop-->
+                                        <div class="demo-drag" id='container'` + index + `>
+                                            <h1 id='isRight' hidden></h1>
+                                            <ul id='list_` + uid + `' style="">
+                                            </ul>
+                                        </div>
+                                        <!--fin merge drag and drop-->
+                                    </div>    
+                                    `);
+                                    CrearDrag(allitems_list, uid);
+                                });
+                                [].forEach.call(document.getElementById("accordion").getElementsByTagName("li"), function (item) {
+                                    item.addEventListener('drag', setDragging)
+                                    item.addEventListener('dragover', setDraggedOver)
+                                    item.addEventListener('drop', compare)
+                                });
+                            }
+                            else {
+                                alert(response.ErrorMessage);
+                            }
+                        }
+                    }
+                });
+            }
+
+            var CrearDrag = function (allitems_list, listId) {
+                var list = document.getElementById('list_' + listId)
+                var base, randomized, dragging, draggedOver;
+                var isRight = 'Not In Order!';
+
+                const genRandom = (array) => {
+                    if (array != null) {
+                        base = array.slice()
+                        randomized = array;//array.sort(() => Math.random() - 0.5)
+                        if (true/*randomized.join("") !== base.join("")*/) {
+                            renderItems(randomized)
+                        } else {
+                            //recursion to account if the randomization returns the original array
+                            genRandom()
+                        }
+                    }
+                }
+
+                const renderItems = (data) => {
+                    document.getElementById('isRight').innerText = isRight
+                    list.innerText = ''
+                    data.forEach(item => {
+                        var node = document.createElement("li");
+                        node.draggable = true
+                        node.style.backgroundColor = item
+                        node.style.backgroundColor = node.style.backgroundColor.length > 0
+                            ? item : ''
+                        node.addEventListener('drag', setDragging)
+                        node.addEventListener('dragover', setDraggedOver)
+                        node.addEventListener('drop', compare)
+                        node.innerText = item
+                        list.appendChild(node)
+                    })
+                }
+
+                const compare = (e) => {
+                    var index1 = randomized.indexOf(dragging);
+                    var index2 = randomized.indexOf(draggedOver);
+                    randomized.splice(index1, 1)
+                    randomized.splice(index2, 0, dragging)
+
+                    isRight = randomized.join("") === base.join("")
+                        ? 'In Order!' : 'Not In Order!'
+
+                    renderItems(randomized)
+                };
+
+
+                const setDraggedOver = (e) => {
+                    e.preventDefault();
+                    draggedOver = e.target.innerText//; Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+                }
+
+                const setDragging = (e) => {
+                    dragging = e.target.innerText// Number.isNaN(parseInt(e.target.innerText)) ? e.target.innerText : parseInt(e.target.innerText)
+                }
+
+                // genRandom([0, 1, 2, 3, 4, 5, 6])
+                genRandom(allitems_list)
+            }
+
+            
+
             //Aux
             //Pantalla 1
             vm.PorcentajeCalificacionGlobalEE = [];
             vm.PorcentajeNivelConfianzaEE = [];
             vm.PorcentajeNivelDeCompromisoEE = [];
             vm.PorcentajeNivelDeColaboracionEE = [];
+            vm.seccionaGraph = 0;
 
             //Pantalla 2
             vm.PorcentajeCredibilidadEE = [];
@@ -256,7 +544,8 @@ function GetDashBoard() {
             vm.SeccionesReporte.Id = 1;
 
             vm.criteriosReporte = [
-                { Id: 0, Nombre: "-Selecciona-" },
+                { Id: -1, Nombre: "-Selecciona-" },
+                { Id: 0, Nombre: "Grupo Autofin" },
                 { Id: 1, Nombre: "Unidad de Negocio" },
                 { Id: 2, Nombre: "Dirección" },
                 { Id: 3, Nombre: "Área" },
@@ -525,6 +814,9 @@ function GetDashBoard() {
                                 vm.Area = Object;
                                 vm.Departamento = Object;
                                 switch (vm.criterioBusquedaSeleccionado.Id) {
+                                    case 0:
+                                        
+                                        break;
                                     case 1:
                                         vm.CompanyCategoria.IdCompanyCategoria = vm.entidadNombre;
                                         vm.CompanyCategoria.Descripcion = vm.entidadNombre;
@@ -577,6 +869,50 @@ function GetDashBoard() {
                 }
             });
 
+            vm.get = function (url, functionOK, mostrarAnimacion) {
+                $http.get(url, { headers: { 'Cache-Control': 'no-cache' } })
+                    .then(function (response) {
+                        try {
+                            if (messageBoxError(response))
+                                return;
+                            functionOK(response.data);
+                        }
+                        catch (aE) {
+                            messageBoxError(aE);
+                        }
+                    },
+                        function (error) {
+                            /*error*/
+                            messageBoxError(error);
+                        })
+                    .finally(function () {
+                    });
+            }/*fin get()*/
+            vm.post = function (url, objeto, functionOK, mostrarAnimacion) {
+                $http.post(url, objeto)
+                    .then(function (response) {
+                        try {
+                            if (messageBoxError(response))
+                                return;
+                            functionOK(response.data);
+                        }
+                        catch (aE) {
+                            messageBoxError(aE);
+                        }
+                    },
+                        function (error) {
+                            /*error*/
+                            messageBoxError(error);
+                        })
+                    .finally(function () {
+                    });
+            }/*fin post()*/
+           
+            var messageBoxError = function () {
+                return false;
+            }
+
+
             vm.agrandarGraficas = function () {
                 var paginaActiva = "";
                 if (paginaActiva.includes("pegarReseccionado")) {
@@ -619,6 +955,7 @@ function GetDashBoard() {
                         [].forEach.call(parrafoHC, function (graf) {
                             graf.style.marginTop = ((parseFloat(graf.style.marginTop) * factConver) + 18) + "px";
                         });
+
                     }
                     if (vm.SeccionesReporte.Id >= 21 && vm.enfoqueSeleccionado == 0) {
                         var graficaBarras = $(".bar-progress-clasificacion:visible");
@@ -641,7 +978,7 @@ function GetDashBoard() {
                             graf.style.minHeight = parseFloat(graf.offsetHeight) * factConver + "px";
                         });
                     }
-                    if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26) {
+                    if (vm.SeccionesReporte.Id == 24 || vm.SeccionesReporte.Id == 26 || vm.SeccionesReporte.Id == 21 || vm.SeccionesReporte.Id == 22) {
                         if (vm.SeccionesReporte.Id == 24) {
                             //if ($(".contenedor-resumen:visible").length > 0) {
                             //    $(".contenedor-resumen:visible")[0].style.setProperty("margin-right", "25px", "important");
@@ -690,7 +1027,7 @@ function GetDashBoard() {
                             if (multi26.length > 0) {
                                 if (resolucion <= 2500 && resolucion >= 1901) {
                                     [].forEach.call(multi26, function (item) {
-                                        item.style.marginTop = "-32rem";
+                                        item.style.marginTop = vm.enfoqueSeleccionado != 0 ? "-39rem" : "-43rem";
                                         item.style.marginRight = "25px";
                                     });
                                 }
@@ -700,12 +1037,21 @@ function GetDashBoard() {
                                         item.style.marginRight = "25px";
                                     });
                                 }
-                                if (resolucion <= 1369) {
-                                    [].forEach.call(multi26, function (item) {
-                                        item.style.marginTop = "-28rem";
-                                        item.style.marginRight = "25px";
-                                    });
+                                if (vm.enfoqueSeleccionado != 0) {
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-31rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
                                 }
+                                /*Ya se acomoda solo en esta resolicion*/
+                                //if (resolucion <= 1369) {
+                                //    [].forEach.call(multi26, function (item) {
+                                //        item.style.marginTop = "-28rem";
+                                //        item.style.marginRight = "25px";
+                                //    });
+                                //}
 
                             }
                         }
@@ -713,7 +1059,7 @@ function GetDashBoard() {
                 }
             }
 
-            vm.CrearHC = function (currentHC, arr, enfoque) {
+              vm.CrearHC = function (currentHC, arr, enfoque) {
                 try {
                     if (enfoque == 0 || enfoque == undefined) {
                         /*Crear HC*/
@@ -724,14 +1070,16 @@ function GetDashBoard() {
                         //Como el HC solo llegara a la mitad mi 100% de personas equivale a 150px
                         //Calcular a que porcentaje equivale la cantidad de HC
                         var maxHC = Enumerable.from(arr).max(o => o.HC);
-                        var px = (currentHC * 165) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
+                        //se cambia de 165 a la mitad, lo quieren más chico 12/10/2021
+                        var px = (currentHC * 82.5) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
                         return px;
                     }
                     if (enfoque != 0) {
                         /*Crear HC*/
                         $(".bar-clasificacion"); // la altura maxima de un 100% en la encuesta es 270px
                         var maxHC = Enumerable.from(arr).max(o => o.HC);
-                        var px = (currentHC * 135) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
+                        //se cambia de 135 a la mitad, lo quieren más chico 12/10/2021
+                        var px = (currentHC * 67.5) / maxHC;//Se puede cambiar para que en lugar de tomar el maximo como *165px que es igual a//una grafica de 100% por la de mas altura en el array data
                         if (px > 135) {
                             alert();
                         }
@@ -746,8 +1094,9 @@ function GetDashBoard() {
             vm.setMargin = function (currentHeight, enfoque, porcentajeE) {//55
                 if (currentHeight != undefined) {
                     if (enfoque == 0 || enfoque == undefined) {
-                        var marginTop = -190;//quiere pedir -191
-                        var dif = 165 - currentHeight;
+                        var marginTop = -107;//+27 quiere pedir -191
+                        //se cambia de 165 a la mitad, lo quieren más chico 12/10/2021
+                        var dif = 82.5 - currentHeight;
                         return marginTop + dif;
                     }
                     if (enfoque != 0) {
@@ -1712,7 +2061,20 @@ function GetDashBoard() {
                     /*Consultar si el anio anterior tiene historicos*/
                     vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
                     var validFind = false;
+                    var IdBdToken = cadenaDesenc.split("|")[8];
                     switch (vm.criterioBusquedaSeleccionado.Id) {
+                        case 0:
+                            if (document.getElementById("DDLBD").value > 0 || IdBdToken != "") {
+                                vm.model.IdBaseDeDatos = cadenaDesenc == "" ? document.getElementById("DDLBD").value : IdBdToken;
+                                vm.model.EntidadNombre = "GAFM";
+                                vm.model.Entidad = "GAFM";
+                                vm.model.EntidadId = "GAFM";
+                                validFind = true;
+                            }
+                            else {
+                                swal("Debes elegir una base de datos", "", "info"); validFind = false;
+                            }
+                            break;
                         case 1:
                             if (vm.CompanyCategoria.IdCompanyCategoria != null/* && vm.CompanyCategoria.IdCompanyCategoria > 0*/) {
                                 vm.model.EntidadNombre = vm.CompanyCategoria.Descripcion;
@@ -1747,12 +2109,47 @@ function GetDashBoard() {
 
                     vm.model.Anio = anioSeleccionado;
                     vm.model.IdTipoEntidad = vm.criterioBusquedaSeleccionado.Id;
-                    vm.model.nivelDetalle =
-                        (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                        (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                        (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                        (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                        (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                    if (cadenaDesenc == "") {
+                        if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                                (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                                (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                                (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                        if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                            vm.model.nivelDetalle =
+                                (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                        }
+                    }
 
                     vm.modelHistorico = vm.model;
                     vm.model.CurrentUsr = localStorage["usuario"];
@@ -1785,6 +2182,7 @@ function GetDashBoard() {
                     }
 
                     vm.model.Anio = anioSeleccionado - 1;
+                    //vm.model.Anio = vm.Anio.value - 1;
                     if (vm.model.EntidadNombre != "" && vm.model.EntidadId != null && vm.model.EntidadId != "") {
                         if (validFind) {
                             fillArrayCustomHisto("apisHistorico/existeHistorico_2", vm.model, vm.ExisteH, function () {
@@ -2173,10 +2571,13 @@ function GetDashBoard() {
             vm.run = function () {
                 try {
                     /****Se guarda el tipo de enfoque seleccionado*****/
+                    localStorage.tieneReporte = "";
+                    vm.listPeticiones = [];
                     vm.enfoqueSeleccionado = vm.ddlEnfoques.Id;
                     switch (vm.opc) {
                         case "1":
                             /*Reporte general*/
+                            getFiltros();
                             vm.getReporteDataPantalla_6();
                             break;
                         case "2":
@@ -2437,6 +2838,1029 @@ function GetDashBoard() {
                 });
             }
 
+            vm.ReglasSeccionarGraficoBarras = function () {
+                if (vm.seccionaGraph == 0 && vm.model.nivelDetalle.length >= 3) {
+                    vm.seccionaGraph++;
+                    var data = [];
+                    var dataEE = [];
+                    var dataEA = [];
+                    vm.GraficoBarrasEE = [];
+                    vm.GraficoBarrasEA = [];
+                    if (vm.enfoqueSeleccionado == 1)
+                        data = vm.ComparativosGeneralesEE.Data;
+                    if (vm.enfoqueSeleccionado == 2)
+                        data = vm.ComparativosGeneralesEA.Data;
+                    if (vm.enfoqueSeleccionado == 0) {
+                        dataEE = vm.ComparativosGeneralesEE.Data;
+                        dataEA = vm.ComparativosGeneralesEA.Data;
+                    }
+
+                    if (vm.enfoqueSeleccionado != 0) {
+                        if (data == undefined) {
+                            vm.seccionaGraph = 0;
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
+                    }
+                    if (vm.enfoqueSeleccionado == 0) {
+                        if (dataEE == undefined) {
+                            vm.seccionaGraph = 0;
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
+                        if (dataEA == undefined) {
+                            vm.seccionaGraph = 0;
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
+                    }
+
+                    // Crear catalogo relacional y armar json tree
+                    if (vm.model.nivelDetalle.length > 0 && vm.enfoqueSeleccionado != 0) {
+                        if (true/*Agrupar un solo enfoque*/) {
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);//0
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);//1
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);//2
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);//3
+                            var nivel_5 = vm.model.nivelDetalle.charAt(4);//4
+                            var nivel_6 = vm.model.nivelDetalle.charAt(5);//5
+                            /*Relacionar por key cada item*/
+                            [].forEach.call(data, function (item) {
+                                if (item.tipoEntidad == 1) {
+                                    uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 2) {
+                                    uidCompany = "Comp_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 3) {
+                                    uidArea = "Area_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 4) {
+                                    uidDepto = "Depto_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 5) {
+                                    uidSubd = "Subd_" + item.Entidad + vm.getUid();
+                                }
+
+                                switch (item.tipoEntidad) {
+                                    case 1:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        break;
+                                    case 2:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        break;
+                                    case 3:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        break;
+                                    case 4:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        break;
+                                    case 5:
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        item.IdSubdepartamento = uidSubd;
+                                        break;
+                                    default:
+                                }
+                            });
+                            console.log(data);
+                            vm.GraficoBarras = [];
+                            var padre = Enumerable.from(data).where(o => o.tipoEntidad == nivel_1).toList()[0];
+                            padre.children = [];
+                            vm.GraficoBarras.push(padre);//Padre para resumen
+                            var listHijos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_2).toList();
+                            [].forEach.call(listHijos, function (hijo, index) {
+                                hijo.children = [];
+                                vm.GraficoBarras[0].children.push(hijo);
+                                var listNietos = [];
+                                if (nivel_3 == "2")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "3")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "4")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.IdArea == hijo.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "5")
+                                    listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_3 && o.IdDepartamento == hijo.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                [].forEach.call(listNietos, function (nieto, index2) {
+                                    nieto.children = [];
+                                    vm.GraficoBarras[0].children[index].children.push(nieto);
+                                    var listBisNietos = [];
+                                    if (nivel_4 == "2")
+                                        listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "3")
+                                        listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "4")
+                                        listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.IdArea == nieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "5")
+                                        listBisNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_4 && o.IdDepartamento == nieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                    [].forEach.call(listBisNietos, function (bisnieto, index3) {
+                                        bisnieto.children = [];
+                                        vm.GraficoBarras[0].children[index].children[index2].children.push(bisnieto);
+
+
+                                        var listTataranietos = [];
+                                        if (nivel_5 == "2")
+                                            listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "3")
+                                            listTataranietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.CompanyId == bisnieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "4")
+                                            listTataranietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.IdArea == bisnieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "5")
+                                            listTataranietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_5 && o.IdDepartamento == bisnieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                        [].forEach.call(listTataranietos, function (tataranieto, index4) {
+                                            tataranieto.children = [];
+                                            vm.GraficoBarras[0].children[index].children[index2].children[index3].children.push(tataranieto);
+                                            var listUltimo = [];
+                                            if (nivel_6 == "2")
+                                                listNietos = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "3")
+                                                listUltimo = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.CompanyId == tataranieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "4")
+                                                listUltimo = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.IdArea == tataranieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "5")
+                                                listUltimo = Enumerable.from(data).where(o => o.tipoEntidad == nivel_6 && o.IdDepartamento == tataranieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                            [].forEach.call(listUltimo, function (ultimo, index5) {
+                                                vm.GraficoBarras[0].children[index].children[index2].children[index3].children[index4].children.push(ultimo);
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                            console.log(vm.GraficoBarras);
+                        }
+                    }
+                    
+                    var uidGAFM;
+                    if (vm.model.nivelDetalle.length > 0 && vm.enfoqueSeleccionado == 0) {
+                        if (true/*Agrupar EE*/) {
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            var nivel_5 = vm.model.nivelDetalle.charAt(4);//4
+                            var nivel_6 = vm.model.nivelDetalle.charAt(5);//5
+                            /*Relacionar por key cada item*/
+                            [].forEach.call(dataEE, function (item) {
+                                if (item.tipoEntidad == 0) {
+                                    uidGAFM = "AFM_" + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 1) {
+                                    uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 2) {
+                                    uidCompany = "Comp_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 3) {
+                                    uidArea = "Area_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 4) {
+                                    uidDepto = "Depto_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 5) {
+                                    uidSubd = "Subd_" + item.Entidad + vm.getUid();
+                                }
+                                item.Enfoque = "Enfoque Empresa";
+                                switch (item.tipoEntidad) {
+                                    case 0:
+                                        item.IdGAFM = uidGAFM;
+                                        break;
+                                    case 1:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        break;
+                                    case 2:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        break;
+                                    case 3:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        break;
+                                    case 4:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        break;
+                                    case 5:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        item.IdSubdepartamento = uidSubd;
+                                        break;
+                                    default:
+                                }
+                            });
+                            console.log(dataEE);
+                            vm.GraficoBarrasEE = [];
+                            var padre = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_1).toList()[0];
+                            padre.children = [];
+                            vm.GraficoBarrasEE.push(padre);//Padre para resumen
+                            var listHijos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_2).toList();
+                            [].forEach.call(listHijos, function (hijo, index) {
+                                hijo.children = [];
+                                vm.GraficoBarrasEE[0].children.push(hijo);
+                                var listNietos = [];
+                                if (nivel_3 == "2")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "3")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "4")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.IdArea == hijo.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "5")
+                                    listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_3 && o.IdDepartamento == hijo.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                [].forEach.call(listNietos, function (nieto, index2) {
+                                    nieto.children = [];
+                                    vm.GraficoBarrasEE[0].children[index].children.push(nieto);
+                                    var listBisNietos = [];
+                                    if (nivel_4 == "2")
+                                        listNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.IdUnidadNegocio == nieto.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "3")
+                                        listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "4")
+                                        listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.IdArea == nieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "5")
+                                        listBisNietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_4 && o.IdDepartamento == nieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                    [].forEach.call(listBisNietos, function (bisnieto, index3) {
+                                        bisnieto.children = [];
+                                        vm.GraficoBarrasEE[0].children[index].children[index2].children.push(bisnieto);
+
+
+
+                                        var listTataranietos = [];
+                                        if (nivel_5 == "3")
+                                            listTataranietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_5 && o.CompanyId == bisnieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "4")
+                                            listTataranietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_5 && o.IdArea == bisnieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "5")
+                                            listTataranietos = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_5 && o.IdDepartamento == bisnieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                        [].forEach.call(listTataranietos, function (tataranieto, index4) {
+                                            tataranieto.children = [];
+                                            vm.GraficoBarrasEE[0].children[index].children[index2].children[index3].children.push(tataranieto);
+                                            var listUltimo = [];
+                                            if (nivel_6 == "3")
+                                                listUltimo = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_6 && o.CompanyId == tataranieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "4")
+                                                listUltimo = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_6 && o.IdArea == tataranieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "5")
+                                                listUltimo = Enumerable.from(dataEE).where(o => o.tipoEntidad == nivel_6 && o.IdDepartamento == tataranieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                            [].forEach.call(listUltimo, function (ultimo, index5) {
+                                                vm.GraficoBarrasEE[0].children[index].children[index2].children[index3].children[index4].children.push(ultimo);
+                                            });
+                                        });
+
+
+
+
+                                    });
+                                });
+                            });
+                            console.log(vm.GraficoBarrasEE);
+                        }
+                        var uidGAFM;
+                        if (true/*Agrupar EA*/) {
+                            var nivel_1 = vm.model.nivelDetalle.charAt(0);
+                            var nivel_2 = vm.model.nivelDetalle.charAt(1);
+                            var nivel_3 = vm.model.nivelDetalle.charAt(2);
+                            var nivel_4 = vm.model.nivelDetalle.charAt(3);
+                            var nivel_5 = vm.model.nivelDetalle.charAt(4);//4
+                            var nivel_6 = vm.model.nivelDetalle.charAt(5);//5
+                            /*Relacionar por key cada item*/
+                            [].forEach.call(dataEA, function (item) {
+                                if (item.tipoEntidad == 0) {
+                                    uidGAFM = "GAFM_" + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 1) {
+                                    uidUnidad = "UNEG_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 2) {
+                                    uidCompany = "Comp_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 3) {
+                                    uidArea = "Area_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 4) {
+                                    uidDepto = "Depto_" + item.Entidad + vm.getUid();
+                                }
+                                if (item.tipoEntidad == 5) {
+                                    uidSubd = "Subd_" + item.Entidad + vm.getUid();
+                                }
+                                item.Enfoque = "Enfoque Area";
+                                switch (item.tipoEntidad) {
+                                    case 0:
+                                        item.IdGAFM = uidGAFM;
+                                        break;
+                                    case 1:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        break;
+                                    case 2:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        break;
+                                    case 3:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        break;
+                                    case 4:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        break;
+                                    case 5:
+                                        item.IdGAFM = uidGAFM;
+                                        item.IdUnidadNegocio = uidUnidad;
+                                        item.CompanyId = uidCompany;
+                                        item.IdArea = uidArea;
+                                        item.IdDepartamento = uidDepto;
+                                        item.IdSubdepartamento = uidSubd;
+                                        break;
+                                    default:
+                                }
+                            });
+                            console.log(dataEA);
+                            vm.GraficoBarrasEA = [];
+                            var padre = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_1).toList()[0];
+                            padre.children = [];
+                            vm.GraficoBarrasEA.push(padre);//Padre para resumen
+                            var listHijos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_2).toList();
+                            [].forEach.call(listHijos, function (hijo, index) {
+                                hijo.children = [];
+                                vm.GraficoBarrasEA[0].children.push(hijo);
+                                var listNietos = [];
+                                if (nivel_3 == "2")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.IdUnidadNegocio == hijo.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "3")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.CompanyId == hijo.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "4")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.IdArea == hijo.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                if (nivel_3 == "5")
+                                    listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_3 && o.IdDepartamento == hijo.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                [].forEach.call(listNietos, function (nieto, index2) {
+                                    nieto.children = [];
+                                    vm.GraficoBarrasEA[0].children[index].children.push(nieto);
+                                    var listBisNietos = [];
+                                    if (nivel_4 == "2")
+                                        listNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.IdUnidadNegocio == nieto.IdUnidadNegocio).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "3")
+                                        listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.CompanyId == nieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "4")
+                                        listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.IdArea == nieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                    if (nivel_4 == "5")
+                                        listBisNietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_4 && o.IdDepartamento == nieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                    [].forEach.call(listBisNietos, function (bisnieto, index3) {
+                                        bisnieto.children = [];
+                                        vm.GraficoBarrasEA[0].children[index].children[index2].children.push(bisnieto);
+
+
+
+                                        var listTataranietos = [];
+                                        if (nivel_5 == "3")
+                                            listTataranietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_5 && o.CompanyId == bisnieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "4")
+                                            listTataranietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_5 && o.IdArea == bisnieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                        if (nivel_5 == "5")
+                                            listTataranietos = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_5 && o.IdDepartamento == bisnieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                        [].forEach.call(listTataranietos, function (tataranieto, index4) {
+                                            tataranieto.children = [];
+                                            vm.GraficoBarrasEA[0].children[index].children[index2].children[index3].children.push(tataranieto);
+                                            var listUltimo = [];
+                                            if (nivel_6 == "3")
+                                                listUltimo = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_6 && o.CompanyId == tataranieto.CompanyId).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "4")
+                                                listUltimo = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_6 && o.IdArea == tataranieto.IdArea).toList();//El where de CompanyId debe ser dinamico
+                                            if (nivel_6 == "5")
+                                                listUltimo = Enumerable.from(dataEA).where(o => o.tipoEntidad == nivel_6 && o.IdDepartamento == tataranieto.IdDepartamento).toList();//El where de CompanyId debe ser dinamico
+                                            [].forEach.call(listUltimo, function (ultimo, index5) {
+                                                vm.GraficoBarrasEA[0].children[index].children[index2].children[index3].children[index4].children.push(ultimo);
+                                            });
+                                        });
+
+
+
+
+
+                                    });
+                                });
+                            });
+                            console.log(vm.GraficoBarrasEA);
+                        }
+                    }
+
+
+                    // Mostrar secciones en el dom
+                    if (vm.enfoqueSeleccionado == 0) {
+                        if (vm.model.nivelDetalle.length == 3) {
+                            // Mostrar graficos
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarrasEE[0];
+                            [].forEach.call(vm.GraficoBarrasEE[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, hijo, dataEA, hijo /*vm.GraficoBarrasEE[0]*/);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                if (hijo.children.length == 0) {
+                                    // Se debe remover el bloque
+                                    document.getElementById(uidPadre).closest(".card").remove();
+                                }
+                                if (hijo.children.length > 0) {
+                                    [].forEach.call(hijo.children, function (nieto) {
+                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, nieto, dataEA, nieto /*hijo*/);
+                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);
+                                    });
+                                }
+                            });
+                        }
+                        if (vm.model.nivelDetalle.length >= 4) {
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarrasEE[0];
+                            [].forEach.call(vm.GraficoBarrasEE[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, hijo, dataEA, hijo /*vm.GraficoBarrasEA[0]*/);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                if (hijo.children.length == 0) {
+                                    // Se debe remover el bloque
+                                    document.getElementById(uidPadre).closest(".card").remove();
+                                }
+                                if (hijo.children.length > 0) {
+                                    [].forEach.call(hijo.children, function (nieto) {
+                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, nieto, dataEA, nieto /*hijo*/);
+                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);
+                                        // Insertar nieto como padre
+                                        if (nieto.children.length == 0) {
+                                            // Se debe rmeover el bloque
+                                        }
+                                        if (nieto.children.length > 0) {
+                                            [].forEach.call(nieto.children, function (bisnieto) {
+                                                var uidBisnieto = vm.getUid();
+                                                var htmlCode = GetContenidoHTMLBarrasPadre(uidBisnieto, "NotDeleteDiv");
+                                                htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, bisnieto, dataEA, /*bisnieto*/ nieto);//Aqui si se debe mostrar el papá en el resumen
+                                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+
+
+                                                // Agregado JAMG
+                                                if (bisnieto.children.length > 0) {
+                                                    [].forEach.call(bisnieto.children, function (tataranieto) {
+                                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                                        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, tataranieto, dataEA, tataranieto);
+                                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidBisnieto).append(htmlCode);
+
+                                                        // Agregado JAMG opcional ultimo nivel
+                                                        //if (tataranieto.children.length > 0) {
+                                                        //    [].forEach.call(tataranieto.children, function (ultima) {
+                                                        //        var uidUltimo = vm.getUid();
+                                                        //        var htmlCode = GetContenidoHTMLBarrasPadre(uidUltimo, "NotDeleteDiv");
+                                                        //        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, ultimo, dataEA, tataranieto);
+                                                        //        $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                                        //    });
+                                                        //}
+
+                                                    });
+                                                }
+
+
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                    // Mostrar secciones en el dom
+                    if (vm.enfoqueSeleccionado != 0) {
+                        if (vm.model.nivelDetalle.length == 3) {
+                            // Mostrar graficos
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarras[0];
+                            [].forEach.call(vm.GraficoBarras[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContent(htmlCode, hijo.Entidad, hijo.Porcentaje, hijo.HC, hijo /*vm.GraficoBarras[0]*/);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                if (hijo.children.length == 0) {
+                                    // Se debe remover el bloque
+                                    document.getElementById(uidPadre).closest(".card").remove();
+                                }
+                                if (hijo.children.length > 0) {
+                                    [].forEach.call(hijo.children, function (nieto) {
+                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                        htmlCode = ReplaceContent(htmlCode, nieto.Entidad, nieto.Porcentaje, nieto.HC, nieto /*hijo*/);
+                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);
+                                    });
+                                }
+                            });
+                        }
+                        if (vm.model.nivelDetalle.length >= 4) {
+                            $("#tab-" + vm.SeccionesReporte.Id + " .bg-gris").empty();
+                            $("hr:visible:first").css("display", "none");
+                            $(".card:visible:first").css("display", "none");
+                            var resumen = vm.GraficoBarras[0];
+                            [].forEach.call(vm.GraficoBarras[0].children, function (hijo) {
+                                var uidPadre = vm.getUid();
+                                var htmlCode = GetContenidoHTMLBarrasPadre(uidPadre);
+                                htmlCode = ReplaceContent(htmlCode, hijo.Entidad, hijo.Porcentaje, hijo.HC, hijo /*vm.GraficoBarras[0]*/);
+                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                if (hijo.children.length == 0) {
+                                    // Se debe remover el bloque
+                                    document.getElementById(uidPadre).closest(".card").remove();
+                                }
+                                if (hijo.children.length > 0) {
+                                    [].forEach.call(hijo.children, function (nieto) {
+                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                        htmlCode = ReplaceContent(htmlCode, nieto.Entidad, nieto.Porcentaje, nieto.HC, nieto /*hijo*/);
+                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidPadre).append(htmlCode);
+                                        // Insertar nieto como padre
+                                        if (nieto.children.length == 0) {
+                                            // Se debe rmeover el bloque
+                                            alert("Remover bloque");
+                                        }
+                                        if (nieto.children.length > 0) {
+                                            [].forEach.call(nieto.children, function (bisnieto) {
+                                                var uidBisnieto = vm.getUid();
+                                                var htmlCode = GetContenidoHTMLBarrasPadre(uidBisnieto, "NotDeleteDiv");
+                                                htmlCode = ReplaceContent(htmlCode, bisnieto.Entidad, bisnieto.Porcentaje, bisnieto.HC, /*bisnieto*/ nieto);
+                                                $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+
+
+
+                                                // Agregado JAMG
+                                                if (bisnieto.children.length > 0) {
+                                                    [].forEach.call(bisnieto.children, function (tataranieto) {
+                                                        var htmlCode = GetContenidoHTMLBarrasHijo();
+                                                        htmlCode = ReplaceContent(htmlCode, tataranieto.Entidad, tataranieto.Porcentaje, tataranieto.HC, tataranieto);
+                                                        $("#tab-" + vm.SeccionesReporte.Id + " #" + uidBisnieto).append(htmlCode);
+
+                                                        // Agregado JAMG opcional ultimo nivel
+                                                        //if (tataranieto.children.length > 0) {
+                                                        //    [].forEach.call(tataranieto.children, function (ultima) {
+                                                        //        var uidUltimo = vm.getUid();
+                                                        //        var htmlCode = GetContenidoHTMLBarrasPadre(uidUltimo, "NotDeleteDiv");
+                                                        //        htmlCode = ReplaceContentEnfoqueCombinado(htmlCode, ultimo, dataEA, tataranieto);
+                                                        //        $("#tab-" + vm.SeccionesReporte.Id + " .container-fluid").append(htmlCode);
+                                                        //    });
+                                                        //}
+
+                                                    });
+                                                }
+
+
+
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                    //Eliminar la primer columnas que ya pasó a ser papá
+                    if (vm.enfoqueSeleccionado != 0) {
+                        [].forEach.call(document.getElementById("tab-21").getElementsByClassName("card"), function (card) {
+                            if (card.getElementsByClassName("bar-estandarW")[0].classList.contains("bar-hidePdf")) {
+                                alert("Se va a eliminar el oculto que da la altura del grafico");
+                            }
+                            if (card.classList.contains("DeleteDiv")) {
+                                card.getElementsByClassName("bar-estandarW")[0].remove();
+                            }
+                        });
+                        [].forEach.call(document.getElementById("tab-22").getElementsByClassName("card"), function (card) {
+                            if (card.getElementsByClassName("bar-estandarW")[0].classList.contains("bar-hidePdf")) {
+                                alert("Se va a eliminar el oculto que da la altura del grafico");
+                            }
+                            if (card.classList.contains("DeleteDiv")) {
+                                card.getElementsByClassName("bar-estandarW")[0].remove();
+                            }                            
+                        });
+                    }
+                    if (vm.enfoqueSeleccionado == 0) {
+                        [].forEach.call(document.getElementById("tab-22").getElementsByClassName("card"), function (card) {
+                            if (card.getElementsByClassName("col px-2")[0].attributes.fantasma != null) {
+                                alert("Se va a eliminar el oculto que da la altura del grafico");
+                            }
+                            if (card.classList.contains("DeleteDiv")) {
+                                card.getElementsByClassName("col px-2")[0].remove();
+                            }                            
+                        });
+                    }
+
+                    var secciones = $("#tab-" + vm.SeccionesReporte.Id + " .card");
+                    // alert(secciones.length);
+                    if (secciones.length == 0) {
+                        console.log("No se pudo seccionar la información");
+                        vm.seccionaGraph = 0;
+                        vm.ReglasSeccionarGraficoBarras();
+                    }
+
+                }
+            }
+
+            var GetContenidoHTMLBarrasPadre = function (uidPadre, claseBisnieto) {
+                var code = "";
+                if (claseBisnieto == null) {
+                    claseBisnieto = "DeleteDiv";
+                }
+                else {
+                    claseBisnieto = "NotDeleteDiv";
+                }
+                if (vm.enfoqueSeleccionado == 0) {
+                    code = 
+                    `
+                    <div class="card `+claseBisnieto+`">
+                        <div class="card-block">
+                            <div class="px-4">
+                                <div class="row mt-4">
+                                    <div class="col-sm-12">
+                                        <div class="graph-wrapper grafica-trabajar">
+                                            <div id="`+ uidPadre + `" class="row bg-gris mr-2 ml-2 mb-4 mt-4">` +
+                                                `<div agrupado class="col px-2" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index" ng-if="$index > 0">
+                                                <center>
+                                                <div class="row px-2 position-relative">
+
+                                                    
+                                                    <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                                        <img src="{{ setIconoEE }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                        <p class="label-top-graphic-clasificacion" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEE }}%</p>
+                                                        <div class="bar-clasificacion" style="width:80%;">
+                                                            <div class="bar-progress-clasificacion" style="height: {{ setAltoEE }}px;">
+                                                                <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEE }}%</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                                        <img src="{{ setIconoEA }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                                        <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEA }}%</p>
+                                                        <div class="bar-clasificacion" style="width: 80%;">
+                                                            <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ setAltoEA }}px;">
+                                                                <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEA }}%</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    </div>
+                                                    <div class="hc" style="margin-top: {{ itemMTHC }}px">
+                                                        <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px; /*width: 42px; margin-top:{{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 80 ? 0 : vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 50 ?  25 : 0 }}px;*/">{{ headCount }}</p>
+                                                        <div class="bar-progress4 hc-doble" style="height:{{ altoHC }}px; width: 42px;"></div>
+                                                    </div>
+                                                    <p class="text-graph entidad-nombre">{{ nombreEntidad }}</p>
+                                                </center>
+                                                </div>
+
+
+
+          <div fantasma class="col px-2" style="width: 0px !important; min-width: 0px !important; max-width: 0px !important; display: none;">
+            <center>
+                <div class="row px-2 position-relative">
+                    <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa" style="width: 1px;">
+                        <img ng-src="` + vm.setIconoSVG(100) + `" class="img-fluid svg-clasificacion">
+                        <p class="label-top-graphic-clasificacion" style="width: 80%; background-color: #eee; color: #eee;">.</p>
+                        <div class="bar-clasificacion" style="width:80%;">
+                            <div class="bar-progress-clasificacion" style="height: 270px; background-color: #eee;"></div>
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 m-0 barras-dobler enfoque-area" style="width: 0px;">
+                        <img src="img/sol-icono.svg" class="img-fluid svg-clasificacion">
+                        <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;">.</p>
+                        <div class="bar-clasificacion" style="width: 80%;">
+                            <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: 270px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hc">
+                    <p class="label-top-graphic-blue2 hc-head-doble" style="width: 0px; color: #eee;">.</p>
+                    <div class="bar-progress4 hc-doble" style="height: 27px; width: 0px;"></div>
+                </div>
+                <p class="text-graph" style="color: #eee;">.</p>
+            </center>
+        </div>
+
+
+
+
+                                            </div>`+
+
+                                            (vm.enfoqueSeleccionado != 0 ?
+                                            ``
+                                            ://Resumen Combinado
+                                            `<div ng-if="vm.enfoqueSeleccionado == 0" class="contenedor-resumen">
+                                                <p class="txt-total">TOTAL</p>
+                                                <div class="images-resumen center-vertically mt-2">
+                                                    <!-- IMG EE -->
+                                                    <img class="img-resumen" src="{{ IconoPromedioPadreEE }}" width="60" height="50">
+                                                    <!-- IMG EA -->
+                                                    <img class="img-resumen" src="{{ IconoPromedioPadreEA }}" width="60" height="50">
+                                                </div>
+                                                <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ resumenPromedioEE }}%</span>
+                                                <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ resumenPromedioEA }}%</span>
+                                                <p style="margin-bottom: 0px;"></p>
+                                                <small class="head-count-resumen">HC: {{ resumenHC }}</small>
+                                            </div>`) +
+
+                                        `</div>
+                                    </div>
+                                </div>
+                                <div title="VALIDAR" class="row mt-2">
+                                    <div class="col-12">
+                                        <center>` +
+                                        (vm.hasHistorico == true ?
+                                            `<div ng-show="vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                    <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                                </div>
+                                            </div>`
+                                            :
+                                            `<div ng-show="!vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                </div>
+                                            </div>`) +
+                                        `</center>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center mt-5">
+                                    <div class="col-12 p-0 m-0">
+                                        <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }
+                else {
+                    code =
+                    `
+                    <div class="card `+ claseBisnieto +`">
+                        <div class="card-block">
+                            <div class="px-4">
+                                <div class="row mt-4">
+                                    <div class="col-sm-12">
+                                        <div class="graph-wrapper grafica-trabajar">
+                                            <div id="`+ uidPadre +`" class="row bg-gris mr-2 ml-2 mb-4 mt-4">` +
+                                                `<div class="col px-0 px-sm-1 bar-estandarW">
+                                                    <center>
+                                                        <img class="img-fluid svg-clasificacion" src="{{ icono }}">
+                                                        <p class="label-top-graphic-clasificacion ng-binding">{{ Promedio }}%</p>
+                                                        <div class="bar-clasificacion" style="overflow:hidden;height: {{ altoGrafica }}px;">
+                                                            <div class="bar-progress-clasificacion" style="height: 0px;">
+                                                            </div>` + 
+                                                            (vm.hasHistorico == true ? `<p class="comparativo">{{ historico }}%</p>` : `` ) + 
+                                                            `<p class="label-top-graphic-blue2 ng-binding" style="margin-top:{{ marginTop }}px;">{{ HC }}</p>
+                                                            <div class="bar-progress4" style="height: {{ alto }}px;">
+                                                            </div>
+                                                        </div>
+                                                        <p class="text-graph ng-binding">{{ EntidadNombre }}</p>
+                                                    </center>
+                                                </div>
+
+
+<div fantasma class="col px-0 px-sm-1 bar-estandarW bar-hidePdf" style="min-width: 0px !important;max-width: 0px !important;">
+    <center>
+        <img ng-src="` + vm.setIconoSVG(100) + `" class="img-fluid svg-clasificacion">
+        <p class="label-top-graphic-clasificacion">.</p>
+        <div class="bar-clasificacion" style="overflow:hidden;height: 270px;">
+            <div class="bar-progress-clasificacion" style="height: 0px;">
+            </div>
+            <p ng-hide="!vm.hasHistorico" class="comparativo" style="bottom: 25%;">.</p>
+            <p class="label-top-graphic-blue2" style="margin-top: 170px;">.</p>
+            <div class="bar-progress4" style="height: 270px;">
+            </div>
+        </div>
+        <p class="text-graph">.</p>
+    </center>
+</div>
+
+
+                                            </div>`+
+
+                                            (vm.enfoqueSeleccionado != 0 ? 
+                                            `<div title="VALIDAR" ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 2" class="contenedor-resumen" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
+                                                <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;line-height:22px;">TOTAL</p>
+                                                <img style="margin-left: -2rem;" src="{{ setIconoResumen }}" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">{{ setPromedioResumen }}%</span>
+                                                <p style="margin-bottom: -20px;"></p>
+                                                <small style="color: blue;margin-left: 50px;">HC: {{ setEsperadasResumen }}</small>
+                                            </div>`
+                                            :
+                                            `<div ng-if="vm.enfoqueSeleccionado == 0" class="contenedor-resumen">
+                                                <p class="txt-total">TOTAL</p>
+                                                <div class="images-resumen center-vertically mt-2">
+                                                    <!-- IMG EE -->
+                                                    <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEE[0]) }}" width="60" height="50">
+                                                    <!-- IMG EA -->
+                                                    <img class="img-resumen" ng-src="{{ vm.setIconoSVG(vm.PorcentajeCalificacionGlobalEA[0]) }}" width="60" height="50">
+                                                </div>
+                                                <span ng-if="vm.enfoqueSeleccionado == 1 || vm.enfoqueSeleccionado == 0" style="margin-left: -1rem;" class="porcentaje-obtenido">EE: {{ vm.PorcentajeCalificacionGlobalEE[0] }}%</span>
+                                                <span ng-if="vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0" style="margin-left: 1rem;" class="porcentaje-obtenido">EA: {{ vm.PorcentajeCalificacionGlobalEA[0] }}%</span>
+                                                <p style="margin-bottom: 0px;"></p>
+                                                <small class="head-count-resumen">HC: {{ vm.Esperadas[0] }}</small>
+                                            </div>`) +
+
+                                        `</div>
+                                    </div>
+                                </div>
+                                <div title="VALIDAR" class="row mt-2">
+                                    <div class="col-12">
+                                        <center>` + 
+                                            (vm.hasHistorico == true ? 
+                                            `<div ng-show="vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                    <div style="width: 25px;height: 25px;background: #fff;margin-top: 10px;float: left;border: solid 2px #45cc00;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">PROM GRAL ANTERIOR</div>
+                                                </div>
+                                            </div>` 
+                                            :
+                                            `<div ng-show="!vm.hasHistorico" class="col-12">
+                                                <div class="row justify-content-center">
+                                                    <div style="width: 25px;height: 25px;background: #2e348d;margin-top: 10px;float: left;"></div>
+                                                    <div class="ml-2 mr-3" style="float: left;font-size: small;font-weight: bold;margin-top: 14px;">PROM GRAL ACTUAL</div>
+                                                    <div style="width: 25px;height: 25px;background: #00abe9;margin-top: 10px;float: left;"></div>
+                                                    <div style="float: left;font-size: small;font-weight: bold;margin-top: 14px;" class="ml-2 mr-3">HC</div>
+                                                </div>
+                                            </div>`) + 
+                                        `</center>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center mt-5">
+                                    <div class="col-12 p-0 m-0">
+                                        <img src="/img/ReporteoClima/indicadores.png" class="m-0 p-0" style="width:inherit;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+                return code;
+            }
+
+            var GetContenidoHTMLBarrasHijo = function () {
+                var code = "";
+                if (vm.enfoqueSeleccionado == 0) {
+                    code = 
+                    `<div agrupado class="col px-2" ng-repeat="item in vm.ComparativosGeneralesEA.Data track by $index" ng-if="$index > 0">
+                        <center>
+                        <div class="row px-2 position-relative">   
+                        
+                            <div class="col-6 p-0 m-0 barras-doblel enfoque-empresa">
+                                <img src="{{ setIconoEE }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                <p class="label-top-graphic-clasificacion" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEE }}%</p>
+                                <div class="bar-clasificacion" style="width:80%;">
+                                    <div class="bar-progress-clasificacion" style="height: {{ setAltoEE }}px;">
+                                        <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEE }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6 p-0 m-0 barras-dobler enfoque-area">
+                                <img src="{{ setIconoEA }}" class="img-fluid svg-clasificacion" style="z-index:1;position:relative;">
+                                <p class="label-top-graphic-clasificacion indicador-doble" style="width: 80%;z-index:1;position:relative;">{{ setPorcentajeEA }}%</p>
+                                <div class="bar-clasificacion" style="width: 80%;">
+                                    <div class="bar-progress-clasificacion bar-progress-clasificacion-doble" style="height: {{ setAltoEA }}px;">
+                                        <p style="display: {{ setDisplayHistorico }}" class="comparativo">{{ setHistoricoEA }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="hc" style="margin-top: {{ itemMTHC }}px">
+                            <p class="label-top-graphic-blue2 hc-head-doble" style="width: 42px; /*width: 42px; margin-top:{{ vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 80 ? 0 : vm.ComparativosGeneralesEE.Data[$index].Porcentaje >= 50 ?  25 : 0 }}px;*/">{{ headCount }}</p>
+                            <div class="bar-progress4 hc-doble" style="height:{{ altoHC }}px; width: 42px;"></div>
+                        </div>
+                        <p class="text-graph entidad-nombre">{{ nombreEntidad }}</p>
+                    </center>
+                </div>
+                `;
+                }
+                else {
+                    code =
+                        `<div class="col px-0 px-sm-1 bar-estandarW">
+                            <center>
+                                <img class="img-fluid svg-clasificacion" src="{{ icono }}">
+                                <p class="label-top-graphic-clasificacion ng-binding">{{ Promedio }}%</p>
+                                <div class="bar-clasificacion" style="overflow:hidden;height: {{ altoGrafica }}px;">
+                                    <div class="bar-progress-clasificacion" style="height: 0px;">
+                                    </div>` +
+                                        (vm.hasHistorico == true ? `<p class="comparativo">{{ historico }}%</p>` : ``) +
+                                        `<p class="label-top-graphic-blue2 ng-binding" style="margin-top:{{ marginTop }}px;">{{ HC }}</p>
+                                    <div class="bar-progress4" style="height: {{ alto }}px;">
+                                    </div>
+                                </div>
+                                <p class="text-graph ng-binding">{{ EntidadNombre }}</p>
+                            </center>
+                        </div>`;
+                }
+                return code;
+            }
+
+            var ReplaceContent = function (htmlCode, EntidadNombre, Promedio, HC, padreResumen) {
+                htmlCode = htmlCode.replace("{{ EntidadNombre }}", EntidadNombre);
+                htmlCode = htmlCode.replace("{{ Promedio }}", Promedio);
+                htmlCode = htmlCode.replace("{{ HC }}", HC);
+                htmlCode = htmlCode.replace("{{ icono }}", vm.setIconoSVG(Promedio));
+                htmlCode = htmlCode.replace("{{ altoGrafica }}", (Promedio * 2.7));
+                htmlCode = htmlCode.replace("{{ historico }}", (vm.getDiferenciaGralEA(EntidadNombre, Promedio, 2)));
+                if (vm.enfoqueSeleccionado != 1) {
+                    htmlCode = htmlCode.replace("{{ marginTop }}", (vm.setMargin(vm.CrearHC(HC, vm.ComparativosGeneralesEA.Data, 2), 2, Promedio)));
+                    htmlCode = htmlCode.replace("{{ alto }}", (vm.CrearHC(HC, vm.ComparativosGeneralesEA.Data, 2)));
+                }
+                if (vm.enfoqueSeleccionado == 1) {
+                    htmlCode = htmlCode.replace("{{ marginTop }}", (vm.setMargin(vm.CrearHC(HC, vm.ComparativosGeneralesEE.Data, 2), 2, Promedio)));
+                    htmlCode = htmlCode.replace("{{ alto }}", (vm.CrearHC(HC, vm.ComparativosGeneralesEE.Data, 2)));
+                    htmlCode = htmlCode.replace("{{ setIconoResumen }}", vm.setIconoSVG(padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEE[0]*/));
+                    htmlCode = htmlCode.replace("{{ setPromedioResumen }}", padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEE[0]*/);
+                }
+                if (vm.enfoqueSeleccionado == 2) {
+                    htmlCode = htmlCode.replace("{{ setIconoResumen }}", vm.setIconoSVG(padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEA[0]*/));
+                    htmlCode = htmlCode.replace("{{ setPromedioResumen }}", padreResumen.Porcentaje/*vm.PorcentajeCalificacionGlobalEA[0]*/);
+                }
+                htmlCode = htmlCode.replace("{{ setEsperadasResumen }}", padreResumen.HC/*vm.Esperadas[0]*/);
+                htmlCode = htmlCode.replace("VALIDAR", padreResumen.Entidad);
+                htmlCode = htmlCode.replace("TOTAL", padreResumen.Entidad);
+
+                return htmlCode;
+            }
+
+            var ReplaceContentEnfoqueCombinado = function (htmlCode, itemEE, objetoEA, padreResumenEE) {
+                var itemEA = Enumerable.from(objetoEA).where(o => o.Entidad == itemEE.Entidad && o.Enfoque == "Enfoque Area").firstOrDefault();
+                var padreResumenEA = Enumerable.from(objetoEA).where(o => o.Entidad == padreResumenEE.Entidad && o.Enfoque == "Enfoque Area").firstOrDefault();
+
+                htmlCode = htmlCode.replace("{{ setIconoEE }}", vm.setIconoSVG(itemEE.Porcentaje));
+                htmlCode = htmlCode.replace("{{ setPorcentajeEE }}", itemEE.Porcentaje);
+                htmlCode = htmlCode.replace("{{ setAltoEE }}", itemEE.Porcentaje * 2.7);
+                htmlCode = htmlCode.replace("{{ setHistoricoEE }}", vm.getDiferenciaGralEE(itemEE.Entidad, itemEE.Porcentaje, 2));
+
+                htmlCode = htmlCode.replace("{{ setIconoEA }}", vm.setIconoSVG(itemEA.Porcentaje));
+                htmlCode = htmlCode.replace("{{ setPorcentajeEA }}", itemEA.Porcentaje);
+                htmlCode = htmlCode.replace("{{ setAltoEA }}", itemEA.Porcentaje * 2.7);
+                htmlCode = htmlCode.replace("{{ setHistoricoEA }}", vm.getDiferenciaGralEE(itemEA.Entidad, itemEA.Porcentaje, 2));
+                
+                htmlCode = htmlCode.replace("{{ nombreEntidad }}", itemEE.Entidad);
+
+                htmlCode = htmlCode.replace("{{ itemMTHC }}", vm.setMargin(vm.CrearHC(itemEE.HC, vm.ComparativosGeneralesEE.Data)));
+                htmlCode = htmlCode.replace("{{ altoHC }}", vm.CrearHC(itemEE.HC, vm.ComparativosGeneralesEE.Data));
+                htmlCode = htmlCode.replace("{{ headCount }}", itemEE.HC);
+                if (vm.hasHistorico) {
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "");
+                }
+                else {
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "none");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "none");
+                    htmlCode = htmlCode.replace("{{ setDisplayHistorico }}", "none");
+                }
+                //Reemplazar datos del resumen combinado
+                htmlCode = htmlCode.replace("{{ IconoPromedioPadreEE }}", vm.setIconoSVG(padreResumenEE.Porcentaje));
+                htmlCode = htmlCode.replace("{{ IconoPromedioPadreEA }}", vm.setIconoSVG(padreResumenEA.Porcentaje));
+                htmlCode = htmlCode.replace("{{ resumenHC }}", padreResumenEE.HC);
+                htmlCode = htmlCode.replace("{{ resumenPromedioEE }}", padreResumenEE.Porcentaje);
+                htmlCode = htmlCode.replace("{{ resumenPromedioEA }}", padreResumenEA.Porcentaje);
+                htmlCode = htmlCode.replace("TOTAL", padreResumenEA.Entidad)
+
+
+                return htmlCode;
+            }
+
             /*#region Secciones*/
             vm.next = async function () {
                 var topMarging = 0; $('html,body').scrollTop(0); var paginaActiva;
@@ -2550,11 +3974,11 @@ function GetDashBoard() {
                             document.getElementById(paginaActiva).style.backgroundColor = "#fff";
                             /* Meter el contenido html dentro de la pagina */
                             /* Validar las paginas 25 y 26 ya que en el caso de automotriz crecen segun el numero de empresas que contiene */
-                            if (vm.SeccionesReporte.Id == 25) {
+                            if (vm.SeccionesReporte.Id == 21) {
                                 // Agrandar al vuelo las graficas de barras en resolucion > 1367
                                 vm.agrandarGraficas();
 
-                                var childs = document.getElementById("divPantalla25").childNodes;
+                                var childs = $("#tab-generales-departamento-ee .card");//document.getElementById("divPantalla21").childNodes;
                                 var canvas = [];
                                 [].forEach.call(childs, function (item) { item.style.display = "none"; });
                                 childs = Enumerable.from(childs).toList();
@@ -2577,7 +4001,7 @@ function GetDashBoard() {
                                     if (resumen.length > 0) {
                                         [].forEach.call(resumen, function (item) {
                                             item.style.removeProperty = "margin-top";
-                                            item.style.marginTop = "-25rem";
+                                            item.style.marginTop = "-35rem";
                                         });
                                     }
                                     canvas.push(data);
@@ -2597,10 +4021,10 @@ function GetDashBoard() {
                                             vm.getReporteDataPantalla_27();
                                         }
                                         else {
-                                            vm.SeccionesReporte.Id++;
-                                            vm.getReporteDataPantalla_26();
-                                            document.getElementById("tab-25").classList.add("ng-hide");
-                                            document.getElementById("tab-26").classList.remove("ng-hide");
+                                            //vm.SeccionesReporte.Id++;
+                                            //vm.getReporteDataPantalla_26();
+                                            //document.getElementById("tab-25").classList.add("ng-hide");
+                                            //document.getElementById("tab-26").classList.remove("ng-hide");
                                         }
                                         termine = true;
                                         document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
@@ -2621,10 +4045,10 @@ function GetDashBoard() {
                                     return;
                                 }
                             }
-                            if (vm.SeccionesReporte.Id == 26) {
+                            if (vm.SeccionesReporte.Id == 22) {
                                 // Agrandar al vuelo las graficas de barras en resolucion > 1367
                                 vm.agrandarGraficas();
-                                var childs = document.getElementById("divPantalla26").childNodes;
+                                var childs = $("#tab-generales-departamento-ea .card");//document.getElementById("divPantalla26").childNodes;
                                 var canvas = [];
                                 [].forEach.call(childs, function (item) { item.style.display = "none"; });
                                 childs = Enumerable.from(childs).toList();
@@ -2659,17 +4083,22 @@ function GetDashBoard() {
                                     if (canvas.length == childs.length) {
                                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                                         clearInterval(refreshIntervalId);
-                                        if (vm.enfoqueSeleccionado == 2) {
+                                        if (vm.enfoqueSeleccionado == 2 || vm.enfoqueSeleccionado == 0) {
+                                            vm.SeccionesReporte.Id = 27;
+                                            vm.peticiones();
                                             vm.SeccionesReporte.Id = 28;
                                             document.getElementById("tab-26").classList.add("ng-hide");
                                             document.getElementById("tab-28").classList.remove("ng-hide");
-                                            vm.getReporteDataPantalla_28();
+                                            /*vm.getReporteDataPantalla_28();*/
+                                            vm.isBusy = false;
+                                            document.getElementsByClassName("busy")[1].style.display = "none";
+                                            return vm.peticiones();
                                         }
                                         else {
-                                            vm.SeccionesReporte.Id++;
-                                            vm.getReporteDataPantalla_27();
-                                            document.getElementById("tab-26").classList.add("ng-hide");
-                                            document.getElementById("tab-27").classList.remove("ng-hide");
+                                            //vm.SeccionesReporte.Id++;
+                                            //vm.getReporteDataPantalla_27();
+                                            //document.getElementById("tab-26").classList.add("ng-hide");
+                                            //document.getElementById("tab-27").classList.remove("ng-hide");
                                         }
                                         termine = true;
                                         document.getElementById(paginaActiva).parentNode.parentNode.removeAttribute("style");
@@ -2830,18 +4259,18 @@ function GetDashBoard() {
                                     else {
                                         if (resolucion <= 2500 && resolucion >= 1901) {
                                             valbarra = 3;
-                                            valpadding = 3.2;
-                                            valpaddingM = 3.3;
+                                            valpadding = 9 ;
+                                            valpaddingM =1.5;
                                         }
                                         if (resolucion <= 1900 && resolucion >= 1370) {
                                             valbarra = 3;
-                                            valpaddingM = 3.2;
-                                            valpadding = 3.3;
+                                            valpaddingM = 1.5;
+                                            valpadding = 9;
                                         }
                                         if (resolucion <= 1369) {
                                             valbarra = 3;
-                                            valpaddingM = 3.2;
-                                            valpadding = 3.3;
+                                            valpaddingM = 1.5;
+                                            valpadding = 9;
                                         }                                        
                                     }
                                     var elementBAzul= $(".grafica-trabajarEx .bar");
@@ -2902,18 +4331,18 @@ function GetDashBoard() {
                                     else {
                                         if (resolucion <= 2500 && resolucion >= 1901) {
                                             valbarra2 = 3;
-                                            valpadding2M = 3.2;
-                                            valpadding2 = 3.3;
+                                            valpadding2M = 1.5;
+                                            valpadding2 = 9;
                                         }
                                         if (resolucion <= 1900 && resolucion >= 1370) {
                                             valbarra2 = 3;
-                                            valpadding2M = 3.2;
-                                            valpadding2 = 3.3;
+                                            valpadding2M = 1.5;
+                                            valpadding2 = 9;
                                         }
                                         if (resolucion <= 1369) {
                                             valbarra2 = 3;
-                                            valpadding2M = 3.2;
-                                            valpadding2 = 3.3;
+                                            valpadding2M = 1.5;
+                                            valpadding2 = 9;
                                         } 
                                     }
                                     var elementBAzul2= $(".grafica-dejarEx .bar2");
@@ -2981,8 +4410,30 @@ function GetDashBoard() {
                                 if (paginaActiva == "tab-indicadores-generales" || paginaActiva == "tab-indicadores-categoria" || paginaActiva == "tab-impulsores-clave") {
                                     ptDefault = 0;
                                     if (resolucion >= 1900) {
-                                        document.getElementById(paginaActiva).style.marginTop = "95px";
-                                        ptDefault = 0;
+                                        
+                                        $(".categoria-bl:visible .col").css("font-size","12px");
+                                        if (vm.SeccionesReporte.Id == 8) {
+                                             $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").removeClass("tablaimpulsores-izqEx");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","15px");
+                                            //$(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","0px");
+                                            //$(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("padding-left","10px");
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq .yellow-clima").css("line-height","1.2");
+                                            document.getElementById(paginaActiva).style.marginTop = "0px";
+                                             ptDefault = 0;
+
+                                        }
+                                        else {
+                                            $(".bg-impulsores:visible .tablaimpulsores-izq").css("padding","15px");
+                                            document.getElementById(paginaActiva).style.marginTop = "95px";
+                                            ptDefault = 30;
+                                        }
+                                        
+                                        $(".bg-impulsores:visible").css("min-height","0px");
+                                        $(".margin-reporte:visible")[0].style.setProperty("margin-top","15px","important");
+                                        
+                                        /*document.getElementById(paginaActiva).style.marginTop = "95px";*/
+                                       
                                     }
                                     else if (resolucion >= 1550 && resolucion <= 1899) {
                                         document.getElementById(paginaActiva).style.marginTop = "95px";
@@ -3058,11 +4509,12 @@ function GetDashBoard() {
 
                                 if (padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado == 0 && $(".divExportacionBienestarClass").length == 0) {
                                     // Seccionado de bienestar
-                                    docReporte.addPage();
+                                    //docReporte.addPage();
                                     var historicoCorte = [];
                                     var childs = ["tab-bienestar-ee", "tab-bienestar-ea"];
                                     childs = Enumerable.from(childs).toList();
                                     childs = childs.map(async (key, index) => {
+                                        docReporte.addPage();
                                         document.getElementById("tab-17").classList.remove("ng-hide");
                                             //Se forza el backgroud en Blanco
                                             $('#' + key)[0].style.backgroundColor = "#fff";
@@ -3087,6 +4539,8 @@ function GetDashBoard() {
                                             //    });
                                             //}
                                         //if (cortes.length == 0) {
+                                        //Se elimina este agregado para evitar pagina en blanco antes de bienestar
+                                        //docReporte.addPage();
                                             var data = await docReporte.addHTML($('#' + key)[0], 0, ptDefault, { /* options  */
                                                 image: { type: 'jpeg', quality: 1.0 },
                                                 html2canvas: { scale: 1 }
@@ -3101,16 +4555,18 @@ function GetDashBoard() {
                                     setTimeout(function () {
                                         document.getElementsByClassName("busy")[1].style.display = "none";
                                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                                        //docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                                     }, 2000);
                                 }
 
                                 else if ((padrePaginaActiva == "tab-17" && vm.enfoqueSeleccionado != 0 && $(".divExportacionBienestarClass").length == 0) || (padrePaginaActiva != "tab-17")) {
                                     var histo = [];
                                     if (padrePaginaActiva == "tab-17") {
+                                        docReporte.addPage();
                                         var idTabla = vm.enfoqueSeleccionado == 1 ? "myTableEE" : "myTableEA";
                                         var divExportacion = vm.enfoqueSeleccionado == 1 ? "tab-bienestar-ee" : "tab-bienestar-ea";
-                                        var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
-                                        var itemsMapeo = $("#" + idTabla + " ." + hijo);
+                                        //var hijo = getHijo(vm.criterioBusquedaSeleccionado.Id);
+                                        //var itemsMapeo = $("#" + idTabla + " ." + hijo);
                                         /*var cortesS = itemsMapeo.map(async (llave, indice) => {
                                             //historicoCorte.push(llave);
                                             document.getElementById("tab-17").classList.remove("ng-hide");
@@ -3338,6 +4794,149 @@ function GetDashBoard() {
                                                 }
                                                 if (paginaActiva == "tab-indicadores-permanencia") {
                                                     if ($(window).width() > 1610) {
+													                                                        /*Regresa estado normal Camos 21102021*/
+                                                        var barrasB1 = $(".label-top-graphic");
+                                                        var numbarrasB1 =  barrasB1.length;
+                                                        var separanum ="";
+                                                        var parnum = 0;                                    
+                                                        var sepasa = false;
+                                                        var valbarra = 0; 
+                                                        var valpadding = 0;
+                                                        var valpaddingM = 0;
+                                                        [].forEach.call(barrasB1,function (elem) {
+                                                            separanum = elem.innerText; 
+                                                            separanum = separanum.replace("%","");
+                                                            parnum =  parseFloat(separanum);                                          
+                                                            if (parnum >= 50) {
+                                                                sepasa= true;
+                                                                return;
+                                                            }
+                                                        });
+                                                        if (sepasa) {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra = 1.5;
+                                                                valpaddingM=1.6;
+                                                                valpadding = 1.7;//-.15
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra = 1.5;
+                                                                valpaddingM=1.6;
+                                                                valpadding = 1.7;//-.15
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra = 1.5;
+                                                                valpaddingM=1.6;
+                                                                valpadding = 1.7;//-.15
+                                                            }
+                                                        }
+                                                        else {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra = 3;
+                                                                valpadding = 9 ;
+                                                                valpaddingM =1.5;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra = 3;
+                                                                valpaddingM = 1.5;
+                                                                valpadding = 9;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra = 3;
+                                                                valpaddingM = 1.5;
+                                                                valpadding = 9;
+                                                            }                                        
+                                                        }
+                                                        var elementBAzul= $(".grafica-trabajarEx .bar");
+                                                        [].forEach.call(elementBAzul,function (elem) {
+                                                            var mt = parseInt(elem.style.minHeight);
+                                                            var newmt = mt / valbarra;
+                                                            elem.style.minHeight = newmt + "px";
+                                                        });
+                                                        var elementBMorado= $(".grafica-trabajarEx .bar-progress2");
+                                                        [].forEach.call(elementBMorado,function (elem) {
+                                                            var mt = parseInt(elem.style.height);
+                                                            var newmt = mt / valpaddingM;
+                                                            elem.style.height = newmt + "px";
+                                                        });
+                                                        var paddingelemento = $(".grafica-trabajarEx .bar-progress");
+                                                        [].forEach.call(paddingelemento,function (elem) {
+                                                            var mtp = parseInt(elem.style.paddingBottom);
+                                                            var newmtp = mtp / valpadding;
+                                                            elem.style.paddingBottom = newmtp + "px";
+    
+                                                        });
+
+                                                        // Lo que haría
+                                                        var barrasB2 = $(".label-top-graphic-blue");
+                                                        var numbarrasB2 =  barrasB2.length;
+                                                        var separanum2 ="";
+                                                        var parnum2 = 0;                                    
+                                                        var sepasa2 = false;
+                                                        var valbarra2 = 0;
+                                                        var valpadding2 = 0;
+                                                        var valpadding2M = 0;
+                                                        [].forEach.call(barrasB2,function (elem) {
+                                                            separanum2 = elem.innerText; 
+                                                            separanum2 = separanum2.replace("%","");
+                                                            parnum2 =  parseFloat(separanum2);
+                                                            if (parnum2 >= 50) {
+                                                                sepasa2= true;
+                                                                return;
+                                                            }
+                                                        });                                   
+                                                        if (sepasa2) {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra2 = 1.5;
+                                                                valpadding2M=1.6;
+                                                                valpadding2 = 1.7;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra2 = 1.5;
+                                                                valpadding2M=1.6;
+                                                                valpadding2 = 1.7;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra2 = 1.5;
+                                                                valpadding2M=1.6;
+                                                                valpadding2 = 1.7;
+                                                            }                                       
+                                                        }
+                                                        else {
+                                                            if (resolucion <= 2500 && resolucion >= 1901) {
+                                                                valbarra2 = 3;
+                                                                valpadding2M = 1.5;
+                                                                valpadding2 = 9;
+                                                            }
+                                                            if (resolucion <= 1900 && resolucion >= 1370) {
+                                                                valbarra2 = 3;
+                                                                valpadding2M = 1.5;
+                                                                valpadding2 = 9;
+                                                            }
+                                                            if (resolucion <= 1369) {
+                                                                valbarra2 = 3;
+                                                                valpadding2M = 1.5;
+                                                                valpadding2 = 9;
+                                                            } 
+                                                        }
+                                                        var elementBAzul2= $(".grafica-dejarEx .bar2");
+                                                        [].forEach.call(elementBAzul2,function (elem) {
+                                                            var mt = parseInt(elem.style.minHeight);
+                                                            var newmt = mt / valbarra2;
+                                                            elem.style.minHeight = newmt + "px";
+                                                        });                                    
+                                                        var elementBMorado2= $(".grafica-dejarEx .bar-progress4");
+                                                        [].forEach.call(elementBMorado2,function (elem) {
+                                                            var mt = parseInt(elem.style.height);
+                                                            var newmt = mt / valpadding2M;
+                                                            elem.style.height = newmt + "px";
+                                                        });
+                                                        var paddingelemento2 = $(".grafica-dejarEx .bar-progress3");
+                                                        [].forEach.call(paddingelemento2,function (elem) {
+                                                            var mtp = parseInt(elem.style.paddingBottom);
+                                                            var newmtp = mtp / valpadding2;
+                                                            elem.style.paddingBottom = newmtp + "px";
+    
+                                                        });
                                                         var indicador = document.getElementsByClassName("margin-top-nuevo");
                                                         [].forEach.call(indicador, function (itemD) {
                                                             var mt = parseInt(itemD.style.marginTop);
@@ -3425,8 +5024,93 @@ function GetDashBoard() {
                 vm.contadorNextButton++;
                 vm.exportaSeccion.push({ IdSeccion: vm.SeccionesReporte.Id, exporta: vm.exportaImagen });
                 // Validar avance
+                if (vm.opc == "0") {
+                    vm.opc = "1";
+                }
                 if (vm.opc == "1" || vm.opc == "4") {
                     if (vm.SeccionesReporte.Id == 2) {
+                        //Guardar orden de datos demograficos
+                        $("#acordeon-drag-drop .collapse")[0].getElementsByTagName("li");
+                        vm.listAntiguedad2 = [];
+                        vm.listGenero2 = [];
+                        vm.listGradoAcademico2 = [];
+                        vm.listCondicionTrabajo2 = [];
+                        vm.listFuncion2 = [];
+                        vm.listRangoEdad2 = [];
+                        [].forEach.call($("#acordeon-drag-drop .collapse"), function (item, index) {
+                            [].forEach.call(item.getElementsByTagName("li"), function (li, indexli) {
+                                console.log(li.innerText);
+                                if (index == 0) {
+                                    // Antiguedad
+                                    vm.listAntiguedad2.push(li.innerText);
+                                }
+                                if (index == 1) {
+                                    // Genero
+                                    vm.listGenero2.push(li.innerText)
+                                }
+                                if (index == 2) {
+                                    // Grado Academico
+                                    vm.listGradoAcademico2.push(li.innerText)
+                                }
+                                if (index == 3) {
+                                    // Condicion de trabajo
+                                    vm.listCondicionTrabajo2.push(li.innerText)
+                                }
+                                if (index == 4) {
+                                    // Funcion
+                                    vm.listFuncion2.push(li.innerText)
+                                }
+                                if (index == 5) {
+                                    // Rangos de Edad
+                                    vm.listRangoEdad2.push(li.innerText)
+                                }
+                            });
+                        });
+
+                        var model = {
+                            Correct: true,
+                            ListAntiguedad: vm.listAntiguedad2,
+                            ListGenero: vm.listGenero2,
+                            ListGradoAcademico: vm.listGradoAcademico2,
+                            ListCondicionTrabajo: vm.listCondicionTrabajo2,
+                            ListFuncion: vm.listFuncion2,
+                            ListEdad: vm.listRangoEdad2
+                        }
+                        let modelPeticion = {
+                            Result: model,
+                            Historico: vm.modelHistorico
+                        };
+                        vm.post("/BackGroundJob/GuardarOrdenReporte/", modelPeticion, function (response) {
+                            console.log(response);
+                            if (response.Correct) {
+                                console.log("se giardo la configuracion de orden");
+                                docReporte = new jsPDF('landscape', 'pt', 'letter');
+                                vm.historicoPaginaActiva = [];
+                                histo = [];
+                                // Volver a mapear los resultados
+                                response.ListAntiguedad.shift();
+                                response.ListGenero.shift();
+                                response.ListEdad.shift();
+                                response.ListGradoAcademico.shift();
+                                response.ListCondicionTrabajo.shift();
+                                response.ListFuncion.shift();
+
+                                vm.listAntiguedad = response.ListAntiguedad;
+                                vm.listGenero = response.ListGenero;
+                                vm.listGradoAcademico = response.ListGradoAcademico;
+                                vm.listCondicionTrabajo = response.ListCondicionTrabajo;
+                                vm.listFuncion = response.ListFuncion;
+                                vm.listRangoEdad = response.ListEdad;
+                            }
+                            else {
+                                swal("Error", response.ErrorMessage, "error");
+                            }
+                        });
+
+                        console.log(model);
+
+
+
                         if (!vm.ValidarSeccion_1()) {
                             ////swal("Al no elegir una imagen el reporte se creará con la imagen por default", "", "info"); 
                             vm.ImagenPortada = vm.ImagenPortadaDefault;
@@ -3451,8 +5135,14 @@ function GetDashBoard() {
                         vm.SeccionesReporte.Id = 41;
                         return;
                     }
-                    if (vm.SeccionesReporte.Id == 17) {
+                    if (vm.SeccionesReporte.Id == 17/* && vm.enfoqueSeleccionado == 0*/) {
                         docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
+                    }
+                    if (vm.SeccionesReporte.Id == 16) {
+                        //docReporte.addPage();
+                    }
+                    if (vm.SeccionesReporte.Id == 17 && vm.enfoqueSeleccionado == 0) {
+                        //docReporte.deletePage(docReporte.internal.getCurrentPageInfo().pageNumber);
                     }
                     // Enfoque Doble y Enfoque Área
                     if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
@@ -3490,7 +5180,9 @@ function GetDashBoard() {
                             }
                             /*Tiene 3 o más niveles de detalle por tanto se muestra el grafico de barras seccionado*/
                             if (vm.SeccionesReporte.Id == 20 && vm.model.nivelDetalle.length >= 3) {
-                                vm.SeccionesReporte.Id = 22;
+                                vm.SeccionesReporte.Id++;
+                                vm.peticiones();
+                                vm.SeccionesReporte.Id++;
                                 return vm.peticiones();
                             }
                             if (vm.SeccionesReporte.Id == 22) {
@@ -4806,73 +6498,73 @@ function GetDashBoard() {
                         vm.getReporteDataPantalla_27();
                     }
                     else if (vm.SeccionesReporte.Id == 27) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 28 && vm.ComparativoAntiguedadEA.length == 0) {
                         vm.getReporteDataPantalla_28();
                     }
                     else if (vm.SeccionesReporte.Id == 28) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 29 && vm.ComparativoGeneroEE.length == 0) {
                         vm.getReporteDataPantalla_29();
                     }
                     else if (vm.SeccionesReporte.Id == 29) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 30 && vm.ComparativoGeneroEA.length == 0) {
                         vm.getReporteDataPantalla_30();
                     }
                     else if (vm.SeccionesReporte.Id == 30) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 31 && vm.ComparativoGradoAcademicoEE.length == 0) {
                         vm.getReporteDataPantalla_31();
                     }
                     else if (vm.SeccionesReporte.Id == 31) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 32 && vm.ComparativoGradoAcademicoEA.length == 0) {
                         vm.getReporteDataPantalla_32();
                     }
                     else if (vm.SeccionesReporte.Id == 32) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 33 && vm.ComparativoCondicionTrabajoEE.length == 0) {
                         vm.getReporteDataPantalla_33();
                     }
                     else if (vm.SeccionesReporte.Id == 33) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 34 && vm.ComparativoCondicionTrabajoEA.length == 0) {
                         vm.getReporteDataPantalla_34();
                     }
                     else if (vm.SeccionesReporte.Id == 34) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 35 && vm.ComparativoFuncionEE.length == 0) {
                         vm.getReporteDataPantalla_35();
                     }
                     else if (vm.SeccionesReporte.Id == 35) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 36 && vm.ComparativoFuncionEA.length == 0) {
                         vm.getReporteDataPantalla_36();
                     }
                     else if (vm.SeccionesReporte.Id == 36) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 37 && vm.ComparativoRangoEdadEE.length == 0) {
                         vm.getReporteDataPantalla_37();
                     }
                     else if (vm.SeccionesReporte.Id == 37) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
                     if (vm.SeccionesReporte.Id == 38 && vm.ComparativoRangoEdadEA.length == 0) {
                         vm.getReporteDataPantalla_38();
                     }
                     else if (vm.SeccionesReporte.Id == 39) {
-                        vm.doblarMargen();
+                        //vm.doblarMargen();
                     }
 
                     
@@ -5280,6 +6972,85 @@ function GetDashBoard() {
                                     item.style.display = "";
                                 });
                             }
+							if (anterior == 21 || anterior == 22) {
+                                if (anterior == 21) {
+                                    $("#tab-21 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ee .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    //var graficaHCN = $("#tab-generales-departamento-ee .hc:visible");
+                                    //[].forEach.call(graficaHCN, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //    graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                    //    graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                    //});
+                                    //var grafHC = $("#tab-generales-departamento-ee .hc-doble:visible");
+                                    //[].forEach.call(grafHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    //var graficaHC = $("#tab-generales-departamento-ee .bar-progress4:visible");
+                                    //[].forEach.call(graficaHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    var parrafoHC = $("#tab-generales-departamento-ee .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 27 )  + "px";
+                                    });
+                                }
+                                else {
+                                    $("#tab-22 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ea .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                    //var graficaHCN = $("#tab-generales-departamento-ea .hc:visible");
+                                    //[].forEach.call(graficaHCN, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //    graf.style.marginTop = parseFloat(graf.style.marginTop) / factConver + "px";
+                                    //    graf.children[1].style.height = parseFloat(graf.children[1].style.height) / factConver + "px";
+                                    //});
+                                    //var grafHC = $("#tab-generales-departamento-ea .hc-doble:visible");
+                                    //[].forEach.call(grafHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    //var graficaHC = $("#tab-generales-departamento-ea .bar-progress4:visible");
+                                    //[].forEach.call(graficaHC, function (graf) {
+                                    //    graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    //});
+                                    var parrafoHC = $("#tab-generales-departamento-ea .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 27)  + "px";
+                                    });
+        
+                                }
+                                
+                                
+                                var multi26 = $(".contenedor-resumen:visible");
+                                
+                                if (multi26.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = vm.enfoqueSeleccionado != 0 ? "-26rem" : "-25rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-28rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+
+                                }
+
+                            }
                             if (contenedor.offsetHeight == 0 || contenedor.offsetHeight == undefined) {
                                 var con = tab.getElementsByClassName("grafica-trabajar");
                                 for (var i = 0; i < con.length; i++) {
@@ -5310,7 +7081,7 @@ function GetDashBoard() {
                                         graf.style.height = parseFloat(graf.style.height) / factConver + "px";
                                     });
                                     //bajar margin top
-                                    var hc = $(".label-top-graphic-blue2:visible");
+                                    var hc = $("#tab-"+anterior+" .label-top-graphic-blue2:visible");
                                     [].forEach.call(hc, function (item) {
                                         item.style.marginTop = (parseInt(item.style.marginTop) / factConver) + "px";
                                     });
@@ -5361,6 +7132,59 @@ function GetDashBoard() {
                             }
                             if (anterior == 24) {
                                 document.getElementById("pegarReseccionadoEA").getElementsByClassName("container-fluid px-lg-5")[0].style.display = "";
+                            }
+							     if (anterior == 21 || anterior == 22) {
+                                if (anterior == 21) {
+                                    $("#tab-21 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ee .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                   
+                                    var parrafoHC = $("#tab-generales-departamento-ee .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 19 )  + "px";
+                                    });
+                                }
+                                else {
+                                    $("#tab-22 .DeleteDiv").css("display", "block");
+                                    var graficaBarras = $("#tab-generales-departamento-ea .bar-clasificacion:visible");
+                                    [].forEach.call(graficaBarras, function (graf) {
+                                        graf.style.height = parseFloat(graf.style.height) / factConver + "px";
+                                    });
+                                  
+                                    var parrafoHC = $("#tab-generales-departamento-ea .label-top-graphic-blue2:visible");
+                                    [].forEach.call(parrafoHC, function (graf) {
+                                        graf.style.marginTop = ((parseFloat(graf.style.marginTop) / factConver) - 19)  + "px";
+                                    });
+        
+                                }
+                                
+                                
+                                var multi26 = $(".contenedor-resumen:visible");
+                                
+                                if (multi26.length > 0) {
+                                    if (resolucion <= 2500 && resolucion >= 1901) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = vm.enfoqueSeleccionado != 0 ? "-26rem" : "-25rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1900 && resolucion >= 1370) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-32rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+                                    if (resolucion <= 1369) {
+                                        [].forEach.call(multi26, function (item) {
+                                            item.style.marginTop = "-26rem";
+                                            item.style.marginRight = "25px";
+                                        });
+                                    }
+
+                                }
+
                             }
                             if (contenedor.offsetHeight == 0 || contenedor.offsetHeight == undefined) {
                                 var con = tab.getElementsByClassName("grafica-trabajar");
@@ -5600,11 +7424,18 @@ function GetDashBoard() {
                             vm.SeccionesReporte.Id = 38;
                             return;
                         }
+                        if (vm.SeccionesReporte.Id != 21) {
+                            document.getElementById("tab-21").classList.add("ng-hide");
+                        }
+                        if (vm.SeccionesReporte.Id != 22) {
+                            document.getElementById("tab-22").classList.add("ng-hide");
+                        }
                         // Enfoque combinado y Enfoque Área
                         if (vm.enfoqueSeleccionado == 0 || vm.enfoqueSeleccionado == 2) {
                             if (vm.hasHistorico) {
                                 if (vm.SeccionesReporte.Id == 28) {
                                     vm.SeccionesReporte.Id = 22;
+                                    $("#tab-22 .card").css("display", "");
                                     document.getElementById("tab-26").classList.add("ng-hide");
                                     return;
                                 }
@@ -5633,6 +7464,7 @@ function GetDashBoard() {
                                 }
                                 if (vm.SeccionesReporte.Id == 28 && vm.model.nivelDetalle.length >= 3) {
                                     vm.SeccionesReporte.Id = 22;
+                                    $("#tab-22 .card").css("display", "");
                                     document.getElementById("tab-26").classList.add("ng-hide");
                                     return;
                                 }
@@ -5993,6 +7825,7 @@ function GetDashBoard() {
                             if (vm.hasHistorico) {
                                 if (vm.SeccionesReporte.Id == 27) {
                                     vm.SeccionesReporte.Id = 21;
+                                    $("#tab-21 .card").css("display", "");
                                     document.getElementById("tab-25").classList.add("ng-hide");
                                     return;
                                 }
@@ -6023,6 +7856,7 @@ function GetDashBoard() {
                                 }
                                 if (vm.SeccionesReporte.Id == 27 && vm.model.nivelDetalle.length >= 3) {
                                     vm.SeccionesReporte.Id = 21;
+                                    $("#tab-21 .card").css("display", "");
                                     document.getElementById("tab-25").classList.add("ng-hide");
                                     return;
                                 }
@@ -6424,6 +8258,9 @@ function GetDashBoard() {
                 var formValid = true;
                 // validar filtros
                 switch (vm.criterioBusquedaSeleccionado.Id) {
+                case 0:
+
+                break;
                     case 1:
                         if (vm.CompanyCategoria == null)
                             formValid = false;
@@ -6481,12 +8318,47 @@ function GetDashBoard() {
                 vm.model.Anio = vm.modelHistorico.Anio;
 
                 vm.existeReporte = Object;
-                vm.modelHistorico.nivelDetalle =
-                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                    vm.modelHistorico.nivelDetalle =
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+
+
                 if (getParamByUrl("token") == null) {
                     vm.modelHistorico.Anio = vm.anioSeleccionado.value - 1;
                     vm.modelHistorico.IdBaseDeDatos = parseInt(document.getElementById("DDLBD").value);
@@ -6642,7 +8514,7 @@ function GetDashBoard() {
                     vm.flagLoading = true;
                     try {
                         vm.isBusy = true;
-                        if (vm.criterioBusquedaSeleccionado.Id > 0) {
+                        if (vm.criterioBusquedaSeleccionado.Id >= 0) {
                             vm.UNSeleccionada = vm.modelHistorico.EntidadNombre;
                             vm.storeName = "_" + vm.modelHistorico.EntidadId + "_" + vm.modelHistorico.EntidadNombre + "_" + (vm.modelHistorico.Anio + 1);
                             /*if (localStorage["esperadas" + vm.storeName] != null && localStorage["participacion" + vm.storeName] != null && localStorage["califGlobal" + vm.storeName] != null && localStorage["confianza" + vm.storeName] != null && localStorage["compromiso" + vm.storeName] != null && localStorage["colaboracion" + vm.storeName] != null) {
@@ -6700,6 +8572,10 @@ function GetDashBoard() {
                                                             localStorage.setItem("colaboracion" + vm.storeName, JSON.stringify(vm.PorcentajeNivelDeColaboracion));
                                                             //vm.getEstructura();
                                                             /*vm.isBusy = false;*/
+                                                            if (cadenaDesenc != "") {
+                                                                getFiltros();
+                                                                vm.getEstructura();
+                                                            }
                                                             if (vm.SeccionesReporte.Id == 1) {
                                                                 vm.SeccionesReporte.Id = vm.SeccionesReporte.Id + 1;
                                                             }
@@ -7613,6 +9489,9 @@ function GetDashBoard() {
                             vm.getReporteDataPantalla_22();
                             return;
                         }
+                        if (vm.enfoqueSeleccionado == 1) {
+                            vm.ReglasSeccionarGraficoBarras();
+                        }
                         document.getElementsByClassName("busy")[1].style.display = "none";
                         vm.isBusy = false;
                     });
@@ -7629,6 +9508,7 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoEntidadesResultadoGeneralEA/", vm.modelHistorico, vm.ComparativosGeneralesEA, function () {
                         vm.ComparativosGeneralesEA.Data = vm.ComparativosGeneralesEA.Data.Data == undefined ? vm.ComparativosGeneralesEA.Data : vm.ComparativosGeneralesEA.Data.Data;
                         document.getElementsByClassName("busy")[1].style.display = "none";
+                        vm.ReglasSeccionarGraficoBarras();
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8003,10 +9883,12 @@ function GetDashBoard() {
                         vm.ComparativoAntiguedadEE = vm.ComparativoAntiguedadEE.Data == null ? vm.ComparativoAntiguedadEE : vm.ComparativoAntiguedadEE.Data;
                         vm.flagDemografico = 1;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoAntiguedadEE = vm.OrdenarArreglo(vm.ComparativoAntiguedadEE, vm.listAntiguedad);
                             vm.SeccionesReporte.Id = 28;
                             vm.getReporteDataPantalla_28();
                             return;
                         }
+                        vm.ComparativoAntiguedadEE = vm.OrdenarArreglo(vm.ComparativoAntiguedadEE, vm.listAntiguedad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8021,6 +9903,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_28();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorAntiguedadEA/", vm.modelHistorico, vm.ComparativoAntiguedadEA, function () {
                         vm.ComparativoAntiguedadEA = vm.ComparativoAntiguedadEA.Data == null ? vm.ComparativoAntiguedadEA : vm.ComparativoAntiguedadEA.Data;
+                        vm.ComparativoAntiguedadEA = vm.OrdenarArreglo(vm.ComparativoAntiguedadEA, vm.listAntiguedad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8036,10 +9919,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGeneroEE/", vm.modelHistorico, vm.ComparativoGeneroEE, function () {
                         vm.ComparativoGeneroEE = vm.ComparativoGeneroEE.Data == undefined ? vm.ComparativoGeneroEE : vm.ComparativoGeneroEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoGeneroEE = vm.OrdenarArreglo(vm.ComparativoGeneroEE, vm.listGenero);
                             vm.SeccionesReporte.Id = 30;
                             vm.getReporteDataPantalla_30();
                             return;
                         }
+                        vm.ComparativoGeneroEE = vm.OrdenarArreglo(vm.ComparativoGeneroEE, vm.listGenero);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8054,6 +9939,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_30();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGeneroEA/", vm.modelHistorico, vm.ComparativoGeneroEA, function () {
                         vm.ComparativoGeneroEA = vm.ComparativoGeneroEA.Data == undefined ? vm.ComparativoGeneroEA : vm.ComparativoGeneroEA.Data;
+                        vm.ComparativoGeneroEA = vm.OrdenarArreglo(vm.ComparativoGeneroEA, vm.listGenero);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8069,10 +9955,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGradoAcademicoEE/", vm.modelHistorico, vm.ComparativoGradoAcademicoEE, function () {
                         vm.ComparativoGradoAcademicoEE = vm.ComparativoGradoAcademicoEE.Data == undefined ? vm.ComparativoGradoAcademicoEE : vm.ComparativoGradoAcademicoEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoGradoAcademicoEE = vm.OrdenarArreglo(vm.ComparativoGradoAcademicoEE, vm.listGradoAcademico);
                             vm.SeccionesReporte.Id = 32;
                             vm.getReporteDataPantalla_32();
                             return;
                         }
+                        vm.ComparativoGradoAcademicoEE = vm.OrdenarArreglo(vm.ComparativoGradoAcademicoEE, vm.listGradoAcademico);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8087,6 +9975,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_32();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorGradoAcademicoEA/", vm.modelHistorico, vm.ComparativoGradoAcademicoEA, function () {
                         vm.ComparativoGradoAcademicoEA = vm.ComparativoGradoAcademicoEA.Data == undefined ? vm.ComparativoGradoAcademicoEA : vm.ComparativoGradoAcademicoEA.Data;
+                        vm.ComparativoGradoAcademicoEA = vm.OrdenarArreglo(vm.ComparativoGradoAcademicoEA, vm.listGradoAcademico);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8102,10 +9991,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorCondicionTrabajoEE/", vm.modelHistorico, vm.ComparativoCondicionTrabajoEE, function () {
                         vm.ComparativoCondicionTrabajoEE = vm.ComparativoCondicionTrabajoEE.Data == undefined ? vm.ComparativoCondicionTrabajoEE : vm.ComparativoCondicionTrabajoEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoCondicionTrabajoEE = vm.OrdenarArreglo(vm.ComparativoCondicionTrabajoEE, vm.listCondicionTrabajo);
                             vm.SeccionesReporte.Id = 34;
                             vm.getReporteDataPantalla_34();
                             return;
                         }
+                        vm.ComparativoCondicionTrabajoEE = vm.OrdenarArreglo(vm.ComparativoCondicionTrabajoEE, vm.listCondicionTrabajo);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8120,6 +10011,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_34();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorCondicionTrabajoEA/", vm.modelHistorico, vm.ComparativoCondicionTrabajoEA, function () {
                         vm.ComparativoCondicionTrabajoEA = vm.ComparativoCondicionTrabajoEA.Data == undefined ? vm.ComparativoCondicionTrabajoEA : vm.ComparativoCondicionTrabajoEA.Data;
+                        vm.ComparativoCondicionTrabajoEA = vm.OrdenarArreglo(vm.ComparativoCondicionTrabajoEA, vm.listCondicionTrabajo);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8135,10 +10027,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorFuncionEE/", vm.modelHistorico, vm.ComparativoFuncionEE, function () {
                         vm.ComparativoFuncionEE = vm.ComparativoFuncionEE.Data == undefined ? vm.ComparativoFuncionEE : vm.ComparativoFuncionEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoFuncionEE = vm.OrdenarArreglo(vm.ComparativoFuncionEE, vm.listFuncion);
                             vm.SeccionesReporte.Id = 36;
                             vm.getReporteDataPantalla_36();
                             return;
                         }
+                        vm.ComparativoFuncionEE = vm.OrdenarArreglo(vm.ComparativoFuncionEE, vm.listFuncion);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8153,6 +10047,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_36();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorFuncionEA/", vm.modelHistorico, vm.ComparativoFuncionEA, function () {
                         vm.ComparativoFuncionEA = vm.ComparativoFuncionEA.Data == undefined ? vm.ComparativoFuncionEA : vm.ComparativoFuncionEA.Data;
+                        vm.ComparativoFuncionEA = vm.OrdenarArreglo(vm.ComparativoFuncionEA, vm.listFuncion);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8169,10 +10064,12 @@ function GetDashBoard() {
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorRangoEdadEE/", vm.modelHistorico, vm.ComparativoRangoEdadEE, function () {
                         vm.ComparativoRangoEdadEE = vm.ComparativoRangoEdadEE.Data == undefined ? vm.ComparativoRangoEdadEE : vm.ComparativoRangoEdadEE.Data;
                         if (vm.enfoqueSeleccionado == 0) {
+                            vm.ComparativoRangoEdadEE = vm.OrdenarArreglo(vm.ComparativoRangoEdadEE, vm.listRangoEdad);
                             vm.SeccionesReporte.Id = 38;
                             vm.getReporteDataPantalla_38();
                             return;
                         }
+                        vm.ComparativoRangoEdadEE = vm.OrdenarArreglo(vm.ComparativoRangoEdadEE, vm.listRangoEdad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8187,6 +10084,7 @@ function GetDashBoard() {
                     vm.limpiarArraysReporte_Pantalla_38();
                     fillArrayCustomHisto("BackGroundJob/getComparativoPorRangoEdadEA/", vm.modelHistorico, vm.ComparativoRangoEdadEA, function () {
                         vm.ComparativoRangoEdadEA = vm.ComparativoRangoEdadEA.Data == undefined ? vm.ComparativoRangoEdadEA : vm.ComparativoRangoEdadEA.Data;
+                        vm.ComparativoRangoEdadEA = vm.OrdenarArreglo(vm.ComparativoRangoEdadEA, vm.listRangoEdad);
                         vm.isBusy = false;
                     });
                 } catch (aE) {
@@ -8614,7 +10512,7 @@ function GetDashBoard() {
                 try {
                     if (vm.enfoqueSeleccionado != 0) {
                         var resumen = `<div id="" class="contenedor-resumen indiceResumen_` + noPantalla + `" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
-                                <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;margin-bottom:2px;">TOTAL</p> <small style="position: absolute;">`+ array[0].Entidad + `</small>
+                                <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;margin-bottom:2px;line-height:22px;">TOTAL</p> <small style="position: absolute;">`+ array[0].Entidad + `</small>
                                 <img style="margin-left: -2rem;margin-top:1.5rem;" src="` + vm.setIconoSVG(array[0].Porcentaje) + `" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">` + array[0].Porcentaje + `%</span>
                                 <p style="margin-bottom: -20px;"></p>
                                 <small style="color: blue;margin-left: 50px;">HC: `+ array[0].HC + `</small>
@@ -11819,7 +13717,7 @@ function GetDashBoard() {
 
                     if (vm.enfoqueSeleccionado != 0) {
                         var resumen = `<div id="" class="contenedor-resumen indiceResumen_` + (vm.enfoqueSeleccionado == 1 ? indice : indiceEA) +`" style="float: right;margin-top: -25rem;width: 220px;height: 130px;border: 2px solid #959292;border-radius: 8px;">
-                                <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;margin-bottom:2px;">TOTAL</p> <small style="position: absolute;">`+ array[0].Entidad +`</small>
+                                <p style="color: blue;font-weight: bold;border-bottom: 2px solid #959292;line-height:22px;margin-bottom:2px;">TOTAL</p> <small style="position: absolute;">`+ array[0].Entidad +`</small>
                                 <img style="margin-left: -2rem;margin-top:1.5rem;" src="` + vm.setIconoSVG(array[0].Porcentaje) + `" width="70" height="60"><span style="margin-left: 28px;color: blue;margin-bottom: 0;">` + array[0].Porcentaje +`%</span>
                                 <p style="margin-bottom: -20px;"></p>
                                 <small style="color: blue;margin-left: 50px;">HC: `+ array[0].HC+`</small>
@@ -13517,6 +15415,24 @@ function GetDashBoard() {
                 try {
                     if (vm.EstructuraColumnas.Data == undefined && vm.contadorEstructura == 0) {
                         switch (vm.criterioBusquedaSeleccionado.Id) {
+                            case 0:
+                                if (vm.model.EntidadNombre != "") {
+                                    vm.EstructuraColumnas = [];
+                                    vm.contadorEstructura = 1;
+                                    if (getParamByUrl("token") == null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 0 + "&IdBD=" + document.getElementById("DDLBD").value + "&entidadNombre=" + vm.model.EntidadNombre, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
+                                    if (getParamByUrl("token") != null) {
+                                        fillArray("apis/getEstructuraFromExcel/?IdTipoEntidad=" + 0 + "&IdBD=" + vm.model.IdBaseDeDatos + "&entidadNombre=" + vm.model.EntidadNombre, vm.EstructuraColumnas, function () {
+                                            vm.fillColumnas(vm.EstructuraColumnas);
+                                            vm.isBusy = false;
+                                        });
+                                    }
+                                }
+                                break;
                             case 1:
                                 /*Unidad de Negocio*/
                                 if (vm.CompanyCategoria.IdCompanyCategoria != "" && vm.CompanyCategoria.IdCompanyCategoria != 0) {
@@ -13601,30 +15517,117 @@ function GetDashBoard() {
                      * Configurar columnas del grafico de bienestar según el nivel de detalle
                      */
                     vm.ColumnasBienestar = Enumerable.from(vm.finalColumnas).toArray();
+                    document.getElementById("tab-1").classList.remove("ng-hide");
                     //Eliminar los niveles no autorizados
-                    if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1 && document.getElementsByClassName("lvlUNeg")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
+                    //if (vm.lvl0 == false && vm.criterioBusquedaSeleccionado.Id != 0 && $(".lvlAFM_:visible")[0].checked == false) {
+                    //    vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
+                    //}
+                    if ($(".lvlUNeg:visible").length > 0) {
+                        if (vm.lvl1 == false && vm.criterioBusquedaSeleccionado.Id != 1 && $(".lvlUNeg:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^UNeg/i)').toArray();
+                        }
                     }
-                    if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2 && document.getElementsByClassName("lvlComp")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                    if ($(".lvlComp:visible").length > 0) {
+                        if (vm.lvl2 == false && vm.criterioBusquedaSeleccionado.Id != 2 && $(".lvlComp:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
                     }
-                    if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3 && document.getElementsByClassName("lvlArea")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                    if ($(".lvlArea:visible").length > 0) {
+                        if (vm.lvl3 == false && vm.criterioBusquedaSeleccionado.Id != 3 && $(".lvlArea:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
                     }
-                    if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4 && document.getElementsByClassName("lvlDpto")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                    if ($(".lvlDpto:visible").length > 0) {
+                        if (vm.lvl4 == false && vm.criterioBusquedaSeleccionado.Id != 4 && $(".lvlDpto:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
                     }
-                    if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5 && document.getElementsByClassName("lvlSubD")[0].checked == false) {
-                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                    if ($(".lvlSubD:visible").length > 0) {
+                        if (vm.lvl5 == false && vm.criterioBusquedaSeleccionado.Id != 5 && $(".lvlSubD:visible")[0].checked == false) {
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
                     }
+                    
+                    
+                    
 
                     // Filtrar columnas bienestar elimiando subdepartamentos redundantes cuyo nombre termina es - -
                     vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where(o => o.value.includes(" - -") == false).toList();//AUT - ELE - AEP - ADM
                     vm.ColumnasBienestar.unshift(vm.finalColumnas[0]);
+
+                    // Si el nivel detalle tiene 3 niveles quitar el ultimo, solo dejar los dos consecutivos
+                    var nivel3 = vm.model.nivelDetalle.charAt(2);
+                    var nivel4 = vm.model.nivelDetalle.charAt(3);
+                    var nivel5 = vm.model.nivelDetalle.charAt(4);
+                    var nivel6 = vm.model.nivelDetalle.charAt(5);
+                    if (nivel3 != "") {
+                        if (nivel3 == "2") {//quitar direcciones
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
+                        if (nivel3 == "3") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
+                        if (nivel3 == "4") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
+                        if (nivel3 == "5") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
+                    }
+                    if (nivel4 != "") {
+                        if (nivel4 == "2") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
+                        if (nivel4 == "3") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
+                        if (nivel4 == "4") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
+                        if (nivel4 == "5") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
+                    }
+                    if (nivel5 != "") {
+                        if (nivel5 == "2") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
+                        if (nivel5 == "3") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
+                        if (nivel5 == "4") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
+                        if (nivel5 == "5") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
+                    }
+                    if (nivel6 != "") {
+                        if (nivel6 == "2") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Comp/i)').toArray();
+                        }
+                        if (nivel6 == "3") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Area/i)').toArray();
+                        }
+                        if (nivel6 == "4") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^Dpto/i)').toArray();
+                        }
+                        if (nivel6 == "5") {//quitar areas
+                            vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).where('!$.type.match(/^SubD/i)').toArray();
+                        }
+                    }
+
+                    
                     
                     //vm.ColumnasBienestar.shift();//Eliminar duplicado inicial
                     /*Configuracion para factor psicosocial*/
                     switch (vm.criterioBusquedaSeleccionado.Id) {
+                        case 0:
+                            vm.ColumnasByCompanyCategoria = Enumerable.from(vm.finalColumnas)
+                                .where('$.type.match(/^UNeg/i)')
+                                .orderBy('$.value')
+                                .toArray();
+                            break;
                         case 1:
                             vm.ColumnasByCompanyCategoria = Enumerable.from(vm.finalColumnas)
                                 .where('$.type.match(/^Comp/i)')
@@ -13659,6 +15662,9 @@ function GetDashBoard() {
                             alert("Opcion no válida");
                             break;
                     }
+
+                    document.getElementById("tab-1").classList.add("ng-hide");
+
                     /*Convertir a array de cadena para enviarlo al back*/
                     vm.arrayStringFiltros = [];
                     vm.arrayStringFiltrosBienestar = [];
@@ -13671,7 +15677,13 @@ function GetDashBoard() {
                     if (vm.arrayStringFiltrosBienestar.length == 0 && getParamByUrl("token") != null) {
                         vm.arrayStringFiltrosBienestar.push("Valor default para cuando tengo token");
                     }
-                    vm.ColumnasBienestar.shift();
+                    if (vm.criterioBusquedaSeleccionado.Id != 0) {
+                        vm.ColumnasBienestar.shift();
+                    }
+                    if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                        vm.ColumnasBienestar.unshift({ type: "", value: "Grupo Autofin" });
+                        vm.ColumnasBienestar = Enumerable.from(vm.ColumnasBienestar).distinct().toList()
+                    }
 					 /****Se llena el numero de columnas para paginas de Indicadores 07/10/2021 Camos****/
                     vm.NumColumnasBienestar = vm.ColumnasBienestar.length;
                     /****Se calcula el CSS segun el numero de columnas 07/10/2021 Camos*****************/
@@ -13754,8 +15766,8 @@ function GetDashBoard() {
                         break;
                     default:
                         
-                            vm.ColIzq = "col-10";
-                            vm.ColDer = "col-2";
+                            vm.ColIzq = "col-3";
+                            vm.ColDer = "col";
                                                
                         break;
         
@@ -14662,6 +16674,9 @@ function GetDashBoard() {
                 vm.model = JSON.parse(JSON.stringify(_nuevoHistorico));
                 var validFind = false;
                 switch (vm.criterioBusquedaSeleccionado.Id) {
+                    case 0:
+
+                        break;
                     case 1:
                         if (vm.CompanyCategoria.IdCompanyCategoria != null && vm.CompanyCategoria.IdCompanyCategoria != "") {
                             vm.model.EntidadNombre = vm.CompanyCategoria.Descripcion;
@@ -14700,12 +16715,45 @@ function GetDashBoard() {
                 vm.model.currentURL = vm.urlApis;
                 vm.model.IdBaseDeDatos = document.getElementById("DDLBD").value;
                 vm.model.ps = localStorage["ps"];
-                vm.model.nivelDetalle = 
-                    (vm.lvl1 == true || document.getElementsByClassName("lvlUNeg")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
-                    (vm.lvl2 == true || document.getElementsByClassName("lvlComp")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
-                    (vm.lvl3 == true || document.getElementsByClassName("lvlArea")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
-                    (vm.lvl4 == true || document.getElementsByClassName("lvlDpto")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
-                    (vm.lvl5 == true || document.getElementsByClassName("lvlSubD")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl0 == true || $(".lvlAFM_:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 0 ? "0" : "") +
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 1) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl1 == true || $(".lvlUNeg:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 1 ? "1" : "") +
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 2) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl2 == true || $(".lvlComp:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 2 ? "2" : "") +
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 3) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl3 == true || $(".lvlArea:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 3 ? "3" : "") +
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 4) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl4 == true || $(".lvlDpto:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 4 ? "4" : "") +
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 5) {
+                    vm.model.nivelDetalle =
+                        (vm.lvl5 == true || $(".lvlSubD:visible")[0].checked || vm.criterioBusquedaSeleccionado.Id == 5 ? "5" : "");
+                }
                         /*public int opc { get; set; } = 0;
                         public int tipoEntidad { get; set; } = 0;
                         public string EntidadName { get; set; } = "";
@@ -14716,18 +16764,34 @@ function GetDashBoard() {
                 vm.model.EntidadName = vm.model.EntidadNombre;
                 vm.model.enfoqueSeleccionado = vm.enfoqueSeleccionado;
 
-                fillArrayCustomHisto("BackGroundJob/execute", vm.model, vm.ExisteH, function () {
-                    if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {
-                        swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
-                    }
-                    else {
-                        localStorage["tieneReporte"] = "";
-                        /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
-                            vm.listPeticiones = [];
-                            window.location.href = "/reporteoClima/Index/";
-                        });*/
-                    }
-                });
+                if (vm.criterioBusquedaSeleccionado.Id > 0) {
+                    fillArrayCustomHisto("BackGroundJob/execute", vm.model, vm.ExisteH, function () {
+                        if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {
+                            swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
+                        }
+                        else {
+                            localStorage["tieneReporte"] = "";
+                            /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
+                                vm.listPeticiones = [];
+                                window.location.href = "/reporteoClima/Index/";
+                            });*/
+                        }
+                    });
+                }
+                if (vm.criterioBusquedaSeleccionado.Id == 0) {
+                    fillArrayCustomHisto("BackGroundJob/executeGeneral", vm.model, vm.ExisteH, function () {
+                        if (localStorage["tieneHistorico"] == "false" || localStorage["tieneHistorico"] == false) {
+                            swal("No se cuenta con un registro historico según el año seleccionado en su configuracion", "", "info");
+                        }
+                        else {
+                            localStorage["tieneReporte"] = "";
+                            /*swal("El reporte ha terminado de crearse, da click en el boton Generar Reporte nuevamente", "", "info").then(function () {
+                                vm.listPeticiones = [];
+                                window.location.href = "/reporteoClima/Index/";
+                            });*/
+                        }
+                    });
+                }
 
                 /*resolucion de todos los data*/
                 var txt = '{"ContentEncoding":null,"ContentType":null,"Data":[2015],"JsonRequestBehavior":0,"MaxJsonLength":null,"RecursionLimit":null}';
@@ -15624,43 +17688,47 @@ var cortes = async function (tipoEntidad = 1, iteracion = 0, tabla, padding) {
 
 
 var getHijo = function (tipoEntidad) {
-    var nivelDetalle = 
-        (document.getElementsByClassName("lvlUNeg")[0].checked == true || tipoEntidad == 1 ? "1" : "") +
-        (document.getElementsByClassName("lvlComp")[0].checked == true || tipoEntidad == 2 ? "2" : "") +
-        (document.getElementsByClassName("lvlArea")[0].checked == true || tipoEntidad == 3 ? "3" : "") +
-        (document.getElementsByClassName("lvlDpto")[0].checked == true || tipoEntidad == 4 ? "4" : "") +
-        (document.getElementsByClassName("lvlSubD")[0].checked == true || tipoEntidad == 5 ? "5" : "");//345
-    var padre = nivelDetalle.charAt(0);
-    var hijo = nivelDetalle.charAt(1);
-    if (hijo == "")
-        hijo = padre;
-    switch (parseInt(hijo)) {
-        case 1: // Unidad de negocio
-            if (nivelDetalle.includes("3"))
+    try {
+        var nivelDetalle =
+            ($(".lvlUNeg:visible")[0].checked == true || tipoEntidad == 1 ? "1" : "") +
+            ($(".lvlComp:visible")[0].checked == true || tipoEntidad == 2 ? "2" : "") +
+            ($(".lvlArea:visible")[0].checked == true || tipoEntidad == 3 ? "3" : "") +
+            ($(".lvlDpto:visible")[0].checked == true || tipoEntidad == 4 ? "4" : "") +
+            ($(".lvlSubD:visible")[0].checked == true || tipoEntidad == 5 ? "5" : "");//345
+        var padre = nivelDetalle.charAt(0);
+        var hijo = nivelDetalle.charAt(1);
+        if (hijo == "")
+            hijo = padre;
+        switch (parseInt(hijo)) {
+            case 1: // Unidad de negocio
+                if (nivelDetalle.includes("3"))
+                    return "Area";
+                if (nivelDetalle.includes("4"))
+                    return "Dpto";
+                if (nivelDetalle.includes("5"))
+                    return "SubD";
+                return "UNeg";
+            case 2: // Direccion
+                if (nivelDetalle.includes("3"))
+                    return "Area";
+                if (nivelDetalle.includes("4"))
+                    return "Dpto";
+                if (nivelDetalle.includes("5"))
+                    return "SubD";
+                return "Comp";
+            case 3: // Area
+                if (nivelDetalle.includes("4"))
+                    return "Dpto";
+                if (nivelDetalle.includes("5"))
+                    return "SubD";
                 return "Area";
-            if (nivelDetalle.includes("4"))
+            case 4: // Depto
+                if (nivelDetalle.includes("5"))
+                    return "Dpto";
                 return "Dpto";
-            if (nivelDetalle.includes("5"))
-                return "SubD";
-            return "UNeg";
-        case 2: // Direccion
-            if (nivelDetalle.includes("3"))
-                return "Area";
-            if (nivelDetalle.includes("4"))
-                return "Dpto";
-            if (nivelDetalle.includes("5"))
-                return "SubD";
-            return "Comp";
-        case 3: // Area
-            if (nivelDetalle.includes("4"))
-                return "Dpto";
-            if (nivelDetalle.includes("5"))
-                return "SubD";
-            return "Area";
-        case 4: // Depto
-            if (nivelDetalle.includes("5"))
-                return "Dpto";
-            return "Dpto";
+        }
+    } catch (e) {
+        alert();
     }
 }
 

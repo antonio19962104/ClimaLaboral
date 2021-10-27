@@ -12,7 +12,7 @@
                                     <div class="col px-0 px-sm-1 bar-estandarW" ng-repeat="item in vm.ComparativoAntiguedadEA">
                                         <center>
                                             <p hidden>{{ vm.getDiferenciaGralEA(item.Entidad, item.Porcentaje, 1) }}%</p>
-                                            <img @*src="~/img/ReporteoClima/sol-icono.svg"*@ ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
+                                            <img ng-src="{{ vm.setIconoSVG(item.Porcentaje) }}" class="img-fluid svg-clasificacion">
                                             <p class="label-top-graphic-clasificacion">{{ item.Porcentaje }}%</p>
                                             <div class="bar-clasificacion" style="overflow:hidden;height: {{ item.Porcentaje * 2.7 }}px;">
                                                 <div class="bar-progress-clasificacion" style="height: 0px;">

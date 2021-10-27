@@ -75,9 +75,12 @@
                     var ActionUsuariosOpc = false;
 
                     var ActionEmpresasListar = false;
-
                     var ActionEmpresasCrear = false;
                     var chkEmpresasOpc = false;
+
+                    var chkPlanesListar = false;
+                    var chkPlanesCrear = false;
+                    var chkAdminAcciones = false;
 
                     var session = Session["AdminLog"];
                     var sessionPerfil = Session["PerfilAdminLog"];
@@ -166,6 +169,18 @@
                         if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "OpcEmpresa")
                         {
                             chkEmpresasOpc = true;
+                        }
+                        if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "ListarPlanes")
+                        {
+                            chkPlanesListar = true;
+                        }
+                        if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "CrearPlanes")
+                        {
+                            chkPlanesCrear = true;
+                        }
+                        if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "AdministrarAcciones")
+                        {
+                            chkAdminAcciones = true;
                         }
                     }
 
@@ -396,6 +411,42 @@
                                 </div>
                             </li>
                         }
+                        if (perfilModulo.Modulo.Nombre == "Planes de Acción")
+                        {
+                            <li id="Encuestas">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" aria-controls="collapseSurvey" style="padding: 0px;">
+                                    <div class="item-menu-icon">
+                                        <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
+                                        <span class="tooltiptext">Encuestas</span>
+                                    </div>
+                                </a>
+                                <span class="item-menu d-none">
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
+                                        <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
+                                    </a>
+                                </span>
+                                <div class="collapse" id="collapseSurvey">
+                                    <div class="card card-body py-2">
+                                        <ul class="fa-ul pl-lg-4">
+                                            @{
+                                                if (chkPlanesListar == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "PlanesDeAccion")">Listado</a></li>
+                                                }
+                                                if (chkPlanesCrear == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "PlanesDeAccion")">Crear</a></li>
+                                                }
+                                                if (chkAdminAcciones == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Administrar acciones</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        }
                     }
                 }
                 <!--Fin seccion permisos por usuario-->
@@ -558,6 +609,9 @@
         }
         else
         {
+            @section Scripts{
+
+            }
             /* Pagina de error */
             <body>
                 <main id="wrapper">

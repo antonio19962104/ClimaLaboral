@@ -50,6 +50,10 @@
                             var chkEmpresasCrear = false;
                             var chkEmpresasOpc = false;
 
+                            var chkPlanesListar = false;
+                            var chkPlanesCrear = false;
+                            var chkAdminAcciones = false;
+
 
                             foreach (ML.PerfilModulo item in Model.ObjectsPermisos)
                             {
@@ -129,6 +133,19 @@
                                 if (item.Modulo.Nombre == "Empresas" && item.PerfilModuloAccion.Accion == "OpcEmpresa")
                                 {
                                     chkEmpresasOpc = true;
+                                }
+                                //
+                                if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "ListarPlanes")
+                                {
+                                    chkPlanesListar = true;
+                                }
+                                if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "CrearPlanes")
+                                {
+                                    chkPlanesCrear = true;
+                                }
+                                if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "AdministrarAcciones")
+                                {
+                                    chkAdminAcciones = true;
                                 }
                             }
 
@@ -436,6 +453,53 @@
                                                         {
                                                             <li><span class="fa-li"><input id="chkEmpresasOpc" class="chk" type="checkbox"></span>Más opciones</li>
                                                         }
+                                                    </ul>
+                                                </div><!--.body-tool-->
+                                            </div><!--.box-tool-->
+                                        </div><!--.wrapper-tool-->
+                                    </div><!--.col-md-4-->
+                                }
+                                if (perfilModulo.Modulo.Nombre == "Planes de Acción")
+                                {
+                                    ModuloEncuestas = true;
+                                    <div id="ModuloPlanes" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                                        <div class="wrapper-tool">
+                                            <div class="box-tool">
+                                                <div class="header-tool" style="background-color: #00d068; background-image: url('../img/bg-tool-survey.png');">
+                                                    <div class="row vertical-align-bottom" align="center">
+                                                        <div align="left" class="col-6">
+                                                            <i class="fas text-white fa-caret-right"></i>
+                                                            <h5 class="title-tool">Planes de Acción</h5>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <img src="../img/icon-survey.png" class="img-fluid">
+                                                        </div>
+                                                    </div>
+                                                </div><!--.header-tool-->
+                                                <div class="body-tool">
+                                                    <ul class="fa-ul">
+                                                        @if (chkPlanesListar == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasListar" class="chk" type="checkbox" checked="checked"></span>Listado</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasListar" class="chk" type="checkbox"></span>Listado</li>
+                                                        }
+
+                                                        @if (chkPlanesCrear == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasCrear" class="chk" type="checkbox" checked="checked"></span>Crear</li>
+                                                        }
+                                                        else
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasCrear" class="chk" type="checkbox"></span>Crear</li>
+                                                        }
+                                                        @if (chkAdminAcciones == true)
+                                                        {
+                                                            <li><span class="fa-li"><input id="chkEncuestasOpc" class="chk" type="checkbox" checked="checked"></span>Importar encuesta</li>
+                                                        }
+
                                                     </ul>
                                                 </div><!--.body-tool-->
                                             </div><!--.box-tool-->

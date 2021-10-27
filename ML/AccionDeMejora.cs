@@ -17,5 +17,6 @@ namespace ML
         public ML.Encuesta Encuesta { get; set; } = new Encuesta();
         public ML.BasesDeDatos BasesDeDatos { get; set; } = new BasesDeDatos();
         public int AnioAplicacion { get; set; } = 0;
+        public int Tipo { get; set; }
     }
 }

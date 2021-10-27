@@ -202,7 +202,6 @@ namespace PL.Controllers
             }
 
         }
-
         public ActionResult Details()
         {           
             return View();

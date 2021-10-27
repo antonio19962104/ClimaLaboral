@@ -1,7 +1,7 @@
 ﻿
 <div class="content-wrap pb-2" ng-switch="vm.enfoqueSeleccionado">
 <!----Enfoque Ambos------->
-<div id="tab-indicadores-categoria" class="container-fluid px-lg-5" ng-switch-when="0">
+<div id="tab-indicadores-categoria" class="container-fluid px-5 px-lg-1" ng-switch-when="0">
     <h2 class="robotothin mb-2 mt-n1">INDICADORES POR CATEGORÍA <span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
     <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
     <div class="card">
@@ -26,114 +26,116 @@
                             </div>
                         </div>
                     </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeCredibilidadEE track by $index" ng-show="$parent.$index == 0" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                    <p class="yellow-clima f-15 mb-1">HC:{{ vm.Esperadas[$index] }}</p>
+
+                    <div class="col" ng-repeat="itemCredibilidadEE in vm.PorcentajeCredibilidadEE track by $index" ng-show="$parent.$index == 0" style="text-align:center;">
+                        <div class="row" ng-repeat="itemCredibilidadEA in vm.PorcentajeCredibilidadEA track by $index" ng-show="$index == $parent.$index" style="text-align:center;">
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemCredibilidadEE) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemCredibilidadEE) }}" class="mt-2 {{ vm.setIcono(itemCredibilidadEE, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemCredibilidadEE }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemCredibilidadEE - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemCredibilidadEE, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemCredibilidadEA) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemCredibilidadEA) }}" class="mt-2 {{ vm.setIcono(itemCredibilidadEA, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemCredibilidadEA }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemCredibilidadEA - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemCredibilidadEA, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeCredibilidadEA track by $index" ng-show="$parent.$index == 0" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                    <p class="yellow-clima f-15 mb-1">HC:{{ vm.Esperadas[$index] }}</p>
+                    <div class="col" ng-repeat="itemImparcialidadEE in vm.PorcentajeImparcialidadEE track by $index" ng-show="$parent.$index == 1" style="text-align:center;">
+                        <div class="row" ng-repeat="itemImparcialidadEA in vm.PorcentajeImparcialidadEA track by $index" ng-show="$index == $parent.$index" style="text-align:center;">
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemImparcialidadEE) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemImparcialidadEE) }}" class="mt-2 {{ vm.setIcono(itemImparcialidadEE, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemImparcialidadEE }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemImparcialidadEE - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemImparcialidadEE, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemImparcialidadEA) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemImparcialidadEA) }}" class="mt-2 {{ vm.setIcono(itemImparcialidadEA, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemImparcialidadEA }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemImparcialidadEA - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemImparcialidadEA, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                    <div class="col" ng-repeat="itemOrgulloEE in vm.PorcentajeOrgulloEE track by $index" ng-show="$parent.$index == 2" style="text-align:center;">
+                        <div class="row" ng-repeat="itemOrgulloEA in vm.PorcentajeOrgulloEA track by $index" ng-show="$index == $parent.$index" style="text-align:center;">
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemOrgulloEE) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemOrgulloEE) }}" class="mt-2 {{ vm.setIcono(itemOrgulloEE, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemOrgulloEE }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemOrgulloEE - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemOrgulloEE, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemOrgulloEA) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemOrgulloEA) }}" class="mt-2 {{ vm.setIcono(itemOrgulloEA, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemOrgulloEA }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemOrgulloEA - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemOrgulloEA, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeImparcialidadEE track by $index" ng-show="$parent.$index == 1" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+
+                    <div class="col" ng-repeat="itemRespetoEE in vm.PorcentajeRespetoEE track by $index" ng-show="$parent.$index == 3" style="text-align:center;">
+                        <div class="row" ng-repeat="itemRespetoEA in vm.PorcentajeRespetoEA track by $index" ng-show="$index == $parent.$index" style="text-align:center;">
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemRespetoEE) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemRespetoEE) }}" class="mt-2 {{ vm.setIcono(itemRespetoEE, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemRespetoEE }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemRespetoEE - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemRespetoEE, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemRespetoEA) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemRespetoEA) }}" class="mt-2 {{ vm.setIcono(itemRespetoEA, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemRespetoEA }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemRespetoEA - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemRespetoEA, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeImparcialidadEA track by $index" ng-show="$parent.$index == 1" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+
+
+                    <div class="col" ng-repeat="itemCompanierismoEE in vm.PorcentajeCompanierismoEE track by $index" ng-show="$parent.$index == 4" style="text-align:center;">
+                        <div class="row" ng-repeat="itemCompanierismoEA in vm.PorcentajeCompanierismoEA track by $index" ng-show="$index == $parent.$index" style="text-align:center;">
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemCompanierismoEE) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemCompanierismoEE) }}" class="mt-2 {{ vm.setIcono(itemCompanierismoEE, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemCompanierismoEE }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemCompanierismoEE - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemCompanierismoEE, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeOrgulloEE track by $index" ng-show="$parent.$index == 2" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeOrgulloEA track by $index" ng-show="$parent.$index == 2" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeRespetoEE track by $index" ng-show="$parent.$index == 3" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeRespetoEA track by $index" ng-show="$parent.$index == 3" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeCompanierismoEE track by $index" ng-show="$parent.$index == 4" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="{{vm.ColDerA}} p-0" ng-repeat="item in vm.PorcentajeCompanierismoEA track by $index" ng-show="$parent.$index == 4" style="text-align:center;">
-                        <div class="p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
-                            <div class="{{ vm.setClase(item) }}">
-                                <center><img ng-src="{{ vm.setIcono(item) }}" class="mt-2 {{ vm.setIcono(item, 1) }}"></center>
-                                <div class="clima-porcentaje robotoblack porcentaje-clima">
-                                    <p class="mb-n2 f-15">{{ item }}%</p>
-                                    <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(item - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(item, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                            <div class="col p-0" style="text-align: center; text-align: -moz-center; text-align: -webkit-center;">
+                                <div class="{{ vm.setClase(itemCompanierismoEA) }}">
+                                    <center><img ng-src="{{ vm.setIcono(itemCompanierismoEA) }}" class="mt-2 {{ vm.setIcono(itemCompanierismoEA, 1) }}"></center>
+                                    <div class="clima-porcentaje robotoblack porcentaje-clima">
+                                        <p class="mb-n2 f-15">{{ itemCompanierismoEA }}%</p>
+                                        <p ng-hide="!vm.hasHistorico" class="{{ vm.getClassDiff(itemCompanierismoEA - vm.listDataHistoricoEE[0].NivelParticipacion) }} f-17 mb-1">{{ vm.getPorcentDiff(itemCompanierismoEA, vm.listDataHistoricoEE[0].NivelParticipacion) }}%</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +152,7 @@
     </div>
 </div>
 <!----Enfoque Empresa------->
-<div id="tab-indicadores-categoria" class="container-fluid px-lg-5" ng-switch-when="1">
+<div id="tab-indicadores-categoria" class="container-fluid  px-5 px-lg-1" ng-switch-when="1">
     <h2 class="robotothin mb-2 mt-n1">INDICADORES POR CATEGORÍA EE<span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
     <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
     <div class="card">
@@ -243,7 +245,7 @@
     </div>
 </div>
 <!----Enfoque Area------->
-    <div id="tab-indicadores-categoria" class="container-fluid px-lg-5" ng-switch-when="2">
+    <div id="tab-indicadores-categoria" class="container-fluid  px-5 px-lg-1" ng-switch-when="2">
         <h2 class="robotothin mb-2 mt-n1">INDICADORES POR CATEGORÍA EA<span class="robotobold yellow-clima area-empresa ml-3">{{vm.UNSeleccionada}}</span></h2>
         <p>Predicen la capacidad de las organizaciones para lograr resultados</p>
         <div class="card">
@@ -336,3 +338,20 @@
         </div>
     </div>
 </div>
+<style>
+         @@media (max-width: 1400px) {
+            .categoria-bl {
+            font-size: small;
+        }
+            .tablaimpulsores-izq h3{
+            font-size: x-large !important;
+        }
+            .tablaimpulsores-izq p{
+            font-size: small;
+            line-height: 13px;
+        }
+        .col-10 .tablaimpulsores-izq {
+            padding: 10px 0px 10px 15px;
+        }
+}
+</style>
