@@ -1000,6 +1000,8 @@
     <Content Include="img\icon-header-survey.png" />
     <Content Include="img\icon-often-false.png" />
     <Content Include="img\icon-often-right.png" />
+    <Content Include="img\icon-plan-action%281%29.png" />
+    <Content Include="img\icon-plan-action.png" />
     <Content Include="img\icon-reports.png" />
     <Content Include="img\icon-sometimes.png" />
     <Content Include="img\icon-survey-dark.png" />
@@ -1295,6 +1297,7 @@
     <Content Include="css\documentacion\vendor\font-awesome\webfonts\fa-solid-900.ttf" />
     <Content Include="css\documentacion\vendor\font-awesome\webfonts\fa-solid-900.woff" />
     <Content Include="css\documentacion\vendor\font-awesome\webfonts\fa-solid-900.woff2" />
+    <Content Include="img\icon-plan-action.webp" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>

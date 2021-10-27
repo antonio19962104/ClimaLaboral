@@ -58,6 +58,142 @@
                     </div>
                 </div>
             </div>
+
+            <div class="header-docs">
+                <label>Namespace: <label style="color: #369191">{{ vm.docDL.Assembly.Name }}</label></label><br />
+                <label>Assembly: <label style="color: #369191">{{ vm.docDL.Assembly.Name }}.dll</label></label><br />
+            </div>
+            <div class="child-1">
+                <div class="child-2 mt-2 ml-3" ng-repeat="item in vm.docDL.Members.Member">
+                    <!--Vista de documento-->
+                    <div style="padding: 5px;">
+                        <fieldset ng-if="item.Class == item.Name">
+                            <h3 class="ml-1">public class {{ item.Class }}</h3>
+                        </fieldset>
+                        <label ng-if="item.Class == item.Name">Class {{ item.Class }} exposes the following members</label>
+                        <div ng-if="item.Class != item.Name" class="ml-2">
+                            <label>Name: {{ item.Name }}</label><br />
+                            <label>Descriptión: {{ item.Summary }}</label><br />
+                            <label>Returns: {{ item.Returns }}</label>
+                            <div class="params ml-5" ng-repeat="elem in item.Param">
+                                <label>Parammetro: {{ elem.Name }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Vista de tabla-->
+                    <div hidden class="mt-2">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Class</th>
+                                    <th>Method</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in vm.docDL.Members.Member">
+                                    <td><img src="" /></td>
+                                    <td>{{ item.Class }}</td>
+                                    <td>{{ item.Name }}</td>
+                                    <td>{{ item.Summary }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-docs">
+                <label>Namespace: <label style="color: #369191">{{ vm.docML.Assembly.Name }}</label></label><br />
+                <label>Assembly: <label style="color: #369191">{{ vm.docML.Assembly.Name }}.dll</label></label><br />
+            </div>
+            <div class="child-1">
+                <div class="child-2 mt-2 ml-3" ng-repeat="item in vm.docML.Members.Member">
+                    <!--Vista de documento-->
+                    <div style="padding: 5px;">
+                        <fieldset ng-if="item.Class == item.Name">
+                            <h3 class="ml-1">public class {{ item.Class }}</h3>
+                        </fieldset>
+                        <label ng-if="item.Class == item.Name">Class {{ item.Class }} exposes the following members</label>
+                        <div ng-if="item.Class != item.Name" class="ml-2">
+                            <label>Name: {{ item.Name }}</label><br />
+                            <label>Descriptión: {{ item.Summary }}</label><br />
+                            <label>Returns: {{ item.Returns }}</label>
+                            <div class="params ml-5" ng-repeat="elem in item.Param">
+                                <label>Parammetro: {{ elem.Name }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Vista de tabla-->
+                    <div hidden class="mt-2">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Class</th>
+                                    <th>Method</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in vm.docML.Members.Member">
+                                    <td><img src="" /></td>
+                                    <td>{{ item.Class }}</td>
+                                    <td>{{ item.Name }}</td>
+                                    <td>{{ item.Summary }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-docs">
+                <label>Namespace: <label style="color: #369191">{{ vm.docPL.Assembly.Name }}</label></label><br />
+                <label>Assembly: <label style="color: #369191">{{ vm.docPL.Assembly.Name }}.dll</label></label><br />
+            </div>
+            <div class="child-1">
+                <div class="child-2 mt-2 ml-3" ng-repeat="item in vm.docPL.Members.Member">
+                    <!--Vista de documento-->
+                    <div style="padding: 5px;">
+                        <fieldset ng-if="item.Class == item.Name">
+                            <h3 class="ml-1">public class {{ item.Class }}</h3>
+                        </fieldset>
+                        <label ng-if="item.Class == item.Name">Class {{ item.Class }} exposes the following members</label>
+                        <div ng-if="item.Class != item.Name" class="ml-2">
+                            <label>Name: {{ item.Name }}</label><br />
+                            <label>Descriptión: {{ item.Summary }}</label><br />
+                            <label>Returns: {{ item.Returns }}</label>
+                            <div class="params ml-5" ng-repeat="elem in item.Param">
+                                <label>Parammetro: {{ elem.Name }}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Vista de tabla-->
+                    <div hidden class="mt-2">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Class</th>
+                                    <th>Method</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in vm.docPL.Members.Member">
+                                    <td><img src="" /></td>
+                                    <td>{{ item.Class }}</td>
+                                    <td>{{ item.Name }}</td>
+                                    <td>{{ item.Summary }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <script src="~/scripts/Clima Dinamico/jquery.min.js"></script>

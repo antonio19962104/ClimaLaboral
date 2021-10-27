@@ -48,7 +48,7 @@ var modelNuevaAccion = {
             vm.BusquedaAcciones = [];
            
             $(document).ready(function () {
-                CrearScript("http://demo.climalaboral.divisionautomotriz.com/scripts/kendo-all.js");
+                CrearScript("http://diagnostic4u.com/scripts/kendo-all.js");
                 $(".filter").on("keyup", function (text) {
                     document.getElementById("mergeBusqueda").innerHTML = "";
                     var texto = text.target.value;
@@ -98,6 +98,9 @@ var modelNuevaAccion = {
                         [].forEach.call(response.Objects, function (accion) {
                             $("#merge-acciones-ayuda").append('<span>' + accion.Descripcion + '</span>');
                         });
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar consultar las acciones de ayuda", response.ErrorMessage, "error");
                     }
                 });
             }
