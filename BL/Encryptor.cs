@@ -12,7 +12,7 @@ using System.Diagnostics;
 	/// <remarks>
 	/// When creating an
 	/// instance of this class, you must pass the algorithm to use in the 
-	/// constructor: see <see cref="EncryptionAlgorithm"/>. Optionally, you can set the output to be formatted as
+	/// constructor: see see cref="EncryptionAlgorithm". Optionally, you can set the output to be formatted as
 	/// hex through the FormatAsHex property.
 	/// 
 	/// This class is based on principles from the Patterns and Practices guide: 
@@ -42,8 +42,8 @@ using System.Diagnostics;
 		/// </summary>
 		/// <remarks>Note that the length and composition of the key and IV
 		/// are algorithm dependent. For example, 3DES requires a 16 or 24 byte key,
-		/// whereas DES requires an 8 byte key. See <see cref="GetKey()"/>
-		/// and <see cref="GetIV()"/></remarks>
+		/// whereas DES requires an 8 byte key. See cref="GetKey()"
+		/// and see cref="GetIV()"</remarks>
 		/// <param name="StringToEncrypt">The string to be encrypted</param>
 		/// <param name="key">The key to use for encryption. The same key will
 		/// be used for decryption.</param>

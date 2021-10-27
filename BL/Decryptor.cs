@@ -11,7 +11,7 @@ using System.Diagnostics;
 	/// <remarks>
 	///  When creating an
 	/// instance of this class, you must pass the algorithm to use in the 
-	/// constructor: see <see cref="EncryptionAlgorithm"/>.  Optionally, if the encrypted string ws hex formatted,
+	/// constructor: see cref="EncryptionAlgorithm".  Optionally, if the encrypted string ws hex formatted,
 	/// you can reformat the input string before decrypting.
 	/// 
 	/// This class is based on principles from the Patterns and Practices guide: 

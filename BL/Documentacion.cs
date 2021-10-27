@@ -200,7 +200,7 @@ namespace BL
             public string Text { get; set; }
 
             [XmlElement(ElementName = "typeparam")]
-            public Typeparam Typeparam { get; set; }
+            public List<Typeparam> Typeparam { get; set; }
         }
 
         [XmlRoot(ElementName = "typeparam")]

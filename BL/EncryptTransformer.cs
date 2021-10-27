@@ -8,19 +8,19 @@ using System.Security.Cryptography;
 	/// </summary>
 	internal enum EncryptionAlgorithm {
 		/// <summary>
-		/// Use <see cref="DES"/> 
+		/// Use cref="DES"
 		/// </summary>
 		Des = 1, 
 		/// <summary>
-		/// Use <see cref="RC2"/>
+		/// Use cref="RC2"
 		/// </summary>
 		Rc2, 
 		/// <summary>
-		/// Use <see cref="Rijndael"/>
+		/// Use cref="Rijndael"
 		/// </summary>
 		Rijndael, 
 		/// <summary>
-		/// Use <see cref="TripleDES"/>
+		/// Use cref="TripleDES"
 		/// </summary>
 		TripleDes};
 	
@@ -63,10 +63,10 @@ using System.Security.Cryptography;
 		/// <summary>
 		/// Returns the proper Service Provider. Sets the key and IV of
 		/// the provider. If no key and/or IV were passed, a random key and/or
-		/// IV are created. They can then be retrieved from the <see cref="Encryptor.Key"/>
-		/// and <see cref="Encryptor.IV"/> properties. (Do not call <see cref="Encryptor.GetKey()"/> 
-		/// or <see cref="Encryptor.GetIV()"/> as
-		/// these create <i>new</i> keys).
+		/// IV are created. They can then be retrieved from the cref="Encryptor.Key"
+		/// and cref="Encryptor.IV" properties. (Do not call cref="Encryptor.GetKey()"
+		/// or cref="Encryptor.GetIV()" as
+		/// these create new keys).
 		/// </summary>
 		/// <param name="bytesKey"></param>
 		/// <returns></returns>
