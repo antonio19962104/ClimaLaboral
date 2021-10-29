@@ -32,6 +32,8 @@ namespace PL
             HangfireAspNet.Use(GetHangfireServers);
 
 
+            BL.NLogGeneratorFile.logObjectsModuloPlanesDeAccion(new ML.Encuesta());
+
             PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
 
             ML.Historico historico = new ML.Historico()
@@ -48,6 +50,7 @@ namespace PL
                 tipoEntidad = 0,
                 ps = "52314672366B707931454E796D44553536504E4268773D3D"
             };
+
             //BL.PlanesDeAccion.EjecutaJob();
             //backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
             //BL.ReporteD4U.getComparativoPorAntiguedadEE("", "GAFM", 2021, 2114);

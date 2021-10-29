@@ -132,7 +132,7 @@ namespace BL
                         }
                     }
 
-                    ///Se consulta solo la de Clima Laboral con sus configuraciones Camos 20/07/2021
+                    //Se consulta solo la de Clima Laboral con sus configuraciones Camos 20/07/2021
                     var queryClima = context.ConfigClimaLab.Where(o => o.IdEncuesta == 1 && o.PeriodoAplicacion != null).ToList();
                     foreach (var item in queryClima)
                     {
@@ -174,6 +174,66 @@ namespace BL
                        
                     }
                         result.ListadoDeEncuestas.Sort((x,y) => string.Compare(x.IdEncuesta.ToString(),y.IdEncuesta.ToString()));
+                }
+            }
+            catch (Exception aE)
+            {
+                result.ex = aE;
+                result.ErrorMessage = aE.Message.ToString();
+                result.Correct = false;
+            }
+            return result;
+        }
+		    /// <summary>
+        /// se crea un nuevo metodo de consulta de encuesta de clima laboral 27/10/2021  Camos
+        /// </summary>
+        /// <returns>Listado de Encuestas de clima laboral</returns>
+        public static Result getEncuestasPM() {
+            ML.Result result = new ML.Result();
+            result.ListadoDeEncuestas = new List<ML.Encuesta>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var queryClima = context.ConfigClimaLab.Where(o => o.IdEncuesta == 1 && o.PeriodoAplicacion != null).ToList();
+                    foreach (var item in queryClima)
+                    {
+                        ML.Encuesta encuestas = new ML.Encuesta();
+                        encuestas.Nombre = "Clima Laboral";
+                        encuestas.IdEncuesta = (Int32)item.IdEncuesta;
+
+                        //Consulta si ya la envíe
+                        var enviada = context.EstatusEmail.SqlQuery("SELECT * FROM ESTATUSEMAIL WHERE IDENCUESTA = {0}", item.IdEncuesta).ToList();
+                        if (enviada.Count > 0)
+                        { encuestas.Enviada = 1; }
+                        else
+                        { encuestas.Enviada = 0; }
+
+                        encuestas.UID = item.Encuesta.UID;
+                        //Se agrega informacion para la consulta de la nueva lista de Encuesta -------  CAMOS 20072021
+                        encuestas.BasesDeDatos = new ML.BasesDeDatos();
+                        encuestas.Company = new ML.Company();
+                        encuestas.TipoOrden = new ML.TipoOrden();
+                        encuestas.BasesDeDatos = item.IdBaseDeDatos != null ? BasesDeDatos.getBDbyIdEncuesta((Int32)item.IdBaseDeDatos) : null;
+                        encuestas.Company = Company.getCompanyById(32);
+                        encuestas.TipoOrden = null;
+                        encuestas.periodo = (Int32)item.PeriodoAplicacion;
+                        encuestas.FechaInicio = item.FechaInicio;
+                        encuestas.FechaFin = item.FechaFin;
+                        encuestas.TipoEncuesta = "Clima Laboral";
+                        encuestas.TipoEstatus = new ML.TipoEstatus();
+                        //encuestas.TipoEstatus.IdEstatus = Convert.ToInt32(obj.IdEstatus);
+                        //encuestas.TipoEstatus.Descripcion = obj.TipoEstatus.Descripcion;
+                        encuestas.IdTipoEncuesta = 4;
+                        //encuestas.FechaHoraCreacion ="";
+                        encuestas.resumen = GetDataEncuesta((Int32)item.IdEncuesta, (Int32)item.IdBaseDeDatos);
+                        //if (obj.FechaHoraModificacion != null)
+                        //{
+                        //    encuestas.FechaHoraModificacion = (DateTime)obj.FechaHoraModificacion;
+                        //}
+                        result.ListadoDeEncuestas.Add(encuestas);
+
+                    }
                 }
             }
             catch (Exception aE)
@@ -318,7 +378,7 @@ namespace BL
                             encuesta.MLTipoEncuesta.IdTipoEncuesta = obj.IdTipoEncuesta;
                             encuesta.Nombre = obj.Nombre;
                             encuesta.TipoOrden = new ML.TipoOrden();
-                            encuesta.TipoOrden.IdTipoOrden = (Int32)obj.IdTipoOrden;
+                            encuesta.TipoOrden.IdTipoOrden = obj.IdTipoOrden == null ? 0 : (Int32)obj.IdTipoOrden;
                             encuesta.Plantillas = new ML.Plantillas();
                             encuesta.Plantillas.IdPlantilla = Convert.ToInt32(obj.IdPlantilla);
                             encuesta.ProgramaCreacion = obj.ProgramaCreacion;
@@ -1386,16 +1446,31 @@ namespace BL
                             }
                             //Add userStatus for new DB
                             var getNewUsers = context.Usuario.SqlQuery("SELECT * FROM USUARIO WHERE IDBASEDEDATOS = {0}", Encuesta.BasesDeDatos.IdBaseDeDatos).ToList();
+                            var listNewUsuarios = new List<DL.UsuarioEstatusEncuesta>();
                             if (getNewUsers.Count() > 0)
                             {
                                 foreach (var item in getNewUsers)
                                 {
-                                    var insert = context.Database.ExecuteSqlCommand
-                                    ("INSERT INTO UsuarioEstatusEncuesta (IdUsuario, IdEncuesta, IdEstatusEncuestaD4U, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
-                                    item.IdUsuario, Encuesta.IdEncuesta, 1, DateTime.Now, usrLog, "Diagnostic4U");
-                                    context.SaveChanges();
+
+                                    //var insert = context.Database.ExecuteSqlCommand
+                                    //("INSERT INTO UsuarioEstatusEncuesta (IdUsuario, IdEncuesta, IdEstatusEncuestaD4U, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) VALUES ({0}, {1}, {2}, {3}, {4}, {5})",
+                                    //item.IdUsuario, Encuesta.IdEncuesta, 1, DateTime.Now, usrLog, "Diagnostic4U");
+                                    //context.SaveChanges();
+
+                                    DL.UsuarioEstatusEncuesta usuarioEstatus = new DL.UsuarioEstatusEncuesta()
+                                    {
+                                        IdUsuario = item.IdUsuario,
+                                        IdEncuesta = Encuesta.IdEncuesta,
+                                        IdEstatusEncuestaD4U = 1,
+                                        FechaHoraCreacion = DateTime.Now,
+                                        UsuarioCreacion = usrLog,
+                                        ProgramaCreacion = "D4U"
+                                    };
+                                    listNewUsuarios.Add(usuarioEstatus);
+
                                 }
                             }
+                            context.UsuarioEstatusEncuesta.AddRange(listNewUsuarios);
                         }
 
 
@@ -1736,8 +1811,9 @@ namespace BL
                 {
                     int Idusuario = 0;
                     string sinespacio = usuarios.ClaveAcceso.Trim();
+                    var dataEncuesta = context.Encuesta.Where(o => o.IdEncuesta == usuarios.IdEncuesta).FirstOrDefault();
 
-                    var getDataUser = context.Usuario.SqlQuery("SELECT * FROM USUARIO WHERE CLAVEACCESO = {0} COLLATE Latin1_General_CS_AS", sinespacio);
+                    var getDataUser = context.Usuario.SqlQuery("SELECT * FROM USUARIO WHERE  IdBaseDeDatos = {1} and  CLAVEACCESO = {0} COLLATE Latin1_General_CS_AS", sinespacio, dataEncuesta.IdBasesDeDatos);
                     if (getDataUser != null)
                     {
                         foreach (var item in getDataUser)

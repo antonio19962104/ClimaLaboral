@@ -13,6 +13,7 @@
     var IdBaseDeDatos = @Html.Raw(JsonConvert.SerializeObject(Model.IdBaseDeDatos))
     var AnioAplicacion = @Html.Raw(JsonConvert.SerializeObject(Model.AnioAplicacion))
 </script>
+
 @section H1{
     <section id="page-title">
         <div class="container-fluid px-lg-5">
@@ -24,7 +25,7 @@
                     </h1>
                 </div>
                 <div class="col-6 bottom-align-right center-vertically-xs">
-                    <a href="#" onclick="return alert('Se ha guardado');" class="btn-parallelogram parallelogram">
+                    <a href="#" onclick="GuardarTodo()" class="btn-parallelogram parallelogram">
                         <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
                     </a>
                 </div>
@@ -40,7 +41,7 @@
             <div class="container-fluid px-lg-5">
                 <div class="row">
                     <div class="col-lg-10">
-                        <h2>{{ vm.Modulo }}</h2>
+                        <h2 id="header-modulo" ng-click="vm.ConsultaAccionesGuardadas()">{{ vm.Modulo }}</h2>
                         <div class="form-group">
                             <div style="display: none;" class="form-group">
                                 <div class="form-inline">
@@ -64,7 +65,7 @@
                         </div>
 
                         <!--Despliega las áreas en un arbol de nodos-->
-                        <div id="tree-view"></div>
+                        <div id="arboles"></div>
 
                         <div id="accordion">
                             <div id="custom-categoria-{{ item.IdCategoria }}" class="card" style="border-radius: 10px;" ng-repeat="item in vm.Categorias track by $index">
@@ -206,6 +207,9 @@
     }
     .re-asignar-accion{
         cursor: pointer;
+    }
+    .treeview{
+        width: 40%;
     }
 </style>
 <link href="~/scripts/PlanesDeAccion/css/jquery.treeview.css" rel="stylesheet" />

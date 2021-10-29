@@ -307,6 +307,30 @@ namespace BL
                                     }
                                 }
                             }
+                            if (IdModulo == 7)//Empresas
+                            {
+                                foreach (var item in admin.Acciones)
+                                {
+                                    if (item == "ListarPlanes")
+                                    {
+                                        var queryAciones = context.Database.ExecuteSqlCommand
+                                        ("INSERT INTO PerfilmoduloAccion (IdPerfilModulo, Accion, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) VALUES ({0}, {1}, {2}, {3}, {4})",
+                                        IdPerfilModulo, "ListarPlanes", DateTime.Now, admin.CURRENT_USER, "D4U");
+                                    }
+                                    if (item == "CrearPlanes")
+                                    {
+                                        var queryAciones = context.Database.ExecuteSqlCommand
+                                        ("INSERT INTO PerfilmoduloAccion (IdPerfilModulo, Accion, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) VALUES ({0}, {1}, {2}, {3}, {4})",
+                                        IdPerfilModulo, "CrearPlanes", DateTime.Now, admin.CURRENT_USER, "D4U");
+                                    }
+                                    if (item == "AdministrarAcciones")
+                                    {
+                                        var queryAciones = context.Database.ExecuteSqlCommand
+                                        ("INSERT INTO PerfilmoduloAccion (IdPerfilModulo, Accion, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion) VALUES ({0}, {1}, {2}, {3}, {4})",
+                                        IdPerfilModulo, "AdministrarAcciones", DateTime.Now, admin.CURRENT_USER, "D4U");
+                                    }
+                                }
+                            }
                         }
                         else
                         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,47 @@ namespace BL
     /// </summary>
     public class PlanesDeAccion
     {
+        /// <summary>
+        /// Obtiene las encuestas de clima laboral para porder configurar sus acciones y planes
+        /// </summary>
+        /// <returns></returns>
+        public static ML.Result GetEncuestasClima()
+        {
+            ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var encuestas = context.ConfigClimaLab.Where(o => o.Encuesta.IdEstatus == 1 && o.FechaFin < DateTime.Now).ToList();
+                    if (encuestas != null)
+                    {
+                        foreach (var item in encuestas)
+                        {
+                            ML.Encuesta encuesta = new ML.Encuesta();
+                            encuesta.IdEncuesta = (int)item.IdEncuesta;
+                            encuesta.Nombre = item.Encuesta.Nombre;
+                            encuesta.cadenaInicio = item.FechaInicio.ToString();
+                            encuesta.cadenaFin = item.FechaFin.ToString();
+                            encuesta.BasesDeDatos = new ML.BasesDeDatos();
+                            encuesta.BasesDeDatos.IdBaseDeDatos = item.IdBaseDeDatos;
+                            encuesta.BasesDeDatos.Nombre = item.BasesDeDatos.Nombre;
+                            encuesta.Anio = (int)item.PeriodoAplicacion;
+
+                            result.Objects.Add(encuesta);
+                        }
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
         /// <summary>
         /// Obtiene las categorias en orden por promedio obtenido
         /// </summary>
@@ -194,7 +236,7 @@ namespace BL
         /// </summary>
         /// <param name="promedioSubCategorias"></param>
         /// <returns></returns>
-        public static ML.Result GetPromediosSubCategorias(ML.PromedioSubCategorias promedioSubCategorias)
+        public static ML.Result GetPromediosSubCategoriasByAreaAgencia(ML.PromedioSubCategorias promedioSubCategorias)
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<Object>();
@@ -694,6 +736,158 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Agrega un conjunto de acciones
+        /// </summary>
+        /// <param name="ListAcciones"></param>
+        /// <param name="UsuarioActual"></param>
+        /// <returns></returns>
+        public static ML.Result AddAcciones(List<ML.AccionDeMejora> ListAcciones, string UsuarioActual)
+        {
+            ML.Result result = new ML.Result();
+            bool status = true;
+            try
+            {
+                foreach (var item in ListAcciones)
+                {
+                    var resultado = AddAccion(item, UsuarioActual);
+                    if (!resultado.Correct)
+                    {
+                        status = false;
+                        result.ErrorMessage = resultado.ErrorMessage;
+                        result.ex = resultado.ex;
+                        break;
+                    }
+                }
+                result.Correct = status;
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+
+
+
+        #region Notificaciones
+        /// <summary>
+        /// Envía un email de notificación a los responsables las acciones al guardar un nuevo Plan
+        /// trigger: Al guardar un plan de accion
+        /// </summary>
+        /// <returns></returns>
+        public static void NotificacionInicialResponsables(int IdPlanDeAccion)
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlanDeAccion).FirstOrDefault();
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
+                    if (true) // Un Email por cada accion
+                    {
+                        foreach (var accionPlan in AccionesPlan)
+                        {
+                            var Accion = context.Acciones.Where(o => o.IdAccion == accionPlan.IdAccion).FirstOrDefault();
+                            var ResponsablesAccion = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                            foreach (var responsable in ResponsablesAccion)
+                            {
+                                var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == responsable.IdResponsable).FirstOrDefault();
+                                ML.Email emailObject = BL.Email.ObtenerObjetoEmail(usuarioResponsable, PlanDeAccion);
+                                BL.Email.NotificacionesPlanes(emailObject, Accion, 1);// Un Email por cada accion
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+        }
+        /// <summary>
+        /// Envía un email de notificación a los responsables las acciones una semana antes de iniciar la accion que le corresponde
+        /// trigger: Una semana antes del inicio de las acciones
+        /// </summary>
+        public static void NotificacionPrevia()
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio == DateTime.Now.AddDays(7)).ToList();
+                    if (AccionesPlan != null)
+                    {
+                        foreach (var accionPlan in AccionesPlan)
+                        {
+                            var Accion = context.Acciones.Where(o => o.IdAccion == accionPlan.IdAccion).FirstOrDefault();
+                            if (Accion != null)
+                            {
+                                var Responsables = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                                foreach (var item in Responsables)
+                                {
+                                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
+                                    var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
+                                    ML.Email emailObject = BL.Email.ObtenerObjetoEmail(usuarioResponsable, PlanDeAccion);
+                                    BL.Email.NotificacionesPlanes(emailObject, Accion, 2);// Un Email por cada accion
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+        }
+        /// <summary>
+        /// Envia un email de notificacion a los responsables cuya acion ya inició pero no han registrado avance
+        /// </summary>
+        public static void NotificacionNoRegistraAvance()
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    //Falta el filtro de que no haya registrado avance
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio < DateTime.Now).ToList();
+                    if (AccionesPlan != null)
+                    {
+                        foreach (var accionPlan in AccionesPlan)
+                        {
+                            var Accion = context.Acciones.Where(o => o.IdAccion == accionPlan.IdAccion).FirstOrDefault();
+                            if (Accion != null)
+                            {
+                                var Responsables = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                                foreach (var item in Responsables)
+                                {
+                                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
+                                    var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
+                                    ML.Email emailObject = BL.Email.ObtenerObjetoEmail(usuarioResponsable, PlanDeAccion);
+                                    BL.Email.NotificacionesPlanes(emailObject, Accion, 2);// Un Email por cada accion
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+        }
+
+        /*
+         * 1 Cuando el porcentaje de avance no corresponda a lo esperado es decir exista un retraso. 
+         *      Por ejemplo cuando el avance deba ser al 25% el registro sea menor o cuando el avance deba estar al 50% o al 75% y de igual forma la captura sea menor.  
+         • 2 El sistema enviará un correo de agradecimiento a los responsables una vez que se haya logrado el 100% de avance en la acción de mejora del plan
+         */
+
+        #endregion
+
 
     }
 }

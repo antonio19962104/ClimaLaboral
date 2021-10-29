@@ -199,14 +199,23 @@
                         }
                         if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "ListarPlanes")
                         {
+                            <script>
+                                localStorage.setItem("ListarPlanes", true)
+                            </script>
                             chkPlanesListar = true;
                         }
                         if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "CrearPlanes")
                         {
+                            <script>
+                                localStorage.setItem("CrearPlanes", true)
+                            </script>
                             chkPlanesCrear = true;
                         }
                         if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "AdministrarAcciones")
                         {
+                            <script>
+                                localStorage.setItem("AdministrarAcciones", true)
+                            </script>
                             chkAdminAcciones = true;
                         }
                     }
@@ -440,19 +449,19 @@
                         }
                         if (perfilModulo.Modulo.Nombre == "Planes de Acción")
                         {
-                            <li id="Encuestas">
-                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" aria-controls="collapseSurvey" style="padding: 0px;">
+                            <li id="Planes">
+                                <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" aria-controls="collapsePlanes" style="padding: 0px;">
                                     <div class="item-menu-icon">
-                                        <img src="~/img/icon-survey.png" alt="Icono Encuestas" class="img-white">
-                                        <span class="tooltiptext">Encuestas</span>
+                                        <img src="~/img/icon-plan-action.png" alt="Icono Encuestas" class="img-white">
+                                        <span class="tooltiptext">Planes de Acción</span>
                                     </div>
                                 </a>
                                 <span class="item-menu d-none">
-                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapseSurvey" role="button" aria-expanded="false" aria-controls="collapseSurvey">
-                                        <img src="~/img/icon-survey.png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
+                                    <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" role="button" aria-expanded="false" aria-controls="collapsePlanes">
+                                        <img src="~/img/icon-plan-action(1).png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
                                     </a>
                                 </span>
-                                <div class="collapse" id="collapseSurvey">
+                                <div class="collapse" id="collapsePlanes">
                                     <div class="card card-body py-2">
                                         <ul class="fa-ul pl-lg-4">
                                             @{
@@ -466,7 +475,7 @@
                                                 }
                                                 if (chkAdminAcciones == true)
                                                 {
-                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Administrar acciones</a></li>
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEncuestas", "PlanesDeAccion")">Administrar acciones</a></li>
                                                 }
                                             }
                                         </ul>

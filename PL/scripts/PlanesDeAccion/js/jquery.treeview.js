@@ -30,22 +30,22 @@ function TreeView(datas, options) {
 
     // ITEM EVENTS --------------------
     function changeCheckState(value, allChildCheck) {
-        var c = this.checked;
+        //var c = this.checked;
 
-        if (value == null || value instanceof MouseEvent) { // TOGGLE CHECK
-            if (c == 0) c = 1;
-            else if (c == 1) c = 0;
-            else if (c == 2) c = 1;
-        } else {
-            c = value;
-        }
-        this.checked = c;
-        setCheckState.bind(this)(c);
+        //if (value == null || value instanceof MouseEvent) { // TOGGLE CHECK
+        //    if (c == 0) c = 1;
+        //    else if (c == 1) c = 0;
+        //    else if (c == 2) c = 1;
+        //} else {
+        //    c = value;
+        //}
+        //this.checked = c;
+        //setCheckState.bind(this)(c);
 
 
-        if (c != 2)
-            checkAllChilds.bind(this)(c);
-        checkControlParents.bind(this)();
+        //if (c != 2)
+        //    checkAllChilds.bind(this)(c);
+        //checkControlParents.bind(this)();
     }
 
     function checkAllChilds(value) {
@@ -81,13 +81,13 @@ function TreeView(datas, options) {
         this.checked = value
         this.setAttribute("check-value", value)
         if (value == 0) {
-            $(this).find(">[check-icon]")[0].className = "fa fa-circle-thin";
+            //$(this).find(">[check-icon]")[0].className = "fa fa-circle-thin";
         }
         if (value == 1) {
-            $(this).find(">[check-icon]")[0].className = "fa fa-check-circle-o";
+            //$(this).find(">[check-icon]")[0].className = "fa fa-check-circle-o";
         }
         if (value == 2) {
-            $(this).find(">[check-icon]")[0].className = "fa fa-dot-circle-o";
+            //$(this).find(">[check-icon]")[0].className = "fa fa-dot-circle-o";
         }
     }
 
@@ -129,12 +129,21 @@ function TreeView(datas, options) {
         }
 
         // ALERT ADD ICON
-        var item = document.createElement("span");
-        item.className = "item";
+        var typeElementNodeArea = "span";
+        var claseElementNodeArea = "item";
+        if (data.children.length == 0) {
+            typeElementNodeArea = "button";
+            claseElementNodeArea = "btn btn-info";
+        }
+        var item = document.createElement(typeElementNodeArea);
+        item.className = claseElementNodeArea;
         item.innerHTML = data.text;
         item.data = data;
-        for (var keys = Object.keys(data), i = 0; i < keys.length ; i++) {
-            item.setAttribute("data-" + keys[i], data[keys[i]]);
+        for (var keys = Object.keys(data), i = 0; i < keys.length; i++) {
+            if (keys[i] == "text") {
+                item.setAttribute("data-text", data[keys[i]]);
+            }
+            //item.setAttribute("data-" + keys[i], data[keys[i]]);
         }
         if ("checked" in data || options.showAlwaysCheckBox == true) {
             var checked = document.createElement("i");

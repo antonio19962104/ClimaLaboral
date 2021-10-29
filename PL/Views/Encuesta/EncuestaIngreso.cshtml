@@ -117,9 +117,12 @@
             var ActionUsuariosOpc = false;
 
             var ActionEmpresasListar = false;
-
             var ActionEmpresasCrear = false;
             var chkEmpresasOpc = false;
+
+            var chkPlanesListar = false;
+            var chkPlanesCrear = false;
+            var chkAdminAcciones = false;
 
             var session = Session["AdminLog"];
             var sessionPerfil = Session["PerfilAdminLog"];
@@ -209,6 +212,27 @@
                 {
                     chkEmpresasOpc = true;
                 }
+                if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "ListarPlanes")
+                {
+                    <script>
+                        localStorage.setItem("ListarPlanes", true)
+                    </script>
+                    chkPlanesListar = true;
+                }
+                if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "CrearPlanes")
+                {
+                    <script>
+                        localStorage.setItem("CrearPlanes", true)
+                    </script>
+                    chkPlanesCrear = true;
+                }
+                if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "AdministrarAcciones")
+                {
+                    <script>
+                        localStorage.setItem("AdministrarAcciones", true)
+                    </script>
+                    chkAdminAcciones = true;
+                }
             }
 
             foreach (ML.PerfilModulo perf in ViewBag.Modulos)
@@ -251,6 +275,7 @@
                                         <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("CreateCL", "Encuesta")">Crear Clima Laboral</a></li>
                                         <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Competencia")">Competencias</a></li>
                                         <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll_", "Competencia")">Categorias</a></li>
+                                        <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Crear Plan de Acción</a></li>
                                     }
                                 </ul>
                             </div>
@@ -437,7 +462,42 @@
                         </div>
                     </li>
                 }
-
+                if (perfilModulo.Modulo.Nombre == "Planes de Acción")
+                {
+                    <li id="Planes">
+                        <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" aria-controls="collapsePlanes" style="padding: 0px;">
+                            <div class="item-menu-icon">
+                                <img src="~/img/icon-plan-action.png" alt="Icono Encuestas" class="img-white">
+                                <span class="tooltiptext">Planes de Acción</span>
+                            </div>
+                        </a>
+                        <span class="item-menu d-none">
+                            <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" role="button" aria-expanded="false" aria-controls="collapsePlanes">
+                                <img src="~/img/icon-plan-action(1).png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
+                            </a>
+                        </span>
+                        <div class="collapse" id="collapsePlanes">
+                            <div class="card card-body py-2">
+                                <ul class="fa-ul pl-lg-4">
+                                    @{
+                                        if (chkPlanesListar == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "PlanesDeAccion")">Listado</a></li>
+                                        }
+                                        if (chkPlanesCrear == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "PlanesDeAccion")">Crear</a></li>
+                                        }
+                                        if (chkAdminAcciones == true)
+                                        {
+                                            <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEncuestas", "PlanesDeAccion")">Administrar acciones</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                }
             }
         }
         <!--Fin seccion permisos por usuario-->

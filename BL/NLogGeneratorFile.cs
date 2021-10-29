@@ -17,6 +17,7 @@ namespace BL
         public static NLog.Logger nlogClimaDinamicoFrontEnd = NLog.LogManager.GetLogger(ML.LogTypes.LogClimaDinamicoFrontEnd);
         public static NLog.Logger nlogModuloEncuestas = NLog.LogManager.GetLogger(ML.LogTypes.LogModuloEncuestas);
         public static NLog.Logger nlogJobReportes = NLog.LogManager.GetLogger("LogJobReportes");
+        public static NLog.Logger nlogPlanesDeAccion = NLog.LogManager.GetLogger("LogPlanesDeAccion");
         public static void logBackGroundJobReporte(string data, StackTrace st, string a, int b, string c)
         {
             nlogClimaDinamicoBackGroundJobReporte.Error("/---------------------------------------------------------------------------------/");
@@ -152,6 +153,33 @@ namespace BL
             string jsCode = "vm.EliminarAccion = function (e) {                var parent = e.target.closest('.form-group');                if (parent.attributes.IdAccion == null) {                    /*Solo se elimina del dom*/                    swal({                        title: '¿Estás seguro de que deseas eliminar la acción de mejora?',                        text: '',                        icon: 'info',                        buttons: [                            'No',                            'Si'                        ],                        dangerMode: false,                        allowOutsideClick: false,                        closeOnClickOutside: false,                    }).then(function (isConfirm) {                        if (isConfirm)                            e.target.closest('.form-group').remove();                    });                }                else {                    if (parent.attributes.IdAccion.value > 0) {                        /*Se elimina del dom pero tambien de la base de datos (Baja lógica)*/                        vm.get('/PlanesDeAccion/DeleteAccion/?IdAccion=' + parent.attributes.IdAccion.value, function (response) {                        });                    }                }            }";
             var minifiedString = minifier.MinifyJavaScript(jsCode);
             Console.WriteLine(minifiedString);
+        }
+        public static void logErrorModuloPlanesDeAccion(Exception aE, StackTrace st)
+        {
+            try
+            {
+                nlogPlanesDeAccion.Error("Method: " + st.GetFrame(0).GetMethod().Name);
+                nlogPlanesDeAccion.Error("Message: " + aE.Message);
+                nlogPlanesDeAccion.Error("Exception: " + aE);
+                nlogPlanesDeAccion.Error("Inner Exception: " + aE.InnerException);
+                nlogPlanesDeAccion.Error("StackTrace: " + aE.StackTrace);
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
+        }
+        public static void logObjectsModuloPlanesDeAccion<T>(T myObject)
+        {
+            try
+            {
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(myObject);
+                nlogPlanesDeAccion.Debug(json);
+            }
+            catch (Exception aE)
+            {
+                logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
         }
     }
 }

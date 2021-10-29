@@ -61,12 +61,12 @@ var modelNuevaAccion = {
                         existe = dataString.includes(input);
                         if (input != "") {
                             if (existe == true) {
-                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + " <small>Categoria 1</small></div>";
+                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + " <small style='display: block;'>Categoria 1</small></div>";
                             }
                         }
                     });
                 });
-                /*vm.ConsultaAreas();// Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta*/
+                //vm.ConsultaAreas();// Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta
                 vm.ConsultaAccionesGuardadas();
                 vm.ConsultaAccionesAyuda();
             });
@@ -80,8 +80,8 @@ var modelNuevaAccion = {
                         var treeObject = vm.GenerarArbol();
                         var tw = new TreeView(
                             treeObject,
-                            { showAlwaysCheckBox: true, fold: false });
-                        document.getElementById("tree-view").appendChild(tw.root);
+                            { showAlwaysCheckBox: true, fold: true });
+                        document.getElementById("arboles").appendChild(tw.root);
                         $("#tree-view p.group").css("display", "none");
                         $("#tree-view p.group:first").css("display", "");
                     }
@@ -109,7 +109,6 @@ var modelNuevaAccion = {
                 vm.post("/PlanesDeAccion/GetAcciones/?", modelNuevaAccion, function (response) {
                     if (response.Correct) {
                         $("#accordion .card-body").empty();
-                        console.log(response.Objects);
                         AccionesPreGuardadas = response.Objects;
                         if (IdEncuesta > 0) {
                             [].forEach.call(response.Objects, function (accion) {
@@ -126,8 +125,8 @@ var modelNuevaAccion = {
                                         </div>
                                         <div class="col-1" style="display:block ruby;padding: 0;">
                                             <button class="btn edit-accion" onclick="editAccion(this);"><i class="fas fa-edit"></i></button>
-                                            <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
                                             <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save" style="color: #28a745;"></i></button>
+                                            <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -211,34 +210,36 @@ var modelNuevaAccion = {
                             <div class="col-3">
                                 <select class="form-control select-rango" style="width: 100%;"></select>
                             </div>
-                            <div class="col-1">
-                                <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
+                            <div class="col-1">                                
                                 <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save"></i></button>
+                                <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                     </div>`;
-                [].forEach.call(document.getElementById("accordion").children, function (item) {
-                    var agregarOpciones = false;
-                    if (item.getElementsByClassName("form-group").length == 0) {
-                        agregarOpciones = true;
-                        for (var i = 0; i < 1; i++) {
-                            item.getElementsByClassName("card-body")[0].innerHTML += content;
+                if (true == false) {
+                    [].forEach.call(document.getElementById("accordion").children, function (item) {
+                        var agregarOpciones = false;
+                        if (item.getElementsByClassName("form-group").length == 0) {
+                            agregarOpciones = true;
+                            for (var i = 0; i < 1; i++) {
+                                item.getElementsByClassName("card-body")[0].innerHTML += content;
+                            }
+                            if (agregarOpciones == true) {
+                                [].forEach.call(item.getElementsByTagName("select"), function (select) {
+                                    if (select.options.length == 0) {
+                                        [].forEach.call(vm.ListRangos, function (item) {
+                                            select.options.add(new Option(item.Descripcion, item.Id, false, false));
+                                        });
+                                    }
+                                });
+                                $(".delete-accion").unbind();
+                                $(".delete-accion").click(function (e) {
+                                    vm.EliminarAccion(e);
+                                });
+                            }
                         }
-                        if (agregarOpciones == true) {
-                            [].forEach.call(item.getElementsByTagName("select"), function (select) {
-                                if (select.options.length == 0) {
-                                    [].forEach.call(vm.ListRangos, function (item) {
-                                        select.options.add(new Option(item.Descripcion, item.Id, false, false));
-                                    });
-                                }
-                            });
-                            $(".delete-accion").unbind();
-                            $(".delete-accion").click(function (e) {
-                                vm.EliminarAccion(e);
-                            });
-                        }
-                    }
-                });
+                    });
+                }
             }
 
             vm.GenerarArbol = function () {
@@ -294,6 +295,7 @@ var modelNuevaAccion = {
                 /*Push Unidad de Negocio*/
                 [].forEach.call(vm.EstructuraAFM, function (item, index) {
                     treeObject.push({
+                        isUnidad: true,
                         text: item.value,
                         checked: false,
                         id: index,
@@ -326,7 +328,15 @@ var modelNuevaAccion = {
                         });
                     });
                 });
-                return treeObject;
+                treeObject = Enumerable.from(treeObject).where(o => !o.text.includes("-")).toList();
+                var treeFinal = [];
+                treeFinal = [{
+                    text: "Base De Datos",
+                    checked: false,
+                    id: 0,
+                    children: treeObject
+                }];
+                return treeFinal;
             }
 
             vm.getUid = function () {
@@ -513,7 +523,7 @@ var modelNuevaAccion = {
                         error = true;
                         break;
                     default:
-                        alert(data.message);
+                        alert("messageBoxError: " + data.message);
                         error = true;
                 }
                 if (error) {
@@ -530,7 +540,7 @@ var modelNuevaAccion = {
                         vm.PlanDeAccion.Id = response.NewId;
                         swal("El plan de acción se agregó correctamente", "", "success").then(function () {
                             /*Mostrar configurador de acciones*/
-                            document.getElementById("accordion").classList.remove("ng-hide");
+                            document.getElementById("accordion").classList.remove("ng-hide");                            
                         });
                     }
                     else {
@@ -554,7 +564,7 @@ var modelNuevaAccion = {
                 });
             }
 
-            vm.GuardarAccion = function (event) {
+            vm.GuardarAccion = function (event, message) {
                 var Accion = event.target.closest(".form-group").getElementsByTagName("input")[0].value;
                 var Rango = event.target.closest(".form-group").getElementsByTagName("select")[0].value;
                 var IdCategoria = event.target.closest(".card-body").attributes.idCategoria.value;
@@ -584,17 +594,18 @@ var modelNuevaAccion = {
                         event.target.closest(".form-group").getElementsByClassName("fas fa-save")[0].style.color = "#28a745";
                         /*Asignar a la accion de mejora Su Id de Accion que debe retornarse en la peticion*/
                         event.target.closest(".form-group").setAttribute("IdAccion", response.NewId);
-                        if (IdAccion == 0)
+                        if (IdAccion == 0 && message != 0)
                             swal("La acción ha sido agregada con éxito", "", "success");
-                        if (IdAccion > 0)
+                        if (IdAccion > 0 && message != 0)
                             swal("La acción ha sido actualizada con éxito", "", "success");
                         event.target.closest(".form-group").getElementsByTagName("input")[0].setAttribute("disabled", "");
                         event.target.closest(".form-group").getElementsByTagName("select")[0].setAttribute("disabled", "");
+                        vm.ConsultaAccionesGuardadas();
                     }
                     else {
-                        if (IdAccion == 0)
+                        if (IdAccion == 0 && message != 0)
                             swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
-                        if (IdAccion > 0)
+                        if (IdAccion > 0 && message != 0)
                             swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
                     }
                 });
@@ -623,14 +634,30 @@ var modelNuevaAccion = {
                 else {
                     if (parent.attributes.IdAccion.value > 0) {
                         /*Se elimina del dom pero tambien de la base de datos (Baja lógica)*/
-                        vm.get("/PlanesDeAccion/DeleteAccion/?IdAccion=" + parent.attributes.IdAccion.value, function (response) {
-                            if (response.Correct) {
-                                swal("La acción ha sido eliminada con éxito", "", "success").then(function () {
-                                    e.target.closest(".form-group").remove();
+                        swal({
+                            title: "¿Estás seguro de que deseas eliminar la acción de mejora?",
+                            text: "",
+                            icon: "info",
+                            buttons: [
+                                'No',
+                                'Si'
+                            ],
+                            dangerMode: false,
+                            allowOutsideClick: false,
+                            closeOnClickOutside: false,
+                        }).then(function (isConfirm) {
+                            if (isConfirm) {
+                                vm.get("/PlanesDeAccion/DeleteAccion/?IdAccion=" + parent.attributes.IdAccion.value, function (response) {
+                                    if (response.Correct) {
+                                        swal("La acción ha sido eliminada con éxito", "", "success").then(function () {
+                                            e.target.closest(".form-group").remove();
+                                            vm.ConsultaAccionesGuardadas();
+                                        });
+                                    }
+                                    else {
+                                        swal("Ocurrió un error al intentar eliminar la acción", response.ErrorMessage, "error");
+                                    }
                                 });
-                            }
-                            else {
-                                swal("Ocurrió un error al intentar eliminar la acción", response.ErrorMessage, "error");
                             }
                         });
                     }
@@ -679,7 +706,7 @@ var modelNuevaAccion = {
             
 
         } catch (aE) {
-            alert(aE.message);
+            alert("Exception PlanesDeAccionController" + aE.message);
         }
     }
 })();
@@ -693,14 +720,14 @@ var NuevaAccionHtmlContent =
             <div class="col-3">
                 <select class="form-control select-rango" style="width: 100%;"></select>
             </div>
-            <div class="col-1">
-                <button class="btn delete-accion"><i class="fas fa-remove"></i></button>
+            <div class="col-1">                
                 <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save"></i></button>
+                <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
             </div>
         </div>
     </div>`;
 
-var GuardarAccion = function (event) {
+var GuardarAccion = function (event, message) {
     var Accion = event.closest(".form-group").getElementsByTagName("input")[0].value;
     var Rango = event.closest(".form-group").getElementsByTagName("select")[0].value;
     var IdCategoria = event.closest(".card-body").attributes.idCategoria.value;
@@ -735,18 +762,22 @@ var GuardarAccion = function (event) {
                 event.closest(".form-group").getElementsByClassName("fas fa-save")[0].style.color = "#28a745";
                 /*Asignar a la accion de mejora Su Id de Accion que debe retornarse en la peticion*/
                 event.closest(".form-group").setAttribute("IdAccion", response.NewId);
-                if (IdAccion == 0)
+                if (IdAccion == 0 && message != 0)
                     swal("La acción ha sido agregada con éxito", "", "success");
-                if (IdAccion > 0)
+                if (IdAccion > 0 && message != 0)
                     swal("La acción ha sido actualizada con éxito", "", "success");
                 event.closest(".form-group").getElementsByTagName("input")[0].setAttribute("disabled", "");
                 event.closest(".form-group").getElementsByTagName("select")[0].setAttribute("disabled", "");
+                if (message != 0)
+                    document.getElementById("header-modulo").click();
+                console.log("Acción guardada");
             }
             else {
-                if (IdAccion == 0)
+                if (IdAccion == 0 && message != 0)
                     swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
-                if (IdAccion > 0)
+                if (IdAccion > 0 && message != 0)
                     swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
+                console.log("Fallé guardar acción");
             }
         },
         error: function (err) {
@@ -754,10 +785,100 @@ var GuardarAccion = function (event) {
                 alert("404 - Recurso no encontrado");
             }
             else {
-                alert(err.status);
+                alert("Ajax Request Save " + err.status);
             }
         }
     });
+}
+
+var GuardarTodo = function () {
+    try {
+        var count = 0;
+        var saveButtons = $("#accordion .save-action");
+        if (saveButtons.length == 0) {
+            swal("No existen acciones para guardar", "", "info").then(function () {
+                return false;
+            });
+            return false;
+        }
+
+        [].forEach.call(saveButtons, function (button) {
+            if (ValidarGuardarTodo(button) == false) {
+                swal("Verifica que hayas descrito y asignado rango a cada una de las acciones").then(function () {
+                    throw BreakException;
+                });
+                throw BreakException;
+            }
+        });
+        var ListAcciones = [];
+        [].forEach.call(saveButtons, function (button) {
+            var newModel = ObtenerModeloAccion(button);
+            ListAcciones.push(newModel);
+        });
+        if (ListAcciones.length == saveButtons.length) {
+            $.ajax({
+                url: "/PlanesDeAccion/AddAcciones/",
+                type: "POST",
+                data: { ListAcciones: ListAcciones },
+                success: function (response) {
+                    if (response.Correct) {
+                        swal("Las acciones fueron guardadas correctamente", "", "success").then(function () {
+                            window.location.href = "/PlanesDeAccion/GetEncuestas/";
+                        });
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar hacer el guardado", response.ErrorMessage, "error");
+                    }
+                },
+                error: function (err) {
+                    if (err.status == 404) {
+                        alert("404 - Recurso no encontrado");
+                    }
+                    else {
+                        alert("Ajax Request BulkSave " + err.status);
+                    }
+                }
+            });
+        }
+        else {
+            swal("Ocurrió un error al intentar hacer el guardado", "No pudo obtenerse la información de todas las acciones", "error");
+        }
+    } catch (e) {
+        swal("Verifica que hayas descrito y asignado rango a cada una de las acciones", e.message, "info");
+    }
+}
+
+var ValidarGuardarTodo = function (event) {
+    var isValid = true;
+    var Accion = event.closest(".form-group").getElementsByTagName("input")[0].value;
+    var Rango = event.closest(".form-group").getElementsByTagName("select")[0].value;
+    if (IsNullOrEmpty(Accion) || Rango == "0") {
+        SetCampoInvalido(event.closest(".form-group").getElementsByTagName("input")[0]);
+        SetCampoInvalido(event.closest(".form-group").getElementsByTagName("select")[0]);
+        $(".collapse").removeClass("show");
+        event.closest(".collapse").classList.add("show")
+        isValid = false;
+    }
+    return isValid;
+}
+
+var ObtenerModeloAccion = function (event) {
+    var Accion = event.closest(".form-group").getElementsByTagName("input")[0].value;
+    var Rango = event.closest(".form-group").getElementsByTagName("select")[0].value;
+    var IdCategoria = event.closest(".card-body").attributes.idCategoria.value;
+    var IdAccion = event.closest(".form-group").attributes.IdAccion == null ? 0 : event.closest(".form-group").attributes.IdAccion.value;
+
+    modelNuevaAccion = {
+        Descripcion: Accion,
+        Rango: { IdRango: Rango },
+        Estatus: { IdEstatus: 1 },
+        Categoria: { IdCategoria: IdCategoria },
+        Encuesta: { IdEncuesta: IdEncuesta },
+        BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
+        AnioAplicacion: AnioAplicacion,
+        IdAccionDeMejora: IdAccion
+    }
+    return modelNuevaAccion;
 }
 
 var IsNullOrEmpty = function (data) {

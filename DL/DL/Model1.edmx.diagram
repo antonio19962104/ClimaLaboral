@@ -209,6 +209,13 @@
         <AssociationConnector Association="RH_DesModel.FK__Acciones__IdEncu__5A8F5B5D" />
         <AssociationConnector Association="RH_DesModel.FK__Acciones__IdEncu__5B837F96" />
         <AssociationConnector Association="RH_DesModel.FK__Acciones__IdBase__5C77A3CF" />
+        <EntityTypeShape EntityType="RH_DesModel.AccionesPlan" Width="1.5" PointX="34.25" PointY="75" />
+        <EntityTypeShape EntityType="RH_DesModel.Responsable" Width="1.5" PointX="34.25" PointY="71.625" />
+        <EntityTypeShape EntityType="RH_DesModel.ResponsablesAccionesPlan" Width="1.5" PointX="36.5" PointY="75.75" />
+        <AssociationConnector Association="RH_DesModel.FK_AccionesPlan_Accion" />
+        <AssociationConnector Association="RH_DesModel.FK_AccionesPlan_Plan" />
+        <AssociationConnector Association="RH_DesModel.FK_ResponsableAccion_AccionPlan" />
+        <AssociationConnector Association="RH_DesModel.FK_ResponsableAccion_Responsable" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

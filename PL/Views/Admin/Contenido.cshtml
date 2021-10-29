@@ -451,7 +451,11 @@
                                                 }
                                                 if (chkAdminAcciones == true)
                                                 {
-                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Administrar acciones</a></li>
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEncuestas", "PlanesDeAccion")">Configuracion de acciones de mejora</a></li>
+                                                }
+                                                if (Session["IdAdministradorLogeado"].ToString() == "23")
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Administrar acciones de mejora (Ayuda)</a></li>
                                                 }
                                             }
                                         </ul>

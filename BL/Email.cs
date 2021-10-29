@@ -5,51 +5,79 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
+using System.Diagnostics;
+using Newtonsoft.Json;
+
 namespace BL
 {
+    /// <summary>
+    /// Capa de negocios de enviós de Email
+    /// </summary>
     public class Email
     {
-        public static async Task<ML.Result> SendEmail(string nombreNewAdmin, string perfil, string UserName, string Password)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="accion"></param>
+        /// <param name="TipoNotificacion"></param>
+        public static void NotificacionesPlanes(ML.Email email, DL.Acciones accion, int TipoNotificacion)
         {
-            ML.Result result = new ML.Result();
-
-            var body =
-            "<p style='font-weight:bold;'>Que tal " + nombreNewAdmin + "</p>" +
-            "<p>Has sido dado de alta dentro del portal de administración de encuestas <b>Diagnostic4U</b> bajo el perfil:</p>" +
-            "<ul>   <li>" + perfil + "</li>    </ul>" +
-            "<p>Tus claves de acceso son las siguientes: </p>" +
-            "<p><b>Nombre de usuario: </b>" + UserName + "</p>" +
-            "<p><b>Password: </b>" + Password + "</p></br>" +
-            "<p>Accede entrando a: <a href='http://demo.climalaboral.divisionautomotriz.com/LogInAdmin/LogIn'><b>Diagnostic4U</b></a></p>" +
-            "<p><img src='http://demo.climalaboral.divisionautomotriz.com/img/logo.png'></p></ br>" +
-            "<small>Si ya cuenta con un perfil anterior a este tenga en cuenta que las claves de acceso son las mismas.</small>";
             var message = new MailMessage();
-            message.To.Add(new MailAddress(UserName));
-            //message.From = new MailAddress("jamurillo@grupoautofin.com");
-            message.Subject = "Bienvenida a Diagnostic4U";
-            message.Body = string.Format(body, "DIAGNOSTIC4U", "jamurillo@grupoautofin.com", "Aqui se envian  las claves de acceso al portal");
+            message.To.Add(new MailAddress(email.To));
+            message.Subject = "Notificación inicial";
+            message.Body = string.Format(GetPlantilla(TipoNotificacion), email.NombreDestinatario, email.NombrePlanAccion, accion.Descripcion);
             message.IsBodyHtml = true;
-
             using (var smtp = new SmtpClient())
             {
-
-
                 try
                 {
-                    await smtp.SendMailAsync(message);
-                    result.Correct = true;
+                    smtp.Send(message);
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Email enviado a: " + email.To);
                 }
-                catch (Exception ex)
+                catch (SmtpException aE)
                 {
-                    var error = ex.Message;
-                    result.Correct = false;
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Falló envío de email a :" + email.To);
+                    BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 }
                 finally
                 {
                     smtp.Dispose();
                 }
-
-                return result;
+            }
+        }
+        public static ML.Email ObtenerObjetoEmail(DL.Responsable responsable, DL.PlanDeAccion planDeAccion)
+        {
+            ML.Email email = new ML.Email();
+            try
+            {
+                email = new ML.Email()
+                {
+                    To = responsable.Email,
+                    MailPriority = MailPriority.Normal,
+                    NombreDestinatario = string.Concat(responsable.Nombre, " ", responsable.ApellidoPaterno, " ", responsable.ApellidoMaterno),
+                    NombrePlanAccion = planDeAccion.Nombre,
+                };
+                BL.NLogGeneratorFile.logObjectsModuloPlanesDeAccion(email);
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return email;
+        }
+        public static string GetPlantilla(int tipo)
+        {
+            switch (tipo)
+            {
+                case 1:
+                    return ML.Email.PlantillaNotificacionInicial;
+                case 2:
+                    return "Plantilla";
+                case 3:
+                    return "Plantilla";
+                default:
+                    return string.Empty;
             }
         }
     }

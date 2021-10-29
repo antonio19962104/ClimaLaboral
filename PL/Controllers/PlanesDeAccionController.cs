@@ -12,6 +12,23 @@ namespace PL.Controllers
     public class PlanesDeAccionController : Controller
     {
         /// <summary>
+        /// Vista del listado de encuestas
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult GetEncuestas()
+        {
+            return View();
+        }
+        /// <summary>
+        /// Api con el listado de encuestas de clima laboral
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetEncuestasClima()
+        {
+            var result = BL.PlanesDeAccion.GetEncuestasClima();
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
         /// Vista de configuración del machote de acciones de mejora
         /// </summary>
         /// <param name="key">UID</param>
@@ -68,6 +85,16 @@ namespace PL.Controllers
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         /// <summary>
+        /// Consulta los promedios generales de cada subcategoria de un area especifica
+        /// </summary>
+        /// <param name="promedioSubCategorias"></param>
+        /// <returns></returns>
+        public JsonResult GetPromediosSubCategoriasByAreaAgencia(ML.PromedioSubCategorias promedioSubCategorias)
+        {
+            var result = BL.PlanesDeAccion.GetPromediosSubCategoriasByAreaAgencia(promedioSubCategorias);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        /// <summary>
         /// Obtiene las acciones preguardadas
         /// </summary>
         /// <param name="accionDeMejora"></param>
@@ -121,6 +148,17 @@ namespace PL.Controllers
         {
             var result = BL.PlanesDeAccion.ReAsignar(IdAccion, IdCategoria, IdRango);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        /// <summary>
+        /// Agrega un conjunto de acciones
+        /// </summary>
+        /// <param name="ListAcciones"></param>
+        /// <returns></returns>
+        public JsonResult AddAcciones(List<ML.AccionDeMejora> ListAcciones)
+        {
+            string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
+            var result = BL.PlanesDeAccion.AddAcciones(ListAcciones, UsuarioActual);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
     }

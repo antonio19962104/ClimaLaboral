@@ -142,7 +142,7 @@ namespace BL
                             pregunta.Pregunta = obj.Pregunta;
                             pregunta.IdPregunta = obj.IdPregunta;
                             pregunta.IdEncuesta = idEncuesta;
-                            pregunta.IdCompetencia = (Int32)obj.IdCompetencia;
+                            pregunta.IdCompetencia = obj.IdCompetencia == null ? 0 : (Int32)obj.IdCompetencia;
                             pregunta.Obligatoria = Convert.ToBoolean(obj.Obligatoria);
                             pregunta.TipoEstatus = new ML.TipoEstatus();
                             pregunta.TipoEstatus.IdEstatus = obj.IdEstatus;

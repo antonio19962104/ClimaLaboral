@@ -110,6 +110,9 @@ namespace DL
         public virtual DbSet<EncuestaIngreso> EncuestaIngreso { get; set; }
         public virtual DbSet<PreguntaCategorias> PreguntaCategorias { get; set; }
         public virtual DbSet<Counter> Counter { get; set; }
+        public virtual DbSet<AccionesPlan> AccionesPlan { get; set; }
+        public virtual DbSet<Responsable> Responsable { get; set; }
+        public virtual DbSet<ResponsablesAccionesPlan> ResponsablesAccionesPlan { get; set; }
     
         [DbFunction("RH_DesEntities1", "splitstring_COMA")]
         public virtual IQueryable<splitstring_COMA_Result> splitstring_COMA(string stringToSplit)

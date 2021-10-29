@@ -1704,6 +1704,7 @@
     <Content Include="Views\ReporteoClima\EstructuraReporte\barras_resumen.cshtml" />
     <Content Include="Views\PlanesDeAccion\Index.cshtml" />
     <Content Include="Views\PlanesDeAccion\_Layout.cshtml" />
+    <Content Include="Views\PlanesDeAccion\GetEncuestas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "GetEncuestas";
+    Layout = "~/Views/PlanesDeAccion/_Layout.cshtml";
+}
+<style>
+    table thead, tbody{
+        text-align: center;
+    }
+</style>
+<div class="content-wrap" ng-app="app" ng-controller="encuestaController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-10">
+
+                <h2>Elige una encuesta para ver las acciones configuradas</h2>
+
+                <table id="myTable" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Encuesta</th>
+                            <th scope="col">Base de datos</th>
+                            <th scope="col">Fecha inicio</th>
+                            <th scope="col">Fecha fin</th>
+                            <th scope="col">Año de aplicación</th>
+                            <th scope="col">Administrar acciones de mejora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in vm.Encuestas">
+                            <td>{{ item.Nombre }}</td>
+                            <td>{{ item.BasesDeDatos.Nombre }}</td>
+                            <td>{{ item.cadenaInicio }}</td>
+                            <td>{{ item.cadenaFin }}</td>
+                            <td>{{ item.Anio }}</td>
+                            <td>
+                                <a href="{{ vm.GetURL(item) }}" class="btn btn-info">
+                                    Administrar acciones
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function GetDashBoard () {
+        window.location.href = "/DashBoard/DashBoard/";
+    }
+    (function () {
+        "use strict"
+        angular.module("app", []).controller("encuestaController", encuestaController);
+
+        function encuestaController($http, $scope) {
+            try {
+                var vm = this;
+                vm.Saludo = "Hola";
+                vm.Encuestas = [];
+
+                vm.get = function (url, functionOK, mostrarAnimacion) {
+                    $http.get(url, { headers: { 'Cache-Control': 'no-cache' } })
+                        .then(function (response) {
+                            try {
+                                if (messageBoxError(response))
+                                    return;
+                                functionOK(response.data);
+                            }
+                            catch (aE) {
+                                messageBoxError(aE);
+                            }
+                        },
+                            function (error) {
+                                /*error*/
+                                messageBoxError(error);
+                            })
+                        .finally(function () {
+                        });
+                }/*fin get()*/
+
+                vm.post = function (url, objeto, functionOK, mostrarAnimacion) {
+                    $http.post(url, objeto)
+                        .then(function (response) {
+                            try {
+                                if (messageBoxError(response))
+                                    return;
+                                functionOK(response.data);
+                            }
+                            catch (aE) {
+                                messageBoxError(aE);
+                            }
+                        },
+                            function (error) {
+                                /*error*/
+                                messageBoxError(error);
+                            })
+                        .finally(function () {
+                        });
+                }/*fin post()*/
+
+                function fillArray(url, arreglo, funcion) {
+                    vm.get(url, function (response) {
+                        angular.copy(response, arreglo);
+                        if (funcion != null)
+                            funcion();
+                    },
+                        true);
+                }
+
+                function messageBoxError(data) {
+                    var error;
+                    switch (data.status) {
+                        case 200:
+                            return false;
+                        case 400:
+                            alert("400 - Bad Request");
+                            error = true;
+                            break;
+                        case 401:
+                            alert("401 - Unauthorized");
+                            error = true;
+                            break;
+                        case 403:
+                            alert("403 - Forbidden");
+                            error = true;
+                            break;
+                        case 404:
+                            alert("404 - Not Found");
+                            error = true;
+                            break;
+                        case 408:
+                            alert("408 - Request TimeOut");
+                            error = true;
+                            break;
+                        case 500:
+                            alert("500 - Internal Server Error");
+                            error = true;
+                            break;
+                        case 502:
+                            alert("502 - Bad Gateway");
+                            error = true;
+                            break;
+                        case 503:
+                            alert("503 - Service Unavailable");
+                            error = true;
+                            break;
+                        default:
+                            alert(data.message);
+                            error = true;
+                    }
+                    if (error) {
+                        $("#mergeError").append(data.data);
+                        $(".divError").show();
+                        $('#formular').modal('toggle');
+                    }
+                    return error;
+                }
+
+                vm.get("/PlanesDeAccion/GetEncuestasClima", function (response) {
+                    if (response.Correct) {
+                        vm.Encuestas = response.Objects;
+                        setTimeout(function () {
+                            $("#myTable").DataTable();
+                        }, 100);
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar obtener las encuestas", response.ErrorMessage, "error");
+                    }
+                });
+
+                vm.GetURL = function (item) {
+                    return '/PlanesDeAccion/Index/?key=' + vm.getUid() + '&IdEncuesta=' + item.IdEncuesta + '&IdBaseDeDatos=' + item.BasesDeDatos.IdBaseDeDatos + '&AnioAplicacion=' + item.Anio;
+                }
+
+                vm.getUid = function () {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+
+            } catch (e) {
+
+            }
+        }
+    })();
+</script>
+<script src="~/scripts/datatable.min..js"></script>
+<link rel="stylesheet" href="~/scripts/datatables.min.css" />

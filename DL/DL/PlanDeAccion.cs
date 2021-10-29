@@ -18,6 +18,7 @@ namespace DL
         public PlanDeAccion()
         {
             this.Acciones = new HashSet<Acciones>();
+            this.AccionesPlan = new HashSet<AccionesPlan>();
         }
     
         public int IdPlanDeAccion { get; set; }
@@ -29,5 +30,7 @@ namespace DL
         public virtual ICollection<Acciones> Acciones { get; set; }
         public virtual Administrador Administrador { get; set; }
         public virtual Encuesta Encuesta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccionesPlan> AccionesPlan { get; set; }
     }
 }

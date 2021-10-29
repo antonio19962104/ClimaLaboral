@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccionDeMejora.cs" />
+    <Compile Include="AccionesPlan.cs" />
     <Compile Include="Administrador.cs" />
     <Compile Include="AdministradorCompany.cs" />
     <Compile Include="Aling.cs" />
@@ -88,10 +89,13 @@
     <Compile Include="DataReportCL.cs" />
     <Compile Include="Departamento.cs" />
     <Compile Include="DetallePlantilla.cs" />
+    <Compile Include="Email.cs" />
     <Compile Include="EmailsEncuesta.cs" />
     <Compile Include="PlanDeAccion.cs" />
     <Compile Include="PromedioSubCategorias.cs" />
     <Compile Include="Rango.cs" />
+    <Compile Include="Responsable.cs" />
+    <Compile Include="ResponsablesAccionesPlan.cs" />
     <Compile Include="Usuario1.cs" />
     <Compile Include="Encuesta.cs" />
     <Compile Include="EncuestaArea.cs" />
