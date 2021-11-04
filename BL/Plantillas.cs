@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,6 +63,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message;
                 result.Correct = false;
@@ -109,6 +111,7 @@ namespace BL
             }
             catch(Exception aE)
                 {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message;
                 result.Correct = false;
@@ -158,6 +161,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message;
                 result.Correct = false;
@@ -205,6 +209,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message;
                 result.Correct = false;
@@ -301,6 +306,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
 
@@ -332,6 +338,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;                
             }
@@ -361,6 +368,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -392,6 +400,7 @@ namespace BL
             }
             catch(Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -424,6 +433,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -457,6 +467,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -489,6 +500,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -598,6 +610,7 @@ namespace BL
                         transaction.Rollback();
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
+                        BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                     }
                     return result;
                 }
@@ -629,6 +642,7 @@ namespace BL
              }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -722,6 +736,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
             }
@@ -830,6 +845,7 @@ namespace BL
                         transaction.Rollback();
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
+                        BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                     }
                     return result;
                 }
@@ -858,6 +874,7 @@ namespace BL
                         transaction.Rollback();
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
+                        BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                     }
                 }
             }               
@@ -919,6 +936,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlantillas(aE, new StackTrace());
                 return false;
 
             }           

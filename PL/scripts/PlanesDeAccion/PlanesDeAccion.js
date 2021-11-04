@@ -2,6 +2,7 @@
  * Script del Modulo de Planes de Accion
  * 07/10/2021
  */
+var docPDF;
 var AccionesPreGuardadas = [];
 var IdAccion_ReAsignar = 0;
 var listRangos = [];
@@ -158,6 +159,7 @@ var modelNuevaAccion = {
                                     IdAccion_ReAsignar = e.target.closest(".form-group").attributes.IdAccion.value;
                                     $('#re-asignar-accion').modal('toggle');
                                 });
+                                vm.CrearPDFPlanDeAccion(response.Objects);
                             }, 500);
                         }
                         else {
@@ -168,6 +170,18 @@ var modelNuevaAccion = {
                         swal("Ocurrió un error al intentar consultar las acciones guardadas", response.ErrorMessage, "error");
                     }
                 });
+            }
+
+            vm.CrearPDFPlanDeAccion = function (dataPlan) {
+                /*docPDF = new jsPDF();
+                docPDF.text("Plan de Acción", 10, 10);
+                var marginTop = 0;
+                [].forEach.call(dataPlan, function (accion, index) {
+                    marginTop = marginTop + 10;
+                    var splitAccion = docPDF.splitTextToSize(accion.Descripcion, 180);
+                    var Categoria = Enumerable.from(vm.Categorias).where(o => o.IdCategoria == accion.Categoria.IdCategoria).firstOrDefault().Categoria;
+                    docPDF.text("(Categoria: " + Categoria + ")" + splitAccion, 20, (marginTop));
+                });*/
             }
 
             vm.ReAsignarAccion = function () {
@@ -1018,3 +1032,4 @@ var EditAccionAyuda = function (e, accion) {
         $("#edita-acciones .header-modal")[0].innerText = "Editar acción";
     }
 }
+

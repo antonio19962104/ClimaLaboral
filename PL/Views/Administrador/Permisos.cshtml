@@ -14,6 +14,7 @@
             <h3>Perfil: @ViewBag.PerfilD4U</h3>
             <input type="submit" value="Editar permisos" class="btn btn-primary" onclick="GetPanelEdit()" />
             <input type="submit" value="Guardar cambios" class="btn btn-success" onclick="Editar()" />
+            <input id="AddNewPerfil" type="submit" value="Agregar perfil de administrador de Planes de Accion" class="btn btn-info" onclick="AgregarPerfilAdminPlanes()" />
             <div id="misPermisos" class="row">
                 <div class="col-lg-8">
                     <div class="row">
@@ -465,14 +466,14 @@
                                     <div id="ModuloPlanes" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4">
                                         <div class="wrapper-tool">
                                             <div class="box-tool">
-                                                <div class="header-tool" style="background-color: #00d068; background-image: url('../../img/icon-plan-action.png');">
+                                                <div class="header-tool" style="background-color: #00d068; background-image: url('../../img/plan-de-accion-2.png');">
                                                     <div class="row vertical-align-bottom" align="center">
                                                         <div align="left" class="col-6">
                                                             <i class="fas text-white fa-caret-right"></i>
                                                             <h5 class="title-tool">Planes de Acción</h5>
                                                         </div>
                                                         <div class="col-6">
-                                                            <img src="~/img/icon-plan-action.png" style="width: 50%;" class="img-fluid">
+                                                            <img src="~/img/plan-de-accion-2.png" style="width: 50%;" class="img-fluid">
                                                         </div>
                                                     </div>
                                                 </div><!--.header-tool-->
@@ -533,7 +534,53 @@
     $(document).ready(function () {
         $(".chk").prop('disabled', true);
         $('#todospermisos').css('display', 'none');
+        if (document.getElementById("ModuloPlanes") != null) {
+            if (document.getElementById("ModuloPlanes").offsetWidth > 0) {
+                // Quitar boton de agregar perfil
+                var button = document.getElementById("AddNewPerfil");
+                button.remove();
+            }
+        }
     });
+
+    function AgregarPerfilAdminPlanes() {
+        var IdAdmin = getParamByUrl("IdAdministrador");
+        if (IdAdmin > 0) {
+            $.ajax({
+                url: "/PlanesDeAccion/AgregarPerfilPlanesDeAccion/?IdAdmin=" + IdAdmin,
+                type: "GET",
+                success: function (response) {
+                    if (response.Correct) {
+                        swal("El perfil se agregó correctamente", response.ErrorMessage, "success").then(function () {
+                            window.location.reload();
+                        });
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar agregar el perfil", response.ErrorMessage, "error");
+                    }
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            });
+        }
+        else {
+            swal("No se pudó obtener la informacion del Id de administrador", "", "error");
+        }
+    }
+
+    var getParamByUrl = function (key) {
+        try {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var param = url.searchParams.get(key);
+            console.log(param);
+            return param;
+        } catch (aE) {
+            return "";
+        }
+    }
+    
 
     function GetPanelEdit() {
         $('.chk').prop('disabled', false);

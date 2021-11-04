@@ -1,0 +1,79 @@
+﻿@model ML.PlanDeAccion
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Notificaciones";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script>
+    var IdPlanDeAccion = @Html.Raw(JsonConvert.SerializeObject(Model.IdPlanDeAccion));
+    var ModelNotificacion = @Html.Raw(JsonConvert.SerializeObject(new ML.Email()));
+</script>
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/swal.min.js"></script>
+<script src="~/scripts/PlanesDeAccion/EmailSender.js"></script>
+<script src="~/scripts/summernote.min.js"></script>
+<link rel="stylesheet" href="~/css/summernote.min.css" />
+@section H1{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6 bottom-align-left center-vertically-xs">
+                    <img src="../../img/icon-survey.png" )" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Plan de Acción / <span>Crear</span>
+                    </h1>
+                </div>
+                <div class="col-6 bottom-align-right center-vertically-xs">
+                    <a href="#" onclick="GuardarTodo()" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
+                    </a>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+
+<div id="config-not" class="content-wrap" ng-app="app" ng-controller="emailSenderController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-10">
+                <h1>{{ vm.Header }}</h1>
+                
+                <div id="not-1" class="form-group config-notificacion">
+                    <h4>Configurar email de notificación inicial</h4>
+                    <textarea id="notificacion-inicial"></textarea>
+                    <input type="text" placeholder="Asunto" />
+                    <input type="button" value="Guardar" ng-click="vm.GuardarConfiguracion($event)" />
+                </div>
+
+                <div id="not-2" class="form-group config-notificacion">
+                    <h4>Configurar email de notificación una semana previa</h4>
+                    <textarea id="notificacion-previa"></textarea>
+                </div>
+
+                <div id="not-3" class="form-group config-notificacion">
+                    <h4>Configurar email de notificación de no reporte de avances</h4>
+                    <textarea id="notificacion-no-reporte-avance-inicial"></textarea>
+                </div>
+
+                <div id="not-4" class="form-group config-notificacion">
+                    <h4>Configurar email de notificación avance esperado no cumplido</h4>
+                    <textarea id="notificacion-avance-no-cumplido"></textarea>
+                </div>
+
+                <div id="not-5" class="form-group config-notificacion">
+                    <h4>Configurar email de notificación de agradecimiento</h4>
+                    <textarea id="notificacion-agradecimiento"></textarea>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    #config-not textarea {
+        height: 50px;
+        min-height: 50px;
+    }
+</style>

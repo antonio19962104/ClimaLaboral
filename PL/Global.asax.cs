@@ -32,10 +32,7 @@ namespace PL
             HangfireAspNet.Use(GetHangfireServers);
 
 
-            BL.NLogGeneratorFile.logObjectsModuloPlanesDeAccion(new ML.Encuesta());
-
-            PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
-
+            /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
             ML.Historico historico = new ML.Historico()
             {
                 Anio = 2020,
@@ -49,7 +46,8 @@ namespace PL
                 nivelDetalle = "012345",
                 tipoEntidad = 0,
                 ps = "52314672366B707931454E796D44553536504E4268773D3D"
-            };
+            };*/
+
 
             //BL.PlanesDeAccion.EjecutaJob();
             //backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
@@ -57,6 +55,7 @@ namespace PL
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere
+             * Agregar Jobs de notificaciones para planes de Acción (Notificaciones programadas, Cron de reenvio)
             */
             RecurringJob.AddOrUpdate("BorradoReportesPDFByFecha", () => BL.LogReporteoClima.DeleteReportes(), "0 0 * * *", TimeZoneInfo.Local);
             RecurringJob.AddOrUpdate("GeneraCategoriasForPlanes", () => BL.PlanesDeAccion.EjecutaJob(), "0 0 * * *", TimeZoneInfo.Local);

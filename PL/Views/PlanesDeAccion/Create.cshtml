@@ -1,0 +1,121 @@
+﻿@model ML.Result
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/swal.min.js"></script>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default-main.min.css" />
+<script>
+    var IdEncuesta = 0;
+    var IdBaseDeDatos =0;
+    var AnioAplicacion = 0;
+</script>
+@section H1{
+    <section id="page-title" >
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6 bottom-align-left center-vertically-xs">
+                    <img src="../../img/icon-survey.png" )" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Plan de Acción / <span>Crear</span>
+                    </h1>
+                </div>
+                <div class="col-6 bottom-align-right center-vertically-xs">
+                    <a href="#" onclick="return alert('Se ha guardado');" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
+                    </a>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+<section id="content" ng-app="app" ng-controller="planAccionController as vm">
+    <div class="content-wrap">
+        <div class="container-fluid px-lg-5">           
+            <div class="row">
+                <div class="col-lg-8  offset-lg-2">
+                    <div class="section-templates" id="section1">
+                        <div class="icon-header-blue"><i class="fas fa-cog"></i></div>
+                        <div class="title-header-blue">
+                            <span class="title-header-section">Creación de Planes de Acción</span>
+                        </div><!--.title-header-blue-->
+                        <div class="form-row">
+                            <div id="gridEncuestaPM"></div>                            
+                        </div><!--.form-row-->
+                    </div>
+                    <div class="section-templates" id="section2" style="display:none">
+                        <div class="icon-header-blue"><i class="fas fa-cog"></i></div>
+                        <div class="title-header-blue">
+                            <span class="title-header-section">Seleccion de Área</span>
+                        </div><!--.title-header-blue-->
+                        <div class="form-row">
+                           
+                            <div class="form-group col">
+                            <div class="row">
+                                <div class="col-12 font-weight-bold">
+                                    <label style="font-size:25px;">Encuesta</label>
+                                </div>                                
+                            </div>
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <label>Nombre de la Encuesta:</label>                                    
+                                    </div>
+                                <div class="col-xl-6">
+                                    <label>{{vm.NombreEncuesta}}</label>
+                                </div>
+                                </div><!--.row-->
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <label>Periodo de la Encuesta:</label>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label>{{vm.PeriodoEncuesta}}</label>
+                                    </div>
+                                </div><!--.row-->
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <label>Base de Datos de la Encuesta:</label>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <label>{{vm.BaseEncuesta}}</label>
+                                    </div>
+                                </div><!--.row-->
+                            </div><!--.form-group-->
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <div class="row">
+                                    <div class="col-12 font-weight-bold">
+                                        <label style="font-size:25px;">Selecciona el Area deseada</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div id="gridAddEncuestaPM">
+                                <div id="tree-view"></div>
+                            </div>
+                        </div><!--.form-row-->
+                    </div>
+                   <div id="section3" class="section-templates" style="display:none;">
+                       <div class="icon-header-blue"><i class="fas fa-cog"></i></div>
+                       <div class="title-header-blue">
+                           <span class="title-header-section">Seleccion de Categoría</span>
+                       </div><!--.title-header-blue-->
+                       <div class="form-row">
+                           <div id="gridCategoriasPM"></div> 
+                       </div>
+                   </div>
+                </div>
+            </div>            
+        </div>        
+    </div>
+</section>
+
+<script src="~/scripts/PlanesDeAccion/AltaPDA.js"></script>
+<link href="~/scripts/PlanesDeAccion/css/jquery.treeview.css" rel="stylesheet" />
+<script src="~/scripts/PlanesDeAccion/js/jquery.treeview.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">

@@ -46,6 +46,14 @@ namespace PL.Controllers
             return View(planDeAccion);
         }
         /// <summary>
+        /// Muestra el configurador de notificaciones
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Notificaciones(string IdPlanDeAccion = "0")
+        {
+            return View(new ML.PlanDeAccion() { IdPlanDeAccion = Convert.ToInt32(IdPlanDeAccion) });
+        }
+        /// <summary>
         /// Obtiene las areas existentes en una bd para crear los planes de accion
         /// </summary>
         /// <param name="IdBaseDeDatos"></param>
@@ -161,5 +169,30 @@ namespace PL.Controllers
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
+        /// <summary>
+        /// Agrega el perfil de administrador de planes de accion
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <returns></returns>
+        public JsonResult AgregarPerfilPlanesDeAccion(int IdAdmin)
+        {
+            var result = BL.PlanesDeAccion.AgregarPerfilPlanesDeAccion(IdAdmin);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+		/// <summary>
+        /// Se crea un Nuevo Listado de encuestas de tipo Clima laboral para la creación de los Planes de Acción 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Create() {           
+            return View();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetEncuestaPM() {
+            var result = BL.Encuesta.getEncuestasPM();
+            return new JsonResult() { Data = result.ListadoDeEncuestas, JsonRequestBehavior = JsonRequestBehavior.AllowGet };        
+        }
     }
 }

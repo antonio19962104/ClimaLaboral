@@ -43,6 +43,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -68,8 +69,8 @@ namespace BL
             }
             catch (Exception aE)
             {
-
-                throw;
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+                return 0;
             }
         }
         public static ML.Result getEncuestas()
@@ -178,6 +179,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -238,6 +240,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -314,6 +317,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -399,6 +403,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -442,6 +447,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -498,6 +504,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -839,11 +846,11 @@ namespace BL
                         idEncuesta = 0;
                     }
                     catch (Exception aE)
-                    {
+                    {                        
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
                         transaction.Rollback();
-
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                 }
             }
@@ -1170,6 +1177,7 @@ namespace BL
                     }
                     catch (SqlException aE)
                     {
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
                         var path2 = @"\\10.5.2.101\RHDiagnostics\log\Log" + EncuestaRespuesta.IdEncuesta + "_" + EncuestaRespuesta.UsuarioCreacion + ".txt";
@@ -1232,7 +1240,7 @@ namespace BL
             }
             catch (Exception ex)
             {
-
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return tieneRespuesta;
         }
@@ -1292,6 +1300,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                 }
             }
@@ -1314,10 +1323,11 @@ namespace BL
 
                     }
                     catch (Exception aE)
-                    {
+                    {                        
                         transaction.Rollback();
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                 }
             }
@@ -1412,6 +1422,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -1637,6 +1648,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                 }
             }
@@ -1729,6 +1741,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -1795,6 +1808,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -1864,6 +1878,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -1890,6 +1905,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -1920,6 +1936,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message.ToString() + "_" + aE.StackTrace.ToString();
             }
@@ -1954,6 +1971,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message.ToString() + "_" + aE.StackTrace.ToString();
             }
@@ -2101,12 +2119,14 @@ namespace BL
                         }
                         catch (Exception exception)
                         {
+                            BL.NLogGeneratorFile.logErrorModuloEncuestas(exception, new StackTrace());
                             Console.WriteLine(exception.Message);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     result.Correct = false;
                     result.ErrorMessage = ex.Message;
                 }
@@ -2272,12 +2292,14 @@ namespace BL
                         }
                         catch (Exception exception)
                         {
+                            BL.NLogGeneratorFile.logErrorModuloEncuestas(exception, new StackTrace());
                             Console.WriteLine(exception.Message);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
+                    BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     result.Correct = false;
                     result.ErrorMessage = ex.Message;
                 }
@@ -2396,6 +2418,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -2624,6 +2647,7 @@ namespace BL
                             }
                             catch (Exception exception)
                             {
+                                BL.NLogGeneratorFile.logErrorModuloEncuestas(exception, new StackTrace());
                                 Console.WriteLine(exception.Message);
                             }
                         }
@@ -2808,6 +2832,7 @@ namespace BL
                             }
                             catch (Exception exception)
                             {
+                                BL.NLogGeneratorFile.logErrorModuloEncuestas(exception, new StackTrace());
                                 Console.WriteLine(exception.Message);
                             }
                         }
@@ -2991,6 +3016,7 @@ namespace BL
                             }
                             catch (Exception exception)
                             {
+                                BL.NLogGeneratorFile.logErrorModuloEncuestas(exception, new StackTrace());
                                 Console.WriteLine(exception.Message);
                             }
                         }
@@ -3206,6 +3232,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = ex.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     }
                 }
             }
@@ -3279,6 +3306,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = ex.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     }
                 }
             }
@@ -3321,6 +3349,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3348,6 +3377,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = ex.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     }
                 }
             }
@@ -3381,6 +3411,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3415,6 +3446,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = ex.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     }
                 }
             }
@@ -3453,6 +3485,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -3486,6 +3519,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = true;
                 result.ErrorMessage = ex.Message;
             }
@@ -3546,6 +3580,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3579,6 +3614,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 NewIdusuario = 0;
             }
             return NewIdusuario;
@@ -3601,6 +3637,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3623,6 +3660,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3645,6 +3683,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3664,6 +3703,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = true;
                 result.ErrorMessage = ex.Message;
             }
@@ -3683,6 +3723,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = true;
                 result.ErrorMessage = ex.Message;
             }
@@ -3719,6 +3760,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = true;
                 result.ErrorMessage = ex.Message;
             }
@@ -3754,6 +3796,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = true;
                 result.ErrorMessage = ex.Message;
             }
@@ -3791,6 +3834,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = true;
                 result.ErrorMessage = ex.Message;
             }
@@ -3821,6 +3865,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3879,8 +3924,9 @@ namespace BL
                 var addr = new System.Net.Mail.MailAddress(email);
                 return addr.Address == email;
             }
-            catch
+            catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 return false;
             }
         }
@@ -3952,6 +3998,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -3981,6 +4028,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4010,6 +4058,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
                 return 0;
@@ -4041,6 +4090,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4060,6 +4110,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4079,6 +4130,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4099,6 +4151,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4119,6 +4172,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4167,6 +4221,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4212,6 +4267,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4234,6 +4290,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 encabezado = "";
             }
             return encabezado;
@@ -4260,6 +4317,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4287,6 +4345,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4321,6 +4380,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4370,6 +4430,7 @@ namespace BL
                 }
                 string appendtext = ex.Message + " metodo: existerespuesta. " + DateTime.Now + Environment.NewLine;
                 File.AppendAllText(fullpath, appendtext);
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -4443,6 +4504,7 @@ namespace BL
                         }
                         string appendText = ex.Message + " Metodo: AddRespuestasVacio 1er ex. Fallo agregado de respuestas en vacio" + DateTime.Now + Environment.NewLine;
                         File.AppendAllText(fullPath, appendText);
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                     }
                     //}
                 }
@@ -4460,6 +4522,7 @@ namespace BL
                 }
                 string appendtext = ex.Message + " metodo: addrespuestasvacio 2a ex. " + DateTime.Now + Environment.NewLine;
                 File.AppendAllText(fullpath, appendtext);
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -4499,6 +4562,7 @@ namespace BL
                 }
                 string appendText = ex.Message + " Metodo: UpdateRespuestaT1. Parametros: IdPreg: " + preg.IdPregunta + ". " + DateTime.Now + Environment.NewLine;
                 File.AppendAllText(fullPath, appendText);
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -4539,6 +4603,7 @@ namespace BL
                 string appendText = ex.Message + " Metodo: UpdateRespuestaT2. Parametros: IdPreg: " + preg.IdPregunta + " IdRespuesta: " + preg.MLRespuestas.IdRespuesta + ". " + DateTime.Now + Environment.NewLine;
                 //string appendText = ex.Message + " Metodo: UpdateRespuestaT2. " + DateTime.Now + Environment.NewLine;
                 File.AppendAllText(fullPath, appendText);
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -4577,6 +4642,7 @@ namespace BL
                 }
                 string appendText = ex.Message + " Metodo: UpdateRespuestaTLikertD. Parametros: IdPregunta: " + preg.IdPregunta + ". " + DateTime.Now + Environment.NewLine;
                 File.AppendAllText(fullPath, appendText);
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -4618,6 +4684,7 @@ namespace BL
                 }
                 string appendText = ex.Message + " Metodo: UpdateRespuestaTCheck. Parametros: IdPregunta: " + preg.IdPregunta + " IdRespuesta: " + preg.MLRespuestas.IdRespuesta + ". " + DateTime.Now + Environment.NewLine;
                 File.AppendAllText(fullPath, appendText);
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
             }
             return result;
         }
@@ -4660,6 +4727,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4721,6 +4789,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
             }
@@ -4740,6 +4809,7 @@ namespace BL
             }
             catch (Exception ex)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = ex.Message;
                 result.Object = "/Encuesta/Login/?e=0";
@@ -4765,7 +4835,7 @@ namespace BL
             }
             catch (Exception ex)
             {
-
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 throw;
             }
             return result;
@@ -6111,6 +6181,7 @@ namespace BL
                         result.ErrorMessage = aE.Message.ToString();
                         result.Correct = false;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                     return result;
                 }
@@ -6153,6 +6224,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -6194,6 +6266,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = aE.Message.ToString();
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                 }
 
@@ -6220,6 +6293,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 return idtipoEncuesta;
             }
             return idtipoEncuesta;
@@ -6298,6 +6372,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 result.ex = aE;
                 result.ErrorMessage = aE.Message.ToString();
                 result.Correct = false;
@@ -6811,6 +6886,7 @@ namespace BL
                         result.Correct = false;
                         result.ErrorMessage = aE.Message;
                         transaction.Rollback();
+                        BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                     }
                 }
             }
@@ -7206,6 +7282,7 @@ namespace BL
                     estatusEmail.IdEstatusEmail = 1;
                     Encuesta.UpdateFlagEmailToError(estatusEmail, ex, lastInsertEstatusEmail);
                     BL.NLogGeneratorFile.logInfoEmailSender(ex, estatusEmail, empleado.IdEmpleado);
+                    BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 }
                 finally
                 {
@@ -7248,6 +7325,7 @@ namespace BL
                     estatusEmail.IdEstatusEmail = 1;
                     Encuesta.UpdateFlagEmailToError(estatusEmail, ex, lastInsertEstatusEmail);
                     BL.NLogGeneratorFile.logInfoEmailSender(ex, estatusEmail, usuario.IdUsuario);
+                    BL.NLogGeneratorFile.logErrorModuloEncuestas(ex, new StackTrace());
                 }
                 finally
                 {
@@ -7328,6 +7406,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
                 return 0;                
             }
             return periodo;

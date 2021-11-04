@@ -414,13 +414,13 @@
                             <li id="Planes">
                                 <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" aria-controls="collapsePlanes" style="padding: 0px;">
                                     <div class="item-menu-icon">
-                                        <img src="~/img/icon-plan-action.png" alt="Icono Encuestas" class="img-white">
+                                        <img src="~/img/plan-de-accion-2.png" alt="Icono Encuestas" class="img-white">
                                         <span class="tooltiptext">Planes de Acción</span>
                                     </div>
                                 </a>
                                 <span class="item-menu d-none">
                                     <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" role="button" aria-expanded="false" aria-controls="collapsePlanes">
-                                        <img src="~/img/icon-plan-action(1).png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
+                                        <img src="~/img/plan-de-accion-2.png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
                                     </a>
                                 </span>
                                 <div class="collapse" id="collapsePlanes">
@@ -465,9 +465,9 @@
 
                                 <div class="col-6 col-sm-8 col-md-7">
                                     <div class="user-info">
-                                        <span class="color">Hola</span>, @Session["AdminLog"]  @{ foreach (var item in ViewBag.Perfil)
+                                        <!--<span class="color">Hola</span>--><a class="" href="@Url.Action("Login", "LoginAdmin")">Cerrar sesión</a> , @Session["AdminLog"]  @{ foreach (var item in ViewBag.Perfil)
                                             { <span class="position"> / @item  </span> } } <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
-                                    </div><!--.user-info-->
+                                    </div>
                                 </div>
                             </div><!--.row-->
                         </div><!--.container-fluid-->
@@ -796,7 +796,7 @@
                                                                         <div id="ModuloPlanes" class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4" style="display:none;">
                                                                             <div class="wrapper-tool" style="background-color:#ffffff;">
                                                                                 <div class="box-tool">
-                                                                                    <div class="header-tool" style="background-color: #00d068; background-image: url('../../img/icon-plan-action.png');">
+                                                                                    <div class="header-tool" style="background-color: #00d068; background-image: url('../../img/plan-de-accion-2.png');">
                                                                                         <div class="row vertical-align-bottom" align="center">
                                                                                             <div align="left" class="col-6">
                                                                                                 <i class="fas text-white fa-caret-right"></i>

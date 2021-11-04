@@ -15,7 +15,7 @@ namespace BL
         /// <summary>
         /// Obtiene las encuestas de clima laboral para porder configurar sus acciones y planes
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result GetEncuestasClima()
         {
             ML.Result result = new ML.Result();
@@ -47,6 +47,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -56,8 +57,8 @@ namespace BL
         /// <summary>
         /// Obtiene las categorias en orden por promedio obtenido
         /// </summary>
-        /// <param name="promedioSubCategorias"></param>
-        /// <returns></returns>
+        /// <param name="promedioSubCategorias">Objeto ML.PromedioSubCategorias</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result JobGenerarPromedioSubCategorias(ML.PromedioSubCategorias promedioSubCategorias)
         {
             ML.Result result = new ML.Result();
@@ -88,6 +89,8 @@ namespace BL
                             categoriaModel.IdPadre = BL.Categoria.getIdPadreSubCategoria((int)categoria.IdSubcategoria);
                             categoriaModel.NombrePadreCategoria = BL.Categoria.getNombreCatByIdCat(categoriaModel.IdPadre);
                             //Sumar los promedios de todas las subcategorias y meterlas al resultado del la Categoria padre
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("JobGenerarPromedioSubCategorias: Valores obtenidos de la categoria: " + categoriaModel.Nombre);
+                            BL.NLogGeneratorFile.logObjectsModuloPlanesDeAccion(categoriaModel);
                             result.Objects.Add(categoriaModel);
                         }
                     }
@@ -106,6 +109,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -115,8 +119,8 @@ namespace BL
         /// <summary>
         /// Obtiene el promedio generar de una categoria
         /// </summary>
-        /// <param name="promedioSubCategorias"></param>
-        /// <returns></returns>
+        /// <param name="promedioSubCategorias">Objeto ML.PromedioSubCategorias</param>
+        /// <returns>Promedio obtenido de la pregunta en Decimal</returns>
         public static decimal GetPromedioByIdPregunta(ML.PromedioSubCategorias promedioSubCategorias)
         {
             try
@@ -140,14 +144,15 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 return 0;
             }
         }
         /// <summary>
         /// Agrega o actualiza los promedios obtenidos de cada subcategoria
         /// </summary>
-        /// <param name="promedioSubCategorias"></param>
-        /// <returns></returns>
+        /// <param name="promedioSubCategorias">Objeto ML.PromedioSubCategorias</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result AddDataPromedioSubCategorias(ML.PromedioSubCategorias promedioSubCategorias)
         {
             ML.Result result = new ML.Result();
@@ -186,6 +191,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -195,8 +201,8 @@ namespace BL
         /// <summary>
         /// Obtiene los promedios de las subcategorias que previamenrte generó el job (el promedio no importa solo lo configurado en la encuesta)
         /// </summary>
-        /// <param name="promedioSubCategorias"></param>
-        /// <returns></returns>
+        /// <param name="promedioSubCategorias">Objeto ML.PromedioSubCategorias</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result GetSubCategoriasByIdEncuesta(ML.PromedioSubCategorias promedioSubCategorias)
         {
             ML.Result result = new ML.Result();
@@ -225,6 +231,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -234,8 +241,8 @@ namespace BL
         /// <summary>
         /// Obtiene los promedios de las subcategorias que previamenrte generó el job (con promedios)
         /// </summary>
-        /// <param name="promedioSubCategorias"></param>
-        /// <returns></returns>
+        /// <param name="promedioSubCategorias">Objeto ML.PromedioSubCategorias</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result GetPromediosSubCategoriasByAreaAgencia(ML.PromedioSubCategorias promedioSubCategorias)
         {
             ML.Result result = new ML.Result();
@@ -264,6 +271,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -279,6 +287,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El Job EjecutaJob ha iniciado");
                     // (Sobre la encuesta original) Verificar encuestas de clima laboral con fecha fin cumplida
                     var encuestaClimaTerminadasList = context.ConfigClimaLab.Where(o => o.FechaFin < DateTime.Now && o.Encuesta.IdEstatus == 1).ToList();
                     foreach (var encuesta in encuestaClimaTerminadasList)
@@ -333,19 +342,19 @@ namespace BL
                             }
                         }
                     }*/
-                    Console.WriteLine("Termne");
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El job de generación de promedios de subcategorias ha terminado");
                 }
             }
-            catch (Exception)
+            catch (Exception aE)
             {
-
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
         }
         /// <summary>
         /// Verifica si un area tiene ya generados sus promedios por subcategoria
         /// </summary>
-        /// <param name="promedioSubCategorias"></param>
-        /// <returns></returns>
+        /// <param name="promedioSubCategorias">Objeto ML.PromedioSubCategorias</param>
+        /// <returns>Bool</returns>
         public static bool TieneRegistroDePromedios(ML.PromedioSubCategorias promedioSubCategorias)
         {
             bool existe = false;
@@ -379,6 +388,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 existe = false;
             }
             return existe;
@@ -386,8 +396,8 @@ namespace BL
         /// <summary>
         /// Agrega un nuevo plan de acción
         /// </summary>
-        /// <param name="planDeAccion"></param>
-        /// <returns></returns>
+        /// <param name="planDeAccion">Objeto ML.PlanDeAccion</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result AddPlanDeAccion(ML.PlanDeAccion planDeAccion)
         {
             ML.Result result = new ML.Result();
@@ -404,6 +414,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -413,7 +424,7 @@ namespace BL
         /// <summary>
         /// Obtiene los rangos establecidos para los planes de acción
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result GetRangos()
         {
             ML.Result result = new ML.Result();
@@ -447,6 +458,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -457,8 +469,8 @@ namespace BL
         /// <summary>
         /// Obtiene las acciones preguardadas para una encuesta
         /// </summary>
-        /// <param name="accionDeMejora"></param>
-        /// <returns></returns>
+        /// <param name="accionDeMejora">Objeto ML.AccionDeMejora</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result GetAcciones(ML.AccionDeMejora accionDeMejora)
         {
             ML.Result result = new ML.Result();
@@ -510,6 +522,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -519,8 +532,8 @@ namespace BL
         /// <summary>
         /// Obtiene las acciones de ayuda
         /// </summary>
-        /// <param name="accionDeMejora"></param>
-        /// <returns></returns>
+        /// <param name="accionDeMejora">Objeto ML.AccionDeMejora</param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result GetAccionesAyuda(ML.AccionDeMejora accionDeMejora)
         {
             ML.Result result = new ML.Result();
@@ -547,6 +560,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -556,9 +570,9 @@ namespace BL
         /// <summary>
         /// Agrega una nueva acción de mejora
         /// </summary>
-        /// <param name="accionDeMejora"></param>
-        /// <param name="UsuarioActual"></param>
-        /// <returns></returns>
+        /// <param name="accionDeMejora" type="ML.AccionDeMejora"></param>
+        /// <param name="UsuarioActual" type="String"></param>
+        /// <returns>Objeto ML.Result</returns>
         public static ML.Result AddAccion(ML.AccionDeMejora accionDeMejora, string UsuarioActual)
         {
             ML.Result result = new ML.Result();
@@ -580,6 +594,7 @@ namespace BL
                             };
                             context.Acciones.Add(accion);
                             context.SaveChanges();
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Se ha agregado exitosamente la acccion de ayuda: " + accion.IdAccion);
                             result.Correct = true;
                             return result;
                         }
@@ -594,6 +609,7 @@ namespace BL
                                 Accion.ProgramaModificacion = "Modulo Planes de Acción (Acciones de ayuda)";
                             }
                             context.SaveChanges();
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Se ha actualizado exitosamente la accion de ayuda: " + Accion.IdAccion);
                             result.Correct = true;
                             return result;
                         }                       
@@ -616,6 +632,7 @@ namespace BL
                         };
                         context.Acciones.Add(accion);
                         context.SaveChanges();
+                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Se ha agregado exitosamente la accion: " + accion.IdAccion);
                         result.Correct = true;
                         result.NewId = accion.IdAccion;
                     }
@@ -637,6 +654,7 @@ namespace BL
                             Accion.ProgramaModificacion = "Modulo Planes de Acción";
                         }
                         context.SaveChanges();
+                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Se ha actualizado exitosamente la acción: " + Accion.IdAccion);
                         result.Correct = true;
                         result.NewId = Accion.IdAccion;
                     }
@@ -645,6 +663,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -672,10 +691,12 @@ namespace BL
                         dataAccion.UsuarioEliminacion = UsuarioActual;
                         dataAccion.ProgramaEliminacion = "Modulo Planes de Acción";
                         context.SaveChanges();
+                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("La accion: " + IdAccion + " fue eliminada");
                         result.Correct = true;
                     }
                     else
                     {
+                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("No se ha encontrado la accion: " + IdAccion + " que se pretendia eliminar");
                         result.Correct = false;
                         result.ErrorMessage = "No se encontró la acción con el Id: " + IdAccion;
                     }
@@ -683,6 +704,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -730,6 +752,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -763,6 +786,60 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Agrega el perfil de administrador de Planes de Acción al admin seleccionado
+        /// </summary>
+        /// <param name="IdAdministrador"></param>
+        /// <returns></returns>
+        public static ML.Result AgregarPerfilPlanesDeAccion(int IdAdministrador)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                List<string> acciones = new List<string>();
+                acciones.Add("AdministrarAcciones");
+                acciones.Add("CrearPlanes");
+                acciones.Add("ListarPlanes");
+                List<DL.PerfilModuloAccion> ListPerfilModuloAccion = new List<DL.PerfilModuloAccion>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    //select* from PerfilModulo where IdAdministrador = 56
+                    var admin = context.Administrador.Where(o => o.IdAdministrador == IdAdministrador).FirstOrDefault();
+                    DL.PerfilModulo perfilModulo = new DL.PerfilModulo()
+                    {
+                        IdPerfil = admin.IdPerfil,
+                        IdModulo = 7,//Id del Modulo de planes de accion
+                        IdAdministrador = admin.IdAdministrador
+                    };
+                    context.PerfilModulo.Add(perfilModulo);
+                    context.SaveChanges();
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Se agrego el PerfilModulo con el nuevo modulo al administrador: " + IdAdministrador);
+                    foreach (var accion in acciones)
+                    {
+                        DL.PerfilModuloAccion perfilModuloAccion = new DL.PerfilModuloAccion()
+                        {
+                            IdPerfilModulo = perfilModulo.IdPerfilModulo,
+                            Accion = accion
+                        };
+                        ListPerfilModuloAccion.Add(perfilModuloAccion);
+                    }
+                    context.PerfilModuloAccion.AddRange(ListPerfilModuloAccion);
+
+                    context.SaveChanges();
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Se agregaron las acciones en la tabla PerfilModuloAccion al administrador: " + IdAdministrador);
+                    result.Correct = true;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -797,6 +874,32 @@ namespace BL
                                 var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == responsable.IdResponsable).FirstOrDefault();
                                 ML.Email emailObject = BL.Email.ObtenerObjetoEmail(usuarioResponsable, PlanDeAccion);
                                 BL.Email.NotificacionesPlanes(emailObject, Accion, 1);// Un Email por cada accion
+                            }
+                        }
+                    }
+                    if (true) // Un Email por usuario
+                    {
+                        foreach (var accionPlan in AccionesPlan)
+                        {
+                            var responsablesAccion = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                            foreach (var responsable in responsablesAccion)
+                            {
+                                var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == responsable.IdResponsable).FirstOrDefault();
+                                var relacional = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == usuarioResponsable.IdResponsable).ToList();
+                                foreach (var item in relacional)
+                                {
+                                    var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == item.IdAccionesPlan).ToList();
+                                    List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
+                                    foreach (var elem in acciones)
+                                    {
+                                        var accion = context.Acciones.Where(o => o.IdAccion == elem.IdAccion).FirstOrDefault();
+                                        ML.AccionDeMejora accionDeMejora = new ML.AccionDeMejora();
+                                        accionDeMejora.IdAccionDeMejora = accion.IdAccion;
+                                        accionDeMejora.Descripcion = accion.Descripcion;
+                                        ListAcciones.Add(accionDeMejora);
+                                    }
+
+                                }
                             }
                         }
                     }
@@ -879,7 +982,6 @@ namespace BL
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
         }
-
         /*
          * 1 Cuando el porcentaje de avance no corresponda a lo esperado es decir exista un retraso. 
          *      Por ejemplo cuando el avance deba ser al 25% el registro sea menor o cuando el avance deba estar al 50% o al 75% y de igual forma la captura sea menor.  
@@ -888,6 +990,27 @@ namespace BL
 
         #endregion
 
+        public static void DemoComparativo()
+        {
+            using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+            {
+                IQueryable<DL.Empleado> empleados = context.Empleado.Where(o => o.IdBaseDeDatos == 2114);
+                IEnumerable<DL.Empleado> empleados1 = context.Empleado.Where(o => o.IdBaseDeDatos == 2114);
+                var data = context.Empleado.Where(o => o.IdBaseDeDatos == 2114);
 
+                empleados = empleados.Where(o => o.Sexo == "Masculino");
+                empleados1 = empleados1.Where(o => o.Sexo == "Masculino");
+
+                string q = empleados.ToString();
+                string q1 = empleados1.ToString();
+                string d = data.ToString();
+
+                foreach (var item in empleados)
+                {
+                    Console.WriteLine(item.Nombre);
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }

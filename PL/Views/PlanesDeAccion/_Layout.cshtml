@@ -419,13 +419,13 @@
                         <li id="Planes">
                             <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" aria-controls="collapsePlanes" style="padding: 0px;">
                                 <div class="item-menu-icon">
-                                    <img src="~/img/icon-plan-action.png" alt="Icono Encuestas" class="img-white">
+                                    <img src="~/img/plan-de-accion-2.png" alt="Icono Encuestas" class="img-white">
                                     <span class="tooltiptext">Planes de Acción</span>
                                 </div>
                             </a>
                             <span class="item-menu d-none">
                                 <a onclick="openNav(this)" data-toggle="collapse" href="#collapsePlanes" role="button" aria-expanded="false" aria-controls="collapsePlanes">
-                                    <img src="~/img/icon-plan-action(1).png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
+                                    <img src="~/img/plan-de-accion-2.png" class="img-white pr-3" alt="Icono Encuestas"> Planes de Acción
                                 </a>
                             </span>
                             <div class="collapse" id="collapsePlanes">
@@ -469,7 +469,7 @@
 
                             <div class="col-6 col-sm-8 col-md-7">
                                 <div class="user-info">
-                                    <span class="color">Hola</span>, @NombreAdmin  @{ foreach (var item in ViewBag.Perfil)
+                                    <!--<span class="color">Hola</span>--><a class="" href="@Url.Action("Login", "LoginAdmin")">Cerrar sesión</a> , @Session["AdminLog"]  @{ foreach (var item in ViewBag.Perfil)
                                         { <span class="position"> / @item  </span> } } <img src="~/img/icon-user-male.jpg" class="avatar-header" width="50" height="50" alt="Avatar">
                                 </div>
                             </div>
@@ -485,7 +485,7 @@
                     <div class="container-fluid px-lg-5">
                         <div class="row">
                             <div class="col-sm-10 bottom-align-left center-vertically-xs">
-                                <img class="img-fluid img-page-title" src="~/img/icon-plan-action.png" />
+                                <img class="img-fluid img-page-title" src="~/img/plan-de-accion-2.png" />
                                 @*<h1 class="title-page-survey"> Reporte / <span>Reporte de Comentarios </span></h1>*@
                                 <h1 class="title-page-survey">Bienvenido <span>Selecciona cualquiera de las herramientas para que comiences:</span></h1>
                             </div>

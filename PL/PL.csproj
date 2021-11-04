@@ -1121,6 +1121,7 @@
     <Content Include="scripts\datatables.min.css" />
     <Content Include="scripts\documentacion.js" />
     <Content Include="scripts\ElementQueries.js" />
+    <Content Include="scripts\PlanesDeAccion\EmailSender.js" />
     <Content Include="scripts\excel.min.js" />
     <Content Include="scripts\excellentexport.js" />
     <Content Include="fonts\fa-brands-400.eot" />
@@ -1705,6 +1706,7 @@
     <Content Include="Views\PlanesDeAccion\Index.cshtml" />
     <Content Include="Views\PlanesDeAccion\_Layout.cshtml" />
     <Content Include="Views\PlanesDeAccion\GetEncuestas.cshtml" />
+    <Content Include="Views\PlanesDeAccion\Notificaciones.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />
