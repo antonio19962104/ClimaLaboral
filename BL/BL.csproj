@@ -134,6 +134,7 @@
     <Compile Include="Generales.cs" />
     <Compile Include="GeneratorPass.cs" />
     <Compile Include="GetRespBD.cs" />
+    <Compile Include="HangFireMonitor.cs" />
     <Compile Include="HistoricoClimaLaboral.cs" />
     <Compile Include="Login.cs" />
     <Compile Include="LogReporteoClima.cs" />

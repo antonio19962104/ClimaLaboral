@@ -17,7 +17,7 @@
     <script src="http://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
         var redirect = "http://" + window.location.href.split('/')[2] + "/LoginAdmin/Login";
-        var elem = document.getElementById("urlLogn").href = redirect;
+        //var elem = document.getElementById("urlLogn").href = redirect;
         $(document).ready(function () {
             swal.fire("Debes iniciar sesion para acceder al portal", "", "info").then(function () {
                 window.location.href = redirect;

@@ -1,0 +1,106 @@
+﻿@model ML.Result
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <title>HangFire</title>
+</head>
+<body>
+    <div id="wrapp">
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/hangfire/">Hangfire Dashboard</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="">
+                            <a href="/hangfire/jobs/enqueued">
+                                Tareas
+                                <span data-metric="enqueued:count-or-null" class="metric metric-default">0</span>
+                                <span data-metric="failed:count-or-null" class="metric metric-null"></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="/hangfire/retries">
+                                Reintentos
+                                <span data-metric="retries:count" class="metric metric-warning">5</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="/hangfire/recurring">
+                                Tareas recurrentes
+                                <span data-metric="recurring:count" class="metric metric-default">3</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a href="/hangfire/servers">
+                                Servidores
+                                <span data-metric="servers:count" class="metric metric-default">2</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">
+                                <span class="glyphicon glyphicon-log-out"></span>
+                                Volver
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+        <div class="container">
+            @{
+                if (Model.Correct)
+                {
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Job Id</th>
+                                <th>State Name</th>
+                                <th>Arguments</th>
+                                <th>Invocation Data</th>
+                                <th>Created At</th>
+                                <th>Expire At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (BL.HangFireMonitor.ModelJob item in Model.Objects)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.StateName</td>
+                                    <td>@item.Arguments</td>
+                                    <td>@item.InvocationData</td>
+                                    <td>@item.CreatedAt</td>
+                                    <td>@item.ExpireAt</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>@Model.ErrorMessage</p>
+                }
+            }
+        </div>
+
+    </div>
+</body>
+</html>

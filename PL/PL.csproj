@@ -340,6 +340,7 @@
     <Compile Include="Controllers\EmpresaController.cs" />
     <Compile Include="Controllers\EncuestaController.cs" />
     <Compile Include="Controllers\EstructuraAFMReporteController.cs" />
+    <Compile Include="Controllers\HangFireMonitorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HtmlToPDFController.cs" />
     <Compile Include="Controllers\LoginAdminController.cs" />
@@ -1707,6 +1708,7 @@
     <Content Include="Views\PlanesDeAccion\_Layout.cshtml" />
     <Content Include="Views\PlanesDeAccion\GetEncuestas.cshtml" />
     <Content Include="Views\PlanesDeAccion\Notificaciones.cshtml" />
+    <Content Include="Views\HangFireMonitor\HangFire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

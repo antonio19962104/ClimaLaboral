@@ -499,6 +499,10 @@ namespace PL.Controllers
             int Idusuario = 0;
             try
             {
+                if (Session["IdUsuarioLog"] == null)
+                {
+                    return Json("SessionTimeOut");
+                }
                 Idusuario = Convert.ToInt32(Session["IdUsuarioLog"]);
                 if (Idusuario == 0)
                 {
@@ -527,6 +531,8 @@ namespace PL.Controllers
                             return Json("reload");
                         }
                         result = BL.Encuesta.UpdateRespuestaT1(respuestas, respuestas.IdEncuesta, Idusuario);
+                        if (!result.Correct)
+                            return Json("ErrorAutoSave");
                         break;
                     case 2://radio Likert
                         if (respuestas.MLRespuestas.IdRespuesta == 0 || respuestas.IdPregunta == 0) {
@@ -534,6 +540,8 @@ namespace PL.Controllers
                             return Json("reload");
                         }
                         result = BL.Encuesta.UpdateRespuestaT2(respuestas, respuestas.IdEncuesta, Idusuario);
+                        if (!result.Correct)
+                            return Json("ErrorAutoSave");
                         break;
                     case 3://Likert Doble
                         if (respuestas.IdPregunta == 0 || String.IsNullOrEmpty(respuestas.MLRespuestas.Respuesta))
@@ -542,6 +550,8 @@ namespace PL.Controllers
                             return Json("reload");
                         }
                         result = BL.Encuesta.UpdateRespuestaTLikertD(respuestas, respuestas.IdEncuesta, Idusuario);
+                        if (!result.Correct)
+                            return Json("ErrorAutoSave");
                         break;
                     case 4://checkbox
                         if (respuestas.MLRespuestas.IdRespuesta == 0 || respuestas.IdPregunta == 0) {
@@ -549,6 +559,8 @@ namespace PL.Controllers
                             return Json("reload");
                         }
                         result = BL.Encuesta.UpdateRespuestaTCheck(respuestas, respuestas.IdEncuesta, Idusuario);
+                        if (!result.Correct)
+                            return Json("ErrorAutoSave");
                         break;
                     default:
                         BL.Encuesta.writeLogIdResCero(respuestas.IdEncuesta, Idusuario, respuestas, "No se encontró un caso para autoguardar");
@@ -564,14 +576,23 @@ namespace PL.Controllers
                     return Json("Error server");
                 }
             }
+            if (existe.Exist == true)
+            {
+                BL.Encuesta.writeLogIdResCero(respuestas.IdEncuesta, Idusuario, "El usuario ya tiene las respuestas vacias agregadas");
+            }
             //
             if (result.Correct && existe.Correct)
             {
+                BL.Encuesta.writeLogIdResCero(respuestas.IdEncuesta, Idusuario, "El AcionResult DemoAutoSave retorna success");
                 return Json("success");
             }
             else
             {
                 if(result.ErrorMessage == null) { result.ErrorMessage = "Ha ocurrido un error"; }
+                if (string.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    return Json("success");
+                }
                 return Json(result.ErrorMessage);
             }
         }

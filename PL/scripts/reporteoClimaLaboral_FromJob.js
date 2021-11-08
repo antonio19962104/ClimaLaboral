@@ -15741,9 +15741,16 @@ function GetDashBoard() {
                             vm.ColDer = "col-2";
                         }                        
                         break;
-                    case 5:                        
+                    case 5: 
+                        if (vm.enfoqueSeleccionado == 0) {
+                            vm.ColIzq = "col-4";
+                            vm.ColDer = "col";
+                            vm.ColIzqA = "col-4";
+                            vm.ColDerA = "col";
+                        }else {
                             vm.ColIzq = "col-7";
                             vm.ColDer = "col-1";
+                        }
                                                 
                         break;
                     case 6:

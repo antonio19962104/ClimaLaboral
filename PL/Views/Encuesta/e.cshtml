@@ -7913,10 +7913,15 @@ for (var r = 0; r < Model.ListarPreguntas[i].Respuestas.Count; r++)
                                     if (data.responseJSON == 'success') {
                                         console.log('Autoguardado exitoso' + date.substring(4, 25));
                                     }
-                                    else if(data.responseJSON == 'Error server') {
+                                    if (data.responseJSON == "ErrorAutoSave") {
+                                        swal("Ocurrió un error al autoguardar tu respuesta, por favor vuelve a ingresar", "", "error").then(function () {
+                                            window.history.back();
+                                        });
+                                    }
+                                    if (data.responseJSON == 'Error server') {
                                         swal('Por favor intenta más tarde', '', 'info');
                                     }
-                                    else if(data.responseJSON == 'SessionTimeOut'){
+                                    if (data.responseJSON == 'SessionTimeOut') {
                                         swal({
                                             title: "Tu sessión ha expirado. Presiona ok y serás redireccionado al Login",
                                             text: "",
@@ -7926,8 +7931,11 @@ for (var r = 0; r < Model.ListarPreguntas[i].Respuestas.Count; r++)
                                             window.location.href = '/Encuesta/Login/?e=' + idEncuesta
                                         });
                                     }
-                                    else if (data.responseJSON == 'reload') {
+                                    if (data.responseJSON == 'reload') {
                                         window.location.reload();
+                                    }
+                                    else {
+                                        swal("Ha ocurrido un error inesperado, por favor intenta más tarde", response.responseJSON, "error");
                                     }
                                 }
                             });

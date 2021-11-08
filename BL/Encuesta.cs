@@ -1840,7 +1840,6 @@ namespace BL
                         }
                     }
 
-
                     int IdEncuesta = 0;
                     var query = context.Encuesta.SqlQuery("SELECT * FROM ENCUESTA INNER JOIN BasesDeDatos ON Encuesta.IdBasesDeDatos = BasesDeDatos.IdBasesDeDatos INNER JOIN Usuario ON BasesDeDatos.IdBasesDeDatos = Usuario.IdBaseDeDatos where Usuario.ClaveAcceso =  {0}  COLLATE Latin1_General_CS_AS AND Encuesta.IdEncuesta= {1}", usuarios.ClaveAcceso, usuarios.IdEncuesta).ToList();
 
@@ -4757,6 +4756,19 @@ namespace BL
                 File.WriteAllText(fullPath, createText);
             }
             string appendText = msg + ". Metodo: Autoguardado. Parametros: IdPreg: " + preg.IdPregunta + " " + DateTime.Now + Environment.NewLine;
+            File.AppendAllText(fullPath, appendText);
+        }
+
+        public static void writeLogIdResCero(int IdEncuesta, int IdUsuario, string msg)
+        {
+            var path = @"\\10.5.2.101\RHDiagnostics\log\Log" + IdEncuesta + "_" + IdUsuario + ".txt";
+            var fullPath = Path.GetFullPath(path);
+            if (!File.Exists(fullPath))
+            {
+                string createText = "Log" + Environment.NewLine;
+                File.WriteAllText(fullPath, createText);
+            }
+            string appendText = msg + DateTime.Now + Environment.NewLine;
             File.AppendAllText(fullPath, appendText);
         }
 

@@ -1293,6 +1293,8 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="Nombre" Type="varchar" MaxLength="250" />
           <Property Name="IdEncuesta" Type="int" />
           <Property Name="IdUsuarioCreacion" Type="int" />
+          <Property Name="IdBaseDeDatos" Type="int" />
+          <Property Name="Area" Type="int" />
         </EntityType>
         <EntityType Name="Plantillas">
           <Key>
@@ -6543,6 +6545,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="Administrador" Relationship="Self.fk_PlanDeAccion_Admin" FromRole="PlanDeAccion" ToRole="Administrador" />
           <NavigationProperty Name="Encuesta" Relationship="Self.fk_PlanDeAccion_Encuesta" FromRole="PlanDeAccion" ToRole="Encuesta" />
           <NavigationProperty Name="AccionesPlan" Relationship="RH_DesModel.FK_AccionesPlan_Plan" FromRole="PlanDeAccion" ToRole="AccionesPlan" />
+          <Property Name="IdBaseDeDatos" Type="Int32" />
+          <Property Name="Area" Type="Int32" />
         </EntityType>
         <EntityType Name="Plantillas">
           <Key>
@@ -16649,6 +16653,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="PlanDeAccion">
             <EntityTypeMapping TypeName="RH_DesModel.PlanDeAccion">
               <MappingFragment StoreEntitySet="PlanDeAccion">
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />
                 <ScalarProperty Name="IdPlanDeAccion" ColumnName="IdPlanDeAccion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="IdEncuesta" ColumnName="IdEncuesta" />

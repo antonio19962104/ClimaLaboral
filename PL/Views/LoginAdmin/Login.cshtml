@@ -17,6 +17,16 @@
     <title>Bienvenido | Diagnostic 4U</title>
 </head>
 <body>
+    <noscript>
+        <style type="text/css">
+            #wrapper {
+                display: none;
+            }
+        </style>
+        <div class="noscriptmsg">
+            Esta pagina funciona con librerias javascript, no se detecto ninguna libreria en tu equipo
+        </div>
+    </noscript>
     <main id="wrapper">
         <section id="slider">
             <!-- Swiper -->
@@ -29,33 +39,33 @@
                 </div><!--.swiper-wrapper-->
             </div><!--.swiper-container-->
         </section>
-  
-    
+
+
         <div class="form-wrapper">
             <div class="form-box">
                 <img src="~/img/logo.png" class="img-fluid logo-form" alt="Logo">
                 <h1 class="title-form-box">Iniciar sesión</h1>
-                <div class="form-group mb-4" >
+                <div class="form-group mb-4">
                     @*<input type="text" class="form-control form-control-lg UserName" id="userLogin" placeholder="Usuario:">*@
-                    @Html.TextBoxFor(model => model.UserName, htmlAttributes: new { @type = "text", @class="form-control form-control-lg UserName", @id="userLogin",  @placeholder="Usuario:" })
+                    @Html.TextBoxFor(model => model.UserName, htmlAttributes: new { @type = "text", @class = "form-control form-control-lg UserName", @id = "userLogin", @placeholder = "Usuario:" })
                 </div>
                 <div class="form-group mb-4">
                     @*<input type="password" class="form-control form-control-lg Pass" id="passwordLogin" placeholder="Contraseña:">*@
-                    @Html.TextBoxFor(model => model.Password, htmlAttributes: new { @type="password", @class="form-control form-control-lg Pass", @id="passwordLogin", @placeholder="Contraseña:" })
+                    @Html.TextBoxFor(model => model.Password, htmlAttributes: new { @type = "password", @class = "form-control form-control-lg Pass", @id = "passwordLogin", @placeholder = "Contraseña:" })
                 </div>
                 <a href="@Url.Action("ForgotPassword", "Account")" class="text-forgot">¿Olvidaste tu contraseña?</a>
             </div>
             @*<a href="#" class="btn btn-login btn-block" onclick="Autenticar()">Entrar</a>*@
-                <input type="submit" value="Entrar" class="btn btn-login btn-block" style="min-width:100%" onclick="Autenticar()" />
-           </div>
-    
+            <input type="submit" value="Entrar" class="btn btn-login btn-block" style="min-width:100%" onclick="Autenticar()" />
+        </div>
+
         <div class="text-slide">
             <h2 class="title-message">Mejora la interacción</h2>
             <p class="desc-message">con el cliente tomando decisiones<br>basadas en conocimientos generados</p>
         </div>
     </main>
 
-    
+
     @Scripts.Render("~/bundles/jqueryAdmin")
 
 
@@ -65,16 +75,16 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script>
-      var swiper = new Swiper('.swiper-container', {
-        spaceBetween: 0,
-        effect: 'fade',
-        loop: true,
-        centeredSlides: true,
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false,
-        }
-      });
+        var swiper = new Swiper('.swiper-container', {
+            spaceBetween: 0,
+            effect: 'fade',
+            loop: true,
+            centeredSlides: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            }
+        });
     </script>
     <script>
 
@@ -82,7 +92,7 @@
 
             var resultLogin = @Session["resultLogin"];
             if (resultLogin != 0) {
-                
+
                 swal({
                     title: "Claves de acceso no válidas",
                     text: "",
@@ -162,13 +172,13 @@
 
                     }
                 });
-            
+
             }
         }
         function sendCode() {
             var code = '<h3 class="box-header-title">Encuesta corta Satisfacción al cliente</h3><p class="box-header-paragraph">Breve descripción de la encuesta, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu</p>';
             var instr = '<h3 class="box-header-title">Encuesta corta Satisfacción al cliente</h3><p class="box-header-paragraph">Breve descripción de la encuesta, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu</p>';
-            let model = { 
+            let model = {
                 descripcion: code,
                 instruccion: instr
             }
@@ -184,6 +194,6 @@
         }
     </script>
 
-    
+
 </body>
 </html>

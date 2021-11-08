@@ -558,12 +558,12 @@ namespace BL
                 try
                 {
                     smtp.Send(message);
-                    BL.NLogGeneratorFile.logInfoEmailSender("Email enviado al usuario: " + UsuarioSolicita + " para notificar el fin de la creacion del reporte de: " + entidadName);
+                    BL.NLogGeneratorFile.logInfoEmailSender("Email enviado al usuario: " + UsuarioSolicita + " para notificar el fin de la creacion del reporte de: " + entidadName, true);
                 }
                 catch (SmtpException ex)
                 {
                     BL.LogReporteoClima.writteLogJobReporte(ex, new StackTrace());
-                    BL.NLogGeneratorFile.logInfoEmailSender("Ocurrio un error al enviar el email al usuario: " + UsuarioSolicita + " para notificar la creacion del reporte");
+                    BL.NLogGeneratorFile.logInfoEmailSender("Ocurrio un error al enviar el email al usuario: " + UsuarioSolicita + " para notificar la creacion del reporte", false);
                     return ex.Message;
                 }
                 finally

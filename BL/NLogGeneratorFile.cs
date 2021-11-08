@@ -128,9 +128,13 @@ namespace BL
         /// Log SMTP
         /// </summary>
         /// <param name="message"></param>
-        public static void logInfoEmailSender(string message)
+        /// <param name="success"></param>
+        public static void logInfoEmailSender(string message, bool success)
         {
-            nlogClimaDinamicoSMTP.Error(message);
+            if (success)
+                nlogClimaDinamicoSMTP.Info(message);
+            else
+                nlogClimaDinamicoSMTP.Error(message);
         }
         /// <summary>
         /// Log eventos FrontEnd
