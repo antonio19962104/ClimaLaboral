@@ -24,6 +24,7 @@ namespace DL
             this.PromedioSubCategorias = new HashSet<PromedioSubCategorias>();
             this.Usuario = new HashSet<Usuario>();
             this.Acciones = new HashSet<Acciones>();
+            this.PromediosCategorias = new HashSet<PromediosCategorias>();
         }
     
         public int IdBasesDeDatos { get; set; }
@@ -60,5 +61,7 @@ namespace DL
         public virtual ICollection<Usuario> Usuario { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Acciones> Acciones { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PromediosCategorias> PromediosCategorias { get; set; }
     }
 }

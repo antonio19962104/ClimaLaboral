@@ -64,6 +64,9 @@
       <HintPath>..\packages\Common.Logging.NLog40.3.4.1\lib\net40\Common.Logging.NLog40.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.14.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.14.0\lib\net40\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\DL\DL\bin\Debug\EntityFramework.dll</HintPath>
     </Reference>
@@ -106,6 +109,7 @@
     <Reference Include="WebGrease">
       <HintPath>..\..\Users\jamurillo\Documents\bin\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Administrador.cs" />

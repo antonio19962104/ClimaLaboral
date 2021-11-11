@@ -72,7 +72,6 @@ namespace DL
         public virtual DbSet<PerfilD4U> PerfilD4U { get; set; }
         public virtual DbSet<PerfilModulo> PerfilModulo { get; set; }
         public virtual DbSet<PerfilModuloAccion> PerfilModuloAccion { get; set; }
-        public virtual DbSet<PlanDeAccion> PlanDeAccion { get; set; }
         public virtual DbSet<Plantillas> Plantillas { get; set; }
         public virtual DbSet<Preguntas> Preguntas { get; set; }
         public virtual DbSet<PreguntasLikert> PreguntasLikert { get; set; }
@@ -113,6 +112,11 @@ namespace DL
         public virtual DbSet<AccionesPlan> AccionesPlan { get; set; }
         public virtual DbSet<Responsable> Responsable { get; set; }
         public virtual DbSet<ResponsablesAccionesPlan> ResponsablesAccionesPlan { get; set; }
+        public virtual DbSet<Evidencia> Evidencia { get; set; }
+        public virtual DbSet<Seguimiento> Seguimiento { get; set; }
+        public virtual DbSet<SeguimientoEvidencia> SeguimientoEvidencia { get; set; }
+        public virtual DbSet<PlanDeAccion> PlanDeAccion { get; set; }
+        public virtual DbSet<PromediosCategorias> PromediosCategorias { get; set; }
     
         [DbFunction("RH_DesEntities1", "splitstring_COMA")]
         public virtual IQueryable<splitstring_COMA_Result> splitstring_COMA(string stringToSplit)

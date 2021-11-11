@@ -1519,7 +1519,7 @@
                     //Se valida que no exista la sub categoria
                     var objCol2SubCat = $("#childP_"+categoriaPregunta).find("input[type='hidden']").filter(".idSubCategoriaC2").toArray();
                     [].forEach.call(objCol2SubCat,function (iobjCol2SubCats) {
-                        if (iobjCol2SubCats.value = subcategoriaPregunta) {
+                        if (iobjCol2SubCats.value == subcategoriaPregunta) {
                             existeSubCategoria = true;
                         }
                     });

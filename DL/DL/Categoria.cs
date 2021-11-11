@@ -22,6 +22,7 @@ namespace DL
             this.ValoracionSubcategoriaPorCategoria1 = new HashSet<ValoracionSubcategoriaPorCategoria>();
             this.ValoracionPreguntaPorSubcategoria = new HashSet<ValoracionPreguntaPorSubcategoria>();
             this.ValoracionCategoria = new HashSet<ValoracionCategoria>();
+            this.PromediosCategorias = new HashSet<PromediosCategorias>();
         }
     
         public int IdCategoria { get; set; }
@@ -51,5 +52,7 @@ namespace DL
         public virtual ICollection<ValoracionPreguntaPorSubcategoria> ValoracionPreguntaPorSubcategoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ValoracionCategoria> ValoracionCategoria { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PromediosCategorias> PromediosCategorias { get; set; }
     }
 }

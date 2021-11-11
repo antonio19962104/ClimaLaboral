@@ -23,54 +23,59 @@ namespace ML
             inicial = 1,
             WeekAfter = 2
         }
-        public static string AsuntoNotificacionInicial = "";
-        public static string AsuntoNotificacionPrevia = "";
-        public static string AsuntoNotificacionAvanceInicial = "";
-        public static string AsuntoNotificacionAvanceNoLogrado = "";
-        public static string AsuntoNotificacionAgradecimiento = "";
-        public static string PlantillaNotificacionInicial { get; set; } =
-            @"
-            <p>Que tal {responsable}.</p>
-            <p>Has sido elegido para colaborar en el plan de acción {nombrePlan} para dar seguimiento a las acciones de mejora en tu área.</p>
-            <p>La acción que tendrás a cargo es:</p>
-            <p>{acciones}</p>
-            <p>Saludos<br></p>
-            ";
+        public static string AsuntoNotificacionInicial = "Has sido elegido";
+        public static string AsuntoNotificacionPrevia = "Estamos a punto de iniciar";
+        public static string AsuntoNotificacionAvanceInicial = "No has registrado tu avance inicial";
+        public static string AsuntoNotificacionAvanceNoLogrado = "Avances esperados no logrados";
+        public static string AsuntoNotificacionAgradecimiento = "Agradecimiento por participación";
 
-        public static string PlantillaNotificacionPrevia { get; set; } =
-            @"
-            <p>Que tal {responsable}.</p>
-            <p>Has sido elegido para colaborar en el plan de acción {nombrePlan} para dar seguimiento a las acciones de mejora en tu área.</p>
-            <p>La acción que tendrás a cargo es:</p>
-            <p>{acciones}</p>
-            <p>Saludos<br></p>
-            ";
 
-        public static string PlantillaSinAvanceInicial { get; set; } =
-            @"
-            <p>Que tal {responsable}.</p>
-            <p>Has sido elegido para colaborar en el plan de acción {nombrePlan} para dar seguimiento a las acciones de mejora en tu área.</p>
-            <p>La acción que tendrás a cargo es:</p>
-            <p>{acciones}</p>
-            <p>Saludos<br></p>
-            ";
 
-        public static string PlantillaAvanceNoLogrado { get; set; } =
-            @"
-            <p>Que tal {responsable}.</p>
-            <p>Has sido elegido para colaborar en el plan de acción {nombrePlan} para dar seguimiento a las acciones de mejora en tu área.</p>
-            <p>La acción que tendrás a cargo es:</p>
-            <p>{acciones}</p>
-            <p>Saludos<br></p>
-            ";
+        public static string PlantillaContenidoAccionesNot1 = @"
+            <fieldset style='margin-bottom: 1rem;'>
+                <div style='width: 100%; height: 40px; background-color: #002060; display:flex; color: white;'>
+                    <div style='width: 90%;vertical-align:middle; font-weight: bold;'>
+                        <span style='margin-top: 0.5rem;position: absolute;margin-left: 1rem;'>#Categoria#</span>
+                    </div>
+                    <div style='width: 5%;font-weight: bold;font-weight: bold;margin-top: 0.5rem;margin-left: 1rem;'>
+                        #100%#
+                    </div>
+                    <div style='width: 5%;font-weight: bold;'>
+                        <img alt='Icono promedio' src='#icono#' style='width: 45px;height: 35px;' />
+                    </div>
+                </div>
+                <div style='width: 100%; display: flex;margin-top: 1rem;'>
+                    <input disabled type='text' value='#accion#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                </div>
+                <div style='width: 100%; display: flex;margin-top: 1rem;'>
+                    <div style='width: 50%; padding-right: 15px;'>
+                        <label>Periodicidad</label>
+                        <input disabled type='text' value='#periodicidad#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                    </div>
+                    <div style='width: 25%; margin-top: 1rem;'>
+                        <img alt='Icono fecha' width='30' height:'30' style='--bs-gutter-x: 1.5rem; --bs-gutter-y: 0;box-sizing: border-box; vertical-align: middle; width: 30px; height: 30px; margin-top: .5rem !important;' src='http://www.diagnostic4u.com/img/icono-calendario.png' class='fas fa-calendar'> <span style='vertical-align: middle; box-sizing: border-box; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0;'>Inicia: #inicio#</span>
+                    </div>
+                    <div style='width: 25%; margin-top: 1rem;'>
+                        <img alt='Icono fecha' width='30' height:'30' style='--bs-gutter-x: 1.5rem; --bs-gutter-y: 0;box-sizing: border-box; vertical-align: middle; width: 30px; height: 30px; margin-top: .5rem !important;' src='http://www.diagnostic4u.com/img/icono-calendario.png' class='fas fa-calendar'> <span style='vertical-align: middle; box-sizing: border-box; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0;'>Concluye: #fin#</span>
+                    </div>
+                </div>
+                <div style='width: 100%; display:flex; margin-top: 1rem;'>
+                    <div style='width: 50%; padding-right: 15px;'>
+                        <label>Objetivo</label>
+                        <input disabled type='text' value='#objetivo#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                    </div>
+                    <div style='width: 50%; padding-right: 15px;'>
+                        <label>Meta</label>
+                        <input disabled type='text' value='#meta#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                    </div>
+                </div>
+            </fieldset>
+        ";
 
-        public static string PlantillaNotificacionAgradecimiento { get; set; } =
-            @"
-            <p>Que tal {responsable}.</p>
-            <p>Has sido elegido para colaborar en el plan de acción {nombrePlan} para dar seguimiento a las acciones de mejora en tu área.</p>
-            <p>La acción que tendrás a cargo es:</p>
-            <p>{acciones}</p>
-            <p>Saludos<br></p>
-            ";
+
+        public static string solIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/sol-icono.png";
+        public static string solNubeIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/solnube-icono.png";
+        public static string nubeIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/nube-icono.png";
+        public static string lluviaIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/lluvia-icono.png";
     }
 }

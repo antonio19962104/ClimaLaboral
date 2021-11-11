@@ -38,10 +38,11 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
+        public Nullable<decimal> PorcentajeAvance { get; set; }
     
         public virtual Acciones Acciones { get; set; }
-        public virtual PlanDeAccion PlanDeAccion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResponsablesAccionesPlan> ResponsablesAccionesPlan { get; set; }
+        public virtual PlanDeAccion PlanDeAccion { get; set; }
     }
 }

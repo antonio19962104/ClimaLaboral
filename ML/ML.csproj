@@ -91,11 +91,15 @@
     <Compile Include="DetallePlantilla.cs" />
     <Compile Include="Email.cs" />
     <Compile Include="EmailsEncuesta.cs" />
+    <Compile Include="Evidencia.cs" />
     <Compile Include="PlanDeAccion.cs" />
+    <Compile Include="PromediosCategorias.cs" />
     <Compile Include="PromedioSubCategorias.cs" />
     <Compile Include="Rango.cs" />
     <Compile Include="Responsable.cs" />
     <Compile Include="ResponsablesAccionesPlan.cs" />
+    <Compile Include="Seguimiento.cs" />
+    <Compile Include="SeguimientoEvidencia.cs" />
     <Compile Include="Usuario1.cs" />
     <Compile Include="Encuesta.cs" />
     <Compile Include="EncuestaArea.cs" />

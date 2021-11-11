@@ -18,6 +18,8 @@ using BL;
 using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Office.Core;
 using Aspose.Pdf;
+using System.Net.Mail;
+using System.IO;
 
 namespace PL
 {
@@ -31,6 +33,33 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
+
+            //BL.PlanesDeAccion.NotificacionInicialResponsables(3);
+
+            //var message = new MailMessage();
+            //message.To.Add(new MailAddress("jamurillo@grupoautofin.com"));
+            //message.Subject = "Prueba notificacion";
+            //message.IsBodyHtml = true;
+            //string contentMessage = File.ReadAllText(Path.GetFullPath(@"\\10.5.2.101\RHDiagnostics\templates\template-email.html"));
+            //contentMessage = PlanesDeAccion.CrearVistaWebEmail(contentMessage);
+            //message.Body = contentMessage;//ML.Email.PlantillaNotificacionInicial
+            //message.Priority = MailPriority.Normal;
+            //message.BodyEncoding = System.Text.Encoding.UTF8;
+            //using (var smtp = new SmtpClient())
+            //{
+            //    try
+            //    {
+            //        smtp.Send(message);
+            //    }
+            //    catch (SmtpException aE)
+            //    {
+            //        Console.Write(aE.Message);
+            //    }
+            //    finally
+            //    {
+            //        smtp.Dispose();
+            //    }
+            //}
 
             /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
             ML.Historico historico = new ML.Historico()

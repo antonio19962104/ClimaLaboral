@@ -221,6 +221,9 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.7.9\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -1022,6 +1025,7 @@
     <Content Include="img\LogoP1.png" />
     <Content Include="img\LogoP2.png" />
     <Content Include="img\LogoP3.png" />
+    <Content Include="img\plan-de-accion-2.png" />
     <Content Include="img\Preguntas-1.jpg" />
     <Content Include="img\Preguntas-2.jpg" />
     <Content Include="img\Preguntas-3.jpg" />
@@ -1122,6 +1126,7 @@
     <Content Include="scripts\datatables.min.css" />
     <Content Include="scripts\documentacion.js" />
     <Content Include="scripts\ElementQueries.js" />
+    <Content Include="scripts\PlanesDeAccion\AltaPDA.js" />
     <Content Include="scripts\PlanesDeAccion\EmailSender.js" />
     <Content Include="scripts\excel.min.js" />
     <Content Include="scripts\excellentexport.js" />
@@ -1370,6 +1375,7 @@
     <Content Include="scripts\PlanesDeAccion\js\jquery.treeview.js" />
     <Content Include="scripts\PlanesDeAccion\PlanesDeAccion.js" />
     <Content Include="scripts\PlanesDeAccion\PlanesDeAccion.min.js" />
+    <Content Include="scripts\PlanesDeAccion\SeguimientoPlan.js" />
     <Content Include="scripts\Reporte.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <Content Include="scripts\jquery-1.8.3.min.js" />
@@ -1447,6 +1453,8 @@
     <Content Include="scripts\wordcloud2.js" />
     <Content Include="scripts\yearpicker.js" />
     <Content Include="scss\summernote-icons.css" />
+    <Content Include="templates\enviados\email_465b464b-1b79-4281-8150-a718d3f1aa63.html" />
+    <Content Include="templates\template-email-1.html" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
@@ -1476,7 +1484,6 @@
     <Content Include="Views\Encuesta\EditSecciones.cshtml" />
     <Content Include="Views\Encuesta\EditCondiciones.cshtml" />
     <Content Include="Views\Encuesta\EnviarEncuestaCL.cshtml" />
-    <Content Include="Views\Encuesta\EditClimaLab.cshtml" />
     <Content Include="scripts\jQuery.auto-save-form.js" />
     <Content Include="Views\Encuesta\successEmail.cshtml" />
     <Content Include="Views\Clim\Login.cshtml" />
@@ -1605,7 +1612,6 @@
     <Content Include="Views\Reporte\ReporteAbiertas.cshtml" />
     <Content Include="Views\Encuesta\creaEncuesta.cshtml" />
     <Content Include="Views\Encuesta\e.cshtml" />
-    <Content Include="Views\Encuesta\Edit.cshtml" />
     <Content Include="Views\Encuesta\Encuesta.cshtml" />
     <Content Include="Views\Encuesta\Preview.cshtml" />
     <Content Include="Views\BD\Add.cshtml" />
@@ -1709,6 +1715,7 @@
     <Content Include="Views\PlanesDeAccion\GetEncuestas.cshtml" />
     <Content Include="Views\PlanesDeAccion\Notificaciones.cshtml" />
     <Content Include="Views\HangFireMonitor\HangFire.cshtml" />
+    <Content Include="Views\PlanesDeAccion\Seguimiento.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

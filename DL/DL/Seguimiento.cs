@@ -12,23 +12,16 @@ namespace DL
     using System;
     using System.Collections.Generic;
     
-    public partial class Acciones
+    public partial class Seguimiento
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Acciones()
+        public Seguimiento()
         {
-            this.AccionesPlan = new HashSet<AccionesPlan>();
+            this.SeguimientoEvidencia = new HashSet<SeguimientoEvidencia>();
         }
     
-        public int IdAccion { get; set; }
-        public Nullable<int> IdPlanDeAccion { get; set; }
-        public string Descripcion { get; set; }
-        public Nullable<int> IdEstatus { get; set; }
-        public Nullable<int> IdCategoria { get; set; }
-        public Nullable<int> IdRango { get; set; }
-        public Nullable<int> IdEncuesta { get; set; }
-        public Nullable<int> IdBaseDeDatos { get; set; }
-        public Nullable<int> AnioAplicacion { get; set; }
+        public int IdSeguimiento { get; set; }
+        public Nullable<int> IdResponsableAccionesPlan { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
@@ -38,17 +31,9 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
-        public Nullable<int> Tipo { get; set; }
     
-        public virtual Categoria Categoria { get; set; }
-        public virtual TipoEstatus TipoEstatus { get; set; }
-        public virtual Rango Rango { get; set; }
-        public virtual Encuesta Encuesta { get; set; }
-        public virtual Encuesta Encuesta1 { get; set; }
-        public virtual Encuesta Encuesta2 { get; set; }
-        public virtual BasesDeDatos BasesDeDatos { get; set; }
+        public virtual ResponsablesAccionesPlan ResponsablesAccionesPlan { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AccionesPlan> AccionesPlan { get; set; }
-        public virtual PlanDeAccion PlanDeAccion { get; set; }
+        public virtual ICollection<SeguimientoEvidencia> SeguimientoEvidencia { get; set; }
     }
 }

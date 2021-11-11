@@ -28,5 +28,6 @@ namespace ML
         public string ProgramaEliminacion { get; set; }
         public List<Categoria> Preguntas { get; set; }
         public object Promedio { get; set; }
+        public object Icono { get; set; }
     }
 }

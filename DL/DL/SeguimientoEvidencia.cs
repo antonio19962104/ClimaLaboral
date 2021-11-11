@@ -12,17 +12,11 @@ namespace DL
     using System;
     using System.Collections.Generic;
     
-    public partial class ResponsablesAccionesPlan
+    public partial class SeguimientoEvidencia
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ResponsablesAccionesPlan()
-        {
-            this.Seguimiento = new HashSet<Seguimiento>();
-        }
-    
-        public int IdResponsablesAccionesPlan { get; set; }
-        public Nullable<int> IdAccionesPlan { get; set; }
-        public Nullable<int> IdResponsable { get; set; }
+        public int IdSeguimientoEvidencia { get; set; }
+        public Nullable<int> IdSeguimiento { get; set; }
+        public Nullable<int> IdEvidencia { get; set; }
         public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
         public string UsuarioCreacion { get; set; }
         public string ProgramaCreacion { get; set; }
@@ -33,9 +27,7 @@ namespace DL
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
     
-        public virtual AccionesPlan AccionesPlan { get; set; }
-        public virtual Responsable Responsable { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Seguimiento> Seguimiento { get; set; }
+        public virtual Evidencia Evidencia { get; set; }
+        public virtual Seguimiento Seguimiento { get; set; }
     }
 }

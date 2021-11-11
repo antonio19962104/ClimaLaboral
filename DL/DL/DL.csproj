@@ -269,6 +269,9 @@
     <Compile Include="EstatusMail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Evidencia.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="FooterPlantilla.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -650,6 +653,9 @@
     <Compile Include="PreguntasLikert.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="PromediosCategorias.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="PromedioSubCategorias.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -682,6 +688,12 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="sd_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Seguimiento.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeguimientoEvidencia.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Server.cs">

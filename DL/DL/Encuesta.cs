@@ -26,7 +26,6 @@ namespace DL
             this.EncuestaUnidadNegocio = new HashSet<EncuestaUnidadNegocio>();
             this.EstatusEncuesta = new HashSet<EstatusEncuesta>();
             this.EstatusEmail = new HashSet<EstatusEmail>();
-            this.PlanDeAccion = new HashSet<PlanDeAccion>();
             this.Preguntas = new HashSet<Preguntas>();
             this.PromedioSubCategorias = new HashSet<PromedioSubCategorias>();
             this.ValoracionSubcategoriaPorCategoria = new HashSet<ValoracionSubcategoriaPorCategoria>();
@@ -37,6 +36,8 @@ namespace DL
             this.Acciones = new HashSet<Acciones>();
             this.Acciones1 = new HashSet<Acciones>();
             this.Acciones2 = new HashSet<Acciones>();
+            this.PlanDeAccion = new HashSet<PlanDeAccion>();
+            this.PromediosCategorias = new HashSet<PromediosCategorias>();
         }
     
         public int IdEncuesta { get; set; }
@@ -94,8 +95,6 @@ namespace DL
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EstatusEmail> EstatusEmail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PlanDeAccion> PlanDeAccion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Preguntas> Preguntas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PromedioSubCategorias> PromedioSubCategorias { get; set; }
@@ -115,5 +114,9 @@ namespace DL
         public virtual ICollection<Acciones> Acciones1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Acciones> Acciones2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanDeAccion> PlanDeAccion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PromediosCategorias> PromediosCategorias { get; set; }
     }
 }

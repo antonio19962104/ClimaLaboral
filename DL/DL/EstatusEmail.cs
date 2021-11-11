@@ -31,6 +31,8 @@ namespace DL
         public string MsgEnvio { get; set; }
         public Nullable<int> IdEncuesta { get; set; }
         public Nullable<int> noIntentos { get; set; }
+        public string CC { get; set; }
+        public string CCO { get; set; }
     
         public virtual BasesDeDatos BasesDeDatos { get; set; }
         public virtual Encuesta Encuesta { get; set; }

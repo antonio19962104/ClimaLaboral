@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -11,6 +13,18 @@ namespace PL.Controllers
     /// </summary>
     public class PlanesDeAccionController : Controller
     {
+        #region Generales Modulo
+        /// <summary>
+        /// Agrega los promedios de cada categoria en una encuesta, base de datos y area especifica
+        /// </summary>
+        /// <param name="promediosCategorias"></param>
+        /// <returns></returns>
+        public JsonResult GuardarPromediosPorCategoria(List<ML.PromediosCategorias> promediosCategorias)
+        {
+            string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
+            var result = BL.PlanesDeAccion.GuardarPromediosPorCategoria(promediosCategorias, UsuarioActual);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
         /// <summary>
         /// Vista del listado de encuestas
         /// </summary>
@@ -169,16 +183,6 @@ namespace PL.Controllers
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
 
-        /// <summary>
-        /// Agrega el perfil de administrador de planes de accion
-        /// </summary>
-        /// <param name="IdAdmin"></param>
-        /// <returns></returns>
-        public JsonResult AgregarPerfilPlanesDeAccion(int IdAdmin)
-        {
-            var result = BL.PlanesDeAccion.AgregarPerfilPlanesDeAccion(IdAdmin);
-            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        }
 		/// <summary>
         /// Se crea un Nuevo Listado de encuestas de tipo Clima laboral para la creación de los Planes de Acción 
         /// </summary>
@@ -194,5 +198,139 @@ namespace PL.Controllers
             var result = BL.Encuesta.getEncuestasPM();
             return new JsonResult() { Data = result.ListadoDeEncuestas, JsonRequestBehavior = JsonRequestBehavior.AllowGet };        
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PlanDeAccion"></param>
+        /// <returns></returns>
+        public JsonResult AddPlanDeAccion(ML.PlanDeAccion PlanDeAccion) {
+            string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
+            int IdUsuarioActual = (int)Session["IdAdministradorLogeado"];
+            var result = BL.PlanesDeAccion.AddPlanDeAccion(PlanDeAccion, UsuarioActual, IdUsuarioActual);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Agrega el perfil de administrador de planes de accion
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <returns></returns>
+        public JsonResult AgregarPerfilPlanesDeAccion(int IdAdmin)
+        {
+            var result = BL.PlanesDeAccion.AgregarPerfilPlanesDeAccion(IdAdmin);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Se crea un Nuevo Listado de encuestas de tipo Clima laboral para la creación de los Planes de Acción 
+        /// </summary>
+        /// <returns></returns>
+        #endregion Generales Modulo
+
+        #region Seguimiento
+        /// <summary>
+        /// Muestra la vista del seguimiento de planes de accion
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Seguimiento()
+        {
+            Session["IdResponsable"] = 1;
+            return View();
+        }
+        /// <summary>
+        /// Obtiene los planes de acción a los que tiene acceso un usuario
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetPlanes(string IdResponsable)
+        {
+            bool IsResponsable = true;
+            if (Session["IdAdministradorLogeado"] == null)
+                return new JsonResult() { Data = "SessionTimeOut", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            if (IdResponsable == "0")
+                IsResponsable = false;
+            int UserId = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
+            var result = BL.PlanesDeAccion.GetPlanes(UserId, IsResponsable);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Obtiene las acciones de un plan de accion en las que el responsable es participante
+        /// </summary>
+        /// <param name="IdPlan"></param>
+        /// <param name="IdResponsable"></param>
+        /// <returns></returns>
+        public JsonResult GetAccionesByIdResponsable(string IdPlan, string IdResponsable)
+        {
+            if (string.IsNullOrEmpty(IdPlan) || string.IsNullOrEmpty(IdResponsable))
+                return new JsonResult() { Data = "Los parametros no pueden ser nulos o vacios", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            var result = BL.PlanesDeAccion.GetAccionesByIdResponsable(Convert.ToInt32(IdPlan), Convert.ToInt32(IdResponsable));
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Agrega un conjunto de archivos al seguimiento de una acción
+        /// </summary>
+        /// <param name="formCollection"></param>
+        /// <param name="IdPlan"></param>
+        /// <param name="IdAccion"></param>
+        /// <returns></returns>
+        public JsonResult AgregaArchivosSeguimieto(FormCollection formCollection, string IdPlan = "_IdPlan_1", string IdAccion = "_IdAccion_1")
+        {
+            try
+            {
+                /*
+                 * Trabajar directorios por id
+                 * Nombre Plan
+                 *  Accion
+                 *      Responsable 1
+                 *          Archivo 1
+                 *      Responsable 2
+                 *          Archivo 1
+                 *  Accion
+                 *      Responsable 1
+                 *          Archivo 1
+                 */
+                IdPlan = "IdPlan_" + IdPlan;
+                IdAccion = "IdAccion_" + IdAccion;
+                string cadenaResponsable;
+                if (Session["AdminLog"] != null)
+                    cadenaResponsable = "IdResponsable_" + Session["IdAdministradorLogeado"].ToString();
+                else
+                    return new JsonResult() { Data = "El nombre del responsable no puede estar vacio", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                int IdResponsable = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
+                var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\" + IdPlan + @"\\" + IdAccion + @"\\" + cadenaResponsable + @"\\";
+                int CantidadArchivos = Request.Files.Count;
+                foreach (string file in Request.Files)
+                {
+                    HttpPostedFileBase itemFile = Request.Files[file];
+                    try
+                    {
+                        if (!Directory.Exists(ruta))
+                            Directory.CreateDirectory(ruta);
+                        itemFile.SaveAs(Path.Combine(ruta, itemFile.FileName));
+                        BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, IdResponsable);
+                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El archivo " + ruta + @"\\" + itemFile.FileName + " fue agregado correctamente");
+                    }
+                    catch (Exception aE)
+                    {
+                        if (aE.Message.Contains("está siendo utilizado en otro proceso"))
+                        {
+                            if (!Directory.Exists(ruta))
+                                Directory.CreateDirectory(ruta);
+                            itemFile.SaveAs(Path.Combine(ruta, itemFile.FileName));
+                            BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, IdResponsable);
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El archivo " + ruta + @"\\" + itemFile.FileName + " fue agregado correctamente");
+                            return Json(true);
+                        }
+                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("El archivo " + ruta + @"\\" + itemFile.FileName + " no pudo agregarse correctamente");
+                        BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                        return Json(aE.Message);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                return Json(aE.Message);
+            }
+            return Json(true);
+        }
+        #endregion Seguimiento
     }
 }

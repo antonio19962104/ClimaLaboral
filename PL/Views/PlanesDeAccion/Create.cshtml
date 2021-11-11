@@ -12,6 +12,10 @@
     var IdEncuesta = 0;
     var IdBaseDeDatos =0;
     var AnioAplicacion = 0;
+    var _modelAcciones = @Html.Raw(JsonConvert.SerializeObject(new ML.AccionDeMejora()));
+    var _modelPlanDeAccion = @Html.Raw(JsonConvert.SerializeObject(new ML.PlanDeAccion()));
+    var _modelAccionesPlan = @Html.Raw(JsonConvert.SerializeObject(new ML.AccionesPlan()));
+    var _modelResponsablePlan = @Html.Raw(JsonConvert.SerializeObject(new ML.ResponsablesAccionesPlan()));
 </script>
 @section H1{
     <section id="page-title" >
@@ -24,8 +28,8 @@
                     </h1>
                 </div>
                 <div class="col-6 bottom-align-right center-vertically-xs">
-                    <a href="#" onclick="return alert('Se ha guardado');" class="btn-parallelogram parallelogram">
-                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
+                    <a href="#" class="btn-parallelogram parallelogram" @*onclick="GuardarAccion(this)"*@>
+                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar Plan de Acción</span>
                     </a>
                 </div>
             </div>
@@ -51,14 +55,8 @@
                         <div class="title-header-blue">
                             <span class="title-header-section">Seleccion de Área</span>
                         </div><!--.title-header-blue-->
-                        <div class="form-row">
-                           
-                            <div class="form-group col">
-                            <div class="row">
-                                <div class="col-12 font-weight-bold">
-                                    <label style="font-size:25px;">Encuesta</label>
-                                </div>                                
-                            </div>
+                        <div class="form-row">                           
+                            <div class="form-group col">                           
                                 <div class="row">
                                     <div class="col-xl-6">
                                         <label>Nombre de la Encuesta:</label>                                    
@@ -80,7 +78,7 @@
                                         <label>Base de Datos de la Encuesta:</label>
                                     </div>
                                     <div class="col-xl-6">
-                                        <label>{{vm.BaseEncuesta}}</label>
+                                        <label>{{vm.BaseEncuesta}}</label><button class="btn btn-clipboard btn-quitaBase"><i class="far fa-trash-alt"></i></button>
                                     </div>
                                 </div><!--.row-->
                             </div><!--.form-group-->
@@ -105,15 +103,85 @@
                        <div class="title-header-blue">
                            <span class="title-header-section">Seleccion de Categoría</span>
                        </div><!--.title-header-blue-->
-                       <div class="form-row">
+                       <div class="form-row section1">
+                           <div class="form-group col">
+                               <div class="row">
+                                   <div class="col-xl-6">
+                                       <label>Nombre de la Encuesta:</label>                                       
+                                   </div>
+                                   <div class="col-xl-6">
+                                       <label>{{vm.NombreEncuesta}}</label>
+                                   </div>
+                               </div><!--.row-->
+                               <div class="row">
+                                   <div class="col-xl-6">
+                                       <label>Periodo de la Encuesta:</label>
+                                   </div>
+                                   <div class="col-xl-6">
+                                       <label>{{vm.PeriodoEncuesta}}</label>
+                                   </div>
+                               </div><!--.row-->
+                               <div class="row">
+                                   <div class="col-xl-6">
+                                       <label>Base de Datos de la Encuesta:</label>
+                                   </div>
+                                   <div class="col-xl-6">
+                                       <label>{{vm.BaseEncuesta}}</label>
+                                   </div>
+                               </div><!--.row-->
+                               <div class="row">
+                                   <div class="col-xl-6">
+                                       <label>Área de la Encuesta:</label>
+                                   </div>
+                                   <div class="col-xl-6">
+                                       <label>{{vm.textAreaAgencia}}</label><button class="btn btn-clipboard btn-quitaArea"><i class="far fa-trash-alt"></i></button>
+                                   </div>
+                               </div><!--.row-->
+                           </div><!--.form-group-->
+                       </div>
+                       <div class="form-row" id="HselecCat">
+                           <div class="form-group col">
+                               <div class="row">
+                                   <div class="col-12 font-weight-bold">
+                                       <label style="font-size:25px;">Selecciona la categoria a configurar</label>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="form-row" id="BselecCat">
                            <div id="gridCategoriasPM"></div> 
                        </div>
+                       <div class="sectionActions" id="listAcciones"></div>
                    </div>
                 </div>
             </div>            
         </div>        
     </div>
 </section>
+
+<div class="modal fade" id="config-categoria">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="alert alert-block">
+                    <h4>Configura acciónes</h4>
+                </div>
+                <div class="form-group">
+                    <select id="nueva-categoria" class="form-control">
+                        <option value="0">-Selecciona una categoria-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="nuevo-rango" class="form-control select-rango"></select>
+                </div>
+                <div style="text-align: end;">
+                    <button class="btn btn-danger" onclick="LimpiarModal()" style="margin-right: 5px;">Cancelar <i class="fas fa-stop-circle"></i></button>
+                    <button class="btn btn-success" ng-click="vm.ReAsignarAccion()">Guardar <i class="fas fa-save"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="~/scripts/PlanesDeAccion/AltaPDA.js"></script>
 <link href="~/scripts/PlanesDeAccion/css/jquery.treeview.css" rel="stylesheet" />

@@ -26,13 +26,23 @@ namespace DL
         public Nullable<int> IdEncuesta { get; set; }
         public Nullable<int> IdUsuarioCreacion { get; set; }
         public Nullable<int> IdBaseDeDatos { get; set; }
-        public Nullable<int> Area { get; set; }
+        public Nullable<decimal> PorcentajeAvance { get; set; }
+        public string Area { get; set; }
+        public Nullable<System.DateTime> FechaHoraCreacion { get; set; }
+        public string UsuarioCreacion { get; set; }
+        public string ProgramaCreacion { get; set; }
+        public Nullable<System.DateTime> FechaHoraModificacion { get; set; }
+        public string UsuarioModificacion { get; set; }
+        public string ProgramaModificacion { get; set; }
+        public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
+        public string UsuarioEliminacion { get; set; }
+        public string ProgramaEliminacion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Acciones> Acciones { get; set; }
-        public virtual Administrador Administrador { get; set; }
-        public virtual Encuesta Encuesta { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccionesPlan> AccionesPlan { get; set; }
+        public virtual Administrador Administrador { get; set; }
+        public virtual Encuesta Encuesta { get; set; }
     }
 }

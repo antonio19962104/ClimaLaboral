@@ -1,0 +1,75 @@
+﻿@model ML.PlanDeAccion
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Seguimiento";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/swal.min.js"></script>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default-main.min.css" />
+<script>
+    var UserId = @Html.Raw(JsonConvert.SerializeObject(Session["IdAdministradorLogeado"]));
+    var IdResponsable = @Html.Raw(JsonConvert.SerializeObject(Session["IdResponsable"]));
+</script>
+@section H1{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6 bottom-align-left center-vertically-xs">
+                    <img src="~/img/plan-de-accion-2.png" )" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Plan de Acción / <span>Seguimiento</span>
+                    </h1>
+                </div>
+                <div hidden class="col-6 bottom-align-right center-vertically-xs">
+                    <a href="#" onclick="GuardarTodo()" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
+                    </a>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+<div class="content-wrap" ng-app="app" ng-controller="seguimientoController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-10">
+                <h3>{{ vm.Modulo }}</h3>
+                <div hidden class="form-group">
+                    <input type="file" id="fileChosser" name="fileChosser" multiple="multiple" />
+                    <input type="button" ng-click="vm.AgregarArchivos()" />
+                </div>
+                <div class="row">
+                    <div class="col-10 ml-5" ng-repeat="item in vm.ListPlanesDeAccion">
+                        <div class="alert alert-light" role="alert">
+                            {{ item.Nombre }}
+                            <button title="Detalle de seguimiento" class="btn" ng-click="vm.MostrarSeguimientoAcciones($event, item.IdPlanDeAccion, item.IdEncuesta, item.IdBaseDeDatos)"><i class="fas fa-eye fa-lg"></i></button>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="col-12 col-sm-12 col-md-6 col-xl-4" ng-repeat="item in vm.ListAcciones track by $index">
+                                    <div class="col-12" style="height: 30px; background-color: #002060;color: white;border-radius: 5px;">
+                                        <strong style="vertical-align: sub;" class="mt-2">{{ item.AccionesDeMejora.Categoria.Descripcion }} {{ item.AccionesDeMejora.Categoria.Promedio }} <img src="{{ item.AccionesDeMejora.Categoria.Icono }}" style="width: 30px;height: 25px;" /> </strong>
+                                    </div>
+                                    <div class="mt-2" style="border: 1px solid; border-radius: 20px; padding: 15px 20px 15px 25px;">
+                                        <input disabled type="text" class="form-control" value="Accion: {{ $index + 1 }}:" />
+                                        <input disabled type="text" class="form-control" value="{{ item.AccionesDeMejora.Descripcion }}" />
+                                        <strong>Avance:</strong><input disabled type="text" class="form-control" value="{{ item.PorcentajeAvance }}">
+                                        <input disabled type="text" class="form-control" value="Cumplimiento: 40%" />
+                                        <input disabled type="text" class="form-control" value="Concluye: {{ item.sFechaFin }}" />
+                                        <button class="btn"><i class="fas fa-eye"></i>  Ver detalle</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                Side
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/scripts/PlanesDeAccion/SeguimientoPlan.js"></script>
