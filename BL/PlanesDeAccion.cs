@@ -1305,22 +1305,51 @@ namespace BL
                                 int IdPlanDeAccion = (int)accionPlan.IdPlanDeAccion;
                                 var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlanDeAccion).FirstOrDefault();
                                 string NombrePlanDeAccion = PlanDeAccion.Nombre;
-                                string FechaFin = accionPlan.FechaFin.ToString();
+                                string FechaInicio = accionPlan.FechaInicio.ToString().Substring(0, 10);
+                                string FechaFin = accionPlan.FechaFin.ToString().Substring(0, 10);
+                                string Objetivo = accionPlan.Objetivo;
+                                string Comentarios = accionPlan.Comentarios;
+                                string Meta = accionPlan.Meta;
+                                var ResponsableAccionesPlan = accionPlan.ResponsablesAccionesPlan.FirstOrDefault();
+                                int IdRes = (int)ResponsableAccionesPlan.IdResponsable;
+                                var Responsable = context.Responsable.Where(o=> o.IdResponsable == IdRes).FirstOrDefault();
+                                string NombreResponsable = string.Concat(Responsable.Nombre, " ", Responsable.ApellidoPaterno, " ", Responsable.ApellidoMaterno);
+                                string EmailResponsable = Responsable.Email;
                                 int IdAccion = (int)accionPlan.IdAccion;
                                 var DataAccion = context.Acciones.Where(o => o.IdAccion == IdAccion).FirstOrDefault();
                                 string DescripcionAccion = DataAccion.Descripcion;
                                 int IdCategoria = (int)DataAccion.IdCategoria;
                                 string DescripcionCategoria = context.Categoria.Where(o => o.IdCategoria == IdCategoria).FirstOrDefault().Nombre;
 
+
                                 ML.AccionesPlan accionesPlan = new ML.AccionesPlan();
                                 accionesPlan.PlanDeAccion.IdPlanDeAccion = IdPlanDeAccion;
                                 accionesPlan.PlanDeAccion.Nombre = NombrePlanDeAccion;
+                                accionesPlan.sFechaInicio = FechaInicio;
                                 accionesPlan.sFechaFin = FechaFin;
+                                accionesPlan.Objetivo = Objetivo;
+                                accionesPlan.Meta = Meta;
+                                accionesPlan.Comentarios = Comentarios;
+                                accionesPlan.ListResponsable.Add(new ML.Responsable() { Nombre = NombreResponsable, Email = EmailResponsable });
                                 accionesPlan.AccionesDeMejora.IdAccionDeMejora = IdAccion;
                                 accionesPlan.AccionesDeMejora.Descripcion = DescripcionAccion;
                                 accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
                                 accionesPlan.AccionesDeMejora.Categoria.Descripcion = DescripcionCategoria;
                                 accionesPlan.PorcentajeAvance = Convert.ToDecimal(accionPlan.PorcentajeAvance);
+                                var Seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == ResponsableAccionesPlan.IdResponsablesAccionesPlan).FirstOrDefault();
+                                if (Seguimiento != null)
+                                {
+                                    var SeguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == Seguimiento.IdSeguimiento).ToList();
+                                    foreach (var seguimientoEvidencia in SeguimientoEvidencia)
+                                    {
+                                        var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia).FirstOrDefault();
+                                        if (evidencia != null)
+                                            accionesPlan.Atachments.Add(evidencia.Ruta);
+                                    }
+                                }
+
+
+
                                 ML.PromediosCategorias promediosCategorias = new ML.PromediosCategorias()
                                 {
                                     Area = PlanDeAccion.Area,

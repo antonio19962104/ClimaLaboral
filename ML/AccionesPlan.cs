@@ -22,6 +22,8 @@ namespace ML
         public string Comentarios { get; set; }
         public decimal PorcentajeAvance { get; set; }
 		public List<ResponsablesAccionesPlan> ListadoResponsables { get; set; } = new List<ResponsablesAccionesPlan>();
+        public List<Responsable> ListResponsable { get; set; } = new List<Responsable>();
+        public List<string> Atachments { get; set; } = new List<string>();
 
     }
 }
