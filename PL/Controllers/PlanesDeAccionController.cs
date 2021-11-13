@@ -272,6 +272,7 @@ namespace PL.Controllers
         /// <returns></returns>
         public JsonResult AgregaArchivosSeguimieto(FormCollection formCollection, string IdPlan = "_IdPlan_1", string IdAccion = "_IdAccion_1")
         {
+            ML.Result result = new ML.Result();
             try
             {
                 /*
@@ -323,13 +324,22 @@ namespace PL.Controllers
                         return Json(aE.Message);
                     }
                 }
+                result.Atachment = BL.PlanesDeAccion.ObtenerAtachments(ruta);
+                result.Correct = true;
             }
             catch (Exception aE)
             {
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
-                return Json(aE.Message);
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
             }
-            return Json(true);
+            return Json(result);
+        }
+        public JsonResult EliminarEvidencia(string ruta)
+        {
+            var result = BL.PlanesDeAccion.EliminarEvidencia(ruta);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         #endregion Seguimiento
     }

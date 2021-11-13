@@ -1336,13 +1336,13 @@ namespace BL
                                 accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
                                 accionesPlan.AccionesDeMejora.Categoria.Descripcion = DescripcionCategoria;
                                 accionesPlan.PorcentajeAvance = Convert.ToDecimal(accionPlan.PorcentajeAvance);
-                                var Seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == ResponsableAccionesPlan.IdResponsablesAccionesPlan).FirstOrDefault();
-                                if (Seguimiento != null)
+                                var Seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == ResponsableAccionesPlan.IdResponsablesAccionesPlan).ToList();
+                                foreach (var seguimento in Seguimiento)
                                 {
-                                    var SeguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == Seguimiento.IdSeguimiento).ToList();
+                                    var SeguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seguimento.IdSeguimiento).ToList();
                                     foreach (var seguimientoEvidencia in SeguimientoEvidencia)
                                     {
-                                        var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia).FirstOrDefault();
+                                        var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia && o.IdEstatus == 1).FirstOrDefault();
                                         if (evidencia != null)
                                             accionesPlan.Atachments.Add(evidencia.Ruta);
                                     }
@@ -1420,8 +1420,8 @@ namespace BL
             ML.Result result = new ML.Result();
             try
             {
-                int _idPlan = Convert.ToInt32(IdPlan);
-                int _idAccion = Convert.ToInt32(IdAccion);
+                int _idPlan = Convert.ToInt32(IdPlan.Split('_')[1]);//"IdPlan_3"
+                int _idAccion = Convert.ToInt32(IdAccion.Split('_')[1]);
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     DL.Evidencia evidencia = new DL.Evidencia();
@@ -1442,6 +1442,81 @@ namespace BL
                     seguimientoEvidencia.IdEvidencia = evidencia.IdEvidencia;
                     context.SeguimientoEvidencia.Add(seguimientoEvidencia);
                     context.SaveChanges();//Agregar SeguimientoEvidencia
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Obtiene los atachments en una ruta especificada
+        /// </summary>
+        /// <param name="ruta"></param>
+        /// <returns></returns>
+        public static List<string> ObtenerAtachments(string ruta)
+        {
+            List<string> result = new List<string>();
+            try
+            {
+                var folders = Directory.GetDirectories(ruta).ToList();
+                foreach (var folder in folders)
+                {
+                    var files = Directory.GetFiles(folder).ToList();
+                    foreach (var fileItem in files)
+                    {
+                        result.Add(fileItem);
+                    }
+                }
+                if (folders.Count == 0)
+                {
+                    var files = Directory.GetFiles(ruta).ToList();
+                    foreach (var fileItem in files)
+                    {
+                        result.Add(fileItem);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result = new List<string>();
+            }
+            return result;
+        }
+        /// <summary>
+        /// Elimina un archivo del conjunto de evidencias
+        /// </summary>
+        /// <param name="ruta"></param>
+        /// <returns></returns>
+        public static ML.Result EliminarEvidencia(string ruta)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                //\\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\IdPlan_3\\IdAccion_67\\IdResponsable_1\\Configurador Planes de Acción por Categoría V3 (3).pptx
+                // \\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\IdPlan_3\\IdAccion_67\\IdResponsable_1\\Reporte de Encuesta DNC.xlsx
+                string serverRoute = ruta.Replace("http://diagnostic4u.com/PlanesDeAccion//", @"\\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\");
+                serverRoute = serverRoute.Replace("/", @"\");
+                File.Delete(serverRoute);
+                result.Correct = true;
+
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var evidencia = context.Evidencia.Where(O => O.Ruta == serverRoute).FirstOrDefault();
+                    if (evidencia != null)
+                    {
+                        evidencia.IdEstatus = 2;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = "No se pudo encontrar la ruta de la evidencia";
+                    }
                 }
             }
             catch (Exception aE)

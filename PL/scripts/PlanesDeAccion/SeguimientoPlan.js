@@ -1,4 +1,6 @@
-﻿(function () {
+﻿var IdPlanDeAccion = 0;
+var IdAccionSeleccionada = 0;
+(function () {
     "use strict"
     angular.module("app", []).controller("seguimientoController", seguimientoController);
 
@@ -12,6 +14,13 @@
             vm.solNubeIcono = "/img/ReporteoClima/Iconos/solnube-icono.png";
             vm.nubeIcono = "/img/ReporteoClima/Iconos/nube-icono.png";
             vm.lluviaIcono = "/img/ReporteoClima/Iconos/lluvia-icono.png";
+
+            if (vm.ListAcciones.length == 0) {
+                vm.Modulo = "Consulta de Planes de Acción";
+            }
+            else {
+                vm.Modulo = "Seguimiento de tu Plan de Acción";
+            }
 
             $(document).ready(function () {
                 document.getElementById("loading").style.display ="block";
@@ -54,7 +63,8 @@
                 });
             }
 
-            vm.MostrarSeguimientoAcciones =function (e, IdPlan) {
+            vm.MostrarSeguimientoAcciones = function (e, IdPlan) {
+                IdPlanDeAccion = IdPlan;
                 document.getElementById("loading").style.display ="block";
                 vm.get("/PlanesDeAccion/GetAccionesByIdResponsable/?IdPlan=" + IdPlan + "&IdResponsable=" + IdResponsable, function (response) {
                     if (response.Correct) {
@@ -88,7 +98,8 @@
                     if (isConfirm) {
                         document.getElementById("loading").style.display ="block";
                         if (vm.ListAcciones.length > 0) {
-                            vm.ListAcciones =[];
+                            vm.ListAcciones = [];
+                            vm.Modulo = "Consulta de Planes de Acción";
                             $scope.$apply()
                         }
                         document.getElementById("loading").style.display ="none";
@@ -96,19 +107,32 @@
                 });
             }
 
-            vm.DetalleAccion =function (IdAccion) {
+            vm.DetalleAccion = function (IdAccion) {
+                vm.Modulo = "Tarjeta de Acciones de Mejora";
+                IdAccionSeleccionada = IdAccion;
                 document.getElementById("mergePlan").children[0].style.display = "none";
                 //document.getElementById("mergePlan").children[1].style.display = "none";
                 var accionPlan = Enumerable.from(vm.ListAcciones).where(o => o.AccionesDeMejora.IdAccionDeMejora == IdAccion).firstOrDefault();
                 var htmlContent = templateDetalleAccion;
                 htmlContent = vm.replaceHtmlContent(htmlContent, accionPlan);
                 $("#mergePlan").append(htmlContent);
+                $(".delete-file").unbind();
+                [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
+                    elem.addEventListener("click", function (e) {
+                        vm.EliminarArchivo(e);
+                    });
+                });
                 var content = document.getElementById('listAcciones');
                 var parent = content.parentNode;
                 parent.insertBefore(content, parent.firstChild);
                 document.getElementsByClassName("btn-back-action-detalle")[0].addEventListener("click", function () {
+                    vm.Modulo = "Seguimiento de tu Plan de Acción";
+                    $scope.$apply()
                     document.getElementById("listAcciones").remove();
                     document.getElementById("mergePlan").children[0].style.display = "";
+                });
+                document.getElementsByClassName("btnGuardarDetalleAccion")[0].addEventListener("click", function () {
+                    vm.AgregarArchivos();
                 });
             }
 
@@ -135,7 +159,9 @@
             vm.ObtenerRutaAtachment = function (data) {
                 var cadena = "";
                 [].forEach.call(data, function (item) {
-                    cadena += '<small style="display: block;">' + item + '</small>';
+                    // \\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\IdPlan_3\\IdAccion_67\\IdResponsable_1\\Configurador Planes de Acción por Categoría V3 (3).pptx
+                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");     
+                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                 });
                 if (cadena.length == 0)
                     cadena = '<small style="display: block;color:red;">Aun no se suben evidencias</small>';
@@ -206,14 +232,30 @@
                     formData.append(fileChosser + "_" + index, file);
                 });
                 $.ajax({
-                    url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=1&IdAccion=1",
+                    url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=" + IdPlanDeAccion + "&IdAccion=" + IdAccionSeleccionada,
                     type: "POST",
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function (response) {
                         if (response.Correct) {
-                            swal("Las evidencias fueron agregadas con éxito", "", "success");
+                            swal("Las evidencias fueron agregadas con éxito", "", "success").then(function () {
+                                // Actualizar archivos
+                                $("#listadoDocs").empty();
+                                var cadena = "";
+                                [].forEach.call(response.Atachment, function (item) {
+                                    // \\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\IdPlan_3\\IdAccion_67\\IdResponsable_1\\Configurador Planes de Acción por Categoría V3 (3).pptx
+                                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");
+                                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                                });
+                                $("#listadoDocs").append(cadena);
+                                $(".delete-file").unbind();
+                                [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
+                                    elem.addEventListener("click", function (e) {
+                                        vm.EliminarArchivo(e);
+                                    });
+                                });
+                            });
                         }
                         else {
                             swal("Ocurrió un error al intentar guardar las evidencias", response.ErrorMessage, "error");
@@ -225,14 +267,45 @@
                 });
             }
 
+            vm.EliminarArchivo = function (e) {
+                var ruta = e.target.nextElementSibling.href;
+                swal({
+                    title: "¿Estás seguro de que deseas eliminar esta evidencia?",
+                    text: "",
+                    icon: "info",
+                    buttons: [
+                        'No',
+                        'Si'
+                    ],
+                    dangerMode: false,
+                    allowOutsideClick: false,
+                    closeOnClickOutside: false,
+                }).then(function (isConfirm) {
+                    if (isConfirm) {
+                        document.getElementById("loading").style.display = "block";
+                        vm.get("/PlanesDeAccion/EliminarEvidencia/?ruta=" + ruta, function (response) {
+                            document.getElementById("loading").style.display = "none";
+                            if (response.Correct) {
+                                swal("La evidencia se eliminó correctamente", "", "success").then(function () {
+                                    // Remover eliminado
+                                    e.target.nextElementSibling.remove();
+                                    e.target.remove();
+                                });
+                            }
+                            else {
+                                swal("Ocurrió un error al intentar eliminar la evidencia", response.ErrorMessage, "error");
+                            }
+                        });
+                    }
+                });
+            }
+
 
 
             /*#region basics functions*/
             function messageBoxError(data) {
+                document.getElementById("loading").style.display = "none";
                 var error;
-                if (data.data.Correct ==undefined) {
-                    alert(data);
-                }
                 if (data.data =="SessionTimeOut") {
                     swal("Tu sesión ha expirado", "", "info").then(function () {
                         window.location.href ="/LoginAdmin/Login/";
@@ -359,7 +432,7 @@ var templateDetalleAccion = `
                     <div class="card-header" id="heading29_1">
                         <h5 class="mb-0">
                             <span class="btn btn-link col-12" data-toggle="collapse">
-                                <input type="text" placeholder="Ingresa nombre de la acción" value="#accion#" class="form-control txt-Nom-Acc">
+                                <input type="text" disabled placeholder="Ingresa nombre de la acción" value="#accion#" class="form-control txt-Nom-Acc">
                             </span>
                         </h5>
                     </div>
@@ -397,7 +470,7 @@ var templateDetalleAccion = `
 
                             <div class="row form-group col-6" style="float:left;">
                                 <div class="col-4">Adjuntar archivos de evidencia: </div>
-                                <div class="col-8"><input type="file" placeholder="Selecciona" class="form-control frm-archivos"></div>
+                                <div class="col-8"><input type="file" placeholder="Selecciona" class="form-control frm-archivos" id="fileChosser" name="fileChosser" multiple="multiple" /></div>
                                 <div id="listadoDocs" class="offset-4">
                                     #listAtachments#
                                 </div>
@@ -411,7 +484,7 @@ var templateDetalleAccion = `
                             </div>
 
                             <div class="row form-group mt-4" style="float:right;">
-                                <input type="button" class="btn btn-info" value="Guardar">
+                                <input type="button" class="btn btn-info btnGuardarDetalleAccion" value="Guardar">
                             </div>
                         </div>
                     </div>
