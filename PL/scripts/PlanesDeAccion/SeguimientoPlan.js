@@ -15,12 +15,10 @@ var IdAccionSeleccionada = 0;
             vm.nubeIcono = "/img/ReporteoClima/Iconos/nube-icono.png";
             vm.lluviaIcono = "/img/ReporteoClima/Iconos/lluvia-icono.png";
 
-            if (vm.ListAcciones.length == 0) {
+            if (vm.ListAcciones.length == 0)
                 vm.Modulo = "Consulta de Planes de Acción";
-            }
-            else {
+            else
                 vm.Modulo = "Seguimiento de tu Plan de Acción";
-            }
 
             $(document).ready(function () {
                 document.getElementById("loading").style.display ="block";
@@ -69,11 +67,13 @@ var IdAccionSeleccionada = 0;
                 vm.get("/PlanesDeAccion/GetAccionesByIdResponsable/?IdPlan=" + IdPlan + "&IdResponsable=" + IdResponsable, function (response) {
                     if (response.Correct) {
                         vm.Modulo ="Seguimiento de tu Plan de Acción";
-                        response.Objects[0].AccionesDeMejora.Descripcion ="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
+                        response.Objects[0].AccionesDeMejora.Descripcion = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
                         vm.ListAcciones =response.Objects;
-                        [].forEach.call([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], function (item) {
-                            vm.ListAcciones.push(response.Objects[0]);
-                        });
+                        //[].forEach.call([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], function (item) {
+                        //    vm.ListAcciones.push(response.Objects[0]);
+                        //});
+                        $("#mergePlan .col").hide();
+                        e.target.closest(".col").style.display = "";
                     }
                     else {
                         swal("Ocurrió un error al intentar obtener las acciones", response.ErrorMessage, "error");
@@ -99,6 +99,7 @@ var IdAccionSeleccionada = 0;
                         document.getElementById("loading").style.display ="block";
                         if (vm.ListAcciones.length > 0) {
                             vm.ListAcciones = [];
+                            $("#mergePlan .col").show();
                             vm.Modulo = "Consulta de Planes de Acción";
                             $scope.$apply()
                         }
@@ -110,12 +111,38 @@ var IdAccionSeleccionada = 0;
             vm.DetalleAccion = function (IdAccion) {
                 vm.Modulo = "Tarjeta de Acciones de Mejora";
                 IdAccionSeleccionada = IdAccion;
-                document.getElementById("mergePlan").children[0].style.display = "none";
-                //document.getElementById("mergePlan").children[1].style.display = "none";
+                $("#mergePlan .col").hide();
+                /*document.getElementById("mergePlan").children[0].style.display = "none";*/
+                /* document.getElementById("mergePlan").children[1].style.display = "none"; */
                 var accionPlan = Enumerable.from(vm.ListAcciones).where(o => o.AccionesDeMejora.IdAccionDeMejora == IdAccion).firstOrDefault();
                 var htmlContent = templateDetalleAccion;
                 htmlContent = vm.replaceHtmlContent(htmlContent, accionPlan);
                 $("#mergePlan").append(htmlContent);
+
+                if (IdResponsable == 0) {// Usuario admin
+                    [].forEach.call(accionPlan.ListResponsable, function (responsable, index) {
+                        $("#mergeResponsables").append(
+                            `<div class="row form-group" id="IdResponsable_` + responsable.IdResponsable + `">
+                                <div class="col-6"><input type="text" disabled value="` + responsable.Nombre + `" placeholder="Ingresa nombre del responsable" class="form-control frm-respon"></div>
+                                <div class="col-6"><input type="text" disabled value="` + responsable.Email + `" placeholder="Ingresa correo electrónico" class="form-control frm-respon-email"></div>
+                            </div>`
+                        );
+                        if (accionPlan.ListResponsable[index].Atachments.length > 0) {
+                            [].forEach.call(accionPlan.ListResponsable[index].Atachments, function (evidencia) {
+                                var ruta = evidencia.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");
+                                $("#IdResponsable_" + responsable.IdResponsable).append(
+                                    `<a href="` + ruta + `"><small class="ml-3" style="display:block;">` + ruta + `</small></a>`
+                                );
+                            });
+                        }
+                        else {
+                            $("#IdResponsable_" + responsable.IdResponsable).append(
+                                `<small class="ml-3" style="color:red;">El responsable aun no tiene evidencias guardadas</small>`
+                            );
+                        }
+                    });
+                }
+
                 $(".delete-file").unbind();
                 [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
                     elem.addEventListener("click", function (e) {
@@ -137,7 +164,6 @@ var IdAccionSeleccionada = 0;
             }
 
             vm.replaceHtmlContent = function (html, accionPlan) {
-                var evidencias = vm.ObtenerRutaAtachment(accionPlan.Atachments);
                 html = html.replace("#competencia#", accionPlan.AccionesDeMejora.Categoria.Descripcion);
                 html = html.replace("#promedio#", accionPlan.AccionesDeMejora.Categoria.Promedio);
                 html = html.replace("#icono#", vm.setIconoSVG(accionPlan.AccionesDeMejora.Categoria.Promedio));
@@ -147,19 +173,24 @@ var IdAccionSeleccionada = 0;
                 html = html.replace("#fin#", accionPlan.sFechaFin);
                 html = html.replace("#objetivo#", accionPlan.Objetivo);
                 html = html.replace("#meta#", accionPlan.Meta);
-                html = html.replace("#name_responsable#", accionPlan.ListResponsable[0].Nombre);
-                html = html.replace("#email_responsable#", accionPlan.ListResponsable[0].Email);
                 html = html.replace("#comentarios#", accionPlan.Comentarios);
                 html = html.replace("#avance#", accionPlan.PorcentajeAvance);
                 html = html.replace("#cumplimiento#", "");
-                html = html.replace("#listAtachments#", evidencias);
+                if (IdResponsable > 0) {// Perfil Responsable
+                    var evidencias = vm.ObtenerRutaAtachment(accionPlan.Atachments);
+                    html = html.replace("#name_responsable#", accionPlan.ListResponsable[0].Nombre);
+                    html = html.replace("#email_responsable#", accionPlan.ListResponsable[0].Email);
+                    html = html.replace("#listAtachments#", evidencias);
+                }
+                else { // Perfil administrador creador del plan
+                    
+                }
                 return html;
             }
 
             vm.ObtenerRutaAtachment = function (data) {
                 var cadena = "";
                 [].forEach.call(data, function (item) {
-                    // \\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\IdPlan_3\\IdAccion_67\\IdResponsable_1\\Configurador Planes de Acción por Categoría V3 (3).pptx
                     var fileName = item.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");     
                     cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                 });
@@ -167,6 +198,7 @@ var IdAccionSeleccionada = 0;
                     cadena = '<small style="display: block;color:red;">Aun no se suben evidencias</small>';
                 return cadena;
             }
+
 
             vm.setIconoSVG = function (value) {
                 try {
@@ -204,7 +236,7 @@ var IdAccionSeleccionada = 0;
                 mywindow.document.close();
                 mywindow.focus();
                 mywindow.setTimeout(function () { mywindow.print(); }, 1000);
-                //mywindow.close();
+                /* mywindow.close(); */
                 $(".tool-bar").show();
                 return true;
             }
@@ -240,11 +272,10 @@ var IdAccionSeleccionada = 0;
                     success: function (response) {
                         if (response.Correct) {
                             swal("Las evidencias fueron agregadas con éxito", "", "success").then(function () {
-                                // Actualizar archivos
+                                /* Actualizar archivos */
                                 $("#listadoDocs").empty();
                                 var cadena = "";
                                 [].forEach.call(response.Atachment, function (item) {
-                                    // \\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\IdPlan_3\\IdAccion_67\\IdResponsable_1\\Configurador Planes de Acción por Categoría V3 (3).pptx
                                     var fileName = item.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");
                                     cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                                 });
@@ -287,7 +318,7 @@ var IdAccionSeleccionada = 0;
                             document.getElementById("loading").style.display = "none";
                             if (response.Correct) {
                                 swal("La evidencia se eliminó correctamente", "", "success").then(function () {
-                                    // Remover eliminado
+                                    /* Remover eliminado */
                                     e.target.nextElementSibling.remove();
                                     e.target.remove();
                                 });
@@ -413,7 +444,7 @@ var IdAccionSeleccionada = 0;
 })();
 
 
-var templateDetalleAccion = `
+var templateDetalleAccion = IdResponsable > 0 ? `
 <div class="sectionActions col" id="listAcciones">
     <div id="cat_1" style="padding: 0px 0.5rem !important; display: block;">
         <div class="title-header-blue">
@@ -475,6 +506,76 @@ var templateDetalleAccion = `
                                     #listAtachments#
                                 </div>
                             </div>
+
+                            <div class="row form-group col-6" style="">
+                                <div class="col -6">
+                                    <span style="display: block;">Avance: #avance#%</span>
+                                    <span style="display: block;">Cumplimiento de la acción: #cumplimiento#%</span>
+                                </div>
+                            </div>
+
+                            <div class="row form-group mt-4" style="float:right;">
+                                <input type="button" class="btn btn-info btnGuardarDetalleAccion" value="Guardar">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+`
+: 
+`
+<div class="sectionActions col" id="listAcciones">
+    <div id="cat_1" style="padding: 0px 0.5rem !important; display: block;">
+        <div class="title-header-blue">
+            <div class="row">
+                <div class="col-10">
+                    <span class="title-header-section"> #competencia#    #promedio#% <img class="ml-3" src="#icono#" style="width: 35px;height: auto;" /> </span>
+                </div>
+                <div class="col-2 text-center">
+                    <button title="Regresar" type="button" idcat="1" class="btn btn-secondary btn-action ml-1 btn-back-action-detalle"><i idcat="1" class="far fa-arrow-alt-circle-left"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div id="accordion">
+                <div class="card">
+                    <div class="card-header" id="heading29_1">
+                        <h5 class="mb-0">
+                            <span class="btn btn-link col-12" data-toggle="collapse">
+                                <input type="text" disabled placeholder="Ingresa nombre de la acción" value="#accion#" class="form-control txt-Nom-Acc">
+                            </span>
+                        </h5>
+                    </div>
+
+                    <div id="collapse29_1" class="collapse show" aria-labelledby="heading29_1" data-parent="#accordion" style="">
+                        <div class="card-body">
+                            <div class="row form-group">
+                                <div class="col-3">Periodicidad: </div>
+                                <div class="col-5"><input type="text" disabled placeholder="Ingresa periocidad" value="#periodicidad#" class="form-control frm-periodicidad"></div>
+                                <div class="col-2"><i class="far fa-calendar-alt"></i>Inicia:<input disabled type="text" value="#inicio#" placeholder="Ingresa fecha de inicio" class="form-control frm-fecini"></div>
+                                <div class="col-2"><i class="far fa-calendar-alt"></i>Concluya:<input disabled type="text" value="#fin#" placeholder="Ingresa fecha de término" class="form-control frm-fecfin"></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-9">Objetivo: </div>
+                                <div class="col-3">Meta: </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-9"><input type="text" disabled value="#objetivo#" placeholder="Objetivo a alcanzar con la acción" class="form-control frm-objetivo"></div>
+                                <div class="col-3"><input type="text" disabled value="#meta#" placeholder="Ingresa meta" class="form-control frm-meta"></div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-3">Comentarios: </div>
+                                <div class="col-9"><input type="text" disabled value="#comentarios#" placeholder="Ingresa comentarios" class="form-control frm-comentarios"></div>
+                            </div>
+
+
+                            <section id="mergeResponsables" class="reponsables_29  frm-responsables">
+                                Responsables: 
+                            </section>
+
 
                             <div class="row form-group col-6" style="">
                                 <div class="col -6">

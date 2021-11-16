@@ -67,7 +67,7 @@ var modelNuevaAccion = {
                         }
                     });
                 });
-                //vm.ConsultaAreas();// Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta
+                /* vm.ConsultaAreas();Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta */
                 vm.ConsultaAccionesGuardadas();
                 vm.ConsultaAccionesAyuda();
             });

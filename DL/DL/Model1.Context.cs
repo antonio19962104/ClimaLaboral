@@ -117,6 +117,7 @@ namespace DL
         public virtual DbSet<SeguimientoEvidencia> SeguimientoEvidencia { get; set; }
         public virtual DbSet<PlanDeAccion> PlanDeAccion { get; set; }
         public virtual DbSet<PromediosCategorias> PromediosCategorias { get; set; }
+        public virtual DbSet<Periodicidad> Periodicidad { get; set; }
     
         [DbFunction("RH_DesEntities1", "splitstring_COMA")]
         public virtual IQueryable<splitstring_COMA_Result> splitstring_COMA(string stringToSplit)

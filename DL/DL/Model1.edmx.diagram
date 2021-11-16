@@ -227,6 +227,7 @@
         <AssociationConnector Association="RH_DesModel.fk_this_BaseDatos" />
         <AssociationConnector Association="RH_DesModel.fk_this_Categoria" />
         <AssociationConnector Association="RH_DesModel.fk_this_Encuesta" />
+        <EntityTypeShape EntityType="RH_DesModel.Periodicidad" Width="1.5" PointX="14.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

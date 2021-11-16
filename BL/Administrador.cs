@@ -264,6 +264,50 @@ namespace BL
             return result;
         }
 
+        public static ML.Result AddAdminModPlanes(ML.Administrador administrador, int IdAdminCreate)
+        {
+            ML.Result result = new ML.Result();
+
+            using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+            {
+                context.Database.Log = Console.Write;
+
+                using (var transaction = context.Database.BeginTransaction())
+                {
+
+                    try
+                    {
+                        //Si el administrador ya existe tomar sus claves e insrtarlas en este nuevo registro para que conserve las mismas claves
+                        var exists = context.Administrador.SqlQuery("select * from Administrador	INNER JOIN Empleado ON Administrador.IdEmpleado = Empleado.IdEmpleado	WHERE Empleado.IdEmpleado = {0}", administrador.Empleado.IdEmpleado).ToList();
+
+                        if (exists.Count == 0)//No existe
+                        {
+                            var query = context.Database.ExecuteSqlCommand
+                            ("INSERT INTO Administrador (IdEmpleado, IdPerfil, IdEstatus, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion, UserName, Password, CompanyId, IdAdministradorCreate) VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9})",
+                            administrador.Empleado.IdEmpleado, administrador.PerfilD4U.IdPerfil, administrador.TipoEstatus.IdEstatus, DateTime.Now, administrador.CURRENT_USER, "D4U", administrador.UserName, administrador.Password, administrador.Company.CompanyId, IdAdminCreate);
+                            int IdAdminInsertado = context.Administrador.Max(p => p.IdAdministrador);
+                            result.UltimoAdminInsertado = IdAdminInsertado;
+                            result.DefPass = administrador.Password;
+                        }
+                        else
+                        {
+                            result.UltimoAdminInsertado = exists.ElementAt(0).IdAdministrador;
+                        }
+                        result.Correct = true;
+                        context.SaveChanges();
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Correct = false;
+                        result.ErrorMessage = ex.Message;
+                        transaction.Rollback();
+                    }
+                }
+            }
+            return result;
+        }
+
         public static ML.Result GetAll(int CURRENT_IDEMPLEADOLOG, int IDCURRENTADMINLOG, int AdminLogSA)
         {
             ML.Result result = new ML.Result();

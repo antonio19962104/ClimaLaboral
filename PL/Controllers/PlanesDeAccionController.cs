@@ -232,7 +232,7 @@ namespace PL.Controllers
         /// <returns></returns>
         public ActionResult Seguimiento()
         {
-            Session["IdResponsable"] = 1;
+            Session["IdResponsable"] = 0;
             return View();
         }
         /// <summary>
@@ -247,7 +247,7 @@ namespace PL.Controllers
             if (IdResponsable == "0")
                 IsResponsable = false;
             int UserId = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
-            var result = BL.PlanesDeAccion.GetPlanes(UserId, IsResponsable);
+            var result = BL.PlanesDeAccion.GetPlanes(UserId, IsResponsable, IdResponsable);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>
@@ -291,9 +291,9 @@ namespace PL.Controllers
                 IdAccion = "IdAccion_" + IdAccion;
                 string cadenaResponsable;
                 if (Session["AdminLog"] != null)
-                    cadenaResponsable = "IdResponsable_" + Session["IdAdministradorLogeado"].ToString();
+                    cadenaResponsable = "IdResponsable_" + Session["IdResponsable"].ToString();
                 else
-                    return new JsonResult() { Data = "El nombre del responsable no puede estar vacio", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    return new JsonResult() { Data = new ML.Result() { Correct = false, ErrorMessage = "El nombre del responsable no puede estar vacio" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 int IdResponsable = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
                 var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\" + IdPlan + @"\\" + IdAccion + @"\\" + cadenaResponsable + @"\\";
                 int CantidadArchivos = Request.Files.Count;
@@ -336,6 +336,11 @@ namespace PL.Controllers
             }
             return Json(result);
         }
+        /// <summary>
+        /// Eliminacion logica en la tabla dbo.Evidencia y eliminacion del archivo fisico en el servidor
+        /// </summary>
+        /// <param name="ruta"></param>
+        /// <returns></returns>
         public JsonResult EliminarEvidencia(string ruta)
         {
             var result = BL.PlanesDeAccion.EliminarEvidencia(ruta);

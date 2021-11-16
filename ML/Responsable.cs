@@ -13,5 +13,6 @@ namespace ML
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
         public string Email { get; set; }
+        public List<string> Atachments { get; set; } = new List<string>();
     }
 }

@@ -635,6 +635,9 @@
     <Compile Include="PerfilModuloAccion.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Periodicidad.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="PlanDeAccion.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

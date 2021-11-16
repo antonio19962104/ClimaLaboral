@@ -1,7 +1,9 @@
 ﻿using DocumentFormat.OpenXml.Math;
 using DocumentFormat.OpenXml.Packaging;
+using Hangfire;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -537,7 +539,7 @@ namespace BL
             }
             return existe;
         }
-		/// <summary>
+        /// <summary>
         /// Agrega un nuevo plan de acción
         /// </summary>
         /// <param name="planDeAccion"></param>
@@ -547,89 +549,197 @@ namespace BL
         public static ML.Result AddPlanDeAccion(ML.PlanDeAccion planDeAccion, string UsuarioActual, int IdUsuarioAcyual)
         {
             ML.Result result = new ML.Result();
-            try
+            using (DL.RH_DesEntities context = new DL.RH_DesEntities())
             {
-                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                using (var transaction = context.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
                 {
-                    //alta de plan de accion
-                    var dataPlanDeAccion = new DL.PlanDeAccion() {
-                        Nombre = planDeAccion.Nombre,
-                        IdUsuarioCreacion = IdUsuarioAcyual,
-                        IdEncuesta = planDeAccion.IdEncuesta,
-                        FechaHoraCreacion = DateTime.Now,
-                        UsuarioCreacion = UsuarioActual,
-                        ProgramaCreacion = "Modulo Planes de Acción Alta",
-                        IdBaseDeDatos = planDeAccion.IdBaseDeDatos,
-                        Area = planDeAccion.Area
-                    };
-                    context.PlanDeAccion.Add(dataPlanDeAccion);
-                    context.SaveChanges();
-                    int idPlanDeAccion = (int)context.PlanDeAccion.Max(q => q.IdPlanDeAccion);
-                    // alta de acciones por categoria
-                    foreach (ML.AccionesPlan item in planDeAccion.ListAcciones)
+                    try
                     {
-                        var actualizaAccion = context.Acciones.Where(o => o.IdAccion == item.IdAccion).FirstOrDefault();
-                        if (actualizaAccion != null)
+                        //alta de plan de accion
+                        var dataPlanDeAccion = new DL.PlanDeAccion()
                         {
-                            actualizaAccion.Descripcion = item.PlanDeAccion.Nombre.Trim();
-                                
-                        }
-                        DL.AccionesPlan acciones = new DL.AccionesPlan() {
-                            IdPlanDeAccion = idPlanDeAccion,
-                            IdAccion = item.IdAccion,
-                            Periodicidad = item.Periodicidad,
-                            FechaInicio = item.FechaInicio,
-                            FechaFin = item.FechaFin,
-                            Objetivo =item.Objetivo,
-                            Meta= item.Meta,
-                            Comentarios= item.Comentarios,
+                            Nombre = planDeAccion.Nombre,
+                            IdUsuarioCreacion = IdUsuarioAcyual,
+                            IdEncuesta = planDeAccion.IdEncuesta,
                             FechaHoraCreacion = DateTime.Now,
                             UsuarioCreacion = UsuarioActual,
-                            ProgramaCreacion = "Modulo Planes de Acción Alta - Acciones"
+                            ProgramaCreacion = "Modulo Planes de Acción Alta",
+                            IdBaseDeDatos = planDeAccion.IdBaseDeDatos,
+                            Area = planDeAccion.Area
                         };
-                        context.AccionesPlan.Add(acciones);
+                        context.PlanDeAccion.Add(dataPlanDeAccion);
                         context.SaveChanges();
-                        var idAccionPlan = context.AccionesPlan.Max(o => o.IdAccionesPlan);
-                        //alta de responsables
-                        foreach (ML.ResponsablesAccionesPlan responsable in item.ListadoResponsables)
+                        int idPlanDeAccion = (int)context.PlanDeAccion.Max(q => q.IdPlanDeAccion);
+                        // alta de acciones por categoria
+                        foreach (ML.AccionesPlan item in planDeAccion.ListAcciones)
                         {
-                            DL.Responsable responsablePA = new DL.Responsable()
+                            var actualizaAccion = context.Acciones.Where(o => o.IdAccion == item.IdAccion).FirstOrDefault();
+                            if (actualizaAccion != null)
                             {
-                                Nombre = responsable.Responsable.Nombre,
-                                ApellidoPaterno = responsable.Responsable.ApellidoPaterno,
-                                ApellidoMaterno = responsable.Responsable.ApellidoMaterno,
-                                Email = responsable.Responsable.Email,
+                                actualizaAccion.Descripcion = item.PlanDeAccion.Nombre.Trim();
+
+                            }
+                            DL.AccionesPlan acciones = new DL.AccionesPlan()
+                            {
+                                IdPlanDeAccion = idPlanDeAccion,
+                                IdAccion = item.IdAccion,
+                                Periodicidad = item.Periodicidad,
+                                FechaInicio = item.FechaInicio,
+                                FechaFin = item.FechaFin,
+                                Objetivo = item.Objetivo,
+                                Meta = item.Meta,
+                                Comentarios = item.Comentarios,
                                 FechaHoraCreacion = DateTime.Now,
                                 UsuarioCreacion = UsuarioActual,
-                                ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable"
+                                ProgramaCreacion = "Modulo Planes de Acción Alta - Acciones"
                             };
-                            context.Responsable.Add(responsablePA);
+                            context.AccionesPlan.Add(acciones);
                             context.SaveChanges();
-                            var idresponsable = context.Responsable.Max(o => o.IdResponsable);
+                            var idAccionPlan = context.AccionesPlan.Max(o => o.IdAccionesPlan);
+                            //alta de responsables
+                            foreach (ML.ResponsablesAccionesPlan responsable in item.ListadoResponsables)
+                            {
+                                var existeResponsableEnAdmin = ExisteResponsableenAdministrador(responsable.Responsable.Email);
+                                var existeResponsable = ExisteResponsable(responsable.Responsable.Email);
+                                //Si existe en Admin, entonces preguntamos si existe en Responsables
+                                if (existeResponsableEnAdmin.Correct)
+                                {
+                                    //Si NO existe en Responsable se inserta en tabla de Responsable y se obtien el id para las relaciones
+                                    if (!existeResponsable.Correct)
+                                    {
+                                        // se inserta en Responsables porque no existe, se obtiene el idResponsable
+                                        DL.Responsable responsablePA = new DL.Responsable()
+                                        {
+                                            IdAdministrador = existeResponsableEnAdmin.CURRENTIDADMINLOG,
+                                            Nombre = responsable.Responsable.Nombre,
+                                            ApellidoPaterno = responsable.Responsable.ApellidoPaterno,
+                                            ApellidoMaterno = responsable.Responsable.ApellidoMaterno,
+                                            Email = responsable.Responsable.Email,
+                                            FechaHoraCreacion = DateTime.Now,
+                                            UsuarioCreacion = UsuarioActual,
+                                            ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable"
+                                        };
+                                        context.Responsable.Add(responsablePA);
+                                        var idresponsable = context.Responsable.Max(o => o.IdResponsable);
 
-                            DL.ResponsablesAccionesPlan respon = new DL.ResponsablesAccionesPlan() {
-                                IdAccionesPlan= idAccionPlan,
-                                IdResponsable = idresponsable,
-                                FechaHoraCreacion = DateTime.Now,
-                                UsuarioCreacion = UsuarioActual,
-                                ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable AccionPlan"
-                            };
-                            context.ResponsablesAccionesPlan.Add(respon);
-                            context.SaveChanges();
+                                        DL.ResponsablesAccionesPlan respon1 = new DL.ResponsablesAccionesPlan()
+                                        {
+                                            IdAccionesPlan = idAccionPlan,
+                                            IdResponsable = idresponsable,
+                                            FechaHoraCreacion = DateTime.Now,
+                                            UsuarioCreacion = UsuarioActual,
+                                            ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable AccionPlan"
+                                        };
+                                        context.ResponsablesAccionesPlan.Add(respon1);
+                                        context.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        DL.ResponsablesAccionesPlan respon = new DL.ResponsablesAccionesPlan()
+                                        {
+                                            IdAccionesPlan = idAccionPlan,
+                                            IdResponsable = existeResponsable.CURRENTIDADMINLOG,
+                                            FechaHoraCreacion = DateTime.Now,
+                                            UsuarioCreacion = UsuarioActual,
+                                            ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable AccionPlan"
+                                        };
+                                        context.ResponsablesAccionesPlan.Add(respon);
+                                        context.SaveChanges();
+                                    }
+                                }
+                                //Si NO existe en Administrador, se inserta primero en empleado y despues en administrador y se obtiene el IdAdministrador
+                                //Se inserta en Résponsable y se obtiene su IdResponsable
+                                //se Inserta Permisos Perfil
+                                //Se inserta relacion REsponsableAccion
+                                else
+                                {
+                                    //Se inserta en Empleados - BAsico -
+                                    ML.Administrador empleadoAdd = new ML.Administrador();
+                                    empleadoAdd.Nombre = responsable.Responsable.Nombre;
+                                    empleadoAdd.ApellidoPaterno = "";
+                                    empleadoAdd.ApellidoMaterno = "";
+                                    empleadoAdd.Correo = responsable.Responsable.Email;
+                                    empleadoAdd.UsuarioCreacion = UsuarioActual;
+                                    empleadoAdd.FechaHoraCreacion = DateTime.Now;
+                                    empleadoAdd.ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable Alta Empleado";
+                                    var altaEmpleado = Empleado.AddForAdmin(empleadoAdd);
 
+
+                                    //Se inserta en Admin y se obtiene el IdAdministrador                                                                          
+                                    //administrador.UserName, 
+                                    //administrador.Password, 
+                                    //administrador.Company.CompanyId, 
+                                    //IdAdminCreate
+                                    ML.Administrador adminAdd = new ML.Administrador();
+                                    adminAdd.Empleado = new ML.Empleado();
+                                    adminAdd.Empleado.IdEmpleado = altaEmpleado.IdEmpleadoFromSP;
+                                    adminAdd.PerfilD4U = new ML.PerfilD4U();
+                                    adminAdd.PerfilD4U.IdPerfil = 9;//perfi de Administracion de Planes de Acción
+                                    adminAdd.TipoEstatus = new ML.TipoEstatus();
+                                    adminAdd.TipoEstatus.IdEstatus = 1;
+                                    adminAdd.UsuarioCreacion = UsuarioActual;
+                                    adminAdd.FechaHoraCreacion = DateTime.Now;
+                                    adminAdd.ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable Alta Administrador";
+                                    adminAdd.UserName = responsable.Responsable.Email;
+                                    adminAdd.Password = BL.Administrador.GeneratePasswordResetToken(altaEmpleado.IdEmpleadoFromSP);
+                                    adminAdd.Company = new ML.Company();
+                                    adminAdd.Company.CompanyId = 1;                                   
+                                    var altaAdministrador = BL.Administrador.AddAdminModPlanes(adminAdd, IdUsuarioAcyual);
+
+                                    if (altaAdministrador.Correct)
+                                    {
+                                        //Se agregan los perfiles de seguimiento de Acciones al IdAdministrador
+                                        AgregarPerfilPlanesDeAccion(altaAdministrador.UltimoAdminInsertado);
+
+                                        DL.Responsable responsablePA = new DL.Responsable()
+                                        {
+                                            IdAdministrador = altaAdministrador.UltimoAdminInsertado,
+                                            Nombre = responsable.Responsable.Nombre,
+                                            ApellidoPaterno = responsable.Responsable.ApellidoPaterno,
+                                            ApellidoMaterno = responsable.Responsable.ApellidoMaterno,
+                                            Email = responsable.Responsable.Email,
+                                            FechaHoraCreacion = DateTime.Now,
+                                            UsuarioCreacion = UsuarioActual,
+                                            ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable"
+                                        };
+                                        context.Responsable.Add(responsablePA);
+                                        context.SaveChanges();
+                                        var idresponsable = context.Responsable.Max(o => o.IdResponsable);
+
+                                        DL.ResponsablesAccionesPlan respon = new DL.ResponsablesAccionesPlan()
+                                        {
+                                            IdAccionesPlan = idAccionPlan,
+                                            IdResponsable = idresponsable,
+                                            FechaHoraCreacion = DateTime.Now,
+                                            UsuarioCreacion = UsuarioActual,
+                                            ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable AccionPlan"
+                                        };
+                                        context.ResponsablesAccionesPlan.Add(respon);
+                                        context.SaveChanges();
+                                    }
+                                    else
+                                    {
+                                        result.Correct = false;
+                                        transaction.Rollback();
+                                        return result;
+
+                                }
+                            }
                         }
-
-                    }
-                    
+                    }  
+					
                     result.Correct = true;
                 }
-            }
             catch (Exception aE)
             {
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
+				transaction.Rollback();
             }
+			transaction.Commit();
+			}
+			}
             return result;
         }
         /// <summary>
@@ -1016,9 +1126,9 @@ namespace BL
             try
             {
                 List<string> acciones = new List<string>();
-                acciones.Add("AdministrarAcciones");
-                acciones.Add("CrearPlanes");
-                acciones.Add("ListarPlanes");
+                      acciones.Add("Seguimiento");
+                //acciones.Add("CrearPlanes");
+                //acciones.Add("ListarPlanes");
                 List<DL.PerfilModuloAccion> ListPerfilModuloAccion = new List<DL.PerfilModuloAccion>();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
@@ -1060,9 +1170,74 @@ namespace BL
         }
         #endregion Generales Modulo
 
+       
+        public static ML.Result ExisteResponsable(string aEmail)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var existente = false;                   
+                    var existeResponsableBD = context.Responsable.Where(o => o.Email == aEmail).FirstOrDefault();
+                    if (existeResponsableBD != null)
+                    {
+                        result.CURRENTIDADMINLOG = existeResponsableBD.IdResponsable;
+                        existente = true;
+                    }
+                    result.Correct = existente;
+                }
+                    
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return result;
+            
+        }
 
+        public static ML.Result ExisteResponsableenAdministrador(string aEmail)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var existeResAdm = context.Administrador.Where(o => o.UserName == aEmail && o.IdEstatus == 1).FirstOrDefault();
+                    if (existeResAdm != null)
+                    {                                                
+                        result.Correct = true;
+                        result.CURRENTIDADMINLOG = existeResAdm.IdAdministrador;                        
+                    }
+                    else
+                    {
+                        result.Correct = false;                        
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
 
         #region Notificaciones
+        /// <summary>
+        /// Disparador del job para el envio de notificacion inicial
+        /// </summary>
+        /// <param name="IdPlanDeAccion"></param>
+        public static void TriggerNotificacionInicial(int IdPlanDeAccion)
+        {
+            BackgroundJob.Enqueue(() => NotificacionInicialResponsables(IdPlanDeAccion));
+        }
         /// <summary>
         /// Envía un email de notificación a los responsables las acciones al guardar un nuevo Plan
         /// trigger: Al guardar un plan de accion
@@ -1221,20 +1396,22 @@ namespace BL
         /// </summary>
         /// <param name="UserId"></param>
         /// <param name="IsResponsable"></param>
+        /// <param name="IdResponsable"></param>
         /// <returns></returns>
-        public static ML.Result GetPlanes(int UserId, bool IsResponsable)
+        public static ML.Result GetPlanes(int UserId, bool IsResponsable, string IdResponsable)
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
             try
             {
+                int _idResponsable = Convert.ToInt32(IdResponsable);
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     // Si es un usuario responsable solo puede ver los planes en donde es participante
                     // Si es un usuario admnistrador de planes de accion puede solo ver los planes de acción que ha creado
                     if (IsResponsable)
                     {
-                        var ResponsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == UserId);
+                        var ResponsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == _idResponsable);
                         foreach (var responsableAccionesPlan in ResponsableAccionesPlan)
                         {
                             var AccionesPlan = context.AccionesPlan.Where(o => o.IdAccionesPlan == responsableAccionesPlan.IdAccionesPlan);
@@ -1274,6 +1451,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -1321,7 +1499,6 @@ namespace BL
                                 int IdCategoria = (int)DataAccion.IdCategoria;
                                 string DescripcionCategoria = context.Categoria.Where(o => o.IdCategoria == IdCategoria).FirstOrDefault().Nombre;
 
-
                                 ML.AccionesPlan accionesPlan = new ML.AccionesPlan();
                                 accionesPlan.PlanDeAccion.IdPlanDeAccion = IdPlanDeAccion;
                                 accionesPlan.PlanDeAccion.Nombre = NombrePlanDeAccion;
@@ -1347,9 +1524,6 @@ namespace BL
                                             accionesPlan.Atachments.Add(evidencia.Ruta);
                                     }
                                 }
-
-
-
                                 ML.PromediosCategorias promediosCategorias = new ML.PromediosCategorias()
                                 {
                                     Area = PlanDeAccion.Area,
@@ -1360,8 +1534,6 @@ namespace BL
                                 var promedio = ObtenerPromedioCategoria(promediosCategorias);
                                 accionesPlan.AccionesDeMejora.Categoria.Promedio = promedio;
                                 accionesPlan.AccionesDeMejora.Categoria.Icono = BL.Email.ObtenerIconoEmail(promedio);
-                                // El porcentaje de la categoria se obtiene al vuelo en el js
-
                                 result.Objects.Add(accionesPlan);
                             }
                         }
@@ -1370,29 +1542,77 @@ namespace BL
                     else
                     {
                         // Obtener todas las acciones del plan ya que es un admin
+                        /*
+                         * Homologar lo que se tiene en la validacion de cuando entra un usuario responsable, solo que en el arreglo de responsables 
+                         * dejarlo abierto a que pueden ser varios
+                         * Asi mismo los atachments mostrarlos segun del responsable que los haya subido
+                         * y en el fron iterar la pantilla en la parte de responsables de accion
+                         */
                         var AccionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == IdPlan);
                         foreach (var accionPlan in AccionesPlan)
                         {
                             int IdPlanDeAccion = (int)accionPlan.IdPlanDeAccion;
-                            string NombrePlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlanDeAccion).FirstOrDefault().Nombre;
-                            DateTime FechaFin = (DateTime)accionPlan.FechaFin;
+                            var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlanDeAccion).FirstOrDefault();
+                            string NombrePlanDeAccion = PlanDeAccion.Nombre;
+                            string FechaInicio = accionPlan.FechaInicio.ToString().Substring(0, 10);
+                            string FechaFin = accionPlan.FechaFin.ToString().Substring(0, 10);
+                            string Objetivo = accionPlan.Objetivo;
+                            string Comentarios = accionPlan.Comentarios;
+                            string Meta = accionPlan.Meta;
                             int IdAccion = (int)accionPlan.IdAccion;
                             var DataAccion = context.Acciones.Where(o => o.IdAccion == IdAccion).FirstOrDefault();
                             string DescripcionAccion = DataAccion.Descripcion;
                             int IdCategoria = (int)DataAccion.IdCategoria;
                             string DescripcionCategoria = context.Categoria.Where(o => o.IdCategoria == IdCategoria).FirstOrDefault().Nombre;
-                            
+
+                            // Listado de responsables
                             ML.AccionesPlan accionesPlan = new ML.AccionesPlan();
+                            var ResponsableAccionesPlan = accionPlan.ResponsablesAccionesPlan.ToList();
+                            int index = 0;
+                            foreach (var responsableAccionPlan in ResponsableAccionesPlan)
+                            {
+                                int IdRes = (int)responsableAccionPlan.IdResponsable;
+                                var Responsable = context.Responsable.Where(o => o.IdResponsable == IdRes).FirstOrDefault();
+                                string NombreResponsable = string.Concat(Responsable.Nombre, " ", Responsable.ApellidoPaterno, " ", Responsable.ApellidoMaterno);
+                                string EmailResponsable = Responsable.Email;
+                                accionesPlan.ListResponsable.Add(new ML.Responsable() { IdResponsable = IdRes, Nombre = NombreResponsable, Email = EmailResponsable });
+                                var Seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == responsableAccionPlan.IdResponsablesAccionesPlan).ToList();
+                                foreach (var seguimento in Seguimiento)
+                                {
+                                    var SeguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seguimento.IdSeguimiento).ToList();
+                                    foreach (var seguimientoEvidencia in SeguimientoEvidencia)
+                                    {
+                                        var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia && o.IdEstatus == 1).FirstOrDefault();
+                                        if (evidencia != null)
+                                            accionesPlan.ListResponsable[index].Atachments.Add(evidencia.Ruta);
+                                    }
+                                }
+                                index++;
+                            }
+                            //Fin Listado de responsables
                             accionesPlan.PlanDeAccion.IdPlanDeAccion = IdPlanDeAccion;
                             accionesPlan.PlanDeAccion.Nombre = NombrePlanDeAccion;
-                            accionesPlan.FechaFin = FechaFin;
+                            accionesPlan.sFechaInicio = FechaInicio;
+                            accionesPlan.sFechaFin = FechaFin;
+                            accionesPlan.Objetivo = Objetivo;
+                            accionesPlan.Meta = Meta;
+                            accionesPlan.Comentarios = Comentarios;
                             accionesPlan.AccionesDeMejora.IdAccionDeMejora = IdAccion;
                             accionesPlan.AccionesDeMejora.Descripcion = DescripcionAccion;
                             accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
                             accionesPlan.AccionesDeMejora.Categoria.Descripcion = DescripcionCategoria;
                             accionesPlan.PorcentajeAvance = Convert.ToDecimal(accionPlan.PorcentajeAvance);
-                            // El porcentaje de la categoria se obtiene al vuelo en el js
-
+                            
+                            ML.PromediosCategorias promediosCategorias = new ML.PromediosCategorias()
+                            {
+                                Area = PlanDeAccion.Area,
+                                BasesDeDatos = new ML.BasesDeDatos() { IdBaseDeDatos = PlanDeAccion.IdBaseDeDatos },
+                                Categoria = new ML.Categoria() { IdCategoria = (int)DataAccion.IdCategoria },
+                                Encuesta = new ML.Encuesta() { IdEncuesta = (int)PlanDeAccion.IdEncuesta }
+                            };
+                            var promedio = ObtenerPromedioCategoria(promediosCategorias);
+                            accionesPlan.AccionesDeMejora.Categoria.Promedio = promedio;
+                            accionesPlan.AccionesDeMejora.Categoria.Icono = BL.Email.ObtenerIconoEmail(promedio);
                             result.Objects.Add(accionesPlan);
                         }
                         result.Correct = true;
@@ -1401,6 +1621,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -1446,6 +1667,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
@@ -1521,6 +1743,7 @@ namespace BL
             }
             catch (Exception aE)
             {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;

@@ -1373,6 +1373,7 @@
     <Content Include="scripts\PlanesDeAccion\css\jquery.treeview.css" />
     <Content Include="scripts\PlanesDeAccion\js\jquery-3.4.1.min.js" />
     <Content Include="scripts\PlanesDeAccion\js\jquery.treeview.js" />
+    <Content Include="scripts\PlanesDeAccion\SeguimientoPlan.min.js" />
     <Content Include="scripts\PlanesDeAccion\PlanesDeAccion.js" />
     <Content Include="scripts\PlanesDeAccion\PlanesDeAccion.min.js" />
     <Content Include="scripts\PlanesDeAccion\SeguimientoPlan.js" />
