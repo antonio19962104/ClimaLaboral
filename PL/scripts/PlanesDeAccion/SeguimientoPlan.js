@@ -21,6 +21,7 @@ var IdAccionSeleccionada = 0;
                 vm.Modulo = "Seguimiento de tu Plan de Acción";
 
             $(document).ready(function () {
+                CrearScript("/scripts/PlanesDeAccion/printThis.js");
                 document.getElementById("loading").style.display ="block";
                 $("#busqueda").on("keyup", function (text) {
                     $("#mergePlan .alert-info").hide();
@@ -59,6 +60,11 @@ var IdAccionSeleccionada = 0;
                     }
                     document.getElementById("loading").style.display ="none";
                 });
+            }
+
+            vm.ObtenerPromedioAvancePlan = function (IdPlan) {
+                var avanceGeneral = Enumerable.from(vm.ListPlanesDeAccion).where(o => o.IdPlanDeAccion == IdPlan).firstOrDefault();
+                document.getElementById("avance-plan").innerText = avanceGeneral.PorcentajeAvance + "%";
             }
 
             vm.MostrarSeguimientoAcciones = function (e, IdPlan) {
@@ -111,6 +117,7 @@ var IdAccionSeleccionada = 0;
             vm.DetalleAccion = function (IdAccion) {
                 vm.Modulo = "Tarjeta de Acciones de Mejora";
                 IdAccionSeleccionada = IdAccion;
+                $(".tool-bar").hide();
                 $("#mergePlan .col").hide();
                 /*document.getElementById("mergePlan").children[0].style.display = "none";*/
                 /* document.getElementById("mergePlan").children[1].style.display = "none"; */
@@ -157,9 +164,40 @@ var IdAccionSeleccionada = 0;
                     $scope.$apply()
                     document.getElementById("listAcciones").remove();
                     document.getElementById("mergePlan").children[0].style.display = "";
+                    $(".tool-bar").show();
                 });
                 document.getElementsByClassName("btnGuardarDetalleAccion")[0].addEventListener("click", function () {
-                    vm.AgregarArchivos();
+                    if (IdResponsable > 0) {
+                        vm.AgregarArchivos();
+                    }
+                    else {
+                        vm.GuardarAvances(accionPlan.AccionesDeMejora.IdAccionDeMejora, IdPlanDeAccion);
+                    }
+                });
+            }
+
+            vm.GuardarAvances = function (IdAccion, IdPlan) {
+                var porcentaje = document.getElementById("avance-accion-seleccionada").value;
+                if (parseFloat(porcentaje) < 0 || porcentaje == "") {
+                    swal("No se puede registrar un avance negativo", "", "info").then(function () {
+                        return false;
+                    });
+                    return false;
+                }
+                let model = {
+                    AccionesDeMejora: { IdAccionDeMejora: IdAccion },
+                    PlanDeAccion: { IdPlanDeAccion: IdPlan },
+                    PorcentajeAvance: porcentaje
+                }
+                vm.post("/PlanesDeAccion/GuardarAvances/", model, function (response) {
+                    if (response.Correct) {
+                        swal("Los avances fueron actualizados correctamente", "", "success").then(function () {
+                            document.getElementById("avance-accion-seleccionada").value = porcentaje;
+                        });
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar guardar el avance", response.ErrorMessage, "error");
+                    }
                 });
             }
 
@@ -168,14 +206,16 @@ var IdAccionSeleccionada = 0;
                 html = html.replace("#promedio#", accionPlan.AccionesDeMejora.Categoria.Promedio);
                 html = html.replace("#icono#", vm.setIconoSVG(accionPlan.AccionesDeMejora.Categoria.Promedio));
                 html = html.replace("#accion#", accionPlan.AccionesDeMejora.Descripcion);
-                html = html.replace("#periodicidad#", accionPlan.Periodicidad);
+                html = html.replace("#periodicidad#", accionPlan.DescripcionPeriodicidad);
                 html = html.replace("#inicio#", accionPlan.sFechaInicio);
                 html = html.replace("#fin#", accionPlan.sFechaFin);
                 html = html.replace("#objetivo#", accionPlan.Objetivo);
                 html = html.replace("#meta#", accionPlan.Meta);
                 html = html.replace("#comentarios#", accionPlan.Comentarios);
                 html = html.replace("#avance#", accionPlan.PorcentajeAvance);
-                html = html.replace("#cumplimiento#", "");
+
+                var avanceGeneral = Enumerable.from(vm.ListPlanesDeAccion).where(o => o.IdPlanDeAccion == IdPlanDeAccion).firstOrDefault();
+                html = html.replace("#cumplimiento#", avanceGeneral.PorcentajeAvance);
                 if (IdResponsable > 0) {// Perfil Responsable
                     var evidencias = vm.ObtenerRutaAtachment(accionPlan.Atachments);
                     html = html.replace("#name_responsable#", accionPlan.ListResponsable[0].Nombre);
@@ -183,7 +223,7 @@ var IdAccionSeleccionada = 0;
                     html = html.replace("#listAtachments#", evidencias);
                 }
                 else { // Perfil administrador creador del plan
-                    
+                    // Las modificaciones se hacen despues de pegar el contenido
                 }
                 return html;
             }
@@ -198,7 +238,6 @@ var IdAccionSeleccionada = 0;
                     cadena = '<small style="display: block;color:red;">Aun no se suben evidencias</small>';
                 return cadena;
             }
-
 
             vm.setIconoSVG = function (value) {
                 try {
@@ -238,6 +277,7 @@ var IdAccionSeleccionada = 0;
                 mywindow.setTimeout(function () { mywindow.print(); }, 1000);
                 /* mywindow.close(); */
                 $(".tool-bar").show();
+                //await $("#printDiv").printThis();
                 return true;
             }
 
@@ -300,8 +340,13 @@ var IdAccionSeleccionada = 0;
 
             vm.EliminarArchivo = function (e) {
                 var ruta = e.target.nextElementSibling.href;
+                var txt = ruta;
+                txt = txt.split("//")[txt.split("//").length - 1];
+                [].forEach.call([1, 2, 3, 4, 5], function (elem) {
+                    txt = txt.replace("%20", " ");
+                });
                 swal({
-                    title: "¿Estás seguro de que deseas eliminar esta evidencia?",
+                    title: "¿Estás seguro de que deseas eliminar la evidencia evidencia:  [" + txt + "]?",
                     text: "",
                     icon: "info",
                     buttons: [
@@ -330,8 +375,6 @@ var IdAccionSeleccionada = 0;
                     }
                 });
             }
-
-
 
             /*#region basics functions*/
             function messageBoxError(data) {
@@ -501,8 +544,11 @@ var templateDetalleAccion = IdResponsable > 0 ? `
 
                             <div class="row form-group col-6" style="float:left;">
                                 <div class="col-4">Adjuntar archivos de evidencia: </div>
-                                <div class="col-8"><input type="file" placeholder="Selecciona" class="form-control frm-archivos" id="fileChosser" name="fileChosser" multiple="multiple" /></div>
-                                <div id="listadoDocs" class="offset-4">
+                                <div class="col-8">
+                                    <input hidden type="file" placeholder="Selecciona" class="form-control frm-archivos" id="fileChosser" name="fileChosser" multiple="multiple" />
+                                    <label for="fileChosser"><i class="fas fa-paperclip fa-lg"></i> Adjuntar archivos de evidencia</label>
+                                </div>
+                                <div id="listadoDocs" class="offset-4" style="border: 1px solid #FFC000;border-radius: 10px;padding: 5px 10px 5px 10px;">
                                     #listAtachments#
                                 </div>
                             </div>
@@ -579,8 +625,12 @@ var templateDetalleAccion = IdResponsable > 0 ? `
 
                             <div class="row form-group col-6" style="">
                                 <div class="col -6">
-                                    <span style="display: block;">Avance: #avance#%</span>
-                                    <span style="display: block;">Cumplimiento de la acción: #cumplimiento#%</span>
+                                    <label>Avance: </label>
+                                    <input id="avance-accion-seleccionada" type="text" value="#avance#" class="form-control" style="display: block;" />
+                                    <i class="fas fa-percent fa-sm errspan"></i>
+                                    <label>Cumplimiento de la acción: </label>
+                                    <input type="text" value="#cumplimiento#" class="form-control" style="display: block;">
+                                    <i class="fas fa-percent fa-sm errspan"></i>
                                 </div>
                             </div>
 
@@ -595,3 +645,9 @@ var templateDetalleAccion = IdResponsable > 0 ? `
     </div>
 </div>
 `;
+
+var CrearScript = function (src) {
+    var script = document.createElement('script');
+    script.src = src;
+    document.head.appendChild(script);
+}

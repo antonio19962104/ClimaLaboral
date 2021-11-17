@@ -52,6 +52,8 @@
           <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="200" />
           <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="200" />
           <Property Name="PorcentajeAvance" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="NotificacionFinal" Type="int" />
+          <Property Name="NotificacionPrevia" Type="int" />
         </EntityType>
         <EntityType Name="Administrador">
           <Key>
@@ -665,6 +667,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="noIntentos" Type="int" />
           <Property Name="CC" Type="varchar(max)" />
           <Property Name="CCO" Type="varchar(max)" />
+          <Property Name="TipoNotificacion" Type="int" />
         </EntityType>
         <EntityType Name="EstatusEncuesta">
           <Key>
@@ -6094,6 +6097,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="EstatusMail" Relationship="Self.FK_ESTATUSEMAIL_ESTATUSMAIL" FromRole="EstatusEmail" ToRole="EstatusMail" />
           <Property Name="CC" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="CCO" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="TipoNotificacion" Type="Int32" />
         </EntityType>
         <EntityType Name="EstatusEncuesta">
           <Key>
@@ -15476,6 +15480,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="ProgramaEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="PorcentajeAvance" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="PlanDeAccion" Relationship="RH_DesModel.FK_AccionesPlan_Plan" FromRole="AccionesPlan" ToRole="PlanDeAccion" />
+          <Property Name="NotificacionFinal" Type="Int32" />
+          <Property Name="NotificacionPrevia" Type="Int32" />
         </EntityType>
         <EntityType Name="Responsable">
           <Key>
@@ -16426,6 +16432,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="EstatusEmail">
             <EntityTypeMapping TypeName="RH_DesModel.EstatusEmail">
               <MappingFragment StoreEntitySet="EstatusEmail">
+                <ScalarProperty Name="TipoNotificacion" ColumnName="TipoNotificacion" />
                 <ScalarProperty Name="CCO" ColumnName="CCO" />
                 <ScalarProperty Name="CC" ColumnName="CC" />
                 <ScalarProperty Name="IdEstatusEmail" ColumnName="IdEstatusEmail" />
@@ -23327,6 +23334,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="AccionesPlan">
             <EntityTypeMapping TypeName="RH_DesModel.AccionesPlan">
               <MappingFragment StoreEntitySet="AccionesPlan">
+                <ScalarProperty Name="NotificacionPrevia" ColumnName="NotificacionPrevia" />
+                <ScalarProperty Name="NotificacionFinal" ColumnName="NotificacionFinal" />
                 <ScalarProperty Name="PorcentajeAvance" ColumnName="PorcentajeAvance" />
                 <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
                 <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />

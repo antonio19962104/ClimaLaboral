@@ -51,7 +51,7 @@
                     <div class="col" ng-repeat="item in vm.ListPlanesDeAccion">
                         <div class="alert alert-info" role="alert">
                             {{ item.Nombre }}
-                            <i class="fas fa-eye fa-lg" ng-hide="vm.ListAcciones.length > 0" style="cursor: pointer;float:inline-end;" title="Ver detalle" ng-click="vm.MostrarSeguimientoAcciones($event, item.IdPlanDeAccion, item.IdEncuesta, item.IdBaseDeDatos)"></i>
+                            <i class="fas fa-eye fa-lg" ng-hide="vm.ListAcciones.length > 0" style="cursor: pointer;float:inline-end;" title="Ver detalle" ng-click="vm.MostrarSeguimientoAcciones($event, item.IdPlanDeAccion, item.IdEncuesta, item.IdBaseDeDatos);vm.ObtenerPromedioAvancePlan(item.IdPlanDeAccion);"></i>
                             <i class="fas fa-close fa-lg" ng-hide="vm.ListAcciones.length == 0" style="cursor: pointer;float:inline-end;" title="Cerrar detalle" ng-click="vm.CerrarDetallePlan($event)"></i>
                         </div>
                         <div class="row">
@@ -65,9 +65,9 @@
                                         <span>Accion: {{ item.AccionesDeMejora.IdAccionDeMejora }}</span>
                                         <small title="{{ item.AccionesDeMejora.Descripcion }}" style="min-height: 58px; max-height: 58px; height: 58px;">{{ item.AccionesDeMejora.Descripcion.substring(0, 100) }}</small>
                                         <span class="mt-2 ml-2">Avance: {{ item.PorcentajeAvance }}</span>
-                                        <span class="mt-2 ml-2">Cumplimiento: 0%</span>
+                                        <span class="mt-2 ml-2">Cumplimiento: 100%</span>
                                         <span class="mt-2 ml-2"><i class="fas fa-calendar fa-lg"></i> Concluye:  {{ item.sFechaFin }}</span>
-                                        <button title="Ver detalle de la acción de mejora" ng-click="vm.DetalleAccion(item.AccionesDeMejora.IdAccionDeMejora)" class="mt-2 ml-2 btn" style="color: #FFC000;"><i class="fas fa-eye fa-lg"></i>  Ver detalle</button>
+                                        <button title="Ver detalle de la acción de mejora" ng-click="vm.DetalleAccion(item.AccionesDeMejora.IdAccionDeMejora);" class="mt-2 ml-2 btn" style="color: #FFC000;"><i class="fas fa-eye fa-lg"></i>  Ver detalle</button>
                                     </div>
                                 </div>
                                 <!--Fin iterar acciones-->
@@ -79,7 +79,7 @@
                             <span>Crecimiento total promedio</span>
                         </div>
                         <div class="alert alert-light" role="alert">
-                            <span>57.56%</span>
+                            <span id="avance-plan"></span>
                         </div>
                     </div>
                 </div>

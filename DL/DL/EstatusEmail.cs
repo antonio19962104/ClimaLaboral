@@ -33,6 +33,7 @@ namespace DL
         public Nullable<int> noIntentos { get; set; }
         public string CC { get; set; }
         public string CCO { get; set; }
+        public Nullable<int> TipoNotificacion { get; set; }
     
         public virtual BasesDeDatos BasesDeDatos { get; set; }
         public virtual Encuesta Encuesta { get; set; }

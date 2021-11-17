@@ -12,7 +12,7 @@ using System.IO;
 namespace BL
 {
     /// <summary>
-    /// Capa de negocios de enviós de Email
+    /// Capa de negocios de envíos de Email
     /// </summary>
     public class Email
     {
@@ -22,8 +22,9 @@ namespace BL
         /// <param name="message"></param>
         /// <param name="status"></param>
         /// <param name="MsgEnvio"></param>
+        /// <param name="TipoNotificacion"></param>
         /// <returns></returns>
-        public static bool GuardarEstatusEmail(MailMessage message, bool status, string MsgEnvio)
+        public static bool GuardarEstatusEmail(MailMessage message, bool status, string MsgEnvio, int TipoNotificacion)
         {
             bool correct = true;
             try
@@ -41,7 +42,8 @@ namespace BL
                         MsgEnvio = MsgEnvio,
                         noIntentos = 1,
                         CC = ObtenerCopiaEnCorreo(message),
-                        CCO = ObtenerCopiaOcultaEnCorreo(message)
+                        CCO = ObtenerCopiaOcultaEnCorreo(message),
+                        TipoNotificacion = TipoNotificacion,
                     };
                     context.EstatusEmail.Add(estatusEmail);
                     context.SaveChanges();
@@ -235,40 +237,47 @@ namespace BL
         {
             try
             {
-                var message = new MailMessage();
-                message.To.Add(new MailAddress(destinatario));
-                message.Subject = ObtenerAsunto(TipoNotificacion);
-                message.IsBodyHtml = true;
-                string contentMessage = ObtenerPlantilla(TipoNotificacion);
-                //Armar las iteraciones de acciones de ser el caso
-                contentMessage += ObtenerContenidoHTMLAccionesEmail(TipoNotificacion, acciones, IdPlanDeAccion);
-                contentMessage += "</div></body></html> ";
-                contentMessage = contentMessage.Replace("#responsable#", (string.Concat(responsable.Nombre, " ", responsable.ApellidoPaterno, " ", responsable.ApellidoMaterno)));
-                //Armar las iteraciones de acciones de ser el caso
-                contentMessage = PlanesDeAccion.CrearVistaWebEmail(contentMessage);
-                message.Body = contentMessage;
-                message.Priority = MailPriority.High;
-                message.BodyEncoding = System.Text.Encoding.UTF8;
-                message.Bcc.Add(new MailAddress("jamurillo@grupoautofin.com"));
-
-                using (var smtp = new SmtpClient())
+                if (acciones.Count > 0)
                 {
-                    try
+                    var message = new MailMessage();
+                    message.To.Add(new MailAddress(destinatario));
+                    message.Subject = ObtenerAsunto(TipoNotificacion);
+                    message.IsBodyHtml = true;
+                    string contentMessage = ObtenerPlantilla(TipoNotificacion);
+                    //Armar las iteraciones de acciones de ser el caso
+                    contentMessage += ObtenerContenidoHTMLAccionesEmail(TipoNotificacion, acciones, IdPlanDeAccion);
+                    contentMessage += "</div></body></html> ";
+                    contentMessage = contentMessage.Replace("#responsable#", (string.Concat(responsable.Nombre, " ", responsable.ApellidoPaterno, " ", responsable.ApellidoMaterno)));
+                    //Armar las iteraciones de acciones de ser el caso
+                    contentMessage = PlanesDeAccion.CrearVistaWebEmail(contentMessage);
+                    message.Body = contentMessage;
+                    message.Priority = MailPriority.High;
+                    message.BodyEncoding = System.Text.Encoding.UTF8;
+                    message.Bcc.Add(new MailAddress("jamurillo@grupoautofin.com"));
+
+                    using (var smtp = new SmtpClient())
                     {
-                        smtp.Send(message);
-                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Email enviado a: " + destinatario);
-                        BL.Email.GuardarEstatusEmail(message, true, "Email enviado exitosamente");
+                        try
+                        {
+                            smtp.Send(message);
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Email enviado a: " + destinatario);
+                            BL.Email.GuardarEstatusEmail(message, true, "Email enviado exitosamente", TipoNotificacion);
+                        }
+                        catch (SmtpException aE)
+                        {
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Falló envío de email a :" + destinatario);
+                            BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                            BL.Email.GuardarEstatusEmail(message, false, (string.Concat(aE.Message, (aE.InnerException == null ? " inner exception is null " : aE.InnerException.ToString()))), TipoNotificacion);
+                        }
+                        finally
+                        {
+                            smtp.Dispose();
+                        }
                     }
-                    catch (SmtpException aE)
-                    {
-                        BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Falló envío de email a :" + destinatario);
-                        BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
-                        BL.Email.GuardarEstatusEmail(message, false, aE.Message);
-                    }
-                    finally
-                    {
-                        smtp.Dispose();
-                    }
+                }
+                else
+                {
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El envío no procede ya que no se contienen acciones en la Lista");
                 }
             }
             catch (Exception aE)
@@ -347,12 +356,12 @@ namespace BL
         /// <returns></returns>
         public static string ObtenerContenidoHTMLAccionesEmail(int TipoNotificacion, List<ML.AccionDeMejora> acciones, int IdPlanDeAccion)
         {
-            string contenido = string.Empty;
+            string contenidoFinal = string.Empty;
             try
             {
-                contenido = Email.ObtenerPlantillaAcciones(TipoNotificacion);
                 foreach (var accion in acciones)
                 {
+                    string contenido = Email.ObtenerPlantillaAcciones(TipoNotificacion);
                     string nombreCategoria = BL.Categoria.getNombreCatByIdCat(accion.Categoria.IdCategoria);
                     var planDeAccion = BL.PlanesDeAccion.GetPlanById(IdPlanDeAccion);
                     var accionPlan = BL.PlanesDeAccion.ObtenerAccionesPlan(accion.IdAccionDeMejora, IdPlanDeAccion);
@@ -374,6 +383,8 @@ namespace BL
                     contenido = contenido.Replace("#fin#", accionPlan.FechaFin.ToString());
                     contenido = contenido.Replace("#objetivo#", accionPlan.Objetivo);
                     contenido = contenido.Replace("#meta#", accionPlan.Meta);
+
+                    contenidoFinal += contenido;
                 }
             }
             catch (Exception aE)
@@ -383,7 +394,7 @@ namespace BL
                             <p>Ocurrió un error al generar este contenido</p>
                         </div>";
             }
-            return contenido;
+            return contenidoFinal;
         }
         /// <summary>
         /// Obtiene la plantilla html del listado de acciones
@@ -400,18 +411,18 @@ namespace BL
                     case 1:
                         contenido = ML.Email.PlantillaContenidoAccionesNot1;
                         break;
-                    //case 2:
-                    //    contenido = ML.Email.PlantillaContenidoAccionesNot2;
-                    //    break;
-                    //case 3:
-                    //    contenido = ML.Email.PlantillaContenidoAccionesNot3;
-                    //    break;
-                    //case 4:
-                    //    contenido = ML.Email.PlantillaContenidoAccionesNot4;
-                    //    break;
-                    //case 5:
-                    //    contenido = ML.Email.PlantillaContenidoAccionesNot5;
-                    //    break;
+                    case 2:
+                        contenido = ML.Email.PlantillaContenidoAccionesNot1;
+                        break;
+                    case 3:
+                        contenido = ML.Email.PlantillaContenidoAccionesNot1;
+                        break;
+                    case 4:
+                        contenido = ML.Email.PlantillaContenidoAccionesNot1;
+                        break;
+                    case 5:
+                        contenido = ML.Email.PlantillaContenidoAccionesNot1;
+                        break;
                     default:
                         break;
                 }

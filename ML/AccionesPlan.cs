@@ -13,6 +13,7 @@ namespace ML
         public ML.AccionDeMejora AccionesDeMejora { get; set; } = new AccionDeMejora();
 		public int IdAccion { get; set; }
         public int Periodicidad { get; set; }
+        public string DescripcionPeriodicidad { get; set; }
         public DateTime FechaInicio { get; set; }
         public DateTime FechaFin { get; set; }
         public string sFechaInicio { get; set; }

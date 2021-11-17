@@ -1239,6 +1239,28 @@ namespace BL
             BackgroundJob.Enqueue(() => NotificacionInicialResponsables(IdPlanDeAccion));
         }
         /// <summary>
+        /// Disparador del job para el envio de notificacion previa
+        /// </summary>
+        public static void TriggerNotificacionPrevia()
+        {
+            BackgroundJob.Enqueue(() => NotificacionPrevia());
+        }
+        /// <summary>
+        /// Disparador del job para el envio de notificacion cuando no se ha registrado el avance inicial
+        /// </summary>
+        public static void TriggerNotificacionSinAvanceInicial()
+        {
+            BackgroundJob.Enqueue(() => NotificacionNoRegistraAvanceInicial());
+        }
+        /// <summary>
+        /// Disparador del job para el envio de notificacion agradecimiento
+        /// </summary>
+        public static void TriggerNotificacionAgradecimiento()
+        {
+            BackgroundJob.Enqueue(() => NotificacionAgradecimiento());
+        }
+
+        /// <summary>
         /// Envía un email de notificación a los responsables las acciones al guardar un nuevo Plan
         /// trigger: Al guardar un plan de accion
         /// </summary>
@@ -1258,10 +1280,10 @@ namespace BL
                         {
                             var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == responsable.IdResponsable).FirstOrDefault();
                             var relacional = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == usuarioResponsable.IdResponsable).ToList();
+                            List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
                             foreach (var item in relacional)
                             {
-                                var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == item.IdAccionesPlan).ToList();
-                                List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
+                                var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == item.IdAccionesPlan && o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
                                 foreach (var elem in acciones)
                                 {
                                     var accion = context.Acciones.Where(o => o.IdAccion == elem.IdAccion).FirstOrDefault();
@@ -1271,8 +1293,8 @@ namespace BL
                                     accionDeMejora.Categoria.IdCategoria = (int)accion.IdCategoria;
                                     ListAcciones.Add(accionDeMejora);
                                 }
-                                BL.Email.EnvioNotificaciones(1, usuarioResponsable.Email, ListAcciones, usuarioResponsable, IdPlanDeAccion);
                             }
+                            BL.Email.EnvioNotificaciones(1, usuarioResponsable.Email, ListAcciones, usuarioResponsable, IdPlanDeAccion);
                         }
                     }
                 }
@@ -1290,9 +1312,11 @@ namespace BL
         {
             try
             {
+                List<int> HistoricoIdResponsable = new List<int>();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio == DateTime.Now.AddDays(7)).ToList();
+                    var auxDate = DateTime.Now.AddDays(7);
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio <= auxDate && o.NotificacionPrevia != 1).ToList();
                     if (AccionesPlan != null)
                     {
                         foreach (var accionPlan in AccionesPlan)
@@ -1303,10 +1327,33 @@ namespace BL
                                 var Responsables = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
                                 foreach (var item in Responsables)
                                 {
-                                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
-                                    var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
-
-                                    //BL.Email.EnvioNotificaciones(2, usuarioResponsable.Email);
+                                    if (HistoricoIdResponsable.Contains((int)item.IdResponsable) == false)
+                                    {
+                                        HistoricoIdResponsable.Add((int)item.IdResponsable);
+                                        var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
+                                        var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
+                                        var relacional = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == usuarioResponsable.IdResponsable).ToList();
+                                        List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
+                                        foreach (var elem in relacional)
+                                        {
+                                            var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == elem.IdAccionesPlan && o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
+                                            foreach (var elem2 in acciones)
+                                            {
+                                                var accion = context.Acciones.Where(o => o.IdAccion == elem2.IdAccion).FirstOrDefault();
+                                                ML.AccionDeMejora accionDeMejora = new ML.AccionDeMejora();
+                                                accionDeMejora.IdAccionDeMejora = accion.IdAccion;
+                                                accionDeMejora.Descripcion = accion.Descripcion;
+                                                accionDeMejora.Categoria.IdCategoria = (int)accion.IdCategoria;
+                                                ListAcciones.Add(accionDeMejora);
+                                            }
+                                        }
+                                        bool status = BL.Email.EnvioNotificaciones(2, usuarioResponsable.Email, ListAcciones, usuarioResponsable, PlanDeAccion.IdPlanDeAccion);
+                                        if (status) //Envio exitoso
+                                        {
+                                            accionPlan.NotificacionPrevia = 1;
+                                            context.SaveChanges();
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1321,14 +1368,15 @@ namespace BL
         /// <summary>
         /// Envia un email de notificacion a los responsables cuya acion ya inició pero no han registrado avance
         /// </summary>
-        public static void NotificacionNoRegistraAvance()
+        public static void NotificacionNoRegistraAvanceInicial()
         {
             try
             {
+                List<int> HistoricoIdResponsable = new List<int>();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     //Falta el filtro de que no haya registrado avance
-                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio < DateTime.Now).ToList();
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio == DateTime.Now && o.PorcentajeAvance <= 0).ToList();
                     if (AccionesPlan != null)
                     {
                         foreach (var accionPlan in AccionesPlan)
@@ -1339,9 +1387,27 @@ namespace BL
                                 var Responsables = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
                                 foreach (var item in Responsables)
                                 {
-                                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
-                                    var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
-                                    //BL.Email.EnvioNotificaciones(3, usuarioResponsable.Email);
+                                    if (HistoricoIdResponsable.Contains((int)item.IdResponsable) == false)
+                                    {
+                                        var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
+                                        var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
+                                        var relacional = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == usuarioResponsable.IdResponsable).ToList();
+                                        List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
+                                        foreach (var elem in relacional)
+                                        {
+                                            var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == elem.IdAccionesPlan && o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
+                                            foreach (var elem2 in acciones)
+                                            {
+                                                var accion = context.Acciones.Where(o => o.IdAccion == elem2.IdAccion).FirstOrDefault();
+                                                ML.AccionDeMejora accionDeMejora = new ML.AccionDeMejora();
+                                                accionDeMejora.IdAccionDeMejora = accion.IdAccion;
+                                                accionDeMejora.Descripcion = accion.Descripcion;
+                                                accionDeMejora.Categoria.IdCategoria = (int)accion.IdCategoria;
+                                                ListAcciones.Add(accionDeMejora);
+                                            }
+                                        }
+                                        BL.Email.EnvioNotificaciones(3, usuarioResponsable.Email, ListAcciones, usuarioResponsable, PlanDeAccion.IdPlanDeAccion);
+                                    }
                                 }
                             }
                         }
@@ -1353,11 +1419,70 @@ namespace BL
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
         }
+
         /*
          * 1 Cuando el porcentaje de avance no corresponda a lo esperado es decir exista un retraso. 
          *      Por ejemplo cuando el avance deba ser al 25% el registro sea menor o cuando el avance deba estar al 50% o al 75% y de igual forma la captura sea menor.  
-         • 2 El sistema enviará un correo de agradecimiento a los responsables una vez que se haya logrado el 100% de avance en la acción de mejora del plan
          */
+
+        /// <summary>
+        /// Envia un email de agradecimiento a los responsables cuya accion ha terminado
+        /// </summary>
+        public static void NotificacionAgradecimiento()
+        {
+            try
+            {
+                List<int> HistoricoIdResponsable = new List<int>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio < DateTime.Now && o.PorcentajeAvance == 100 && o.NotificacionFinal != 1).ToList();
+                    if (AccionesPlan != null)
+                    {
+                        foreach (var accionPlan in AccionesPlan)
+                        {
+                            var Accion = context.Acciones.Where(o => o.IdAccion == accionPlan.IdAccion).FirstOrDefault();
+                            if (Accion != null)
+                            {
+                                var Responsables = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                                foreach (var item in Responsables)
+                                {
+                                    if (HistoricoIdResponsable.Contains((int)item.IdResponsable) == false)
+                                    {
+                                        var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == accionPlan.IdPlanDeAccion).FirstOrDefault();
+                                        var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == item.IdResponsable).FirstOrDefault();
+                                        var relacional = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == usuarioResponsable.IdResponsable).ToList();
+                                        List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
+                                        foreach (var elem in relacional)
+                                        {
+                                            var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == elem.IdAccionesPlan && o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
+                                            foreach (var elem2 in acciones)
+                                            {
+                                                var accion = context.Acciones.Where(o => o.IdAccion == elem2.IdAccion).FirstOrDefault();
+                                                ML.AccionDeMejora accionDeMejora = new ML.AccionDeMejora();
+                                                accionDeMejora.IdAccionDeMejora = accion.IdAccion;
+                                                accionDeMejora.Descripcion = accion.Descripcion;
+                                                accionDeMejora.Categoria.IdCategoria = (int)accion.IdCategoria;
+                                                ListAcciones.Add(accionDeMejora);
+                                            }
+                                        }
+                                        var status = BL.Email.EnvioNotificaciones(5, usuarioResponsable.Email, ListAcciones, usuarioResponsable, PlanDeAccion.IdPlanDeAccion);
+                                        if (status) //Envio exitoso
+                                        {
+                                            accionPlan.NotificacionFinal = 1;
+                                            context.SaveChanges();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+        }
         /// <summary>
         /// Crea la vista web del correo de notificacion
         /// </summary>
@@ -1425,6 +1550,7 @@ namespace BL
                                     planDeAccion.Nombre = plan.Nombre;
                                     planDeAccion.IdEncuesta = (int)plan.IdEncuesta;
                                     planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
+                                    planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(planDeAccion.IdPlanDeAccion);
 
                                     result.Objects.Add(planDeAccion);
                                 }
@@ -1442,6 +1568,7 @@ namespace BL
                             planDeAccion.Nombre = plan.Nombre;
                             planDeAccion.IdEncuesta = (int)plan.IdEncuesta;
                             planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
+                            plan.PorcentajeAvance = GetPorcentajeAvancePlan(planDeAccion.IdPlanDeAccion);
 
                             result.Objects.Add(planDeAccion);
                         }
@@ -1455,6 +1582,36 @@ namespace BL
                 result.Correct = false;
                 result.ErrorMessage = aE.Message;
                 result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Obtiene el porcentaje de avance general en un plan de acción
+        /// </summary>
+        /// <param name="IdPlan"></param>
+        /// <returns></returns>
+        public static decimal GetPorcentajeAvancePlan(int IdPlan)
+        {
+            decimal result = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var accionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == IdPlan).ToList();
+                    if (accionesPlan.Count > 0)
+                    {
+                        foreach (var accionPlan in accionesPlan)
+                        {
+                            result += accionPlan.PorcentajeAvance == null ? 0 : Convert.ToDecimal(accionPlan.PorcentajeAvance);
+                        }
+                        result /= accionesPlan.Count;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result = 0;
             }
             return result;
         }
@@ -1513,6 +1670,7 @@ namespace BL
                                 accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
                                 accionesPlan.AccionesDeMejora.Categoria.Descripcion = DescripcionCategoria;
                                 accionesPlan.PorcentajeAvance = Convert.ToDecimal(accionPlan.PorcentajeAvance);
+                                accionesPlan.DescripcionPeriodicidad = accionPlan.Periodicidad == 0 ? "Periodicidad no configurada" : context.Periodicidad.Where(o => o.IdPeriodicidad == accionPlan.Periodicidad).FirstOrDefault().Descripcion;
                                 var Seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == ResponsableAccionesPlan.IdResponsablesAccionesPlan).ToList();
                                 foreach (var seguimento in Seguimiento)
                                 {
@@ -1750,6 +1908,38 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Actualiza el avance de una accion en un plan especifico
+        /// </summary>
+        /// <param name="accionesPlan"></param>
+        /// <returns></returns>
+        public static ML.Result GuardarAvances(ML.AccionesPlan accionesPlan)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var accionP = context.AccionesPlan.Where(o => o.IdPlanDeAccion == accionesPlan.PlanDeAccion.IdPlanDeAccion && o.IdAccion == accionesPlan.AccionesDeMejora.IdAccionDeMejora).FirstOrDefault();
+                    if (accionP != null)
+                    {
+                        accionP.PorcentajeAvance = accionesPlan.PorcentajeAvance;
+                        context.SaveChanges();
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
         #endregion Seguimiento
+        public static string Saludo(string name) => $"Hola {name}";
+        public static Func<int, int> square = x => x * x;
     }
 }

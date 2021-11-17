@@ -1,4 +1,6 @@
 ﻿using System;
+using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -63,6 +65,13 @@ namespace PL
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            var options = new DashboardOptions()
+            {
+                DashboardTitle = "Monitor de tareas",
+                DisplayStorageConnectionString = false,
+            };
+            app.UseHangfireDashboard("/HangfireDashboard", options);
         }
     }
 }

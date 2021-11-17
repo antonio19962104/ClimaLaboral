@@ -84,6 +84,7 @@
                     var chkPlanesListar = false;
                     var chkPlanesCrear = false;
                     var chkAdminAcciones = false;
+                    var chkSeguimiento = false;
 
                     var session = Session["AdminLog"];
                     var sessionPerfil = Session["PerfilAdminLog"];
@@ -194,6 +195,13 @@
                             </script>
                             chkAdminAcciones = true;
                         }
+                        if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "Seguimiento")
+                        {
+                            <script>
+                                localStorage.setItem("SeguimientoAcciones", true)
+                            </script>
+                            chkSeguimiento = true;
+                        }
                     }
 
                     foreach (ML.PerfilModulo perf in ViewBag.Modulos)
@@ -236,7 +244,6 @@
                                                 <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("CreateCL", "Encuesta")">Crear Clima Laboral</a></li>
                                                 <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll", "Competencia")">Competencias</a></li>
                                                 <li style="margin-left: 20px;"><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetAll_", "Competencia")">Categorias</a></li>
-                                                <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Crear Plan de Acción</a></li>
                                             }
                                         </ul>
                                     </div>
@@ -452,6 +459,10 @@
                                                 if (chkAdminAcciones == true)
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEncuestas", "PlanesDeAccion")">Configuracion de acciones de mejora</a></li>
+                                                }
+                                                if (chkSeguimiento == true)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Seguimiento", "PlanesDeAccion")">Seguimiento a las acciones de mejora</a></li>
                                                 }
                                                 if (Session["IdAdministradorLogeado"].ToString() == "23")
                                                 {

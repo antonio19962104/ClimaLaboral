@@ -33,8 +33,8 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
-
-            //BL.PlanesDeAccion.NotificacionInicialResponsables(3);
+            //BL.PlanesDeAccion.NotificacionPrevia();
+            //BL.PlanesDeAccion.NotificacionInicialResponsables(19);
 
             //var message = new MailMessage();
             //message.To.Add(new MailAddress("jamurillo@grupoautofin.com"));
@@ -87,7 +87,11 @@ namespace PL
              * Agregar Jobs de notificaciones para planes de Acción (Notificaciones programadas, Cron de reenvio)
             */
             RecurringJob.AddOrUpdate("BorradoReportesPDFByFecha", () => BL.LogReporteoClima.DeleteReportes(), "0 0 * * *", TimeZoneInfo.Local);
-            RecurringJob.AddOrUpdate("GeneraCategoriasForPlanes", () => BL.PlanesDeAccion.EjecutaJob(), "0 0 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("GeneraPromediosCategoriasForPlanes", () => BL.PlanesDeAccion.EjecutaJob(), "0 0 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("PDANotificacionPrevia", () => BL.PlanesDeAccion.NotificacionPrevia(), "0 9 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("PDANotificacionSinAvanceInicial", () => BL.PlanesDeAccion.TriggerNotificacionSinAvanceInicial(), "0 10 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("PDANotificacionAgradecimiento", () => BL.PlanesDeAccion.NotificacionAgradecimiento(), "0 11 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("JobReenvioEmails", () => BL.Email.CronReenvioNotificaciones(), "0 12 * * *", TimeZoneInfo.Local);
         }
         public void ResetRecurringJobs()
         {

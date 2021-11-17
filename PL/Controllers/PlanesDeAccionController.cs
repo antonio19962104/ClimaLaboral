@@ -346,6 +346,16 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.EliminarEvidencia(ruta);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Registra los avances que el usuario creador del plan asigna segun las evidencias subidas
+        /// </summary>
+        /// <param name="accionesPlan"></param>
+        /// <returns></returns>
+        public JsonResult GuardarAvances(ML.AccionesPlan accionesPlan)
+        {
+            var result = BL.PlanesDeAccion.GuardarAvances(accionesPlan);
+            return new JsonResult() { Data = result, JsonRequestBehavior= JsonRequestBehavior.AllowGet };
+        }
         #endregion Seguimiento
     }
 }
