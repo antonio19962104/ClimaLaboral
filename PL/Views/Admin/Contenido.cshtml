@@ -456,17 +456,21 @@
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Create", "PlanesDeAccion")">Crear</a></li>
                                                 }
-                                                if (chkAdminAcciones == true)
+                                                @*if (chkAdminAcciones == true)
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("GetEncuestas", "PlanesDeAccion")">Configuracion de acciones de mejora</a></li>
-                                                }
+                                                }*@
                                                 if (chkSeguimiento == true)
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Seguimiento", "PlanesDeAccion")">Seguimiento a las acciones de mejora</a></li>
                                                 }
-                                                if (Session["IdAdministradorLogeado"].ToString() == "23")
+                                                if (Convert.ToInt32(Session["SuperAdmin"]) == 1)
                                                 {
-                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Administrar acciones de mejora (Ayuda)</a></li>
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "PlanesDeAccion")">Administrar acciones de mejora (Genericas)</a></li>
+                                                }
+                                                if (Convert.ToInt32(Session["SuperAdmin"]) == 1)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("ConfigurarPermisos", "PlanesDeAccion")">Configurar permisos</a></li>
                                                 }
                                             }
                                         </ul>

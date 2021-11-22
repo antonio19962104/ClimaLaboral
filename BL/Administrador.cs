@@ -861,7 +861,40 @@ namespace BL
             }
             return result;
         }
+		 /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public static ML.Result isResponsable(string email)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var responsable = context.Responsable.Where(o => o.Email == email).FirstOrDefault();
+                    if (responsable != null)
+                    {
+                        result.Correct = true;
+                        result.NewId = responsable.IdResponsable;
+                    }
+                    else
+                    {
+                        result.Correct = true;
+                        result.NewId = 0;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.NewId = 0;
+            }
+            return result;
 
+        }
         public static ML.Result GetAllId()
         {
             ML.Result result = new ML.Result();

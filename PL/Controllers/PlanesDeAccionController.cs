@@ -1,8 +1,13 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using Spire.Xls;
+using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -74,7 +79,32 @@ namespace PL.Controllers
         /// <returns></returns>
         public JsonResult GetAreasForPlanAccion(int IdBaseDeDatos)
         {
-            var result = BL.EstructuraAFMReporte.GetEstructuraGAFMForPlanesAccion(IdBaseDeDatos);
+            bool SA = false;
+            int IdCurrentAdmin = Convert.ToInt32(Session["IdAdministradorLogeado"]);
+            int IsSA = Convert.ToInt32(Session["SuperAdmin"]);
+            if (IsSA == 1)
+                SA = true;
+            var result = BL.EstructuraAFMReporte.GetEstructuraGAFMForPlanesAccion(IdBaseDeDatos, IdCurrentAdmin, SA);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public ActionResult ConfigurarPermisos()
+        {
+            return View();
+        }
+        public JsonResult ArbolEstructuraModuloPermisosPlanes()
+        {
+            var result = BL.EstructuraAFMReporte.ArbolEstructuraModuloPermisosPlanes();
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public JsonResult AddPermisosPlanes(string Area, List<int> admins)
+        {
+            string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
+            var result = BL.PlanesDeAccion.AddPermisosPlanes(Area, admins, UsuarioActual);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public JsonResult ObtenerAdmins(string Area)
+        {
+            var result = BL.PlanesDeAccion.ObtenerAdmins(Area);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>
@@ -219,10 +249,16 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.AgregarPerfilPlanesDeAccion(IdAdmin);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+
         /// <summary>
-        /// Se crea un Nuevo Listado de encuestas de tipo Clima laboral para la creación de los Planes de Acción 
+        /// 
         /// </summary>
         /// <returns></returns>
+        public JsonResult GetPeriodicidad() {
+            var result = BL.PlanesDeAccion.GetPeriodicidad();
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+        }
         #endregion Generales Modulo
 
         #region Seguimiento
@@ -232,7 +268,7 @@ namespace PL.Controllers
         /// <returns></returns>
         public ActionResult Seguimiento()
         {
-            Session["IdResponsable"] = 0;
+            //Session["IdResponsable"] = 0;
             return View();
         }
         /// <summary>
@@ -261,6 +297,161 @@ namespace PL.Controllers
             if (string.IsNullOrEmpty(IdPlan) || string.IsNullOrEmpty(IdResponsable))
                 return new JsonResult() { Data = "Los parametros no pueden ser nulos o vacios", JsonRequestBehavior = JsonRequestBehavior.AllowGet };
             var result = BL.PlanesDeAccion.GetAccionesByIdResponsable(Convert.ToInt32(IdPlan), Convert.ToInt32(IdResponsable));
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        public JsonResult ActualizarLayout()
+        {
+            try
+            {
+                Spire.Xls.Workbook workbook = new Spire.Xls.Workbook();
+                Spire.Xls.Worksheet sheet = workbook.Worksheets[0];
+                Spire.Xls.Worksheet sheetCatalogo = workbook.Worksheets[1];
+                int index = 1;
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var categorias = context.PromediosCategorias.Select(o => o.IdCategoria).Distinct().ToList();
+                    foreach (var cat in categorias)
+                    {
+                        var nameCat = context.Categoria.Where(o => o.IdCategoria == cat.Value).FirstOrDefault();
+                        if (nameCat != null)
+                        {
+                            sheetCatalogo.Range["A" + index].Value = nameCat.Nombre;
+                            index++;
+                        }
+                    }
+                }
+                var range = workbook.Worksheets[1].Range["A1:A" + index];
+                workbook.Worksheets[0].Range["A1"].DataValidation.DataRange = range;
+
+                workbook.SaveToFile(@"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\PruebaExcelDinamico.xlsx");
+                //workbook.Worksheets.RemoveAt(2);
+                //var license = workbook.Worksheets.Where(o => o.Name == "Evaluation Warning").FirstOrDefault();
+                //license.Remove();
+            }
+            catch (Exception aE)
+            {
+                Console.WriteLine(aE.Message);
+            }
+            return new JsonResult();
+        }
+        public JsonResult AddAccionesExcel(FormCollection formCollection)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                if (Request != null)
+                {
+                    HttpPostedFileBase file = Request.Files["postedFile"];
+                    if ((file != null) && (file.ContentLength > 0) && (!string.IsNullOrEmpty(file.FileName)))
+                    {
+                        string fileName = file.FileName;
+                        string fileExtension = Path.GetExtension(file.FileName);
+                        string fileContentType = file.ContentType;
+                        byte[] fileBytes = new byte[file.ContentLength];
+                        var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                        List<DL.Acciones> ListAcciones = new List<DL.Acciones>();
+                        if (fileExtension == ".xlsx")
+                        {
+                            using (var package = new ExcelPackage(file.InputStream))//using OfficeOpenXml;
+                            {
+                                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                                var currentSheet = package.Workbook.Worksheets;
+                                var workSheet = currentSheet.First();
+                                var noOfCol = workSheet.Dimension.End.Column;
+                                var noOfRow = workSheet.Dimension.End.Row;
+
+                                if (noOfRow > 1)
+                                {
+                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                    {
+                                        DL.Acciones accion = new DL.Acciones();
+                                        accion.Descripcion = (workSheet.Cells[rowIterator, 1].Value).ToString();
+                                        int IdCategoria = 0;
+                                        switch (workSheet.Cells[rowIterator, 2].Value.ToString())
+                                        {
+                                            case "Practicas culturales":
+                                                IdCategoria = 1;
+                                                break;
+                                            case "Alineacion estratégica":
+                                                IdCategoria = 11;
+                                                break;
+                                            case "Indicadores de procesos organizacionales":
+                                                IdCategoria = 12;
+                                                break;
+                                            case "Nivel de colaboración":
+                                                IdCategoria = 23;
+                                                break;
+                                            case "Nivel de compromiso":
+                                                IdCategoria = 24;
+                                                break;
+                                            case "ISO 9001:2015 AMBIENTE PARA LA OPERACIÓN DE LOS PROCESOS":
+                                                IdCategoria = 25;
+                                                break;
+                                            case "Alineacion cultural":
+                                                IdCategoria= 29;
+                                                break;
+                                            case "Bienestar":
+                                                IdCategoria = 30;
+                                                break;
+                                            case "Nivel de habilidades gerenciales":
+                                                IdCategoria = 34;
+                                                break;
+                                            default:
+                                                result.Correct = false;
+                                                result.ErrorMessage = "Debes elegir una categoria válida";
+                                                return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                                                break;
+                                        }
+
+                                        int IdRango = 0;
+                                        switch (workSheet.Cells[rowIterator, 3].Value.ToString())
+                                        {
+                                            case "0% - 69%":
+                                                IdRango = 1;
+                                                break;
+                                            case "70% - 79%":
+                                                IdRango = 2;
+                                                break;
+                                            case "80% - 89%":
+                                                IdRango = 3;
+                                                break;
+                                            case "90% - 100%":
+                                                IdRango = 4;
+                                                break;
+                                            default:
+                                                result.Correct = false;
+                                                result.ErrorMessage = "Debes elegir un rango válido válida";
+                                                return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                                                break;
+                                        }
+
+                                        accion.IdCategoria = IdCategoria;
+                                        accion.IdRango = IdRango;
+                                        accion.Tipo = 2;
+                                        accion.IdEncuesta = 1;//Las acciones globales llevan id de encuesta 1
+                                        accion.IdEstatus = 1;
+
+                                        ListAcciones.Add(accion);
+                                    }
+                                }
+                                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                                {
+                                    context.Acciones.AddRange(ListAcciones);
+                                    context.SaveChanges();
+                                    result.Correct = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>
@@ -295,7 +486,7 @@ namespace PL.Controllers
                 else
                     return new JsonResult() { Data = new ML.Result() { Correct = false, ErrorMessage = "El nombre del responsable no puede estar vacio" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 int IdResponsable = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
-                var ruta = @"\\\\10.5.2.101\\RHDiagnostics\\PlanesDeAccion\\" + IdPlan + @"\\" + IdAccion + @"\\" + cadenaResponsable + @"\\";
+                var ruta = @"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\PlanesDeAccion\\" + IdPlan + @"\\" + IdAccion + @"\\" + cadenaResponsable + @"\\";
                 int CantidadArchivos = Request.Files.Count;
                 foreach (string file in Request.Files)
                 {
@@ -355,6 +546,12 @@ namespace PL.Controllers
         {
             var result = BL.PlanesDeAccion.GuardarAvances(accionesPlan);
             return new JsonResult() { Data = result, JsonRequestBehavior= JsonRequestBehavior.AllowGet };
+        }
+        public ActionResult DescargaL()
+        {
+            string file = "LayoutAccionesDeMejora.xlsx";
+            string fullPath = Path.Combine(Server.MapPath("~/resources/"), file);
+            return File(fullPath, "application/vnd.ms-excel", file);
         }
         #endregion Seguimiento
     }

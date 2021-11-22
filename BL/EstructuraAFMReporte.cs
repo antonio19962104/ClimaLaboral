@@ -782,62 +782,75 @@ namespace BL
             return list;
         }
 
-        public static ML.Result GetEstructuraGAFMForPlanesAccion(int IdBaseDeDatos)
+        /// <summary>
+        /// Obtiene la estructura organizacional de la empresa
+        /// Si el IdCurrentAdmin es cero debe mandar todo
+        /// Si es mayor a cero entonces se debe validar si el area a agregar al arreglo esta en los permisos de PDAPermisos
+        /// Si no esta en PDAPermisos el area no se inserta y asi mismo se quita del listado a su padre(Direccion)
+        /// </summary>
+        /// <param name="IdBaseDeDatos"></param>
+        /// <param name="IdCurrentAdmin"></param>
+        /// <param name="IsSuperAdmin"></param>
+        /// <returns></returns>
+        public static ML.Result GetEstructuraGAFMForPlanesAccion(int IdBaseDeDatos, int IdCurrentAdmin, bool IsSuperAdmin)
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
             var list = new List<string>();
             string query = string.Empty;
+            var permisos = new List<ML.PDAPermisos>();
+            if (IdCurrentAdmin > 0)
+                permisos = BL.PlanesDeAccion.ObtenerPermisosPDA(IdCurrentAdmin);
             SqlDataAdapter data = new SqlDataAdapter();
             try
             {
-                DataSet ds_CompanyCategoria = new DataSet();
-                using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
+                var tieneEmpleadosAndUnidadNeg = TieneEmpleadosAndUneg(IdBaseDeDatos);
+                if (tieneEmpleadosAndUnidadNeg)
                 {
-                    query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0}", IdBaseDeDatos);
-                    data = new SqlDataAdapter(query, conn);
-                    data.Fill(ds_CompanyCategoria, "data");
-                    foreach (DataRow row_CompanyCategoria in ds_CompanyCategoria.Tables[0].Rows)
+                    DataSet ds_CompanyCategoria = new DataSet();
+                    using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
                     {
-                        if (row_CompanyCategoria.ItemArray[0].ToString() != "-")
-                        {
-                            if (hasEmpleado(row_CompanyCategoria.ItemArray[0].ToString(), 1, IdBaseDeDatos))
-                                list.Add("UNeg=>" + row_CompanyCategoria.ItemArray[0].ToString());
-                        }
-                        DataSet ds_Company = new DataSet();
-                        query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and UnidadNegocio = '{1}'", IdBaseDeDatos, row_CompanyCategoria.ItemArray[0].ToString());
+                        query = string.Format("select distinct UnidadNegocio from Empleado where IdBaseDeDatos = {0}", IdBaseDeDatos);
                         data = new SqlDataAdapter(query, conn);
-                        data.Fill(ds_Company, "data");
-                        foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                        data.Fill(ds_CompanyCategoria, "data");
+                        foreach (DataRow row_CompanyCategoria in ds_CompanyCategoria.Tables[0].Rows)
                         {
-                            if (hasEmpleado(row_Company.ItemArray[0].ToString(), 2, IdBaseDeDatos))
-                                list.Add("Comp=>" + row_Company.ItemArray[0].ToString());
-                            DataSet ds_Area = new DataSet();
-                            query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
-                            data = new SqlDataAdapter(query, conn);
-                            data.Fill(ds_Area, "data");
-                            foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                            if (row_CompanyCategoria.ItemArray[0].ToString() != "-")
                             {
-                                if (hasEmpleado(row_Area.ItemArray[0].ToString(), 3, IdBaseDeDatos))
-                                    list.Add("Area=>" + row_Area.ItemArray[0].ToString());
-                                /*DataSet ds_Departamento = new DataSet();
-                                query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
+                                if (hasEmpleado(row_CompanyCategoria.ItemArray[0].ToString(), 1, IdBaseDeDatos))
+                                    list.Add("UNeg=>" + row_CompanyCategoria.ItemArray[0].ToString());
+                            }
+                            DataSet ds_Company = new DataSet();
+                            query = string.Format("select distinct DivisionMarca from Empleado where IdBaseDeDatos = {0} and UnidadNegocio = '{1}'", IdBaseDeDatos, row_CompanyCategoria.ItemArray[0].ToString());
+                            data = new SqlDataAdapter(query, conn);
+                            data.Fill(ds_Company, "data");
+                            foreach (DataRow row_Company in ds_Company.Tables[0].Rows)
+                            {
+                                if (hasEmpleado(row_Company.ItemArray[0].ToString(), 2, IdBaseDeDatos))
+                                    list.Add("Comp=>" + row_Company.ItemArray[0].ToString());
+                                DataSet ds_Area = new DataSet();
+                                query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
                                 data = new SqlDataAdapter(query, conn);
-                                data.Fill(ds_Departamento, "data");
-                                foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                                data.Fill(ds_Area, "data");
+                                foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
                                 {
-                                    if (hasEmpleado(row_Depto.ItemArray[0].ToString(), 4, IdBaseDeDatos))
-                                        list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
-                                    DataSet ds_SubDepartamento = new DataSet();
-                                    query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
-                                    data = new SqlDataAdapter(query, conn);
-                                    data.Fill(ds_SubDepartamento, "data");
-                                    foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
+                                    if (hasEmpleado(row_Area.ItemArray[0].ToString(), 3, IdBaseDeDatos))
+                                        list.Add("Area=>" + row_Area.ItemArray[0].ToString());
+                                    // Validar si el usuario actual tiene los permisos para esta area
+                                    if (IsSuperAdmin == false)
                                     {
-                                        if (hasEmpleado(row_Subd.ItemArray[0].ToString(), 5, IdBaseDeDatos))
-                                            list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
+                                        if (IdCurrentAdmin > 0 && IdCurrentAdmin != 23)
+                                        {
+                                            var area = row_Area.ItemArray[0].ToString();
+                                            var existeAreaEnPermisos = permisos.Where(o => o.Area == area).FirstOrDefault();
+                                            if (existeAreaEnPermisos == null)
+                                            {
+                                                var ultimoIndexArray = list.Count - 1;
+                                                list.RemoveAt(ultimoIndexArray);
+                                            }
+                                        }
                                     }
-                                }*/
+                                }
                             }
                         }
                     }
@@ -855,7 +868,77 @@ namespace BL
             result.Correct = true;
             return result;
         }
-
+        public static bool TieneEmpleadosAndUneg(int IdBase)
+        {
+            bool result = false;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var empleados = context.Empleado.Where(o => o.IdBaseDeDatos == IdBase);
+                    if (empleados != null)
+                    {
+                        var unidades = empleados.Where(o => o.AreaAgencia != null && o.AreaAgencia != "").ToList();
+                        if (unidades.Count > 0)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return result;
+        }
+        public class PlanesPermisos
+        {
+            public int IdBaseDeDatos { get; set; } = 0;
+            public string Nombre { get; set; } = string.Empty;
+            public List<object> Estructura { get; set; } = new List<object>();
+        }
+        public static ML.Result ArbolEstructuraModuloPermisosPlanes()
+        {
+            ML.Result result1 = new ML.Result();
+            List<PlanesPermisos> list = new List<PlanesPermisos>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var BDs = context.BasesDeDatos.Where(o => o.IdTipoBD == 1 && o.IdEstatus == 1);
+                    foreach (var bd in BDs)
+                    {
+                        var tieneEmpleadosAndUnidadNeg = TieneEmpleadosAndUneg(bd.IdBasesDeDatos);
+                        if (tieneEmpleadosAndUnidadNeg)
+                        {
+                            var result = GetEstructuraGAFMForPlanesAccion(bd.IdBasesDeDatos, 0, true);
+                            if (result.Correct)
+                            {
+                                PlanesPermisos planesPermisos = new PlanesPermisos()
+                                {
+                                    IdBaseDeDatos = bd.IdBasesDeDatos,
+                                    Nombre = bd.Nombre,
+                                    Estructura = result.Objects
+                                };
+                                list.Add(planesPermisos);
+                            }
+                        }
+                    }
+                    result1.Objects = new List<object>();
+                    result1.Objects.Add(list);
+                    result1.Correct = true;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result1.Correct = false;
+                result1.ErrorMessage = aE.Message;
+                result1.ex = aE;
+            }
+            return result1;
+        }
         public static bool hasEmpleado(string entidadNombre, int idTipoEntidad, int idBD)
         {
             try

@@ -73,12 +73,13 @@ var IdAccionSeleccionada = 0;
                 vm.get("/PlanesDeAccion/GetAccionesByIdResponsable/?IdPlan=" + IdPlan + "&IdResponsable=" + IdResponsable, function (response) {
                     if (response.Correct) {
                         vm.Modulo ="Seguimiento de tu Plan de Acción";
-                        response.Objects[0].AccionesDeMejora.Descripcion = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
+                        //response.Objects[0].AccionesDeMejora.Descripcion = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
                         vm.ListAcciones =response.Objects;
                         //[].forEach.call([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], function (item) {
                         //    vm.ListAcciones.push(response.Objects[0]);
                         //});
                         $("#mergePlan .col").hide();
+                        e.target.closest(".alert-info").removeAttribute("style")
                         e.target.closest(".col").style.display = "";
                     }
                     else {
@@ -106,6 +107,12 @@ var IdAccionSeleccionada = 0;
                         if (vm.ListAcciones.length > 0) {
                             vm.ListAcciones = [];
                             $("#mergePlan .col").show();
+                            /*
+                             min-width: 255px; min-height: 138px;*/
+                            $(".alert-info").css("min-width", "255px");
+                            $(".alert-info").css("min-height", "138px");
+                            $(".alert-info").css("max-width", "255px");
+                            $(".alert-info").css("max-height", "138px");
                             vm.Modulo = "Consulta de Planes de Acción";
                             $scope.$apply()
                         }
@@ -136,9 +143,9 @@ var IdAccionSeleccionada = 0;
                         );
                         if (accionPlan.ListResponsable[index].Atachments.length > 0) {
                             [].forEach.call(accionPlan.ListResponsable[index].Atachments, function (evidencia) {
-                                var ruta = evidencia.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");
+                                var ruta = evidencia.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
                                 $("#IdResponsable_" + responsable.IdResponsable).append(
-                                    `<a href="` + ruta + `"><small class="ml-3" style="display:block;">` + ruta + `</small></a>`
+                                    `<a target="blank" href="` + ruta + `"><small class="ml-3" style="display:block;">` + ruta + `</small></a>`
                                 );
                             });
                         }
@@ -193,6 +200,7 @@ var IdAccionSeleccionada = 0;
                     if (response.Correct) {
                         swal("Los avances fueron actualizados correctamente", "", "success").then(function () {
                             document.getElementById("avance-accion-seleccionada").value = porcentaje;
+                            //vm.MostrarSeguimientoAcciones(null, IdPlanDeAccion);
                         });
                     }
                     else {
@@ -231,8 +239,8 @@ var IdAccionSeleccionada = 0;
             vm.ObtenerRutaAtachment = function (data) {
                 var cadena = "";
                 [].forEach.call(data, function (item) {
-                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");     
-                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");     
+                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                 });
                 if (cadena.length == 0)
                     cadena = '<small style="display: block;color:red;">Aun no se suben evidencias</small>';
@@ -316,8 +324,8 @@ var IdAccionSeleccionada = 0;
                                 $("#listadoDocs").empty();
                                 var cadena = "";
                                 [].forEach.call(response.Atachment, function (item) {
-                                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\RHDiagnostics\\\\", "http://diagnostic4u.com/");
-                                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
+                                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                                 });
                                 $("#listadoDocs").append(cadena);
                                 $(".delete-file").unbind();

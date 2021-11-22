@@ -16,6 +16,7 @@ namespace PL.Controllers
             Session["PerfilAdminLog"] = null;
             Session["Permisos"] = null;
             Session["Modulos"] = null;
+			Session["IdResponsable"] = null;
 
             return View();
         }
@@ -33,6 +34,7 @@ namespace PL.Controllers
             Session["IdAdministradorLogeado"] = result.CURRENTIDADMINLOG;
 
             Session["SuperAdmin"] = result.IsSuperAdmin;
+			Session["IdResponsable"] = BL.Administrador.isResponsable(admin.UserName).NewId;
             BL.Seguridad seguridad = new BL.Seguridad();
             Session["ps"] = seguridad.EncriptarCadena(admin.Password);
             try

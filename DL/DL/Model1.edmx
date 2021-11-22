@@ -1241,6 +1241,24 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="100" />
           <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="PDAPermisos">
+          <Key>
+            <PropertyRef Name="IdPDAPermisos" />
+          </Key>
+          <Property Name="IdPDAPermisos" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Area" Type="varchar" MaxLength="250" />
+          <Property Name="IdAdministrador" Type="int" />
+          <Property Name="FechaHoraCreacion" Type="datetime" />
+          <Property Name="UsuarioCreacion" Type="varchar" MaxLength="150" />
+          <Property Name="ProgramaCreacion" Type="varchar" MaxLength="150" />
+          <Property Name="FechaHoraModificacion" Type="datetime" />
+          <Property Name="UsuarioModificacion" Type="varchar" MaxLength="150" />
+          <Property Name="ProgramaModificacion" Type="varchar" MaxLength="150" />
+          <Property Name="FechaHoraEliminacion" Type="datetime" />
+          <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="150" />
+          <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="150" />
+          <Property Name="IdBaseDeDatos" Type="int" />
+        </EntityType>
         <EntityType Name="Perfil">
           <Key>
             <PropertyRef Name="IdPerfil" />
@@ -2909,6 +2927,18 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             </Principal>
             <Dependent Role="HeaderPlantilla">
               <PropertyRef Name="IdEstatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_PDAPermisos_Admin">
+          <End Role="Administrador" Type="Self.Administrador" Multiplicity="0..1" />
+          <End Role="PDAPermisos" Type="Self.PDAPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrador">
+              <PropertyRef Name="IdAdministrador" />
+            </Principal>
+            <Dependent Role="PDAPermisos">
+              <PropertyRef Name="IdAdministrador" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4730,6 +4760,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySet Name="Historico" EntityType="Self.Historico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HistoricoClima" EntityType="Self.HistoricoClima" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modulo" EntityType="Self.Modulo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PDAPermisos" EntityType="Self.PDAPermisos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PerfilD4U" EntityType="Self.PerfilD4U" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PerfilModulo" EntityType="Self.PerfilModulo" Schema="dbo" store:Type="Tables" />
@@ -5123,6 +5154,10 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="TipoEstatus" EntitySet="TipoEstatus" />
             <End Role="HeaderPlantilla" EntitySet="HeaderPlantilla" />
           </AssociationSet>
+          <AssociationSet Name="fk_PDAPermisos_Admin" Association="Self.fk_PDAPermisos_Admin">
+            <End Role="Administrador" EntitySet="Administrador" />
+            <End Role="PDAPermisos" EntitySet="PDAPermisos" />
+          </AssociationSet>
           <AssociationSet Name="FK_PerfilModulo_Administrador" Association="Self.FK_PerfilModulo_Administrador">
             <End Role="Administrador" EntitySet="Administrador" />
             <End Role="PerfilModulo" EntitySet="PerfilModulo" />
@@ -5429,6 +5464,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="PerfilModulo" Relationship="Self.FK_PerfilModulo_Administrador" FromRole="Administrador" ToRole="PerfilModulo" />
           <NavigationProperty Name="AdministradorCompany" Relationship="Self.FK_USUARIOCOMPANY_ADMIN" FromRole="Administrador" ToRole="AdministradorCompany" />
           <NavigationProperty Name="PlanDeAccion" Relationship="RH_DesModel.fk_PlanDeAccion_Admin" FromRole="Administrador" ToRole="PlanDeAccion" />
+          <NavigationProperty Name="PDAPermisos" Relationship="RH_DesModel.fk_PDAPermisos_Admin" FromRole="Administrador" ToRole="PDAPermisos" />
         </EntityType>
         <EntityType Name="AdministradorCompany">
           <Key>
@@ -10512,6 +10548,11 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="PromediosCategorias" EntitySet="PromediosCategorias" />
           </AssociationSet>
           <EntitySet Name="Periodicidad" EntityType="RH_DesModel.Periodicidad" />
+          <EntitySet Name="PDAPermisos" EntityType="RH_DesModel.PDAPermisos" />
+          <AssociationSet Name="fk_PDAPermisos_Admin" Association="RH_DesModel.fk_PDAPermisos_Admin">
+            <End Role="Administrador" EntitySet="Administrador" />
+            <End Role="PDAPermisos" EntitySet="PDAPermisos" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="f_getEstructuraDescByCompanyId_Result">
           <Property Type="Int32" Name="ID_COMPANY" Nullable="false" />
@@ -15812,6 +15853,37 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="UsuarioEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="ProgramaEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
+        <EntityType Name="PDAPermisos">
+          <Key>
+            <PropertyRef Name="IdPDAPermisos" />
+          </Key>
+          <Property Name="IdPDAPermisos" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Area" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IdAdministrador" Type="Int32" />
+          <Property Name="FechaHoraCreacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioCreacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaCreacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraModificacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioModificacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaModificacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraEliminacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioEliminacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaEliminacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Administrador" Relationship="RH_DesModel.fk_PDAPermisos_Admin" FromRole="PDAPermisos" ToRole="Administrador" />
+          <Property Name="IdBaseDeDatos" Type="Int32" />
+        </EntityType>
+        <Association Name="fk_PDAPermisos_Admin">
+          <End Type="RH_DesModel.Administrador" Role="Administrador" Multiplicity="0..1" />
+          <End Type="RH_DesModel.PDAPermisos" Role="PDAPermisos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Administrador">
+              <PropertyRef Name="IdAdministrador" />
+            </Principal>
+            <Dependent Role="PDAPermisos">
+              <PropertyRef Name="IdAdministrador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23507,6 +23579,25 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
                 <ScalarProperty Name="FechaHoraCreacion" ColumnName="FechaHoraCreacion" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="IdPeriodicidad" ColumnName="IdPeriodicidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PDAPermisos">
+            <EntityTypeMapping TypeName="RH_DesModel.PDAPermisos">
+              <MappingFragment StoreEntitySet="PDAPermisos">
+                <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />
+                <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
+                <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
+                <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
+                <ScalarProperty Name="ProgramaModificacion" ColumnName="ProgramaModificacion" />
+                <ScalarProperty Name="UsuarioModificacion" ColumnName="UsuarioModificacion" />
+                <ScalarProperty Name="FechaHoraModificacion" ColumnName="FechaHoraModificacion" />
+                <ScalarProperty Name="ProgramaCreacion" ColumnName="ProgramaCreacion" />
+                <ScalarProperty Name="UsuarioCreacion" ColumnName="UsuarioCreacion" />
+                <ScalarProperty Name="FechaHoraCreacion" ColumnName="FechaHoraCreacion" />
+                <ScalarProperty Name="IdAdministrador" ColumnName="IdAdministrador" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="IdPDAPermisos" ColumnName="IdPDAPermisos" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

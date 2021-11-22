@@ -33,54 +33,7 @@ namespace PL
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             HangfireAspNet.Use(GetHangfireServers);
 
-            //BL.PlanesDeAccion.NotificacionPrevia();
-            //BL.PlanesDeAccion.NotificacionInicialResponsables(19);
-
-            //var message = new MailMessage();
-            //message.To.Add(new MailAddress("jamurillo@grupoautofin.com"));
-            //message.Subject = "Prueba notificacion";
-            //message.IsBodyHtml = true;
-            //string contentMessage = File.ReadAllText(Path.GetFullPath(@"\\10.5.2.101\RHDiagnostics\templates\template-email.html"));
-            //contentMessage = PlanesDeAccion.CrearVistaWebEmail(contentMessage);
-            //message.Body = contentMessage;//ML.Email.PlantillaNotificacionInicial
-            //message.Priority = MailPriority.Normal;
-            //message.BodyEncoding = System.Text.Encoding.UTF8;
-            //using (var smtp = new SmtpClient())
-            //{
-            //    try
-            //    {
-            //        smtp.Send(message);
-            //    }
-            //    catch (SmtpException aE)
-            //    {
-            //        Console.Write(aE.Message);
-            //    }
-            //    finally
-            //    {
-            //        smtp.Dispose();
-            //    }
-            //}
-
-            /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
-            ML.Historico historico = new ML.Historico()
-            {
-                Anio = 2020,
-                enfoqueSeleccionado = 0,
-                currentURL = "localhost:11124",
-                CurrentUsr = "jamurillo@grupoautofin.com",
-                EntidadNombre = "GAFM",
-                IdBaseDeDatos = 2114,
-                idEncuesta = 1,
-                IdTipoEntidad = 0,
-                nivelDetalle = "012345",
-                tipoEntidad = 0,
-                ps = "52314672366B707931454E796D44553536504E4268773D3D"
-            };*/
-
-
-            //BL.PlanesDeAccion.EjecutaJob();
-            //backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
-            //BL.ReporteD4U.getComparativoPorAntiguedadEE("", "GAFM", 2021, 2114);
+            PruebasIniciales();
 
             /*
              * Aqui se colocan las tareas programadas a ejecutar segun la recurrencia que se requiere
@@ -126,6 +79,120 @@ namespace PL
             .UseNLogLogProvider();
             
             yield return new BackgroundJobServer();
+        }
+        /// <summary>
+        /// Metodo donde se depositan las pruebas de inicio rapido
+        /// </summary>
+        private void PruebasIniciales()
+        {
+            //Spire.Xls.Workbook workbook = new Spire.Xls.Workbook();
+            //workbook.LoadFromFile(@"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\PruebaExcelDinamico.xlsx");
+            //workbook.Worksheets.RemoveAt(2);
+            //var licencia = workbook.Worksheets.Where(o => o.Name == "Evaluation Warning").FirstOrDefault();
+            //licencia.Remove();
+
+
+            PL.Controllers.PlanesDeAccionController planesDeAccionController = new Controllers.PlanesDeAccionController();
+            planesDeAccionController.ActualizarLayout();
+            //var data = BL.EstructuraAFMReporte.ArbolEstructuraModuloPermisosPlanes();
+            //Console.WriteLine(data);
+            //BL.PlanesDeAccion.CrearVistaWebEmail("rutaEmailHTML Hola");
+            //BL.PlanesDeAccion.NotificacionPrevia();
+            //BL.PlanesDeAccion.NotificacionInicialResponsables(3);
+
+            /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
+            ML.Historico historico = new ML.Historico()
+            {
+                Anio = 2020,
+                enfoqueSeleccionado = 0,
+                currentURL = "localhost:11124",
+                CurrentUsr = "jamurillo@grupoautofin.com",
+                EntidadNombre = "GAFM",
+                IdBaseDeDatos = 2114,
+                idEncuesta = 1,
+                IdTipoEntidad = 0,
+                nivelDetalle = "012345",
+                tipoEntidad = 0,
+                ps = "52314672366B707931454E796D44553536504E4268773D3D"
+            };*/
+            //BL.PlanesDeAccion.EjecutaJob();
+            //backGroundJobController.BackgroundJobCreateReportNivelGAFM(historico);
+            //BL.ReporteD4U.getComparativoPorAntiguedadEE("", "GAFM", 2021, 2114);
+        }
+        public static void PruebaEnvioMain()
+        {
+            using (SmtpClient client = new SmtpClient())
+            {
+                var message = new MailMessage();
+                message.To.Add("jamurillo@grupoautofin.com");
+                message.Subject = "Prueba";
+                message.IsBodyHtml = true;
+                message.Body = @"
+<!doctype html>
+<html>
+   <head>
+      <meta charset='UTF-8'>
+      <title>Nivel de Colaboración</title>
+      <style>
+      	td{
+        	padding: 5px 5px 5px 10px;
+        }
+      </style>
+   </head>
+   <body style='font-family: Gotham, Helvetica Neue, Helvetica, Arial, sans-serif;'>
+      <table style='border: solid 1px #EEEEEE;width:100%;'>
+         <tbody style=''>
+            <tr style='background-color: #002856; color: #FFFFFF; padding: 10px;'>
+               <td colspan='2' style='font-weight:bold;padding: 5px 5px 5px 10px;'>NIVEL DE COLABORACIÓN</td>
+               <td style='padding: 5px 5px 5px 10px;'>0%</td>
+               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com//img/ReporteoClima/Iconos/sol-icono.png' width='30' height='' /></td>
+            </tr>
+            <tr style='padding: 10px; border: solid 1px #EEEEEE;'>
+               <td colspan='3' style='padding: 5px 5px 5px 10px;'>ACCIÓN 1</td>
+            </tr>
+         </tbody>
+      </table>
+      <p style='display:none'>Perioricidad</p>
+      <table style='border: solid 1px #EEEEEE;width:100%'>
+         <tbody style=''>
+            <tr>
+                <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>Perioricidad</td>
+            </tr>
+            <tr>
+               <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>0</td>
+               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: 01/11/2021</td>
+               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: 01/02/2022</td>
+            </tr>
+         </tbody>
+      </table>
+      <table style='border: solid 1px #EEEEEE;width:100%'>
+         <tbody style=''>
+            <tr>
+               <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Objetivo</p></td>
+               <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Meta</p></td>
+            </tr>
+            <tr>
+               <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>Objetivo 1</td>
+               <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>Meta 1</td>
+            </tr>
+         </tbody>
+      </table>
+   </body>
+</html>
+";
+                try
+                {
+                    client.Send(message);
+                }
+                catch (SmtpException ae)
+                {
+                    Console.WriteLine(ae.Message);
+                }
+                finally
+                {
+                    client.Dispose();
+                }
+            }
         }
     }
 }

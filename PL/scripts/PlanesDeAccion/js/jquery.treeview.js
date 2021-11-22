@@ -30,22 +30,17 @@ function TreeView(datas, options) {
 
     // ITEM EVENTS --------------------
     function changeCheckState(value, allChildCheck) {
-        //var c = this.checked;
-
-        //if (value == null || value instanceof MouseEvent) { // TOGGLE CHECK
-        //    if (c == 0) c = 1;
-        //    else if (c == 1) c = 0;
-        //    else if (c == 2) c = 1;
-        //} else {
-        //    c = value;
-        //}
-        //this.checked = c;
-        //setCheckState.bind(this)(c);
-
-
-        //if (c != 2)
-        //    checkAllChilds.bind(this)(c);
-        //checkControlParents.bind(this)();
+        if (value.target.className == "btn btn-info") {
+            var all = $(".btn-info");
+            all.removeAttr("check-value");
+            all.attr("check-value", 0);
+            var c = this.checked;
+            if (value == null || value instanceof MouseEvent) { // TOGGLE CHECK
+                if (c == 0) c = 1;
+            }          
+            this.checked = c;
+            setCheckState.bind(this)(c);            
+        }     
     }
 
     function checkAllChilds(value) {
@@ -132,8 +127,11 @@ function TreeView(datas, options) {
         var typeElementNodeArea = "span";
         var claseElementNodeArea = "item";
         if (data.children.length == 0) {
-            typeElementNodeArea = "button";
-            claseElementNodeArea = "btn btn-info";
+            var cortes = data.text.split("-").length;
+            if (cortes == 3) {
+                typeElementNodeArea = "button";
+                claseElementNodeArea = "btn btn-info";
+            }
         }
         var item = document.createElement(typeElementNodeArea);
         item.className = claseElementNodeArea;

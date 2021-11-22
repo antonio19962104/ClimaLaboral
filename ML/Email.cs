@@ -45,32 +45,74 @@ namespace ML
                     </div>
                 </div>
                 <div style='width: 100%; display: flex;margin-top: 1rem;'>
-                    <input disabled type='text' value='#accion#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                    <input disabled='' type='text' value='#accion#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
                 </div>
                 <div style='width: 100%; display: flex;margin-top: 1rem;'>
                     <div style='width: 50%; padding-right: 15px;'>
                         <label>Periodicidad</label>
-                        <input disabled type='text' value='#periodicidad#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                        <input disabled='' type='text' value='#periodicidad#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
                     </div>
                     <div style='width: 25%; margin-top: 1rem;'>
-                        <img alt='Icono fecha' width='30' height:'30' style='--bs-gutter-x: 1.5rem; --bs-gutter-y: 0;box-sizing: border-box; vertical-align: middle; width: 30px; height: 30px; margin-top: .5rem !important;' src='http://www.diagnostic4u.com/img/icono-calendario.png' class='fas fa-calendar'> <span style='vertical-align: middle; box-sizing: border-box; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0;'>Inicia: #inicio#</span>
+                        <img alt='Icono fecha' style='--bs-gutter-x: 1.5rem; --bs-gutter-y: 0;box-sizing: border-box; vertical-align: middle; width: 30px; height: 30px; max-width: 30px; max-height: 30px; min-width: 30px; min-height: 30px; margin-top: .5rem !important;' src='http://www.diagnostic4u.com/img/icono-calendario.png' class='fas fa-calendar' /> <span style='vertical-align: middle; box-sizing: border-box; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0;'>Inicia: #inicio#</span>
                     </div>
                     <div style='width: 25%; margin-top: 1rem;'>
-                        <img alt='Icono fecha' width='30' height:'30' style='--bs-gutter-x: 1.5rem; --bs-gutter-y: 0;box-sizing: border-box; vertical-align: middle; width: 30px; height: 30px; margin-top: .5rem !important;' src='http://www.diagnostic4u.com/img/icono-calendario.png' class='fas fa-calendar'> <span style='vertical-align: middle; box-sizing: border-box; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0;'>Concluye: #fin#</span>
+                        <img alt='Icono fecha' style='--bs-gutter-x: 1.5rem; --bs-gutter-y: 0;box-sizing: border-box; vertical-align: middle; width: 30px; height: 30px; max-width: 30px; max-height: 30px; min-width: 30px; min-height: 30px; margin-top: .5rem !important;' src='http://www.diagnostic4u.com/img/icono-calendario.png' class='fas fa-calendar' /> <span style='vertical-align: middle; box-sizing: border-box; --bs-gutter-x: 1.5rem; --bs-gutter-y: 0;'>Concluye: #fin#</span>
                     </div>
                 </div>
                 <div style='width: 100%; display:flex; margin-top: 1rem;'>
                     <div style='width: 50%; padding-right: 15px;'>
                         <label>Objetivo</label>
-                        <input disabled type='text' value='#objetivo#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                        <input disabled='' type='text' value='#objetivo#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
                     </div>
                     <div style='width: 50%; padding-right: 15px;'>
                         <label>Meta</label>
-                        <input disabled type='text' value='#meta#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
+                        <input disabled='' type='text' value='#meta#' style='border: 1px solid; box-sizing: border-box; margin: 0; font-family: inherit; display: block; width: 100%; padding: .375rem .75rem; font-size: 1rem; font-weight: 400; line-height: 1.5; color: #212529; background-color: #fff; background-clip: padding-box; border: 1px solid #ced4da; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: .25rem; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;' />
                     </div>
                 </div>
             </fieldset>
         ";
+
+
+        public static string PlantillaAcciones = @"
+<fieldset style='margin-bottom: 1rem;'>
+        <table style='border: solid 1px #EEEEEE;width:100%;'>
+         <tbody style=''>
+            <tr style='background-color: #002856; color: #FFFFFF; padding: 10px;'>
+               <td colspan='2' style='font-weight:bold;padding: 5px 5px 5px 10px;'>#Categoria#</td>
+               <td style='padding: 5px 5px 5px 10px;'>#100%#</td>
+               <td style='padding: 5px 5px 5px 10px;'><img src='#icono#' width='30' height='' /></td>
+            </tr>
+            <tr style='padding: 10px; border: solid 1px #EEEEEE;'>
+               <td colspan='3' style='padding: 5px 5px 5px 10px;'>#accion#</td>
+            </tr>
+         </tbody>
+      </table>
+      <p style='display:none'>Perioricidad</p>
+      <table style='border: solid 1px #EEEEEE;width:100%'>
+         <tbody style=''>
+            <tr>
+                <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>Perioricidad</td>
+            </tr>
+            <tr>
+               <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>#periodicidad#</td>
+               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: #inicio#</td>
+               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: #fin#</td>
+            </tr>
+         </tbody>
+      </table>
+      <table style='border: solid 1px #EEEEEE;width:100%'>
+         <tbody style=''>
+            <tr>
+               <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Objetivo</p></td>
+               <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Meta</p></td>
+            </tr>
+            <tr>
+               <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>#objetivo#</td>
+               <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>#meta#</td>
+            </tr>
+         </tbody>
+      </table>
+</fieldset>";
 
 
         public static string solIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/sol-icono.png";

@@ -251,6 +251,15 @@
       <HintPath>..\packages\RazorJS.0.4.3\lib\RazorJS.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Spire.License, Version=1.4.0.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.XLS.11.8.6\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=7.8.9.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.XLS.11.8.6\lib\net40\Spire.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.XLS, Version=11.8.6.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\FreeSpire.XLS.11.8.6\lib\net40\Spire.XLS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -1130,6 +1139,7 @@
     <Content Include="scripts\documentacion.js" />
     <Content Include="scripts\ElementQueries.js" />
     <Content Include="scripts\PlanesDeAccion\AltaPDA.js" />
+    <Content Include="scripts\PlanesDeAccion\AsignarPermisos.js" />
     <Content Include="scripts\PlanesDeAccion\EmailSender.js" />
     <Content Include="scripts\excel.min.js" />
     <Content Include="scripts\excellentexport.js" />
@@ -1721,6 +1731,7 @@
     <Content Include="Views\PlanesDeAccion\Notificaciones.cshtml" />
     <Content Include="Views\HangFireMonitor\HangFire.cshtml" />
     <Content Include="Views\PlanesDeAccion\Seguimiento.cshtml" />
+    <Content Include="Views\PlanesDeAccion\ConfigurarPermisos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="scripts\TableExport\" />

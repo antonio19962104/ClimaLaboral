@@ -228,6 +228,8 @@
         <AssociationConnector Association="RH_DesModel.fk_this_Categoria" />
         <AssociationConnector Association="RH_DesModel.fk_this_Encuesta" />
         <EntityTypeShape EntityType="RH_DesModel.Periodicidad" Width="1.5" PointX="14.375" PointY="15.75" />
+        <EntityTypeShape EntityType="RH_DesModel.PDAPermisos" Width="1.5" PointX="8.25" PointY="63.25" />
+        <AssociationConnector Association="RH_DesModel.fk_PDAPermisos_Admin" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

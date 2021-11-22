@@ -48,11 +48,11 @@
                     </div>
                 </div>
                 <div id="mergePlan" class="row mt-3">
-                    <div class="col" ng-repeat="item in vm.ListPlanesDeAccion">
-                        <div class="alert alert-info" role="alert">
-                            {{ item.Nombre }}
+                    <div class="col" ng-repeat="item in vm.ListPlanesDeAccion" style="">
+                        <div class="alert alert-info" role="alert" style="width: 255px; height: 138px; max-width: 255px; max-height: 138px; min-width: 255px; min-height: 138px;">
+                            <p style="margin-bottom: 0px;">{{ item.Nombre.replace("_", " ") }}</p>
                             <i class="fas fa-eye fa-lg" ng-hide="vm.ListAcciones.length > 0" style="cursor: pointer;float:inline-end;" title="Ver detalle" ng-click="vm.MostrarSeguimientoAcciones($event, item.IdPlanDeAccion, item.IdEncuesta, item.IdBaseDeDatos);vm.ObtenerPromedioAvancePlan(item.IdPlanDeAccion);"></i>
-                            <i class="fas fa-close fa-lg" ng-hide="vm.ListAcciones.length == 0" style="cursor: pointer;float:inline-end;" title="Cerrar detalle" ng-click="vm.CerrarDetallePlan($event)"></i>
+                            <i class="fas fa-close fa-lg" ng-hide="vm.ListAcciones.length == 0" style="margin-top: -20px;cursor: pointer; float: inline-end;" title="Cerrar detalle" ng-click="vm.CerrarDetallePlan($event)"></i>
                         </div>
                         <div class="row">
                             <div class="col-12" style="display: contents;">

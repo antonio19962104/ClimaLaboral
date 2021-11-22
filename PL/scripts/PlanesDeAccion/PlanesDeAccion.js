@@ -32,9 +32,6 @@ var modelNuevaAccion = {
         try {
             var vm = this;
             vm.Modulo = "Configuración de Acciones de Mejora";
-            if (IdEncuesta == 0) {
-                vm.Modulo = "Configuración de Acciones de ayuda para el usuario";
-            }
             vm.solIcono = "/img/ReporteoClima/Iconos/sol-icono.png";
             vm.solNubeIcono = "/img/ReporteoClima/Iconos/solnube-icono.png";
             vm.nubeIcono = "/img/ReporteoClima/Iconos/nube-icono.png";
@@ -55,14 +52,16 @@ var modelNuevaAccion = {
                     var texto = text.target.value;
                     var input = texto.toUpperCase();
                     var todosCard = $("#merge-acciones-ayuda span");
-                    [].forEach.call(todosCard, function (elem) {
+                    var todosCategoria = $("#merge-acciones-ayuda small");
+                    [].forEach.call(todosCard, function (elem, index) {
+                        var categoria = todosCategoria[index];
                         var dataString = elem.innerText;
                         dataString = dataString.toUpperCase();
                         var existe = false;
                         existe = dataString.includes(input);
                         if (input != "") {
                             if (existe == true) {
-                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + " <small style='display: block;'>Categoria 1</small></div>";
+                                document.getElementById("mergeBusqueda").innerHTML += "<div class='alert alert-primary'>" + dataString + " <small style='display: block;'>" + categoria.innerText + "</small></div>";
                             }
                         }
                     });
@@ -70,6 +69,20 @@ var modelNuevaAccion = {
                 /* vm.ConsultaAreas();Esta seccion se omite del alta de acciones ya que este conjunto es de uso genérico por encuesta */
                 vm.ConsultaAccionesGuardadas();
                 vm.ConsultaAccionesAyuda();
+                document.getElementById("postedFile").addEventListener("change", function () {
+                    var elem = document.getElementById("postedFile");
+                    if (elem.files.length > 0) {
+                        if (elem.files[0].name.split(".")[1] != "xlsx") {
+                            swal("Tipo de archivo no válido, asegurate se usar un archivo xlsx", "", "info");
+                        }
+                        else {
+                            document.getElementById("labelForInputFile").innerText = elem.files[0].name;
+                        }
+                    }
+                    else {
+                        document.getElementById("labelForInputFile").innerText = "Selecciona un archivo";
+                    }
+                });
             });
 
             vm.ConsultaAreas = function () {
@@ -97,7 +110,7 @@ var modelNuevaAccion = {
                 vm.post("/PlanesDeAccion/GetAccionesAyuda/?", modelNuevaAccion, function (response) {
                     if (response.Correct) {
                         [].forEach.call(response.Objects, function (accion) {
-                            $("#merge-acciones-ayuda").append('<span>' + accion.Descripcion + '</span>');
+                            $("#merge-acciones-ayuda").append('<span>' + accion.Descripcion + '</span><small>' + accion.Categoria.Descripcion + '</small>');
                         });
                     }
                     else {
@@ -111,7 +124,7 @@ var modelNuevaAccion = {
                     if (response.Correct) {
                         $("#accordion .card-body").empty();
                         AccionesPreGuardadas = response.Objects;
-                        if (IdEncuesta > 0) {
+                        if (IdEncuesta == 0) {
                             [].forEach.call(response.Objects, function (accion) {
                                 $("#merge-new-acciones-idcat-" + accion.Categoria.IdCategoria).append(
                                     `
@@ -409,7 +422,7 @@ var modelNuevaAccion = {
                     true);
             }
 
-            if (IdEncuesta > 0) {
+            if (IdEncuesta == 0) {
                 /*Obtiene las subcategorias configuradas en una encuesta, aqui todavia sin importar los promedios obtenidos*/
                 vm.post("/PlanesDeAccion/GetSubCategoriasByIdEncuesta/", model, function (response) {
                     if (response.Correct) {
@@ -601,7 +614,8 @@ var modelNuevaAccion = {
                     Encuesta: { IdEncuesta: IdEncuesta },
                     BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
                     AnioAplicacion: AnioAplicacion,
-                    IdAccionDeMejora: IdAccion
+                    IdAccionDeMejora: IdAccion,
+                    Tipo: 2
                 }
                 vm.post("/PlanesDeAccion/AddAccion/", modelNuevaAccion, function (response) {
                     if (response.Correct) {
@@ -991,12 +1005,12 @@ var CrearGridSubCategorias = function () {
 }
 
 var LimpiarModal = function () {
-    if (IdEncuesta > 0) {
+    if (IdEncuesta == 0) {
         $('#re-asignar-accion').modal('toggle');
         $("#nueva-categoria").val("0");
         $("#nuevo-rango").val("0");
     }
-    if (IdEncuesta == 0) {
+    if (IdEncuesta > 0) {
         $('#edita-acciones').modal('toggle');
         $("#edita-acciones input")[0].value = "";
         $("#edita-acciones input")[1].value = "";
@@ -1033,3 +1047,32 @@ var EditAccionAyuda = function (e, accion) {
     }
 }
 
+var CargaMasiva = function () {
+    try {
+        var elem = document.getElementById("postedFile");
+        var formData = new FormData();
+        formData.append("postedFile", elem.files[0]);
+        $.ajax({
+            url: "/PlanesDeAccion/AddAccionesExcel/",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.Correct) {
+                    swal("Las acciones fueron agregadas correctamente", "", "success").then(function () {
+                        document.getElementById("header-modulo").click();
+                    });
+                }
+                else {
+                    swal("Ocurrió un error al hacer la carga masiva de acciones", response.ErrorMessage, "error");
+                }
+            },
+            error: function (err) {
+                alert(err);
+            }
+        });
+    } catch (e) {
+
+    }
+}

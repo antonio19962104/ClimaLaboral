@@ -8,6 +8,7 @@ using System.Net.Mail;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.IO;
+using System.Configuration;
 
 namespace BL
 {
@@ -232,13 +233,16 @@ namespace BL
         /// <param name="acciones"></param>
         /// <param name="IdPlanDeAccion"></param>
         /// <param name="responsable"></param>
+        /// <param name="administrador"></param>
         /// <returns></returns>
-        public static bool EnvioNotificaciones(int TipoNotificacion, string destinatario, List<ML.AccionDeMejora> acciones, DL.Responsable responsable, int IdPlanDeAccion)
+        public static bool EnvioNotificaciones(int TipoNotificacion, string destinatario, List<ML.AccionDeMejora> acciones, DL.Responsable responsable, DL.Administrador administrador, int IdPlanDeAccion)
         {
             try
             {
                 if (acciones.Count > 0)
                 {
+                    if (administrador == null)
+                        administrador = new DL.Administrador() { UserName = "Sin usuario", Password = "Sin contraseña" };
                     var message = new MailMessage();
                     message.To.Add(new MailAddress(destinatario));
                     message.Subject = ObtenerAsunto(TipoNotificacion);
@@ -246,6 +250,7 @@ namespace BL
                     string contentMessage = ObtenerPlantilla(TipoNotificacion);
                     //Armar las iteraciones de acciones de ser el caso
                     contentMessage += ObtenerContenidoHTMLAccionesEmail(TipoNotificacion, acciones, IdPlanDeAccion);
+                    contentMessage += "<div><p>Tus credenciales para poder acceder a subir tus avances son las siguientes</p><p>Username: " + administrador.UserName + "</p><p>Contraseña: " + administrador.Password + "</p>             <p>Accede entrando a: </p><a href='" + ConfigurationManager.AppSettings["urlTemplateLocation"].ToString() + "/LoginAdmin/Login'><img src='http://www.diagnostic4u.com/img/Logo_emails.png' style='border-radius: 5px;' /></a></div>";
                     contentMessage += "</div></body></html> ";
                     contentMessage = contentMessage.Replace("#responsable#", (string.Concat(responsable.Nombre, " ", responsable.ApellidoPaterno, " ", responsable.ApellidoMaterno)));
                     //Armar las iteraciones de acciones de ser el caso
@@ -378,7 +383,7 @@ namespace BL
                     contenido = contenido.Replace("#icono#", ObtenerIconoEmail(promedioCategoria));
                     contenido = contenido.Replace("#100%#", promedioCategoria.ToString() + "%");
                     contenido = contenido.Replace("#accion#", accion.Descripcion);
-                    contenido = contenido.Replace("#periodicidad#", accionPlan.Periodicidad.ToString());
+                    contenido = contenido.Replace("#periodicidad#", BL.PlanesDeAccion.ObtenerPeriodicidadById(accionPlan.Periodicidad).Descripcion);
                     contenido = contenido.Replace("#inicio#", accionPlan.FechaInicio.ToString());
                     contenido = contenido.Replace("#fin#", accionPlan.FechaFin.ToString());
                     contenido = contenido.Replace("#objetivo#", accionPlan.Objetivo);
@@ -426,6 +431,7 @@ namespace BL
                     default:
                         break;
                 }
+                contenido = ML.Email.PlantillaAcciones;
             }
             catch (Exception)
             {

@@ -92,6 +92,8 @@
     <Compile Include="Email.cs" />
     <Compile Include="EmailsEncuesta.cs" />
     <Compile Include="Evidencia.cs" />
+    <Compile Include="PDAPermisos.cs" />
+    <Compile Include="Periodicidad.cs" />
     <Compile Include="PlanDeAccion.cs" />
     <Compile Include="PromediosCategorias.cs" />
     <Compile Include="PromedioSubCategorias.cs" />

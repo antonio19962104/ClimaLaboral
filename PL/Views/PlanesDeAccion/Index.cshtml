@@ -36,12 +36,12 @@
 <div class="content-wrap" ng-app="app" ng-controller="planAccionController as vm">
     @{
         // Acciones para un plan
-        if (Model.IdEncuesta > 0)
+        if (Model.IdEncuesta == 0)
         {
             <div class="container-fluid px-lg-5">
                 <div class="row">
                         <div class="col-lg-10">
-                            <h2 id="header-modulo" ng-click="vm.ConsultaAccionesGuardadas()">{{ vm.Modulo }}</h2>                          
+                            <h2 id="header-modulo" ng-click="vm.ConsultaAccionesGuardadas()">{{ vm.Modulo }}</h2>
                             <div class="form-group">
                                 <div style="display: none;" class="form-group">
                                     <div class="form-inline">
@@ -66,15 +66,20 @@
 
                             <!--Despliega las áreas en un arbol de nodos-->
                             <div id="arboles"></div>
+                            <div class="col-4 form-group">
+                                <input hidden type="file" accept="" id="postedFile" name="postedFile" class="form-control" />
+                                <label id="labelForInputFile" class="mr-3 form-control" for="postedFile">Selecciona un archivo <i class="fas fa-file-excel fa-lg"></i></label>
+                                <button class="btn btn-success" onclick="CargaMasiva()">Cargar acciones <i class="fas fa-upload"></i></button>
+                                <button class="btn btn-danger" onclick="Download()">Descargar layout <i class="fas fa-download"></i></button>
+                            </div>
 
                             <div id="accordion">
                                 <div id="custom-categoria-{{ item.IdCategoria }}" class="card" style="border-radius: 10px;" ng-repeat="item in vm.Categorias track by $index">
                                     <div class="card-header row col-12" style="left: 15px;" id="headingOne{{ $index }}">
                                         <div class="col-10">
                                             <btn class="btn" data-toggle="collapse" data-target="#collapseOne{{ $index }}" aria-expanded="true" aria-controls="collapseOne{{ $index }}">
-                                                ({{ item.IdCategoria }}) {{ item.Categoria }} - Promedio General: {{ item.PromedioGeneral }}
+                                                @*({{ item.IdCategoria }})*@ {{ item.Categoria }}
                                             </btn>
-                                            <img hidden src="{{ vm.setIconoSVG(item.PromedioGeneral) }}" />
                                         </div>
                                         <div class="col-2">
                                             <h5 class="mb-0" style="text-align: end;">
@@ -136,14 +141,20 @@
             </div>
         }
         // Acciones dadas de alta por Noé
-        if (Model.IdEncuesta == 0)
+        if (Model.IdEncuesta == -5)
         {
             <div class="container-fluid px-lg-5">
                 <div class="row">
                     <div class="col-lg-10">
                         <h2>{{ vm.Modulo }}</h2>
-                        <div class="form-group">
+                        <div hidden class="form-group">
                             <button id="nueva-accion" onclick="EditAccionAyuda(this, 'agregar')" class="btn btn-success">Agregar nueva acción <i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" accept="" id="postedFile" name="postedFile" class="form-control" />
+                            <input type="button" class="btn btn-info" value="Cargar acciones" onclick="CargaMasiva()" />
+                            <br />
+                            <input type="button" value="Descargar layout" onclick="Download()" />
                         </div>
                         <div id="grid-Acciones" class="mt-5"></div>
                     </div>
@@ -222,3 +233,8 @@
 <script src="~/scripts/ReporteoClima/html2canvas.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
 <script src="~/scripts/ReporteoClima/jspdf.min.js"></script>
+<script>
+    function Download() {
+        window.location = "@Url.Action("DescargaL", "PlanesDeAccion")";
+    }
+</script>

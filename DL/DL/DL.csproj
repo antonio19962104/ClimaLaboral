@@ -620,6 +620,9 @@
     <Compile Include="OpenSearch_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="PDAPermisos.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Perfil.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

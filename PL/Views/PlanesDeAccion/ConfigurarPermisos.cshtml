@@ -1,0 +1,78 @@
+﻿@model ML.PlanDeAccion
+@using Newtonsoft.Json
+@{
+    ViewBag.Title = "Configurar permisos";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+<script src="~/scripts/ReporteoClima/LinQ.js"></script>
+<script src="~/scripts/AngularJS.js"></script>
+<script src="~/scripts/swal.min.js"></script>
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default-main.min.css" />
+<script>
+    var UserId = @Html.Raw(JsonConvert.SerializeObject(Session["IdAdministradorLogeado"]));
+</script>
+@section H1{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-6 bottom-align-left center-vertically-xs">
+                    <img src="~/img/plan-de-accion-2.png" )" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Plan de Acción / <span>Seguimiento</span>
+                    </h1>
+                </div>
+                <div hidden class="col-6 bottom-align-right center-vertically-xs">
+                    <a href="#" onclick="GuardarTodo()" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i> Guardar y cerrar</span>
+                    </a>
+                </div>
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+<div hidden class="form-group">
+    <input type="file" id="fileChosser2" name="fileChosser2" multiple="multiple" />
+    <input type="button" ng-click="vm.AgregarArchivos()" />
+</div>
+<div id="printDiv" class="content-wrap" ng-app="app" ng-controller="permisosController as vm">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-8">
+                        <h3>{{ vm.Modulo }}</h3>
+                    </div>
+                    <div class="col-4" ng-hide="vm.ListAcciones.length > 0">
+                        <input type="button" ng-click="vm.ObtenerAdminElegidos()" class="btn btn-info" value="Agregar permisos" /><i class="fas fa-save"></i>
+                    </div>
+                </div>
+                <div id="mergePlan" class="row mt-3">
+                    <div class="col-1" ng-repeat="item in vm.ListAreas" style="">
+                        <input type="button" value="{{ item }}" ng-click="vm.ObtenerAdmins($event)" />
+                    </div>  
+                </div>
+
+                <div class="divAdmins">
+                    <div class="alert alert-info" ng-repeat="item in vm.ListAdmin">
+                        {{ item.IdAdministrador }} {{ item.Nombre }} ({{ item.UserName }})
+                        <input type="checkbox" id="chkAdmin_{{ item.IdAdministrador }}" value="{{ item.IdAdministrador }}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/scripts/PlanesDeAccion/AsignarPermisos.js"></script>
+<style>
+    .list-acciones span, small{
+        display: block;
+    }
+    .errspan {
+        float: right;
+        margin-right: 15px;
+        margin-top: -25px;
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
