@@ -622,6 +622,7 @@ namespace BL
                                             ProgramaCreacion = "Modulo Planes de Acción Alta - Responsable"
                                         };
                                         context.Responsable.Add(responsablePA);
+                                        context.SaveChanges();
                                         var idresponsable = context.Responsable.Max(o => o.IdResponsable);
 
                                         DL.ResponsablesAccionesPlan respon1 = new DL.ResponsablesAccionesPlan()
@@ -741,9 +742,13 @@ namespace BL
                 result.ex = aE;
 				transaction.Rollback();
             }
-			 transaction.Commit();
-                    //TriggerNotificacionInicial(idPlanDeAccion);
-                    BackgroundJob.Enqueue(() => NotificacionInicialResponsables(idPlanDeAccion));
+                    if (result.Correct)
+                    {
+                        transaction.Commit();
+                        //TriggerNotificacionInicial(idPlanDeAccion);
+                        BackgroundJob.Enqueue(() => NotificacionInicialResponsables(idPlanDeAccion));
+                    }
+
 			}
 			}
             return result;

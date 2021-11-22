@@ -47,7 +47,9 @@
                 AnioAplicacion: AnioAplicacion
             };
             var IdAccion = 0;
+            vm.ListPeriodicidad = [];
             $(document).ready(function () {
+                vm.ObtenerPeriodicidad();
                 document.getElementById("loading").style.display = "block";
                 $(".btn-parallelogram").css("display", "none");
                 vm.ConsultaEncuestaPM();
@@ -143,7 +145,7 @@
                                 style: "text-align: center; vertical-align: middle; white-space: pre-wrap;"
                             },
                             command: [{
-                                text: "Add PdA",
+                                text: "Agregar",
                                 click: vm.addEncuestaPdA
                             }]
 
@@ -425,28 +427,41 @@
                     });
                     /*Push Division*/
                     var Division = Enumerable.from(vm.EstructuraAFM).where(o => o.type == "Comp=>" && o.IdUnidadNegocio == item.IdUnidadNegocio).toList();
-                    [].forEach.call(Division, function (elem, index2) {
-                        treeObject[index].children.push({
-                            text: elem.value,
-                            checked: false,
-                            id: 0,
-                            children: [
-                                /*Area Agencia*/
-                            ]
-                        });
-                        /*Push Area*/
-                        var AreaAgencia = Enumerable.from(vm.EstructuraAFM).where(o => o.type == "Area=>" && o.CompanyId == elem.CompanyId).toList();
-                        [].forEach.call(AreaAgencia, function (elem) {
-                            treeObject[index].children[index2].children.push({
+                    if (Division.length == 0) {
+                        delete treeObject[index];
+                    }
+                    else {
+                        [].forEach.call(Division, function (elem, index2) {
+                            treeObject[index].children.push({
                                 text: elem.value,
                                 checked: false,
                                 id: 0,
                                 children: [
-                                    /*Division*/
+                                    /*Area Agencia*/
                                 ]
                             });
+                            /*Push Area*/
+                            var AreaAgencia = Enumerable.from(vm.EstructuraAFM).where(o => o.type == "Area=>" && o.CompanyId == elem.CompanyId).toList();
+                            if (AreaAgencia.length == 0) {
+                                delete treeObject[index].children[index2];
+                            }
+                            else {
+                                [].forEach.call(AreaAgencia, function (elem) {
+                                    treeObject[index].children[index2].children.push({
+                                        text: elem.value,
+                                        checked: false,
+                                        id: 0,
+                                        children: [
+                                            /*Division*/
+                                        ]
+                                    });
+                                });
+                            }
+
                         });
-                    });
+                    }
+
+                   
                 });
                 treeObject = Enumerable.from(treeObject).where(o => !o.text.includes("-")).toList();
                 var treeFinal = [];
@@ -557,7 +572,10 @@
                                    `<div id= "cat_` + item.IdCategoria + `" style="padding: 0 .5rem !important; display:none;">
                                         <div class ="title-header-blue">
                                             <div class ="row">
-                                                <div class ="col-10"><span class ="title-header-section"> `+ item.Categoria +` </span></div>
+                                                <div class ="col-10">
+                                                <span class ="title-header-section"> `+ item.Categoria +` </span>
+                                                <span class ="title-header-section ico"> `+ item.PromedioGeneral +`%       </span>
+                                                </div>
                                                 <div class ="col-2 text-center">
                                                     <button title="Regresar" type="button" idcat = "` + item.IdCategoria + `" class ="btn btn-secondary btn-action ml-1 btn-back-action"><i idcat = "` + item.IdCategoria + `" class ="far fa-arrow-alt-circle-left"></i></button>
                                                     <button title="Agregar Accion" type="button" idcat = "` + item.IdCategoria + `" class ="btn btn-secondary btn-action ml-1 btn-add-action"><i idcat = "` + item.IdCategoria + `" class ="fas fa-plus-circle"></i></button>
@@ -568,9 +586,17 @@
                                             <div id="accordion"></div>
                                         </div>
                                     </div>`);
+                                //Se inserta el icono
+                                var imagenIco = vm.setIconoSVG(item.PromedioGeneral);
+                                if (imagenIco != "") {
+                                    $("#cat_" + item.IdCategoria + " .ico").append(`<img src="` + imagenIco + `" class="img-fluid" style="background-color: white;width: 4%;">`);
+                                }
                                 [].forEach.call(vm.ListRangos, function (items) {
-                                    if (item.PromedioGeneral >= items.valor1 && item.PromedioGeneral <= items.valor2)
-                                        { item.IdRango = items.Id; item.Rango = items.Descripcion };
+                                    if (item.PromedioGeneral >= parseFloat(items.valor1) && item.PromedioGeneral <= parseFloat(items.valor2))
+                                    {
+                                        item.IdRango = items.Id;
+                                        item.Rango = items.Descripcion;
+                                    };
                                 });
                             });
 
@@ -714,7 +740,7 @@
                     //se verifica si existen acciones en el acordion de categoria
                     var accionesXcategoria = $("#cat_"+dataItem.IdCategoria+" #accordion")[0].children.length;
                     if (accionesXcategoria == 0) {
-                        var accionesXcat = Enumerable.from(vm.ListadoAccionesModel).where(o => o.Categoria.IdCategoria == dataItem.IdCategoria).toList();
+                        var accionesXcat = Enumerable.from(vm.ListadoAccionesModel).where(o => o.Categoria.IdCategoria == dataItem.IdCategoria && o.Rango.IdRango == vm.IdRango).toList();
                         if (accionesXcat.length > 0) {
 
                             [].forEach.call(accionesXcat, function (item) {
@@ -729,9 +755,12 @@
                                 <div class ="card">
 	                               <div class ="card-header" id="heading`+ item.IdAccionDeMejora + `_` + numAcciones + `" >
 		                               <h5 class ="mb-0">
-			                               <span class ="btn btn-link col-12" data-toggle="collapse" data-target= "#collapse`+ item.IdAccionDeMejora + `_` + numAcciones + `" aria-expanded="true" aria-controls= "collapse` + item.IdAccionDeMejora + `_` + numAcciones + `" >
+			                               <span class ="btn btn-link col-10" data-toggle="collapse" data-target= "#collapse`+ item.IdAccionDeMejora + `_` + numAcciones + `" aria-expanded="true" aria-controls= "collapse` + item.IdAccionDeMejora + `_` + numAcciones + `" >
 				                               <input type="text" placeholder="Ingresa nombre de la acción" value= "`+ item.Descripcion + `" class ="form-control txt-Nom-Acc" />
 			                               </span>
+                                           <span class="col-2">
+                                           <i class ="far fa-times-circle eliminaAccion" style="cursor: pointer;"></i>
+                                           </span>
 		                               </h5>
 	                               </div>
 
@@ -739,7 +768,10 @@
 		                               <div class ="card-body">
 			                               <div class ="row form-group">
                                                 <div class ="col-3">Periodicidad: </div>
-                                                <div class ="col-5"><input type="text" placeholder="Ingresa periocidad" class ="form-control frm-periodicidad" /></div>
+                                                <div class ="col-5">
+                                                <input type="hidden" placeholder="Ingresa periocidad" class ="form-control frm-periodicidad" />                                                
+                                                <select class ="form-control frm-periodicidadS select-periodicidad`+item.IdAccionDeMejora+`" style="width: 100%;"></select>
+                                                </div>
                                                 <div class ="col-2"><i class ="far fa-calendar-alt"></i>Inicia:<input type="date" placeholder="Ingresa fecha de inicio" class ="form-control frm-fecini" /></div>
                                                 <div class ="col-2"><i class ="far fa-calendar-alt"></i>Concluya:<input type="date" placeholder="Ingresa fecha de término" class ="form-control frm-fecfin" /></div>
                                             </div>
@@ -766,11 +798,20 @@
                                                 <div class ="col-9"><input type="text" placeholder="Ingresa comentarios" class ="form-control frm-comentarios" /></div>
                                             </div>
                                             <input type="hidden" class ="newIdAccion" value= "`+item.IdAccionDeMejora+ `" />
+                                            <input type="hidden" class ="idCat" value= "`+dataItem.IdCategoria+ `" />
 		                               </div>
 	                               </div>
                                </div>
-                                `);
+                                `
+                                );
+                                var idselectAccion = ".select-periodicidad" + item.IdAccionDeMejora;
+                                [].forEach.call(vm.ListPeriodicidad, function (item) {
+                                    $(idselectAccion).append("<option value='" + item.Id + "'>" + item.Descripcion + "</option>");
+                                });
+
                             });
+                            //se agrega el select de Periodiicidad
+                            
 
                         }
                         else {
@@ -783,102 +824,194 @@
                     }, 500);
                 });
                 $('#listAcciones').on('click', '.btn-add-action', function (e) {
-                    
                     var idCat = e.target.attributes.idcat.value;
-                    // da de alta la accion en BD
-                    modelNuevaAccion = {
-                        Descripcion: "",
-                        Rango: { IdRango:vm.IdRango},
-                        Estatus: { IdEstatus: 1 },
-                        Categoria: { IdCategoria: idCat},
-                        Encuesta: { IdEncuesta:vm.IdEncuesta},
-                        BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
-                        AnioAplicacion: vm.PeriodoEncuesta                        
-                    }
-                    //se oculta el aviso de no cuenta con acciones
-                    var numNocuenta = $("#accordion .notieneAcc").length;
-                    if (numNocuenta == 1) {
-                        //indica que tiene aviso de No cuenta con Acciones asignadas
-                        $("#cat_" + idCat + " #accordion").empty()
-                    }
-                    var numAcciones = $("#accordion .card").length;
-                    if (numAcciones == 0) {
-                        numAcciones = 1;
-                    }
-                    else {
-                        numAcciones = numAcciones + 1
-                    }
-                    vm.post("/PlanesDeAccion/AddAccion/", modelNuevaAccion, function (response) {
-                        if (response.Correct) {                           
-                            $("#cat_" + idCat + " #accordion").append(`
-                                <div class ="card">
-	                               <div class ="card-header" id= "heading`+response.NewId+`_` + numAcciones + `" >
-		                               <h5 class ="mb-0">
-			                               <span class ="btn btn-link col-12" data-toggle="collapse" data-target= "#collapse`+response.NewId+`_` + numAcciones + `" aria-expanded="true" aria-controls= "collapse`+response.NewId+`_`+numAcciones+`" >
-				                              <input type="text" placeholder="Ingresa el nombre de la acción" class ="form-control txt-Nom-Acc" />
-			                               </span>
-		                               </h5>
-	                               </div>
+                    var idTipo = 0;
+                    swal("Ésta acción será Genérica?", {
+                        buttons: {
+                            cancel: "Cancelar",
+                            si: {
+                                text: "Si",
+                                value: "si",
+                            },
+                            no: {
+                                text: "No",
+                                value:"no",
+                            },
+                        },
+                    })
+                    .then((value) => {
+                        switch (value) {
 
-	                               <div id= "collapse`+response.NewId+`_` + numAcciones + `" class ="collapse" aria-labelledby= "heading`+response.NewId+`_` + numAcciones + `" data-parent="#accordion">
-		                               <div class ="card-body">
-			                               <div class ="row form-group">
-                                                <div class ="col-3">Periodicidad: </div>
-                                                <div class ="col-5"><input type="text" placeholder="Ingresa periocidad" class ="form-control frm-periodicidad" /></div>
-                                                <div class ="col-2"><i class ="far fa-calendar-alt"></i>Inicia:<input type="date" placeholder="Ingresa fecha de inicio" class ="form-control frm-fecini" /></div>
-                                                <div class ="col-2"><i class ="far fa-calendar-alt"></i>Concluya:<input type="date" placeholder="Ingresa fecha de término" class ="form-control frm-fecfin" /></div>
-                                            </div>
-                                            <div class ="row form-group">
-                                                <div class ="col-9">Objetivo: </div>
-                                                <div class ="col-3">Meta: </div>
-                                            </div>
-                                            <div class ="row form-group">
-                                                <div  class ="col-9"><input type="text" placeholder="Objetivo a alcanzar con la acción" class ="form-control frm-objetivo" /></div>
-                                                <div  class ="col-3"><input type="text" placeholder="Ingresa meta" class ="form-control frm-meta" /></div>
-                                            </div>
-                                            <div class ="row form-group">
-                                                <div class ="col-6"><i class = "fas fa-plus add-responsable" idAccion= "`+response.NewId+`" idcat= "`+ idCat + `" ></i> Responsable: </div>
-                                                <div class ="col-6">Email: </div>
-                                            </div>
-                                            <section class = "reponsables_`+response.NewId+ ` frm-responsables" >
-                                            <div class ="row form-group">
-                                                <div class ="col-6"><input type="text" placeholder="Ingresa nombre del responsable" class ="form-control frm-respon" /></div>
-                                                <div class ="col-6"><input type="text" placeholder="Ingresa correo electrónico" class ="form-control frm-respon-email" /></div>
-                                            </div>
-                                            </section>
-                                            <div class ="row form-group">
-                                                <div class ="col-3">Comentarios: </div>
-                                                <div class ="col-9"><input type="text" placeholder="Ingresa comentarios" class ="form-control frm-comentarios" /></div>
-                                            </div>
-                                            <input type="hidden" class ="newIdAccion" value="`+response.NewId+`" />
-		                               </div>
-	                               </div>
-                               </div>
-                                `
-                                        );
-                            //asigna el id creado de accion en el cabezero del accordion insertado
-                            $("#heading"+response.NewId+"_"+numAcciones+" .txt-Nom-Acc")[0].setAttribute("IdAccion", "" + response.NewId + "")
-                            if (IdAccion == 0)
-                                swal("La acción ha sido agregada con éxito", "", "success");
-                            if (IdAccion > 0)
-                                swal("La acción ha sido actualizada con éxito", "", "success");                            
+                            case "no":
+                                //swal("No es generica!");
+                                idTipo = 1;
+                                vm.AddAccionPlan(idCat,idTipo);
+                                break;
+
+                            case "si":
+                                //swal("Si!", "Es Acción Generica!", "success");
+                                idTipo = 2;
+                                vm.AddAccionPlan(idCat,idTipo);
+                                break;
+
+                            default:
+                                swal("Acción Cancelada!");
                         }
-                        else {
-                            if (IdAccion == 0)
-                                swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
-                            if (IdAccion > 0)
-                                swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
-                        }
-                    });                    
+                    });
+
                 });
 
 
-                $('#listAcciones').on('click', '.btn-back-action', function (e) {                    
+                $('#listAcciones').on('click', '.btn-back-action', function (e) {
+                    //se agregan las acciones al modelo General
+                    document.getElementById("loading").style.display = "block";
+                    var validarEnvio = false;
+                    vm.NombreEncuesta; vm.PeriodoEncuesta; vm.BaseEncuesta; vm.textAreaAgencia;
+                    vm.IdRango; vm.IdCategoria;
+                    vm.PlanDeAccionModel.Nombre = vm.NombreEncuesta + "_" + vm.PeriodoEncuesta + "_" + vm.BaseEncuesta + "_" + vm.textAreaAgencia;
+                    vm.PlanDeAccionModel.Area = vm.textAreaAgencia;
+                    vm.PlanDeAccionModel.IdEncuesta = vm.IdEncuesta;
+                    vm.PlanDeAccionModel.IdBaseDeDatos = vm.IdBaseEncuesta;
+                    vm.PlanDeAccionModel.AnioAplicacion = vm.PeriodoEncuesta;
+                    //se localiza las acciones
+                    var accionesLocalizadas = $("body").find("#accordion .card:visible");
+                    //se valida por lo menos una acción
+                    if (accionesLocalizadas.length == 0) {
+                        swal("Debes agregar por lo menos una acción a la categoria", "", "info").then(function () {
+                            document.getElementById("loading").style.display = "none";
+                            return false;
+                        });
+                        document.getElementById("loading").style.display = "none";
+                        return false;
+                    }
+                    //se valida los datos de las acciones
+                    [].forEach.call(accionesLocalizadas, function (item) {
+                        var idAccionAltaV = item.getElementsByClassName("newIdAccion")[0].value;
+                        var idPeriodicidad = "frm-periodicidad" + idAccionAltaV;
+                        var NombreV = item.getElementsByClassName("txt-Nom-Acc")[0].value;
+                        var PeriodicidadV = item.getElementsByClassName("frm-periodicidadS")[0].value;
+                        var FechaInicioV = item.getElementsByClassName("frm-fecini")[0].value;
+                        var FechaFinV = item.getElementsByClassName("frm-fecfin")[0].value;
+                        var ObjetivoV = item.getElementsByClassName("frm-objetivo")[0].value;
+                        var MetaV = item.getElementsByClassName("frm-meta")[0].value;
+                        var ComentariosV = item.getElementsByClassName("frm-comentarios")[0].value;
+                        if (NombreV == "" || NombreV == "null") {
+                            swal("Debes agregar nombre a la acción", "", "info").then(function () {
+                                SetCampoInvalido(item.getElementsByClassName("txt-Nom-Acc")[0]);
+                                validarEnvio = false;
+                                return false;
+                            });
+                            validarEnvio = false;
+                            return false;
+                        } else { validarEnvio = true; }
+                        if (FechaInicioV == "") {
+                            swal("Debes agregar una fecha inicio a la acción", "", "info").then(function () {
+                                SetCampoInvalido(item.getElementsByClassName("frm-fecini")[0]);
+                                validarEnvio = false;
+                                return false;
+                            });
+                            validarEnvio = false;
+                            return false;
+                        } else { validarEnvio = true; }
+                        if (FechaFinV == "") {
+                            swal("Debes agregar una fecha fin a la acción", "", "info").then(function () {
+                                SetCampoInvalido(item.getElementsByClassName("frm-fecfin")[0]);
+                                validarEnvio = false;
+                                return false;
+                            });
+                            validarEnvio = false;
+                            return false;
+                        } else { validarEnvio = true; }
+                        if (ObjetivoV == "") {
+                            swal("Debes agregar objetivo a la acción", "", "info").then(function () {
+                                SetCampoInvalido(item.getElementsByClassName("frm-objetivo")[0]);
+                                validarEnvio = false;
+                                return false;
+                            });
+                            validarEnvio = false;
+                            return false;
+                        } else { validarEnvio = true; }
+                        if (MetaV == "") {
+                            swal("Debes agregar meta a la acción", "", "info").then(function () {
+                                SetCampoInvalido(item.getElementsByClassName("frm-meta")[0]);
+                                validarEnvio = false;
+                                return false;
+                            });
+                            validarEnvio = false;
+                            return false;
+                        } else { validarEnvio = true; }
+                        if (ComentariosV == "") {
+                            swal("Debes agregar comentarios a la acción", "", "info").then(function () {
+                                SetCampoInvalido(item.getElementsByClassName("frm-comentarios")[0]);
+                                validarEnvio = false;
+                                return false;
+                            });
+                            validarEnvio = false;
+                            return false;
+                        } else { validarEnvio = true; }
+                        //se validan los responsables
+
+                        var lresponsablesV = $(".reponsables_" + idAccionAltaV + "").find(".form-group");
+                        [].forEach.call(lresponsablesV, function (itemr) {
+                            var NombreVR = itemr.getElementsByClassName("frm-respon")[0].value;
+                            var EmailVR = itemr.getElementsByClassName("frm-respon-email")[0].value;
+                            if (NombreVR == "") {
+                                swal("Debes agregar nombre de responsable", "", "info").then(function () {
+                                    SetCampoInvalido(item.getElementsByClassName("frm-respon")[0]);
+                                    validarEnvio = false;
+                                    return false;
+                                });
+                                validarEnvio = false;
+                                return false;
+                            } else { validarEnvio = true; }
+                            if (EmailVR == "") {
+                                swal("Debes agregar email de responsable", "", "info").then(function () {
+                                    SetCampoInvalido(item.getElementsByClassName("frm-respon-email")[0]);
+                                    validarEnvio = false;
+                                    return false;
+                                });
+                                validarEnvio = false;
+                                return false;
+                            } else { validarEnvio = true; }
+                        });
+
+                    });
+                    //Despues de validar que no tenga campos vacios
+                    //por el numero de acciones que tenga el Plan de Accion                   
+                    if (validarEnvio) {
+                        document.getElementById("loading").style.display = "block";
+                        [].forEach.call(accionesLocalizadas, function (item) {
+                            var idAccionAltaV = item.getElementsByClassName("newIdAccion")[0].value;
+                            var idPeriodicidad = "frm-periodicidad" + idAccionAltaV;
+                            var idAccionAlta = item.getElementsByClassName("newIdAccion")[0].value;
+                            vm.AccionesPlanModel.IdAccion = idAccionAlta;
+                            vm.AccionesPlanModel.PlanDeAccion.Nombre = item.getElementsByClassName("txt-Nom-Acc")[0].value;
+                            vm.AccionesPlanModel.Periodicidad = item.getElementsByClassName("frm-periodicidadS")[0].value;
+                            vm.AccionesPlanModel.FechaInicio = item.getElementsByClassName("frm-fecini")[0].value;
+                            vm.AccionesPlanModel.FechaFin = item.getElementsByClassName("frm-fecfin")[0].value;
+                            vm.AccionesPlanModel.Objetivo = item.getElementsByClassName("frm-objetivo")[0].value;
+                            vm.AccionesPlanModel.Meta = item.getElementsByClassName("frm-meta")[0].value;
+                            vm.AccionesPlanModel.Comentarios = item.getElementsByClassName("frm-comentarios")[0].value;
+
+                            var lresponsables = $(".reponsables_" + idAccionAlta + "").find(".form-group");
+                            [].forEach.call(lresponsables, function (itemr) {
+                                vm.ResponsablePlanModel.Responsable.Nombre = itemr.getElementsByClassName("frm-respon")[0].value;
+                                vm.ResponsablePlanModel.Responsable.Email = itemr.getElementsByClassName("frm-respon-email")[0].value;
+                                vm.AccionesPlanModel.ListadoResponsables.push(vm.ResponsablePlanModel);
+                                vm.ResponsablePlanModel = JSON.parse(JSON.stringify(_modelResponsablePlan));
+                            });
+                            //vm.AccionesPlanModel.ListadoResponsables.push(AccionesPlanObj);
+                            vm.PlanDeAccionModel.ListAcciones.push(vm.AccionesPlanModel);
+                            vm.AccionesPlanModel = JSON.parse(JSON.stringify(_modelAccionesPlan));
+                        });
+                        console.log(vm.PlanDeAccionModel);                       
+                    }
+                    //se agregarón las acciones al modelo General
                     var iddiv = e.target.parentElement.attributes.idcat.value;
                     document.getElementById("HselecCat").style.display = "block";
                     document.getElementById("BselecCat").style.display = "block";
-                    document.getElementById("cat_"+iddiv).style.display = "none";                   
-                    console.log(e.target);
+                    document.getElementById("cat_"+iddiv).style.display = "none";                                      
+                    document.getElementById("loading").style.display = "none";
                 });
                 //regresa a la seccion de Arbol de Areas
                 $("#section3").on("click", ".btn-quitaArea", function () {
@@ -916,6 +1049,7 @@
                 });
                 //guardar todo el plan de accion
                 $("#page-title").on("click", ".btn-parallelogram", function (e) {
+                    document.getElementById("loading").style.display = "block";
                     var validarEnvio = false;
                     vm.NombreEncuesta; vm.PeriodoEncuesta; vm.BaseEncuesta; vm.textAreaAgencia;
                     vm.IdRango; vm.IdCategoria;                   
@@ -925,18 +1059,22 @@
                     vm.PlanDeAccionModel.IdBaseDeDatos = vm.IdBaseEncuesta;
                     vm.PlanDeAccionModel.AnioAplicacion = vm.PeriodoEncuesta;
                     //se localiza las acciones
-                    var accionesLocalizadas = $("body").find("#accordion .card");
+                    var accionesLocalizadas = $("body").find("#accordion .card:visible");
                     //se valida por lo menos una acción
                     if (accionesLocalizadas.length == 0) {
                         swal("Debes agregar por lo menos una acción a la categoria", "", "info").then(function () {
+                            document.getElementById("loading").style.display = "none";
                             return false;
                         });
+                        document.getElementById("loading").style.display = "none";
                         return false;
                     }                   
                     //se valida los datos de las acciones
-[].forEach.call(accionesLocalizadas, function (item) {      
+                    [].forEach.call(accionesLocalizadas, function (item) {
+    var idAccionAltaV = item.getElementsByClassName("newIdAccion")[0].value;
+    var idPeriodicidad = "frm-periodicidad" + idAccionAltaV;
     var NombreV = item.getElementsByClassName("txt-Nom-Acc")[0].value;
-    var PeriodicidadV = item.getElementsByClassName("frm-periodicidad")[0].value;
+   // var PeriodicidadV = item.getElementsByClassName(idPeriodicidad)[0].value;
     var FechaInicioV = item.getElementsByClassName("frm-fecini")[0].value;
     var FechaFinV = item.getElementsByClassName("frm-fecfin")[0].value;
     var ObjetivoV = item.getElementsByClassName("frm-objetivo")[0].value;
@@ -951,15 +1089,15 @@
         validarEnvio = false;
         return false;
     } else { validarEnvio = true; }
-    if (PeriodicidadV == "") {
-        swal("Debes agregar periodicidad a la acción", "", "info").then(function () {
-            SetCampoInvalido(item.getElementsByClassName("frm-periodicidad")[0]);
-            validarEnvio = false;
-            return false;
-        });
-        validarEnvio = false;
-        return false;       
-    } else { validarEnvio = true; }
+    //if (PeriodicidadV == "") {
+    //    swal("Debes agregar periodicidad a la acción", "", "info").then(function () {
+    //        //SetCampoInvalido(item.getElementsByClassName("frm-periodicidad" + idAccionAltaV + "")[0]);
+    //        validarEnvio = false;
+    //        return false;
+    //    });
+    //    validarEnvio = false;
+    //    return false;       
+    //} else { validarEnvio = true; }
     if (FechaInicioV == "") {
         swal("Debes agregar una fecha inicio a la acción", "", "info").then(function () {
             SetCampoInvalido(item.getElementsByClassName("frm-fecini")[0]);
@@ -1006,7 +1144,7 @@
         return false;
     } else { validarEnvio = true; }
     //se validan los responsables
-    var idAccionAltaV = item.getElementsByClassName("newIdAccion")[0].value;
+    
     var lresponsablesV = $(".reponsables_" + idAccionAltaV + "").find(".form-group");    
     [].forEach.call(lresponsablesV, function (itemr) {
         var NombreVR = itemr.getElementsByClassName("frm-respon")[0].value;
@@ -1034,12 +1172,15 @@
 });
                     //Despues de validar que no tenga campos vacios
                     //por el numero de acciones que tenga el Plan de Accion                   
-                if (validarEnvio) {
-                    [].forEach.call(accionesLocalizadas, function (item) {
+if (validarEnvio) {
+    document.getElementById("loading").style.display = "block";
+    [].forEach.call(accionesLocalizadas, function (item) {
+        var idAccionAltaV = item.getElementsByClassName("newIdAccion")[0].value;
+        var idPeriodicidad = "frm-periodicidad" + idAccionAltaV;
                         var idAccionAlta = item.getElementsByClassName("newIdAccion")[0].value;
                         vm.AccionesPlanModel.IdAccion = idAccionAlta;
                         vm.AccionesPlanModel.PlanDeAccion.Nombre = item.getElementsByClassName("txt-Nom-Acc")[0].value;
-                        vm.AccionesPlanModel.Periodicidad = item.getElementsByClassName("frm-periodicidad")[0].value;
+                        vm.AccionesPlanModel.Periodicidad = item.getElementsByClassName("frm-periodicidadS")[0].value;
                         vm.AccionesPlanModel.FechaInicio = item.getElementsByClassName("frm-fecini")[0].value;
                         vm.AccionesPlanModel.FechaFin = item.getElementsByClassName("frm-fecfin")[0].value;
                         vm.AccionesPlanModel.Objetivo = item.getElementsByClassName("frm-objetivo")[0].value;
@@ -1058,8 +1199,9 @@
                         vm.AccionesPlanModel = JSON.parse(JSON.stringify(_modelAccionesPlan));
                     });
                     console.log(vm.PlanDeAccionModel);
-                    vm.post("/PlanesDeAccion/AddPlanDeAccion/", JSON.stringify(vm.PlanDeAccionModel), function (response) {
+                    vm.post("/PlanesDeAccion/AddPlanDeAccion/", vm.PlanDeAccionModel, function (response) {
                         if (response.Correct) {
+                            document.getElementById("loading").style.display = "none";
                             swal("El Plan de Acción ha sido agregado con éxito", "", "success");
                             setTimeout(function () {
                                 window.location.href = "/PlanesDeAccion/Create";
@@ -1067,13 +1209,22 @@
                             
                         }
                         else {
+                            document.getElementById("loading").style.display = "none";
                             swal("Ocurrio un problema con el Alta de Plan de Acción", response.ErrorMessage, "error");
+                            setTimeout(function () {
+                                window.location.href = "/PlanesDeAccion/Create";
+                            }, 1800);
                         }
                     });
                 }
 
 
                    
+                });
+                //elimina la accion del listado de acciones
+                $("body").on("click", ".eliminaAccion", function (e) {
+                    //e.target.parentNode.parentNode.parentNode.parentNode.remove();
+                    e.target.closest(".card").remove();
                 });
             });
 
@@ -1107,13 +1258,13 @@
             vm.setIconoSVG = function (value) {
                 try {
                     value = parseFloat(value);
-                    if (value < 70) {
+                    if (value < 70.99) {
                         return vm.lluviaIcono;
                     }
-                    if (value >= 70 && value < 80) {
+                    if (value >= 70 && value < 80.99) {
                         return vm.nubeIcono;
                     }
-                    if (value >= 80 && value < 90) {
+                    if (value >= 80 && value < 90.99) {
                         return vm.solNubeIcono;
                     }
                     if (value >= 90 && value <= 100) {
@@ -1129,8 +1280,9 @@
                     if (response.Correct) {                       
                         [].forEach.call(response.Objects, function (item) {
                             var separa = item.Descripcion.split(" - ");
-                            separa[0] = parseInt(separa[0]);
-                            separa[1] = parseInt(separa[1]);
+                            separa[0] = parseFloat(separa[0]);
+                            separa[1] = parseFloat(separa[1]);
+                            separa[1] = separa[1] + .99;
                             vm.ListRangos.push({ Id: item.IdRango, Descripcion: item.Descripcion, valor1: separa[0], valor2:separa[1] });
                         });
                        // vm.ListRangos.unshift({ Id: 0, Descripcion: "- Asignar rango -" });
@@ -1404,7 +1556,121 @@
                 });
             }
 
+            vm.ObtenerPeriodicidad = function () {
+                vm.get("/PlanesDeAccion/GetPeriodicidad/", function (response) {
+                    if (response.Correct) {
+                        console.log(response.Objects);
+                        [].forEach.call(response.Objects, function (item) {
+                            vm.ListPeriodicidad.push({Id: item.IdPeriodicidad, Descripcion: item.Descripcion});
+                        });
+                        //vm.ListPeriodicidad = response.Objects;
+                    }
+                    
+                });
 
+            }
+
+            vm.AddAccionPlan = function (idCat,idTipo) {
+                // da de alta la accion en BD
+                modelNuevaAccion = {
+                    Descripcion: "",
+                    Rango: { IdRango: vm.IdRango },
+                    Estatus: { IdEstatus: 1 },
+                    Categoria: { IdCategoria: idCat },
+                    Encuesta: { IdEncuesta: vm.IdEncuesta },
+                    BasesDeDatos: { IdBaseDeDatos: IdBaseDeDatos },
+                    Tipo:idTipo,
+                    AnioAplicacion: vm.PeriodoEncuesta
+                }
+                //se oculta el aviso de no cuenta con acciones
+                var numNocuenta = $("#accordion .notieneAcc").length;
+                if (numNocuenta == 1) {
+                    //indica que tiene aviso de No cuenta con Acciones asignadas
+                    $("#cat_" + idCat + " #accordion").empty()
+                }
+                var numAcciones = $("#cat_"+idCat+" #accordion .card:visible").length;
+                if (numAcciones == 0) {
+                    numAcciones = 1;
+                }
+                else {
+                    numAcciones = numAcciones + 1
+                }
+                vm.post("/PlanesDeAccion/AddAccion/", modelNuevaAccion, function (response) {
+                    if (response.Correct) {
+                        $("#cat_" + idCat + " #accordion").append(`
+                                <div class ="card">
+	                               <div class ="card-header" id= "heading`+ response.NewId + `_` + numAcciones + `" >
+		                               <h5 class ="mb-0">
+			                               <span class ="btn btn-link col-10" data-toggle="collapse" data-target= "#collapse`+ response.NewId + `_` + numAcciones + `" aria-expanded="true" aria-controls= "collapse` + response.NewId + `_` + numAcciones + `" >
+				                              <input type="text" placeholder="Ingresa el nombre de la acción" class ="form-control txt-Nom-Acc" />
+			                               </span>
+                                           <span class ="col-2">
+                                           <i class ="far fa-times-circle eliminaAccion" style="cursor: pointer;"></i>
+                                           </span>
+		                               </h5>
+	                               </div>
+
+	                               <div id= "collapse`+ response.NewId + `_` + numAcciones + `" class ="collapse" aria-labelledby= "heading` + response.NewId + `_` + numAcciones + `" data-parent="#accordion">
+		                               <div class ="card-body">
+			                               <div class ="row form-group">
+                                                <div class ="col-3">Periodicidad: </div>
+                                                <div class ="col-5">
+                                                <input type="hidden" placeholder="Ingresa periocidad" class ="form-control frm-periodicidad" />
+                                                <select class = "form-control frm-periodicidadS select-periodicidad`+ response.NewId + `" style="width: 100%;">
+                                                </select>
+                                                </div>
+                                                <div class ="col-2"><i class ="far fa-calendar-alt"></i>Inicia:<input type="date" placeholder="Ingresa fecha de inicio" class ="form-control frm-fecini" /></div>
+                                                <div class ="col-2"><i class ="far fa-calendar-alt"></i>Concluya:<input type="date" placeholder="Ingresa fecha de término" class ="form-control frm-fecfin" /></div>
+                                            </div>
+                                            <div class ="row form-group">
+                                                <div class ="col-9">Objetivo: </div>
+                                                <div class ="col-3">Meta: </div>
+                                            </div>
+                                            <div class ="row form-group">
+                                                <div  class ="col-9"><input type="text" placeholder="Objetivo a alcanzar con la acción" class ="form-control frm-objetivo" /></div>
+                                                <div  class ="col-3"><input type="text" placeholder="Ingresa meta" class ="form-control frm-meta" /></div>
+                                            </div>
+                                            <div class ="row form-group">
+                                                <div class ="col-6"><i class = "fas fa-plus add-responsable" idAccion= "`+ response.NewId + `" idcat= "` + idCat + `" ></i> Responsable: </div>
+                                                <div class ="col-6">Email: </div>
+                                            </div>
+                                            <section class = "reponsables_`+ response.NewId + ` frm-responsables" >
+                                            <div class ="row form-group">
+                                                <div class ="col-6"><input type="text" placeholder="Ingresa nombre del responsable" class ="form-control frm-respon" /></div>
+                                                <div class ="col-6"><input type="text" placeholder="Ingresa correo electrónico" class ="form-control frm-respon-email" /></div>
+                                            </div>
+                                            </section>
+                                            <div class ="row form-group">
+                                                <div class ="col-3">Comentarios: </div>
+                                                <div class ="col-9"><input type="text" placeholder="Ingresa comentarios" class ="form-control frm-comentarios" /></div>
+                                            </div>
+                                            <input type="hidden" class ="newIdAccion" value= "`+ response.NewId + `" />
+                                            <input type="hidden" class ="idCat" value= "`+ idCat + `" />
+		                               </div>
+	                               </div>
+                               </div>
+                                `
+                            );
+                        //se agrega el select de Periodiicidad
+                        var idselectAccion = ".select-periodicidad" + response.NewId;
+                        [].forEach.call(vm.ListPeriodicidad, function (item) {
+                            $(idselectAccion).append("<option value='" + item.Id + "'>" + item.Descripcion + "</option>");
+                        });
+                        //asigna el id creado de accion en el cabezero del accordion insertado
+                        $("#heading" + response.NewId + "_" + numAcciones + " .txt-Nom-Acc")[0].setAttribute("IdAccion", "" + response.NewId + "")
+                        if (IdAccion == 0)
+                            swal("La acción ha sido agregada con éxito", "", "success");
+                        if (IdAccion > 0)
+                            swal("La acción ha sido actualizada con éxito", "", "success");
+                    }
+                    else {
+                        if (IdAccion == 0)
+                            swal("Ocurrió un error al intentar guardar la acción", response.ErrorMessage, "error");
+                        if (IdAccion > 0)
+                            swal("Ocurrió un error al intentar actualizar la acción", response.ErrorMessage, "error");
+                    }
+                });
+            }
         } catch (aE) {
             alert(aE.message);
         }

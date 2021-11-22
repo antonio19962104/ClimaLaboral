@@ -314,24 +314,6 @@ var IdAccionSeleccionada = 0;
                     [].forEach.call(chosser.files, function (file, index) {
                         formData.append(fileChosser + "_" + index, file);
                     });
-
-                    var res = Array.from(formData.entries(), ([key, prop]) => (
-                        {
-                            [key]: {
-                                "ContentLength":
-                                    typeof prop === "string"
-                                        ? prop.length
-                                        : prop.size
-                            }
-                        }));
-
-                    if (res[0]["[object HTMLInputElement]_0"].ContentLength / 1000000 > 20) {
-                        swal("No se pueden cargar archivos mayores a 20 MB", "", "info").then(function () {
-                            return false;
-                        });
-                        return false;
-                    }
-
                     $.ajax({
                         url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=" + IdPlanDeAccion + "&IdAccion=" + IdAccionSeleccionada,
                         type: "POST",

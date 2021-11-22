@@ -8,18 +8,24 @@ var AreaSeleccionada;
         try {
             var vm = this;
             vm.Modulo = "Configura permisos";
-            vm.ListAreas = [];
-            [].forEach.call([1, 2, 3, 4, 5, 6, 7, 8, 9], function (value) {
-                vm.ListAreas.push("Area " + value);
-            });
-
             $(document).ready(function () {
                 document.getElementById("loading").style.display = "block";
                 vm.get("/PlanesDeAccion/ArbolEstructuraModuloPermisosPlanes/", function (response) {
                     document.getElementById("loading").style.display = "none";
                     if (response.Correct) {
-                        console.log(response.Objects[0]);
+                        //console.log(response.Objects[0]);
                         Estructura = response.Objects[0];
+                        vm.ListPlanesDeAccion = response.Objects[0];
+                        console.log(vm.ListPlanesDeAccion);
+                        setTimeout(function () {
+                            var treeObject = vm.ListPlanesDeAccion;
+                            var tw = new TreeView(
+                                treeObject,
+                                { showAlwaysCheckBox: true, fold: false });
+                            $("#tree-view").empty();
+                            document.getElementById("tree-view").appendChild(tw.root);
+                        }, 800);
+                        
                     }
                     else {
                         swal("");
@@ -28,10 +34,10 @@ var AreaSeleccionada;
             });
 
             vm.ObtenerAdmins = function (e) {
-                var area = e.target.value;
-                AreaSeleccionada = area;
+               // var area = e.target.value;
+                AreaSeleccionada = e;
                 document.getElementById("loading").style.display = "block";
-                vm.get("/PlanesDeAccion/ObtenerAdmins/?Area=" + area, function (response) {
+                vm.get("/PlanesDeAccion/ObtenerAdmins/?Area=" +AreaSeleccionada, function (response) {
                     document.getElementById("loading").style.display = "none";
                     if (response.Correct) {
                         vm.ListAdmin = response.Objects;
@@ -59,7 +65,12 @@ var AreaSeleccionada;
                 vm.post("/PlanesDeAccion/AddPermisosPlanes/?Area=" + area, elegidos, function (response) {
                     document.getElementById("loading").style.display = "none";
                     if (response.Correct) {
-                        swal("Los permisos se agregaron correctamente", "", "success");
+                        swal("Los permisos se agregaron correctamente", "", "success").then(function () {
+                            $(".collapse").removeClass("show");
+                            vm.ListAdmin = [];
+                            $scope.$apply();
+                        });
+                        
                     }
                     else {
                         swal("Ocurrió un error al intentar guardar los permisos", response.ErrorMessage, "error");
@@ -68,9 +79,120 @@ var AreaSeleccionada;
             }
 
 
+            vm.consultaAreas = function (Objects, index) {
+                vm.EstructuraAFM = [];
+                [].forEach.call(Objects[0], function (item) {
+                    vm.EstructuraAFM.push({ type: item.substring(0, 6), value: item.substring(6, (item.length)) });
+                });
+                if (vm.EstructuraAFM.length > 0) {
+                    var treeObject = vm.GenerarArbol(vm.EstructuraAFM);
+                    var tw = new TreeView(
+                        treeObject,
+                        { showAlwaysCheckBox: true, fold: false });
+                    $("#tree-view" + index).empty();
+                    document.getElementById("tree-view" + index).appendChild(tw.root);
+                    $("#tree-view" + index + " p.group").css("display", "none");
+                    $("#tree-view" + index + " p.group:first").css("display", "");
+                }
+            }
+            vm.GenerarArbol = function (ObjectAFM) {
+                var uidUnidad, uidCompany, uidArea, uidDepto, uidSubd;
+                var treeObject = [];
+                /*Relacionar objeto*/
+                [].forEach.call(ObjectAFM, function (item) {
+                    if (item.type == "UNeg=>") {
+                        uidUnidad = "UNEG_" + item.value + vm.getUid();
+                    }
+                    if (item.type == "Comp=>") {
+                        uidCompany = "Comp_" + item.value + vm.getUid();
+                    }
+                    if (item.type == "Area=>") {
+                        uidArea = "Area_" + item.value + vm.getUid();
+                    }
+                    if (item.type == "Dpto=>") {
+                        uidDepto = "Depto_" + item.value + vm.getUid();
+                    }
+                    if (item.type == "SubD=>") {
+                        uidSubd = "Subd_" + item.value + vm.getUid();
+                    }
 
+                    switch (item.type) {
+                        case "UNeg=>":
+                            item.IdUnidadNegocio = uidUnidad;
+                            break;
+                        case "Comp=>":
+                            item.IdUnidadNegocio = uidUnidad;
+                            item.CompanyId = uidCompany;
+                            break;
+                        case "Area=>":
+                            item.IdUnidadNegocio = uidUnidad;
+                            item.CompanyId = uidCompany;
+                            item.IdArea = uidArea;
+                            break;
+                        case "Dpto=>":
+                            item.IdUnidadNegocio = uidUnidad;
+                            item.CompanyId = uidCompany;
+                            item.IdArea = uidArea;
+                            item.IdDepartamento = uidDepto;
+                            break;
+                        case "SubD=>":
+                            item.IdUnidadNegocio = uidUnidad;
+                            item.CompanyId = uidCompany;
+                            item.IdArea = uidArea;
+                            item.IdDepartamento = uidDepto;
+                            item.IdSubdepartamento = uidSubd;
+                            break;
+                        default:
+                    }
+                });
+                /*Push Unidad de Negocio*/
+                [].forEach.call(ObjectAFM, function (item, index) {
+                    treeObject.push({
+                        isUnidad: true,
+                        text: item.value,
+                        checked: false,
+                        id: index,
+                        children: [
+                            /*Division*/
+                        ]
+                    });
+                    /*Push Division*/
+                    var Division = Enumerable.from(ObjectAFM).where(o => o.type == "Comp=>" && o.IdUnidadNegocio == item.IdUnidadNegocio).toList();
+                    [].forEach.call(Division, function (elem, index2) {
+                        treeObject[index].children.push({
+                            text: elem.value,
+                            checked: false,
+                            id: 0,
+                            children: [
+                                /*Area Agencia*/
+                            ]
+                        });
+                        /*Push Area*/
+                        var AreaAgencia = Enumerable.from(ObjectAFM).where(o => o.type == "Area=>" && o.CompanyId == elem.CompanyId).toList();
+                        [].forEach.call(AreaAgencia, function (elem) {
+                            treeObject[index].children[index2].children.push({
+                                text: elem.value,
+                                checked: false,
+                                id: 0,
+                                children: [
+                                    /*Division*/
+                                ]
+                            });
+                        });
+                    });
+                });
+                treeObject = Enumerable.from(treeObject).where(o => !o.text.includes("-")).toList();
+                var treeFinal = [];
+                treeFinal = [{
+                    text: "Selecciona",
+                    checked: false,
+                    id: 0,
+                    children: treeObject
+                }];
+                return treeFinal;
+            }
 
-
+            
             function messageBoxError(data) {
                 document.getElementById("loading").style.display = "none";
                 var error;
@@ -173,6 +295,16 @@ var AreaSeleccionada;
                 },
                     true);
             }
+
+            $(function () {
+                $('#accordion').on('click', '.btn-info', function (e) {
+                    var areaSelecionada = e.target.data.text;
+                    vm.ObtenerAdmins(areaSelecionada);
+                    var parent = e.target.closest(".card-body")
+
+
+                });
+            })
         } catch (aE) {
             alert(aE);
         }
