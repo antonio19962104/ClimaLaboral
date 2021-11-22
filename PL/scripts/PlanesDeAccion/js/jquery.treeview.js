@@ -126,11 +126,16 @@ function TreeView(datas, options) {
         // ALERT ADD ICON
         var typeElementNodeArea = "span";
         var claseElementNodeArea = "item";
-        if (data.children.length == 0) {
-            var cortes = data.text.split("-").length;
-            if (cortes == 3) {
-                typeElementNodeArea = "button";
-                claseElementNodeArea = "btn btn-info";
+        if (data.children == undefined) {
+            console.log(data);
+        }
+        else {
+            if (data.children.length == 0) {
+                var cortes = data.text.split("-").length;
+                if (cortes == 3) {
+                    typeElementNodeArea = "button";
+                    claseElementNodeArea = "btn btn-info";
+                }
             }
         }
         var item = document.createElement(typeElementNodeArea);

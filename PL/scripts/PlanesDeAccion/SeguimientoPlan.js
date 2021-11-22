@@ -78,9 +78,11 @@ var IdAccionSeleccionada = 0;
                         //[].forEach.call([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], function (item) {
                         //    vm.ListAcciones.push(response.Objects[0]);
                         //});
-                        $("#mergePlan .col").hide();
-                        e.target.closest(".alert-info").removeAttribute("style")
-                        e.target.closest(".col").style.display = "";
+                        if (e != null) {
+                            $("#mergePlan .col").hide();
+                            e.target.closest(".alert-info").removeAttribute("style")
+                            e.target.closest(".col").style.display = "";
+                        }
                     }
                     else {
                         swal("Ocurrió un error al intentar obtener las acciones", response.ErrorMessage, "error");
@@ -200,7 +202,7 @@ var IdAccionSeleccionada = 0;
                     if (response.Correct) {
                         swal("Los avances fueron actualizados correctamente", "", "success").then(function () {
                             document.getElementById("avance-accion-seleccionada").value = porcentaje;
-                            //vm.MostrarSeguimientoAcciones(null, IdPlanDeAccion);
+                            vm.MostrarSeguimientoAcciones(null, IdPlanDeAccion);
                         });
                     }
                     else {
@@ -308,42 +310,65 @@ var IdAccionSeleccionada = 0;
             vm.AgregarArchivos =function () {
                 var formData =new FormData();
                 var chosser =document.getElementById("fileChosser");
-                [].forEach.call(chosser.files, function (file, index) {
-                    formData.append(fileChosser + "_" + index, file);
-                });
-                $.ajax({
-                    url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=" + IdPlanDeAccion + "&IdAccion=" + IdAccionSeleccionada,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (response.Correct) {
-                            swal("Las evidencias fueron agregadas con éxito", "", "success").then(function () {
-                                /* Actualizar archivos */
-                                $("#listadoDocs").empty();
-                                var cadena = "";
-                                [].forEach.call(response.Atachment, function (item) {
-                                    var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
-                                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
-                                });
-                                $("#listadoDocs").append(cadena);
-                                $(".delete-file").unbind();
-                                [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
-                                    elem.addEventListener("click", function (e) {
-                                        vm.EliminarArchivo(e);
+                if (chosser.files.length > 0) {
+                    [].forEach.call(chosser.files, function (file, index) {
+                        formData.append(fileChosser + "_" + index, file);
+                    });
+
+                    var res = Array.from(formData.entries(), ([key, prop]) => (
+                        {
+                            [key]: {
+                                "ContentLength":
+                                    typeof prop === "string"
+                                        ? prop.length
+                                        : prop.size
+                            }
+                        }));
+
+                    if (res[0]["[object HTMLInputElement]_0"].ContentLength / 1000000 > 20) {
+                        swal("No se pueden cargar archivos mayores a 20 MB", "", "info").then(function () {
+                            return false;
+                        });
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=" + IdPlanDeAccion + "&IdAccion=" + IdAccionSeleccionada,
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response.Correct) {
+                                swal("Las evidencias fueron agregadas con éxito", "", "success").then(function () {
+                                    /* Actualizar archivos */
+                                    $("#listadoDocs").empty();
+                                    var cadena = "";
+                                    [].forEach.call(response.Atachment, function (item) {
+                                        var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
+                                        cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                                    });
+                                    $("#listadoDocs").append(cadena);
+                                    $(".delete-file").unbind();
+                                    [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
+                                        elem.addEventListener("click", function (e) {
+                                            vm.EliminarArchivo(e);
+                                        });
                                     });
                                 });
-                            });
+                            }
+                            else {
+                                swal("Ocurrió un error al intentar guardar las evidencias", response.ErrorMessage, "error");
+                            }
+                        },
+                        error: function (err) {
+                            swal("Ocurrió un error al intentar guardar las evidencias", err, "error");
                         }
-                        else {
-                            swal("Ocurrió un error al intentar guardar las evidencias", response.ErrorMessage, "error");
-                        }
-                    },
-                    error: function (err) {
-                        swal("Ocurrió un error al intentar guardar las evidencias", err, "error");
-                    }
-                });
+                    });
+                }
+                else {
+                    swal("Debes elegir minimo un archivo para poder guardar tus evidencias", "", "info");
+                }
             }
 
             vm.EliminarArchivo = function (e) {

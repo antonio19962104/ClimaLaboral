@@ -85,15 +85,8 @@ namespace PL
         /// </summary>
         private void PruebasIniciales()
         {
-            //Spire.Xls.Workbook workbook = new Spire.Xls.Workbook();
-            //workbook.LoadFromFile(@"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\PruebaExcelDinamico.xlsx");
-            //workbook.Worksheets.RemoveAt(2);
-            //var licencia = workbook.Worksheets.Where(o => o.Name == "Evaluation Warning").FirstOrDefault();
-            //licencia.Remove();
-
-
-            PL.Controllers.PlanesDeAccionController planesDeAccionController = new Controllers.PlanesDeAccionController();
-            planesDeAccionController.ActualizarLayout();
+            //PL.Controllers.PlanesDeAccionController planesDeAccionController = new Controllers.PlanesDeAccionController();
+            //planesDeAccionController.ActualizarLayout();
             //var data = BL.EstructuraAFMReporte.ArbolEstructuraModuloPermisosPlanes();
             //Console.WriteLine(data);
             //BL.PlanesDeAccion.CrearVistaWebEmail("rutaEmailHTML Hola");

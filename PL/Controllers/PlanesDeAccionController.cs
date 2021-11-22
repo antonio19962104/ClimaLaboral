@@ -322,11 +322,7 @@ namespace PL.Controllers
                 }
                 var range = workbook.Worksheets[1].Range["A1:A" + index];
                 workbook.Worksheets[0].Range["A1"].DataValidation.DataRange = range;
-
                 workbook.SaveToFile(@"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\PruebaExcelDinamico.xlsx");
-                //workbook.Worksheets.RemoveAt(2);
-                //var license = workbook.Worksheets.Where(o => o.Name == "Evaluation Warning").FirstOrDefault();
-                //license.Remove();
             }
             catch (Exception aE)
             {
