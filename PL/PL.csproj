@@ -67,6 +67,10 @@
       <HintPath>..\packages\BouncyCastle.1.8.6.1\lib\BouncyCastle.Crypto.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CatalogosValidacionExcel_JAMG96_Net_Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CatalogosValidacionExcel_JAMG96_Net_Framework\CatalogosValidacionExcel_JAMG96_Net_Framework\bin\Debug\CatalogosValidacionExcel_JAMG96_Net_Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>

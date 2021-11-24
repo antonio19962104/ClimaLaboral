@@ -38,7 +38,7 @@ namespace PL.Controllers
             string _idEncuesta = Convert.ToString(Session["EncuestaRealizar"]);
             return View(BL.ClimaDinamico.getHtmlIntro(_idEncuesta));
         }
-        //// <summary>/
+        //// <summary>
         /// Se manda el IdEncuesta para la carga de la Intorduccion. CAMOS 08/07/2021
         /// </summary>
         /// <param name="aIdEncuesta">El id de Encuesta para previsualizarla</param>

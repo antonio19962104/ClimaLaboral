@@ -85,14 +85,6 @@ namespace PL
         /// </summary>
         private void PruebasIniciales()
         {
-            //PL.Controllers.PlanesDeAccionController planesDeAccionController = new Controllers.PlanesDeAccionController();
-            //planesDeAccionController.ActualizarLayout();
-            //var data = BL.EstructuraAFMReporte.ArbolEstructuraModuloPermisosPlanes();
-            //Console.WriteLine(data);
-            //BL.PlanesDeAccion.CrearVistaWebEmail("rutaEmailHTML Hola");
-            //BL.PlanesDeAccion.NotificacionPrevia();
-            //BL.PlanesDeAccion.NotificacionInicialResponsables(3);
-
             /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
             ML.Historico historico = new ML.Historico()
             {

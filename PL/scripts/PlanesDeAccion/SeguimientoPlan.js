@@ -135,6 +135,18 @@ var IdAccionSeleccionada = 0;
                 htmlContent = vm.replaceHtmlContent(htmlContent, accionPlan);
                 $("#mergePlan").append(htmlContent);
 
+                $("#fileChosser").unbind();
+                $("#fileChosser").change(function () {
+                    var elem = document.getElementById("fileChosser");
+                    var fileName = "  ";
+                    if (elem.files.length > 0) {
+                        [].forEach.call(elem.files, function (file) {
+                            fileName += file.name + ";";
+                        });
+                        document.getElementById("label-for-input").innerText = fileName;
+                    }
+                });
+
                 if (IdResponsable == 0) {// Usuario admin
                     [].forEach.call(accionPlan.ListResponsable, function (responsable, index) {
                         $("#mergeResponsables").append(
@@ -168,11 +180,15 @@ var IdAccionSeleccionada = 0;
                 var content = document.getElementById('listAcciones');
                 var parent = content.parentNode;
                 parent.insertBefore(content, parent.firstChild);
+                document.getElementById("mergePlan").getElementsByClassName("col-der")[0].style.display = "none";
+                document.getElementById("listAcciones").classList.remove("col");
+                document.getElementById("listAcciones").classList.add("col-8");
                 document.getElementsByClassName("btn-back-action-detalle")[0].addEventListener("click", function () {
                     vm.Modulo = "Seguimiento de tu Plan de Acción";
                     $scope.$apply()
                     document.getElementById("listAcciones").remove();
                     document.getElementById("mergePlan").children[0].style.display = "";
+                    document.getElementById("mergePlan").getElementsByClassName("col-der")[0].style.display = "";
                     $(".tool-bar").show();
                 });
                 document.getElementsByClassName("btnGuardarDetalleAccion")[0].addEventListener("click", function () {
@@ -314,6 +330,24 @@ var IdAccionSeleccionada = 0;
                     [].forEach.call(chosser.files, function (file, index) {
                         formData.append(fileChosser + "_" + index, file);
                     });
+
+                    var res = Array.from(formData.entries(), ([key, prop]) => (
+                        {
+                            [key]: {
+                                "ContentLength":
+                                    typeof prop === "string"
+                                        ? prop.length
+                                        : prop.size
+                            }
+                        }));
+
+                    /*if ((res[0]["[object HTMLInputElement]_0"].ContentLength / 1000) > 50000) {//KB
+                        swal("No se pueden cargar archivos mayores a 50 MB", "", "info").then(function () {
+                            return false;
+                        });
+                        return false;
+                    }*/
+                    document.getElementById("loading").style.display = "block";
                     $.ajax({
                         url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=" + IdPlanDeAccion + "&IdAccion=" + IdAccionSeleccionada,
                         type: "POST",
@@ -321,9 +355,11 @@ var IdAccionSeleccionada = 0;
                         contentType: false,
                         processData: false,
                         success: function (response) {
+                            document.getElementById("loading").style.display = "none";
                             if (response.Correct) {
                                 swal("Las evidencias fueron agregadas con éxito", "", "success").then(function () {
                                     /* Actualizar archivos */
+                                    document.getElementById("label-for-input").innerText = "Adjuntar archivos de evidencia";
                                     $("#listadoDocs").empty();
                                     var cadena = "";
                                     [].forEach.call(response.Atachment, function (item) {
@@ -344,6 +380,7 @@ var IdAccionSeleccionada = 0;
                             }
                         },
                         error: function (err) {
+                            document.getElementById("loading").style.display = "none";
                             swal("Ocurrió un error al intentar guardar las evidencias", err, "error");
                         }
                     });
@@ -561,7 +598,7 @@ var templateDetalleAccion = IdResponsable > 0 ? `
                                 <div class="col-4">Adjuntar archivos de evidencia: </div>
                                 <div class="col-8">
                                     <input hidden type="file" placeholder="Selecciona" class="form-control frm-archivos" id="fileChosser" name="fileChosser" multiple="multiple" />
-                                    <label for="fileChosser"><i class="fas fa-paperclip fa-lg"></i> Adjuntar archivos de evidencia</label>
+                                    <i class="fas fa-paperclip fa-lg"></i><label id="label-for-input" for="fileChosser">Adjuntar archivos de evidencia</label>
                                 </div>
                                 <div id="listadoDocs" class="offset-4" style="border: 1px solid #FFC000;border-radius: 10px;padding: 5px 10px 5px 10px;">
                                     #listAtachments#

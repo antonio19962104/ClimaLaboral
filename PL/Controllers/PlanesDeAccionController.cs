@@ -299,36 +299,30 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.GetAccionesByIdResponsable(Convert.ToInt32(IdPlan), Convert.ToInt32(IdResponsable));
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Crea un layout en excel con campos validados dinamicamente
+        /// </summary>
+        /// <returns></returns>
         public JsonResult ActualizarLayout()
         {
+            CatalogosValidacionExcel_JAMG96_Net_Framework.Result result = new CatalogosValidacionExcel_JAMG96_Net_Framework.Result();
             try
             {
-                Spire.Xls.Workbook workbook = new Spire.Xls.Workbook();
-                Spire.Xls.Worksheet sheet = workbook.Worksheets[0];
-                Spire.Xls.Worksheet sheetCatalogo = workbook.Worksheets[1];
-                int index = 1;
-                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
-                {
-                    var categorias = context.PromediosCategorias.Select(o => o.IdCategoria).Distinct().ToList();
-                    foreach (var cat in categorias)
-                    {
-                        var nameCat = context.Categoria.Where(o => o.IdCategoria == cat.Value).FirstOrDefault();
-                        if (nameCat != null)
-                        {
-                            sheetCatalogo.Range["A" + index].Value = nameCat.Nombre;
-                            index++;
-                        }
-                    }
-                }
-                var range = workbook.Worksheets[1].Range["A1:A" + index];
-                workbook.Worksheets[0].Range["A1"].DataValidation.DataRange = range;
-                workbook.SaveToFile(@"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\PruebaExcelDinamico.xlsx");
+                CatalogosValidacionExcel_JAMG96_Net_Framework.Configurador configurador = new CatalogosValidacionExcel_JAMG96_Net_Framework.Configurador();
+                List<CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator> modelValidators = new List<CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator>();
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 35, Catalogo = new List<string>(), CeldaValidar = "A1", HeadelCol = "Descripción", HexColorHead = "" });
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 30, Catalogo = BL.PlanesDeAccion.GetCategorias(), CeldaValidar = "B1", HeadelCol = "Categoria", HexColorHead = "" });
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 30, Catalogo = BL.PlanesDeAccion.GetRangosForExcel(), CeldaValidar = "C1", HeadelCol = "Rango", HexColorHead = "" });
+                result = configurador.ConfiguradorExcel(modelValidators, @"C:\\ClimaLaboral");
             }
             catch (Exception aE)
             {
-                Console.WriteLine(aE.Message);
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
             }
-            return new JsonResult();
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         public JsonResult AddAccionesExcel(FormCollection formCollection)
         {
@@ -482,6 +476,7 @@ namespace PL.Controllers
                 else
                     return new JsonResult() { Data = new ML.Result() { Correct = false, ErrorMessage = "El nombre del responsable no puede estar vacio" }, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                 int IdResponsable = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
+                int _idResponsable = Convert.ToInt32(Session["IdResponsable"].ToString());
                 var ruta = @"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\PlanesDeAccion\\" + IdPlan + @"\\" + IdAccion + @"\\" + cadenaResponsable + @"\\";
                 int CantidadArchivos = Request.Files.Count;
                 foreach (string file in Request.Files)
@@ -492,7 +487,7 @@ namespace PL.Controllers
                         if (!Directory.Exists(ruta))
                             Directory.CreateDirectory(ruta);
                         itemFile.SaveAs(Path.Combine(ruta, itemFile.FileName));
-                        BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, IdResponsable);
+                        BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, _idResponsable);
                         BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El archivo " + ruta + @"\\" + itemFile.FileName + " fue agregado correctamente");
                     }
                     catch (Exception aE)
@@ -502,7 +497,7 @@ namespace PL.Controllers
                             if (!Directory.Exists(ruta))
                                 Directory.CreateDirectory(ruta);
                             itemFile.SaveAs(Path.Combine(ruta, itemFile.FileName));
-                            BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, IdResponsable);
+                            BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, _idResponsable);
                             BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El archivo " + ruta + @"\\" + itemFile.FileName + " fue agregado correctamente");
                             return Json(true);
                         }

@@ -601,8 +601,8 @@ namespace BL
                             //alta de responsables
                             foreach (ML.ResponsablesAccionesPlan responsable in item.ListadoResponsables)
                             {
-                                var existeResponsableEnAdmin = ExisteResponsableenAdministrador(responsable.Responsable.Email);
-                                var existeResponsable = ExisteResponsable(responsable.Responsable.Email);
+                                 var existeResponsableEnAdmin = ExisteResponsableenAdministrador(responsable.Responsable.Email, context);
+                                var existeResponsable = ExisteResponsable(responsable.Responsable.Email, context);
                                 //Si existe en Admin, entonces preguntamos si existe en Responsables
                                 if (existeResponsableEnAdmin.Correct)
                                 {
@@ -1287,13 +1287,13 @@ namespace BL
         /// </summary>
         /// <param name="aEmail"></param>
         /// <returns></returns>
-        public static ML.Result ExisteResponsable(string aEmail)
+        public static ML.Result ExisteResponsable(string aEmail,DL.RH_DesEntities context)
         {
             ML.Result result = new ML.Result();
             try
             {
-                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
-                {
+                //using ( = new DL.RH_DesEntities())
+                //{
                     var existente = false;                   
                     var existeResponsableBD = context.Responsable.Where(o => o.Email == aEmail).FirstOrDefault();
                     if (existeResponsableBD != null)
@@ -1302,7 +1302,7 @@ namespace BL
                         existente = true;
                     }
                     result.Correct = existente;
-                }
+                //}
                     
             }
             catch (Exception aE)
@@ -1321,13 +1321,13 @@ namespace BL
         /// </summary>
         /// <param name="aEmail"></param>
         /// <returns></returns>
-        public static ML.Result ExisteResponsableenAdministrador(string aEmail)
+        public static ML.Result ExisteResponsableenAdministrador(string aEmail,DL.RH_DesEntities context)
         {
             ML.Result result = new ML.Result();
             try
             {
-                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
-                {
+               // using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                //{
                     var existeResAdm = context.Administrador.Where(o => o.UserName == aEmail && o.IdEstatus == 1).FirstOrDefault();
                     if (existeResAdm != null)
                     {                                                
@@ -1338,7 +1338,7 @@ namespace BL
                     {
                         result.Correct = false;                        
                     }
-                }
+                //}
 
                 return result;
             }
@@ -1437,6 +1437,7 @@ namespace BL
         {
             try
             {
+                List<string> EmailDestinatario = new List<string>();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlanDeAccion).FirstOrDefault();
@@ -1463,7 +1464,11 @@ namespace BL
                                     ListAcciones.Add(accionDeMejora);
                                 }
                             }
-                            BL.Email.EnvioNotificaciones(1, usuarioResponsable.Email, ListAcciones, usuarioResponsable, accountResponsable, IdPlanDeAccion);
+                            if (!EmailDestinatario.Contains(usuarioResponsable.Email))
+                            {
+                                BL.Email.EnvioNotificaciones(1, usuarioResponsable.Email, ListAcciones, usuarioResponsable, accountResponsable, IdPlanDeAccion);
+                                EmailDestinatario.Add(usuarioResponsable.Email);
+                            }
                         }
                     }
                 }
@@ -1699,6 +1704,7 @@ namespace BL
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
+            List<int> ArrayIdPlan = new List<int>();
             try
             {
                 int _idResponsable = Convert.ToInt32(IdResponsable);
@@ -1723,8 +1729,11 @@ namespace BL
                                     planDeAccion.IdEncuesta = (int)plan.IdEncuesta;
                                     planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
                                     planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(planDeAccion.IdPlanDeAccion);
-
-                                    result.Objects.Add(planDeAccion);
+                                    if (!ArrayIdPlan.Contains(planDeAccion.IdPlanDeAccion))
+                                    {
+                                        result.Objects.Add(planDeAccion);
+                                        ArrayIdPlan.Add(planDeAccion.IdPlanDeAccion);
+                                    }
                                 }
                             }
                         }
@@ -1979,19 +1988,28 @@ namespace BL
                     DL.Evidencia evidencia = new DL.Evidencia();
                     evidencia.Ruta = ruta;
                     evidencia.IdEstatus = 1;
+                    evidencia.FechaHoraCreacion = DateTime.Now;
+                    evidencia.UsuarioCreacion = Convert.ToString(IdResponsable);
+                    evidencia.ProgramaCreacion = "Carga de evidencias";
                     context.Evidencia.Add(evidencia);
                     context.SaveChanges();//Agregar evidencia
 
                     var AccionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == _idPlan && o.IdAccion == _idAccion).FirstOrDefault();
-                    var ResponsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == AccionesPlan.IdAccionesPlan).FirstOrDefault();
+                    var ResponsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == AccionesPlan.IdAccionesPlan && o.IdResponsable == IdResponsable).FirstOrDefault();
                     DL.Seguimiento seguimiento = new DL.Seguimiento();
                     seguimiento.IdResponsableAccionesPlan = ResponsableAccionesPlan.IdResponsablesAccionesPlan;
+                    seguimiento.FechaHoraCreacion = DateTime.Now;
+                    seguimiento.UsuarioCreacion = Convert.ToString(IdResponsable);
+                    seguimiento.ProgramaCreacion = "Carga de evidencias";
                     context.Seguimiento.Add(seguimiento);
                     context.SaveChanges();//Agregar seguimiento
 
                     DL.SeguimientoEvidencia seguimientoEvidencia = new DL.SeguimientoEvidencia();
                     seguimientoEvidencia.IdSeguimiento = seguimiento.IdSeguimiento;
                     seguimientoEvidencia.IdEvidencia = evidencia.IdEvidencia;
+                    seguimientoEvidencia.FechaHoraCreacion = DateTime.Now;
+                    seguimientoEvidencia.UsuarioCreacion = Convert.ToString(IdResponsable);
+                    seguimientoEvidencia.ProgramaCreacion = "Carga de evidencias";
                     context.SeguimientoEvidencia.Add(seguimientoEvidencia);
                     context.SaveChanges();//Agregar SeguimientoEvidencia
                 }
@@ -2326,5 +2344,51 @@ namespace BL
             return ListPDAPermisos;
         }
         #endregion Permisos
+
+        #region Actualizar Layout
+        public static List<string> GetCategorias()
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var categorias = context.PromediosCategorias.Select(o => o.IdCategoria).Distinct().ToList();
+                    foreach (var cat in categorias)
+                    {
+                        var nameCat = context.Categoria.Where(o => o.IdCategoria == cat.Value).FirstOrDefault();
+                        if (nameCat != null)
+                            list.Add(nameCat.Nombre);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return list;
+        }
+        public static List<string> GetRangosForExcel()
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var rangos = context.Rango.ToList();
+                    foreach (var rango in rangos)
+                    {
+                        if (rango != null)
+                            list.Add(rango.Descripcion);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return list;
+        }
+        #endregion
     }
 }
