@@ -120,8 +120,14 @@ var modelNuevaAccion = {
             }
 
             vm.ConsultaAccionesGuardadas = function () {
+                document.getElementById("loading").style.display = "block";
                 vm.post("/PlanesDeAccion/GetAcciones/?", modelNuevaAccion, function (response) {
+                    document.getElementById("loading").style.display = "none";
                     if (response.Correct) {
+                        $("#descarga-acciones").unbind();
+                        document.getElementById("descarga-acciones").addEventListener("click", function () {
+                            window.location = response.Atachment[0];
+                        });
                         $("#accordion .card-body").empty();
                         AccionesPreGuardadas = response.Objects;
                         if (IdEncuesta == 0) {

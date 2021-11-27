@@ -20,6 +20,7 @@ using Microsoft.Office.Core;
 using Aspose.Pdf;
 using System.Net.Mail;
 using System.IO;
+using CronExpressionDescriptor;
 
 namespace PL
 {
@@ -45,6 +46,9 @@ namespace PL
             RecurringJob.AddOrUpdate("PDANotificacionSinAvanceInicial", () => BL.PlanesDeAccion.TriggerNotificacionSinAvanceInicial(), "0 10 * * *", TimeZoneInfo.Local);
             RecurringJob.AddOrUpdate("PDANotificacionAgradecimiento", () => BL.PlanesDeAccion.NotificacionAgradecimiento(), "0 11 * * *", TimeZoneInfo.Local);
             RecurringJob.AddOrUpdate("JobReenvioEmails", () => BL.Email.CronReenvioNotificaciones(), "0 12 * * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate("KillJobsNotificacionesPDA", () => BL.PlanesDeAccion.KillJobsNotificacionesPDA(), "*/5 * * * *", TimeZoneInfo.Local);
+            PL.Controllers.PlanesDeAccionController planesDeAccionController = new Controllers.PlanesDeAccionController();
+            RecurringJob.AddOrUpdate("ActualizarLayoutAcciones", () => planesDeAccionController.ActualizarLayout(), "0 2 * * *", TimeZoneInfo.Local);
         }
         public void ResetRecurringJobs()
         {
@@ -85,6 +89,21 @@ namespace PL
         /// </summary>
         private void PruebasIniciales()
         {
+            
+            //{ Id: "", Descripcion: "Enviar al guardar" },
+            //{ Id: "* * * * *", Descripcion: "Cada minuto" },
+            //{ Id: "0 8 * * *", Descripcion: "Diario" },
+            //{ Id: "0 0 */3 * *", Descripcion: "Cada tercer día" },
+            //{ Id: "0 10 * * 1", Descripcion: "Semanal(Lunes)" },
+            //{ Id: "0 9 1 * *", Descripcion: "Mensual(Primer día del mes)" }
+
+            //string desc1 = ExpressionDescriptor.GetDescription("* * * * *", new CronExpressionDescriptor.Options() { Locale = "es" });
+            //string desc2 = ExpressionDescriptor.GetDescription("0 8 * * *", new CronExpressionDescriptor.Options() { Locale = "es" });
+            //string desc3 = ExpressionDescriptor.GetDescription("0 0 */3 * *", new CronExpressionDescriptor.Options() { Locale = "es" });
+            //string desc4 = ExpressionDescriptor.GetDescription("0 10 * * 1", new CronExpressionDescriptor.Options() { Locale = "es" });
+            //string desc5 = ExpressionDescriptor.GetDescription("0 9 1 * *", new CronExpressionDescriptor.Options() { Locale = "es" });
+
+            //Console.Write("");
             /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
             ML.Historico historico = new ML.Historico()
             {

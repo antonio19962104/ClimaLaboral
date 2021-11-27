@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using Hangfire;
 
 namespace PL.Controllers
 {
@@ -73,6 +74,30 @@ namespace PL.Controllers
             return View(new ML.PlanDeAccion() { IdPlanDeAccion = Convert.ToInt32(IdPlanDeAccion) });
         }
         /// <summary>
+        /// Envio de email customizado por el usuario
+        /// </summary>
+        /// <param name="IdPlanDeAccion"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public JsonResult ConfiguraNotificacion(int IdPlanDeAccion, ML.Email email)
+        {
+            bool result = false;
+            if (string.IsNullOrEmpty(email.Frecuencia))
+            {
+                // Job inicia y olvida
+                BackgroundJob.Enqueue(() => BL.PlanesDeAccion.EnvioEmailCustom(IdPlanDeAccion, email.Priority, email.Subject, email.Plantilla));
+                result = true;
+            }
+            else
+            {
+                // Job recurrente
+                string uid = "IdPlan_" + IdPlanDeAccion + "_" + Guid.NewGuid().ToString();
+                result = BL.PlanesDeAccion.AgregarJobNotificacionesPDA(IdPlanDeAccion, uid, Session["AdminLog"].ToString(), email.Frecuencia, email.Plantilla, email.Priority, email.Subject);
+                RecurringJob.AddOrUpdate(uid, () => BL.PlanesDeAccion.EnvioEmailCustom(IdPlanDeAccion, email.Priority, email.Subject, email.Plantilla), email.Frecuencia, TimeZoneInfo.Local);
+            }
+            return Json(new JsonResult() { Data = new ML.Result() { Correct = result }, JsonRequestBehavior = JsonRequestBehavior.AllowGet });
+        }
+        /// <summary>
         /// Obtiene las areas existentes en una bd para crear los planes de accion
         /// </summary>
         /// <param name="IdBaseDeDatos"></param>
@@ -87,21 +112,40 @@ namespace PL.Controllers
             var result = BL.EstructuraAFMReporte.GetEstructuraGAFMForPlanesAccion(IdBaseDeDatos, IdCurrentAdmin, SA);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Retorna la vista de configuracion de permisos a planes de acción
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ConfigurarPermisos()
         {
             return View();
         }
+        /// <summary>
+        /// Obtiene el json de estructura organizacional para elegir los permisos
+        /// </summary>
+        /// <returns></returns>
         public JsonResult ArbolEstructuraModuloPermisosPlanes()
         {
             var result = BL.EstructuraAFMReporte.ArbolEstructuraModuloPermisosPlanes();
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Agrega los permisos a un Area al grupo de administradores seleccionados
+        /// </summary>
+        /// <param name="Area"></param>
+        /// <param name="admins"></param>
+        /// <returns></returns>
         public JsonResult AddPermisosPlanes(string Area, List<int> admins)
         {
             string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
             var result = BL.PlanesDeAccion.AddPermisosPlanes(Area, admins, UsuarioActual);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Obtiene los admins para el grid de seleccion de asignacion de permisos
+        /// </summary>
+        /// <param name="Area"></param>
+        /// <returns></returns>
         public JsonResult ObtenerAdmins(string Area)
         {
             var result = BL.PlanesDeAccion.ObtenerAdmins(Area);
@@ -212,7 +256,6 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.AddAcciones(ListAcciones, UsuarioActual);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-
 		/// <summary>
         /// Se crea un Nuevo Listado de encuestas de tipo Clima laboral para la creación de los Planes de Acción 
         /// </summary>
@@ -249,7 +292,6 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.AgregarPerfilPlanesDeAccion(IdAdmin);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -283,7 +325,10 @@ namespace PL.Controllers
             if (IdResponsable == "0")
                 IsResponsable = false;
             int UserId = Convert.ToInt32(Session["IdAdministradorLogeado"].ToString());
-            var result = BL.PlanesDeAccion.GetPlanes(UserId, IsResponsable, IdResponsable);
+            bool IsSA = false;
+            if (Convert.ToInt32(Session["SuperAdmin"]) == 1)
+                IsSA = true;
+            var result = BL.PlanesDeAccion.GetPlanes(UserId, IsResponsable, IdResponsable, IsSA);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>
@@ -313,7 +358,7 @@ namespace PL.Controllers
                 modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 35, Catalogo = new List<string>(), CeldaValidar = "A1", HeadelCol = "Descripción", HexColorHead = "" });
                 modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 30, Catalogo = BL.PlanesDeAccion.GetCategorias(), CeldaValidar = "B1", HeadelCol = "Categoria", HexColorHead = "" });
                 modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 30, Catalogo = BL.PlanesDeAccion.GetRangosForExcel(), CeldaValidar = "C1", HeadelCol = "Rango", HexColorHead = "" });
-                result = configurador.ConfiguradorExcel(modelValidators, @"C:\\ClimaLaboral");
+                result = configurador.CreateExcelWithValidation(modelValidators, @"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\", "LayoutAccionesDeMejora");
             }
             catch (Exception aE)
             {
@@ -324,6 +369,11 @@ namespace PL.Controllers
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Insercion msaiva de acciones de mejora
+        /// </summary>
+        /// <param name="formCollection"></param>
+        /// <returns></returns>
         public JsonResult AddAccionesExcel(FormCollection formCollection)
         {
             ML.Result result = new ML.Result();
@@ -356,65 +406,17 @@ namespace PL.Controllers
                                     {
                                         DL.Acciones accion = new DL.Acciones();
                                         accion.Descripcion = (workSheet.Cells[rowIterator, 1].Value).ToString();
-                                        int IdCategoria = 0;
-                                        switch (workSheet.Cells[rowIterator, 2].Value.ToString())
+                                        int IdCategoria = BL.PlanesDeAccion.GetIdCategoriaByName(workSheet.Cells[rowIterator, 2].Value.ToString());
+                                        int IdRango = BL.PlanesDeAccion.GetIdRangoByName(workSheet.Cells[rowIterator, 3].Value.ToString());
+                                        if (IdCategoria == 0 || IdRango == 0)
                                         {
-                                            case "Practicas culturales":
-                                                IdCategoria = 1;
-                                                break;
-                                            case "Alineacion estratégica":
-                                                IdCategoria = 11;
-                                                break;
-                                            case "Indicadores de procesos organizacionales":
-                                                IdCategoria = 12;
-                                                break;
-                                            case "Nivel de colaboración":
-                                                IdCategoria = 23;
-                                                break;
-                                            case "Nivel de compromiso":
-                                                IdCategoria = 24;
-                                                break;
-                                            case "ISO 9001:2015 AMBIENTE PARA LA OPERACIÓN DE LOS PROCESOS":
-                                                IdCategoria = 25;
-                                                break;
-                                            case "Alineacion cultural":
-                                                IdCategoria= 29;
-                                                break;
-                                            case "Bienestar":
-                                                IdCategoria = 30;
-                                                break;
-                                            case "Nivel de habilidades gerenciales":
-                                                IdCategoria = 34;
-                                                break;
-                                            default:
-                                                result.Correct = false;
-                                                result.ErrorMessage = "Debes elegir una categoria válida";
-                                                return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                                                break;
+                                            result.Correct = false;
+                                            result.ErrorMessage = "No se pudo encontrar el Id de Categoria ni el Id de Rango bajo la descripción proporcionada";
+                                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Error(result.ErrorMessage);
+                                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Categoria: " + workSheet.Cells[rowIterator, 2].Value.ToString());
+                                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Rango    : " + workSheet.Cells[rowIterator, 3].Value.ToString());
+                                            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
                                         }
-
-                                        int IdRango = 0;
-                                        switch (workSheet.Cells[rowIterator, 3].Value.ToString())
-                                        {
-                                            case "0% - 69%":
-                                                IdRango = 1;
-                                                break;
-                                            case "70% - 79%":
-                                                IdRango = 2;
-                                                break;
-                                            case "80% - 89%":
-                                                IdRango = 3;
-                                                break;
-                                            case "90% - 100%":
-                                                IdRango = 4;
-                                                break;
-                                            default:
-                                                result.Correct = false;
-                                                result.ErrorMessage = "Debes elegir un rango válido válida";
-                                                return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-                                                break;
-                                        }
-
                                         accion.IdCategoria = IdCategoria;
                                         accion.IdRango = IdRango;
                                         accion.Tipo = 2;
@@ -538,6 +540,10 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.GuardarAvances(accionesPlan);
             return new JsonResult() { Data = result, JsonRequestBehavior= JsonRequestBehavior.AllowGet };
         }
+        /// <summary>
+        /// Descarga el layout de acciones de mejora
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DescargaL()
         {
             string file = "LayoutAccionesDeMejora.xlsx";
@@ -545,5 +551,31 @@ namespace PL.Controllers
             return File(fullPath, "application/vnd.ms-excel", file);
         }
         #endregion Seguimiento
+
+        #region Notificaciones Programadas
+        /// <summary>
+        /// Cambia el estatus de un job de notificacion
+        /// </summary>
+        /// <param name="IdPlan"></param>
+        /// <param name="IdJobsNotificacionesPDA"></param>
+        /// <param name="NewEstatus"></param>
+        /// <returns></returns>
+        public JsonResult ChangeEstatusJob(int IdPlan, int IdJobsNotificacionesPDA, int NewEstatus)
+        {
+            string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
+            var result = BL.PlanesDeAccion.ChangeEstatusJob(IdPlan, IdJobsNotificacionesPDA, NewEstatus, UsuarioActual);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Elimina la tarea de la cola y elimina permanentemente su registro
+        /// </summary>
+        /// <param name="IdJobsNotificacionesPDA"></param>
+        /// <returns></returns>
+        public JsonResult EliminarJobNotificacion(int IdJobsNotificacionesPDA)
+        {
+            var result = BL.PlanesDeAccion.EliminarJobNotificacion(IdJobsNotificacionesPDA);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        #endregion Notificaciones Programadas
     }
 }

@@ -92,6 +92,7 @@
     <Compile Include="Email.cs" />
     <Compile Include="EmailsEncuesta.cs" />
     <Compile Include="Evidencia.cs" />
+    <Compile Include="JobsNotificacionesPDA.cs" />
     <Compile Include="PDAPermisos.cs" />
     <Compile Include="Periodicidad.cs" />
     <Compile Include="PlanDeAccion.cs" />
@@ -159,6 +160,9 @@
     <Compile Include="ValoracionSubcategoriaPorCategoria.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />

@@ -1,5 +1,6 @@
 ﻿//using DocumentFormat.OpenXml.Math;
 //using DocumentFormat.OpenXml.Packaging;
+using CronExpressionDescriptor;
 using Hangfire;
 using System;
 using System.Collections.Generic;
@@ -824,8 +825,12 @@ namespace BL
                                 ML.AccionDeMejora accion = new ML.AccionDeMejora();
                                 accion.IdAccionDeMejora = item.IdAccion;
                                 accion.Descripcion = item.Descripcion;
-                                accion.Categoria.IdCategoria = item.Categoria.IdCategoria;
-                                accion.Rango.IdRango = item.Rango.IdRango;
+                                var rango = context.Rango.Where(o => o.IdRango == item.IdRango).FirstOrDefault();
+                                accion.Rango.IdRango = rango.IdRango;
+                                accion.Rango.Descripcion = rango.Descripcion;
+                                var categoria = context.Categoria.Where(o => o.IdCategoria == item.IdCategoria).FirstOrDefault();
+                                accion.Categoria.IdCategoria = categoria.IdCategoria;
+                                accion.Categoria.Nombre = categoria.Nombre;
                                 result.Objects.Add(accion);
                             }
                             result.Correct = true;
@@ -880,6 +885,7 @@ namespace BL
                             result.Correct = true;
                         }
                     }
+                    result.Atachment.Add(BL.PlanesDeAccion.CrearGridAcciones(result.Objects));
                 }
             }
             catch (Exception aE)
@@ -890,6 +896,48 @@ namespace BL
                 result.ex = aE;
             }
             return result;
+        }
+        /// <summary>
+        /// Crea el archivo xlsx con la informacion de las acciones para su descarga
+        /// </summary>
+        /// <param name="Objects"></param>
+        /// <returns></returns>
+        public static string CrearGridAcciones(List<object> Objects)
+        {
+            string ruta = string.Empty;
+            List<string> ListIdAccion = new List<string>();
+            List<string> ListDescripcion = new List<string>();
+            List<string> ListCategoria = new List<string>();
+            List<string> ListRangos = new List<string>();
+            CatalogosValidacionExcel_JAMG96_Net_Framework.Result result = new CatalogosValidacionExcel_JAMG96_Net_Framework.Result();
+            try
+            {
+                List<CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator> modelValidators = new List<CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator>();
+                foreach (ML.AccionDeMejora item in Objects)
+                {
+                    ListIdAccion.Add(item.IdAccionDeMejora.ToString());
+                    ListDescripcion.Add(item.Descripcion);
+                    ListCategoria.Add(item.Categoria.Nombre);
+                    ListRangos.Add(item.Rango.Descripcion);
+                }
+                CatalogosValidacionExcel_JAMG96_Net_Framework.GridBuilder gridBuilder = new CatalogosValidacionExcel_JAMG96_Net_Framework.GridBuilder();
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 10, Catalogo = ListIdAccion, CeldaValidar = "A1", HeadelCol = "Id", HexColorHead = "" });
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 140, Catalogo = ListDescripcion, CeldaValidar = "B1", HeadelCol = "Descripción", HexColorHead = "" });
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 70, Catalogo = ListCategoria, CeldaValidar = "C1", HeadelCol = "Categoria", HexColorHead = "" });
+                modelValidators.Add(new CatalogosValidacionExcel_JAMG96_Net_Framework.ModelValidator() { AnchoColumna = 15, Catalogo = ListRangos, CeldaValidar = "D1", HeadelCol = "Rango", HexColorHead = "" });
+
+                result = gridBuilder.CreateExcelWithData(modelValidators, @"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString() + @"\\resources\\Grids\\");
+                if (result.Correct)
+                    ruta = result.SuccessMessage;
+                else
+                    ruta = result.ErrorMessage;
+                ruta = ruta.Replace(@"\\\\10.5.2.101\\" + ConfigurationManager.AppSettings["templateLocation"].ToString(), ConfigurationManager.AppSettings["urlTemplateLocation"].ToString());
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return ruta;
         }
         /// <summary>
         /// Obtiene las acciones de ayuda
@@ -1225,7 +1273,6 @@ namespace BL
             }
             return result;
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -1281,11 +1328,11 @@ namespace BL
         }
         #endregion Generales Modulo
 
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="aEmail"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
         public static ML.Result ExisteResponsable(string aEmail,DL.RH_DesEntities context)
         {
@@ -1315,7 +1362,6 @@ namespace BL
             return result;
             
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -1349,7 +1395,6 @@ namespace BL
             }
 
         }
-
 		/// <summary>
         /// 
         /// </summary>
@@ -1397,6 +1442,7 @@ namespace BL
             result.Correct = true;
             return result;
         }
+        
         #region Notificaciones
         /// <summary>
         /// Disparador del job para el envio de notificacion inicial
@@ -1427,7 +1473,58 @@ namespace BL
         {
             BackgroundJob.Enqueue(() => NotificacionAgradecimiento());
         }
-
+        /// <summary>
+        /// Envia un email de notificacion a los usuarios seleccionados con la plantilla configurada
+        /// </summary>
+        /// <param name="IdPlanDeAccion"></param>
+        /// <param name="Asunto"></param>
+        /// <param name="Plantilla"></param>
+        /// <param name="prioridad"></param>
+        public static void EnvioEmailCustom(int IdPlanDeAccion, int prioridad, string Asunto, string Plantilla)
+        {
+            try
+            {
+                List<string> EmailDestinatario = new List<string>();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlanDeAccion).FirstOrDefault();
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
+                    foreach (var accionPlan in AccionesPlan)
+                    {
+                        var responsablesAccion = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                        foreach (var responsable in responsablesAccion)
+                        {
+                            var usuarioResponsable = context.Responsable.Where(o => o.IdResponsable == responsable.IdResponsable).FirstOrDefault();
+                            var accountResponsable = context.Administrador.Where(o => o.IdAdministrador == usuarioResponsable.IdAdministrador).FirstOrDefault();
+                            var relacional = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == usuarioResponsable.IdResponsable).ToList();
+                            List<ML.AccionDeMejora> ListAcciones = new List<ML.AccionDeMejora>();
+                            foreach (var item in relacional)
+                            {
+                                var acciones = context.AccionesPlan.Where(o => o.IdAccionesPlan == item.IdAccionesPlan && o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion).ToList();
+                                foreach (var elem in acciones)
+                                {
+                                    var accion = context.Acciones.Where(o => o.IdAccion == elem.IdAccion).FirstOrDefault();
+                                    ML.AccionDeMejora accionDeMejora = new ML.AccionDeMejora();
+                                    accionDeMejora.IdAccionDeMejora = accion.IdAccion;
+                                    accionDeMejora.Descripcion = accion.Descripcion;
+                                    accionDeMejora.Categoria.IdCategoria = (int)accion.IdCategoria;
+                                    ListAcciones.Add(accionDeMejora);
+                                }
+                            }
+                            if (!EmailDestinatario.Contains(usuarioResponsable.Email))
+                            {
+                                BL.Email.EnvioNotificacionesCustom(1, usuarioResponsable.Email, ListAcciones, usuarioResponsable, accountResponsable, IdPlanDeAccion, prioridad, Asunto, Plantilla);
+                                EmailDestinatario.Add(usuarioResponsable.Email);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+        }
         /// <summary>
         /// Envía un email de notificación a los responsables las acciones al guardar un nuevo Plan
         /// trigger: Al guardar un plan de accion
@@ -1595,12 +1692,10 @@ namespace BL
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
         }
-
         /*
          * 1 Cuando el porcentaje de avance no corresponda a lo esperado es decir exista un retraso. 
          *      Por ejemplo cuando el avance deba ser al 25% el registro sea menor o cuando el avance deba estar al 50% o al 75% y de igual forma la captura sea menor.  
          */
-
         /// <summary>
         /// Envia un email de agradecimiento a los responsables cuya accion ha terminado
         /// </summary>
@@ -1699,8 +1794,9 @@ namespace BL
         /// <param name="UserId"></param>
         /// <param name="IsResponsable"></param>
         /// <param name="IdResponsable"></param>
+        /// <param name="isSA"></param>
         /// <returns></returns>
-        public static ML.Result GetPlanes(int UserId, bool IsResponsable, string IdResponsable)
+        public static ML.Result GetPlanes(int UserId, bool IsResponsable, string IdResponsable, bool isSA)
         {
             ML.Result result = new ML.Result();
             result.Objects = new List<object>();
@@ -1712,7 +1808,25 @@ namespace BL
                 {
                     // Si es un usuario responsable solo puede ver los planes en donde es participante
                     // Si es un usuario admnistrador de planes de accion puede solo ver los planes de acción que ha creado
-                    if (IsResponsable)
+                    // Si es un usuario SA puede ver todo
+                    if (isSA)
+                    {
+                        var PlanesDeAccion = context.PlanDeAccion.ToList();
+                        foreach (var plan in PlanesDeAccion)
+                        {
+                            ML.PlanDeAccion planDeAccion = new ML.PlanDeAccion();
+                            planDeAccion.IdPlanDeAccion = plan.IdPlanDeAccion;
+                            planDeAccion.Nombre = plan.Nombre;
+                            planDeAccion.IdEncuesta = (int)plan.IdEncuesta;
+                            planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
+                            planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(plan.IdPlanDeAccion);
+                            planDeAccion.ListJobsNotificaciones = BL.PlanesDeAccion.ObtenerNotificacionesProgramadas(planDeAccion.IdPlanDeAccion);
+
+                            result.Objects.Add(planDeAccion);
+                        }
+                        result.Correct = true;
+                    }
+                    if (IsResponsable && !isSA)
                     {
                         var ResponsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdResponsable == _idResponsable);
                         foreach (var responsableAccionesPlan in ResponsableAccionesPlan)
@@ -1729,6 +1843,8 @@ namespace BL
                                     planDeAccion.IdEncuesta = (int)plan.IdEncuesta;
                                     planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
                                     planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(planDeAccion.IdPlanDeAccion);
+                                    planDeAccion.ListJobsNotificaciones = BL.PlanesDeAccion.ObtenerNotificacionesProgramadas(planDeAccion.IdPlanDeAccion);
+
                                     if (!ArrayIdPlan.Contains(planDeAccion.IdPlanDeAccion))
                                     {
                                         result.Objects.Add(planDeAccion);
@@ -1739,7 +1855,7 @@ namespace BL
                         }
                         result.Correct = true;
                     }
-                    else
+                    if (!IsResponsable && !isSA)
                     {
                         var PlanesDeAccion = context.PlanDeAccion.Where(o => o.IdUsuarioCreacion == UserId);
                         foreach (var plan in PlanesDeAccion)
@@ -1749,7 +1865,8 @@ namespace BL
                             planDeAccion.Nombre = plan.Nombre;
                             planDeAccion.IdEncuesta = (int)plan.IdEncuesta;
                             planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
-                            plan.PorcentajeAvance = GetPorcentajeAvancePlan(planDeAccion.IdPlanDeAccion);
+                            planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(plan.IdPlanDeAccion);
+                            planDeAccion.ListJobsNotificaciones = BL.PlanesDeAccion.ObtenerNotificacionesProgramadas(planDeAccion.IdPlanDeAccion);
 
                             result.Objects.Add(planDeAccion);
                         }
@@ -1797,7 +1914,7 @@ namespace BL
             return result;
         }
         /// <summary>
-        /// 
+        /// Obtiene las acciones de un responsable
         /// </summary>
         /// <param name="IdResponsable"></param>
         /// <param name="IdPlan"></param>
@@ -2163,6 +2280,13 @@ namespace BL
 
 
         #region Permisos
+        /// <summary>
+        /// Agrega los permisos a un listado de usuarios en un area especificada
+        /// </summary>
+        /// <param name="Area"></param>
+        /// <param name="Admins"></param>
+        /// <param name="currentAdmin"></param>
+        /// <returns></returns>
         public static ML.Result AddPermisosPlanes(string Area, List<int> Admins, string currentAdmin)
         {
             ML.Result result = new ML.Result();
@@ -2196,6 +2320,12 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Agrega el perfil modulo y asigna las acciones a un administrador en el modulo de Planes de Accion
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <param name="currentAdmin"></param>
+        /// <returns></returns>
         public static ML.Result ConfigurarPerfil(int IdAdmin, string currentAdmin)
         {
             List<string> acciones = new List<string>();
@@ -2266,6 +2396,11 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Obtiene listado de administradores que no tienen aun asignado el permiso al area seleccionada
+        /// </summary>
+        /// <param name="Area"></param>
+        /// <returns></returns>
         public static ML.Result ObtenerAdmins(string Area)
         {
             ML.Result result = new ML.Result();
@@ -2284,6 +2419,9 @@ namespace BL
                         administrador.IdAdministrador = item.IdAdministrador;
                         administrador.Nombre = String.Concat(empleado.Nombre, " ", empleado.ApellidoPaterno, " ", empleado.ApellidoMaterno);
                         administrador.UserName = item.UserName;
+                        // Inicio: Verificar si el admin pertecene a alguna area agencia para ya ponerla marcada
+                        administrador.Selected = ML.Administrador.Data.verdadero;
+                        //Fin: Verificar si el admin pertecene a alguna area agencia para ya ponerla marcada
                         // Solo se muestra si el usuario no tiene asignado el permiso a esta area ya previamente
                         if (!TienePermisoPDA(item.IdAdministrador, Area))
                             result.Objects.Add(administrador);
@@ -2300,6 +2438,12 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Valida si un administrador tiene permisos a un area determinada
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <param name="Area"></param>
+        /// <returns></returns>
         public static bool TienePermisoPDA(int IdAdmin, string Area)
         {
             bool result = false;
@@ -2318,6 +2462,11 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Obtiene los permisos asignados de un administrador
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <returns></returns>
         public static List<ML.PDAPermisos> ObtenerPermisosPDA(int IdAdmin)
         {
             List<ML.PDAPermisos> ListPDAPermisos = new List<ML.PDAPermisos>();
@@ -2345,7 +2494,11 @@ namespace BL
         }
         #endregion Permisos
 
-        #region Actualizar Layout
+        #region Actualizar Layout Carga masiva de acciones
+        /// <summary>
+        /// Retorna un listado de strings para llenar el layout
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetCategorias()
         {
             List<string> list = new List<string>();
@@ -2368,6 +2521,10 @@ namespace BL
             }
             return list;
         }
+        /// <summary>
+        /// Retorna un listado de strings para llenar el layout
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetRangosForExcel()
         {
             List<string> list = new List<string>();
@@ -2388,6 +2545,232 @@ namespace BL
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
             return list;
+        }
+        /// <summary>
+        /// Retorna el id de categoria por su nombre
+        /// </summary>
+        /// <param name="NombreC"></param>
+        /// <returns></returns>
+        public static int GetIdCategoriaByName(string NombreC)
+        {
+            int idCategoria = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var categoria = context.Categoria.Where(o => o.Nombre == NombreC).FirstOrDefault();
+                    if (categoria != null)
+                        idCategoria = categoria.IdCategoria;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return idCategoria;
+        }
+        /// <summary>
+        /// Retorna el id de rango por su nombre
+        /// </summary>
+        /// <param name="NombreR"></param>
+        /// <returns></returns>
+        public static int GetIdRangoByName(string NombreR)
+        {
+            int idRango = 0;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var rango = context.Rango.Where(o => o.Descripcion == NombreR).FirstOrDefault();
+                    if (rango != null)
+                        idRango = rango.IdRango;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return idRango;
+        }
+        /// <summary>
+        /// Agrega un proceso automatizado de envio de notificaciones
+        /// </summary>
+        /// <param name="IdPlanDeAccion"></param>
+        /// <param name="UID"></param>
+        /// <param name="frecuencia"></param>
+        /// <param name="currentUser"></param>
+        /// <param name="plantilla"></param>
+        /// <param name="priority"></param>
+        /// <param name="subject"></param>
+        /// <returns></returns>
+        public static bool AgregarJobNotificacionesPDA(int IdPlanDeAccion, string UID, string currentUser, string frecuencia, string plantilla, int priority, string subject)
+        {
+            bool result = false;
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    DL.JobsNotificacionesPDA jobsNotificacionesPDA = new DL.JobsNotificacionesPDA()
+                    {
+                        IdPlanDeAccion = IdPlanDeAccion,
+                        JobId = UID,
+                        IdEstatus = 1,
+                        CronExpression = frecuencia,
+                        Plantilla = plantilla,
+                        Priority = priority,
+                        Subject = subject,
+                        FechaHoraCreacion = DateTime.Now,
+                        UsuarioCreacion = currentUser,
+                        ProgramaCreacion = "AgregarJobNotificacionesPDA"
+                    };
+                    context.JobsNotificacionesPDA.Add(jobsNotificacionesPDA);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception)
+            {
+                result = false;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Obtiene el o los jobs relacionados al envio de notificaciones programadas de un plan de accion
+        /// </summary>
+        /// <param name="IdPlanDeAccion"></param>
+        /// <returns></returns>
+        public static List<ML.JobsNotificacionesPDA> ObtenerNotificacionesProgramadas(int IdPlanDeAccion)
+        {
+            List< ML.JobsNotificacionesPDA> result = new List<ML.JobsNotificacionesPDA>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var data = context.JobsNotificacionesPDA.Where(o => o.IdPlanDeAccion == IdPlanDeAccion);
+                    foreach (var job in data)
+                    {
+                        ML.JobsNotificacionesPDA jobsNotificacionesPDA = new ML.JobsNotificacionesPDA();
+                        jobsNotificacionesPDA.IdJobsNotificacionesPDA = job.IdJobsNotificacionesPDA;
+                        jobsNotificacionesPDA.JobId = job.JobId;
+                        jobsNotificacionesPDA.IdEstatus = (int)job.IdEstatus;
+                        jobsNotificacionesPDA.IdPlanDeAccion = (int)job.IdPlanDeAccion;
+                        jobsNotificacionesPDA.CronExpression = job.CronExpression;
+                        jobsNotificacionesPDA.Periodicidad = ExpressionDescriptor.GetDescription(job.CronExpression, new Options() { Locale = "es" });
+                        if (jobsNotificacionesPDA.CronExpression.Equals("0 8 * * *"))
+                            jobsNotificacionesPDA.Periodicidad = $"Todos los días {jobsNotificacionesPDA.Periodicidad}";
+
+                        result.Add(jobsNotificacionesPDA);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+            return result;
+        }
+        /// <summary>
+        /// Cambia el estatus de un job de notificaciones
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <param name="IdPlan"></param>
+        /// <param name="IdJobsNotificacionesPDA"></param>
+        /// <param name="NewEstatus"></param>
+        /// <returns></returns>
+        public static ML.Result ChangeEstatusJob(int IdPlan, int IdJobsNotificacionesPDA, int NewEstatus, string currentUser)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var job = context.JobsNotificacionesPDA.Where(o => o.IdPlanDeAccion == IdPlan && o.IdJobsNotificacionesPDA == IdJobsNotificacionesPDA).FirstOrDefault();
+                    if (job != null)
+                    {
+                        job.IdEstatus = NewEstatus;
+                        job.FechaHoraModificacion = DateTime.Now;
+                        job.UsuarioModificacion = currentUser;
+                        job.ProgramaModificacion = "ChangeEstatusJob";
+                        context.SaveChanges();
+                        if (NewEstatus == 0)
+                            KillJobsNotificacionesPDA();
+                        if (NewEstatus == 1)
+                        {
+                            // Volver a generar el job segun lo que esta en la tabla de control
+                            // var job = context.JobsNotificacionesPDA.Where(o => o.JobId == item.JobId).FirstOrDefault();
+                            RecurringJob.AddOrUpdate(job.JobId, () => BL.PlanesDeAccion.EnvioEmailCustom((int)job.IdPlanDeAccion, (int)job.Priority, job.Subject, job.Plantilla), job.CronExpression, TimeZoneInfo.Local);
+                        }
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Detiene los procesos automatizados de envio de notificaciones
+        /// </summary>
+        public static void KillJobsNotificacionesPDA()
+        {
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var JobsNotificacionesKill = context.JobsNotificacionesPDA.Where(o => o.IdEstatus == 0).ToList();
+                    foreach (var jobKill in JobsNotificacionesKill)
+                    {
+                        RecurringJob.RemoveIfExists(jobKill.JobId);
+                    }
+                    var JobsNotificacionesRestart = context.JobsNotificacionesPDA.Where(o => o.IdEstatus == 1).ToList();
+                    foreach (var jobRestart in JobsNotificacionesRestart)
+                    {
+                        // Volver a generar el job segun lo que esta en la tabla de control
+                        // var job = context.JobsNotificacionesPDA.Where(o => o.JobId == item.JobId).FirstOrDefault();
+                        RecurringJob.AddOrUpdate(jobRestart.JobId, () => BL.PlanesDeAccion.EnvioEmailCustom((int)jobRestart.IdPlanDeAccion, (int)jobRestart.Priority, jobRestart.Subject, jobRestart.Plantilla), jobRestart.CronExpression, TimeZoneInfo.Local);
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
+        }
+        /// <summary>
+        /// Elimina la tarea de la cola y elimina permanentemente su registro
+        /// </summary>
+        /// <param name="IdJobsNotificacionesPDA"></param>
+        /// <returns></returns>
+        public static ML.Result EliminarJobNotificacion(int IdJobsNotificacionesPDA)
+        {
+            var result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var data = context.JobsNotificacionesPDA.Where(o => o.IdJobsNotificacionesPDA == IdJobsNotificacionesPDA).FirstOrDefault();
+                    if (data != null)
+                    {
+                        RecurringJob.RemoveIfExists(data.JobId);
+                        context.JobsNotificacionesPDA.Remove(data);
+                        context.SaveChanges();
+                        result.Correct = true;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+                throw;
+            }
+            return result;
         }
         #endregion
     }

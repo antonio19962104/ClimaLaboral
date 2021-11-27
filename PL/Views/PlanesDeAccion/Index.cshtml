@@ -66,11 +66,12 @@
 
                             <!--Despliega las áreas en un arbol de nodos-->
                             <div id="arboles"></div>
-                            <div class="col-4 form-group">
+                            <div class="col-6 form-group">
                                 <input hidden type="file" accept="" id="postedFile" name="postedFile" class="form-control" />
                                 <label id="labelForInputFile" class="mr-3 form-control" for="postedFile">Selecciona un archivo <i class="fas fa-file-excel fa-lg"></i></label>
                                 <button class="btn btn-success" onclick="CargaMasiva()">Cargar acciones <i class="fas fa-upload"></i></button>
-                                <button class="btn btn-danger" onclick="Download()">Descargar layout <i class="fas fa-download"></i></button>
+                                <button class="btn btn-danger" onclick="DownloadLayout()">Descargar layout <i class="fas fa-download"></i></button>
+                                <button class="btn btn-info" id="descarga-acciones">Descargar acciones <i class="fas fa-download"></i></button>
                             </div>
 
                             <div id="accordion">
@@ -234,7 +235,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
 <script src="~/scripts/ReporteoClima/jspdf.min.js"></script>
 <script>
-    function Download() {
+    function DownloadLayout() {
         window.location = "@Url.Action("DescargaL", "PlanesDeAccion")";
     }
 </script>

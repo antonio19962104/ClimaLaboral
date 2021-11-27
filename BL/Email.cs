@@ -179,7 +179,9 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Job de reenvio de notificaciones de planes de accion");
                     var emailsFallidos = context.EstatusEmail.Where(o => o.IdEstatusMail == 1 && o.ProgramaCreacion == "Envio Notificaciones Planes" && o.noIntentos <= 2);
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info($"Se encontraron {emailsFallidos.Count()} emails para reenviar");
                     foreach (var email in emailsFallidos)
                     {
                         var message = ObtenerObjetoCopiaEnCorreo(email.CC, email.CCO);
@@ -193,12 +195,12 @@ namespace BL
                             try
                             {
                                 smtp.Send(message);
-                                BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Email enviado a: " + email.Destinatario);
+                                BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Job Reenvio Notificaciones PDA. Email enviado a: " + email.Destinatario);
                                 BL.Email.UpdateEstatusEmail(email, true, "Email enviado exitosamente");
                             }
                             catch (SmtpException aE)
                             {
-                                BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Falló envío de email a :" + email.Destinatario);
+                                BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Job Renvio de Notificaciones PDA. Falló envío de email a :" + email.Destinatario);
                                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
                                 BL.Email.UpdateEstatusEmail(email, false, aE.Message);
                             }
@@ -257,6 +259,75 @@ namespace BL
                     contentMessage = PlanesDeAccion.CrearVistaWebEmail(contentMessage);
                     message.Body = contentMessage;
                     message.Priority = MailPriority.High;
+                    message.BodyEncoding = System.Text.Encoding.UTF8;
+                    message.Bcc.Add(new MailAddress("jamurillo@grupoautofin.com"));
+
+                    using (var smtp = new SmtpClient())
+                    {
+                        try
+                        {
+                            smtp.Send(message);
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Email enviado a: " + destinatario);
+                            BL.Email.GuardarEstatusEmail(message, true, "Email enviado exitosamente", TipoNotificacion);
+                        }
+                        catch (SmtpException aE)
+                        {
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Falló envío de email a :" + destinatario);
+                            BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                            BL.Email.GuardarEstatusEmail(message, false, (string.Concat(aE.Message, (aE.InnerException == null ? " inner exception is null " : aE.InnerException.ToString()))), TipoNotificacion);
+                        }
+                        finally
+                        {
+                            smtp.Dispose();
+                        }
+                    }
+                }
+                else
+                {
+                    BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El envío no procede ya que no se contienen acciones en la Lista");
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                return false;
+            }
+            return true;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="TipoNotificacion"></param>
+        /// <param name="destinatario"></param>
+        /// <param name="acciones"></param>
+        /// <param name="responsable"></param>
+        /// <param name="administrador"></param>
+        /// <param name="IdPlanDeAccion"></param>
+        /// <param name="Prioridad"></param>
+        /// <param name="Asunto"></param>
+        /// <param name="Plantilla"></param>
+        /// <returns></returns>
+        public static bool EnvioNotificacionesCustom(int TipoNotificacion, string destinatario, List<ML.AccionDeMejora> acciones, DL.Responsable responsable, DL.Administrador administrador, int IdPlanDeAccion, int Prioridad, string Asunto, string Plantilla)
+        {
+            try
+            {
+                if (acciones.Count > 0)
+                {
+                    if (administrador == null)
+                        administrador = new DL.Administrador() { UserName = "Sin usuario", Password = "Sin contraseña" };
+                    var message = new MailMessage();
+                    message.To.Add(new MailAddress(destinatario));
+                    message.Subject = Asunto;
+                    message.IsBodyHtml = true;
+                    string contentMessage = "<html><body><div>" + Plantilla;
+                    string contenidoAcciones = ObtenerContenidoHTMLAccionesEmail(TipoNotificacion, acciones, IdPlanDeAccion);
+                    contentMessage = contentMessage.Replace("#Lista Acciones#", contenidoAcciones);
+                    contentMessage += "<div><p>Tus credenciales para poder acceder a subir tus avances son las siguientes</p><p>Username: " + administrador.UserName + "</p><p>Contraseña: " + administrador.Password + "</p>             <p>Accede entrando a: </p><a href='" + ConfigurationManager.AppSettings["urlTemplateLocation"].ToString() + "/LoginAdmin/Login'><img src='http://www.diagnostic4u.com/img/Logo_emails.png' style='border-radius: 5px;' /></a></div>";
+                    contentMessage += "</div></body></html> ";
+                    contentMessage = contentMessage.Replace("#Nombre#", (string.Concat(responsable.Nombre, " ", responsable.ApellidoPaterno, " ", responsable.ApellidoMaterno)));
+                    contentMessage = PlanesDeAccion.CrearVistaWebEmail(contentMessage);
+                    message.Body = contentMessage;
+                    message.Priority = (MailPriority)Prioridad;
                     message.BodyEncoding = System.Text.Encoding.UTF8;
                     message.Bcc.Add(new MailAddress("jamurillo@grupoautofin.com"));
 

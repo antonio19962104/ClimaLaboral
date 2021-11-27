@@ -21,5 +21,6 @@ namespace ML
         public List<AccionesPlan> ListAcciones { get; set; } = new List<AccionesPlan>();
         public List<Responsable> ListResponsables { get; set; }
         public Categoria Categoria { get; set; }
+        public List<JobsNotificacionesPDA> ListJobsNotificaciones { get; set; } = new List<JobsNotificacionesPDA>();
     }
 }

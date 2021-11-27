@@ -581,6 +581,9 @@
     <Compile Include="JobQueue.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="JobsNotificacionesPDA.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="List.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

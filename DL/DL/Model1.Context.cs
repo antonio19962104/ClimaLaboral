@@ -119,6 +119,7 @@ namespace DL
         public virtual DbSet<PromediosCategorias> PromediosCategorias { get; set; }
         public virtual DbSet<Periodicidad> Periodicidad { get; set; }
         public virtual DbSet<PDAPermisos> PDAPermisos { get; set; }
+        public virtual DbSet<JobsNotificacionesPDA> JobsNotificacionesPDA { get; set; }
     
         [DbFunction("RH_DesEntities1", "splitstring_COMA")]
         public virtual IQueryable<splitstring_COMA_Result> splitstring_COMA(string stringToSplit)

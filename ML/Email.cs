@@ -19,6 +19,8 @@ namespace ML
         public MailPriority MailPriority { get; set; } = new MailPriority {  };
         public string NombreDestinatario { get; set; } = string.Empty;
         public string NombrePlanAccion { get; set; } = string.Empty;
+        public string Plantilla { get; set; } = string.Empty;
+        public string Frecuencia { get; set; } = string.Empty;
         public enum TipoNotificacion {
             inicial = 1,
             WeekAfter = 2
@@ -74,50 +76,56 @@ namespace ML
 
 
         public static string PlantillaAcciones = @"
-<fieldset style='margin-bottom: 1rem;'>
-        <table style='border: solid 1px #EEEEEE;width:100%;'>
-         <tbody style=''>
-            <tr style='background-color: #002856; color: #FFFFFF; padding: 10px;'>
-               <td colspan='2' style='font-weight:bold;padding: 5px 5px 5px 10px;'>#Categoria#</td>
-               <td style='padding: 5px 5px 5px 10px;'>#100%#</td>
-               <td style='padding: 5px 5px 5px 10px;'><img src='#icono#' width='30' height='' /></td>
-            </tr>
-            <tr style='padding: 10px; border: solid 1px #EEEEEE;'>
-               <td colspan='3' style='padding: 5px 5px 5px 10px;'>#accion#</td>
-            </tr>
-         </tbody>
-      </table>
-      <p style='display:none'>Perioricidad</p>
-      <table style='border: solid 1px #EEEEEE;width:100%'>
-         <tbody style=''>
-            <tr>
-                <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>Perioricidad</td>
-            </tr>
-            <tr>
-               <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>#periodicidad#</td>
-               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: #inicio#</td>
-               <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: #fin#</td>
-            </tr>
-         </tbody>
-      </table>
-      <table style='border: solid 1px #EEEEEE;width:100%'>
-         <tbody style=''>
-            <tr>
-               <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Objetivo</p></td>
-               <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Meta</p></td>
-            </tr>
-            <tr>
-               <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>#objetivo#</td>
-               <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>#meta#</td>
-            </tr>
-         </tbody>
-      </table>
-</fieldset>";
+            <fieldset style='margin-bottom: 1rem;'>
+                    <table style='border: solid 1px #EEEEEE;width:100%;'>
+                        <tbody style=''>
+                        <tr style='background-color: #002856; color: #FFFFFF; padding: 10px;'>
+                            <td colspan='2' style='font-weight:bold;padding: 5px 5px 5px 10px;'>#Categoria#</td>
+                            <td style='padding: 5px 5px 5px 10px;'>#100%#</td>
+                            <td style='padding: 5px 5px 5px 10px;'><img src='#icono#' width='30' height='' /></td>
+                        </tr>
+                        <tr style='padding: 10px; border: solid 1px #EEEEEE;'>
+                            <td colspan='3' style='padding: 5px 5px 5px 10px;'>#accion#</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <p style='display:none'>Perioricidad</p>
+                    <table style='border: solid 1px #EEEEEE;width:100%'>
+                        <tbody style=''>
+                        <tr>
+                            <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>Perioricidad</td>
+                        </tr>
+                        <tr>
+                            <td colspan='2' style='width: 50%;padding: 5px 5px 5px 10px;'>#periodicidad#</td>
+                            <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Inicia: #inicio#</td>
+                            <td style='padding: 5px 5px 5px 10px;'><img src='http://www.diagnostic4u.com/img/icono-calendario.png' width='20' height='20' style='max-width: 15px; border: solid 1px #EEEEEE;'> Concluye: #fin#</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table style='border: solid 1px #EEEEEE;width:100%'>
+                        <tbody style=''>
+                        <tr>
+                            <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Objetivo</p></td>
+                            <td style='width: 50%;padding: 5px 5px 5px 10px;'><p>Meta</p></td>
+                        </tr>
+                        <tr>
+                            <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>#objetivo#</td>
+                            <td style='width: 50%; border: solid 1px #EEEEEE;padding: 5px 5px 5px 10px;'>#meta#</td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </fieldset>";
 
 
         public static string solIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/sol-icono.png";
         public static string solNubeIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/solnube-icono.png";
         public static string nubeIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/nube-icono.png";
         public static string lluviaIcono = "http://www.diagnostic4u.com//img/ReporteoClima/Iconos/lluvia-icono.png";
+
+        public string PlantillaNotificacionInicial { get; set; } = "<body><h3>Plantilla Notificación Inicial</h3><p>Este es el contenido de la plantilla, por favor revisa la o las acciones que te toca dar seguimiento</p></body>";
+        public string PlantillaNotificacionPrevia { get; set; } = "<body><h3>Plantilla Notificacion Previa</h3><p>Ya casi empezamos prepara tus cositas</p></body>";
+        public string PlantillaSinAvanceInicial { get; set; } = "<body><h3>Plantilla Sin Avance Inicial</h3><p>Ya empezamos con las acciones de mejora, dale gas</p></body>";
+        public string PlantillaAvanceNoLogrado { get; set; } = "<body><h3>Plantilla Avance No Logrado</h3><p>:( no lograste tu avance esperado</p></body>";
+        public string PlantillaNotificacionAgradecimiento { get; set; } = "<body><h3>Plantilla Notificacion Agradecimiento</h3><p>Gracias por darle gas ;)</p></body>";
     }
 }

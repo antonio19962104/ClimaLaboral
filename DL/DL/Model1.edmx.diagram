@@ -230,6 +230,7 @@
         <EntityTypeShape EntityType="RH_DesModel.Periodicidad" Width="1.5" PointX="14.375" PointY="15.75" />
         <EntityTypeShape EntityType="RH_DesModel.PDAPermisos" Width="1.5" PointX="8.25" PointY="63.25" />
         <AssociationConnector Association="RH_DesModel.fk_PDAPermisos_Admin" />
+        <EntityTypeShape EntityType="RH_DesModel.JobsNotificacionesPDA" Width="1.5" PointX="16.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

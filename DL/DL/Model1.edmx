@@ -1225,6 +1225,28 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="Psico" Type="decimal" Precision="18" Scale="2" />
           <Property Name="Social" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
+        <EntityType Name="JobsNotificacionesPDA">
+          <Key>
+            <PropertyRef Name="IdJobsNotificacionesPDA" />
+          </Key>
+          <Property Name="IdJobsNotificacionesPDA" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobId" Type="varchar" MaxLength="250" />
+          <Property Name="IdEstatus" Type="int" />
+          <Property Name="FechaHoraCreacion" Type="datetime" />
+          <Property Name="UsuarioCreacion" Type="varchar" MaxLength="250" />
+          <Property Name="ProgramaCreacion" Type="varchar" MaxLength="250" />
+          <Property Name="FechaHoraModificacion" Type="datetime" />
+          <Property Name="UsuarioModificacion" Type="varchar" MaxLength="250" />
+          <Property Name="ProgramaModificacion" Type="varchar" MaxLength="250" />
+          <Property Name="FechaHoraEliminacion" Type="datetime" />
+          <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="250" />
+          <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="250" />
+          <Property Name="IdPlanDeAccion" Type="int" />
+          <Property Name="CronExpression" Type="varchar" MaxLength="200" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="Subject" Type="varchar" MaxLength="250" />
+          <Property Name="Plantilla" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="Modulo">
           <Key>
             <PropertyRef Name="IdModulo" />
@@ -4759,6 +4781,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySet Name="HeaderPlantilla" EntityType="Self.HeaderPlantilla" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Historico" EntityType="Self.Historico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HistoricoClima" EntityType="Self.HistoricoClima" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobsNotificacionesPDA" EntityType="Self.JobsNotificacionesPDA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Modulo" EntityType="Self.Modulo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PDAPermisos" EntityType="Self.PDAPermisos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
@@ -10553,6 +10576,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="Administrador" EntitySet="Administrador" />
             <End Role="PDAPermisos" EntitySet="PDAPermisos" />
           </AssociationSet>
+          <EntitySet Name="JobsNotificacionesPDA" EntityType="RH_DesModel.JobsNotificacionesPDA" />
         </EntityContainer>
         <ComplexType Name="f_getEstructuraDescByCompanyId_Result">
           <Property Type="Int32" Name="ID_COMPANY" Nullable="false" />
@@ -15884,6 +15908,28 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="JobsNotificacionesPDA">
+          <Key>
+            <PropertyRef Name="IdJobsNotificacionesPDA" />
+          </Key>
+          <Property Name="IdJobsNotificacionesPDA" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobId" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IdEstatus" Type="Int32" />
+          <Property Name="FechaHoraCreacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioCreacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaCreacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraModificacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioModificacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaModificacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraEliminacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioEliminacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaEliminacion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IdPlanDeAccion" Type="Int32" />
+          <Property Name="CronExpression" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Priority" Type="Int32" />
+          <Property Name="Subject" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Plantilla" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23598,6 +23644,29 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
                 <ScalarProperty Name="IdAdministrador" ColumnName="IdAdministrador" />
                 <ScalarProperty Name="Area" ColumnName="Area" />
                 <ScalarProperty Name="IdPDAPermisos" ColumnName="IdPDAPermisos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobsNotificacionesPDA">
+            <EntityTypeMapping TypeName="RH_DesModel.JobsNotificacionesPDA">
+              <MappingFragment StoreEntitySet="JobsNotificacionesPDA">
+                <ScalarProperty Name="Plantilla" ColumnName="Plantilla" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="CronExpression" ColumnName="CronExpression" />
+                <ScalarProperty Name="IdPlanDeAccion" ColumnName="IdPlanDeAccion" />
+                <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
+                <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
+                <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
+                <ScalarProperty Name="ProgramaModificacion" ColumnName="ProgramaModificacion" />
+                <ScalarProperty Name="UsuarioModificacion" ColumnName="UsuarioModificacion" />
+                <ScalarProperty Name="FechaHoraModificacion" ColumnName="FechaHoraModificacion" />
+                <ScalarProperty Name="ProgramaCreacion" ColumnName="ProgramaCreacion" />
+                <ScalarProperty Name="UsuarioCreacion" ColumnName="UsuarioCreacion" />
+                <ScalarProperty Name="FechaHoraCreacion" ColumnName="FechaHoraCreacion" />
+                <ScalarProperty Name="IdEstatus" ColumnName="IdEstatus" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
+                <ScalarProperty Name="IdJobsNotificacionesPDA" ColumnName="IdJobsNotificacionesPDA" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

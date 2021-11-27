@@ -87,6 +87,6 @@ namespace ML
         public List<string> ListCondicionTrabajo { get; set; } = new List<string>();
         public List<string> ListFuncion { get; set; } = new List<string>();
         public List<string> ListEdad { get; set; } = new List<string>();
-        public List<string> Atachment { get; set; }
+        public List<string> Atachment { get; set; } = new List<string>();
     }
 }
