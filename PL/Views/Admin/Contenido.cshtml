@@ -176,10 +176,10 @@
                         }
                         if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "ListarPlanes")
                         {
-                            <script>
+                            @*<script>
                                 localStorage.setItem("ListarPlanes", true)
                             </script>
-                            chkPlanesListar = true;
+                            chkPlanesListar = true;*@
                         }
                         if (item.Modulo.Nombre == "Planes de Acción" && item.PerfilModuloAccion.Accion == "CrearPlanes")
                         {
@@ -471,6 +471,11 @@
                                                 if (Convert.ToInt32(Session["SuperAdmin"]) == 1)
                                                 {
                                                     <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("ConfigurarPermisos", "PlanesDeAccion")">Configurar permisos</a></li>
+                                                }
+                                                /*Se agrega la administracion de los Rangos dentro de los Planes de Acción*/
+                                                if (Convert.ToInt32(Session["SuperAdmin"]) == 1)
+                                                {
+                                                    <li><span class="fa-li"><i class="fas fa-minus"></i></span> <a href="@Url.Action("Index", "Rango")">Configurar rangos</a></li>
                                                 }
                                             }
                                         </ul>

@@ -18,8 +18,7 @@ namespace ML
 		public string Area { get; set; } = string.Empty;
         public string key { get; set; }
 		 public decimal PorcentajeAvance { get; set; }
-        public List<AccionesPlan> ListAcciones { get; set; } = new List<AccionesPlan>();
-        public List<Responsable> ListResponsables { get; set; }
+        public List<AccionesPlan> ListAcciones { get; set; } = new List<AccionesPlan>();   
         public Categoria Categoria { get; set; }
         public List<JobsNotificacionesPDA> ListJobsNotificaciones { get; set; } = new List<JobsNotificacionesPDA>();
     }

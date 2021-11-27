@@ -77,12 +77,13 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="divAdmins" style="overflow-y: scroll;max-height: 456px;">
+                        @*<div class="divAdmins" style="overflow-y: scroll;max-height: 456px;">
                             <div class="alert alert-info" ng-repeat="item in vm.ListAdmin">
                                 {{ item.IdAdministrador }} {{ item.Nombre }} ({{ item.UserName }})
                                 <input type="checkbox" id="chkAdmin_{{ item.IdAdministrador }}" value="{{ item.IdAdministrador }}" />
                             </div>
-                        </div>
+                        </div>*@
+                        <div id="gridListAdmin"></div>
                     </div>
                 </div>
             </div>

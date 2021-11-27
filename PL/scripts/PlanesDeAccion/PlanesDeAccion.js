@@ -985,7 +985,19 @@ var CrearGridSubCategorias = function () {
                         field: "Descripcion",
                         title: "Descripcion",
                         width: 150,
-                    }, {
+					 },
+                    {
+                        field: "Categoria.Nombre",
+                        title: "Categoria",
+                        width: 150,
+                    },
+                    {
+                        field: "Rango.Descripcion",
+                        title: "Rango",
+                        width: 150,
+                    },
+
+                    {
                         field: "Editar",
                         title: "Editar",
                         width: 80,

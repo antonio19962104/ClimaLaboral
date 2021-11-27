@@ -543,6 +543,13 @@ namespace BL
         }
         /// <summary>
         /// Agrega un nuevo plan de acción
+		  /// Se agrega una nueva Accion Plan con el Id nuevo del Plan de Acción
+        /// Se valida la existencia de los Responsables en dos tablas Responsables y Administradores
+        /// Se graba ResponsablesAccionesPlan por responsables
+        /// Se registra Responsable
+        /// Se agregan los prefiles segun el repsonsable por idAdministrador
+        /// En el caso de no existir en niguna tabla, se insertan an las dos tablas Responsables y Administradores
+        /// 
         /// </summary>
         /// <param name="planDeAccion"></param>
         /// <param name="IdUsuarioAcyual"></param>
@@ -580,8 +587,12 @@ namespace BL
                             if (actualizaAccion != null)
                             {
                                 actualizaAccion.Descripcion = item.PlanDeAccion.Nombre.Trim();
+                                actualizaAccion.UsuarioModificacion = UsuarioActual;
+                                actualizaAccion.FechaHoraModificacion = DateTime.Now;
+                                actualizaAccion.ProgramaModificacion = "Modulo Planes de Acción Alta - Creacion de Acción";
 
                             }
+                            context.SaveChanges();
                             DL.AccionesPlan acciones = new DL.AccionesPlan()
                             {
                                 IdPlanDeAccion = idPlanDeAccion,
@@ -636,7 +647,7 @@ namespace BL
                                         };
                                         context.ResponsablesAccionesPlan.Add(respon1);
                                         context.SaveChanges();
-                                        AgregarPerfilPlanesDeAccionN(existeResponsable.CURRENTIDADMINLOG);
+                                        AgregarPerfilPlanesDeAccionN(existeResponsable.CURRENT_IDEMPLEADOLOG);
                                     }
                                     else
                                     {
@@ -651,7 +662,7 @@ namespace BL
                                         context.ResponsablesAccionesPlan.Add(respon);
                                         context.SaveChanges();
                                         //Agregar perfil sobre un usuario Administrador existente
-                                        AgregarPerfilPlanesDeAccionN(existeResponsable.CURRENTIDADMINLOG);
+                                        AgregarPerfilPlanesDeAccionN(existeResponsable.CURRENT_IDEMPLEADOLOG);
                                     }
                                 }
                                 //Si NO existe en Administrador, se inserta primero en empleado y despues en administrador y se obtiene el IdAdministrador
@@ -753,8 +764,8 @@ namespace BL
 			}
 			}
             return result;
-        }
-        /// <summary>
+        }        
+		/// <summary>
         /// Obtiene los rangos establecidos para los planes de acción
         /// </summary>
         /// <returns>Objeto ML.Result</returns>
@@ -1328,6 +1339,7 @@ namespace BL
         }
         #endregion Generales Modulo
 
+
         /// <summary>
         /// 
         /// </summary>
@@ -1346,6 +1358,7 @@ namespace BL
                     if (existeResponsableBD != null)
                     {
                         result.CURRENTIDADMINLOG = existeResponsableBD.IdResponsable;
+						   result.CURRENT_IDEMPLEADOLOG = (Int32)existeResponsableBD.IdAdministrador;
                         existente = true;
                     }
                     result.Correct = existente;
@@ -1362,6 +1375,7 @@ namespace BL
             return result;
             
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -1395,6 +1409,7 @@ namespace BL
             }
 
         }
+
 		/// <summary>
         /// 
         /// </summary>
@@ -1442,7 +1457,6 @@ namespace BL
             result.Correct = true;
             return result;
         }
-        
         #region Notificaciones
         /// <summary>
         /// Disparador del job para el envio de notificacion inicial
@@ -1473,6 +1487,7 @@ namespace BL
         {
             BackgroundJob.Enqueue(() => NotificacionAgradecimiento());
         }
+
         /// <summary>
         /// Envia un email de notificacion a los usuarios seleccionados con la plantilla configurada
         /// </summary>
@@ -1692,10 +1707,12 @@ namespace BL
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
         }
+
         /*
          * 1 Cuando el porcentaje de avance no corresponda a lo esperado es decir exista un retraso. 
          *      Por ejemplo cuando el avance deba ser al 25% el registro sea menor o cuando el avance deba estar al 50% o al 75% y de igual forma la captura sea menor.  
          */
+
         /// <summary>
         /// Envia un email de agradecimiento a los responsables cuya accion ha terminado
         /// </summary>

@@ -1,0 +1,63 @@
+﻿@model IEnumerable<DL.Rango>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+}
+
+@section H1{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-12 bottom-align-left center-vertically-xs">
+                    <img src="../../img/icon-survey.png" )" class="img-fluid">
+                    <h1 class="title-page-survey">
+                        Rangos / <span>Inicio</span>
+                    </h1>
+                </div>
+
+            </div>
+        </div><!--.container-fluid-->
+    </section>
+}
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-8  offset-lg-2">
+                <h4>
+                    Listado de Rangos
+                    @*@Html.ActionLink("Create New", "Create")*@
+                </h4>
+                <table class="table">
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdRango)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Editar", "Edit", new { id = item.IdRango }) |
+                                @Html.ActionLink("Detalles", "Details", new { id = item.IdRango }) @*|*@
+                                @*@Html.ActionLink("Delete", "Delete", new { id = item.IdRango })*@
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

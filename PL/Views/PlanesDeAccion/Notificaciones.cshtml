@@ -42,9 +42,9 @@
                 <div class="row">
                     <div class="col-4">
                         Listado de planes
-                        <div class="form-group" ng-repeat="item in vm.ListPlanesDeAccion">
+                        <fieldset style="border: 1px solid" class="form-group p-2" ng-repeat="item in vm.ListPlanesDeAccion">
                             <span style="display:block">{{ item.Nombre }}</span>
-                            <button ng-click="vm.SetIdPlan(item.IdPlanDeAccion)" class="btn btn-info">Agregar notificación customizada <i class="fas fa-pen"></i></button>
+                            <button ng-click="vm.SetIdPlan(item.IdPlanDeAccion, item.Nombre)" class="btn btn-info">Agregar notificación customizada <i class="fas fa-pen"></i></button>
                             <div ng-repeat="job in item.ListJobsNotificaciones">
                                 <p>
                                     Envio de notificacion {{ job.Periodicidad }}
@@ -53,7 +53,7 @@
                                     <button ng-click="vm.EliminarJob(job.IdJobsNotificacionesPDA)" class="btn btn-danger">Eliminar <i class="fas fa-trash"></i></button>
                                 </p>
                             </div>
-                        </div>
+                        </fieldset>
                     </div>
                     <div ng-show="vm.IdPlanDeAccion > 0" class="col-8">
                         <h3>{{ vm.Modulo }}</h3>
@@ -64,22 +64,45 @@
                         </small>
                         <div id="not-1" class="form-group config-notificacion">
                             <textarea id="notificacion-inicial" ng-model="vm.Plantilla"></textarea>
-                            <div class="col-4 p-0">
-                                <label class="control-label">Prioridad del email</label>
-                                <select class="form-control" ng-model="vm.PrioridadEmail" ng-options="prioridad.Descripcion for prioridad in vm.Prioridad track by prioridad.Id">
-                                </select>
-                            </div>
-                            <div class="col-4 p-0">
-                                <label class="control-label">Asunto del email</label>
-                                <input type="text" class="form-control" placeholder="Asunto" ng-model="vm.Asunto" />
-                            </div>
-                            <div class="col-4 p-0">
-                                <label class="control-label">Frecuencia de envío</label>
-                                <select class="form-control" ng-model="vm.Frecuencia" ng-options="frecuencia.Descripcion for frecuencia in vm.ListFrecuencia track by frecuencia.Id">
-                                </select>
-                            </div>
-                            <div class="col-4 p-0 mt-3">
-                                <button class="btn btn-success" ng-click="vm.GuardarConfiguracion()">Guardar <i class="fas fa-save"></i></button>
+                            <div class="row col-12">
+                                <div class="col-4 p-1">
+                                    <label class="control-label">Prioridad del email</label>
+                                    <select class="form-control" ng-model="vm.PrioridadEmail" ng-options="prioridad.Descripcion for prioridad in vm.Prioridad track by prioridad.Id">
+                                    </select>
+                                </div>
+                                <div class="col-4 p-1">
+                                    <label class="control-label">Asunto del email</label>
+                                    <input type="text" class="form-control" placeholder="Asunto" ng-model="vm.Asunto" />
+                                </div>
+                                <!--<div ng-if="true == false" class="col-4 p-1">
+                                    <label class="control-label">Frecuencia de envío</label>
+                                    <select class="form-control" ng-model="vm.Frecuencia" ng-options="frecuencia.Descripcion for frecuencia in vm.ListFrecuencia track by frecuencia.Id">
+                                    </select>
+                                </div>-->
+
+                                <!--Customizar expresion cron-->
+                                <div class="col-4 p-1">
+                                    <label class="control-label">Frecuencia de envío</label>
+                                    <select class="form-control" ng-model="vm.Frecuency" ng-options="frecuencia.Descripcion for frecuencia in vm.FrecuencyList track by frecuencia.Id">
+                                    </select>
+                                </div>
+
+                                <div class="col-4 p-1" ng-if="vm.Frecuency.Id >= 3" ng-hide="vm.Frecuency.Id == 4">
+                                    <label class="control-label">Día de la semana para el envío</label>
+                                    <select class="form-control" ng-model="vm.Day" ng-options="frecuencia.Descripcion for frecuencia in vm.DayList track by frecuencia.Id">
+                                    </select>
+                                </div>
+
+                                <div class="col-4 p-1" ng-hide="vm.Frecuency.Id == 0">
+                                    <label class="control-label">Horario de envío</label>
+                                    <select class="form-control" ng-model="vm.Horary" ng-options="frecuencia.Descripcion for frecuencia in vm.HoraryList track by frecuencia.Id">
+                                    </select>
+                                </div>
+                                <!--Customizar expresion cron-->
+
+                                <div class="col-4 p-1 mt-3">
+                                    <button class="btn btn-success" ng-click="vm.GuardarConfiguracion()">Guardar <i class="fas fa-save"></i></button>
+                                </div>
                             </div>
                         </div>
                     </div>

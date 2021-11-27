@@ -29,6 +29,78 @@
             vm.PrioridadEmail = vm.Prioridad[0];
             vm.Frecuencia = vm.ListFrecuencia[0];
 
+            vm.FrecuencyList = [
+                { Id: 0, Descripcion: "Enviar al guardar" },
+                { Id: 1, Descripcion: "Diaria" },
+                { Id: 2, Descripcion: "Cada tercer día" },
+                { Id: 3, Descripcion: "Semanal" },
+                { Id: 4, Descripcion: "Mensual" },
+            ];
+            vm.Frecuency = vm.FrecuencyList[0];
+
+            vm.HoraryList = [
+                { Id: 1, Descripcion: "00:00 am" },
+                { Id: 2, Descripcion: "00:30 am" },
+                { Id: 3, Descripcion: "01:00 am" },
+                { Id: 4, Descripcion: "01:30 am" },
+                { Id: 5, Descripcion: "02:00 am" },
+                { Id: 6, Descripcion: "02:30 am" },
+                { Id: 7, Descripcion: "03:00 am" },
+                { Id: 8, Descripcion: "03:30 am" },
+                { Id: 9, Descripcion: "04:00 am" },
+                { Id: 10, Descripcion: "04:30 am" },
+                { Id: 11, Descripcion: "05:00 am" },
+                { Id: 12, Descripcion: "05:30 am" },
+                { Id: 13, Descripcion: "06:00 am" },
+                { Id: 14, Descripcion: "06:30 am" },
+                { Id: 15, Descripcion: "07:00 am" },
+                { Id: 16, Descripcion: "07:30 am" },
+                { Id: 17, Descripcion: "08:00 am" },
+                { Id: 18, Descripcion: "08:30 am" },
+                { Id: 19, Descripcion: "09:00 am" },
+                { Id: 20, Descripcion: "09:30 am" },
+                { Id: 21, Descripcion: "10:00 am" },
+                { Id: 22, Descripcion: "10:30 am" },
+                { Id: 23, Descripcion: "11:00 am" },
+                { Id: 24, Descripcion: "11:30 am" },
+                { Id: 25, Descripcion: "12:00 am" },
+                { Id: 26, Descripcion: "12:30 pm" },
+                { Id: 27, Descripcion: "13:00 pm" },
+                { Id: 28, Descripcion: "13:30 pm" },
+                { Id: 29, Descripcion: "14:00 pm" },
+                { Id: 30, Descripcion: "14:30 pm" },
+                { Id: 31, Descripcion: "15:00 pm" },
+                { Id: 32, Descripcion: "15:30 pm" },
+                { Id: 33, Descripcion: "16:00 pm" },
+                { Id: 34, Descripcion: "16:30 pm" },
+                { Id: 35, Descripcion: "17:00 pm" },
+                { Id: 36, Descripcion: "17:30 pm" },
+                { Id: 37, Descripcion: "18:00 pm" },
+                { Id: 38, Descripcion: "18:30 pm" },
+                { Id: 39, Descripcion: "19:00 pm" },
+                { Id: 40, Descripcion: "19:30 pm" },
+                { Id: 41, Descripcion: "20:00 pm" },
+                { Id: 42, Descripcion: "20:30 pm" },
+                { Id: 43, Descripcion: "21:00 pm" },
+                { Id: 44, Descripcion: "21:30 pm" },
+                { Id: 45, Descripcion: "22:00 pm" },
+                { Id: 46, Descripcion: "22:30 pm" },
+                { Id: 47, Descripcion: "23:00 pm" },
+                { Id: 48, Descripcion: "23:30 pm" },
+            ];
+            vm.Horary = vm.HoraryList[0];
+
+            vm.DayList = [
+                { Id: 0, Descripcion: "Domingo" },
+                { Id: 1, Descripcion: "Lunes" },
+                { Id: 2, Descripcion: "Martes" },
+                { Id: 3, Descripcion: "Miercoles" },
+                { Id: 4, Descripcion: "Jueves" },
+                { Id: 5, Descripcion: "Viernes" },
+                { Id: 6, Descripcion: "Sabado" },
+            ];
+            vm.Day = vm.DayList[0];
+
             $(document).ready(function () {
                 document.getElementById("loading").style.display = "block";
                 document.getElementsByTagName("textarea")[0].value = ModelNotificacion.PlantillaNotificacionInicial.trim();
@@ -52,9 +124,15 @@
                 });
             }
 
-            vm.SetIdPlan = function (id) {
+            vm.SetIdPlan = function (id, nombre) {
                 document.getElementById("loading").style.display = "block";
                 vm.IdPlanDeAccion = id;
+                vm.Modulo = "Configura la notificaciones de el plan de acción: " + nombre;
+                vm.Day = vm.DayList[0];
+                vm.Frecuency = vm.FrecuencyList[0];
+                vm.Horary = vm.HoraryList[0];
+                vm.Asunto = "";
+                vm.PrioridadEmail = vm.Prioridad[0];
                 setTimeout(function () {
                     document.getElementById("loading").style.display = "none";
                 }, 500);
@@ -103,11 +181,37 @@
                 });
             }
 
+            vm.CreateCronExpression = function () {
+                if (vm.Frecuency.Id != 0) {
+                    var minute, hour, dayMonth, month, dayWeek;
+                    minute = parseInt(vm.Horary.Descripcion.split(":")[1])
+                    hour = vm.Horary.Descripcion.split(":")[0];
+                    dayMonth = "*";
+                    month = "*";
+                    if (vm.Frecuency.Id == 1)//diario
+                        dayWeek = "*";
+                    if (vm.Frecuency.Id == 2) {//cada tercer dia
+                        dayMonth = "*/3";
+                        dayWeek = "*";
+                    }
+                    if (vm.Frecuency.Id == 3)
+                        dayWeek = vm.Day.Id;//Un día en especial
+                    if (vm.Frecuency.Id == 4) {
+                        dayMonth = 1;//El día uno de cada mes
+                        dayWeek = "*";
+                    }
+                    return minute + " " + hour + " " + dayMonth + " " + month + " " + dayWeek;
+                }
+                else {
+                    return "";
+                }
+            }
+
             vm.GuardarConfiguracion = function (e) {
                 ModelNotificacion.Subject = vm.Asunto;
                 ModelNotificacion.Priority = vm.PrioridadEmail.Id;
                 ModelNotificacion.Plantilla = document.getElementsByTagName("textarea")[0].value;
-                ModelNotificacion.Frecuencia = vm.Frecuencia.Id;
+                ModelNotificacion.Frecuencia = vm.CreateCronExpression();
                 if (IsNullOrEmpty(ModelNotificacion.Subject) || IsNullOrEmpty(ModelNotificacion.Plantilla) || IsNullOrEmpty(vm.Frecuencia)) {
                     swal("Asegurate de haber llenado todos los campos requeridos", "", "info").then(function () {
                         return false;
