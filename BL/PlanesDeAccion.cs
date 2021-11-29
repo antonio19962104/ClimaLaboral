@@ -2433,15 +2433,21 @@ namespace BL
                         if (empleado == null)
                             empleado = new DL.Empleado() { Nombre = "", ApellidoPaterno = "", ApellidoMaterno = "" };
                         ML.Administrador administrador = new ML.Administrador();
+                        administrador.IdRH = item.IdRH == null ? 0 : (int)item.IdRH;
                         administrador.IdAdministrador = item.IdAdministrador;
                         administrador.Nombre = String.Concat(empleado.Nombre, " ", empleado.ApellidoPaterno, " ", empleado.ApellidoMaterno);
                         administrador.UserName = item.UserName;
                         // Inicio: Verificar si el admin pertecene a alguna area agencia para ya ponerla marcada
-                        administrador.Selected = ML.Administrador.Data.verdadero;
+                        administrador.Selected = BL.PlanesDeAccion.TieneAccesoAreaByLayout(administrador.IdAdministrador, Area);
                         //Fin: Verificar si el admin pertecene a alguna area agencia para ya ponerla marcada
                         // Solo se muestra si el usuario no tiene asignado el permiso a esta area ya previamente
-                        if (!TienePermisoPDA(item.IdAdministrador, Area))
-                            result.Objects.Add(administrador);
+                        if (TienePermisoPDA(item.IdAdministrador, Area))
+                            administrador.Selected = ML.Administrador.Data.verdadero;
+                        else
+                            administrador.Selected = ML.Administrador.Data.falso;
+                        if (item.AdminSA == 1)
+                            administrador.Selected = ML.Administrador.Data.verdadero;
+                        result.Objects.Add(administrador);
                     }
                     result.Correct = true;
                 }
@@ -2508,6 +2514,116 @@ namespace BL
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
             return ListPDAPermisos;
+        }
+        /// <summary>
+        /// Verifica por el id de RH si un admins tiene acceso al area que se seleccionó
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <param name="Area"></param>
+        /// <returns></returns>
+        public static ML.Administrador.Data TieneAccesoAreaByLayout(int IdAdmin, string Area)
+        {
+            var result = new ML.Administrador.Data();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var admin = context.Administrador.Where(o => o.IdAdministrador == IdAdmin).FirstOrDefault();
+                    if (admin != null)
+                    {
+                        if (admin.IdRH != null)
+                        {
+                            var data = context.Empleado.Select(o => new { o.IdJefe, o.IdResponsableEstructura, o.IdResponsableRH, o.AreaAgencia }).Where(o => o.IdJefe == admin.IdRH || o.IdResponsableEstructura == admin.IdRH || o.IdResponsableRH == admin.IdRH).ToList();
+                            List<string> Areas = data.Select(o => o.AreaAgencia).ToList();
+                            if (Areas.Contains(Area))
+                                result = ML.Administrador.Data.verdadero;
+                            else
+                                result = ML.Administrador.Data.falso;
+                        }
+                        else
+                        {
+                            result = ML.Administrador.Data.falso;
+                        }
+                    }
+                    else
+                    {
+                        result = ML.Administrador.Data.falso;
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result = ML.Administrador.Data.falso;
+            }
+            return result;
+        }
+        public static void DetallePlanDeAccion(int IdPlan)
+        {
+            try
+            {
+                ML.PlanDeAccion planDeAccion = new ML.PlanDeAccion();
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlan).FirstOrDefault();
+                    if (PlanDeAccion != null)
+                    {
+                        var AccionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion);
+                        foreach (var accionPlan in AccionesPlan)
+                        {
+                            // Model
+                            planDeAccion.IdPlanDeAccion = PlanDeAccion.IdPlanDeAccion;
+                            planDeAccion.Nombre = PlanDeAccion.Nombre;
+                            // Model
+
+                            var Accion = context.Acciones.Where(o => o.IdAccion == accionPlan.IdAccion).FirstOrDefault();
+                            var ResponsablesAccion = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
+                            foreach (var responable in ResponsablesAccion)
+                            {
+                                var Responsable = context.Responsable.Where(o => o.IdResponsable == responable.IdResponsable).FirstOrDefault();
+                                var seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == responable.IdResponsablesAccionesPlan).ToList();
+                                foreach (var seg in seguimiento)
+                                {
+                                    var seguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seg.IdSeguimiento).FirstOrDefault();
+                                    var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia).FirstOrDefault();
+                                    // Model
+                                    planDeAccion.ListAcciones.Add(
+                                        new ML.AccionesPlan()
+                                        {
+                                            IdAccionesPlan = accionPlan.IdAccionesPlan,
+                                            sFechaInicio = Convert.ToString(accionPlan.FechaInicio),
+                                            sFechaFin = Convert.ToString(accionPlan.FechaFin),
+                                            Comentarios = accionPlan.Comentarios,
+                                            Meta = accionPlan.Meta,
+                                            Objetivo = accionPlan.Objetivo,
+                                            AccionesDeMejora = new ML.AccionDeMejora()
+                                                {
+                                                    IdAccionDeMejora = Accion.IdAccion,
+                                                    Descripcion = Accion.Descripcion,
+                                                },
+                                                ListResponsable = new List<ML.Responsable>() { new ML.Responsable()
+                                                {
+                                                    IdResponsable = Responsable.IdResponsable,
+                                                    Nombre = Responsable.Nombre,
+                                                    ApellidoPaterno = Responsable.ApellidoPaterno,
+                                                    ApellidoMaterno = Responsable.ApellidoMaterno,
+                                                    Email = Responsable.Email,
+                                                    Atachments = new List<string>(){ evidencia.Ruta }
+                                                }
+                                            }
+                                        });
+                                    // Model
+                                }
+                            }
+                        }
+                    }
+                    Console.Write(planDeAccion);
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+            }
         }
         #endregion Permisos
 

@@ -14,6 +14,10 @@
             <h3>Perfil: @ViewBag.PerfilD4U</h3>
             <input type="submit" value="Editar permisos" class="btn btn-primary" onclick="GetPanelEdit()" />
             <input type="submit" value="Guardar cambios" class="btn btn-success" onclick="Editar()" />
+            <div class="form-group col-4 col-lg-2 col-md-4">
+                <label>Id de RH</label>
+                <input type="text" id="txtIDRH" value="@ViewBag.IdRH" placeholder="Id de RH" class="form-control" />
+            </div>
             <input id="AddNewPerfil" type="submit" value="Agregar perfil de administrador de Planes de Accion" class="btn btn-info" onclick="AgregarPerfilAdminPlanes()" />
             <div id="misPermisos" class="row">
                 <div class="col-lg-8">
@@ -593,6 +597,12 @@
     }
 
     function Editar() {
+        if (document.getElementById("txtIDRH").value == "") {
+            swal("Debes especificar un id de RH", "", "info").then(function () {
+                return false;
+            });
+            return false;
+        }
         //get permission value from checkbox
         var chkEncuestasListar = false;
         var chkEncuestasCrear = false;
@@ -694,12 +704,13 @@
 
         let ModelPerfilModulo = {
             acciones: [chkEmpresasListar, chkEmpresasCrear, chkEmpresasOpc,
-                        chkEncuestasListar, chkEncuestasCrear, chkEncuestasOpc,
-                        chkPlantillasListar, chkPlantillasCrear, chkPlantillasOpc,
-                        chkBDListar, chkBDCrear, chkBDOpc,
-                        chkReportesListar, chkReportesCrear, chkReportesOpc,
-                        chkUsuariosListar, chkusuariosCrear, chkUsuariosOpc,
-                        chkPlanesCrear, chkPlanesListar, chkAdminAcciones]
+                    chkEncuestasListar, chkEncuestasCrear, chkEncuestasOpc,
+                    chkPlantillasListar, chkPlantillasCrear, chkPlantillasOpc,
+                    chkBDListar, chkBDCrear, chkBDOpc,
+                    chkReportesListar, chkReportesCrear, chkReportesOpc,
+                    chkUsuariosListar, chkusuariosCrear, chkUsuariosOpc,
+                chkPlanesCrear, chkPlanesListar, chkAdminAcciones],
+            administrador: { IdRH: document.getElementById("txtIDRH").value }
         };
 
         var MLPerfilModulo = JSON.stringify(ModelPerfilModulo);

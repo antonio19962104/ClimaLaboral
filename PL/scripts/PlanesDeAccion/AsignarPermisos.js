@@ -40,7 +40,78 @@ var AreaSeleccionada;
                 vm.get("/PlanesDeAccion/ObtenerAdmins/?Area=" +AreaSeleccionada, function (response) {
                     document.getElementById("loading").style.display = "none";
                     if (response.Correct) {
+                        // Si el atributo Selected viene en true el check del admin debe colocarse como seleccionado
                         vm.ListAdmin = response.Objects;
+                        vm.ListAdmin.sort(function (a, b) {
+                            var a1 = a.Nombre, b1 = b.Nombre;
+                            if (a1 == b1) return 0;
+                            return a1 > b1 ? 1 : -1;
+                        });
+                        //se pinta el grid Kendo
+                        $.getScript("http://demo.climalaboral.divisionautomotriz.com/scripts/kendo-all.js", function () {
+                            $("#gridListAdmin").kendoGrid({
+                                dataSource: {
+                                    transport: {
+                                        read: function (e) {
+                                            e.success(vm.ListAdmin);
+                                        }
+                                    },
+                                    batch: true,
+                                    schema: {
+                                        model: {
+                                            fields: {
+                                                IdAdministrador: { editable: false },
+                                                Nombre: { editable: false },
+                                                Selected: { type: "boolean" },
+                                            }
+                                        }
+                                    }
+                                },
+                                columnMenu: {
+                                    filterable: false
+                                },
+                                navigatable: true,
+                                groupable: false,
+                                sortable: true,
+                                selectable: "multiple",
+                                reorderable: true,
+                                resizable: true,
+                                filterable: true,
+                                columnMenu: false,
+                                pageable: {
+                                    refresh: false,
+                                    pageSize: 10,
+                                    pageSizes: [5, 10, 20, 50, 100]
+                                },
+                                //height : 300, 
+                                columns: [
+                                {
+                                    field: "IdAdministrador",
+                                    title: "ID",
+                                    headerAttributes: { style: "text-align: left; vertical-align: middle; white-space: pre-wrap;" },
+                                    editable: false
+                                }, {
+                                    field: "Nombre",
+                                    title: "Nombre",
+                                    headerAttributes: { style: "text-align: left; vertical-align: middle; white-space: pre-wrap;" },
+                                    //attributes: { class: "text-center" },
+                                },
+                                {
+                                    field: "Selected",
+                                    title: "Selecciona",
+                                    editable: false,
+                                    headerAttributes: { style: "text-align: center; vertical-align: middle; white-space: pre-wrap;" },
+                                    attributes: { class: "text-center" },
+                                    template: '<input type="checkbox" #= Selected ? \'checked="checked"\' : "" # class="chkbx-Admin" />',
+                                    width: 110,
+                                    //template: {"#=dirtyField(data,'Selected')#<input type='checkbox' #= Selected ? \'checked='checked'\' : ''# class='chkbx k-checkbox' />", width: 110}
+                                },
+                                ],
+                                editable: false,
+
+                            })
+                        });
+                       
                     }
                     else {
                         swal("");
@@ -48,12 +119,28 @@ var AreaSeleccionada;
                 });
             }
 
+            $("#gridListAdmin").on("click", "input.chkbx-Admin", function (e) {
+                debugger
+
+                var grid = $("#gridListAdmin").data("kendoGrid");
+                var adminSelected = grid.dataItem($(e.target).closest("tr"));
+
+                if (this.checked) {
+                    Enumerable.from(vm.ListAdmin).where('$.IdAdministrador =="' + adminSelected.IdAdministrador + '"').firstOrDefault().Selected = true;
+                } else {
+                    Enumerable.from(vm.ListAdmin).where('$.IdAdministrador =="' + adminSelected.IdAdministrador + '"').firstOrDefault().Selected = false;
+                }                
+                $('#gridListAdmin').data('kendoGrid').dataSource.read();
+                $('#gridListAdmin').data('kendoGrid').refresh();
+
+
+            });
             vm.ObtenerAdminElegidos = function () {
                 var elegidos = [];
-                var chkList = document.getElementsByClassName("divAdmins")[0].getElementsByTagName("input");
-                [].forEach.call(chkList, function (chk) {
-                    if (chk.checked)
-                        elegidos.push(chk.value);
+                //var chkList = document.getElementsByClassName("divAdmins")[0].getElementsByTagName("input");
+                [].forEach.call(vm.ListAdmin, function (chk) {
+                    if (chk.Selected)
+                        elegidos.push(chk.IdAdministrador);
                 });
                 console.log(AreaSeleccionada);
                 console.log(elegidos);
@@ -67,6 +154,10 @@ var AreaSeleccionada;
                     if (response.Correct) {
                         swal("Los permisos se agregaron correctamente", "", "success").then(function () {
                             $(".collapse").removeClass("show");
+                            if ($("#gridListAdmin").data("kendoGrid")) {
+                                $("#gridListAdmin").data("kendoGrid").destroy();
+                                $("#gridListAdmin").empty();
+                            }
                             vm.ListAdmin = [];
                             $scope.$apply();
                         });

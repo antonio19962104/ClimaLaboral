@@ -77,6 +77,7 @@
           <Property Name="CompanyId" Type="int" />
           <Property Name="IdAdministradorCreate" Type="int" />
           <Property Name="AdminSA" Type="int" />
+          <Property Name="IdRH" Type="int" />
         </EntityType>
         <EntityType Name="AdministradorCompany">
           <Key>
@@ -5488,6 +5489,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="AdministradorCompany" Relationship="Self.FK_USUARIOCOMPANY_ADMIN" FromRole="Administrador" ToRole="AdministradorCompany" />
           <NavigationProperty Name="PlanDeAccion" Relationship="RH_DesModel.fk_PlanDeAccion_Admin" FromRole="Administrador" ToRole="PlanDeAccion" />
           <NavigationProperty Name="PDAPermisos" Relationship="RH_DesModel.fk_PDAPermisos_Admin" FromRole="Administrador" ToRole="PDAPermisos" />
+          <Property Name="IdRH" Type="Int32" />
         </EntityType>
         <EntityType Name="AdministradorCompany">
           <Key>
@@ -15964,6 +15966,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="Administrador">
             <EntityTypeMapping TypeName="RH_DesModel.Administrador">
               <MappingFragment StoreEntitySet="Administrador">
+                <ScalarProperty Name="IdRH" ColumnName="IdRH" />
                 <ScalarProperty Name="IdAdministrador" ColumnName="IdAdministrador" />
                 <ScalarProperty Name="IdEmpleado" ColumnName="IdEmpleado" />
                 <ScalarProperty Name="IdPerfil" ColumnName="IdPerfil" />

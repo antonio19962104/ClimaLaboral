@@ -10,6 +10,28 @@ namespace BL
 {
     public class Administrador
     {
+        public static ML.Result UpdateIdRH(int IdAdmin, int IdRH)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var admin = context.Administrador.Where(o => o.IdAdministrador == IdAdmin).FirstOrDefault();
+                    if (admin != null)
+                        admin.IdRH = IdRH;
+                    context.SaveChanges();
+                    result.Correct = true;
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
         public static ML.Result AutenticarAdmin(ML.Administrador admin)
         {
             //print_r(new List<ML.Result>())
@@ -224,8 +246,8 @@ namespace BL
                         if (exists.Count == 0)//No existe
                         {
                             var query = context.Database.ExecuteSqlCommand
-                            ("INSERT INTO Administrador (IdEmpleado, IdPerfil, IdEstatus, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion, UserName, Password, CompanyId, IdAdministradorCreate) VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9})",
-                            administrador.Empleado.IdEmpleado, administrador.PerfilD4U.IdPerfil, administrador.TipoEstatus.IdEstatus, DateTime.Now, administrador.CURRENT_USER, "D4U", administrador.UserName, administrador.Password, administrador.Company.CompanyId, IdAdminCreate);
+                            ("INSERT INTO Administrador (IdEmpleado, IdPerfil, IdEstatus, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion, UserName, Password, CompanyId, IdAdministradorCreate, IdRH) VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10})",
+                            administrador.Empleado.IdEmpleado, administrador.PerfilD4U.IdPerfil, administrador.TipoEstatus.IdEstatus, DateTime.Now, administrador.CURRENT_USER, "D4U", administrador.UserName, administrador.Password, administrador.Company.CompanyId, IdAdminCreate, administrador.IdRH);
                             int IdAdminInsertado = context.Administrador.Max(p => p.IdAdministrador);
                             result.UltimoAdminInsertado = IdAdminInsertado;
                             result.DefPass = administrador.Password;
@@ -238,8 +260,8 @@ namespace BL
                                 result.DefPass = item.Password;//Obtengo el Pass que ya existe
                             }
                             var query = context.Database.ExecuteSqlCommand
-                                ("INSERT INTO Administrador (IdEmpleado, IdPerfil, IdEstatus, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion, UserName, Password, CompanyId, IdAdministradorCreate) VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9})",
-                                administrador.Empleado.IdEmpleado, administrador.PerfilD4U.IdPerfil, administrador.TipoEstatus.IdEstatus, DateTime.Now, administrador.CURRENT_USER, "D4U", result.DefUsername, result.DefPass, administrador.Company.CompanyId, IdAdminCreate);
+                                ("INSERT INTO Administrador (IdEmpleado, IdPerfil, IdEstatus, FechaHoraCreacion, UsuarioCreacion, ProgramaCreacion, UserName, Password, CompanyId, IdAdministradorCreate, IDRH) VALUES ({0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10})",
+                                administrador.Empleado.IdEmpleado, administrador.PerfilD4U.IdPerfil, administrador.TipoEstatus.IdEstatus, DateTime.Now, administrador.CURRENT_USER, "D4U", result.DefUsername, result.DefPass, administrador.Company.CompanyId, IdAdminCreate, administrador.IdRH);
                             int IdAdminInsertado = context.Administrador.Max(p => p.IdAdministrador);
                             result.UltimoAdminInsertado = IdAdminInsertado;
                             result.DefPass = result.DefPass;
@@ -657,6 +679,7 @@ namespace BL
                         ML.Administrador administradorData = new ML.Administrador();
                         administradorData.Empleado = new ML.Empleado();
 
+                        administradorData.IdRH = item.IdRH == null ? 0 : (int)item.IdRH;
                         administradorData.IdAdministrador = item.IdAdministrador;
                         administradorData.Empleado.Nombre = item.Empleado.Nombre;
                         administradorData.Empleado.ApellidoPaterno = item.Empleado.ApellidoPaterno;

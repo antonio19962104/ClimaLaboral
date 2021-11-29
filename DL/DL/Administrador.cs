@@ -45,6 +45,7 @@ namespace DL
         public Nullable<int> CompanyId { get; set; }
         public Nullable<int> IdAdministradorCreate { get; set; }
         public Nullable<int> AdminSA { get; set; }
+        public Nullable<int> IdRH { get; set; }
     
         public virtual TipoEstatus TipoEstatus { get; set; }
         public virtual Company Company { get; set; }

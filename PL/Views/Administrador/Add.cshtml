@@ -544,6 +544,16 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+
+
+                                                            <div class="form-horizontal">
+                                                                <div class="form-group">
+                                                                    @Html.LabelFor(model => model.IdRH, new { @class = "control-label", @id = "" })
+                                                                    <div class="col-md-5 col-sm-6">
+                                                                        <input maxlength="50" type="text" id="txtIdRH" class="form-control" value="" placeholder="Id de RH del administrador" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1290,7 +1300,7 @@
                     ApellidoPaterno == "" || ApellidoPaterno == null ||
                     ApellidoMaterno == null || ApellidoMaterno == "" ||
                     Correo == null || Correo == "" || UNegocio == null || UNegocio == "" || CompanyEmpleado == 0 || CompanyEmpleado == null
-                    || CompanyEmpleado == "") {
+                    || CompanyEmpleado == "" || document.getElementById("txtIdRH").value == "") {
                     //$("#ErrorMessage").text('Debes llenar todos los campos');
                     swal({
                         title: "Debes llenar todos los campos para poder registrar un administrador",
@@ -1487,6 +1497,7 @@
                         company: { companyId:  $('#DDLCompany').val() },
                         password: passwordJS ,
                         tipoEstatus: { idEstatus: Estatus },
+                        IdRH: document.getElementById("txtIdRH").value,
                         acciones: [ListarEncuesta, CrearEncuesta, OpcEncuesta,
                                    ListarPlantilla, CrearPlantilla, OpcPlantilla,
                                     ListarReporte, CrearReporte, OpcReporte,

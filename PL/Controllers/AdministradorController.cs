@@ -478,9 +478,11 @@ namespace PL.Controllers
             ML.Administrador administrador = new ML.Administrador();
             administrador.Empleado = new ML.Empleado();
 
+            administrador.IdRH = ((ML.Administrador)result.Object).IdRH == null ? 0 : ((ML.Administrador)result.Object).IdRH;
             administrador.Empleado.Nombre = ((ML.Administrador)result.Object).Empleado.Nombre;
             administrador.Empleado.ApellidoPaterno = ((ML.Administrador)result.Object).Empleado.ApellidoPaterno;
             administrador.Empleado.ApellidoMaterno = ((ML.Administrador)result.Object).Empleado.ApellidoMaterno;
+            ViewBag.IdRH = administrador.IdRH;
             ViewBag.NombreAdmin = administrador.Empleado.Nombre + " " + administrador.Empleado.ApellidoPaterno + " " + administrador.Empleado.ApellidoMaterno;
 
 
@@ -525,6 +527,8 @@ namespace PL.Controllers
         {
             perfilModulo.CURRENT_USER = Convert.ToString(Session["AdminLog"]);
             ML.Result result = new ML.Result();
+
+            result = BL.Administrador.UpdateIdRH(Convert.ToInt32(Session["IdAdmin"]), perfilModulo.Administrador.IdRH);
 
             int IdPerfil = Convert.ToInt32(Session["IdPerfil"]);
   
