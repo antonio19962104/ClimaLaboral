@@ -545,7 +545,7 @@ namespace BL
 
                         /***Inserta Header Plantilla***/
                         var insertaHeader = context.Database.ExecuteSqlCommand("INSERT INTO HeaderPlantilla (IdPlantillaDefinida,Nombre,CodeHTML,ImagenFondo," +
-                            "LogoIco,LogoAlinea,ImagenFondoAlinea,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,color1,color2)" +
+                            "LogoIco,LogoAlinea,ImagenFondoAlinea,IdEstatus,FechaHoraCreacion,UsuarioCreacion,ProgramaCreacion,Color1,Color2)" +
                             " VALUES({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12})", plantilla.HeaderPlantilla.IdPlantillaDefinida, plantilla.HeaderPlantilla.Nombre.ToString(), plantilla.HeaderPlantilla.CodeHTML, plantilla.HeaderPlantilla.ImagenFondo.ToString(),
                              plantilla.HeaderPlantilla.LogoIco, plantilla.HeaderPlantilla.LogoAlinea.IdAling == 0 ? 1 : plantilla.HeaderPlantilla.LogoAlinea.IdAling,
                              plantilla.HeaderPlantilla.ImagenFondoAlinea.IdAling == 0 ? 1: plantilla.HeaderPlantilla.ImagenFondoAlinea.IdAling, 1, DateTime.Now, plantilla.UsuarioCreacion, plantilla.ProgramaCreacion,plantilla.HeaderPlantilla.color1,plantilla.HeaderPlantilla.color2);                       
@@ -792,7 +792,7 @@ namespace BL
                         context.SaveChanges();
                         DL.FooterPlantilla updateFooterPlantilla = context.FooterPlantilla.FirstOrDefault(x => x.IdFooterPlantilla == idFooterPlantilla);
                         updateFooterPlantilla.Nombre= plantilla.Nombre;
-                        updateFooterPlantilla.Color1 = plantilla.FooterPlantilla.Color1; ;
+                        updateFooterPlantilla.Color1 = plantilla.FooterPlantilla.Color1; 
                         updateFooterPlantilla.Color2 = plantilla.FooterPlantilla.Color2;
                         updateFooterPlantilla.LogoIco = plantilla.FooterPlantilla.LogoIco;
                         updateFooterPlantilla.LogoAlinea = 1;//plantilla.FooterPlantilla.LogoAlinea.IdAling;
