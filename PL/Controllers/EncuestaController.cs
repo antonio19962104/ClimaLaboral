@@ -16,6 +16,8 @@ using System.Web.SessionState;
 using System.Text;
 using System.Data;
 using Newtonsoft.Json;
+using Hangfire;
+
 namespace PL.Controllers
 {
     public class EncuestaController : Controller
@@ -497,22 +499,11 @@ namespace PL.Controllers
         {
             var result = new ML.Result();
             int Idusuario = 0;
-            try
-            {
-                if (Session["IdUsuarioLog"] == null)
-                {
-                    return Json("SessionTimeOut");
-                }
-                Idusuario = Convert.ToInt32(Session["IdUsuarioLog"]);
-                if (Idusuario == 0)
-                {
-                    return Json("SessionTimeOut");
-                }
-            }
-            catch (Exception)
-            {
+            if (Session["IdUsuarioLog"] == null)
                 return Json("SessionTimeOut");
-            }
+            Idusuario = Convert.ToInt32(Session["IdUsuarioLog"]);
+            if (Idusuario == 0)
+                return Json("SessionTimeOut");
             var existe = BL.Encuesta.existeRespuesta(respuestas.IdEncuesta, Idusuario);
             if (existe.Correct == false)
             {
@@ -588,7 +579,6 @@ namespace PL.Controllers
             }
             else
             {
-                if(result.ErrorMessage == null) { result.ErrorMessage = "Ha ocurrido un error"; }
                 if (string.IsNullOrEmpty(result.ErrorMessage))
                 {
                     return Json("success");
@@ -3545,5 +3535,50 @@ namespace PL.Controllers
             var result = BL.Encuesta.getEncuestas();
             return View(result);
         }
+
+        #region Notificaciones Custom
+        /// <summary>
+        /// Agrega uno o varios Jobs a la cola de procesos de HangFire
+        /// </summary>
+        /// <param name="IdEncuesta"></param>
+        /// <param name="IdBaseDeDatos"></param>
+        /// <param name="ListEmails"></param>
+        /// <returns></returns>
+        public JsonResult ConfiguraMultNotificaciones(int IdEncuesta, int IdBaseDeDatos, List<ML.Email> ListEmails)
+        {
+            bool result = false;
+            foreach (var objEmail in ListEmails)
+            {
+                var resultA = ConfiguraNotificacion(IdEncuesta, IdBaseDeDatos, objEmail);
+                result = ((ML.Result)((JsonResult)resultA.Data).Data).Correct;
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Agrega un proceso de envio de notificacion a la cola de procesos de HangFire
+        /// </summary>
+        /// <param name="IdEncuesta"></param>
+        /// <param name="IdBaseDeDatos"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public JsonResult ConfiguraNotificacion(int IdEncuesta, int IdBaseDeDatos, ML.Email email)
+        {
+            ML.Result result = new ML.Result();
+            if (string.IsNullOrEmpty(email.Frecuencia))
+            {
+                // Job inicia y olvida
+                BackgroundJob.Enqueue(() => BL.Encuesta.ConfiguraNotificacion(IdEncuesta, IdBaseDeDatos, email));
+                result.Correct = true;
+            }
+            else
+            {
+                // Job recurrente
+                string uid = "IdPlan_" + IdEncuesta + "_" + IdBaseDeDatos + "_" + Guid.NewGuid().ToString();
+                result.Correct = BL.PlanesDeAccion.AgregarJobNotificacionesPDA(0, uid, Session["AdminLog"].ToString(), email.Frecuencia, email.Plantilla, email.Priority, email.Subject, IdEncuesta, IdBaseDeDatos);
+                RecurringJob.AddOrUpdate(uid, () => BL.Encuesta.ConfiguraNotificacion(IdEncuesta, IdBaseDeDatos, email), email.Frecuencia, TimeZoneInfo.Local);
+            }
+            return Json(new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet });
+        }
+        #endregion Notificaciones Custom
     }
 }

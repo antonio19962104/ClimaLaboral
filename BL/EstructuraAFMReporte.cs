@@ -135,11 +135,12 @@ namespace BL
             list.AddRange(GetRangoEdad(IdBaseDeDatos));
             return list;
         }
-        public static List<string> GetCompanyCategoria(string IdBaseDeDatos)
+        public static List<string> GetCompanyCategoria(string IdBaseDeDatos, string IdAdmin, int isSA)
         {
             var list = new List<string>();
             try
             {
+                int _idAdmin = Convert.ToInt32(IdAdmin);
                 DataSet ds = new DataSet();
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
                 {
@@ -149,6 +150,31 @@ namespace BL
                 }
                 foreach (DataRow row in ds.Tables[0].Rows)
                     list.Add(row.ItemArray[0].ToString());
+                if (isSA != 1)
+                {
+                    List<int> indexRemove = new List<int>();
+                    using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                    {
+                        var pdaPermisos = context.PDAPermisos.Where(o => o.IdAdministrador == _idAdmin);
+                        if (pdaPermisos.Count() == 0)
+                        {
+                            list = new List<string>();
+                        }
+                        else
+                        {
+                            int index = 0;
+                            foreach (var unidad in list)
+                            {
+                                if (pdaPermisos.Where(o => o.Unidad == unidad).FirstOrDefault() == null)
+                                    indexRemove.Add(index);
+                                index++;
+                            }
+                            indexRemove = indexRemove.OrderByDescending(o => o).ToList();
+                            foreach (var indexR in indexRemove)
+                                list.RemoveAt(indexR);
+                        }
+                    }
+                }
             }
             catch (Exception aE)
             {
@@ -298,13 +324,14 @@ namespace BL
             list = list.Where(o => !o.Equals("") && !o.Equals("-") && o.Length > 6).ToList();
             return list;
         }
-        public static List<string> GetCompaniesByCompanyCategoria(int IdBaseDeDatos, string entidadNombre)
+        public static List<string> GetCompaniesByCompanyCategoria(int IdBaseDeDatos, string entidadNombre, string IdAdmin, int isSA)
         {
             var list = new List<string>();
             string query = string.Empty;
             SqlDataAdapter data = new SqlDataAdapter();
             try
             {
+                int _idAdmin = Convert.ToInt32(IdAdmin);
                 DataSet ds_CompanyCategoria = new DataSet();
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
                 {
@@ -323,33 +350,34 @@ namespace BL
                         {
                             if (hasEmpleado(row_Company.ItemArray[0].ToString(), 2, IdBaseDeDatos))
                                 list.Add(row_Company.ItemArray[0].ToString());
-                            /*DataSet ds_Area = new DataSet();
-                            query = string.Format("select distinct AreaAgencia from Empleado where IdBaseDeDatos = {0} and DivisionMarca = '{1}'", IdBaseDeDatos, row_Company.ItemArray[0].ToString());
-                            data = new SqlDataAdapter(query, conn);
-                            data.Fill(ds_Area, "data");
-                            foreach (DataRow row_Area in ds_Area.Tables[0].Rows)
+                        }
+                    }
+                }
+                if (isSA != 1)
+                {
+                    List<int> indexRemove = new List<int>();
+                    using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                    {
+                        var pdaPermisos = context.PDAPermisos.Where(o => o.IdAdministrador == _idAdmin);
+                        if (pdaPermisos.Count() == 0)
+                        {
+                            list = new List<string>();
+                        }
+                        else
+                        {
+                            int index = 0;
+                            foreach (var direccion in list)
                             {
-                                if (downLevel >= 3)
-                                    list.Add("Area=>" + row_Area.ItemArray[0].ToString());
-                                DataSet ds_Departamento = new DataSet();
-                                query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
-                                data = new SqlDataAdapter(query, conn);
-                                data.Fill(ds_Departamento, "data");
-                                foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
+                                if (index > 0)//El primer item no se toca porque es el papá
                                 {
-                                    if (downLevel >= 4)
-                                        list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
-                                    DataSet ds_SubDepartamento = new DataSet();
-                                    query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
-                                    data = new SqlDataAdapter(query, conn);
-                                    data.Fill(ds_SubDepartamento, "data");
-                                    foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
-                                    {
-                                        if (downLevel >= 5)
-                                            list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
-                                    }
+                                    if (pdaPermisos.Where(o => o.Direccion == direccion).FirstOrDefault() == null)
+                                        indexRemove.Add(index);
                                 }
-                            }*/
+                                index++;
+                            }
+                            indexRemove = indexRemove.OrderByDescending(o => o).ToList();
+                            foreach (var indexR in indexRemove)
+                                list.RemoveAt(indexR);
                         }
                     }
                 }
@@ -363,13 +391,14 @@ namespace BL
             return list;
         }
 
-        public static List<string> GetAreasByCompany(int IdBaseDeDatos, string entidadNombre)
+        public static List<string> GetAreasByCompany(int IdBaseDeDatos, string entidadNombre, string IdAdmin, int isSA)
         {
             var list = new List<string>();
             string query = string.Empty;
             SqlDataAdapter data = new SqlDataAdapter();
             try
             {
+                int _idAdmin = Convert.ToInt32(IdAdmin);
                 using (SqlConnection conn = new SqlConnection(ConfigurationManager.ConnectionStrings["myConnection"].ToString()))
                 {
                     DataSet ds_Company = new DataSet();
@@ -388,27 +417,36 @@ namespace BL
                         {
                             if (hasEmpleado(row_Area.ItemArray[0].ToString(), 3, IdBaseDeDatos))
                                 list.Add(row_Area.ItemArray[0].ToString());
-                            /*DataSet ds_Departamento = new DataSet();
-                            query = string.Format("select distinct Depto from Empleado where IdBaseDeDatos = {0} and AreaAgencia = '{1}'", IdBaseDeDatos, row_Area.ItemArray[0].ToString());
-                            data = new SqlDataAdapter(query, conn);
-                            data.Fill(ds_Departamento, "data");
-                            foreach (DataRow row_Depto in ds_Departamento.Tables[0].Rows)
-                            {
-                                if (downLevel >= 4)
-                                    list.Add("Dpto=>" + row_Depto.ItemArray[0].ToString());
-                                DataSet ds_SubDepartamento = new DataSet();
-                                query = string.Format("select distinct SubDepartamento from Empleado where IdBaseDeDatos = {0} and Depto = '{1}'", IdBaseDeDatos, row_Depto.ItemArray[0].ToString());
-                                data = new SqlDataAdapter(query, conn);
-                                data.Fill(ds_SubDepartamento, "data");
-                                foreach (DataRow row_Subd in ds_SubDepartamento.Tables[0].Rows)
-                                {
-                                    if (downLevel >= 5)
-                                        list.Add("SubD=>" + row_Subd.ItemArray[0].ToString());
-                                }
-                            }*/
                         }
                     }
-                    
+                }
+                if (isSA != 1)
+                {
+                    List<int> indexRemove = new List<int>();
+                    using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                    {
+                        var pdaPermisos = context.PDAPermisos.Where(o => o.IdAdministrador == _idAdmin);
+                        if (pdaPermisos.Count() == 0)
+                        {
+                            list = new List<string>();
+                        }
+                        else
+                        {
+                            int index = 0;
+                            foreach (var area in list)
+                            {
+                                if (index > 0)//El primer item no se toca porque es el papá
+                                {
+                                    if (pdaPermisos.Where(o => o.Area == area).FirstOrDefault() == null)
+                                        indexRemove.Add(index);
+                                }
+                                index++;
+                            }
+                            indexRemove = indexRemove.OrderByDescending(o => o).ToList();
+                            foreach (var indexR in indexRemove)
+                                list.RemoveAt(indexR);
+                        }
+                    }
                 }
             }
             catch (Exception aE)

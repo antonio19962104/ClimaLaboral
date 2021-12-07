@@ -8,6 +8,9 @@ var AreaSeleccionada;
         try {
             var vm = this;
             vm.Modulo = "Configura permisos";
+            vm.idDB = 0;
+            vm.direccionS = "";
+            vm.unidadS = "";           
             $(document).ready(function () {
                 document.getElementById("loading").style.display = "block";
                 vm.get("/PlanesDeAccion/ArbolEstructuraModuloPermisosPlanes/", function (response) {
@@ -149,7 +152,7 @@ var AreaSeleccionada;
 
             vm.AgregarPermisos = function (area, elegidos) {
                 document.getElementById("loading").style.display = "block";
-                vm.post("/PlanesDeAccion/AddPermisosPlanes/?Area=" + area, elegidos, function (response) {
+                vm.post("/PlanesDeAccion/AddPermisosPlanes/?Area=" + area + "&IdBD=" + vm.idDB + "&Direccion=" + vm.direccionS + "&Unidad="+vm.unidadS, elegidos, function (response) {
                     document.getElementById("loading").style.display = "none";
                     if (response.Correct) {
                         swal("Los permisos se agregaron correctamente", "", "success").then(function () {
@@ -158,6 +161,7 @@ var AreaSeleccionada;
                                 $("#gridListAdmin").data("kendoGrid").destroy();
                                 $("#gridListAdmin").empty();
                             }
+                            $("#areaSeleccionada").css("display", "none");
                             vm.ListAdmin = [];
                             $scope.$apply();
                         });
@@ -389,11 +393,19 @@ var AreaSeleccionada;
 
             $(function () {
                 $('#accordion').on('click', '.btn-info', function (e) {
+                    var padre = e.target.closest(".collapse");                    
+                    var direccion = e.target.closest("p .group");
+                    var unidad = e.target.parentNode.parentNode.parentNode.childNodes[1];
+                    vm.unidadS = unidad.attributes[1].value;
+                    vm.direccionS =direccion.parentElement.childNodes[1].attributes[1].value;
+                    vm.idDB = padre.attributes.idbd.value;
                     var areaSelecionada = e.target.data.text;
+                    var colocaArea = $("#areaSeleccionada")[0];
+                    colocaArea.style.display = "block"
+                    colocaArea.innerText = "";
+                    colocaArea.innerText ="Configuarando el Área: "+areaSelecionada;
                     vm.ObtenerAdmins(areaSelecionada);
-                    var parent = e.target.closest(".card-body")
-
-
+                    //var parent = e.target.closest(".card-body")
                 });
             })
         } catch (aE) {

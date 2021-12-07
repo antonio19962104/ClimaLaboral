@@ -11,7 +11,7 @@
         <p class="text-center">Gracias por participar en la encuesta de Clima Laboral 2020</p>
         <div class="row center-vertically">
             <div class="col-xs-12 col-sm-12 col-md-7 col-lg-5 col-xl-4 btn-final btn-continuar text-center">
-                <p class="btn-continuar" style="padding: 0.8rem;">Salir</p>
+                <p class="btn-continuar" onclick="window.close();" style="padding: 0.8rem;">Salir</p>
             </div>
         </div>
     </div>
@@ -24,3 +24,9 @@
         font-weight: bold;
     }
 </style>
+<script>
+    $(document).ready(function () {
+           document.getElementsByClassName("busy")[0].classList.add("loadInvisible");
+    });
+
+</script>

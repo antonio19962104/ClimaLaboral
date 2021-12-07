@@ -637,6 +637,38 @@ namespace BL
                     {
                         return data[0].UnidadNegocio;
                     }
+
+                    // Validar por demograficos
+                    data = context.Empleado.Where(o => o.Sexo == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.RangoAntiguedad == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.RangoEdad == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.TipoFuncion == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.CondicionTrabajo == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
+                    data = context.Empleado.Where(o => o.GradoAcademico == entidad && o.IdBaseDeDatos == IdBD).ToList();
+                    if (data.Count > 0)
+                    {
+                        return data[0].UnidadNegocio;
+                    }
                 }
             }
             catch (Exception aE)

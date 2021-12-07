@@ -58,8 +58,8 @@
                             <div class="col-12" style="display: contents;">
                                 <!--Iterar acciones-->
                                 <div class="col-12 col-sm-12 col-md-6 col-xl-4 mt-3 list-acciones" ng-repeat="item in vm.ListAcciones track by $index">
-                                    <div class="col-12" style="height: 30px; background-color: #002060;color: white;border-radius: 5px;">
-                                        <strong style="vertical-align: sub;" class="mt-2">{{ item.AccionesDeMejora.Categoria.Descripcion }} {{ item.AccionesDeMejora.Categoria.Promedio }} <img src="{{ item.AccionesDeMejora.Categoria.Icono }}" style="width: 30px;height: 25px;" /> </strong>
+                                    <div class="col-12" style="height: 30px; background-color: #002060;color: white;border-radius: 5px;overflow: hidden;min-height: 65px;">
+                                        <strong style="vertical-align: sub;" class="mt-2">{{ item.AccionesDeMejora.Categoria.Descripcion }} {{ item.AccionesDeMejora.Categoria.Promedio }} <img src="{{ item.AccionesDeMejora.Categoria.Icono }}" style="width:30px;height:25px;background-color:white;" /> </strong>
                                     </div>
                                     <div class="mt-2" style="border: 0.7px solid #FFC000; border-radius: 20px; padding: 15px 20px 15px 25px;">
                                         <span>Accion: {{ item.AccionesDeMejora.IdAccionDeMejora }}</span>

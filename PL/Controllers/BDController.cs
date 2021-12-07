@@ -45,7 +45,11 @@ namespace PL.Controllers
             ViewBag.Permisos = Session["CompaniesPermisos"];
             permisosEstructura = ViewBag.Permisos;
             var miEmpresaOrigen = Convert.ToInt32(Session["CompanyDelAdminLog"]);
-            return View("GetAll", BL.BasesDeDatos.getBaseDeDatosAllForListado(permisosEstructura, miEmpresaOrigen));
+            bool SA = false;
+            int IsSA = Convert.ToInt32(Session["SuperAdmin"]);
+            if (IsSA == 1)
+                SA = true;
+            return View("GetAll", BL.BasesDeDatos.getBaseDeDatosAllForListado(permisosEstructura, miEmpresaOrigen, SA));
         }
 
         public JsonResult GetAllForListadoJSON()
@@ -54,7 +58,43 @@ namespace PL.Controllers
             ViewBag.Permisos = Session["CompaniesPermisos"];
             permisosEstructura = ViewBag.Permisos;
             var miEmpresaOrigen = Convert.ToInt32(Session["CompanyDelAdminLog"]);
-            return Json(BL.BasesDeDatos.getBaseDeDatosAllForListado(permisosEstructura, miEmpresaOrigen), JsonRequestBehavior.AllowGet);
+            bool SA = false;
+            int IsSA = Convert.ToInt32(Session["SuperAdmin"]);
+            if (IsSA == 1)
+                SA = true;
+            return Json(BL.BasesDeDatos.getBaseDeDatosAllForListado(permisosEstructura, miEmpresaOrigen, SA), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllForListadoJSONRpt()
+        {
+            int IsSA = Convert.ToInt32(Session["SuperAdmin"]);
+            int IdAdmin = Convert.ToInt32(Session["IdAdministradorLogeado"]);
+            if (IsSA == 1)
+                // Obtener resultadospara un SA(all BD)
+                return Json(BL.BasesDeDatos.getBaseDeDatosAllForListado(new List<object>(), 0, true), JsonRequestBehavior.AllowGet);
+            else
+                // Obtener resultados segun permisosPDA
+                return Json(BL.BasesDeDatos.GetAllForListadoJSONRpt(IdAdmin), JsonRequestBehavior.AllowGet);
+        }
+
+        public SelectList Lista()
+        {
+            List<SelectListItem> ListaItems = new List<SelectListItem>();
+            using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+            {
+                ListaItems.Add(new SelectListItem() { Text = "Selecciona", Value = "0" });
+                var ListEncuestas = context.Encuesta;
+                foreach (var encuesta in ListEncuestas)
+                {
+                    SelectListItem selectListItem = new SelectListItem();
+                    selectListItem.Value = encuesta.IdEncuesta.ToString();
+                    selectListItem.Text = encuesta.Nombre;
+
+                    ListaItems.Add(selectListItem);
+                }
+            }
+            SelectList selectList = new SelectList(ListaItems, ListaItems[0]);
+            return selectList;
         }
 
         public ActionResult GetDataFromBD(ML.BasesDeDatos BD)

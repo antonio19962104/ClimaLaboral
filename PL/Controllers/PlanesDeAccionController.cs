@@ -92,7 +92,7 @@ namespace PL.Controllers
             {
                 // Job recurrente
                 string uid = "IdPlan_" + IdPlanDeAccion + "_" + Guid.NewGuid().ToString();
-                result = BL.PlanesDeAccion.AgregarJobNotificacionesPDA(IdPlanDeAccion, uid, Session["AdminLog"].ToString(), email.Frecuencia, email.Plantilla, email.Priority, email.Subject);
+                result = BL.PlanesDeAccion.AgregarJobNotificacionesPDA(IdPlanDeAccion, uid, Session["AdminLog"].ToString(), email.Frecuencia, email.Plantilla, email.Priority, email.Subject, 0, 0);
                 RecurringJob.AddOrUpdate(uid, () => BL.PlanesDeAccion.EnvioEmailCustom(IdPlanDeAccion, email.Priority, email.Subject, email.Plantilla), email.Frecuencia, TimeZoneInfo.Local);
             }
             return Json(new JsonResult() { Data = new ML.Result() { Correct = result }, JsonRequestBehavior = JsonRequestBehavior.AllowGet });
@@ -134,11 +134,14 @@ namespace PL.Controllers
         /// </summary>
         /// <param name="Area"></param>
         /// <param name="admins"></param>
+        /// <param name="IdBD"></param>
+        /// <param name="Direccion"></param>
+        /// <param name="Unidad"></param>
         /// <returns></returns>
-        public JsonResult AddPermisosPlanes(string Area, List<int> admins)
+        public JsonResult AddPermisosPlanes(string Area, int IdBD, List<int> admins, string Direccion, string Unidad)
         {
             string UsuarioActual = Session["AdminLog"] == null ? "Invitado" : Session["AdminLog"].ToString();
-            var result = BL.PlanesDeAccion.AddPermisosPlanes(Area, admins, UsuarioActual);
+            var result = BL.PlanesDeAccion.AddPermisosPlanes(Area, admins, UsuarioActual, IdBD, Direccion, Unidad);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>

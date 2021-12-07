@@ -2416,9 +2416,9 @@ namespace PL.Controllers
                 case 0:
                     return BL.EstructuraAFMReporte.GetUnidadesDeNegocioByIdBD(IdBD);
                 case 1:
-                    return BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBD, entidadNombre);
+                    return BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBD, entidadNombre, "1", 1);
                 case 2:
-                    return BL.EstructuraAFMReporte.GetAreasByCompany(IdBD, entidadNombre);
+                    return BL.EstructuraAFMReporte.GetAreasByCompany(IdBD, entidadNombre, "1", 1);
                 case 3:
                     return BL.EstructuraAFMReporte.GetDepartamentosByArea(IdBD, entidadNombre);
                 case 4:

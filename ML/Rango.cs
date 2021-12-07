@@ -10,5 +10,7 @@ namespace ML
     {
         public int IdRango { get; set; } = 0;
         public string Descripcion { get; set; } = string.Empty;
+        public int Desde { get; set; } = 0;
+        public int Hasta { get; set; } = 0;
     }
 }

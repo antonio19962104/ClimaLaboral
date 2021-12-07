@@ -848,6 +848,18 @@ function GetDashBoard() {
                     }
 
                     vm.verificarStorage();
+
+                    vm.get("/PlanesDeAccion/GetRangos/", function (response) {
+                        if (response.Correct) {
+                            vm.ListRangos = response.Objects;
+                        }
+                        else {
+                            swal("Ocurrió un error al intentar obtener los rangos", response.ErrorMessage, "error").then(function () {
+                                window.location.reload();
+                            });
+                        }
+                    });
+
                     $(document).on("keydown", function (e) {
                         if (e.key == "ArrowLeft") {
                             //document.getElementById("prev-btn").click();
@@ -8035,46 +8047,121 @@ function GetDashBoard() {
             vm.setIcono = function (value, id) {
                 try {
                     // asignar imagen
-                    if (id == null) {
-                        if (value == 'NaN')
-                            value = 0;
-                        value = parseFloat(value);
-                        if (value < 70) {
-                            return vm.imgLluvia;
-                        }
-                        if (value >= 70 && value < 80) {
-                            return vm.imgNublado;
-                        }
-                        if (value >= 80 && value < 90) {
-                            return vm.imgSolNube;
-                        }
-                        if (value >= 90 && value <= 100) {
-                            return vm.imgSol;
-                        }
-                        if (value > 100) {
-                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
-                        }
-                    }
+                    var img = "";
+                    if (value) {
+                        if (id == null) {
+                            if (value == 'NaN')
+                                value = 0;
+                            value = parseFloat(value);
 
-                    // asignar ancho
-                    if (id == 1) {
-                        if (value == 'NaN')
-                            value = 0;
-                        value = parseFloat(value);
-                        if (value < 70) {
-                            return "lluvia-png";//"width: 30px!important";
+
+                            [].forEach.call(vm.ListRangos, function (rango, index) {
+                                var Rango_Hasta = index != 3 ? 0 : rango.Hasta;
+                                if (index != 3) {
+                                    Rango_Hasta = (rango.Hasta + 0.99);
+                                }
+                                if (value >= rango.Desde && value <= Rango_Hasta) {
+                                    switch (index) {
+                                        case 0:
+                                            //return vm.imgLluvia;
+                                            img = vm.imgLluvia;
+                                            break;
+                                        case 1:
+                                            //return vm.imgNublado;
+                                            img = vm.imgNublado;
+                                            break;
+                                        case 2:
+                                            //return vm.imgSolNube;
+                                            img = vm.imgSolNube;
+                                            break;
+                                        case 3:
+                                            //return vm.imgSol;
+                                            img = vm.imgSol;
+                                            break;
+                                        default:
+                                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                                            break;
+                                    }
+                                }
+                            });
+                            if (vm.isNullOrEmpty(img) == false)
+                                return img;
+
+                            alert("Ya me pasé de la validación de rangos");
+
+
+
+                            if (value < 70) {
+                                return vm.imgLluvia;
+                            }
+                            if (value >= 70 && value < 80) {
+                                return vm.imgNublado;
+                            }
+                            if (value >= 80 && value < 90) {
+                                return vm.imgSolNube;
+                            }
+                            if (value >= 90 && value <= 100) {
+                                return vm.imgSol;
+                            }
+                            if (value > 100) {
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                            }
                         }
-                        if (value >= 70 && value < 80) {
-                            return "nube-png";//"width: 40px!important";
-                        }
-                        if (value >= 80 && value < 90) {
-                            return "sol-nube-png"//"width: 25px!important";
-                        }
-                        if (value >= 90 && value <= 100) {
-                            return "sol-png"; //"width: 23px!important";
-                        }
-                        if (value > 100) {
-                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+
+                        // asignar ancho
+                        if (id == 1) {
+                            if (value == 'NaN')
+                                value = 0;
+                            value = parseFloat(value);
+
+
+                            [].forEach.call(vm.ListRangos, function (rango, index) {
+                                var Rango_Hasta = index != 3 ? 0 : rango.Hasta;
+                                if (index != 3) {
+                                    Rango_Hasta = (rango.Hasta + 0.99);
+                                }
+                                if (value >= rango.Desde && value <= Rango_Hasta) {
+                                    switch (index) {
+                                        case 0:
+                                            img = "lluvia-png";//"width: 30px!important";
+                                            break;
+                                        case 1:
+                                            img = "nube-png";//"width: 40px!important";
+                                            break;
+                                        case 2:
+                                            img = "sol-nube-png"//"width: 25px!important";
+                                            break;
+                                        case 3:
+                                            img = "sol-png"; //"width: 23px!important";
+                                            break;
+                                        default:
+                                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                                            break;
+                                    }
+                                }
+                            });
+
+                            if (vm.isNullOrEmpty(img) == false)
+                                return img;
+
+                            alert("Ya me pasé de la validación de rangos");
+
+
+                            if (value < 70) {
+                                return "lluvia-png";//"width: 30px!important";
+                            }
+                            if (value >= 70 && value < 80) {
+                                return "nube-png";//"width: 40px!important";
+                            }
+                            if (value >= 80 && value < 90) {
+                                return "sol-nube-png"//"width: 25px!important";
+                            }
+                            if (value >= 90 && value <= 100) {
+                                return "sol-png"; //"width: 23px!important";
+                            }
+                            if (value > 100) {
+                                swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                            }
                         }
                     }
                 } catch (aE) {
@@ -8084,21 +8171,61 @@ function GetDashBoard() {
 
             vm.setIconoMejoresPeores = function (value) {
                 try {
-                    value = parseFloat(value);
-                    if (value < 70) {
-                        return vm.lluvia;
-                    }
-                    if (value >= 70 && value < 80) {
-                        return vm.nublado;
-                    }
-                    if (value >= 80 && value < 90) {
-                        return vm.solNube;
-                    }
-                    if (value >= 90 && value <= 100) {
-                        return vm.sol;
-                    }
-                    if (value > 100) {
-                        swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                var img = "";
+                    if (value) {
+                        value = parseFloat(value);
+
+                        [].forEach.call(vm.ListRangos, function (rango, index) {
+                            var Rango_Hasta = index != 3 ? 0 : rango.Hasta;
+                            if (index != 3) {
+                                Rango_Hasta = (rango.Hasta + 0.99);
+                            }
+                            if (value >= rango.Desde && value <= Rango_Hasta) {
+                                switch (index) {
+                                    case 0:
+                                        //return vm.lluvia;
+                                        img = vm.lluvia;
+                                        break;
+                                    case 1:
+                                        //return vm.nublado;
+                                        img = vm.nublado;
+                                        break;
+                                    case 2:
+                                        //return vm.solNube;
+                                        img = vm.solNube;
+                                        break;
+                                    case 3:
+                                        //return vm.sol;
+                                        img = vm.sol;
+                                        break;
+                                    default:
+                                        swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                                        break;
+                                }
+                            }
+                        });
+
+                        if (vm.isNullOrEmpty(img) == false)
+                            return img;
+
+                        alert("Ya me pasé de la validación de rangos");
+
+
+                        if (value < 70) {
+                            return vm.lluvia;
+                        }
+                        if (value >= 70 && value < 80) {
+                            return vm.nublado;
+                        }
+                        if (value >= 80 && value < 90) {
+                            return vm.solNube;
+                        }
+                        if (value >= 90 && value <= 100) {
+                            return vm.sol;
+                        }
+                        if (value > 100) {
+                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                        }
                     }
                 } catch (aE) {
                     ////swal(aE.message, "", "warning");
@@ -8107,21 +8234,60 @@ function GetDashBoard() {
 
             vm.setIconoSVG = function (value) {
                 try {
-                    value = parseFloat(value);
-                    if (value < 70) {
-                        return vm.lluviaIcono;
-                    }
-                    if (value >= 70 && value < 80) {
-                        return vm.nubeIcono;
-                    }
-                    if (value >= 80 && value < 90) {
-                        return vm.solNubeIcono;
-                    }
-                    if (value >= 90 && value <= 100) {
-                        return vm.solIcono;
-                    }
-                    if (value > 100) {
-                        swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                var img = "";
+                    if (value) {
+                        value = parseFloat(value);
+
+                        [].forEach.call(vm.ListRangos, function (rango, index) {
+                            var Rango_Hasta = index != 3 ? 0 : rango.Hasta;
+                            if (index != 3) {
+                                Rango_Hasta = (rango.Hasta + 0.99);
+                            }
+                            if (value >= rango.Desde && value <= Rango_Hasta) {
+                                switch (index) {
+                                    case 0:
+                                        //return vm.lluviaIcono;
+                                        img = vm.lluviaIcono;
+                                        break;
+                                    case 1:
+                                        //return vm.nubeIcono;
+                                        img = vm.nubeIcono;
+                                        break;
+                                    case 2:
+                                        //return vm.solNubeIcono;
+                                        img = vm.solNubeIcono;
+                                        break;
+                                    case 3:
+                                        //return vm.solIcono;
+                                        img = vm.solIcono;
+                                        break;
+                                    default:
+                                        swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                                        break;
+                                }
+                            }
+                        });
+
+                        if (vm.isNullOrEmpty(img) == false)
+                            return img;
+
+                        alert("Ya me pasé de la validación de rangos");
+
+                        if (value < 70) {
+                            return vm.lluviaIcono;
+                        }
+                        if (value >= 70 && value < 80) {
+                            return vm.nubeIcono;
+                        }
+                        if (value >= 80 && value < 90) {
+                            return vm.solNubeIcono;
+                        }
+                        if (value >= 90 && value <= 100) {
+                            return vm.solIcono;
+                        }
+                        if (value > 100) {
+                            swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                        }
                     }
                 } catch (aE) {
                     ////swal(aE.message, "", "warning");
@@ -8130,9 +8296,46 @@ function GetDashBoard() {
 
             vm.setClase = function (value) {
                 try {
+                    var img = "";
                     if (value == 'NaN')
                         value = 0;
                     value = parseFloat(value);
+
+                    [].forEach.call(vm.ListRangos, function (rango, index) {
+                        var Rango_Hasta = index != 3 ? 0 : rango.Hasta;
+                        if (index != 3) {
+                            Rango_Hasta = (rango.Hasta + 0.99);
+                        }
+                        if (value >= rango.Desde && value <= Rango_Hasta) {
+                            switch (index) {
+                                case 0:
+                                    //return "lluvia fondoNuevoGris";
+                                    img = "lluvia fondoNuevoGris";
+                                    break;
+                                case 1:
+                                    //return "nublado fondoNuevoGris";
+                                    img = "nublado fondoNuevoGris";
+                                    break;
+                                case 2:
+                                    //return "solnube fondoNuevoGris";
+                                    img = "solnube fondoNuevoGris";
+                                    break;
+                                case 3:
+                                    //return "sol fondoNuevoGris";
+                                    img = "sol fondoNuevoGris";
+                                    break;
+                                default:
+                                    swal("Existe un porcentaje mayor a 100, verificalo", "", "warning");
+                                    break;
+                            }
+                        }
+                    });
+
+                    if (vm.isNullOrEmpty(img) == false)
+                        return img;
+
+                    alert("Ya me pasé de la validación de rangos");
+
                     if (value < 70) {
                         return "lluvia fondoNuevoGris"
                     }

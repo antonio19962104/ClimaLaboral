@@ -4396,8 +4396,6 @@ namespace BL
                 string createText = "Log" + Environment.NewLine;
                 File.WriteAllText(fullPath1, createText);
             }
-            //string appendText1 = "Ingreso usuario" + " " + DateTime.Now + Environment.NewLine;
-            //File.AppendAllText(fullPath1, appendText1);
             ML.Result result = new ML.Result();
             try
             {
@@ -7424,5 +7422,88 @@ namespace BL
             return periodo;
 
         }
+
+        #region Notificaciones Custom
+        /// <summary>
+        /// Envia un email de notificacion a los usuarios encuestados
+        /// </summary>
+        /// <param name="IdEncuesta"></param>
+        /// <param name="IdBaseDeDatos"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public static ML.Result ConfiguraNotificacion(int IdEncuesta, int IdBaseDeDatos, ML.Email email)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var Encuesta = context.Encuesta.Where(o => o.IdEncuesta == IdEncuesta).FirstOrDefault();
+                    if (IdEncuesta == 1) // Encuesta de Clima Laboral
+                    {
+                        var ConfiguracionEncuesta = context.ConfigClimaLab.Where(o => o.IdEncuesta == IdEncuesta && o.IdBaseDeDatos == IdBaseDeDatos).FirstOrDefault();
+                        var EmpleadosEncuestado = context.Empleado.Where(o => o.IdBaseDeDatos == ConfiguracionEncuesta.IdBaseDeDatos);
+                        foreach (var empleadoE in EmpleadosEncuestado)
+                        {
+                            var EstatusEncuesta = context.EstatusEncuesta.Where(o => o.IdEmpleado == empleadoE.IdEmpleado && o.IdEncuesta == Encuesta.IdEncuesta).FirstOrDefault();
+                            switch (email.EstatusEncuesta)
+                            {
+                                case 1: // No comenzada
+                                    if (EstatusEncuesta.Estatus == "No comenzada")
+                                        BL.Email.EnvioNotificacionesCustom(Encuesta, ConfiguracionEncuesta, empleadoE, email);
+                                    break;
+                                case 2: // En proceso
+                                    if (EstatusEncuesta.Estatus == "En proceso")
+                                        BL.Email.EnvioNotificacionesCustom(Encuesta, ConfiguracionEncuesta, empleadoE, email);
+                                    break;
+                                case 3: // Terminada
+                                    if (EstatusEncuesta.Estatus == "Terminada")
+                                        BL.Email.EnvioNotificacionesCustom(Encuesta, ConfiguracionEncuesta, empleadoE, email);
+                                    break;
+                                default:
+                                    BL.NLogGeneratorFile.nlogModuloEncuestas.Error("No se puedo determinar para quienes va dirigida la notificación");
+                                    break;
+                            }
+                        }
+                    }
+                    else // Encuestas dinámicas
+                    {
+                        var UsuariosEncuestados = context.Usuario.Where(o => o.IdBaseDeDatos == Encuesta.IdBasesDeDatos);
+                        foreach (var usuarioE in UsuariosEncuestados)
+                        {
+                            var EstatusEncuesta = context.UsuarioEstatusEncuesta.Where(o => o.IdEncuesta == Encuesta.IdEncuesta && o.IdUsuario == usuarioE.IdUsuario).FirstOrDefault();
+                            DL.ConfigClimaLab configClimaLab = new DL.ConfigClimaLab() { FechaInicio = Encuesta.FechaInicio, FechaFin = Encuesta.FechaFin };
+                            DL.Empleado empleado = new DL.Empleado() { Nombre = usuarioE.Nombre, ApellidoPaterno = usuarioE.ApellidoPaterno, ApellidoMaterno = usuarioE.ApellidoMaterno, Correo = usuarioE.Email, ClaveAcceso = usuarioE.ClaveAcceso  };
+                            switch (email.EstatusEncuesta)
+                            {
+                                case 1: // No iniciada
+                                    if (EstatusEncuesta.IdEstatusEncuestaD4U == 1)
+                                        BL.Email.EnvioNotificacionesCustom(Encuesta, configClimaLab, empleado, email);
+                                    break;
+                                case 2: // Iniciada
+                                    if (EstatusEncuesta.IdEstatusEncuestaD4U == 2)
+                                        BL.Email.EnvioNotificacionesCustom(Encuesta, configClimaLab, empleado, email);
+                                    break;
+                                case 3: // Terminada
+                                    if (EstatusEncuesta.IdEstatusEncuestaD4U == 3)
+                                        BL.Email.EnvioNotificacionesCustom(Encuesta, configClimaLab, empleado, email);
+                                    break;
+                                default:
+                                    BL.NLogGeneratorFile.nlogModuloEncuestas.Error("No se puedo determinar para quienes va dirigida la notificación");
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+            }
+            return result;
+        }
+        #endregion Notificaciones Custom
     }
 }

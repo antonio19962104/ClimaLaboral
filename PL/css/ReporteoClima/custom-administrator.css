@@ -1644,6 +1644,17 @@ input.bg-radio-black[type='radio']:checked:after {
     width: 100px;
 }
 
+.sol-2 {
+    background-color: #ca8c24;
+    padding: 0;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    border-radius: 10px;
+    margin-top: 5px;
+    width: 100px;
+}
+
 .borde-impulsores {
     /*margin-left: -1px;
     border-right: solid 2px #d2d2d1;*/
@@ -2530,6 +2541,9 @@ width: 0px !important;
 .sol{
     width: 80px;
 }
+    .sol-2 {
+        width: 80px;
+    }
 }
 @media(max-width:1200px) {
     .borde {

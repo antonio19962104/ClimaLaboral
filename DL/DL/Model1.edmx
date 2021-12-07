@@ -1247,6 +1247,8 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="Priority" Type="int" />
           <Property Name="Subject" Type="varchar" MaxLength="250" />
           <Property Name="Plantilla" Type="varchar(max)" />
+          <Property Name="IdEncuesta" Type="int" />
+          <Property Name="IdBaseDeDatos" Type="int" />
         </EntityType>
         <EntityType Name="Modulo">
           <Key>
@@ -1281,6 +1283,8 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="150" />
           <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="150" />
           <Property Name="IdBaseDeDatos" Type="int" />
+          <Property Name="Direccion" Type="varchar" MaxLength="250" />
+          <Property Name="Unidad" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Perfil">
           <Key>
@@ -1540,6 +1544,17 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           </Key>
           <Property Name="IdRango" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="500" />
+          <Property Name="Desde" Type="int" />
+          <Property Name="Hasta" Type="int" />
+          <Property Name="FechaHoraCreacion" Type="datetime" />
+          <Property Name="UsuarioCreacion" Type="varchar" MaxLength="100" />
+          <Property Name="ProgramaCreacion" Type="varchar" MaxLength="100" />
+          <Property Name="FechaHoraModificacion" Type="datetime" />
+          <Property Name="UsuarioModificacion" Type="varchar" MaxLength="100" />
+          <Property Name="ProgramaModificacion" Type="varchar" MaxLength="100" />
+          <Property Name="FechaHoraEliminacion" Type="datetime" />
+          <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="100" />
+          <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="RangoEdad">
           <Key>
@@ -2154,18 +2169,6 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             </Principal>
             <Dependent Role="Acciones">
               <PropertyRef Name="IdPlanDeAccion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_Accion_Rango">
-          <End Role="Rango" Type="Self.Rango" Multiplicity="0..1" />
-          <End Role="Acciones" Type="Self.Acciones" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Rango">
-              <PropertyRef Name="IdRango" />
-            </Principal>
-            <Dependent Role="Acciones">
-              <PropertyRef Name="IdRango" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4918,10 +4921,6 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
             <End Role="PlanDeAccion" EntitySet="PlanDeAccion" />
             <End Role="Acciones" EntitySet="Acciones" />
           </AssociationSet>
-          <AssociationSet Name="fk_Accion_Rango" Association="Self.fk_Accion_Rango">
-            <End Role="Rango" EntitySet="Rango" />
-            <End Role="Acciones" EntitySet="Acciones" />
-          </AssociationSet>
           <AssociationSet Name="FK_AccionesPlan_Accion" Association="Self.FK_AccionesPlan_Accion">
             <End Role="Acciones" EntitySet="Acciones" />
             <End Role="AccionesPlan" EntitySet="AccionesPlan" />
@@ -6939,6 +6938,17 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="IdRango" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Acciones" Relationship="Self.fk_Accion_Rango" FromRole="Rango" ToRole="Acciones" />
+          <Property Name="Desde" Type="Int32" />
+          <Property Name="Hasta" Type="Int32" />
+          <Property Name="FechaHoraCreacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioCreacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaCreacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraModificacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioModificacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaModificacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHoraEliminacion" Type="DateTime" Precision="3" />
+          <Property Name="UsuarioEliminacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ProgramaEliminacion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RangoEdad">
           <Key>
@@ -15897,6 +15907,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="ProgramaEliminacion" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Administrador" Relationship="RH_DesModel.fk_PDAPermisos_Admin" FromRole="PDAPermisos" ToRole="Administrador" />
           <Property Name="IdBaseDeDatos" Type="Int32" />
+          <Property Name="Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Unidad" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="fk_PDAPermisos_Admin">
           <End Type="RH_DesModel.Administrador" Role="Administrador" Multiplicity="0..1" />
@@ -15931,6 +15943,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="Priority" Type="Int32" />
           <Property Name="Subject" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Plantilla" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IdEncuesta" Type="Int32" />
+          <Property Name="IdBaseDeDatos" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -17326,6 +17340,17 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="Rango">
             <EntityTypeMapping TypeName="RH_DesModel.Rango">
               <MappingFragment StoreEntitySet="Rango">
+                <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
+                <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
+                <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
+                <ScalarProperty Name="ProgramaModificacion" ColumnName="ProgramaModificacion" />
+                <ScalarProperty Name="UsuarioModificacion" ColumnName="UsuarioModificacion" />
+                <ScalarProperty Name="FechaHoraModificacion" ColumnName="FechaHoraModificacion" />
+                <ScalarProperty Name="ProgramaCreacion" ColumnName="ProgramaCreacion" />
+                <ScalarProperty Name="UsuarioCreacion" ColumnName="UsuarioCreacion" />
+                <ScalarProperty Name="FechaHoraCreacion" ColumnName="FechaHoraCreacion" />
+                <ScalarProperty Name="Hasta" ColumnName="Hasta" />
+                <ScalarProperty Name="Desde" ColumnName="Desde" />
                 <ScalarProperty Name="IdRango" ColumnName="IdRango" />
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
@@ -23634,6 +23659,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="PDAPermisos">
             <EntityTypeMapping TypeName="RH_DesModel.PDAPermisos">
               <MappingFragment StoreEntitySet="PDAPermisos">
+                <ScalarProperty Name="Unidad" ColumnName="Unidad" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
                 <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />
                 <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
                 <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
@@ -23653,6 +23680,8 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="JobsNotificacionesPDA">
             <EntityTypeMapping TypeName="RH_DesModel.JobsNotificacionesPDA">
               <MappingFragment StoreEntitySet="JobsNotificacionesPDA">
+                <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />
+                <ScalarProperty Name="IdEncuesta" ColumnName="IdEncuesta" />
                 <ScalarProperty Name="Plantilla" ColumnName="Plantilla" />
                 <ScalarProperty Name="Subject" ColumnName="Subject" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />

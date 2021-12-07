@@ -183,49 +183,59 @@ namespace BL
             return result;
         }
 
-        public static ML.Result getBaseDeDatosAllForListado(List<object> permisosEstrucura, int miEmpresaorigen)
+        public static ML.Result getBaseDeDatosAllForListado(List<object> permisosEstrucura, int miEmpresaorigen, bool isSA)
         {
             ML.Result result = new ML.Result();
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    //Get CompanyIdForPermisos
-                    List<string> CompanyIds = new List<string>();
-                    string WHEREsql = "";
-                    foreach (ML.AdministradorCompany item in permisosEstrucura)
+                    dynamic query;
+                    if (isSA == false)
                     {
-                        string CompanyId = Convert.ToString(item.Company.CompanyId);
-                        string CompanyIdFinal = " OR Company.CompanyId = " + CompanyId + " and BasesDeDatos.IdEstatus = 1 or BasesDeDatos.IdEstatus = 2 ";
-                        WHEREsql += CompanyIdFinal;
+                        //Get CompanyIdForPermisos
+                        List<string> CompanyIds = new List<string>();
+                        string WHEREsql = "";
+                        foreach (ML.AdministradorCompany item in permisosEstrucura)
+                        {
+                            string CompanyId = Convert.ToString(item.Company.CompanyId);
+                            string CompanyIdFinal = " OR Company.CompanyId = " + CompanyId + " and BasesDeDatos.IdEstatus = 1 or BasesDeDatos.IdEstatus = 2 ";
+                            WHEREsql += CompanyIdFinal;
+                        }
+                        WHEREsql += " OR COMPANY.COMPANYID = " + miEmpresaorigen + " and BasesDeDatos.IdEstatus = 1 or BasesDeDatos.IdEstatus = 2 ";
+
+                        Console.WriteLine(WHEREsql);
+
+                        //End Get CompanyId
+                        var idParametro = 1;
+                        query = context.BasesDeDatos.SqlQuery
+                            ("SELECT * FROM BasesDeDatos INNER JOIN TIPOBD ON BASESDEDATOS.IDTIPOBD = TIPOBD.IDTIPOBD INNER JOIN Administrador ON BasesDeDatos.IdAdministradorCreate = Administrador.IdAdministrador INNER JOIN Empleado ON Administrador.IdEmpleado = Empleado.IdEmpleado INNER JOIN Company ON Administrador.CompanyId = Company.CompanyId " +
+                            " where Company.CompanyId = 0  " + WHEREsql);
                     }
-                    WHEREsql += " OR COMPANY.COMPANYID = " + miEmpresaorigen + " and BasesDeDatos.IdEstatus = 1 or BasesDeDatos.IdEstatus = 2 "; 
-
-                    Console.WriteLine(WHEREsql);
-
-                    //End Get CompanyId
-                    var idParametro = 1;
-                    var query = context.BasesDeDatos.SqlQuery
-                        ("SELECT * FROM BasesDeDatos INNER JOIN TIPOBD ON BASESDEDATOS.IDTIPOBD = TIPOBD.IDTIPOBD INNER JOIN Administrador ON BasesDeDatos.IdAdministradorCreate = Administrador.IdAdministrador INNER JOIN Empleado ON Administrador.IdEmpleado = Empleado.IdEmpleado INNER JOIN Company ON Administrador.CompanyId = Company.CompanyId " +
-                        " where Company.CompanyId = 0  " + WHEREsql);
-
+                    else
+                    {
+                        query = context.BasesDeDatos.Where(o => o.IdEstatus == 1);
+                    }
                     
                     result.ListadoDeBaseDeDatos = new List<object>();
                     if (query != null)
                     {
                         foreach (var obj in query)
                         {
-                            ML.BasesDeDatos bases = new ML.BasesDeDatos();
-                            bases.IdBaseDeDatos = obj.IdBasesDeDatos;
-                            bases.Nombre = obj.Nombre;
-                            bases.TipoEstatus = new ML.TipoEstatus();
-                            bases.TipoEstatus.IdEstatus = obj.TipoEstatus.IdEstatus;
-                            bases.TipoEstatus.Descripcion = obj.TipoEstatus.Descripcion;
-                            bases.TipoBD = new ML.TipoBD();
-                            bases.TipoBD.IdTipoBD = obj.TipoBD.IdTipoBD;
-                            bases.TipoBD.Descripcion = obj.TipoBD.Descripcion;
-                            result.ListadoDeBaseDeDatos.Add(bases);
-                            result.Correct = true;
+                            if (obj.IdEstatus == 1)
+                            {
+                                ML.BasesDeDatos bases = new ML.BasesDeDatos();
+                                bases.IdBaseDeDatos = obj.IdBasesDeDatos;
+                                bases.Nombre = obj.Nombre;
+                                bases.TipoEstatus = new ML.TipoEstatus();
+                                bases.TipoEstatus.IdEstatus = obj.TipoEstatus.IdEstatus;
+                                bases.TipoEstatus.Descripcion = obj.TipoEstatus.Descripcion;
+                                bases.TipoBD = new ML.TipoBD();
+                                bases.TipoBD.IdTipoBD = obj.TipoBD.IdTipoBD;
+                                bases.TipoBD.Descripcion = obj.TipoBD.Descripcion;
+                                result.ListadoDeBaseDeDatos.Add(bases);
+                                result.Correct = true;
+                            }
                         }
                     }
                     else
@@ -240,6 +250,44 @@ namespace BL
             {
                 result.Correct = false;
                 result.ErrorMessage = aE.Message.ToString();
+            }
+            return result;
+        }
+
+        public static ML.Result GetAllForListadoJSONRpt(int IdAdmin)
+        {
+            ML.Result result = new ML.Result();
+            result.ListadoDeBaseDeDatos = new List<object>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var permisosPDA = context.PDAPermisos.Where(o => o.IdAdministrador == IdAdmin);
+                    var ListBD = context.BasesDeDatos.Where(o => o.IdEstatus == 1);
+                    foreach (var bd in ListBD)
+                    {
+                        if (permisosPDA.Where(o => o.IdBaseDeDatos == bd.IdBasesDeDatos).FirstOrDefault() != null)
+                        {
+                            ML.BasesDeDatos bases = new ML.BasesDeDatos();
+                            bases.IdBaseDeDatos = bd.IdBasesDeDatos;
+                            bases.Nombre = bd.Nombre;
+                            bases.TipoEstatus = new ML.TipoEstatus();
+                            bases.TipoEstatus.IdEstatus = bd.TipoEstatus.IdEstatus;
+                            bases.TipoEstatus.Descripcion = bd.TipoEstatus.Descripcion;
+                            bases.TipoBD = new ML.TipoBD();
+                            bases.TipoBD.IdTipoBD = bd.TipoBD.IdTipoBD;
+                            bases.TipoBD.Descripcion = bd.TipoBD.Descripcion;
+                            result.ListadoDeBaseDeDatos.Add(bases);
+                            result.Correct = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception aE)
+            {
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
             }
             return result;
         }

@@ -19,6 +19,7 @@ namespace BL
     {
         /// <summary>
         /// Guarda el estatus de envío de un email de notificación
+        /// El tipo de notificacion 0 (Cero) es cuando se trata de un envio de email customizado para encuestas
         /// </summary>
         /// <param name="message"></param>
         /// <param name="status"></param>
@@ -39,7 +40,7 @@ namespace BL
                         IdEstatusMail = status == true ? 2 : 1,
                         FechaHoraCreacion = DateTime.Now,
                         UsuarioCreacion = "Envio Notificaciones",
-                        ProgramaCreacion = "Envio Notificaciones Planes",
+                        ProgramaCreacion = TipoNotificacion == 0 ? "Envio Notificaciones Encuesta" : "Envio Notificaciones Planes",
                         MsgEnvio = MsgEnvio,
                         noIntentos = 1,
                         CC = ObtenerCopiaEnCorreo(message),
@@ -362,6 +363,64 @@ namespace BL
                 return false;
             }
             return true;
+        }
+        /// <summary>
+        /// Envio de notificaciones customizadas para encuestas de clima laboral
+        /// </summary>
+        /// <returns></returns>
+        public static bool EnvioNotificacionesCustom(DL.Encuesta encuesta, DL.ConfigClimaLab configClimaLab, DL.Empleado empleado, ML.Email email)
+        {
+            bool result = false;
+            try
+            {
+
+                if (!string.IsNullOrEmpty(empleado.Correo))
+                {
+                    empleado.Correo = empleado.Correo.Trim();
+                    MailMessage mailMessage = new MailMessage();
+                    mailMessage.Subject = email.Subject;
+                    mailMessage.Priority = (MailPriority)email.Priority;
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.To.Add(new MailAddress(empleado.Correo));
+                    string contentMessage = email.Plantilla;
+                    contentMessage = contentMessage.Replace("#Nombre#", string.Concat(empleado.Nombre, empleado.ApellidoPaterno, empleado.ApellidoMaterno));
+                    contentMessage = contentMessage.Replace("#Encuesta#", encuesta.Nombre);
+                    contentMessage = contentMessage.Replace("#FechaInicio#", configClimaLab.FechaInicio.ToString());
+                    contentMessage = contentMessage.Replace("#FechaFin#", configClimaLab.FechaFin.ToString());
+                    contentMessage = contentMessage.Replace("#Contraseña#", empleado.ClaveAcceso);
+                    contentMessage = contentMessage.Replace("#LinkEncuesta#", string.Concat(ConfigurationManager.AppSettings["urlTemplateLocation"].ToString(), "/Encuesta/Login/?e=", encuesta.IdEncuesta));
+
+                    mailMessage.Body = contentMessage;
+                    using (var smtp = new SmtpClient())
+                    {
+                        try
+                        {
+                            smtp.Send(mailMessage);
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("Email enviado a: " + empleado.Correo);
+                            BL.Email.GuardarEstatusEmail(mailMessage, true, "Email enviado exitosamente ", 0);
+                        }
+                        catch (SmtpException aE)
+                        {
+                            BL.NLogGeneratorFile.nlogPlanesDeAccion.Error("Falló envío de email a :" + empleado.Correo);
+                            BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                            BL.Email.GuardarEstatusEmail(mailMessage, false, (string.Concat(aE.Message, (aE.InnerException == null ? " inner exception is null " : aE.InnerException.ToString()))), 0);
+                        }
+                        finally
+                        {
+                            smtp.Dispose();
+                        }
+                    }
+                }
+                else
+                {
+                    BL.NLogGeneratorFile.nlogModuloEncuestas.Info($"El empleado {empleado.IdEmpleado} no cuenta con un email");
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloEncuestas(aE, new StackTrace());
+            }
+            return result;
         }
         /// <summary>
         /// Lee el fichero de la plantilla html

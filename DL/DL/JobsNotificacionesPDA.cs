@@ -31,5 +31,7 @@ namespace DL
         public Nullable<int> Priority { get; set; }
         public string Subject { get; set; }
         public string Plantilla { get; set; }
+        public Nullable<int> IdEncuesta { get; set; }
+        public Nullable<int> IdBaseDeDatos { get; set; }
     }
 }

@@ -178,6 +178,8 @@ namespace BL
         {
             [XmlAttribute(AttributeName = "name")]
             public string Name { get; set; }
+            [XmlAttribute(AttributeName = "Type")]
+            public string Type { get; set; }
         }
 
         [XmlRoot(ElementName = "member")]

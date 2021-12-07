@@ -1286,11 +1286,13 @@ namespace PL.Controllers
 
         public JsonResult getCompanyByCompanyCategoriaFromExcel(int IdBaseDeDatos, string UnidadNegocio)
         {
-            return Json(BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBaseDeDatos, UnidadNegocio), JsonRequestBehavior.AllowGet);
+            int isSA = Convert.ToInt32(Session["SuperAdmin"]);
+            return Json(BL.EstructuraAFMReporte.GetCompaniesByCompanyCategoria(IdBaseDeDatos, UnidadNegocio, Session["IdAdministradorLogeado"].ToString(), isSA), JsonRequestBehavior.AllowGet);
         }
         public JsonResult getAreaByCompanyFromExcel(int IdBaseDeDatos, string Company)
         {
-            return Json(BL.EstructuraAFMReporte.GetAreasByCompany(IdBaseDeDatos, Company), JsonRequestBehavior.AllowGet);
+            int isSA = Convert.ToInt32(Session["SuperAdmin"]);
+            return Json(BL.EstructuraAFMReporte.GetAreasByCompany(IdBaseDeDatos, Company, Session["IdAdministradorLogeado"].ToString(), isSA), JsonRequestBehavior.AllowGet);
         }
         public JsonResult getDepartamentoByAreaFromExcel(int IdBaseDeDatos, string Area)
         {

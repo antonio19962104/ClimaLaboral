@@ -41,7 +41,8 @@ namespace PL.Controllers
         }
         public JsonResult GetCompanyCategoria(string IdBaseDeDatos)
         {
-            return Json(BL.EstructuraAFMReporte.GetCompanyCategoria(IdBaseDeDatos), JsonRequestBehavior.AllowGet);
+            int IsSA = Convert.ToInt32(Session["SuperAdmin"]);
+            return Json(BL.EstructuraAFMReporte.GetCompanyCategoria(IdBaseDeDatos, Session["IdAdministradorLogeado"].ToString(), IsSA), JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetEstructuraGAFM(string IdBaseDeDatos, [FromBody] List<string> data, [FromBody] List<string> level)
         {

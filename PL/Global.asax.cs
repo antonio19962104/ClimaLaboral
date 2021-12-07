@@ -89,21 +89,12 @@ namespace PL
         /// </summary>
         private void PruebasIniciales()
         {
-            
-            //{ Id: "", Descripcion: "Enviar al guardar" },
-            //{ Id: "* * * * *", Descripcion: "Cada minuto" },
-            //{ Id: "0 8 * * *", Descripcion: "Diario" },
-            //{ Id: "0 0 */3 * *", Descripcion: "Cada tercer día" },
-            //{ Id: "0 10 * * 1", Descripcion: "Semanal(Lunes)" },
-            //{ Id: "0 9 1 * *", Descripcion: "Mensual(Primer día del mes)" }
-
-            //string desc1 = ExpressionDescriptor.GetDescription("* * * * *", new CronExpressionDescriptor.Options() { Locale = "es" });
-            //string desc2 = ExpressionDescriptor.GetDescription("0 8 * * *", new CronExpressionDescriptor.Options() { Locale = "es" });
-            //string desc3 = ExpressionDescriptor.GetDescription("0 0 */3 * *", new CronExpressionDescriptor.Options() { Locale = "es" });
-            //string desc4 = ExpressionDescriptor.GetDescription("0 10 * * 1", new CronExpressionDescriptor.Options() { Locale = "es" });
-            //string desc5 = ExpressionDescriptor.GetDescription("0 9 1 * *", new CronExpressionDescriptor.Options() { Locale = "es" });
-
-            //Console.Write("");
+            /*List<ML.Email> emails = new List<ML.Email>();
+            emails.Add(new ML.Email() { Plantilla = "", Priority = 1 });
+            emails.Add(new ML.Email() { Plantilla = "", Priority = 2 });
+            Controllers.EncuestaController encuestaController = new Controllers.EncuestaController();
+            var result = encuestaController.ConfiguraMultNotificaciones(1, 1, emails);
+            Console.Write(result);*/
             /*PL.Controllers.BackGroundJobController backGroundJobController = new Controllers.BackGroundJobController();
             ML.Historico historico = new ML.Historico()
             {

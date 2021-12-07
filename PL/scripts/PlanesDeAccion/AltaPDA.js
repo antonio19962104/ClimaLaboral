@@ -140,16 +140,22 @@
                             }
                         },
                         {
-                            title: "Agrega Plan de Acción",
-                            headerAttributes: {
-                                style: "text-align: center; vertical-align: middle; white-space: pre-wrap;"
-                            },
-                            command: [{
-                                text: "Agregar",
-                                click: vm.addEncuestaPdA
-                            }]
-
+                            title: "Crear",
+                            headerAttributes: { style: "text-align: center; vertical-align: middle; white-space: pre-wrap;" },
+                            attributes: { class: "text-center" },
+                            template: "<span class='btn btn-info addBdPlan'>Crear</span>"
                         }
+                        //{
+                        //    title: "Agrega Plan de Acción",
+                        //    headerAttributes: {
+                        //        style: "text-align: center; vertical-align: middle; white-space: pre-wrap;"
+                        //    },
+                        //    command: [{
+                        //        text: "Agregarsss",
+                        //        click: vm.addEncuestaPdA
+                        //    }]
+
+                        //}
                             ],
                             editable: false,
 
@@ -623,7 +629,7 @@
                                                     }
                                             }
                                         }, sort: {
-                                            field: "PromedioGeneral", dir: "desc"
+                                            field: "PromedioGeneral", dir: "asc"
                                         }
                                     },
                                     columnMenu: {
@@ -653,7 +659,7 @@
                                         field: "PromedioGeneral",
                                         title: "Promedio",
                                         headerAttributes: { style: "text-align: center; vertical-align: middle; white-space: pre-wrap;" },
-                                        attributes: { class: "text-center" },
+                                        //attributes: { class: "text-center" },
                                         template: function (dataItem) {
                                             try {
                                                 dataItem.PromedioGeneral = parseFloat(dataItem.PromedioGeneral);
@@ -1226,6 +1232,41 @@ if (validarEnvio) {
                     //e.target.parentNode.parentNode.parentNode.parentNode.remove();
                     e.target.closest(".card").remove();
                 });
+                //Solicita las categorias dependiendo de la base Seleccionadas
+                $("#gridEncuestaPM").on("click", ".addBdPlan", function (e) {
+                    document.getElementById("loading").style.display = "block";
+                    e.preventDefault();
+                    var grid = $("#gridEncuestaPM").data("kendoGrid");
+                    var dataItem = grid.dataItem($(e.target).closest("tr")); //this.dataItem($(e.currentTarget).closest("tr"));
+                    document.getElementById("section1").style.display = "none";
+                    document.getElementById("section2").style.display = "block";
+                    IdBaseDeDatos = dataItem.BasesDeDatos.IdBaseDeDatos;
+                    vm.NombreEncuesta = dataItem.Nombre;
+                    vm.PeriodoEncuesta = dataItem.periodo;
+                    vm.BaseEncuesta = dataItem.BasesDeDatos.Nombre;
+                    vm.IdBaseEncuesta = dataItem.BasesDeDatos.IdBaseDeDatos;
+                    vm.IdEncuesta = dataItem.IdEncuesta;
+                    //se llenan las acciones 
+                    vm.AccionesModel.AnioAplicacion = dataItem.periodo;
+                    vm.AccionesModel.Encuesta.IdEncuesta = dataItem.IdEncuesta;
+                    vm.AccionesModel.BasesDeDatos.IdBaseDeDatos = dataItem.BasesDeDatos.IdBaseDeDatos;
+                    vm.AccionesModel.Descripcion = "";
+                    vm.post("/PlanesDeAccion/GetAcciones/?", vm.AccionesModel, function (response) {
+                        if (response.Correct) {
+                            console.log(response.Objects);
+                            vm.ListadoAccionesModel = response.Objects;
+                        }
+                        else {
+                            swal("Ocurrió un error al intentar consultar las acciones de ayuda", response.ErrorMessage, "error");
+                        }
+                    });
+                    vm.ConsultaAreas();
+                    setTimeout(function () {
+                        document.getElementById("loading").style.display = "none";
+                    }, 800);
+
+                });
+
             });
 
             if (IdEncuesta > 0) {
@@ -1279,11 +1320,16 @@ if (validarEnvio) {
                 vm.get("/PlanesDeAccion/GetRangos/", function (response) {
                     if (response.Correct) {                       
                         [].forEach.call(response.Objects, function (item) {
+
                             var separa = item.Descripcion.split(" - ");
                             separa[0] = parseFloat(separa[0]);
                             separa[1] = parseFloat(separa[1]);
                             separa[1] = separa[1] + .99;
-                            vm.ListRangos.push({ Id: item.IdRango, Descripcion: item.Descripcion, valor1: separa[0], valor2:separa[1] });
+                            var hastaF = parseFloat(item.Hasta);
+                            hastaF = hastaF + .99;
+                            vm.ListRangos.push({
+                                Id: item.IdRango, Descripcion: item.Descripcion, valor1: item.Desde, valor2: hastaF
+                            });
                         });
                        // vm.ListRangos.unshift({ Id: 0, Descripcion: "- Asignar rango -" });
                         /* 

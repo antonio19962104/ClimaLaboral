@@ -2,8 +2,8 @@
 @using Newtonsoft.Json
 @model ML.ClimaDinamico
 @{
-    //List<ML.Preguntas> data = new List<ML.Preguntas>();
-    //data.AddRange(JsonConvert.SerializeObject());
+//List<ML.Preguntas> data = new List<ML.Preguntas>();
+//data.AddRange(JsonConvert.SerializeObject());
 }
 @{
     Layout = "~/Views/ClimaDinamico/Layout.cshtml";
@@ -12,7 +12,7 @@
 <script>
     var objEmpleadoRes = @Html.Raw(JsonConvert.SerializeObject(new ML.ClimaDinamico()));
 </script>
-@{   
+@{
     <div class="row main-content-likert" style="padding-bottom: 120px;" ng-init="vm.getPreguntasByEncuesta()">
         <div class="row col-xl-12" style="margin-right: auto; margin-left: auto; margin-bottom: 4rem" ng-show="vm.surveySection <= vm.totalSecciones - 1">
             <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8">
@@ -111,7 +111,7 @@
                 <span class="span-competencia">{{ item.Competencia.Nombre }}</span><br class="salto-compe" />
                 <p style="">{{ item.IdPregunta }}.- {{ item.Pregunta }}</p>
                 <div id="" class="col-12 dem" style="display: inline-flex;">
-                    <textarea idPregunta="{{ item.IdPregunta }}" style="width: 100%;" cols="4"></textarea>
+                    <textarea idPregunta="{{ item.IdPregunta }}" style="width: 100%;" cols="4" name="Pregunta-textarea-EE-{{ item.IdPregunta }}"></textarea>
                 </div>
             </div>
         </div>
@@ -124,11 +124,26 @@
                 {{ item.IdPregunta }}.- {{ item.Pregunta }}
             </div>
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 EE" style="padding-top: 8px;">
-                <!--<p class="mini-header">Empresa y jefes</p>-->
                 <div id="" class="col-12 dem" style="display: inline-flex;">
-                    <select class="form-control" idPregunta="{{ item.IdPregunta }}">
+                    <!-- select unidad de negocio -->
+                    <select ng-if="item.IdPreguntaPadre == 186" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-unidad-negocio" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
                         <option value="">-Selecciona-</option>
-                        <option ng-repeat="item in vm.preguntas" value="{{ item.IdPregunta }}">{{ item.Pregunta }}</option>
+                    </select>
+                    <!-- select company -->
+                    <select ng-if="item.IdPreguntaPadre == 187" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-company hijos-unidad-negocio" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
+                    </select>
+                    <!-- select area -->
+                    <select ng-if="item.IdPreguntaPadre == 188" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-area hijos-unidad-negocio hijos-company" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
+                    </select>
+                    <!-- select departamento -->
+                    <select ng-if="item.IdPreguntaPadre == 189" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control select-departamento hijos-unidad-negocio hijos-company hijos-area" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
+                    </select>
+                    <!-- select no dependiente de demografico -->
+                    <select ng-if="item.IdPreguntaPadre != 186 && item.IdPreguntaPadre != 187 && item.IdPreguntaPadre != 188 && item.IdPreguntaPadre != 189" id="select-list-idpreg-{{ item.IdPregunta }}" class="form-control" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idPregunta="{{ item.IdPregunta }}" name="Pregunta-select-EE-{{ item.IdPregunta }}" onclick="getRespuestas(this)">
+                        <option value="">-Selecciona-</option>
                     </select>
                 </div>
             </div>
@@ -136,15 +151,14 @@
         <!--radio-->
         <div ng-if="item.IdentificadorTipoControl == 4" class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mergePreguntas align-middle dataPregunta_{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" tipoOrden="{{ vm.listPreguntas[$index].IdTipoOrden }}" idPreguntaPadre="{{ item.IdPreguntaPadre }}" idOrden="{{ vm.listPreguntas[$index].IdOrden }}" idCompetencia="{{ vm.listPreguntas[$index].Competencia.IdCompetencia }}" nombreCompetencia="{{ vm.listPreguntas[$index].Competencia.Nombre }}" idPregunta="{{ item.IdPregunta }}" ng-repeat="item in vm.listPreguntas track by $index" ng-class="{'bg-color': $index % 2 != 0}" style="" idConsecutivo="{{ $index + 1 }}">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8" style="margin-bottom: 8px; padding-top: 5px;">
-                <!--<p class="mini-header">Empresa y jefes</p><p class="mini-header">Área y jefe directo</p>-->
                 <span class="span-competencia">{{ item.Competencia.Nombre }}</span><br class="salto-compe" />
                 {{ item.IdPregunta }}.- {{ item.Pregunta }}
             </div>
             <div id="EnfE" class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 EE" style="padding-top: 8px;">
-                <!--<p class="mini-header">Empresa y jefes</p>-->
-                <div id="" class="col-12 dem radio-simple" style="display: inline-flex;">
-                    <input name="pregPerm" idPregunta="{{ item.IdPregunta }}" class="perm" id="rb-si" type="radio" value="Si" /> <p for="rb-si"> Si</p>
-                    <input name="pregPerm" idPregunta="{{ item.IdPregunta }}" style="margin-left: 2rem;" class="perm" id="rb-no" type="radio" value="No" /> <p for="rb-no"> No</p>
+                <div id="merge-rb-{{ item.IdPregunta }}" class="col-12 dem radio-simple" style="display: inline-flex;">
+                    {{ vm.getContentRadioButton(item.IdPregunta) }}
+                    @*<input name="preg-rb-{{ item.IdPregunta }}" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" class="perm" id="rb-si" type="radio" value="Si" /> <p for="rb-si"> Si</p>
+                        <input name="preg-rb-{{ item.IdPregunta }}" itemid="rb-{{ item.IdPregunta }}" idPregunta="{{ item.IdPregunta }}" style="margin-left: 2rem;" class="perm" id="rb-no" type="radio" value="No" /> <p for="rb-no"> No</p>*@
                 </div>
             </div>
         </div>
@@ -172,7 +186,200 @@
         </div>
         <!--botones-->
     </div>
-        <script>
+    <script>
+            function selectExistValue(id, value) {
+                var options = document.getElementById(id).options;
+                var exist = false;
+                [].forEach.call(options, function (elem) {
+                    if (parseInt(elem.value) == value)
+                        exist = true;
+                });
+                return exist;
+            }
+            var list = [186,187,188,189];
+            function getRespuestas(e) {
+                $(".select-unidad-negocio").change(function () {
+                    $(".hijos-unidad-negocio").find('option').remove();
+                    $(".hijos-unidad-negocio").append("<option value=''>-Selecciona-</option>");
+                });
+                $(".select-company").change(function () {
+                    $(".hijos-company").find('option').remove();
+                    $(".hijos-company").append("<option value=''>-Selecciona-</option>");
+                });
+                $(".select-area").change(function () {
+                    $(".hijos-area").find('option').remove();
+                    $(".hijos-area").append("<option value=''>-Selecciona-</option>");
+                });
+                var value = 0;
+                if (e.options.length <= 1) {
+                    document.getElementsByClassName("busy")[0].style.display = "block";
+                    var IdPreguntaPadre = e.attributes.idPreguntaPadre.value;
+                    var select = $("select");
+                    if (IdPreguntaPadre == 186) {
+                        $.ajax({
+                            url: '/ClimaDinamico/GetUnidadesNegocio/?IdPregunta=' + IdPregunta,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Descripcion != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.IdCompanyCategoria + ">"+ elem.Descripcion +"</option>");
+                                    }
+                                    else{
+                                        document.getElementById(e.id).value = elem.IdCompanyCategoria;
+                                        value = elem.IdCompanyCategoria;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                    if (IdPreguntaPadre == 187) {
+                        var elem = Enumerable.From(select).Where(o => o.attributes.idPreguntaPadre.value == 186).FirstOrDefault();
+                        $.ajax({
+                            url: '/ClimaDinamico/GetCompanies/?IdCompanyCategoria=' + elem.value,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.CompanyName != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.CompanyId + ">"+ elem.CompanyName +"</option>");
+                                    }
+                                    else{
+                                        document.getElementById(e.id).value = elem.CompanyId;
+                                        value = elem.CompanyId;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                    if (IdPreguntaPadre == 188) {
+                        var elem = Enumerable.From(select).Where(o => o.attributes.idPreguntaPadre.value == 187).FirstOrDefault();
+                        $.ajax({
+                            url: '/ClimaDinamico/GetAreas/?CompanyId=' + elem.value,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Nombre != "EmpRes") {
+                                        $("#" + e.id).append("<option value=" + elem.IdArea + ">"+ elem.Nombre +"</option>");
+                                    }
+                                    else {
+                                        document.getElementById(e.id).value = elem.IdArea;
+                                        value = elem.IdArea;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                    if (IdPreguntaPadre == 189) {
+                        var elem = Enumerable.From(select).Where(o => o.attributes.idPreguntaPadre.value == 188).FirstOrDefault();
+                        $.ajax({
+                            url: '/ClimaDinamico/GetDepartamentos/?IdArea=' + elem.value,
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Nombre != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.IdDepartamento + ">"+ elem.Nombre +"</option>");
+                                    }
+                                    else {
+                                        document.getElementById(e.id).value = elem.IdDepartamento;
+                                        value = elem.IdDepartamento;
+                                    }
+                                    if (response.length == 1) {
+                                        $("#" + e.id).append("<option value='0'>-</option>");
+                                        document.getElementById(e.id).value = 0;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                                // si el select con sus nuevas opciones no incluye el valor de value entonces dejar con valor de ""
+                                if (value != 0 && !selectExistValue(e.id, value))
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+
+                    if (list.includes(parseInt(IdPreguntaPadre)) == false) {
+                        document.getElementsByClassName("busy")[0].style.display = "block";
+                        var IdPregunta = e.attributes.idpregunta.value;
+                        $.ajax({
+                            url: '/ClimaDinamico/GetRespuestasByIdPregunta/?IdPregunta=' + IdPregunta + "&IdEncuesta=" + localStorage.getItem("idEncuesta"),
+                            type: 'GET',
+                            success: function (response) {
+                                console.log(response);
+                                $("#" + e.id).find('option').not(':first').remove();
+                                [].forEach.call(response, function (elem) {
+                                    if (elem.Respuesta != "EmpRes"){
+                                        $("#" + e.id).append("<option value=" + elem.IdRespuesta + ">"+ elem.Respuesta +"</option>");
+                                    }
+                                    else { // set respuesta
+                                        document.getElementById(e.id).value = elem.IdRespuesta;
+                                        value = elem.IdRespuesta;
+                                    }
+                                });
+                                $("#" + e.id).blur();
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                document.getElementById(e.id).value = value;
+                                if (value == 0)
+                                    document.getElementById(e.id).value = "";
+                            },
+                            error: function (err) {
+                                document.getElementsByClassName("busy")[0].style.display = "none";
+                                swal.fire("Ocurrió un error al consultar las respuestas", err, "error");
+                            }
+                        });
+                    }
+                }
+            }
+
             function createCSSSelector(selector, style) {
                 if (!document.styleSheets) return;
                 if (document.getElementsByTagName('head').length == 0) return;
@@ -250,6 +457,7 @@
                 });
             }
             $(window).resize(function () {
+                try {
                 var space = (document.getElementById("div_0_EE").offsetWidth - 130); // restar padding y los 20px de cada radio
                 if (space <= 0) {
                     space = (document.getElementById("div_8_EE").offsetWidth - 130);
@@ -292,20 +500,26 @@
                 }
                 space = space / 4; // entre los 4 margin-left
                 createCSSSelector('label + label', 'margin-left:' + space + "px !important");
+                } catch (e) {
+                    console.log(e);
+                }
             });
-        </script>
+    </script>
         <style>
-            input.perm{
+            input.perm {
                 opacity: 1 !important;
                 position: inherit !important;
                 pointer-events: all !important;
             }
-            .perm + .perm{
+
+            .perm + .perm {
                 margin-left: 2rem !important;
             }
-            textarea{
+
+            textarea {
                 resize: none;
             }
+
             .btn-enviar {
                 background-color: #000080;
                 color: #fff !important;

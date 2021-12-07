@@ -23,7 +23,7 @@ namespace BL
         /// <summary>
         /// Obtiene la informacion de un plan de accion especifico
         /// </summary>
-        /// <param name="IdPlan"></param>
+        /// <param name="IdPlan" type="int"></param>
         /// <returns></returns>
         public static ML.PlanDeAccion GetPlanById(int IdPlan)
         {
@@ -49,8 +49,8 @@ namespace BL
         /// <summary>
         /// Obtiene acciones plan(Detalle de lo que se configura en el plan de accion)
         /// </summary>
-        /// <param name="IdAccion"></param>
-        /// <param name="IdPlan"></param>
+        /// <param name="IdAccion" type="int"></param>
+        /// <param name="IdPlan" type="int"></param>
         /// <returns></returns>
         public static ML.AccionesPlan ObtenerAccionesPlan(int IdAccion, int IdPlan)
         {
@@ -784,7 +784,9 @@ namespace BL
                         {
                             ML.Rango rango = new ML.Rango();
                             rango.IdRango = item.IdRango;
-                            rango.Descripcion = item.Descripcion;
+                            rango.Descripcion = item.Descripcion.Replace("\r\n", "");
+                            rango.Desde = (int)item.Desde;
+                            rango.Hasta = (int)item.Hasta;
                             result.Objects.Add(rango);
                         }
                         if (dataRangos.Count == 0)
@@ -1380,6 +1382,7 @@ namespace BL
         /// 
         /// </summary>
         /// <param name="aEmail"></param>
+        /// <param name="context"></param>
         /// <returns></returns>
         public static ML.Result ExisteResponsableenAdministrador(string aEmail,DL.RH_DesEntities context)
         {
@@ -2303,8 +2306,11 @@ namespace BL
         /// <param name="Area"></param>
         /// <param name="Admins"></param>
         /// <param name="currentAdmin"></param>
+        /// <param name="IdBD"></param>
+        /// <param name="Unidad"></param>
+        /// <param name="Direccion"></param>
         /// <returns></returns>
-        public static ML.Result AddPermisosPlanes(string Area, List<int> Admins, string currentAdmin)
+        public static ML.Result AddPermisosPlanes(string Area, List<int> Admins, string currentAdmin, int IdBD, string Direccion, string Unidad)
         {
             ML.Result result = new ML.Result();
             try
@@ -2317,6 +2323,9 @@ namespace BL
                         {
                             Area = Area,
                             IdAdministrador = item,
+                            IdBaseDeDatos = IdBD,
+                            Direccion = Direccion,
+                            Unidad = Unidad,
                             FechaHoraCreacion = DateTime.Now,
                             UsuarioCreacion = currentAdmin,
                             ProgramaCreacion = "Alta de permisos PDA"
@@ -2558,45 +2567,46 @@ namespace BL
             }
             return result;
         }
-        public static void DetallePlanDeAccion(int IdPlan)
+        public static ML.PlanDeAccion DetallePlanDeAccion(int IdPlan)
         {
+            ML.PlanDeAccion planDeAccion = new ML.PlanDeAccion();
             try
             {
-                ML.PlanDeAccion planDeAccion = new ML.PlanDeAccion();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
                     var PlanDeAccion = context.PlanDeAccion.Where(o => o.IdPlanDeAccion == IdPlan).FirstOrDefault();
                     if (PlanDeAccion != null)
                     {
+                        // Model
+                        planDeAccion.IdPlanDeAccion = PlanDeAccion.IdPlanDeAccion;
+                        planDeAccion.Nombre = PlanDeAccion.Nombre;
+                        // Model
                         var AccionesPlan = context.AccionesPlan.Where(o => o.IdPlanDeAccion == PlanDeAccion.IdPlanDeAccion);
                         foreach (var accionPlan in AccionesPlan)
                         {
-                            // Model
-                            planDeAccion.IdPlanDeAccion = PlanDeAccion.IdPlanDeAccion;
-                            planDeAccion.Nombre = PlanDeAccion.Nombre;
-                            // Model
-
                             var Accion = context.Acciones.Where(o => o.IdAccion == accionPlan.IdAccion).FirstOrDefault();
                             var ResponsablesAccion = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == accionPlan.IdAccionesPlan).ToList();
                             foreach (var responable in ResponsablesAccion)
                             {
                                 var Responsable = context.Responsable.Where(o => o.IdResponsable == responable.IdResponsable).FirstOrDefault();
                                 var seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == responable.IdResponsablesAccionesPlan).ToList();
-                                foreach (var seg in seguimiento)
+                                if (seguimiento.Count > 0)
                                 {
-                                    var seguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seg.IdSeguimiento).FirstOrDefault();
-                                    var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia).FirstOrDefault();
-                                    // Model
-                                    planDeAccion.ListAcciones.Add(
-                                        new ML.AccionesPlan()
-                                        {
-                                            IdAccionesPlan = accionPlan.IdAccionesPlan,
-                                            sFechaInicio = Convert.ToString(accionPlan.FechaInicio),
-                                            sFechaFin = Convert.ToString(accionPlan.FechaFin),
-                                            Comentarios = accionPlan.Comentarios,
-                                            Meta = accionPlan.Meta,
-                                            Objetivo = accionPlan.Objetivo,
-                                            AccionesDeMejora = new ML.AccionDeMejora()
+                                    foreach (var seg in seguimiento)
+                                    {
+                                        var seguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seg.IdSeguimiento).FirstOrDefault();
+                                        var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia).FirstOrDefault();
+                                        // Model
+                                        planDeAccion.ListAcciones.Add(
+                                            new ML.AccionesPlan()
+                                            {
+                                                IdAccionesPlan = accionPlan.IdAccionesPlan,
+                                                sFechaInicio = Convert.ToString(accionPlan.FechaInicio),
+                                                sFechaFin = Convert.ToString(accionPlan.FechaFin),
+                                                Comentarios = accionPlan.Comentarios,
+                                                Meta = accionPlan.Meta,
+                                                Objetivo = accionPlan.Objetivo,
+                                                AccionesDeMejora = new ML.AccionDeMejora()
                                                 {
                                                     IdAccionDeMejora = Accion.IdAccion,
                                                     Descripcion = Accion.Descripcion,
@@ -2610,6 +2620,36 @@ namespace BL
                                                     Email = Responsable.Email,
                                                     Atachments = new List<string>(){ evidencia.Ruta }
                                                 }
+                                                }
+                                            });
+                                        // Model
+                                    }
+                                }
+                                else
+                                {
+                                    // Model
+                                    planDeAccion.ListAcciones.Add(
+                                        new ML.AccionesPlan()
+                                        {
+                                            IdAccionesPlan = accionPlan.IdAccionesPlan,
+                                            sFechaInicio = Convert.ToString(accionPlan.FechaInicio),
+                                            sFechaFin = Convert.ToString(accionPlan.FechaFin),
+                                            Comentarios = accionPlan.Comentarios,
+                                            Meta = accionPlan.Meta,
+                                            Objetivo = accionPlan.Objetivo,
+                                            AccionesDeMejora = new ML.AccionDeMejora()
+                                            {
+                                                IdAccionDeMejora = Accion.IdAccion,
+                                                Descripcion = Accion.Descripcion,
+                                            },
+                                            ListResponsable = new List<ML.Responsable>() { new ML.Responsable()
+                                            {
+                                                IdResponsable = Responsable.IdResponsable,
+                                                Nombre = Responsable.Nombre,
+                                                ApellidoPaterno = Responsable.ApellidoPaterno,
+                                                ApellidoMaterno = Responsable.ApellidoMaterno,
+                                                Email = Responsable.Email,
+                                            }
                                             }
                                         });
                                     // Model
@@ -2624,6 +2664,7 @@ namespace BL
             {
                 BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
             }
+            return planDeAccion;
         }
         #endregion Permisos
 
@@ -2735,16 +2776,21 @@ namespace BL
         /// <param name="plantilla"></param>
         /// <param name="priority"></param>
         /// <param name="subject"></param>
+        /// <param name="IdBD"></param>
+        /// <param name="IdEncuesta"></param>
         /// <returns></returns>
-        public static bool AgregarJobNotificacionesPDA(int IdPlanDeAccion, string UID, string currentUser, string frecuencia, string plantilla, int priority, string subject)
+        public static bool AgregarJobNotificacionesPDA(int IdPlanDeAccion, string UID, string currentUser, string frecuencia, string plantilla, int priority, string subject, int IdEncuesta, int IdBD)
         {
             bool result = false;
             try
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
+                    // Validar cuando metr cad param
                     DL.JobsNotificacionesPDA jobsNotificacionesPDA = new DL.JobsNotificacionesPDA()
                     {
+                        IdEncuesta = IdEncuesta,
+                        IdBaseDeDatos = IdBD,
                         IdPlanDeAccion = IdPlanDeAccion,
                         JobId = UID,
                         IdEstatus = 1,
@@ -2754,7 +2800,7 @@ namespace BL
                         Subject = subject,
                         FechaHoraCreacion = DateTime.Now,
                         UsuarioCreacion = currentUser,
-                        ProgramaCreacion = "AgregarJobNotificacionesPDA"
+                        ProgramaCreacion = IdPlanDeAccion == 0 ? "AgregarJobNotificacionesEncuesta" : "AgregarJobNotificacionesPDA"
                     };
                     context.JobsNotificacionesPDA.Add(jobsNotificacionesPDA);
                     context.SaveChanges();

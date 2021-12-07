@@ -27,6 +27,8 @@ namespace DL
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
         public Nullable<int> IdBaseDeDatos { get; set; }
+        public string Direccion { get; set; }
+        public string Unidad { get; set; }
     
         public virtual Administrador Administrador { get; set; }
     }
