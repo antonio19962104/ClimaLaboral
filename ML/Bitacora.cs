@@ -9,6 +9,7 @@ namespace ML
     public class Bitacora
     {
         public DateTime FechaHoraCreacion { get; set; } = DateTime.Now;
+        public string sFechaHoraCreacion { get; set; } = string.Empty;
         public int IdUsuarioCreacion { get; set; } = 0;
         public string IpCreacion { get; set; } = string.Empty;
 

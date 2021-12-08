@@ -74,10 +74,8 @@ var IdAccionSeleccionada = 0;
                     if (response.Correct) {
                         vm.Modulo ="Seguimiento de tu Plan de Acción";
                         //response.Objects[0].AccionesDeMejora.Descripcion = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
-                        vm.ListAcciones =response.Objects;
-                        //[].forEach.call([2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30], function (item) {
-                        //    vm.ListAcciones.push(response.Objects[0]);
-                        //});
+                        vm.ListAcciones = response.Objects;
+                        document.getElementById("avance-plan").innerText = vm.ListAcciones[0].AvanceGeneral + "%";
                         if (e != null) {
                             $("#mergePlan .col").hide();
                             e.target.closest(".alert-info").removeAttribute("style")
@@ -123,14 +121,14 @@ var IdAccionSeleccionada = 0;
                 });
             }
 
-            vm.DetalleAccion = function (IdAccion) {
+            vm.DetalleAccion = function (IdAccion, IdAccionesPlan) {
                 vm.Modulo = "Tarjeta de Acciones de Mejora";
                 IdAccionSeleccionada = IdAccion;
                 $(".tool-bar").hide();
                 $("#mergePlan .col").hide();
                 /*document.getElementById("mergePlan").children[0].style.display = "none";*/
                 /* document.getElementById("mergePlan").children[1].style.display = "none"; */
-                var accionPlan = Enumerable.from(vm.ListAcciones).where(o => o.AccionesDeMejora.IdAccionDeMejora == IdAccion).firstOrDefault();
+                var accionPlan = Enumerable.from(vm.ListAcciones).where(o => o.IdAccionesPlan == IdAccionesPlan).firstOrDefault();
                 var htmlContent = templateDetalleAccion;
                 htmlContent = vm.replaceHtmlContent(htmlContent, accionPlan);
                 $("#mergePlan").append(htmlContent);
@@ -196,13 +194,14 @@ var IdAccionSeleccionada = 0;
                         vm.AgregarArchivos();
                     }
                     else {
-                        vm.GuardarAvances(accionPlan.AccionesDeMejora.IdAccionDeMejora, IdPlanDeAccion);
+                        vm.GuardarAvances(accionPlan.AccionesDeMejora.IdAccionDeMejora, IdPlanDeAccion, accionPlan.IdAccionesPlan);
                     }
                 });
             }
 
-            vm.GuardarAvances = function (IdAccion, IdPlan) {
+            vm.GuardarAvances = function (IdAccion, IdPlan, IdAccionesPlan) {
                 var porcentaje = document.getElementById("avance-accion-seleccionada").value;
+                var cumplimiento = document.getElementById("cumplimiento-accion-seleccionada").value;
                 if (parseFloat(porcentaje) < 0 || porcentaje == "") {
                     swal("No se puede registrar un avance negativo", "", "info").then(function () {
                         return false;
@@ -210,14 +209,17 @@ var IdAccionSeleccionada = 0;
                     return false;
                 }
                 let model = {
+                    IdAccionesPlan: IdAccionesPlan,
                     AccionesDeMejora: { IdAccionDeMejora: IdAccion },
                     PlanDeAccion: { IdPlanDeAccion: IdPlan },
-                    PorcentajeAvance: porcentaje
+                    PorcentajeAvance: porcentaje,
+                    Cumplimiento: cumplimiento
                 }
                 vm.post("/PlanesDeAccion/GuardarAvances/", model, function (response) {
                     if (response.Correct) {
                         swal("Los avances fueron actualizados correctamente", "", "success").then(function () {
                             document.getElementById("avance-accion-seleccionada").value = porcentaje;
+                            document.getElementById("cumplimiento-accion-seleccionada").value = cumplimiento;
                             vm.MostrarSeguimientoAcciones(null, IdPlanDeAccion);
                         });
                     }
@@ -241,7 +243,7 @@ var IdAccionSeleccionada = 0;
                 html = html.replace("#avance#", accionPlan.PorcentajeAvance);
 
                 var avanceGeneral = Enumerable.from(vm.ListPlanesDeAccion).where(o => o.IdPlanDeAccion == IdPlanDeAccion).firstOrDefault();
-                html = html.replace("#cumplimiento#", avanceGeneral.PorcentajeAvance);
+                html = html.replace("#cumplimiento#", accionPlan.Cumplimiento);
                 if (IdResponsable > 0) {// Perfil Responsable
                     var evidencias = vm.ObtenerRutaAtachment(accionPlan.Atachments);
                     html = html.replace("#name_responsable#", accionPlan.ListResponsable[0].Nombre);
@@ -540,11 +542,11 @@ var IdAccionSeleccionada = 0;
 
 
 var templateDetalleAccion = IdResponsable > 0 ? `
-<div class="sectionActions col" id="listAcciones">
+<div class="sectionActions col-12 col-sm-12 col-xs-12 col-md-12 col-lg-10 col-xl-8" id="listAcciones">
     <div id="cat_1" style="padding: 0px 0.5rem !important; display: block;">
         <div class="title-header-blue">
             <div class="row">
-                <div class="col-10">
+                <div class="col-10 p-0">
                     <span class="title-header-section"> #competencia#    #promedio#% <img class="ml-3" src="#icono#" style="width: 35px;height: auto;" /> </span>
                 </div>
                 <div class="col-2 text-center">
@@ -566,18 +568,18 @@ var templateDetalleAccion = IdResponsable > 0 ? `
                     <div id="collapse29_1" class="collapse show" aria-labelledby="heading29_1" data-parent="#accordion" style="">
                         <div class="card-body">
                             <div class="row form-group">
-                                <div class="col-3">Periodicidad: </div>
-                                <div class="col-5"><input type="text" disabled placeholder="Ingresa periocidad" value="#periodicidad#" class="form-control frm-periodicidad"></div>
-                                <div class="col-2"><i class="far fa-calendar-alt"></i>Inicia:<input disabled type="text" value="#inicio#" placeholder="Ingresa fecha de inicio" class="form-control frm-fecini"></div>
-                                <div class="col-2"><i class="far fa-calendar-alt"></i>Concluya:<input disabled type="text" value="#fin#" placeholder="Ingresa fecha de término" class="form-control frm-fecfin"></div>
+                                <div class="col-12 col-lg3">Periodicidad: </div>
+                                <div class="col-12 col-lg-5"><input type="text" disabled placeholder="Ingresa periocidad" value="#periodicidad#" class="form-control frm-periodicidad"></div>
+                                <div class="col-12 col-lg-2"><i class="far fa-calendar-alt"></i>Inicia:<input disabled type="text" value="#inicio#" placeholder="Ingresa fecha de inicio" class="form-control frm-fecini"></div>
+                                <div class="col-12 col-lg-2"><i class="far fa-calendar-alt"></i>Concluya:<input disabled type="text" value="#fin#" placeholder="Ingresa fecha de término" class="form-control frm-fecfin"></div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-9">Objetivo: </div>
-                                <div class="col-3">Meta: </div>
+                                <div class="col-12 col-lg-9">Objetivo: </div>
+                                <div class="col-12 col-lg-3">Meta: </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-9"><input type="text" disabled value="#objetivo#" placeholder="Objetivo a alcanzar con la acción" class="form-control frm-objetivo"></div>
-                                <div class="col-3"><input type="text" disabled value="#meta#" placeholder="Ingresa meta" class="form-control frm-meta"></div>
+                                <div class="col-12 col-lg-9"><input type="text" disabled value="#objetivo#" placeholder="Objetivo a alcanzar con la acción" class="form-control frm-objetivo"></div>
+                                <div class="col-12 col-lg-3"><input type="text" disabled value="#meta#" placeholder="Ingresa meta" class="form-control frm-meta"></div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-6">Responsable: </div>
@@ -625,11 +627,11 @@ var templateDetalleAccion = IdResponsable > 0 ? `
 `
 : 
 `
-<div class="sectionActions col" id="listAcciones">
+<div class="sectionActions col-12 col-sm-12 col-xs-12 col-md-12 col-lg-10 col-xl-8" id="listAcciones">
     <div id="cat_1" style="padding: 0px 0.5rem !important; display: block;">
         <div class="title-header-blue">
             <div class="row">
-                <div class="col-10">
+                <div class="col-10 p-0">
                     <span class="title-header-section"> #competencia#    #promedio#% <img class="ml-3" src="#icono#" style="width: 35px;height: auto;" /> </span>
                 </div>
                 <div class="col-2 text-center">
@@ -651,18 +653,18 @@ var templateDetalleAccion = IdResponsable > 0 ? `
                     <div id="collapse29_1" class="collapse show" aria-labelledby="heading29_1" data-parent="#accordion" style="">
                         <div class="card-body">
                             <div class="row form-group">
-                                <div class="col-3">Periodicidad: </div>
-                                <div class="col-5"><input type="text" disabled placeholder="Ingresa periocidad" value="#periodicidad#" class="form-control frm-periodicidad"></div>
-                                <div class="col-2"><i class="far fa-calendar-alt"></i>Inicia:<input disabled type="text" value="#inicio#" placeholder="Ingresa fecha de inicio" class="form-control frm-fecini"></div>
-                                <div class="col-2"><i class="far fa-calendar-alt"></i>Concluya:<input disabled type="text" value="#fin#" placeholder="Ingresa fecha de término" class="form-control frm-fecfin"></div>
+                                <div class="col-12 col-lg-3">Periodicidad: </div>
+                                <div class="col-12 col-lg-5"><input type="text" disabled placeholder="Ingresa periocidad" value="#periodicidad#" class="form-control frm-periodicidad"></div>
+                                <div class="col-12 col-lg-2"><i class="far fa-calendar-alt"></i>Inicia:<input disabled type="text" value="#inicio#" placeholder="Ingresa fecha de inicio" class="form-control frm-fecini"></div>
+                                <div class="col-12 col-lg-2"><i class="far fa-calendar-alt"></i>Concluya:<input disabled type="text" value="#fin#" placeholder="Ingresa fecha de término" class="form-control frm-fecfin"></div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-9">Objetivo: </div>
-                                <div class="col-3">Meta: </div>
+                                <div class="col-12 col-lg-9">Objetivo: </div>
+                                <div class="col-12 col-lg-3">Meta: </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-9"><input type="text" disabled value="#objetivo#" placeholder="Objetivo a alcanzar con la acción" class="form-control frm-objetivo"></div>
-                                <div class="col-3"><input type="text" disabled value="#meta#" placeholder="Ingresa meta" class="form-control frm-meta"></div>
+                                <div class="col-12 col-lg-9"><input type="text" disabled value="#objetivo#" placeholder="Objetivo a alcanzar con la acción" class="form-control frm-objetivo"></div>
+                                <div class="col-12 col-lg-3"><input type="text" disabled value="#meta#" placeholder="Ingresa meta" class="form-control frm-meta"></div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-3">Comentarios: </div>
@@ -681,7 +683,7 @@ var templateDetalleAccion = IdResponsable > 0 ? `
                                     <input id="avance-accion-seleccionada" type="text" value="#avance#" class="form-control" style="display: block;" />
                                     <i class="fas fa-percent fa-sm errspan"></i>
                                     <label>Cumplimiento de la acción: </label>
-                                    <input type="text" value="#cumplimiento#" class="form-control" style="display: block;">
+                                    <input id="cumplimiento-accion-seleccionada" type="text" value="#cumplimiento#" class="form-control" style="display: block;">
                                     <i class="fas fa-percent fa-sm errspan"></i>
                                 </div>
                             </div>

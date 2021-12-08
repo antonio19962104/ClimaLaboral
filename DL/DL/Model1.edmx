@@ -54,6 +54,7 @@
           <Property Name="PorcentajeAvance" Type="decimal" Precision="18" Scale="0" />
           <Property Name="NotificacionFinal" Type="int" />
           <Property Name="NotificacionPrevia" Type="int" />
+          <Property Name="Cumplimiento" Type="decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Administrador">
           <Key>
@@ -15559,6 +15560,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <NavigationProperty Name="PlanDeAccion" Relationship="RH_DesModel.FK_AccionesPlan_Plan" FromRole="AccionesPlan" ToRole="PlanDeAccion" />
           <Property Name="NotificacionFinal" Type="Int32" />
           <Property Name="NotificacionPrevia" Type="Int32" />
+          <Property Name="Cumplimiento" Type="Decimal" Precision="18" Scale="0" />
         </EntityType>
         <EntityType Name="Responsable">
           <Key>
@@ -23480,6 +23482,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="AccionesPlan">
             <EntityTypeMapping TypeName="RH_DesModel.AccionesPlan">
               <MappingFragment StoreEntitySet="AccionesPlan">
+                <ScalarProperty Name="Cumplimiento" ColumnName="Cumplimiento" />
                 <ScalarProperty Name="NotificacionPrevia" ColumnName="NotificacionPrevia" />
                 <ScalarProperty Name="NotificacionFinal" ColumnName="NotificacionFinal" />
                 <ScalarProperty Name="PorcentajeAvance" ColumnName="PorcentajeAvance" />

@@ -1726,7 +1726,7 @@ namespace BL
                 List<int> HistoricoIdResponsable = new List<int>();
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio < DateTime.Now && o.PorcentajeAvance == 100 && o.NotificacionFinal != 1).ToList();
+                    var AccionesPlan = context.AccionesPlan.Where(o => o.FechaInicio < DateTime.Now && o.Cumplimiento == 100 && o.NotificacionFinal != 1).ToList();
                     if (AccionesPlan != null)
                     {
                         foreach (var accionPlan in AccionesPlan)
@@ -1841,6 +1841,7 @@ namespace BL
                             planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
                             planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(plan.IdPlanDeAccion);
                             planDeAccion.ListJobsNotificaciones = BL.PlanesDeAccion.ObtenerNotificacionesProgramadas(planDeAccion.IdPlanDeAccion);
+                            planDeAccion.sFechaHoraCreacion = Convert.ToString(plan.FechaHoraCreacion);
 
                             result.Objects.Add(planDeAccion);
                         }
@@ -1864,7 +1865,7 @@ namespace BL
                                     planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
                                     planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(planDeAccion.IdPlanDeAccion);
                                     planDeAccion.ListJobsNotificaciones = BL.PlanesDeAccion.ObtenerNotificacionesProgramadas(planDeAccion.IdPlanDeAccion);
-
+                                    planDeAccion.sFechaHoraCreacion = Convert.ToString(plan.FechaHoraCreacion);
                                     if (!ArrayIdPlan.Contains(planDeAccion.IdPlanDeAccion))
                                     {
                                         result.Objects.Add(planDeAccion);
@@ -1887,6 +1888,7 @@ namespace BL
                             planDeAccion.IdBaseDeDatos = (int)plan.IdBaseDeDatos;
                             planDeAccion.PorcentajeAvance = GetPorcentajeAvancePlan(plan.IdPlanDeAccion);
                             planDeAccion.ListJobsNotificaciones = BL.PlanesDeAccion.ObtenerNotificacionesProgramadas(planDeAccion.IdPlanDeAccion);
+                            planDeAccion.sFechaHoraCreacion = Convert.ToString(plan.FechaHoraCreacion);
 
                             result.Objects.Add(planDeAccion);
                         }
@@ -1920,7 +1922,7 @@ namespace BL
                     {
                         foreach (var accionPlan in accionesPlan)
                         {
-                            result += accionPlan.PorcentajeAvance == null ? 0 : Convert.ToDecimal(accionPlan.PorcentajeAvance);
+                            result += accionPlan.Cumplimiento == null ? 0 : Convert.ToDecimal(accionPlan.Cumplimiento);
                         }
                         result /= accionesPlan.Count;
                     }
@@ -1975,6 +1977,8 @@ namespace BL
                                 string DescripcionCategoria = context.Categoria.Where(o => o.IdCategoria == IdCategoria).FirstOrDefault().Nombre;
 
                                 ML.AccionesPlan accionesPlan = new ML.AccionesPlan();
+                                accionesPlan.IdAccionesPlan = accionesPlan.IdAccionesPlan;
+                                accionesPlan.AvanceGeneral = GetPorcentajeAvancePlan(IdPlan);
                                 accionesPlan.PlanDeAccion.IdPlanDeAccion = IdPlanDeAccion;
                                 accionesPlan.PlanDeAccion.Nombre = NombrePlanDeAccion;
                                 accionesPlan.sFechaInicio = FechaInicio;
@@ -1988,6 +1992,7 @@ namespace BL
                                 accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
                                 accionesPlan.AccionesDeMejora.Categoria.Descripcion = DescripcionCategoria;
                                 accionesPlan.PorcentajeAvance = Convert.ToDecimal(accionPlan.PorcentajeAvance);
+                                accionesPlan.Cumplimiento = Convert.ToDecimal(accionPlan.Cumplimiento);
                                 accionesPlan.DescripcionPeriodicidad = accionPlan.Periodicidad == 0 ? "Periodicidad no configurada" : context.Periodicidad.Where(o => o.IdPeriodicidad == accionPlan.Periodicidad).FirstOrDefault().Descripcion;
                                 var Seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == ResponsableAccionesPlan.IdResponsablesAccionesPlan).ToList();
                                 foreach (var seguimento in Seguimiento)
@@ -2043,6 +2048,8 @@ namespace BL
 
                             // Listado de responsables
                             ML.AccionesPlan accionesPlan = new ML.AccionesPlan();
+                            accionesPlan.IdAccionesPlan = accionPlan.IdAccionesPlan;
+                            accionesPlan.AvanceGeneral = GetPorcentajeAvancePlan(IdPlan);
                             var ResponsableAccionesPlan = accionPlan.ResponsablesAccionesPlan.ToList();
                             int index = 0;
                             foreach (var responsableAccionPlan in ResponsableAccionesPlan)
@@ -2078,6 +2085,7 @@ namespace BL
                             accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
                             accionesPlan.AccionesDeMejora.Categoria.Descripcion = DescripcionCategoria;
                             accionesPlan.PorcentajeAvance = Convert.ToDecimal(accionPlan.PorcentajeAvance);
+                            accionesPlan.Cumplimiento = Convert.ToDecimal(accionPlan.Cumplimiento);
                             accionesPlan.DescripcionPeriodicidad = accionPlan.Periodicidad == 0 ? "Periodicidad no configurada" : context.Periodicidad.Where(o => o.IdPeriodicidad == accionPlan.Periodicidad).FirstOrDefault().Descripcion;
 
                             ML.PromediosCategorias promediosCategorias = new ML.PromediosCategorias()
@@ -2278,10 +2286,11 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var accionP = context.AccionesPlan.Where(o => o.IdPlanDeAccion == accionesPlan.PlanDeAccion.IdPlanDeAccion && o.IdAccion == accionesPlan.AccionesDeMejora.IdAccionDeMejora).FirstOrDefault();
+                    var accionP = context.AccionesPlan.Where(o => o.IdAccionesPlan == accionesPlan.IdAccionesPlan && o.IdPlanDeAccion == accionesPlan.PlanDeAccion.IdPlanDeAccion && o.IdAccion == accionesPlan.AccionesDeMejora.IdAccionDeMejora).FirstOrDefault();
                     if (accionP != null)
                     {
                         accionP.PorcentajeAvance = accionesPlan.PorcentajeAvance;
+                        accionP.Cumplimiento = accionesPlan.Cumplimiento;
                         context.SaveChanges();
                         result.Correct = true;
                     }
@@ -2456,6 +2465,7 @@ namespace BL
                             administrador.Selected = ML.Administrador.Data.falso;
                         if (item.AdminSA == 1)
                             administrador.Selected = ML.Administrador.Data.verdadero;
+                        administrador.AdminSA = Convert.ToInt32(item.AdminSA);
                         result.Objects.Add(administrador);
                     }
                     result.Correct = true;

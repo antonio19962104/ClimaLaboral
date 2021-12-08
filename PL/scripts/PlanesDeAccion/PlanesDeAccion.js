@@ -136,14 +136,14 @@ var modelNuevaAccion = {
                                     `
                                 <div class="form-group ng-scope" idAccion="` + accion.IdAccionDeMejora + `">
                                     <div class="form-inline">
-                                        <div class="col-8">
-                                            <button class="btn btn-sm re-asignar-accion"><i class="fas fa-sync-alt"></i></button>
-                                            <input disabled value="` + accion.Descripcion + `" type="text" class="form-control is-valid" style="width: 95%;" placeholder="Acción de mejora">
+                                        <div class="col-md-12 col-lg-7 col-xl-7 col-12">
+                                            <button class="btn btn-sm re-asignar-accion" style="float:inline-end;width:10%"><i class="fas fa-sync-alt"></i></button>
+                                            <input disabled value="` + accion.Descripcion + `" type="text" class="form-control is-valid" style="width: 90%;" placeholder="Acción de mejora">
                                         </div>
-                                        <div class="col-3">
-                                            <select disabled class="form-control select-rango is-valid" style="width: 100%;"></select>
+                                        <div class="col-md-6 col-lg-3 col-xl-3 col-6">
+                                            <select disabled class="form-control select-rango valid" style="width: 100%;"></select>
                                         </div>
-                                        <div class="col-1" style="display:block ruby;padding: 0;">
+                                        <div class="col-md-6 col-lg-2 col-xl-2 col-6" style="display:block ruby;padding: 0;">
                                             <button class="btn edit-accion" onclick="editAccion(this);"><i class="fas fa-edit"></i></button>
                                             <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save" style="color: #28a745;"></i></button>
                                             <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
@@ -748,13 +748,13 @@ var modelNuevaAccion = {
 var NuevaAccionHtmlContent =
     `<div class="form-group">
         <div class="form-inline">
-            <div class="col-8">
+            <div class="col-md-12 col-lg-7 col-xl-7 col-12">
                 <input type="text" class="form-control" style="width: 100%;" placeholder="Acción de mejora" />
             </div>
-            <div class="col-3">
+            <div class="col-md-6 col-lg-3 col-xl-3 col-6">
                 <select class="form-control select-rango" style="width: 100%;"></select>
             </div>
-            <div class="col-1">                
+            <div class="col-md-6 col-lg-2 col-xl-2 col-6">
                 <button class="btn save-action" onclick="GuardarAccion(this)"><i class="fas fa-save"></i></button>
                 <button class="btn delete-accion"><i class="fas fa-trash"></i></button>
             </div>
@@ -935,13 +935,25 @@ var IsNullOrEmpty = function (data) {
 }
 
 var SetCampoInvalido = function (DomElem) {
-    DomElem.classList.remove("is-valid");
-    DomElem.classList.add("is-invalid");
+    if (DomElem.type == "select-one") {
+        DomElem.classList.remove("valid");
+        DomElem.classList.add("invalid");
+    }
+    else {
+        DomElem.classList.remove("is-valid");
+        DomElem.classList.add("is-invalid");
+    }
 }
 
 var SetCampoValido = function (DomElem) {
-    DomElem.classList.remove("is-invalid");
-    DomElem.classList.add("is-valid");
+    if (DomElem.type == "select-one") {
+        DomElem.classList.remove("invalid");
+        DomElem.classList.add("valid");
+    }
+    else {
+        DomElem.classList.remove("is-invalid");
+        DomElem.classList.add("is-valid");
+    }
 }
 
 var BuscaAcciones = function (filtro) {

@@ -41,6 +41,7 @@ namespace DL
         public Nullable<decimal> PorcentajeAvance { get; set; }
         public Nullable<int> NotificacionFinal { get; set; }
         public Nullable<int> NotificacionPrevia { get; set; }
+        public Nullable<decimal> Cumplimiento { get; set; }
     
         public virtual Acciones Acciones { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

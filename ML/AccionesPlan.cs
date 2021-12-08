@@ -8,6 +8,7 @@ namespace ML
 {
     public class AccionesPlan : Bitacora
     {
+        public decimal AvanceGeneral { get; set; }
         public int IdAccionesPlan { get; set; }
         public ML.PlanDeAccion PlanDeAccion { get; set; } = new PlanDeAccion();
         public ML.AccionDeMejora AccionesDeMejora { get; set; } = new AccionDeMejora();
@@ -25,6 +26,7 @@ namespace ML
 		public List<ResponsablesAccionesPlan> ListadoResponsables { get; set; } = new List<ResponsablesAccionesPlan>();
         public List<Responsable> ListResponsable { get; set; } = new List<Responsable>();
         public List<string> Atachments { get; set; } = new List<string>();
+        public decimal Cumplimiento { get; set; }
 
     }
 }
