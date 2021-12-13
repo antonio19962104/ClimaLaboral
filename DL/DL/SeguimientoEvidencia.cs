@@ -26,6 +26,7 @@ namespace DL
         public Nullable<System.DateTime> FechaHoraEliminacion { get; set; }
         public string UsuarioEliminacion { get; set; }
         public string ProgramaEliminacion { get; set; }
+        public string Comentario { get; set; }
     
         public virtual Evidencia Evidencia { get; set; }
         public virtual Seguimiento Seguimiento { get; set; }

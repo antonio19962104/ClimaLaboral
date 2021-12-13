@@ -1977,7 +1977,7 @@ namespace BL
                                 string DescripcionCategoria = context.Categoria.Where(o => o.IdCategoria == IdCategoria).FirstOrDefault().Nombre;
 
                                 ML.AccionesPlan accionesPlan = new ML.AccionesPlan();
-                                accionesPlan.IdAccionesPlan = accionesPlan.IdAccionesPlan;
+                                accionesPlan.IdAccionesPlan = accionPlan.IdAccionesPlan;
                                 accionesPlan.AvanceGeneral = GetPorcentajeAvancePlan(IdPlan);
                                 accionesPlan.PlanDeAccion.IdPlanDeAccion = IdPlanDeAccion;
                                 accionesPlan.PlanDeAccion.Nombre = NombrePlanDeAccion;
@@ -1986,7 +1986,7 @@ namespace BL
                                 accionesPlan.Objetivo = Objetivo;
                                 accionesPlan.Meta = Meta;
                                 accionesPlan.Comentarios = Comentarios;
-                                accionesPlan.ListResponsable.Add(new ML.Responsable() { Nombre = NombreResponsable, Email = EmailResponsable });
+                                accionesPlan.ListResponsable.Add(new ML.Responsable() { IdResponsable = Responsable.IdResponsable, Nombre = NombreResponsable, Email = EmailResponsable });
                                 accionesPlan.AccionesDeMejora.IdAccionDeMejora = IdAccion;
                                 accionesPlan.AccionesDeMejora.Descripcion = DescripcionAccion;
                                 accionesPlan.AccionesDeMejora.Categoria.IdCategoria = IdCategoria;
@@ -2002,7 +2002,9 @@ namespace BL
                                     {
                                         var evidencia = context.Evidencia.Where(o => o.IdEvidencia == seguimientoEvidencia.IdEvidencia && o.IdEstatus == 1).FirstOrDefault();
                                         if (evidencia != null)
-                                            accionesPlan.Atachments.Add(evidencia.Ruta);
+                                        {
+                                            accionesPlan.Atachments.Add(string.Concat(evidencia.Ruta, ""));
+                                        }
                                     }
                                 }
                                 ML.PromediosCategorias promediosCategorias = new ML.PromediosCategorias()
@@ -2120,12 +2122,14 @@ namespace BL
         /// <param name="IdAccion"></param>
         /// <param name="IdPlan"></param>
         /// <param name="IdResponsable"></param>
+        /// <param name="comentario"></param>
         /// <returns></returns>
-        public static ML.Result GuardarRutaArchivo(string ruta, string IdPlan, string IdAccion, int IdResponsable)
+        public static ML.Result GuardarRutaArchivo(string ruta, string IdPlan, string IdAccion, int IdResponsable, string comentario)
         {
             ML.Result result = new ML.Result();
             try
             {
+                comentario = "###Responsable: " + comentario + "###";
                 int _idPlan = Convert.ToInt32(IdPlan.Split('_')[1]);//"IdPlan_3"
                 int _idAccion = Convert.ToInt32(IdAccion.Split('_')[1]);
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
@@ -2152,6 +2156,7 @@ namespace BL
                     DL.SeguimientoEvidencia seguimientoEvidencia = new DL.SeguimientoEvidencia();
                     seguimientoEvidencia.IdSeguimiento = seguimiento.IdSeguimiento;
                     seguimientoEvidencia.IdEvidencia = evidencia.IdEvidencia;
+                    seguimientoEvidencia.Comentario += comentario;
                     seguimientoEvidencia.FechaHoraCreacion = DateTime.Now;
                     seguimientoEvidencia.UsuarioCreacion = Convert.ToString(IdResponsable);
                     seguimientoEvidencia.ProgramaCreacion = "Carga de evidencias";
@@ -2305,6 +2310,75 @@ namespace BL
             }
             return result;
         }
+        public static ML.Result GetComentarios(int IdAccionesPlan, int IdResponsable)
+        {
+            ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
+            try
+            {
+                // Segun el IdAccionesPlan Buscar en responsableaccuonesPlan con ese id
+                // Segun el idResponsableaccionesPlan biscar en seguimiento con el idresponsavlesAccionesplan
+                // con el id de seguimiento buscar en seguimiento evidencia
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var responsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == IdAccionesPlan && o.IdResponsable == IdResponsable).FirstOrDefault();
+                    var seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == responsableAccionesPlan.IdResponsablesAccionesPlan).FirstOrDefault();
+                    var seguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seguimiento.IdSeguimiento).FirstOrDefault();
+                    var comentarios = seguimientoEvidencia.Comentario.Split(new string[] { "###" }, StringSplitOptions.None);
+
+                    comentarios = comentarios.Where(o => o != null && o != "").ToArray();
+                    result.Objects.Add(comentarios);
+                    result.Correct = true;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        public static ML.Result AgregarComentarios(int IdAccionesPlan, int IdResponsable, string comentario, int sessionResponsableId)
+        {
+            ML.Result result = new ML.Result();
+            result.Objects = new List<object>();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    if (sessionResponsableId == 0)
+                    {
+                        // Si no es un responsable el que agrega el comentario entonces va asi
+                        comentario = "###" + comentario + "###";
+                    }
+                    else
+                    {
+                        // Si es un responsable el que agrega el comentario entonces debe ser asi
+                        comentario = "###Responsable: " + comentario + "###";
+                    }
+                    
+                    var responsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == IdAccionesPlan && o.IdResponsable == IdResponsable).FirstOrDefault();
+                    var seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == responsableAccionesPlan.IdResponsablesAccionesPlan).FirstOrDefault();
+                    var seguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seguimiento.IdSeguimiento).FirstOrDefault();
+
+                    seguimientoEvidencia.Comentario += comentario;
+                    context.SaveChanges();
+
+                    result.Objects = GetComentarios(IdAccionesPlan, IdResponsable).Objects;
+                    result.Correct = true;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
         #endregion Seguimiento
 
 
@@ -2335,6 +2409,7 @@ namespace BL
                             IdBaseDeDatos = IdBD,
                             Direccion = Direccion,
                             Unidad = Unidad,
+                            IdEstatus = 1,
                             FechaHoraCreacion = DateTime.Now,
                             UsuarioCreacion = currentAdmin,
                             ProgramaCreacion = "Alta de permisos PDA"
@@ -2343,6 +2418,38 @@ namespace BL
                         context.SaveChanges();
                         ConfigurarPerfil(item, currentAdmin);
                     }
+                    result.Correct = true;
+                }
+            }
+            catch (Exception aE)
+            {
+                BL.NLogGeneratorFile.logErrorModuloPlanesDeAccion(aE, new StackTrace());
+                result.Correct = false;
+                result.ErrorMessage = aE.Message;
+                result.ex = aE;
+            }
+            return result;
+        }
+        /// <summary>
+        /// Deshabilita los permisos del administrador al area especificada
+        /// </summary>
+        /// <param name="IdAdmin"></param>
+        /// <param name="area"></param>
+        /// <returns>objeto de la clase result</returns>
+        public static ML.Result DesactivarPermiso(int IdAdmin, string area)
+        {
+            ML.Result result = new ML.Result();
+            try
+            {
+                using (DL.RH_DesEntities context = new DL.RH_DesEntities())
+                {
+                    var PDAPErmiso = context.PDAPermisos.Where(o => o.IdAdministrador == IdAdmin && o.Area == area).ToList();
+                    foreach (var item in PDAPErmiso)
+                    {
+                        if (item != null)
+                            item.IdEstatus = 2;
+                    }
+                    context.SaveChanges();
                     result.Correct = true;
                 }
             }
@@ -2465,7 +2572,14 @@ namespace BL
                             administrador.Selected = ML.Administrador.Data.falso;
                         if (item.AdminSA == 1)
                             administrador.Selected = ML.Administrador.Data.verdadero;
-                        administrador.AdminSA = Convert.ToInt32(item.AdminSA);
+                        
+                        if (item.AdminSA == 0)
+                            administrador.AdminSA = null;
+                        if (item.AdminSA == null)
+                            administrador.AdminSA = null;
+                        if (item.AdminSA != 0 && item.AdminSA != null)
+                            administrador.AdminSA = Convert.ToInt32(item.AdminSA);
+                        
                         result.Objects.Add(administrador);
                     }
                     result.Correct = true;
@@ -2493,7 +2607,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var existe = context.PDAPermisos.Where(o => o.IdAdministrador == IdAdmin && o.Area == Area).FirstOrDefault();
+                    var existe = context.PDAPermisos.Where(o => o.IdAdministrador == IdAdmin && o.Area == Area && o.IdEstatus == 1).FirstOrDefault();
                     if (existe != null)
                         result = true;
                 }
@@ -2516,7 +2630,7 @@ namespace BL
             {
                 using (DL.RH_DesEntities context = new DL.RH_DesEntities())
                 {
-                    var permisos = context.PDAPermisos.Where(o => o.IdAdministrador == IdAdmin);
+                    var permisos = context.PDAPermisos.Where(o => o.IdAdministrador == IdAdmin && o.IdEstatus == 1);
                     foreach (var itemPermiso in permisos)
                     {
                         ML.PDAPermisos pDAPermisos = new ML.PDAPermisos();

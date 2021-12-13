@@ -1286,6 +1286,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.EncuestaIngreso' no tiene definid
           <Property Name="IdBaseDeDatos" Type="int" />
           <Property Name="Direccion" Type="varchar" MaxLength="250" />
           <Property Name="Unidad" Type="varchar" MaxLength="250" />
+          <Property Name="IdEstatus" Type="int" />
         </EntityType>
         <EntityType Name="Perfil">
           <Key>
@@ -1686,6 +1687,7 @@ advertencia 6002: La tabla o vista 'RH_Des.dbo.PreguntaCategorias' no tiene defi
           <Property Name="FechaHoraEliminacion" Type="datetime" />
           <Property Name="UsuarioEliminacion" Type="varchar" MaxLength="200" />
           <Property Name="ProgramaEliminacion" Type="varchar" MaxLength="200" />
+          <Property Name="Comentario" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="SubDepartamento">
           <Key>
@@ -15694,6 +15696,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="ProgramaEliminacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Evidencia" Relationship="RH_DesModel.fk_SeguimientoEvidencia_Evidencia" FromRole="SeguimientoEvidencia" ToRole="Evidencia" />
           <NavigationProperty Name="Seguimiento" Relationship="RH_DesModel.fk_SeguimientoEvidencia_Seguimiento" FromRole="SeguimientoEvidencia" ToRole="Seguimiento" />
+          <Property Name="Comentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="fk_Evidencia_TipoEstatus">
           <End Type="RH_DesModel.TipoEstatus" Role="TipoEstatus" Multiplicity="0..1" />
@@ -15911,6 +15914,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <Property Name="IdBaseDeDatos" Type="Int32" />
           <Property Name="Direccion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
           <Property Name="Unidad" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IdEstatus" Type="Int32" />
         </EntityType>
         <Association Name="fk_PDAPermisos_Admin">
           <End Type="RH_DesModel.Administrador" Role="Administrador" Multiplicity="0..1" />
@@ -23584,6 +23588,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="SeguimientoEvidencia">
             <EntityTypeMapping TypeName="RH_DesModel.SeguimientoEvidencia">
               <MappingFragment StoreEntitySet="SeguimientoEvidencia">
+                <ScalarProperty Name="Comentario" ColumnName="Comentario" />
                 <ScalarProperty Name="ProgramaEliminacion" ColumnName="ProgramaEliminacion" />
                 <ScalarProperty Name="UsuarioEliminacion" ColumnName="UsuarioEliminacion" />
                 <ScalarProperty Name="FechaHoraEliminacion" ColumnName="FechaHoraEliminacion" />
@@ -23662,6 +23667,7 @@ advertencia 6002: La tabla o vista 'RH_Des.HangFire.Counter' no tiene definida n
           <EntitySetMapping Name="PDAPermisos">
             <EntityTypeMapping TypeName="RH_DesModel.PDAPermisos">
               <MappingFragment StoreEntitySet="PDAPermisos">
+                <ScalarProperty Name="IdEstatus" ColumnName="IdEstatus" />
                 <ScalarProperty Name="Unidad" ColumnName="Unidad" />
                 <ScalarProperty Name="Direccion" ColumnName="Direccion" />
                 <ScalarProperty Name="IdBaseDeDatos" ColumnName="IdBaseDeDatos" />

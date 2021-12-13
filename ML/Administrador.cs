@@ -9,7 +9,7 @@ namespace ML
     public class Administrador
     {
         public int IdRH { get; set; } = 0;
-        public int AdminSA { get; set; }
+        public int? AdminSA { get; set; }
         public string Code { get; set; }
         public int ID_EMPLEADO_FOR_UPDATE_PERMISOS { get; set; }
         public List<object> Objects { get; set; }

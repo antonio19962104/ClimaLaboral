@@ -144,6 +144,11 @@ namespace PL.Controllers
             var result = BL.PlanesDeAccion.AddPermisosPlanes(Area, admins, UsuarioActual, IdBD, Direccion, Unidad);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        public JsonResult DesactivarPermiso(int IdAdmin, string Area)
+        {
+            var result = BL.PlanesDeAccion.DesactivarPermiso(IdAdmin, Area);
+            return new JsonResult { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
         /// <summary>
         /// Obtiene los admins para el grid de seleccion de asignacion de permisos
         /// </summary>
@@ -455,8 +460,9 @@ namespace PL.Controllers
         /// <param name="formCollection"></param>
         /// <param name="IdPlan"></param>
         /// <param name="IdAccion"></param>
+        /// <param name="accionDeMejora"></param>
         /// <returns></returns>
-        public JsonResult AgregaArchivosSeguimieto(FormCollection formCollection, string IdPlan = "_IdPlan_1", string IdAccion = "_IdAccion_1")
+        public JsonResult AgregaArchivosSeguimieto(FormCollection formCollection, ML.AccionDeMejora accionDeMejora, string IdPlan = "_IdPlan_1", string IdAccion = "_IdAccion_1")
         {
             ML.Result result = new ML.Result();
             try
@@ -473,6 +479,7 @@ namespace PL.Controllers
                  *      Responsable 1
                  *          Archivo 1
                  */
+                string comentario = formCollection["comentario"].ToString();
                 IdPlan = "IdPlan_" + IdPlan;
                 IdAccion = "IdAccion_" + IdAccion;
                 string cadenaResponsable;
@@ -492,7 +499,7 @@ namespace PL.Controllers
                         if (!Directory.Exists(ruta))
                             Directory.CreateDirectory(ruta);
                         itemFile.SaveAs(Path.Combine(ruta, itemFile.FileName));
-                        BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, _idResponsable);
+                        BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, _idResponsable, comentario);
                         BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El archivo " + ruta + @"\\" + itemFile.FileName + " fue agregado correctamente");
                     }
                     catch (Exception aE)
@@ -502,7 +509,7 @@ namespace PL.Controllers
                             if (!Directory.Exists(ruta))
                                 Directory.CreateDirectory(ruta);
                             itemFile.SaveAs(Path.Combine(ruta, itemFile.FileName));
-                            BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, _idResponsable);
+                            BL.PlanesDeAccion.GuardarRutaArchivo(ruta + itemFile.FileName, IdPlan, IdAccion, _idResponsable, comentario);
                             BL.NLogGeneratorFile.nlogPlanesDeAccion.Info("El archivo " + ruta + @"\\" + itemFile.FileName + " fue agregado correctamente");
                             return Json(true);
                         }
@@ -542,6 +549,31 @@ namespace PL.Controllers
         {
             var result = BL.PlanesDeAccion.GuardarAvances(accionesPlan);
             return new JsonResult() { Data = result, JsonRequestBehavior= JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Obtiene el historial de comentarios sobre una evidencia cargada
+        /// </summary>
+        /// <param name="IdAccionesPlan"></param>
+        /// <param name="IdResponsable"></param>
+        /// <returns></returns>
+        public JsonResult GetComentarios(int IdAccionesPlan, int IdResponsable)
+        {
+            var result = BL.PlanesDeAccion.GetComentarios(IdAccionesPlan, IdResponsable);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+        /// <summary>
+        /// Agrega un comentario sobre una evidencia
+        /// </summary>
+        /// <param name="IdAccionesPlan"></param>
+        /// <param name="IdResponsable"></param>
+        /// <param name="formCollection"></param>
+        /// <returns></returns>
+        public JsonResult AgregarComentarios(int IdAccionesPlan, int IdResponsable, FormCollection formCollection)
+        {
+            string comentario = formCollection["comentario"].ToString();
+            int sessionResponsableId = Convert.ToInt32(Session["IdResponsable"]);
+            var result = BL.PlanesDeAccion.AgregarComentarios(IdAccionesPlan, IdResponsable, comentario, sessionResponsableId);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
         /// <summary>
         /// Descarga el layout de acciones de mejora

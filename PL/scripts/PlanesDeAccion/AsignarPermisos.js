@@ -26,7 +26,7 @@ var AreaSeleccionada;
                                 treeObject,
                                 { showAlwaysCheckBox: true, fold: false });
                             $("#tree-view").empty();
-                            document.getElementById("tree-view").appendChild(tw.root);
+                            //document.getElementById("tree-view").appendChild(tw.root);
                         }, 800);
                         
                     }
@@ -105,7 +105,7 @@ var AreaSeleccionada;
                                     editable: false,
                                     headerAttributes: { style: "text-align: center; vertical-align: middle; white-space: pre-wrap;" },
                                     attributes: { class: "text-center" },
-                                    template: '<input type="checkbox" #= Selected ? \'checked="checked"\' : "" # class="chkbx-Admin" />',
+                                    template: '<input type="checkbox" #= Selected ? \'checked="checked"\' : "" # class="chkbx-Admin" #= AdminSA != null ? \'disabled\' : "" # />',
                                     width: 110,
                                     //template: {"#=dirtyField(data,'Selected')#<input type='checkbox' #= Selected ? \'checked='checked'\' : ''# class='chkbx k-checkbox' />", width: 110}
                                 },
@@ -113,8 +113,13 @@ var AreaSeleccionada;
                                 editable: false,
 
                             })
+                        }).then(function () {
+                            $(".chkbx-Admin").unbind();
+                            $(".chkbx-Admin").click(function (e) {
+                                vm.DesactivarPermiso(e);
+                            });
                         });
-                       
+
                     }
                     else {
                         swal("");
@@ -123,7 +128,7 @@ var AreaSeleccionada;
             }
 
             $("#gridListAdmin").on("click", "input.chkbx-Admin", function (e) {
-                debugger
+                //debugger
 
                 var grid = $("#gridListAdmin").data("kendoGrid");
                 var adminSelected = grid.dataItem($(e.target).closest("tr"));
@@ -136,6 +141,8 @@ var AreaSeleccionada;
                 $('#gridListAdmin').data('kendoGrid').dataSource.read();
                 $('#gridListAdmin').data('kendoGrid').refresh();
 
+
+                vm.DesactivarPermiso(e);
 
             });
             vm.ObtenerAdminElegidos = function () {
@@ -173,6 +180,27 @@ var AreaSeleccionada;
                 });
             }
 
+
+            vm.DesactivarPermiso = function (e) {
+                //AreaSeleccionada
+                var isSeleccionado = e.currentTarget.checked;
+                if (isSeleccionado == false) {
+                    var IdAdmin = e.currentTarget.closest("tr").children[0].innerText;
+                    if (IdAdmin > 0) {
+                        vm.get("/PlanesDeAccion/DesactivarPermiso/?IdAdmin=" + IdAdmin + "&Area=" + AreaSeleccionada, function (response) {
+                            if (response.Correct) {
+                                console.log("OK");
+                            }
+                            else {
+                                alert(response.ErrorMessage);
+                            }
+                        });
+                    }
+                    else {
+                        swal("Ocurrió un errror al intentar obtener el Id del administrador", "", "error");
+                    }
+                }
+            }
 
             vm.consultaAreas = function (Objects, index) {
                 vm.EstructuraAFM = [];

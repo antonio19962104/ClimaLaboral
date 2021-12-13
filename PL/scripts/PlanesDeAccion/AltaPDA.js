@@ -1,6 +1,7 @@
 ﻿/*
  * Script del Modulo de Planes de Accion - Alta
  * 25/10/2021
+ * localStorage["usuario"] validar con este dato que no se pueda agregar un responsable igual al creador del plan
  */
 (function () {
     "use strict"
@@ -817,7 +818,10 @@
 
                             });
                             //se agrega el select de Periodiicidad
-                            
+                            $(".frm-respon-email").keyup(function (e) {
+                                vm.ValidaEmail(e);
+                            })
+
 
                         }
                         else {
@@ -1013,10 +1017,11 @@
                         console.log(vm.PlanDeAccionModel);                       
                     }
                     //se agregarón las acciones al modelo General
-                    var iddiv = e.target.parentElement.attributes.idcat.value;
+                    //alert(vm.IdCategoria);
+                    //var iddiv = e.target.parentElement.attributes.idcat.value;
                     document.getElementById("HselecCat").style.display = "block";
                     document.getElementById("BselecCat").style.display = "block";
-                    document.getElementById("cat_"+iddiv).style.display = "none";                                      
+                    document.getElementById("cat_"+vm.IdCategoria).style.display = "none";                                      
                     document.getElementById("loading").style.display = "none";
                 });
                 //regresa a la seccion de Arbol de Areas
@@ -1201,6 +1206,14 @@ if (validarEnvio) {
                             vm.ResponsablePlanModel = JSON.parse(JSON.stringify(_modelResponsablePlan));
                         });
                         //vm.AccionesPlanModel.ListadoResponsables.push(AccionesPlanObj);
+                        //Valida si la configuracion de un accion ya existe para evitar el duplicado de accion cuando se configura mas de una categoria
+                        var objetoValidacion = Enumerable.from(vm.PlanDeAccionModel.ListAcciones)
+                            .where(o => o.IdAccion == vm.AccionesPlanModel.IdAccion).toList();
+
+                        if (objetoValidacion.length > 0) {
+                            // Quito el item y abajo se vuelve a insertar con los datos actualizados
+                            vm.PlanDeAccionModel.ListAcciones = Enumerable.from(vm.PlanDeAccionModel.ListAcciones).where(o => o.IdAccion != vm.AccionesPlanModel.IdAccion).toArray();
+                        }
                         vm.PlanDeAccionModel.ListAcciones.push(vm.AccionesPlanModel);
                         vm.AccionesPlanModel = JSON.parse(JSON.stringify(_modelAccionesPlan));
                     });
@@ -1289,6 +1302,19 @@ if (validarEnvio) {
                     }
                 });
             }
+
+            vm.ValidaEmail = function (e) {
+                var email = e.target.value;
+                if (email == localStorage["usuario"]) {
+                    swal("El email del creador del plan de accion no puede usarse como responsable", "", "info").then(function () {
+                        e.target.classList.add("is-invalid");
+                    });
+                }
+                else {
+                    e.target.classList.remove("is-invalid");
+                }
+            }
+
             vm.limpiaGridCategoriasPorArea = function () {
                 if ($("#gridCategoriasPM").data("kendoGrid")) {
                     $("#gridCategoriasPM").data("kendoGrid").destroy();

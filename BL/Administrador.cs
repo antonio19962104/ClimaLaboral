@@ -56,7 +56,7 @@ namespace BL
                             administradorData.Company.LogoEmpresa = item.Company.LogoEmpresa;
 
                             administradorData.AdminSA = Convert.ToInt32(item.AdminSA);
-                            result.IsSuperAdmin = administradorData.AdminSA;
+                            result.IsSuperAdmin = (int)administradorData.AdminSA;
 
                             result.DataColors = administradorData;
                             result.CURRENT_IDEMPLEADOLOG = administradorData.Empleado.IdEmpleado;

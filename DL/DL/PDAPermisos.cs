@@ -29,6 +29,7 @@ namespace DL
         public Nullable<int> IdBaseDeDatos { get; set; }
         public string Direccion { get; set; }
         public string Unidad { get; set; }
+        public Nullable<int> IdEstatus { get; set; }
     
         public virtual Administrador Administrador { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿var IdPlanDeAccion = 0;
+﻿var targetVerComentarios;
+var IdPlanDeAccion = 0;
 var IdAccionSeleccionada = 0;
 (function () {
     "use strict"
@@ -129,6 +130,7 @@ var IdAccionSeleccionada = 0;
                 /*document.getElementById("mergePlan").children[0].style.display = "none";*/
                 /* document.getElementById("mergePlan").children[1].style.display = "none"; */
                 var accionPlan = Enumerable.from(vm.ListAcciones).where(o => o.IdAccionesPlan == IdAccionesPlan).firstOrDefault();
+                vm.accionPlanSeleccionado = accionPlan;
                 var htmlContent = templateDetalleAccion;
                 htmlContent = vm.replaceHtmlContent(htmlContent, accionPlan);
                 $("#mergePlan").append(htmlContent);
@@ -156,9 +158,14 @@ var IdAccionSeleccionada = 0;
                         if (accionPlan.ListResponsable[index].Atachments.length > 0) {
                             [].forEach.call(accionPlan.ListResponsable[index].Atachments, function (evidencia) {
                                 var ruta = evidencia.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
+                                var id = vm.getUid();
                                 $("#IdResponsable_" + responsable.IdResponsable).append(
-                                    `<a target="blank" href="` + ruta + `"><small class="ml-3" style="display:block;">` + ruta + `</small></a>`
+                                    `<a target="blank" href="` + ruta + `"><small class="ml-3" style="display:block;">` + ruta + `</small></a><i id="` + id + `" style="cursor:pointer;" title="Ver comentarios" class="fas fa-envelope ml-3"></i>`
                                 );
+                                document.getElementById(id).addEventListener("click", function (e) {
+                                    targetVerComentarios = e;
+                                    vm.VerComentarios(accionPlan, responsable.IdResponsable);
+                                });
                             });
                         }
                         else {
@@ -170,9 +177,16 @@ var IdAccionSeleccionada = 0;
                 }
 
                 $(".delete-file").unbind();
+                $(".view-comments").unbind();
                 [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
                     elem.addEventListener("click", function (e) {
                         vm.EliminarArchivo(e);
+                    });
+                });
+                [].forEach.call(document.getElementsByClassName("view-comments"), function (elem) {
+                    elem.addEventListener("click", function (e) {
+                        targetVerComentarios = e;
+                        vm.VerComentarios(accionPlan);
                     });
                 });
                 var content = document.getElementById('listAcciones');
@@ -195,6 +209,57 @@ var IdAccionSeleccionada = 0;
                     }
                     else {
                         vm.GuardarAvances(accionPlan.AccionesDeMejora.IdAccionDeMejora, IdPlanDeAccion, accionPlan.IdAccionesPlan);
+                    }
+                });
+            }
+
+            vm.VerComentarios = function (accionPlan, _idResponsable) {
+                if (_idResponsable == null) {
+                    _idResponsable = accionPlan.ListResponsable[0].IdResponsable;
+                }
+                vm.get("/PlanesDeAccion/GetComentarios/?IdAccionesPlan=" + accionPlan.IdAccionesPlan + "&IdResponsable=" + _idResponsable, function (response) {
+                    if (response.Correct) {
+                        vm.Comentarios = [];
+                        [].forEach.call(response.Objects[0], function (comentario) {
+                            if (comentario != "") {
+                                if (comentario.includes("Responsable: "))
+                                    vm.Comentarios.push({ from: 'Respo', comentario: comentario });
+                                else
+                                    vm.Comentarios.push({ from: 'Admin', comentario: comentario });
+                            }
+                        });
+                        console.log(vm.Comentarios);
+                        $('#formular').modal('toggle');
+                        document.getElementById("class-header").classList.remove("alert-danger");
+                        document.getElementById("class-header").classList.add("alert-info");
+                        document.getElementById("title-header").innerHTML = "Chat de comentarios";
+                        /*
+                        <div id="mergeError">
+                            <div class="row ml-2">Hola</div>
+                            <div class="row offset-7">Hola</div>
+                        </div>
+                         */
+                        var divChat = "";
+                        document.getElementById("mergeError").innerHTML = "";
+                        document.getElementById("mergeChat").innerHTML = "";
+                        [].forEach.call(vm.Comentarios, function (comentario) {
+                            if (comentario.from == "Respo")
+                                divChat += '<div class="row ml-2 mt-2"><span style="background-color: #8be68b;width: 45%;border-radius: 5px;padding: 5px;">' + comentario.comentario + '</span></div>';
+                            else
+                                divChat += '<div class="row offset-5 mt-2"><span style="background-color: #6da2e6;width: 80%;border-radius: 5px;padding: 5px;">' + comentario.comentario + '</span></div>';
+                        });
+                        document.getElementById("mergeError").innerHTML += divChat;
+                        document.getElementById("mergeChat").innerHTML +=
+                            `<div class="row col-12">
+                                <div class="col-10"><input type="text" id="txtChatNewComentario" class="form-control" placeholder="Escribe un mensaje"></div>
+                                <div class="col-2 p-0"><input type="button" value="Enviar" onclick="AgregarComentario(` + accionPlan.IdAccionesPlan + `,` + _idResponsable + `)" class="btn btn-success btn-sm"></div>
+                            </div>`;
+                        if (document.getElementById("formular").style.display == "none") {
+                            $('#formular').modal('toggle');
+                        }
+                    }
+                    else {
+                        swal("Ocurrió un error al intentar consultar los comentarios", response.ErrorMessage, "error");
                     }
                 });
             }
@@ -260,7 +325,7 @@ var IdAccionSeleccionada = 0;
                 var cadena = "";
                 [].forEach.call(data, function (item) {
                     var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");     
-                    cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                    cadena += '<i class="fas fa-envelope view-comments mr-2" title="Ver comentarios" style="cursor:pointer"></i><i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                 });
                 if (cadena.length == 0)
                     cadena = '<small style="display: block;color:red;">Aun no se suben evidencias</small>';
@@ -349,6 +414,12 @@ var IdAccionSeleccionada = 0;
                         });
                         return false;
                     }*/
+                    var comentario = document.getElementById("txtComentarios").value;
+                    let model = {
+                        IdAccionDeMejora: 0,
+                        Descripcion: comentario
+                    };
+                    formData.append("comentario", comentario);
                     document.getElementById("loading").style.display = "block";
                     $.ajax({
                         url: "/PlanesDeAccion/AgregaArchivosSeguimieto/?IdPlan=" + IdPlanDeAccion + "&IdAccion=" + IdAccionSeleccionada,
@@ -362,17 +433,25 @@ var IdAccionSeleccionada = 0;
                                 swal("Las evidencias fueron agregadas con éxito", "", "success").then(function () {
                                     /* Actualizar archivos */
                                     document.getElementById("label-for-input").innerText = "Adjuntar archivos de evidencia";
+                                    document.getElementById("txtComentarios").value = "";
                                     $("#listadoDocs").empty();
                                     var cadena = "";
                                     [].forEach.call(response.Atachment, function (item) {
                                         var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
-                                        cadena += '<i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                                        cadena += '<i class="fas fa-envelope view-comments mr-2" title="Ver comentarios" style="cursor:pointer"></i><i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                                     });
                                     $("#listadoDocs").append(cadena);
                                     $(".delete-file").unbind();
+                                    $(".view-comments").unbind();
                                     [].forEach.call(document.getElementsByClassName("delete-file"), function (elem) {
                                         elem.addEventListener("click", function (e) {
                                             vm.EliminarArchivo(e);
+                                        });
+                                    });
+                                    [].forEach.call(document.getElementsByClassName("view-comments"), function (elem) {
+                                        elem.addEventListener("click", function (e) {
+                                            targetVerComentarios = e;
+                                            vm.VerComentarios(vm.accionPlanSeleccionado);
                                         });
                                     });
                                 });
@@ -602,7 +681,10 @@ var templateDetalleAccion = IdResponsable > 0 ? `
                                     <input hidden type="file" placeholder="Selecciona" class="form-control frm-archivos" id="fileChosser" name="fileChosser" multiple="multiple" />
                                     <i class="fas fa-paperclip fa-lg"></i><label id="label-for-input" for="fileChosser">Adjuntar archivos de evidencia</label>
                                 </div>
-                                <div id="listadoDocs" class="offset-4" style="border: 1px solid #FFC000;border-radius: 10px;padding: 5px 10px 5px 10px;">
+                                <div class="col-8 offset-4">
+                                    <textarea placeholder="Comentario de las evidencias" max-length="250" class="form-control frm-archivos" id="txtComentarios" />
+                                </div>
+                                <div id="listadoDocs" class="offset-4 mt-3" style="border: 1px solid #FFC000;border-radius: 10px;padding: 5px 10px 5px 10px;">
                                     #listAtachments#
                                 </div>
                             </div>
@@ -704,4 +786,38 @@ var CrearScript = function (src) {
     var script = document.createElement('script');
     script.src = src;
     document.head.appendChild(script);
+}
+
+var AgregarComentario = function (IdAccionesPlan, IdResponsable) {
+    console.log(IdAccionesPlan);
+    var comentario = document.getElementById("txtChatNewComentario").value;
+    if (comentario == "" || comentario == null) {
+        swal("Escribe un mensaje", "", "info").then(function () {
+            return false;
+        });
+        return;
+    }
+    var formData = new FormData();
+    formData.append("comentario", comentario);
+    $.ajax({
+        url: "/PlanesDeAccion/AgregarComentarios/?IdAccionesPlan=" + IdAccionesPlan + "&IdResponsable=" + IdResponsable,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response.Correct) {
+                swal("Comentario agregado correctamente", "", "success").then(function () {
+                    console.log(response.Objects);
+                    targetVerComentarios.target.click();
+                });
+            }
+            else {
+                swal("Ocurrió un error al intentar enviar el comentario", response.ErrorMessage, "error");
+            }
+        },
+        error: function (err) {
+            alert(err);
+        }
+    });
 }
