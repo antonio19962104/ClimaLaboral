@@ -1,0 +1,672 @@
+﻿@model ML.Result
+@{
+    ViewBag.Title = "Encuesta";
+    Layout = "~/Views/Admin/Contenido.cshtml";
+    var error = false;
+}
+
+@section Styles
+{
+    <style type="text/css">
+        .contenedor-text-rich .btn-group {
+            position: unset !important;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slides {
+            width: 100%;
+            height: 100%;
+            color: #FFFFFF;
+        }
+
+            .swiper-slides .swiper-slide {
+                background-color: #111657;
+                padding: 0.65rem;
+                min-height: 395px;
+            }
+
+        .slider-templates-wrap {
+            position: relative;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .swiper-prev {
+            left: -30px;
+        }
+
+        .swiper-next {
+            right: -30px;
+        }
+
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 2rem;
+        }
+    </style>
+}
+@section H1
+{
+    <section id="page-title">
+        <div class="container-fluid px-lg-5">
+            <div class="row">
+                <div class="col-sm-8 bottom-align-left center-vertically-xs">
+                    <img class="img-fluid img-page-title" src="~/img/icon-survey.png"> <h1 class="title-page-survey">Encuestas / <span>Listado</span></h1>
+                </div>
+                <div class="col-sm-2 bottom-align-right center-vertically-xs">
+                    <a href="@Url.Action("Load","Encuesta")" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-save"></i>Importar Encuesta</span>
+                    </a>
+                </div>
+                <div class="col-sm-2 bottom-align-right center-vertically-xs">
+                    <a href="@Url.Action("Create","Encuesta")" class="btn-parallelogram parallelogram">
+                        <span class="skew-fix"><i class="fas fa-eye"></i>Crear Encuesta</span>
+                    </a>
+                </div>
+
+            </div><!--.row-->
+        </div><!--.container-fluid-->
+    </section>
+}
+
+@*<section id="content">*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.5.0/materia/bootstrap.min.css">
+<div class="content-wrap">
+    <div class="container-fluid px-lg-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-templates">
+                    <div class="title-header-blue">
+                        <span class="title-header-section">
+                            Encuestas Creadas
+                        </span>
+                    </div>
+                    <div class="row">
+                        <div class="active-cyan-3 active-cyan-4 mb-4 col-12 col-sm-6">
+                            <input class="form-control filter" type="text" placeholder="Busqueda" title="Escribe algun texto" aria-label="Busqueda">
+                        </div>
+                    </div>
+                    @*<div class="slider-templates-wrap">
+    <div class="slider-produtos-destaque swiper-container">*@
+                            <div class="row">
+                                @{
+                                    foreach (ML.Encuesta item in Model.ListadoDeEncuestas)
+                                    {
+                                        <div class="gv-card col-lg-3 col-md-3 col-sm-4 col-xs-12 my-2">
+                                            <div class="card " style="background-color: #D9D9D9;">                                                                                               
+                                            <div class="card-body">
+                                                <h3 class="card-title" style="text-overflow:ellipsis;white-space:nowrap;overflow:hidden;" alt="@Html.Raw(item.Nombre)" title="@Html.Raw(item.Nombre)">@Html.Raw(item.Nombre)</h3>
+                                            <div class="card p-3" style="background: linear-gradient(30deg,#B1BDCE,white);">
+                                                <p class="card-text">
+                                                @{
+                                                    if (item.BasesDeDatos != null)
+                                                    {
+                                                        @Html.Raw(item.BasesDeDatos.Nombre)
+                                                    }
+                                                }
+                                               </p>
+                                                <p class="card-text">@Html.Raw(item.Company.CompanyName)</p>
+                                                <p class="card-text">Vigencia: @Html.Raw(item.FechaInicio) a @Html.Raw(item.FechaFin)</p>
+                                                <p class="card-text">Periodo: @Html.Raw(item.periodo)</p>
+                                                <p class="card-text">Encuesta: @Html.Raw(item.TipoEncuesta)</p>
+                                                 
+                                               
+                                                    @if (item.TipoOrden != null)
+                                                    {
+                                                        @:<p class="card-text">
+                                                            @Html.Raw(item.TipoOrden.Descripcion)
+                                                        @:</p>
+                                                    }
+
+                                                @{ 
+                                                    decimal total, terminadas ,promedio, promtotal;
+                                                    string clase = "";
+                                                    string csscolor = "";
+                                                    total = (decimal)item.resumen.Esperadas;
+                                                    terminadas = (decimal)item.resumen.Terminadas;
+                                                    if (terminadas > 0)
+                                                    {
+                                                        promedio = terminadas / total;
+                                                        promtotal = promedio * 100;
+                                                        promtotal =  Math.Round(promtotal, 2, MidpointRounding.ToEven);
+                                                    }
+                                                    else
+                                                    {
+                                                        promtotal = 0;
+                                                    }
+                                                    //Escala de colores segun el promedio
+
+                                                    if (promtotal < 21)
+                                                    {
+                                                        csscolor = "#f15a24";
+                                                        clase = "col-2";
+                                                    }
+                                                    if (promtotal > 20 && promtotal < 41)
+                                                    {
+                                                        csscolor = "#f7931e";
+                                                        clase = "col-4";
+                                                    }
+                                                    if (promtotal > 40 && promtotal < 61)
+                                                    {
+                                                        csscolor = "#cccc01";
+                                                        clase = "col-6";
+                                                    }
+                                                    if (promtotal > 60 && promtotal < 81)
+                                                    {
+                                                        csscolor = "#8cc63f";
+                                                        clase = "col-9";
+                                                    }
+                                                    if (promtotal > 80 && promtotal <= 100)
+                                                    {
+                                                        csscolor = "#39b54a";
+                                                        clase = "col-12";
+                                                    }
+
+
+                                                }
+
+                                                <div class="row">
+                                                    <div class="col-12 p-0" style="background-color:#39B54A">
+                                                        <div class="@clase" style="background-color:@csscolor">                                                    
+                                                        &nbsp;</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">Creado</div>
+                                                    <div class="col-6">Editado</div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">@Html.Raw(item.FechaHoraCreacion)</div>
+                                                    <div class="col-6">@Html.Raw(item.FechaHoraModificacion)</div>
+                                                </div>
+                                            </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                                    }
+                                }
+                           </div>
+@*
+        </div>
+
+    </div>*@
+                    @{
+                        if (error == true)
+                        {
+                            @Html.Partial("~/Views/Encuesta/errorView.cshtml")
+                        }
+                    }
+
+                </div>
+            </div>
+        </div><!--.row-->
+    </div><!--.container-->
+</div><!--.content-wrap-->
+<script>
+    function validaEnviada(enviada) {
+        if(enviada == 1){
+            swal({
+                title: "Esta encuesta ya fué enviada anteriormente. Estas seguro de que quieres volver a enviar esta encuesta",
+                text: "",
+                icon: "info",
+                buttons: [
+                  'No, cancelar!',
+                  'Si, estoy seguro!'
+                ],
+                dangerMode: false,
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+                   //Open modal
+                }
+                else {
+                    $('#modalEdit').modal('toggle');//Close modal
+                }
+            });
+        }
+    }
+    function confirmEditEncuesta(IdEncuestaEdit) {
+        swal({
+            title: "Estas seguro de que quieres editar esta encuesta",
+            text: "",
+            icon: "info",
+            buttons: [
+              'No, cancelar!',
+              'Si, estoy seguro!'
+            ],
+            dangerMode: false,
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+                ///Encuesta/Edit?IdEncuesta=180
+                window.location.href = '/Encuesta/Edit?IdEncuesta=' + IdEncuestaEdit;
+            }
+        });
+    }
+</script>
+
+
+<div class="wrapper-editor">
+    <div class="row d-flex justify-content-center modalWrapper">
+        <div class="modal fade modalEditClass" id="modalEdit" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div id="anchoModal" class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold text-secondary ml-5">Configurar email de invitación</h4>
+                        <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <input type="hidden" name="name" value="" id="IdEncuestaEnviar" />
+                    <input type="hidden" name="name" value="" id="tipoEncuesta" />
+                    <input type="hidden" name="name" value="" id="txtEnviada" />
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Mensaje predeterminado para el envio de invitaciones</label>
+                            @Html.TextArea("txtDefaultEmail", new { @Value = " ", rows = "10", style = "resize:none;width:100%;", @class = "form-control input-lg textarea-editor", @editable = "false", @id = "msgDefault" })
+                        </div>
+                        <div class="md-form mb-5">
+                            <label data-error="wrong" data-success="right" for="inputName">Personaliza tu email de invitación</label>
+                            <div class="form-group">
+                                <label class="control-label" style="font-weight:bold">El mensaje debe contener las palabras clave con los asteriscos como se muestra en el ejemplo del mensaje predeterminado</label>
+                                <label class="control-label" style="font-weight:bold">
+                                    *NombreUsuario*
+                                    *NombreEncuesta*
+                                    *FechaInicio*
+                                    *FechaFin*
+                                    *LinkEncuesta*
+                                    *ClaveAcceso*
+                                </label>
+                            </div>
+                            <div class="contenedor-text-rich">
+                                @Html.TextArea("txtCustomEmail", new { @Value = " ", rows = "10", style = "resize:none;width:100%;", placeholder = "Instruccion", @class = "form-control input-lg textarea-editor", @id = "customEmail" })
+                            </div>
+                        </div>
+                        <div class="md-form mb-5">
+                            <label class="control-label">Que mensaje deseas enviar</label>
+                            <div class="form-group">
+                                <input id="def1" type="radio" name="opcion" value="default" /> <label for="def1">Mensaje por default</label>
+                            </div>
+                            <div class="form-group">
+                                <input id="def2" type="radio" name="opcion" value="custom" /> <label for="def2">Mi mensaje personalizado</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center buttonAddFormWrapper">
+                            <button onclick="return onSwal($('#IdEncuestaEnviar').val(), $('#tipoEncuesta').val())" id="btnEditEmail" class="btn btn-outline-primary btn-block buttonAdd">
+                                Enviar emails
+                                <i class="fas fa-envelope"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-backdrop {
+        z-index: -5 !important;
+    }
+
+    #anchoModal {
+        min-width: 80%;
+    }
+</style>
+
+@*</section>*@
+@section Scripts
+{
+
+
+
+    <link href="~/css/summernote.min.css" rel="stylesheet" />
+    <script src="~/scripts/summernote/bootstrap.js" type="text/javascript"></script>
+    <script src="~/scripts/summernote/summernote.js" type="text/javascript"></script>
+    <script src="~/scripts/jqueryBase642.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/scripts/swiper.min.js"></script>
+    <script src="~/scripts/lz-string.min.js"></script>
+    <script>
+        function EnviarClimaLab() {
+            window.location.href = "/Encuesta/EnviarEncuestaClima/?IdEncuesta=1";
+        }
+
+        function onSwal(IdEncuesta, tipo) {
+
+            var mensaje = '';
+            if ($('input:radio[name=opcion]:checked').val() == 'default') {
+                mensaje = '*NombreUsuario* *NombreEncuesta* *FechaInicio* *FechaFin* *LinkEncuesta* *ClaveAcceso*';
+            }
+            else if ($('input:radio[name=opcion]:checked').val() == 'custom') {
+                mensaje = $('#customEmail').val();
+            }
+
+            if ($('input:radio[name=opcion]:checked').val() == '' || $('input:radio[name=opcion]:checked').val() == null) {
+                swal('Debes elegir un mensaje a enviar', '', 'info');
+                return false;
+            }
+            else
+                if ($('input:radio[name=opcion]:checked').val() == 'custom' && mensaje == '') {
+                    swal('El mensaje del email no puede estar vacio', '', 'info');
+                    return false;
+                }
+
+                //Validar espacios dinamicos
+                else if (mensaje.includes('*NombreUsuario*') == false) {
+                    swal('El mensaje del email debe contener el apartado para el nombre del detinatario', '', 'info');
+                    return false;
+                }
+                else if (mensaje.includes('*NombreEncuesta*') == false) {
+                    swal('El mensaje del email debe contener el apartado para el nombre de la Encuesta', '', 'info');
+                    return false;
+                }
+                else if (mensaje.includes('*FechaInicio*') == false) {
+                    swal('El mensaje del email debe contener el apartado para la fecha de Inicio', '', 'info');
+                    return false;
+                }
+                else if (mensaje.includes('*FechaFin*') == false) {
+                    swal('El mensaje del email debe contener el apartado para la fecha de Fin', '', 'info');
+                    return false;
+                }
+                else if (mensaje.includes('*ClaveAcceso*') == false) {
+                    swal('El mensaje del email debe contener el apartado para la Clave de Acceso del usuario', '', 'info');
+                    return false;
+                }
+                else if (mensaje.includes('*LinkEncuesta*') == false) {
+                    swal('El mensaje del email debe contener el apartado para delimitar el link de la Encuesta, el cual debe colocarse despues de la palabra clave *LinkEncuesta*', '', 'info');
+                    return false;
+                }
+
+
+                //else if (mensaje.includes('*endUrl*') == false) {
+                //    swal('El mensaje del email debe contener el apartado para delimitar el link de la Encuesta, el cual debe colocarse dentro de las palabras clave *startUrl* y *endUrl*', 'Ejemplo: *startUrl*Aqui se coloca el link de la encuesta*endUrl*', 'info');
+                //    return false;
+                //}
+
+                else {
+
+                    //Pase Mensaje => base 64
+                    var mensajeBase64 = $.base64.encode(reemplazarAcentos(mensaje));
+
+                    var urlBse = "http://" + window.location.href.split("/")[2];
+                    let model = {
+                        idEncuesta: IdEncuesta,
+                        tipoMensaje: $('input:radio[name=opcion]:checked').val(),
+                        mensaje: mensajeBase64,
+                        currentUrl: urlBse,
+                    }
+                    //Confirm
+                    if (tipo == 4) {
+                        swal({
+                        title: "Estas seguro de que quieres enviar la encuesta",
+                        text: "",
+                        icon: "info",
+                        buttons: [
+                          'No, cancelar!',
+                          'Si, estoy seguro!'
+                        ],
+                        dangerMode: false,
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {
+                            if (IdEncuesta != 1) {
+                                swal({
+                                    title: "Los email han comenzado a enviarse. Se le notificará cuando este proceso haya terminado",
+                                    text: "",
+                                    type: "success",
+                                    icon: "success",
+                                }).then(function () {
+                                    $.ajax({
+                                        url: '@Url.Action("envioMasivoEmail", "ClimaDinamico")',
+                                        data: model,
+                                        type: 'POST',
+                                        complete: function () {
+                                            window.location.href = "/Encuesta/GetAll/";
+                                        }
+                                    });
+                                });
+                                return false;
+                            }
+                            else {
+
+                            }
+                        } else {
+                            return false;
+                        }
+                    });
+                    }
+                    else {
+                        swal({
+                        title: "Estas seguro de que quieres enviar la encuesta",
+                        text: "",
+                        icon: "info",
+                        buttons: [
+                          'No, cancelar!',
+                          'Si, estoy seguro!'
+                        ],
+                        dangerMode: false,
+                    }).then(function (isConfirm) {
+                        if (isConfirm) {
+                            if (IdEncuesta != 1) {
+                                swal({
+                                    title: "Los email han comenzado a enviarse. Se le notificará cuando este proceso haya terminado",
+                                    text: "",
+                                    type: "success",
+                                    icon: "success",
+                                }).then(function () {
+                                    $.ajax({
+                                        url: '@Url.Action("EnviarEncuesta")',
+                                        data: model,
+                                        type: 'POST',
+                                        complete: function () {
+                                            window.location.href = "/Encuesta/GetAll/";
+                                        }
+                                    });
+                                });
+                                return false;
+                            }
+                            else {
+
+                            }
+                        } else {
+                            return false;
+                        }
+                    });
+                    }
+
+                }
+        }
+        var reemplazarAcentos = function (cadena) {
+            if (cadena != "" && cadena != null) {
+                var chars = {
+                    "á": "&aacute;", "é": "&eacute;", "í": "&iacute;", "ó": "&oacute;", "ú": "&uacute;",
+                    "à": "&aacute;", "è": "&eacute;", "ì": "&iacute;", "ò": "&oacute;", "ù": "&uacute;", "ñ": "n",
+                    "Á": "&Aacute;", "É": "&Eacute;", "Í": "&Iacute;", "Ó": "&Oacute;", "Ú": "&Uacute;",
+                    "À": "&Aacute;", "È": "&Eacute;", "Ì": "&Iacute;", "Ò": "&Oacute;", "Ù": "&Uacute;", "Ñ": "N"
+                }
+                var expr = /[áàéèíìóòúùñ]/ig;
+                var res = cadena.replace(expr, function (e) { return chars[e] });
+            }
+            else {
+                res = "";
+            }
+            return res;
+        }
+        function confirmacionEliminar(IdEncuestaDelete) {
+            let model = {
+                idEncuesta: IdEncuestaDelete
+            }
+            swal({
+                title: "Estas seguro de que quieres eliminar la encuesta",
+                text: "",
+                icon: "warning",
+                buttons: [
+                  'No, cancelar!',
+                  'Si, estoy seguro!'
+                ],
+                dangerMode: false,
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: '@Url.Action("Delete")',
+                        data: model,
+                        complete: function (Response) {
+                            if (Response.responseJSON == "success") {
+                                swal({
+                                    title: 'La encuesta fue eliminada',
+                                    text: '',
+                                    icon: 'success'
+                                }).then(function () {
+                                    window.location.reload(true);
+                                });
+                            }
+                            else {
+                                swal('No se ha podido eliminar la encuesta', '', 'info');
+                            }
+                        }
+                    });
+
+                } else {
+                    return false;
+                }
+            })
+        }
+    </script>
+    <script>
+
+        $(".filter").on("keyup", function (text) {
+            var texto = text.target.value;
+            var input = texto.toUpperCase();//$(this).val().toUpperCase();
+            var todosCard = $(".gv-card");
+            [].forEach.call(todosCard, function (elem) {
+                var dataString = elem.innerText;
+                dataString = dataString.toUpperCase();
+                var existe = false;
+                existe = dataString.indexOf(input);
+                if (input != "") {
+                    if (existe > 0) {
+                        elem.hidden = false;
+                    }
+                    else {
+                        elem.hidden = true;
+                    }
+                }
+                else { elem.hidden = false; }
+                
+
+            });
+           
+        });
+
+        function enviaEncuesta(IdEncuesta) {
+
+            swal({
+                title: "Procesando...",
+                text: "Espere...",
+                imageUrl: "",
+                icon: "/images/load.gif",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+            $('.swal-icon').addClass('load');
+            $('.load').css('width', '25%');
+            $('.load').css('height', '25%');
+            $('swal-button-container').css('display', 'none');
+
+            let ModelEncuesta = {
+                IdEncuesta: IdEncuesta
+            };
+
+            $.ajax({
+                type: 'POST',
+                data: ModelEncuesta,
+                url: '@Url.Action("SendEncuestaGral", "Encuesta")',
+                complete: function (Response) {
+                    if (Response.responseJSON = 'success') {
+                        swal({
+                            title: "Los email han comenzado a enviarse. Se le notificará cuando este proceso haya terminado",
+                            text: "",
+                            type: "success",
+                            icon: "success",
+                        }).then(function () {
+                            window.location.href = "/Encuesta/GetAll";
+                        });
+                    }
+                    else {
+                        swal("Hubo un error al intentar enviar los emails", "", "warning");
+                    }
+                }
+            });
+        };
+    </script>
+    <script>
+        var x = document.getElementsByClassName("slider-templates-wrap");
+
+        for (var i = 0; i < x.length; i++) {
+
+            var el = x[i];
+
+            var swiper = el.getElementsByClassName("swiper-container")[0];
+            var nx = el.getElementsByClassName("swiper-next")[0];
+            var pr = el.getElementsByClassName("swiper-prev")[0];
+
+            new Swiper(swiper, {
+                slidesPerView: 3,
+                spaceBetween: 0,
+        loop: true,
+                navigation: {
+                    nextEl: nx,
+                    prevEl: pr
+                },
+                breakpoints: {
+                    200: {
+                        slidesPerView: 1,
+                        spaceBetween: 5,
+                    },
+                    567: {
+                        slidesPerView: 3,
+                        spaceBetween: 5,
+                    },
+                    992: {
+                        slidesPerView: 4,
+                        spaceBetween: 10,
+                    },
+                }
+            });
+        }
+
+        //var swiper = new Swiper('.swiper-slides', {
+        //    slidesPerView: 3,
+        //    spaceBetween: 25,
+        //    slidesPerGroup: 1,
+        //    loop: true,
+        //    loopFillGroupWithBlank: true,
+        //    navigation: {
+        //        nextEl: '.swiper-button-next',
+        //        prevEl: '.swiper-button-prev',
+        //    },
+        //});
+        //var swiper_templates = new Swiper('.own-templates', {
+        //    slidesPerView: 4,
+        //    spaceBetween: 25,
+        //    slidesPerGroup: 1,
+        //    loop: true,
+        //    loopFillGroupWithBlank: true,
+        //    navigation: {
+        //        nextEl: '.swiper-button-next',
+        //        prevEl: '.swiper-button-prev',
+        //    },
+        //});
+
+        $(document).ready(function () {
+            $('#msgDefault').summernote('disable');
+            var mensajeDefault = '<p><b>Que tal *NombreUsuario*<o:p></o:p></b></p><p>Has sido dado de alta dentro del portal de encuestas <b>Diagnostic4U.</b><o:p></o:p></p><p>Has sido elegido para contestar la encuesta: <b>*NombreEncuesta*</b> la cual estará activa desde el <b>*FechaInicio*</b> hasta el <b>*FechaFin*</b><o:p></o:p></p><p>Tu clave de acceso es la siguiente: <b>*ClaveAcceso*</b><o:p></o:p></p><p>Accede entrando a: <b>*LinkEncuesta*<a href="http://www.diagnostic4u.com/Encuesta/e/?u=E7832E0B-9995-4B90-AC41-9D06E835F276"></b></a><o:p></o:p></p><p></p><p><img border="0" id="_x0000_i1025" src="http://demo.climalaboral.divisionautomotriz.com/img/logo.png"><o:p></o:p></p>';
+            $("#msgDefault").summernote("code", mensajeDefault);          
+        })
+    </script>
+}
+
+

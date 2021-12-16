@@ -3573,7 +3573,7 @@ namespace PL.Controllers
             else
             {
                 // Job recurrente
-                string uid = "IdPlan_" + IdEncuesta + "_" + IdBaseDeDatos + "_" + Guid.NewGuid().ToString();
+                string uid = "NotificacionProgramada_IdEncuesta_" + IdEncuesta + "_IdBD_" + IdBaseDeDatos + "_" + Guid.NewGuid().ToString();
                 result.Correct = BL.PlanesDeAccion.AgregarJobNotificacionesPDA(0, uid, Session["AdminLog"].ToString(), email.Frecuencia, email.Plantilla, email.Priority, email.Subject, IdEncuesta, IdBaseDeDatos);
                 RecurringJob.AddOrUpdate(uid, () => BL.Encuesta.ConfiguraNotificacion(IdEncuesta, IdBaseDeDatos, email), email.Frecuencia, TimeZoneInfo.Local);
             }

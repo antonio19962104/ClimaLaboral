@@ -219,43 +219,59 @@ var IdAccionSeleccionada = 0;
                 }
                 vm.get("/PlanesDeAccion/GetComentarios/?IdAccionesPlan=" + accionPlan.IdAccionesPlan + "&IdResponsable=" + _idResponsable, function (response) {
                     if (response.Correct) {
-                        vm.Comentarios = [];
-                        [].forEach.call(response.Objects[0], function (comentario) {
-                            if (comentario != "") {
-                                if (comentario.includes("Responsable: "))
-                                    vm.Comentarios.push({ from: 'Respo', comentario: comentario });
+                        if (response.Objects.length > 0) {
+                            vm.Comentarios = [];
+                            [].forEach.call(response.Objects[0], function (comentario) {
+                                if (comentario != "") {
+                                    if (comentario.includes("Responsable: "))
+                                        vm.Comentarios.push({ from: 'Respo', comentario: comentario });
+                                    else
+                                        vm.Comentarios.push({ from: 'Admin', comentario: comentario });
+                                }
+                            });
+                            console.log(vm.Comentarios);
+                            $('#formular').modal('toggle');
+                            document.getElementById("class-header").classList.remove("alert-danger");
+                            document.getElementById("class-header").classList.add("alert-info");
+                            document.getElementById("title-header").innerHTML = "Chat de comentarios";
+                            var divChat = "";
+                            document.getElementById("mergeError").innerHTML = "";
+                            document.getElementById("mergeChat").innerHTML = "";
+                            [].forEach.call(vm.Comentarios, function (comentario) {
+                                if (comentario.from == "Respo")
+                                    divChat += '<div class="row ml-2 mt-2"><span style="background-color: #8be68b;width: 45%;border-radius: 5px;padding: 5px;">' + comentario.comentario + '</span></div>';
                                 else
-                                    vm.Comentarios.push({ from: 'Admin', comentario: comentario });
-                            }
-                        });
-                        console.log(vm.Comentarios);
-                        $('#formular').modal('toggle');
-                        document.getElementById("class-header").classList.remove("alert-danger");
-                        document.getElementById("class-header").classList.add("alert-info");
-                        document.getElementById("title-header").innerHTML = "Chat de comentarios";
-                        /*
-                        <div id="mergeError">
-                            <div class="row ml-2">Hola</div>
-                            <div class="row offset-7">Hola</div>
-                        </div>
-                         */
-                        var divChat = "";
-                        document.getElementById("mergeError").innerHTML = "";
-                        document.getElementById("mergeChat").innerHTML = "";
-                        [].forEach.call(vm.Comentarios, function (comentario) {
-                            if (comentario.from == "Respo")
-                                divChat += '<div class="row ml-2 mt-2"><span style="background-color: #8be68b;width: 45%;border-radius: 5px;padding: 5px;">' + comentario.comentario + '</span></div>';
-                            else
-                                divChat += '<div class="row offset-5 mt-2"><span style="background-color: #6da2e6;width: 80%;border-radius: 5px;padding: 5px;">' + comentario.comentario + '</span></div>';
-                        });
-                        document.getElementById("mergeError").innerHTML += divChat;
-                        document.getElementById("mergeChat").innerHTML +=
-                            `<div class="row col-12">
+                                    divChat += '<div class="row offset-5 mt-2"><span style="background-color: #6da2e6;width: 80%;border-radius: 5px;padding: 5px;">' + comentario.comentario + '</span></div>';
+                            });
+                            document.getElementById("mergeError").innerHTML += divChat;
+                            document.getElementById("mergeChat").innerHTML +=
+                                `<div class="row col-12">
                                 <div class="col-10"><input type="text" id="txtChatNewComentario" class="form-control" placeholder="Escribe un mensaje"></div>
                                 <div class="col-2 p-0"><input type="button" value="Enviar" onclick="AgregarComentario(` + accionPlan.IdAccionesPlan + `,` + _idResponsable + `)" class="btn btn-success btn-sm"></div>
                             </div>`;
-                        if (document.getElementById("formular").style.display == "none") {
-                            $('#formular').modal('toggle');
+                            if (document.getElementById("formular").style.display == "none") {
+                                $('#formular').modal('toggle');
+                            }
+                        }
+                        else {
+                            swal("No se encontraron comentarios guardados para esta evidencia", "", "info").then(function () {
+                                $('#formular').modal('toggle');
+                                document.getElementById("class-header").classList.remove("alert-danger");
+                                document.getElementById("class-header").classList.add("alert-info");
+                                document.getElementById("title-header").innerHTML = "Chat de comentarios";
+                                var divChat = "";
+                                document.getElementById("mergeError").innerHTML = "";
+                                document.getElementById("mergeChat").innerHTML = "";
+                                document.getElementById("mergeError").innerHTML += divChat;
+                                document.getElementById("mergeChat").innerHTML +=
+                                    `<div class="row col-12">
+                                        <div class="col-10"><input type="text" id="txtChatNewComentario" class="form-control" placeholder="Escribe un mensaje"></div>
+                                        <div class="col-2 p-0"><input type="button" value="Enviar" onclick="AgregarComentario(` + accionPlan.IdAccionesPlan + `,` + _idResponsable + `)" class="btn btn-success btn-sm"></div>
+                                    </div>`;
+                                if (document.getElementById("formular").style.display == "none") {
+                                    $('#formular').modal('toggle');
+                                }
+                            });
                         }
                     }
                     else {
@@ -325,7 +341,7 @@ var IdAccionSeleccionada = 0;
                 var cadena = "";
                 [].forEach.call(data, function (item) {
                     var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");     
-                    cadena += '<i class="fas fa-envelope view-comments mr-2" title="Ver comentarios" style="cursor:pointer"></i><i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                    cadena += '<i class="fas fa-envelope view-comments mr-2" title="Ver comentarios" style="cursor:pointer"></i><i hidden class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                 });
                 if (cadena.length == 0)
                     cadena = '<small style="display: block;color:red;">Aun no se suben evidencias</small>';
@@ -438,7 +454,7 @@ var IdAccionSeleccionada = 0;
                                     var cadena = "";
                                     [].forEach.call(response.Atachment, function (item) {
                                         var fileName = item.replace("\\\\\\\\10.5.2.101\\\\ClimaLaboral\\\\", "http://demo.climalaboral.divisionautomotriz.com/");
-                                        cadena += '<i class="fas fa-envelope view-comments mr-2" title="Ver comentarios" style="cursor:pointer"></i><i class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
+                                        cadena += '<i class="fas fa-envelope view-comments mr-2" title="Ver comentarios" style="cursor:pointer"></i><i hidden class="fas fa-close delete-file" title="Eliminar archivo" style="cursor:pointer"></i><a target="blank" href="' + fileName + '"><small style="display: block;">' + fileName + '</small></a>';
                                     });
                                     $("#listadoDocs").append(cadena);
                                     $(".delete-file").unbind();
@@ -809,6 +825,7 @@ var AgregarComentario = function (IdAccionesPlan, IdResponsable) {
             if (response.Correct) {
                 swal("Comentario agregado correctamente", "", "success").then(function () {
                     console.log(response.Objects);
+                    $('#formular').modal('toggle');
                     targetVerComentarios.target.click();
                 });
             }

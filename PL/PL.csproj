@@ -1150,6 +1150,7 @@
     <Content Include="scripts\datatables.min.css" />
     <Content Include="scripts\documentacion.js" />
     <Content Include="scripts\ElementQueries.js" />
+    <Content Include="scripts\Encuesta\encuesta.js" />
     <Content Include="scripts\PlanesDeAccion\AltaPDA.js" />
     <Content Include="scripts\PlanesDeAccion\AsignarPermisos.js" />
     <Content Include="scripts\PlanesDeAccion\EmailSender.js" />
@@ -1539,6 +1540,7 @@
     <Content Include="Views\ClimaDinamico\EncuestaPV.cshtml" />
     <Content Include="Views\ClimaDinamico\IntroduccionPV.cshtml" />
     <Content Include="Views\ClimaDinamico\ThanksVP.cshtml" />
+    <Content Include="Views\Encuesta\GetAllN.cshtml" />
     <None Include="Views\Encuesta\mi vista.cshtml" />
     <Content Include="Views\Encuesta\ValidacionModal.cshtml" />
     <Content Include="Views\Home\Busy.cshtml" />

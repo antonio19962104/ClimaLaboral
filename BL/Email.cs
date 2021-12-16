@@ -364,6 +364,7 @@ namespace BL
             }
             return true;
         }
+        public bool nullEmp(string s) => s == null || s == "";
         /// <summary>
         /// Envio de notificaciones customizadas para encuestas de clima laboral
         /// </summary>
@@ -383,10 +384,10 @@ namespace BL
                     mailMessage.IsBodyHtml = true;
                     mailMessage.To.Add(new MailAddress(empleado.Correo));
                     string contentMessage = email.Plantilla;
-                    contentMessage = contentMessage.Replace("#Nombre#", string.Concat(empleado.Nombre, empleado.ApellidoPaterno, empleado.ApellidoMaterno));
-                    contentMessage = contentMessage.Replace("#Encuesta#", encuesta.Nombre);
-                    contentMessage = contentMessage.Replace("#FechaInicio#", configClimaLab.FechaInicio.ToString());
-                    contentMessage = contentMessage.Replace("#FechaFin#", configClimaLab.FechaFin.ToString());
+                    contentMessage = contentMessage.Replace("*NombreUsuario*", string.Concat(empleado.Nombre, empleado.ApellidoPaterno, empleado.ApellidoMaterno));
+                    contentMessage = contentMessage.Replace("*NombreEncuesta*", encuesta.Nombre);
+                    contentMessage = contentMessage.Replace("*FechaInicio*", configClimaLab.FechaInicio.ToString());
+                    contentMessage = contentMessage.Replace("*FechaFin*", configClimaLab.FechaFin.ToString());
                     contentMessage = contentMessage.Replace("#Contraseña#", empleado.ClaveAcceso);
                     contentMessage = contentMessage.Replace("#LinkEncuesta#", string.Concat(ConfigurationManager.AppSettings["urlTemplateLocation"].ToString(), "/Encuesta/Login/?e=", encuesta.IdEncuesta));
 

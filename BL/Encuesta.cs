@@ -7448,6 +7448,9 @@ namespace BL
                             var EstatusEncuesta = context.EstatusEncuesta.Where(o => o.IdEmpleado == empleadoE.IdEmpleado && o.IdEncuesta == Encuesta.IdEncuesta).FirstOrDefault();
                             switch (email.EstatusEncuesta)
                             {
+                                case 0:
+                                    BL.Email.EnvioNotificacionesCustom(Encuesta, ConfiguracionEncuesta, empleadoE, email);
+                                    break;
                                 case 1: // No comenzada
                                     if (EstatusEncuesta.Estatus == "No comenzada")
                                         BL.Email.EnvioNotificacionesCustom(Encuesta, ConfiguracionEncuesta, empleadoE, email);

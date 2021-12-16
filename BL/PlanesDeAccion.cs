@@ -2310,6 +2310,12 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Obtiene los comentarios existentes sobre una evidencia
+        /// </summary>
+        /// <param name="IdAccionesPlan"></param>
+        /// <param name="IdResponsable"></param>
+        /// <returns></returns>
         public static ML.Result GetComentarios(int IdAccionesPlan, int IdResponsable)
         {
             ML.Result result = new ML.Result();
@@ -2324,10 +2330,12 @@ namespace BL
                     var responsableAccionesPlan = context.ResponsablesAccionesPlan.Where(o => o.IdAccionesPlan == IdAccionesPlan && o.IdResponsable == IdResponsable).FirstOrDefault();
                     var seguimiento = context.Seguimiento.Where(o => o.IdResponsableAccionesPlan == responsableAccionesPlan.IdResponsablesAccionesPlan).FirstOrDefault();
                     var seguimientoEvidencia = context.SeguimientoEvidencia.Where(o => o.IdSeguimiento == seguimiento.IdSeguimiento).FirstOrDefault();
-                    var comentarios = seguimientoEvidencia.Comentario.Split(new string[] { "###" }, StringSplitOptions.None);
-
-                    comentarios = comentarios.Where(o => o != null && o != "").ToArray();
-                    result.Objects.Add(comentarios);
+                    if (!string.IsNullOrEmpty(seguimientoEvidencia.Comentario))
+                    {
+                        var comentarios = seguimientoEvidencia.Comentario.Split(new string[] { "###" }, StringSplitOptions.None);
+                        comentarios = comentarios.Where(o => o != null && o != "").ToArray();
+                        result.Objects.Add(comentarios);
+                    }
                     result.Correct = true;
                 }
             }
@@ -2340,6 +2348,14 @@ namespace BL
             }
             return result;
         }
+        /// <summary>
+        /// Agrega un comentario nuevo sobre la evidencia especificada
+        /// </summary>
+        /// <param name="IdAccionesPlan"></param>
+        /// <param name="IdResponsable"></param>
+        /// <param name="comentario"></param>
+        /// <param name="sessionResponsableId"></param>
+        /// <returns></returns>
         public static ML.Result AgregarComentarios(int IdAccionesPlan, int IdResponsable, string comentario, int sessionResponsableId)
         {
             ML.Result result = new ML.Result();
